@@ -1,0 +1,33 @@
+alias mv='mv -i'
+alias rm='trash-put'
+alias cp='cp -i'
+export LS_OPTIONS='--color=auto'
+alias ls='ls $LS_OPTIONS'
+export PATH=/usr/local/tmux-2.3.0/bin:$PATH
+
+alias fbterm="zsh ~/.background_fbterm /usr/share/images/desktop-base/spacefun-grub-widescreen2.png"
+tmux_init()
+{
+    tmux new-session -s "getong" -d #-n "local"     开启一个会话
+    tmux new-window #-n "other"           开启一个窗口
+    tmux -2 attach-session -d           # tmux -2强制启用256color，连接已开启的tmux
+}
+
+# 判断是否已有开启的tmux会话，没有则开启
+if [[ $(tty) == \/dev\/tty[1-6]* ]]; then
+    # eval `dbus-launch --auto-syntax`
+    fcitx > /dev/null 2>&1
+    if [ -z `ps aux | grep -i tmux | grep -v grep` ]; then
+        fbterm -i fcitx-fbterm -- tmux new-session -s "getong"
+    else
+        fbterm -i fcitx-fbterm -- tmux attach
+    fi
+elif which tmux 2>&1 >/dev/null; then
+    test -z "$TMUX" && (tmux attach || tmux_init)
+fi
+
+alias emacs='emacs -nw'
+
+alias tmux_lock='tmux lock-session'
+
+export PS1=\$
