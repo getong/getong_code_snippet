@@ -5,6 +5,8 @@
 
 解压到/usr/local/就可以了。
 在PATH环境变量中添加Oracle JDK就可以了
+```
 export JAVA_HOME=/usr/local/jdk1.8.0_112
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH=/usr/local/scala-2.12.1/bin:$PATH
+```
