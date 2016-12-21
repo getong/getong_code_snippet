@@ -13,16 +13,16 @@ The Size or the TypeSpecifier, or both, can be omitted. Thus, the following vari
 
 The TypeSpecifierList is a list of type specifiers separated by hyphens.
 
-##Type
+Type
 The type can be integer, float, or binary.
 
-##Signedness
+Signedness
 The signedness specification can be either signed or unsigned. Notice that signedness only matters for matching.
 
-##Endianness
+Endianness
 The endianness specification can be either big, little, or native. Native-endian means that the endian is resolved at load time, to be either big-endian or little-endian, depending on what is "native" for the CPU that the Erlang machine is run on.
 
-##Unit
+Unit
 The unit size is given as unit:IntegerLiteral. The allowed range is 1-256. It is multiplied by the Size specifier to give the effective size of the segment. Since Erlang R12B, the unit size specifies the alignment for binary segments without size.
 
 Example:
