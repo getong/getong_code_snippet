@@ -31,3 +31,33 @@ alias emacs='emacs -nw'
 alias tmux_lock='tmux lock-session'
 
 export PS1=\$
+
+
+# change the man page output
+man() {
+    env \
+        LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+        LESS_TERMCAP_md=$(printf "\e[1;31m") \
+        LESS_TERMCAP_me=$(printf "\e[0m") \
+        LESS_TERMCAP_se=$(printf "\e[0m") \
+        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+        LESS_TERMCAP_ue=$(printf "\e[0m") \
+        LESS_TERMCAP_us=$(printf "\e[1;32m") \
+            man "$@"
+}
+
+# 7z compress
+function 7z_cp() {
+	7z a -t7z -m0=lzma -mx=0 -mfb=64 -md=32m -ms=on $1.7z $1 &> /dev/null
+}
+
+# 7z decompress
+function 7z_dc() {
+	7z x $1 &> /dev/null
+}
+
+
+# append absolute path to the filenames
+function get_dir_file() {
+   find $1 -type f
+}
