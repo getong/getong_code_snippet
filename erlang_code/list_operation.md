@@ -9,4 +9,14 @@ remove_watcher(Pid, WatcherList) ->
         {value, {_Pid, MRef}, NewWatcherList} ->
             {MRef, NewWatcherList}
     end.
+
+%% copy from riak_ensemble_msg.erl
+-spec find_valid([peer_reply()]) -> {[peer_reply()], [peer_nack()]}.
+find_valid(Replies) ->
+    {Valid, Nacks} = lists:partition(fun({_, nack}) ->
+                                             false;
+                                        (_) ->
+                                             true
+                                     end, Replies),
+    {Valid, Nacks}.
 ```
