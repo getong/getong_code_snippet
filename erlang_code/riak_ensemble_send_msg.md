@@ -96,6 +96,39 @@ send_request({PeerId, PeerPid}, ReqId, Event) ->
             gen_fsm:send_event(PeerPid, Event)
     end.
 ```
+The timeout msg:
+```
+%% copy from the riak_ensemble_peer.erl
+handle_info(quorum_timeout, StateName, State) ->
+    State2 = quorum_timeout(State),
+    {next_state, StateName, State2};
+
+quorum_timeout(State=#state{awaiting=undefined}) ->
+    State;
+quorum_timeout(State=#state{awaiting=Awaiting}) ->
+    Awaiting2 = riak_ensemble_msg:quorum_timeout(Awaiting),
+    State#state{awaiting=Awaiting2}.
+
+%% copy from the riak_ensemble_msg.erl
+-spec quorum_timeout(msg_state()) -> msg_state().
+quorum_timeout(#msgstate{replies=Replies}) ->
+    {Valid, _Nacks} = find_valid(Replies),
+    gen_fsm:send_event(self(), {timeout, Valid}),
+    #msgstate{awaiting=undefined, timer=undefined, replies=[]}.
+
+
+%% copy from the riak_ensemble_peer.erl
+probe({timeout, Replies}, State=#state{fact=Fact}) ->
+    Latest = latest_fact(Replies, Fact),
+    State2 = State#state{fact=Latest},
+    State3 = check_views(State2),
+    probe(delay, State3);
+probe(delay, State) ->
+    State2 = set_timer(?PROBE_DELAY, probe_continue, State),
+    {next_state, probe, State2};
+probe(probe_continue, State) ->
+    probe(init, State);
+```
 
 used example:
 ```
