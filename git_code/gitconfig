@@ -1,0 +1,13 @@
+[user]
+	name = user
+	email = user@gmail.com
+[color]
+	ui = true
+[push]
+	default = matching
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[merge]
+	tool = vimdiff
