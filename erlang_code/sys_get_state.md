@@ -1,5 +1,5 @@
 #sys get_state
-#in sys.erl
+##in sys.erl
 ```
 get_state(Name) ->
     case send_system_msg(Name, get_state) of
@@ -39,8 +39,14 @@ do_get_state(Mod, Misc) ->
 
 ```
 
-#in gen_fsm.erl
+##in gen_fsm.erl
 ```
 system_get_state([_Name, StateName, StateData, _Mod, _Time]) ->
     {ok, {StateName, StateData}}.
+```
+## in gen_server.erl
+
+```
+system_get_state([_Name, State, _Mod, _Time]) ->
+    {ok, State}.
 ```
