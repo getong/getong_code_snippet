@@ -8,7 +8,7 @@ svn cp -m "create branch" svn://svn_server/repo/trunk svn://svn_server/repo/bran
 ##获得分支
 
 ```
-svn co svn://svn_server/repo/branches/branch_name
+svn co --username=user svn://svn_server/repo/branches/branch_name
 ```
 
 ##合并主干上的最新代码到分支上
