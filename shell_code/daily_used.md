@@ -3,7 +3,14 @@
 ```
 curl ifconfig.me
 ```
+
 ## 监控磁盘空间
 ```
 watch -n 1 df
+```
+
+## 永久删除文件
+
+```
+shred -zuv filename
 ```
