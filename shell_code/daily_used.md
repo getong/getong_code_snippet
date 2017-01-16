@@ -19,3 +19,8 @@ shred -zuv filename
 ```
 reset
 ```
+
+## dos2unix
+```
+dos2unix filename
+```
