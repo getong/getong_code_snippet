@@ -14,3 +14,8 @@ watch -n 1 df
 ```
 shred -zuv filename
 ```
+
+## clear terminal
+```
+reset
+```
