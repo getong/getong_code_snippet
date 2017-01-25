@@ -64,4 +64,14 @@ iex(10)> colors[:red]
 iex(11)> colors.green
 65280
 
-	```
+```
+## 更新散列表
+```
+new_map = %{old_map | key => value , ...}
+```
+example
+```
+iex > m = %{ a: 1, b: 2, c: 3}
+iex > m1 = %{m | b: "two", c: "three" }
+iex > m2 = %{m1 | a: "one"}
+```
