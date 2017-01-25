@@ -8,5 +8,9 @@ emacs
 vim
 tmux
 trash-cli
+proxychains
+ansible
+supervisor
+
 
 ```
