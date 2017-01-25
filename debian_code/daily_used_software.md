@@ -11,6 +11,6 @@ trash-cli
 proxychains
 ansible
 supervisor
-
+python-pip
 
 ```
