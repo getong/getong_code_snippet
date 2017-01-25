@@ -7,4 +7,6 @@ zsh
 emacs
 vim
 tmux
+trash-cli
+
 ```
