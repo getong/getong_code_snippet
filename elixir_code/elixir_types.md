@@ -75,3 +75,7 @@ iex > m = %{ a: 1, b: 2, c: 3}
 iex > m1 = %{m | b: "two", c: "three" }
 iex > m2 = %{m1 | a: "one"}
 ```
+## 散列表增加新元素
+```
+Dict.put_new/3
+```
