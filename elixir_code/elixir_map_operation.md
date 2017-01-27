@@ -51,7 +51,7 @@ IO.inspect get_in(authors, [languages_with_an_r, :name])
 #=> [ "José", nil, "Larry" ]
 
 ```
-#elixir update_in
+#elixir map update_in
 ```
 defmodule Customer do
   defstruct name: "", company: ""
