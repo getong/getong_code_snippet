@@ -5,4 +5,6 @@ add this two code in your init.el file
 ```
 (add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
 (add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
+(require 'elixir-mode)
+(require 'alchemist)
 ```
