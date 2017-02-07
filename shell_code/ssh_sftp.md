@@ -19,3 +19,7 @@ scp user@ip:/tmp/file /tmp
 
 
 ```
+#user login via ssh in a different port other than 22
+```
+ssh user@host -p port
+```
