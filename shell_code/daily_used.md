@@ -24,3 +24,10 @@ reset
 ```
 dos2unix filename
 ```
+## use adduser to add normal user, use useradd to add system user
+```
+# will create /home/user
+adduser user
+#not create /home/user2
+useradd user2
+```
