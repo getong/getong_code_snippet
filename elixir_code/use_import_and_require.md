@@ -6,3 +6,30 @@
 >`require Module` 允许使用一个模块的宏, 但并不导入他们. 必须通过全名(带名称空间)来引用.
 
 # 模块中的宏， 可以通过import 或者 require导入
+code example
+import
+```
+$iex
+iex(1)> import Bitwise
+iex(2)> 2 >>> 4
+0
+iex(3)> 3 <<< 4
+48
+```
+
+require
+```
+$iex
+iex(1)> require Bitwise
+Bitwise
+iex(2)> Bitwise.<<< 1, 2
+4
+iex(3)> Bitwise.<<<(1, 2)
+4
+iex(4)> Bitwise.>>> 1, 2
+0
+iex(5)>Bitwise.>>>(1, 2)
+0
+iex(6)> Bitwise.>>> (1, 2)
+** (SyntaxError) iex:7: unexpected parentheses. If you are making a function call, do not insert spaces between the function name and the opening parentheses. Syntax error before: '(')
+```
