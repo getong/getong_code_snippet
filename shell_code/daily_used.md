@@ -31,3 +31,8 @@ adduser user
 #not create /home/user2
 useradd user2
 ```
+## 列出归属于user的用户的进程和线程
+
+```
+$ ps -LF -u user
+```
