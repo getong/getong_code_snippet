@@ -36,3 +36,9 @@ useradd user2
 ```
 $ ps -LF -u user
 ```
+#找到网关 gateway
+
+```
+#netstat -rn
+(以0.0.0.0开始的行的gateway是默认网关)
+```
