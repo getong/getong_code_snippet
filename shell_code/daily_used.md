@@ -36,9 +36,17 @@ useradd user2
 ```
 $ ps -LF -u user
 ```
-#找到网关 gateway
+##找到网关 gateway
 
 ```
 #netstat -rn
 (以0.0.0.0开始的行的gateway是默认网关)
+```
+## 快速格式化u盘
+
+```
+#mkfs.ntfs -f /dev/sdb1
+
+## 参看 /etc/mke2fs.conf
+#mkfs.ext4  -T largefile /dev/sdb1
 ```
