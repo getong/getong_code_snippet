@@ -20,3 +20,17 @@ find_valid(Replies) ->
                                      end, Replies),
     {Valid, Nacks}.
 ```
+
+%% find a element from record list
+
+```
+
+-record(fact, {
+	a,
+	b,
+	c}).
+
+L = [{fact, 1, 2,3},{fact, 1, 2,4},{fact, 1, 2,5},{fact, 1, 2,7}].
+lists:keyfind(1, #fact.a, L).
+
+```
