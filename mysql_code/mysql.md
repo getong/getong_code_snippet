@@ -10,3 +10,18 @@ mysqldump --comments -uuser -ppassword -h host_ip --opt database -d --single-tra
 ```
 mysql -h host_ip -u user -p database -P 3306 -e "select * from table"  > filename
 ```
+
+## 查看表的索引
+
+```
+mysql> show keys from table_name;
+
+mysql> show index from table_name;
+
+```
+
+## 查看表结构
+
+```
+mysql> desc table_name;
+```
