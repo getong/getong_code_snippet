@@ -50,3 +50,8 @@ $ ps -LF -u user
 ## 参看 /etc/mke2fs.conf
 #mkfs.ext4  -T largefile /dev/sdb1
 ```
+
+## pv拷贝带进度条
+```
+pv file1 > file2
+```
