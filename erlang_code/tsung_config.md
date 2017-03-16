@@ -21,3 +21,4 @@ read(Filename, LogDir) ->
              Result
     end.
 ```
+copy from ts_config.erl

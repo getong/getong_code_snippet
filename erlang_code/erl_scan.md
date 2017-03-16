@@ -19,6 +19,7 @@ getTypeAttr(Type, String) ->
     {ok, [{Type,1,Val}],1} = erl_scan:string(String),
     Val.
 ```
+copy from ts_config.erl
 The `String` is read from the xml files, and in erlang, it is the list type.
 code exec info:
 
