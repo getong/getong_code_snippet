@@ -88,3 +88,18 @@ get_intf_aliases([Line|Tail], Interface, Old, Res) ->
     end.
 ```
 copy from ts_ip_scan.erl
+
+tsung get the ip from the cmd line output:
+
+```
+$LC_ALL=C /sbin/ip -o -f inet addr show dev eth0
+2: eth0    inet xxx.xxx.xxx.xxx/24 brd xxx.xxx.xxx.xxx scope global dynamic eth0\       valid_lft 58180sec preferred_lft 58180sec
+```
+It only outputs the ipv4 ip address.
+Does all ipv6 comes with a ipv4 ip address?
+Gets all the network interface address with:
+
+```
+ip a
+```
+The `ifconfig` does the same work.
