@@ -55,3 +55,9 @@ $ ps -LF -u user
 ```
 pv file1 > file2
 ```
+
+## get shell pid
+
+```
+echo $$
+```
