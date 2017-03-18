@@ -18,6 +18,8 @@ getTypeAttr(integer_or_string, String)->
 getTypeAttr(Type, String) ->
     {ok, [{Type,1,Val}],1} = erl_scan:string(String),
     Val.
+
+{ok, [{atom,1,Name}],1} = erl_scan:string("tr_"++RawName),
 ```
 copy from ts_config.erl
 The `String` is read from the xml files, and in erlang, it is the list type.
@@ -27,4 +29,7 @@ code exec info:
 $erl
 1> erl_scan:string("800").
 {ok,[{integer,1,800}],1}
+
+2>erl_scan:string("tr_"++ "abc").
+{ok,[{atom,1,tr_abc}],1}
 ```
