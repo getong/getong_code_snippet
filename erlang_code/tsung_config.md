@@ -103,3 +103,15 @@ Gets all the network interface address with:
 ip a
 ```
 The `ifconfig` does the same work.
+
+
+## re for dynamic var
+
+```
+get_dynvar_name(VarNameStr) ->
+    %% check if the var name is for an array (myvar[N])
+    case re:run(VarNameStr,"(.+)\[(\d+)\]",[{capture,all_but_first,list},dotall]) of
+        {match,[Name,Index]} -> {list_to_atom(Name),Index};
+        _                    -> list_to_atom(VarNameStr)
+    end.
+```
