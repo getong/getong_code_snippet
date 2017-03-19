@@ -115,3 +115,31 @@ get_dynvar_name(VarNameStr) ->
         _                    -> list_to_atom(VarNameStr)
     end.
 ```
+
+## Plugin parse_config
+
+```
+%%% Parsing the request element
+parse(Element = #xmlElement{name=request, attributes=Attrs},
+      Conf = #config{sessions=[CurSess|_], curid=Id}) ->
+
+    Type  = CurSess#session.type,
+    SubstitutionFlag  = getAttr(atom, Attrs, subst, false),
+    Tag = getAttr(string, Attrs, tag, ""),
+    Tags = lists:map(fun(X)->{X,ok} end, string:tokens(?config(exclude_tag),",")),
+    %% do not add in Conf excluded requests
+    case proplists:is_defined(Tag, Tags) of
+        true ->
+            ?LOGF("Tag  ~p in ~p ~p ~p ~n",[Tag,true,?config(exclude_tag),Tags],?NOTICE),
+            Conf;
+        false ->
+            lists:foldl( fun(A,B) ->Type:parse_config(A,B) end,
+                         Conf#config{curid=Id+1, cur_req_id=Id+1,
+                                     subst=SubstitutionFlag,
+                                     match=[],
+                                     tag=Tag
+                                    },
+                         Element#xmlElement.content)
+        end;
+```
+The mysql, ldap, http are all added the `parse_config` option in a module.
