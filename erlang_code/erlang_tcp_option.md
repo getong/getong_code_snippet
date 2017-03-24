@@ -1,4 +1,5 @@
 #erlang gen_tcp option
+##option documentation
 copy from erlang documentation inet module doc
 
 ```
@@ -213,4 +214,23 @@ Sets IPV6_TCLASS IP level options on platforms where this is implemented. The be
 In addition to these options, raw option specifications can be used. The raw options are specified as a tuple of arity four, beginning with tag raw, followed by the protocol level, the option number, and the option value specified as a binary. This corresponds to the second, third, and fourth arguments to the setsockopt call in the C socket API. The option value must be coded in the native endianess of the platform and, if a structure is required, must follow the structure alignment conventions on the specific platform.
 
 Using raw socket options requires detailed knowledge about the current operating system and TCP stack.
+```
+
+## random port
+copy from lasp_sup.erl
+
+```
+%% @private
+random_port() ->
+    {ok, Socket} = gen_tcp:listen(0, []),
+    {ok, {_, Port}} = inet:sockname(Socket),
+    ok = gen_tcp:close(Socket),
+    Port.
+```
+The documentation is:
+
+```
+gen_tcp:listen(Port, Options)
+If Port == 0, the underlying OS assigns an available port number, use inet:port/1 to retrieve it.
+
 ```
