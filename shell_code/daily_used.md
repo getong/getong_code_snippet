@@ -61,3 +61,9 @@ pv file1 > file2
 ```
 echo $$
 ```
+
+## The nproc command shows the number of processing units available:
+
+```
+$nproc
+```
