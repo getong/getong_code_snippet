@@ -25,3 +25,30 @@ mysql> show index from table_name;
 ```
 mysql> desc table_name;
 ```
+
+
+## 允许user用户远程登陆
+用root用户登陆mysql， 在mysql 的shell里面运行下面命令：
+```
+mysql>grant all on *.* to user@'%' identified by 'password';
+```
+解析
+
+```
+"*.*"：第一个*代表数据库名；第二个*代表表名。这里的意思是所有数据库里的所有表都授权给用户。
+user：授予user账号。
+"%"：表示授权的用户IP可以指定，这里代表任意的IP地址都能访问MySQL数据库。
+"password"：分配账号对应的密码，这里密码替换成user帐号对应的mysql密码。
+```
+最后，运行下面命令：
+
+```
+mysql> flush privileges;
+#/etc/init.d/mysqld restart
+```
+要注意my.cnf里面要配置正确：
+
+```
+Just comment out bind-address= altogether. When you do that, it will bind to all addresses.
+Also make sure that you don't have skip-networking enabled in your my.cnf.
+```
