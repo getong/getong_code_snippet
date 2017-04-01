@@ -1,6 +1,6 @@
 [user]
 	name = user
-	email = user@gmail.com
+	email = username@users.noreply.github.com
 [color]
 	ui = true
 [push]
