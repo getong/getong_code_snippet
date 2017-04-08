@@ -12,8 +12,7 @@ git submodule update
 export ERL_TOP=PWD
 export PATH=ERL_TOP/bin:PATH
 ./otp_build autoconf
-./otp_build configure --prefix=/usr/local/otp-19.3-rebased
-./otp_build boot -a
+./configure --prefix=/usr/local/otp-19.3-rebased
 make clean
 make
 make tests
