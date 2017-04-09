@@ -249,3 +249,4 @@ listen_on(CallbackModule, IpAddr, Port) when is_tuple(IpAddr) andalso
             Err
     end;
 ```
+This function is `undocumented`, and use [ranch](https://github.com/ninenines/ranch) as much as possible.
