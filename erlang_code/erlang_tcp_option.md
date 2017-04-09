@@ -234,3 +234,18 @@ gen_tcp:listen(Port, Options)
 If Port == 0, the underlying OS assigns an available port number, use inet:port/1 to retrieve it.
 
 ```
+
+## prim_net:async_accept/2
+```erlang
+listen_on(CallbackModule, IpAddr, Port) when is_tuple(IpAddr) andalso
+                                             (8 =:= size(IpAddr) orelse
+                                              4 =:= size(IpAddr)) ->
+    SockOpts = [{ip, IpAddr}|CallbackModule:sock_opts()],
+    case gen_tcp:listen(Port, SockOpts) of
+        {ok, LSock} ->
+            {ok, _Ref} = prim_inet:async_accept(LSock, -1),
+            {ok, LSock};
+        Err ->
+            Err
+    end;
+```
