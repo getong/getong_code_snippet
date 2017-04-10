@@ -81,3 +81,6 @@ update(#maxrate{} = State, Size) ->
      Pause}.
 ```
 The `update` function return two elemnts tuple. The first is the new `shaper` state. The Second is the `Pause` value. The `Pause` value is a millisecond value, used to stop the process in `Pause` milliseconds. And the `Pause` value is often used with `erlang:send_after` function.
+
+## traffic ratio control
+`none` means not set traffic control. `max_rate` means traffic control sets maximum.
