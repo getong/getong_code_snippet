@@ -39,3 +39,5 @@ erlang:system_info(atom_count).
 ```
 
 See [Monitoring Erlang Atoms] (https://engineering.klarna.com/monitoring-erlang-atoms-c1d6a741328e)
+
+## binary_to_atom/2 doesn't increase duplicate atoms.
