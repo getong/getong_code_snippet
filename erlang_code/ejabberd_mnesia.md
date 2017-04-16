@@ -141,3 +141,21 @@ remove_user(User, Server, Password) ->
       _ -> bad_request
     end.
 ```
+
+## set_master
+
+``` erlang
+set_master("self") ->
+    set_master(node());
+set_master(NodeString) when is_list(NodeString) ->
+    set_master(list_to_atom(NodeString));
+set_master(Node) when is_atom(Node) ->
+    case mnesia:set_master_nodes([Node]) of
+        ok ->
+	    {ok, ""};
+	{error, Reason} ->
+	    String = io_lib:format("Can't set master node ~p at node ~p:~n~p",
+				   [Node, node(), Reason]),
+	    {error, String}
+    end.
+```
