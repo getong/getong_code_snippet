@@ -22,3 +22,10 @@ git pull https://github.com/other/proj develop
 git checkout master
 git merge --no-ff develop
 git push origin master
+
+## can't pull new tags
+Sometimes the new tag in remote repository, pull can't get the new tags. Fetch it.
+
+``` shell
+git fetch --tags
+```
