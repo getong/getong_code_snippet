@@ -8,7 +8,7 @@ export KERL_BUILD_BACKEND=git
 export OTP_GITHUB_URL="https://github.com/erlang/otp"
 kerl update releases
 kerl list releases
-KERL_BUILD_DOCS=yes kerl build 19.3.2
+KERL_BUILD_DOCS=yes kerl build 19.3.2 19.3.2
 kerl install 19.3.2 ~/kerl/19.3.2
 source ~/kerl/19.3.2/activate
 ```
