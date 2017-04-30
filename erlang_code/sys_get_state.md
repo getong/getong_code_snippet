@@ -1,4 +1,18 @@
 #sys get_state
+
+## The doc
+>This module contains functions for sending system messages used by programs, and messages used for debugging purposes.
+>
+>Functions  used for implementation of processes are also expected to understand system messages, such as debug messages
+>and code change. These functions must be used to implement the use of system messages for a process;  either  directly,
+>or through standard behaviors, such as gen_server.
+>
+>The  default  time-out  is  5000  ms,  unless  otherwise specified. timeout defines the time to wait for the process to
+>respond to a request. If the process does not respond, the function evaluates exit({timeout, {M, F, A}}).
+>
+>The functions make references to a debug structure. The debug structure is a list of dbg_opt(), which  is  an  internal
+>data type used by function handle_system_msg/6. No debugging is performed if it is an empty list.
+
 ##in sys.erl
 ```
 get_state(Name) ->
