@@ -39,7 +39,7 @@ do_get_state(Mod, Misc) ->
 
 ```
 
-##in gen_fsm.erl
+## in gen_fsm.erl
 ```
 system_get_state([_Name, StateName, StateData, _Mod, _Time]) ->
     {ok, {StateName, StateData}}.
@@ -50,3 +50,11 @@ system_get_state([_Name, StateName, StateData, _Mod, _Time]) ->
 system_get_state([_Name, State, _Mod, _Time]) ->
     {ok, State}.
 ```
+
+## sys trace
+
+``` erlang
+sys:trace(Name, Flag)
+```
+Trace `Name` process message.
+`Name` process can be pid, atom(register atom name)
