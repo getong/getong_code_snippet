@@ -52,3 +52,8 @@ mysql> flush privileges;
 Just comment out bind-address= altogether. When you do that, it will bind to all addresses.
 Also make sure that you don't have skip-networking enabled in your my.cnf.
 ```
+
+## InnoDB: mmap(137363456 bytes) failed; errno 12
+MySQL 5.6 或者 MariaDB 10会占用很多内存。这个错误是因为启动的时候申请大块内存失败导致的。
+在my.cnf设置
+innodb_buffer_pool_size=8M
