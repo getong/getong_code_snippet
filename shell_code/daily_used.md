@@ -67,10 +67,3 @@ echo $$
 ```
 $nproc
 ```
-
-## svn add all the deps, including new added files and remove files
-
-```
-$ svn add _build
-$ svn commit -m 'update new dep' _build
-```

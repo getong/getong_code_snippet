@@ -47,3 +47,10 @@ svn copy svn://svn_server/repo/trunk svn://svn_server/repo/tags/tag-2017-01-13 -
 svn rm svn://svn_server/repo/branches/branch_name
 svn rm svn://svn_server/repo/tags/tag-2017-01-13
 ```
+
+## svn add all the deps, including new added files and remove files
+
+```
+$ svn add _build
+$ svn commit -m 'update new dep' _build
+```
