@@ -36,7 +36,7 @@ useradd user2
 ```
 $ ps -LF -u user
 ```
-##找到网关 gateway
+## 找到网关 gateway
 
 ```
 #netstat -rn
@@ -67,3 +67,11 @@ echo $$
 ```
 $nproc
 ```
+
+## lowercase filename
+To translate uppercase names to lower, you'd use
+``` shell
+$ rename -n 'y/A-Z/a-z/' filename
+$ rename -v 'y/A-Z/a-z/' filename
+```
+found it on manpage
