@@ -1,5 +1,5 @@
-#elixir control flow
-##if
+# elixir control flow
+## if
 ```
 if 1 == 1, do: "true part", else: "false part"
 
@@ -9,7 +9,7 @@ else
 	"false part"
 end
 ```
-##unless
+## unless
 ```
 unless 1 == 1, do: "error", else: "OK"
 
@@ -19,7 +19,7 @@ else
 	"error"
 end
 ```
-##cond
+## cond
 ```
 cond do
 	rem(current, 3) == 0 and rem(current, 5) == 0 ->
@@ -32,7 +32,7 @@ cond do
 		current
 end
 ```
-##case
+## case
 ```
 case File.open("filename") do
 	{:ok, file} ->

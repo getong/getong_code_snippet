@@ -1,4 +1,4 @@
-#sys get_state
+# sys get_state
 
 ## The doc
 >This module contains functions for sending system messages used by programs, and messages used for debugging purposes.
@@ -13,7 +13,7 @@
 >The functions make references to a debug structure. The debug structure is a list of dbg_opt(), which  is  an  internal
 >data type used by function handle_system_msg/6. No debugging is performed if it is an empty list.
 
-##in sys.erl
+## in sys.erl
 ```
 get_state(Name) ->
     case send_system_msg(Name, get_state) of

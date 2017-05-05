@@ -1,5 +1,5 @@
-#erlang pretty format
-##rp
+# erlang pretty format
+## rp
 
 ```
 erl
@@ -15,14 +15,14 @@ erl
 ok
 
 ```
-##io:put_chars/1
+## io:put_chars/1
 
 ```
 erl
 1>io:put_chars(erlang:system_info(info)).
 
 ```
-##clear the erl terminal
+## clear the erl terminal
 
 ```
 erl

@@ -1,5 +1,5 @@
-#erlang gen_tcp option
-##option documentation
+# erlang gen_tcp option
+## option documentation
 copy from erlang documentation inet module doc
 
 ```

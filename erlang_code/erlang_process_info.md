@@ -1,4 +1,4 @@
-#erlang process_info
+# erlang process_info
 
 ```
 process_info(self()).
@@ -27,50 +27,50 @@ process_info(self()).
  {suspending,[]}]
 ```
 
-##current_function
+## current_function
 当前函数
 
-##initial_call
+## initial_call
 初始调用函数
 
-##status
+## status
 当前进程运行状态
 
-##message_queue_len
+## message_queue_len
 消息队列长度
 
-##messages
+## messages
 进程收到的消息
 
-##links
+## links
 链接进程
 
-##dictionary
+## dictionary
 进程字典
 
-##trap_exit
+## trap_exit
 捕获进程退出标志
 
-##error_handler
+## error_handler
 错误处理器
 
-##priority
+## priority
 进程优先级
 
-##group_leader
+## group_leader
 io输出进程
 
-##total_heap_size
+## total_heap_size
 总的堆的大小
 
-##heap_size
+## heap_size
 堆大小
 
-##stack_size
+## stack_size
 栈大小
 
-##garbage_collection
+## garbage_collection
 进程垃圾回收选项
 
-##suspending
+## suspending
 被其挂起的所有进程信息

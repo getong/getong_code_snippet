@@ -1,5 +1,5 @@
-#tsung behaviours
-##gen_ts_transport
+# tsung behaviours
+## gen_ts_transport
 `gen_ts_transport` is the transport library, it describes how the network works.
 The behaviour_info is :
 

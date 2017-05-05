@@ -1,4 +1,4 @@
-#ssh sftp终端使用
+# ssh sftp终端使用
 
 ## 确保key的权限为400
 
@@ -6,7 +6,7 @@
 chmod 400 id_rsa
 ```
 
-##ssh with key
+## ssh with key
 
 ```
 ssh -i id_rsa user@ip
