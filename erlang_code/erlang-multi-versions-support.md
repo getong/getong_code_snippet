@@ -1,6 +1,6 @@
 Erlang/OTP 在各个版本中引入了很多新特性，导致某些函数在不同的版本中不可用，因此编写版本兼容的代码很有必要。
 
-#1. 使用indef或者ifndef条件编译
+# 1. 使用indef或者ifndef条件编译
 
 ```
 %% 在riak_core
@@ -21,7 +21,7 @@ sha(Bin) ->
 ```
 推荐使用这种方式。像rand模块、不同版本的spec标记、crypto的 strong_rand_bytes/1函数等都可以使用这种方法
 
-#2. 使用try...catch...
+# 2. 使用try...catch...
 ```
 %% 忘记在哪个项目使用了, 仿照下面的例子改写一个
 ts() ->
@@ -36,7 +36,7 @@ ts() ->
 
 ```
 
-#3.使用erlang:function_exported/3函数检测是否有新的函数
+# 3.使用erlang:function_exported/3函数检测是否有新的函数
 ```
 %% emqttd/src/emqttd_guid.erl
 ts() ->
@@ -49,7 +49,7 @@ ts() ->
     end.
 ```
 
-#4.鸵鸟埋头大法, 屏蔽编译错误
+# 4.鸵鸟埋头大法, 屏蔽编译错误
 ```
 %% 在ejabberd
 %% rebar.config

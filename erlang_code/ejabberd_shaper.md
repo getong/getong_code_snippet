@@ -1,4 +1,4 @@
-#ejabberd shaper
+# ejabberd shaper
 
 ## load_from_config
 

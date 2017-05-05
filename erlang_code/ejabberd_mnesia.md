@@ -1,4 +1,4 @@
-#ejabberd acl mnesia operation
+# ejabberd acl mnesia operation
 ## add operation
 
 ```

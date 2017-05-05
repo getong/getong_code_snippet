@@ -1,4 +1,4 @@
-#erlang OS environment
+# erlang OS environment
 
 ## os:getenv/1 works in linux, windows probably not
 

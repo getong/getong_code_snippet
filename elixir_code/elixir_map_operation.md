@@ -1,4 +1,4 @@
-#elixir map put_in
+# elixir map put_in
 ```
 nested = %{
 	buttercup: %{
@@ -31,7 +31,7 @@ IO.inspect put_in(nested, [:westley, :actor, :last], "Elwes")
 # =>     westley: %{actor: %{first: "Carey", last: "Elwes"}, role: "farm boy"}}
 ```
 
-#elixir map get_in
+## elixir map get_in
 ```
 authors = [
   %{ name: "José",  language: "Elixir" },
@@ -51,7 +51,7 @@ IO.inspect get_in(authors, [languages_with_an_r, :name])
 #=> [ "José", nil, "Larry" ]
 
 ```
-#elixir map update_in
+# elixir map update_in
 ```
 defmodule Customer do
   defstruct name: "", company: ""

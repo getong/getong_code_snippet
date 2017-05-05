@@ -1,4 +1,4 @@
-#get all redis keys
+# get all redis keys
 
 ```
 # 比较消耗性能

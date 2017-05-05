@@ -1,4 +1,4 @@
-#gpg verify file
+# gpg verify file
 The `.sig`, `.asc` file is the signature file, use the `gpg` command line the verify it.
 ## get the key
 

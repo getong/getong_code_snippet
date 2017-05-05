@@ -1,4 +1,4 @@
-#erlang bytes2int
+# erlang bytes2int
 copy from mnesia_locaker.erl
 
 ```

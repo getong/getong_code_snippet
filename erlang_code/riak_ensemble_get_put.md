@@ -1,4 +1,4 @@
-#riak_ensemble kv put get
+# riak_ensemble kv put get
 
 ## fact
 ```

@@ -1,4 +1,4 @@
-#elixir types
+# elixir types
 ## keyword list 列表
 ```
 $iex
@@ -79,12 +79,12 @@ iex > m2 = %{m1 | a: "one"}
 ```
 Dict.put_new/3
 ```
-#字符串
+# 字符串
 ```
 iex> is_binary("abc")
 true
 ```
-#原子
+# 原子
 ```
 iex> is_atom(Module)
 true

@@ -1,4 +1,4 @@
-#erlang array
+# erlang array
 array is defined as record
 
 ```

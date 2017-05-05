@@ -1,4 +1,4 @@
-#erlang memory
+# erlang memory
 We can get the memory from the `erlang:memory` function.
 
 ```

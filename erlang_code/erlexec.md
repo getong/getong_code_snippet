@@ -1,4 +1,4 @@
-#erlexec
+# erlexec
 
 ## erl shell file
 In the `erl` file, it is just a shell file.

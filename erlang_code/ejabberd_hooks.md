@@ -1,4 +1,4 @@
-#ejabberd hooks
+# ejabberd hooks
 ejabberd_hooks.erl support add/2,3,4, add_dist/5,6, delete/4,5,6 and get_handlers/2 operations. They are all call to the `ejabberd_hooks` process, and then the process add the info to the ets table.
 for example, like the add function:
 

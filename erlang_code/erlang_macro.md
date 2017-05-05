@@ -1,4 +1,4 @@
-#erlang use macro to avoid wrong spell
+# erlang use macro to avoid wrong spell
 
 Using `macro` to define an atom or a number in case of wrong spell and give it a full meaning.
 

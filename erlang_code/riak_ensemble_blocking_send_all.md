@@ -1,4 +1,4 @@
-#riak_ensemble blocking_send_allow
+# riak_ensemble blocking_send_allow
 ## code definition
 ```
 %% copy from the riak-ensemble_peer.erl

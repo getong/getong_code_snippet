@@ -1,4 +1,4 @@
-#riak_ensemble cast_all function
+# riak_ensemble cast_all function
 
 ```
 %% copy from riak_ensemble_peer.erl

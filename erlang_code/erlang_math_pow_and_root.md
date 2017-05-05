@@ -1,4 +1,4 @@
-#erlang math pow and root
+# erlang math pow and root
 ## math pow
 
 ```

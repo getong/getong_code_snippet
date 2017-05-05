@@ -1,4 +1,4 @@
-#erlang system monitor
+# erlang system monitor
 copy from alarms_server.erl
 
 ```

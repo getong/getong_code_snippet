@@ -1,4 +1,4 @@
-#erlang time operation
+# erlang time operation
 
 ## 时间操作，例如前一天、后一天，最好的方案是先把时间换算成unix时间戳， 然后进行计算，最后换算回来日期。
 

@@ -1,4 +1,4 @@
-#erl_scan get string type
+# erl_scan get string type
 
 tsung use erl_scan:string/1 to get the string's value, like below:
 

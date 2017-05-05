@@ -1,4 +1,4 @@
-#bit syntax
+# bit syntax
 [Bit Syntax](http://erlang.org/doc/programming_examples/bit_syntax.html)
 
 ```

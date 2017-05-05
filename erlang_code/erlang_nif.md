@@ -1,4 +1,4 @@
-#erlang nif loading
+# erlang nif loading
 >NIF libraries are loaded by calling erlang:load_nif/2, with the name of the shared library as argument. The second argument can be any term that will be passed on to the library and used for initialization:
 
 ```

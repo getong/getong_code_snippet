@@ -1,4 +1,4 @@
-#elixir func
+# elixir func
 通常，在单行代码使用do: 在多行代码使用do...end 语法
 ## do...end
 

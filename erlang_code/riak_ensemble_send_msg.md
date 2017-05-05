@@ -1,4 +1,4 @@
-#riak_ensemble peer send vote msg
+# riak_ensemble peer send vote msg
 
 ## send_all/2 function
 ```

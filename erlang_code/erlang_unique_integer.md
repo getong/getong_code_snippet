@@ -1,4 +1,4 @@
-#erlang unique_integer
+# erlang unique_integer
 
 ``` erlang
 $erl

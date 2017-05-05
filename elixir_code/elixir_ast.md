@@ -1,4 +1,4 @@
-#elixir ast
+# elixir ast
 All the elixir code is represented as this:
 
 ```

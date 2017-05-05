@@ -1,4 +1,4 @@
-#compile no auto import
+# compile no auto import
 
 ``` erlang
 -module(no_auto_import).

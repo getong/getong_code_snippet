@@ -1,4 +1,4 @@
-#debian timezone
+# debian timezone
 
 ```
 dpkg-reconfigure tzdata

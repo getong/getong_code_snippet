@@ -1,4 +1,4 @@
-#elixir node
+# elixir node
 ## a node
 ```
 iex --sname a

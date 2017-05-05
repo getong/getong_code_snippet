@@ -1,4 +1,4 @@
-#erlang man
+# erlang man
 Get the `module` man page in the command line.
 
 ```

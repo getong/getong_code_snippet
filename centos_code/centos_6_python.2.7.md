@@ -1,4 +1,4 @@
-#centos 6.x install python 2.7
+# centos 6.x install python 2.7
 
 ```
 wget -c https://centos6.iuscommunity.org/ius-release.rpm

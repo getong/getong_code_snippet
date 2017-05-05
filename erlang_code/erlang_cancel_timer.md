@@ -1,4 +1,4 @@
-#erlang cancel timer
+# erlang cancel timer
 cancel the timer and check the result.
 copy from ejabberd mod_pind.erl
 

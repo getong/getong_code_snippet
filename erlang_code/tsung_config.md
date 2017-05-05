@@ -1,4 +1,4 @@
-#tsung config
+# tsung config
 
 ## read from xml config file
 tsung read the config file using xml

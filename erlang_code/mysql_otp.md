@@ -1,4 +1,4 @@
-#mysql_otp check return info
+# mysql_otp check return info
 
 ## update SQL always return ok
 

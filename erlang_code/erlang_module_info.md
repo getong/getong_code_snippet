@@ -1,4 +1,4 @@
-#erlang module info
+# erlang module info
 When erlang source file is compiled, it auto generate the module info with the module_info/0 function with it.
 ```
 $erl

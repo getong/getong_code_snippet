@@ -1,4 +1,4 @@
-#erlang init
+# erlang init
 
 ## stop node
 

@@ -1,4 +1,4 @@
-#ipv4 and integer
+# ipv4 and integer
 copy from minuteman_lashup_vip_listener.erl
 ```
 -spec(integer_to_ip(IntIP :: 0..4294967295) -> inet:ip4_address()).

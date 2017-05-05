@@ -1,4 +1,4 @@
-#alchemist
+# alchemist
 Install alchemist via package install, and also install company mode, which enable auto complete.
 when edit elixir source file, enable alchemist-mode by hand.
 add this two code in your init.el file

@@ -1,4 +1,4 @@
-#erlang universaltime, localtime, posixtime
+# erlang universaltime, localtime, posixtime
 
 ``` erlang
 1> erlang:universaltime().

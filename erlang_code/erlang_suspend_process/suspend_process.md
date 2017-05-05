@@ -1,4 +1,4 @@
-#erlang suspend process
+# erlang suspend process
 
 ```
 $erl

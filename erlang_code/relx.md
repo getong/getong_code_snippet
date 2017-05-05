@@ -1,4 +1,4 @@
-#relx
+# relx
 >{release, {sexpr, "0.0.1"},
 > [sexpr,
 >  %% There are two syntaxes for constraints.

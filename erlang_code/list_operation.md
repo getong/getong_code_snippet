@@ -1,4 +1,4 @@
-#list operation
+# list operation
 
 ```
 %% copy from riak_ensemble_peer.erl
