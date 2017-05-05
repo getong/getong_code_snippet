@@ -1,4 +1,4 @@
-#compile erlang
+# compile erlang
 
 ## kerl
 [kerl](https://github.com/kerl/kerl)
