@@ -16,4 +16,10 @@ docker logs web
 # stop
 docker stop web
 
+# exec command
+docker exec web ps
+
+# rename
+docker rename web web-old
+
 ```
