@@ -4,7 +4,7 @@
 # list all images
 docker images
 
-#pull
+# pull
 docker pull nginx
 
 # daemon
@@ -28,4 +28,17 @@ docker exec web ps
 # rename
 docker rename web web-old
 
+# save and load
+docker save -o nginx.tar nginx
+docker load --input nginx.tar
+
+# commit
+$ docker run -ti nginx /bin/bash
+root@38d5616406a7:/# touch test
+root@38d5616406a7:/# exit
+$docker commit -m "add file" -a "new img" 38d5616406a7 new_img_name
+
+# tag and push
+docker tag new_img_name:latest user/new_img_name:latest
+docker push user/new_img_name:latest
 ```
