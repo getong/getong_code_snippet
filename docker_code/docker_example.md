@@ -1,6 +1,12 @@
 # docker example
 
 ``` shell
+# list all images
+docker images
+
+#pull
+docker pull nginx
+
 # daemon
 docker run --detach --name web nginx:latest
 
