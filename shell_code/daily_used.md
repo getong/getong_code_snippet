@@ -24,6 +24,7 @@ reset
 ```
 dos2unix filename
 ```
+
 ## use adduser to add normal user, use useradd to add system user
 ```
 # will create /home/user
@@ -31,17 +32,20 @@ adduser user
 #not create /home/user2
 useradd user2
 ```
+
 ## 列出归属于user的用户的进程和线程
 
 ```
 $ ps -LF -u user
 ```
+
 ## 找到网关 gateway
 
 ```
 #netstat -rn
 (以0.0.0.0开始的行的gateway是默认网关)
 ```
+
 ## 快速格式化u盘
 
 ```
@@ -75,3 +79,11 @@ $ rename -n 'y/A-Z/a-z/' filename
 $ rename -v 'y/A-Z/a-z/' filename
 ```
 found it on manpage
+
+## get the kill command of zombie process
+
+``` shell
+ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -9 ” $2，$3}’
+
+ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -18 ” $3}’
+```
