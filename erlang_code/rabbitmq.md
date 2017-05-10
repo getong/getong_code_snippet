@@ -29,7 +29,7 @@ See the reference [Access Control (Authentication, Authorisation) in RabbitMQ](h
 ## Location of rabbitmq.config and rabbitmq-env.conf
 
 > Generic UNIX - $RABBITMQ_HOME/etc/rabbitmq/
- 
+> 
 > Debian - /etc/rabbitmq/
 > 
 > RPM - /etc/rabbitmq/
