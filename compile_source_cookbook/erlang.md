@@ -34,3 +34,19 @@ make -j`nproc` docs
 
 sudo make install && sudo make install-docs
 ```
+
+## g++: internal compiler error: Killed (program cc1plus)
+The main reason is the memory is not enough, use the swap file to solve it.
+
+``` shell
+sudo dd if=/dev/zero of=/swapfile bs=64M count=16
+sudo mkswap /swapfile
+sudo swapon /swapfile
+```
+
+Then compile the erlang source, and after compiled it, stop the swap file.
+
+``` shell
+sudo swapoff /swapfile
+sudo rm /swapfile
+```
