@@ -48,4 +48,9 @@ docker run -d --name web -v ~/docs:/usr/local/apapche2/htdocs ubuntu
 # mount managed volumn
 docker run -d -v /var/lib/data --name web ubuntu
 
+# romove all the containers
+docker ps -a | awk '{print $1}' | sed '1d' | xargs -I xxx docker rm xxx
+
+# remove all the images
+docker images | awk '{print $3}' | sed '1d' | xargs -I xxx docker rmi -f xxx
 ```
