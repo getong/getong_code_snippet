@@ -87,3 +87,9 @@ ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -9 ” $2，$3}’
 
 ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -18 ” $3}’
 ```
+
+## mount iso file
+
+``` shell
+mount -t iso9660 -o ro,loop,noauto /your/file.iso /mnt
+```
