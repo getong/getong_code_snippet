@@ -66,4 +66,16 @@ $docker logs $cid
 
 # bridged container
 $ docker run --rm --net bridge alpine:latest ip addr
+
+# joined container
+Share the container among the container network.
+First container
+$ docker run -d --name brady --network non alpine:latest nc -l 127.0.0.1:3333
+
+The second container
+$ docker run -it --network container:brady alpine:latest netstat -al
+
+# open contrainer
+docker run --rm --network host alpine:latest ip addr
+
 ```
