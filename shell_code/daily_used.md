@@ -99,3 +99,10 @@ mount -t iso9660 -o ro,loop,noauto /your/file.iso /mnt
 ``` shell
 netstat -putona
 ```
+
+## say yes to all command
+
+``` shell
+yes | apt-get install vim
+yes no | command
+```
