@@ -93,3 +93,9 @@ ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -18 ” $3}’
 ``` shell
 mount -t iso9660 -o ro,loop,noauto /your/file.iso /mnt
 ```
+
+## netstat get network info
+
+``` shell
+netstat -putona
+```
