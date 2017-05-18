@@ -29,3 +29,12 @@ Sometimes the new tag in remote repository, pull can't get the new tags. Fetch i
 ``` shell
 git fetch --tags
 ```
+
+## push more than one repositories at one time
+change the .git/config like below:
+
+``` shell
+[remote "origin"]
+	url = https://github.com/user/abc
+	url = https://gitlab.com/other_user/abc
+```
