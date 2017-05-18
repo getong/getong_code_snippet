@@ -63,4 +63,7 @@ $docker logs $cid
        valid_lft forever preferred_lft forever
     inet6 ::1/128 scope host
        valid_lft forever preferred_lft forever
+
+# bridged container
+$ docker run --rm --net bridge alpine:latest ip addr
 ```
