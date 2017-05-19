@@ -79,3 +79,6 @@ $ docker run -it --network container:brady alpine:latest netstat -al
 docker run --rm --network host alpine:latest ip addr
 
 ```
+
+## entrypoint
+entrypoint is a container loading and running command. If there are many entryponits, the last command will be running.
