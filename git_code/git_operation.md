@@ -41,6 +41,11 @@ change the .git/config like below:
 
 
 ## change remote repo commit user and email
+Create a fresh, bare clone of your repository:
+``` shell
+git clone --bare https://github.com/user/repo.git
+cd repo.git
+```
 
 ``` shell
 #!/bin/sh
@@ -65,11 +70,26 @@ fi
 The push it
 
 ``` shell
-git push --force
+git push --force --tags origin 'refs/heads/*'
+
 ```
 
 view all the commit user and email
 
 ``` shell
 git log --pretty=format:"%cn:%ce"
+```
+
+Finally, delete it.
+
+``` shell
+cd ..
+rm -rf repo.git
+```
+Look at [Changing author info](https://help.github.com/articles/changing-author-info/) for more info.
+
+The old cloned repo use --rebase to fetch it.
+
+``` shell
+git pull --rebase
 ```
