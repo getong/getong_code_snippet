@@ -106,3 +106,10 @@ netstat -putona
 yes | apt-get install vim
 yes no | command
 ```
+
+
+## check the atime, mtime, ctime of a file
+
+``` shell
+stat file
+```
