@@ -113,3 +113,23 @@ yes no | command
 ``` shell
 stat file
 ```
+
+## number operation
+``` shell
+#!/bin/bash
+echo "Hello World !"
+a=3
+b=5
+val=`expr $a + $b`
+echo "Total value : $val"
+
+val=`expr $a - $b`
+echo "Total value : $val"
+
+val=`expr $a \* $b`
+echo "Total value : $val"
+
+val=`expr $a / $b`
+echo "Total value : $val"
+```
+Note that, multiply operation should be escaped.
