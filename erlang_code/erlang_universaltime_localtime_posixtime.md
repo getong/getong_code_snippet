@@ -11,3 +11,5 @@
 {{2017,4,7},{10,4,38}}
 
 ```
+When storing files into the file system, it gets the localtime, and change it to the universaltime, but convert it into posix time as a number.
+When getting the file atime, mtime, ctime, it fetch the posix time as a number, and then convert it into universaltime, and finally change it to localtime.
