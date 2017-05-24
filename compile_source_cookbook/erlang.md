@@ -70,3 +70,8 @@ yum install m4 openssl openssl-devel  unixODBC unixODBC-devel \
 	make gcc gcc-c++ kernel-devel ncurses-devel libxslt \
 	fop java-1.8.0-openjdk-devel wxGTK-gl wxGTK-devel tk
 ```
+
+## erlang-rpm project
+There is a project for to package erlang install rpm in centos, it is made by RabbitMQ.
+See [erlang-rpm](https://github.com/rabbitmq/erlang-rpm)
+With some patches in its script.
