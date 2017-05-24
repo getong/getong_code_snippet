@@ -50,3 +50,23 @@ Then compile the erlang source, and after compiled it, stop the swap file.
 sudo swapoff /swapfile
 sudo rm /swapfile
 ```
+
+
+## install the deps
+debian
+``` shell
+aptitude install autoconf libncurses-dev build-essential \
+    libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
+    libglu1-mesa-dev libpng3 default-jdk g++ libxml2-utils
+
+apt-get build-dep erlang
+```
+
+centos
+
+``` shell
+yum groupinstall -y "Development Tools"
+yum install m4 openssl openssl-devel  unixODBC unixODBC-devel \
+	make gcc gcc-c++ kernel-devel ncurses-devel libxslt \
+	fop java-1.8.0-openjdk-devel wxGTK-gl wxGTK-devel tk
+```
