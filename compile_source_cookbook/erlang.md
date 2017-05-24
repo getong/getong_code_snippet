@@ -75,3 +75,7 @@ yum install m4 openssl openssl-devel  unixODBC unixODBC-devel \
 There is a project for to package erlang install rpm in centos, it is made by RabbitMQ.
 See [erlang-rpm](https://github.com/rabbitmq/erlang-rpm)
 With some patches in its script.
+
+Something releated:
+[Use ESL erlang deb, provide fake erlang-nox package so deps behave](https://gist.github.com/RJ/2284940)
+[How to install RabbitMQ with the latest Erlang release on Debian](https://blog.eriksen.com.br/en/how-install-rabbitmq-latest-erlang-release-debian)
