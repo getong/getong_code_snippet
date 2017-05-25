@@ -22,3 +22,5 @@ dpkg --remove --force-remove-reinstreq PAQUET
 ```
 
 Replace the `PAQUET` with the package name you want to remove.
+
+See the reference [Manually remove a broken package on Debian/Ubuntu](http://www.piprime.fr/1480/manually-remove-broken-package-debian-ubuntu/)
