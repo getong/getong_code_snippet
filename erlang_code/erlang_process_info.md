@@ -1,5 +1,6 @@
 # erlang process_info
 
+It is how to know the `pcb` of erlang process.
 ```
 process_info(self()).
 [{current_function,{erl_eval,do_apply,6}},
@@ -74,3 +75,18 @@ io输出进程
 
 ## suspending
 被其挂起的所有进程信息
+
+## erlang process current function
+To know what the process current function running:
+
+``` erlang
+erl>erlang:process_info(Pid, current_function).
+{current_function,{httpc,handle_answer,3}}
+
+... Time passed by
+
+erl>erlang:process_info(Pid, current_function).
+{current_function,{gen_server,loop,6}}
+
+```
+Through this method, I found out what caused our system key process timeout.
