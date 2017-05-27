@@ -133,3 +133,12 @@ val=`expr $a / $b`
 echo "Total value : $val"
 ```
 Note that, multiply operation should be escaped.
+
+
+## get host ip
+
+``` shell
+$ ifconfig
+$ ip a
+$ hostname -I
+```
