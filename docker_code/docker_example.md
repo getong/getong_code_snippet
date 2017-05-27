@@ -36,7 +36,7 @@ docker load --input nginx.tar
 $ docker run -ti nginx /bin/bash
 root@38d5616406a7:/# touch test
 root@38d5616406a7:/# exit
-$docker commit -m "add file" -a "new img" 38d5616406a7 new_img_name
+$docker commit -m "commit msg" -a "auther@test.com" 38d5616406a7 new_img_name
 
 # tag and push
 docker tag new_img_name:latest user/new_img_name:latest
