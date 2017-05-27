@@ -7,9 +7,10 @@ See the reference [使用dokcer 构建 mariadb 数据库](http://dockone.io/arti
 ``` shell
 mkdir -p /data/mysql/data
 chcon -Rt svirt_sandbox_file_t /data/mysql/data
-docker run -v /data/mysql/data:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root --name mariadb -d mariadb:latest
+docker run --privileged -v /data/mysql/data:/var/lib/mysql -p 4444:3306 -e MYSQL_ROOT_PASSWORD=root --name mariadb -d mariadb:latest
 
 ```
+If not root user, it must uses `--privileged` parameter to obtain root privilege.
 
 ## use the mariadb
 
@@ -26,3 +27,10 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 MariaDB [(none)]> show databases;
 ```
+
+## use the mysql client
+
+``` shell
+mysql -uroot -p -h127.0.0.1 -P 4444
+```
+It must use `-h` parameter.
