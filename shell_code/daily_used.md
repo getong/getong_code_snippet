@@ -142,3 +142,10 @@ $ ifconfig
 $ ip a
 $ hostname -I
 ```
+
+## awk substr
+Print the Nth part(include the Nth) to the end of each line.
+
+``` shell
+awk '{print substr($0, index($0, $N))}'
+```
