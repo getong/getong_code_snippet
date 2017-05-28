@@ -78,6 +78,9 @@ $ docker run -it --network container:brady alpine:latest netstat -al
 # open contrainer
 docker run --rm --network host alpine:latest ip addr
 
+# get the contaniner commit history
+docker history container_id
+
 ```
 
 ## entrypoint
