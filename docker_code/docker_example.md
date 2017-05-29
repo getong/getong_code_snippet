@@ -81,6 +81,9 @@ docker run --rm --network host alpine:latest ip addr
 # get the contaniner commit history
 docker history container_id
 
+# from dockerfile, the build command. The dockerfile is in current working directory.
+docker build -t tag_name .
+
 ```
 
 ## entrypoint
