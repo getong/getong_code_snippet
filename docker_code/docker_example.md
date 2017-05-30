@@ -84,6 +84,11 @@ docker history container_id
 # from dockerfile, the build command. The dockerfile is in current working directory.
 docker build -t tag_name .
 
+# export and import
+# Note that, export is very likely with the save, but it removes the commit history.
+docker export --output new_image.tar container_id
+docker import new_image.tar
+
 ```
 
 ## entrypoint
