@@ -11,6 +11,7 @@ trash-cli
 proxychains
 ansible
 supervisor
+systemd
 python-pip
-
+nemo
 ```
