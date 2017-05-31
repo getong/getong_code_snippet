@@ -87,7 +87,8 @@ docker build -t tag_name .
 # export and import
 # Note that, export is very likely with the save, but it removes the commit history.
 docker export --output new_image.tar container_id
-docker import new_image.tar
+docker import new_image.tar new_images:tag_name
+docker import http://example.com/exampleimage.tgz img_name:tag_name
 
 ```
 
