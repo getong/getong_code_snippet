@@ -1,6 +1,6 @@
 # erl_scan get string type
 
-tsung use erl_scan:string/1 to get the string's value, like below:
+## tsung use erl_scan:string/1 to get the string's value, like below:
 
 ```
 getTypeAttr(string, String)-> String;
@@ -32,4 +32,21 @@ $erl
 
 2>erl_scan:string("tr_"++ "abc").
 {ok,[{atom,1,tr_abc}],1}
+```
+
+## parse string to erlang term
+
+``` erlang
+string_to_term(String) when is_list(String) ->
+    case erl_scan:string(String++".") of
+        {ok, Tokens, _} ->
+            case erl_parse:parse_term(Tokens) of
+                {ok, Term} ->
+					Term;
+                _Err ->
+					error
+			end;
+        _Error ->
+            error
+    end.
 ```
