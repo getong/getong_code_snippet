@@ -149,3 +149,9 @@ Print the Nth part(include the Nth) to the end of each line.
 ``` shell
 awk '{print substr($0, index($0, $N))}'
 ```
+
+## curl post http data
+
+``` shell
+curl -d "msg=a&msg1=b" url
+```
