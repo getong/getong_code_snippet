@@ -1,5 +1,6 @@
 # erlang unicode
 
+## erlang reference
 Reference to [Erlang Unicode编码](http://wudaijun.com/2016/12/unicode-in-erlang/)
 
 
@@ -42,3 +43,12 @@ code:
 > ~ts则可打印charlist和unicode binary。
 
 > ~p如果不能打印出ASCII(0-127)字符，则直接打印出原生Term，不会对Unicode编码进行处理。
+
+## convert http post data to unicode
+
+``` erlang
+utf8_list_to_string(StrangeList) ->
+  unicode:characters_to_list(list_to_binary(StrangeList)).
+```
+[Using Unicode in Erlang](http://erlang.org/doc/apps/stdlib/unicode_usage.html)
+[how to support chinese in http request body? erlang](https://stackoverflow.com/questions/21304233/how-to-support-chinese-in-http-request-body-erlang)
