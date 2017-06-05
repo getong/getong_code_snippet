@@ -154,4 +154,5 @@ awk '{print substr($0, index($0, $N))}'
 
 ``` shell
 curl -d "msg=a&msg1=b" url
+curl url -X POST -H 'Content-Type: application/json' -d '{"msg": "a", "msg2": "b"}'
 ```
