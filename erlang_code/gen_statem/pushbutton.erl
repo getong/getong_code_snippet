@@ -26,6 +26,7 @@ code_change(_Vsn, State, Data, _Extra) ->
 init([]) ->
 	%% Set the initial state + data.  Data is used only as a counter.
 	State = off, Data = 0,
+	erlang:send_after(1000, self(), test),
 	{ok,State,Data}.
 callback_mode() -> state_functions.
 
@@ -48,6 +49,9 @@ on(EventType, EventContent, Data) ->
 handle_event({call,From}, get_count, Data) ->
 	%% Reply with the current count
 	{keep_state,Data,[{reply,From,Data}]};
-handle_event(_, _, Data) ->
+handle_event(Type, Content, Data) ->
+	io:format("Type:~p, Content:~p~n", [Type, Content]),
+	%% for the init function test msg, here will print:
+	%%  Type:info, Content:test
 	%% Ignore all other events
 	{keep_state,Data}.
