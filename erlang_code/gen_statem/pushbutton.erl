@@ -27,6 +27,7 @@ init([]) ->
 	%% Set the initial state + data.  Data is used only as a counter.
 	State = off, Data = 0,
 	erlang:send_after(1000, self(), test),
+	erlang:start_timer(2000, self(), new_test),
 	{ok,State,Data}.
 callback_mode() -> state_functions.
 
@@ -53,5 +54,7 @@ handle_event(Type, Content, Data) ->
 	io:format("Type:~p, Content:~p~n", [Type, Content]),
 	%% for the init function test msg, here will print:
 	%%  Type:info, Content:test
+	%% for the init function new_test msg, here will print:
+	%% Type:info, Content:{timeout,#Ref<0.1082072278.3859021828.235514>,new_test}
 	%% Ignore all other events
 	{keep_state,Data}.
