@@ -94,3 +94,10 @@ docker import http://example.com/exampleimage.tgz img_name:tag_name
 
 ## entrypoint
 entrypoint is a container loading and running command. If there are many entryponits, the last command will be running.
+
+## get all tags of image on remote repo
+
+``` shell
+ wget -q https://registry.hub.docker.com/v1/repositories/debian/tags -O -  | sed -e 's/[][]//g' -e 's/"//g' -e 's/ //g' | tr '}' '\n'  | awk -F: '{print $3}'
+```
+see the [docker get list of tags in repository](https://fordodone.com/2015/10/02/docker-get-list-of-tags-in-repository/)
