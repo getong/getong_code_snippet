@@ -70,3 +70,43 @@ erl>
 4> lists:ukeymerge(1,  B, A).
 [{a,2},{b,3},{c,4}]
 ```
+
+## For proplists, sometimes it is better to use lists module
+
+``` erlang
+%% proplists:get_value/3
+-spec get_value(Key, List, Default) -> term() when
+      Key :: term(),
+      List :: [term()],
+      Default :: term().
+
+get_value(Key, [P | Ps], Default) ->
+    if is_atom(P), P =:= Key ->
+	    true;
+       tuple_size(P) >= 1, element(1, P) =:= Key ->
+	    case P of
+		{_, Value} ->
+		    Value;
+		_ ->
+		    %% Don</code>t continue the search!
+		    Default
+	    end;
+       true ->
+	    get_value(Key, Ps, Default)
+    end;
+get_value(_Key, [], Default) ->
+    Default.
+
+%% lists:keyfind/3
+%% Shadowed by erl_bif_types: lists:keyfind/3
+-spec keyfind(Key, N, TupleList) -> Tuple | false when
+      Key :: term(),
+      N :: pos_integer(),
+      TupleList :: [Tuple],
+      Tuple :: tuple().
+
+keyfind(_, _, _) ->
+    erlang:nif_error(undef).
+```
+lists:keyfind/3 is nif implementation, better in performance.
+For [{Key, Value}] proplists, it is better to use lists:keyfind/3 than proplists:get_value/3.
