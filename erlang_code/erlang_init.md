@@ -11,3 +11,9 @@ init:stop().
 ``` erlang
 init:restart().
 ```
+
+## get sys.config file location
+
+``` shell
+init:get_argument(config)
+```
