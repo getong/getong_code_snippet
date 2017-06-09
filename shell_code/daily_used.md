@@ -156,3 +156,19 @@ awk '{print substr($0, index($0, $N))}'
 curl -d "msg=a&msg1=b" url
 curl url -X POST -H 'Content-Type: application/json' -d '{"msg": "a", "msg2": "b"}'
 ```
+
+## cat words to file
+Sometimes, no `vim`, `nano`, you can use `cat` to write words into a file.
+
+``` shell
+cat > sources.list << EOF
+deb http://mirrors.163.com/debian/ jessie main non-free contrib
+deb http://mirrors.163.com/debian/ jessie-updates main non-free contrib
+deb http://mirrors.163.com/debian/ jessie-backports main non-free contrib
+deb-src http://mirrors.163.com/debian/ jessie main non-free contrib
+deb-src http://mirrors.163.com/debian/ jessie-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ jessie-backports main non-free contrib
+deb http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib
+deb-src http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib
+EOF
+```
