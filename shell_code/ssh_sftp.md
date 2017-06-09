@@ -41,3 +41,22 @@ scp user@ip:/tmp/file /tmp
 ```
 ssh user@host -p port
 ```
+
+## enable public key login
+
+``` shell
+#mkdir ~/.ssh
+#chmod 755 ~/.ssh
+#ssh-keygen -t rsa  # enter the password of the key, not the user's password
+#cd ~/.ssh
+#cp id_rsa.pub authorized_keys
+#chmod 600 authorized_keys
+#chmod 600 id_rsa
+
+#vi /etc/ssh/sshd_config
+
+PubkeyAuthentication yes ## use key login
+AuthorizedKeysFile .ssh/authorized_keys ## key filename
+
+#service sshd restart
+```
