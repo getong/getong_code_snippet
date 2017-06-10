@@ -7,6 +7,7 @@
 		 push/0,
 		 get_count/0,
 		 stop/0,
+		 info_msg/0,
 		 cast_msg/0]).
 -export([
 		 terminate/3,
@@ -29,6 +30,9 @@ push() ->
 
 get_count() ->
 	gen_statem:call(name(), get_count).
+
+info_msg() ->
+	name() ! send_info_msg.
 
 cast_msg() ->
 	gen_statem:cast(name(), cast_msg).
