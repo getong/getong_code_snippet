@@ -5,3 +5,4 @@
 - [x] read the `gen_statem` manual and write some examples
 - [ ] write code doc
 - [ ] write a callback module
+- [ ] docker a erlang cluster, need a epmd docker container per host?
