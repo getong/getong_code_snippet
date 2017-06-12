@@ -172,3 +172,11 @@ deb http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib
 deb-src http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib
 EOF
 ```
+
+
+## view linux capacity
+
+``` shell
+capsh --print
+```
+In docker, this will change according to the user.
