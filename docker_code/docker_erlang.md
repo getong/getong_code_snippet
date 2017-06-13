@@ -8,14 +8,10 @@
 > It was not an issue in the previous case, because by default all ports in the "docker network" are open, so containers are able to talk to each other using them. Below is a sample Vagrant file, which shows how to do that with 2 hosts. See the Mongoose documentation for more details about clustering: http://mongooseim.readthedocs.org/en/latest/operation-and-maintenance/Cluster-configuration-and-node-management/.
 
 see [mongooseim-docker](https://github.com/ppikula/mongooseim-docker)
-This should use the `bridge` docker network.
 
-## docker epmd
-This also use the `bridge` docker network.
-`This is just my thinking, does not test to work.`
-
-In every host, docker a epmd container, then in a cluster, every host should have a epmd process to handle the host erlang network.
-The erlang team divide the `epmd` into a own repo, and the docker hub found a epmd image. This should be work, but not test.
+In this solution, every host has a epmd container, then in a cluster, every host should have a epmd process to handle the host erlang network.
+This uses the `bridge` docker network.
+Thus, use kubernetes, docker compose, mesos should make the cluster more easy to be build.
 
 ## use the open network
-Not isolate the network, use the host network.
+Not isolate the network, use the host network. Only one epmd container, and many other erlang containers.
