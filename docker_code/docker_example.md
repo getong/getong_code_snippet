@@ -101,3 +101,24 @@ entrypoint is a container loading and running command. If there are many entrypo
  wget -q https://registry.hub.docker.com/v1/repositories/debian/tags -O -  | sed -e 's/[][]//g' -e 's/"//g' -e 's/ //g' | tr '}' '\n'  | awk -F: '{print $3}'
 ```
 see the [docker get list of tags in repository](https://fordodone.com/2015/10/02/docker-get-list-of-tags-in-repository/)
+
+## inspect. Find out the meta data of an image or a container
+
+``` shell
+docker inspect image_name
+docker inspect container_id
+```
+
+## attach. Attatch to the container stdin
+
+``` shell
+docker attach container_id
+```
+
+## exec. Running cmd in a container like pipeline
+
+``` shell
+docker exec -it container_id /bin/sh
+docker exec -d container_id cmd
+echo $?
+```
