@@ -67,7 +67,7 @@ fi
 ' --tag-name-filter cat -- --branches --tags
 
 ```
-The push it
+Then push it
 
 ``` shell
 git push --force --tags origin 'refs/heads/*'
@@ -92,4 +92,10 @@ The old cloned repo use --rebase to fetch it.
 
 ``` shell
 git pull --rebase
+```
+
+## squash
+
+``` shell
+git merge branch_name --squash
 ```
