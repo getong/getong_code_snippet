@@ -99,3 +99,11 @@ git pull --rebase
 ``` shell
 git merge branch_name --squash
 ```
+
+## rebase pr
+
+``` shell
+git rebase -i HEAD~5
+git rebase --abort
+git rebase --continue
+```
