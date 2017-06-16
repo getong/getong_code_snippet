@@ -113,3 +113,9 @@ git rebase --continue
 ``` shell
 git remote show origin
 ```
+
+## reflog
+see the reference with the log
+``` shell
+git reflog
+```
