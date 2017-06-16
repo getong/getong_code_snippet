@@ -107,3 +107,9 @@ git rebase -i HEAD~5
 git rebase --abort
 git rebase --continue
 ```
+
+## remote show
+
+``` shell
+git remote show origin
+```
