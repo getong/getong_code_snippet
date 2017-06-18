@@ -127,3 +127,10 @@ git checkout master
 git cherry-pick commit_id
 git cmomit
 ```
+
+## show
+show the commit info
+
+``` shell
+git show commit_id
+```
