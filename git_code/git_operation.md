@@ -115,7 +115,15 @@ git remote show origin
 ```
 
 ## reflog
-see the reference with the log
+see the local branch log
 ``` shell
 git reflog
+```
+
+## cherry-pick
+
+``` shell
+git checkout master
+git cherry-pick commit_id
+git cmomit
 ```
