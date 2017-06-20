@@ -180,3 +180,10 @@ EOF
 capsh --print
 ```
 In docker, this will change according to the user.
+
+## dd iso image
+
+``` shell
+# /dev/sdb is the ustick mount point
+sudo dd if=xxx.iso of=/dev/sdb
+```
