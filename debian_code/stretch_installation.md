@@ -93,3 +93,4 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/m
 ```
 # apt-get build-dep -y emacs erlang tmux
 ```
+compile emacs, erlang, tmux as the docs
