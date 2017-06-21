@@ -10,7 +10,7 @@
 apt-get build-dep -y linux
 apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev \
                    linux-source build-essential linux-headers-amd64 vim \
-				   build-essential git subversion
+		   build-essential git subversion curl
 cd /usr/src
 xz -d -k linux-patch-4.9-rt.patch.xz
 tar xaf linux-source-4.9.tar.xz
@@ -79,4 +79,15 @@ GRUB_CMDLINE_LINUX="noapic acpi=off"
 The `grub_timeout` is `1`, and the `noapic acpi=off`. 
 ```shell
 # update-grub
+```
+
+## install zsh
+```shell
+# apt-get install -y zsh
+$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+```
+
+## build emacs erlang tmux
+```
+# apt-get build-dep -y emacs erlang tmux
 ```
