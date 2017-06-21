@@ -84,6 +84,8 @@ The `grub_timeout` is `1`, and the `noapic acpi=off`.
 ## install zsh
 ```shell
 # apt-get install -y zsh
+$ chsh 
+/bin/zsh
 $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
 
