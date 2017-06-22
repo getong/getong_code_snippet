@@ -76,7 +76,7 @@ GRUB_CMDLINE_LINUX="noapic acpi=off"
 #GRUB_INIT_TUNE="480 440 1"
 
 ```
-The `grub_timeout` is `1`, and the `noapic acpi=off`. 
+The `grub_timeout` is `1`, and the `noapic acpi=off`.
 ```shell
 # update-grub
 ```
@@ -84,7 +84,7 @@ The `grub_timeout` is `1`, and the `noapic acpi=off`.
 ## install zsh
 ```shell
 # apt-get install -y zsh
-$ chsh 
+$ chsh
 /bin/zsh
 $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 ```
@@ -94,3 +94,10 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/m
 # apt-get build-dep -y emacs erlang tmux
 ```
 compile emacs, erlang, tmux as the docs
+
+## 找回最大化最小化按钮
+See [Bring back "minimize" and "maximize" buttons in titlebars by default](https://labs.riseup.net/code/issues/11270)
+
+``` shell
+gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
+```
