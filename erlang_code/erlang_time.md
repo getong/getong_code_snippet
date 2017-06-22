@@ -16,3 +16,30 @@ p1_time_compat.erl 这个模块可以找到对应版本的时间方法.
 
 ```
 copy from ejabberd_app.erl
+
+
+## uptime
+Prints the node uptime (as specified by erlang:statistics(wall_clock)) in human-readable form.
+
+``` erlang
+%%
+%% uptime/0
+%%
+
+-spec uptime() -> 'ok'.
+
+uptime() ->
+    io:format("~s~n", [uptime(get_uptime())]).
+
+uptime({D, {H, M, S}}) ->
+    lists:flatten(
+      [[ io_lib:format("~p days, ", [D]) || D > 0 ],
+       [ io_lib:format("~p hours, ", [H]) || D+H > 0 ],
+       [ io_lib:format("~p minutes and ", [M]) || D+H+M > 0 ],
+       io_lib:format("~p seconds", [S])]).
+
+get_uptime() ->
+    {UpTime, _} = erlang:statistics(wall_clock),
+    calendar:seconds_to_daystime(UpTime div 1000).
+```
+copy from c.erl
