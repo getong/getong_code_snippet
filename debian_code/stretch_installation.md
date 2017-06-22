@@ -101,3 +101,8 @@ See [Bring back "minimize" and "maximize" buttons in titlebars by default](https
 ``` shell
 gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
 ```
+
+## fcitx
+```shell
+# apt-get install fcitx-ui-classic fcitx-frontend-fbterm
+```
