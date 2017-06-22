@@ -106,3 +106,7 @@ gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize
 ```shell
 # apt-get install fcitx-ui-classic fcitx-frontend-fbterm
 ```
+## systemd multi-user target
+```shell
+systemctl set-default multi-user.target
+```
