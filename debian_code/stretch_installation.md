@@ -110,3 +110,7 @@ gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize
 ```shell
 systemctl set-default multi-user.target
 ```
+Temporary enable graphics target
+```shell
+systemctl isolate graphical.target
+```
