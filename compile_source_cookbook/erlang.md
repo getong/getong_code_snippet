@@ -53,13 +53,20 @@ sudo rm /swapfile
 
 
 ## install the deps
-debian
+debian jessie
 ``` shell
 aptitude install autoconf libncurses-dev build-essential \
     libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
     libglu1-mesa-dev libpng3 default-jdk g++ libxml2-utils
 
 apt-get build-dep erlang
+```
+debian stretch
+```shell
+apt-get build-dep erlang
+apt-get install autoconf libncurses5-dev build-essential \
+    libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
+    libglu1-mesa-dev libpng-dev default-jdk g++ libxml2-utils
 ```
 
 centos
