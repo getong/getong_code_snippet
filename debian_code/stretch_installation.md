@@ -125,3 +125,22 @@ $ ./configure
 $ make 
 $ sudo make install
 ```
+## gem source 
+```shell
+$ sudo gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
+$ sudo gem update --system 
+$ sudo gem install githug
+```
+
+## swap caps and ctrl
+Edit /etc/default/keyboard
+```shell
+XKBOPTIONS="ctrl:swapcaps"
+```
+Then run this:
+```shell
+$ sudo dpkg-reconfigure -phigh console-setup
+```
+
+
+
