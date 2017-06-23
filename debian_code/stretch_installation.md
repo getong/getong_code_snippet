@@ -114,3 +114,12 @@ Temporary enable graphics target
 ```shell
 systemctl isolate graphical.target
 ```
+
+## install fbv
+```shell
+$ git clone https://github.com/godspeed1989/fbv
+$ cd fbv
+$ ./configure
+$ make 
+$ sudo make install
+```
