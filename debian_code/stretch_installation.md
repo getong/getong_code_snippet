@@ -117,6 +117,7 @@ systemctl isolate graphical.target
 
 ## install fbv
 ```shell
+$ sudo apt-get install libjpeg-dev
 $ git clone https://github.com/godspeed1989/fbv
 $ cd fbv
 $ ./configure
