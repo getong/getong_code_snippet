@@ -22,6 +22,7 @@ sftp -i id_rsa user@ip
 
 ```
 scp -i id_rsa file user@ip:/tmp/dir
+scp -i id_rsa dir/* user@host:/var/cache/yum/x86_64/7/updates/packages/
 ```
 
 ## 拷贝目录到远程服务器
