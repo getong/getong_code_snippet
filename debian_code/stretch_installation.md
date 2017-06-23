@@ -106,7 +106,13 @@ gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize
 ## fcitx
 ```shell
 # apt-get install fcitx-ui-classic fcitx-frontend-fbterm
+# sudo chmod u+s /usr/bin/fbterm
 ```
+Edit ~/.fbtermrc
+```shell
+input-method=fcitx-fbterm
+```
+
 ## systemd multi-user target
 ```shell
 systemctl set-default multi-user.target
