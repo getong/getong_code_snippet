@@ -10,7 +10,8 @@
 apt-get build-dep -y linux
 apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev \
                    linux-source build-essential linux-headers-amd64 vim \
-		   build-essential git subversion curl nemo proxychains trash-cli firefox-esr-l10n-zh-cn
+		   build-essential git subversion curl nemo proxychains trash-cli firefox-esr-l10n-zh-cn \
+	moc w3m
 cd /usr/src
 xz -d -k linux-patch-4.9-rt.patch.xz
 tar xaf linux-source-4.9.tar.xz
