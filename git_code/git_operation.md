@@ -134,3 +134,17 @@ show the commit info
 ``` shell
 git show commit_id
 ```
+
+## stash
+```shell
+$ git stash save filename
+```
+
+## git ignore
+```shell
+$ cat .gitignore
+*.swp
+*.a
+!lib.a
+```
+All the `.swp` files and all the `.a` file except the `lib.a` file will be ignore
