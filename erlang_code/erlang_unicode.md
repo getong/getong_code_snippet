@@ -52,3 +52,9 @@ utf8_list_to_string(StrangeList) ->
 ```
 [Using Unicode in Erlang](http://erlang.org/doc/apps/stdlib/unicode_usage.html)
 [how to support chinese in http request body? erlang](https://stackoverflow.com/questions/21304233/how-to-support-chinese-in-http-request-body-erlang)
+
+## erlang file encode
+```erlang
+%% coding: latin-1
+```
+The default is UTF-8, but this can make it use local encode.
