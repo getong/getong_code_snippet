@@ -128,13 +128,13 @@ $ sudo apt-get install libjpeg-dev
 $ git clone https://github.com/godspeed1989/fbv
 $ cd fbv
 $ ./configure
-$ make 
+$ make
 $ sudo make install
 ```
-## gem source 
+## gem source
 ```shell
 $ sudo gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
-$ sudo gem update --system 
+$ sudo gem update --system
 $ sudo gem install githug
 ```
 
@@ -148,5 +148,31 @@ Then run this:
 $ sudo dpkg-reconfigure -phigh console-setup
 ```
 
+## network static
+> As if Stretch, the old network names like eth0, eth1 have gone away as the device name can change. The new names are similar to these: enp6s0, enp8s0, enp0s31f6, enp5s0.
+> To find the names of your interfaces you will want to look here:
+```shell
+$ ls /sys/class/net/
+```
 
+Set the local network interface static, write this into /etc/network/interface
 
+``` shell
+auto enp0s3
+iface enp0s3 inet static
+address 192.168.1.56
+netmask 255.255.255.0
+gateway 192.168.1.1
+```
+
+And the `/etc/resolv.conf` is missing, create it and write this into it.
+
+``` shell
+nameserver 192.168.1.1
+```
+
+Restart the network:
+
+``` shell
+# /etc/init.d/networking restart
+```
