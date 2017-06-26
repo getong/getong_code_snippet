@@ -233,3 +233,23 @@ See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题]
 ``` shell
 # apt-get install nemo proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin
 ```
+
+## virtualbox-5.1
+
+``` shell
+# cat "deb http://download.virtualbox.org/virtualbox/debian stretch contrib" > /etc/apt/sources.list.d/virtualbox.list
+# wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- |  apt-key add -
+# apt-get update
+# apt-get install virtualbox-5.1 dkms
+# wget -c http://download.virtualbox.org/virtualbox/5.1.22/Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+# VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+## or add replace
+# VBoxManage extpack install --replace Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+```
+
+## vagrant
+
+``` shell
+# wget -c https://releases.hashicorp.com/vagrant/1.9.5/vagrant_1.9.5_x86_64.deb
+# dpkg -i vagrant_1.9.5_x86_64.deb
+```
