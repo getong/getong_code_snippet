@@ -149,6 +149,7 @@ $ sudo dpkg-reconfigure -phigh console-setup
 ```
 
 ## network static
+See the reference: [NetworkConfiguration](https://wiki.debian.org/NetworkConfiguration)
 > As if Stretch, the old network names like eth0, eth1 have gone away as the device name can change. The new names are similar to these: enp6s0, enp8s0, enp0s31f6, enp5s0.
 > To find the names of your interfaces you will want to look here:
 ```shell
@@ -176,3 +177,34 @@ Restart the network:
 ``` shell
 # /etc/init.d/networking restart
 ```
+
+## libssl
+The libssl in stretch is `1.1.0f-3` and is the default package.
+And the openssl has change some API in 1.1.0, conflicts with 1.0.0 .
+The shadowsocks is use libssl 1.0.0, and the stretch is install libssl 1.1.0, something need to be changed.
+
+``` shell
+vim /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py
+```
+change the line 52
+
+``` python
+libcrypto.EVP_CIPHER_CTX_cleanup.argtypes = (c_void_p,)
+```
+to be :
+
+``` python
+libcrypto.EVP_CIPHER_CTX_reset.argtypes = (c_void_p,)
+```
+
+And the line 111
+
+``` python
+libcrypto.EVP_CIPHER_CTX_cleanup(self._ctx)
+```
+to be
+
+``` python
+libcrypto.EVP_CIPHER_CTX_reset(self._ctx)
+```
+See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题](https://blog.lyz810.com/article/2016/09/shadowsocks-with-openssl-greater-than-110/)
