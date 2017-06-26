@@ -7,17 +7,15 @@
 ## 编译linux内核
 
 ``` shell
-apt-get build-dep -y linux
-apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev \
-                   linux-source build-essential linux-headers-amd64 vim \
-		   build-essential git subversion curl nemo proxychains trash-cli firefox-esr-l10n-zh-cn \
-	moc w3m python-pip
-cd /usr/src
-xz -d -k linux-patch-4.9-rt.patch.xz
-tar xaf linux-source-4.9.tar.xz
-cd linux-source-4.9
-patch -p1 < ../linux-patch-4.9-rt.patch
-cp /boot/config-4.9.0-3-amd64 .config
+# apt-get build-dep -y linux
+# apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev \
+                   linux-source build-essential linux-headers-amd64 vim git subversion curl build-essential
+# cd /usr/src
+# xz -d -k linux-patch-4.9-rt.patch.xz
+# tar xaf linux-source-4.9.tar.xz
+# cd linux-source-4.9
+# patch -p1 < ../linux-patch-4.9-rt.patch
+# cp /boot/config-4.9.0-3-amd64 .config
 ```
 
 修改.config文件，CONFIG_SATA_PMP=n
@@ -229,3 +227,9 @@ to be
 libcrypto.EVP_CIPHER_CTX_reset(self._ctx)
 ```
 See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题](https://blog.lyz810.com/article/2016/09/shadowsocks-with-openssl-greater-than-110/)
+
+## other software:
+
+``` shell
+# apt-get install nemo proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin
+```
