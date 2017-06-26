@@ -181,6 +181,27 @@ Restart the network:
 ## libssl
 The libssl in stretch is `1.1.0f-3` and is the default package.
 And the openssl has change some API in 1.1.0, conflicts with 1.0.0 .
+Install shadowsocks:
+
+``` shell
+# pip install --upgrade shadowsocks
+# mkdir -p /etc/shadowsocks
+# cd /etc/shadowsocks
+# cat ss_client.config
+{
+        "server": "192.168.1.1",
+        "server_port": 443,
+        "local_port":1080,
+        "password": "123456",
+        "timeout":600,
+        "method": "aes-256-cfb",
+        "auth": true
+}
+
+# sslocal -c ss_client.config -d start
+
+```
+
 The shadowsocks is use libssl 1.0.0, and the stretch is install libssl 1.1.0, something need to be changed.
 
 ``` shell
