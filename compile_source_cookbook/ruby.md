@@ -7,8 +7,11 @@ tar xaf ruby-2.4.1.tar.xz
 cd ruby-2.4.1
 ./configure --prefix=/usr/local/ruby-2.4.1
 make
+make test
 make capi
 sudo make install
 ```
 
 See the reference: [Ruby-2.4.1](http://www.linuxfromscratch.org/blfs/view/cvs/general/ruby.html)
+
+Besides, compile on Debian, See the [Ruby – Installation and compilation from sources on Debian](https://mensfeld.pl/2014/10/ruby-installation-and-compilation-from-sources-on-debian/)
