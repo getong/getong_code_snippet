@@ -253,3 +253,11 @@ See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题]
 # wget -c https://releases.hashicorp.com/vagrant/1.9.5/vagrant_1.9.5_x86_64.deb
 # dpkg -i vagrant_1.9.5_x86_64.deb
 ```
+
+## proxychains
+Edit /etc/proxychains.conf
+```shell
+quiet_mode
+socks5  127.0.0.1 1080
+```
+
