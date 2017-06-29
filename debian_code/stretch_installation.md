@@ -261,3 +261,4 @@ quiet_mode
 socks5  127.0.0.1 1080
 ```
 
+## jigdo-lite not support https url
