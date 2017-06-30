@@ -187,3 +187,13 @@ In docker, this will change according to the user.
 # /dev/sdb is the ustick mount point
 sudo dd if=xxx.iso of=/dev/sdb
 ```
+
+## sleep n second for copy many files, in case of lager power
+
+``` shell
+for i in `ls`
+do
+cp $i /tmp
+sleep 10
+done
+```
