@@ -9,7 +9,7 @@
 ``` shell
 # apt-get build-dep -y linux
 # apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev \
-                   linux-source build-essential linux-headers-amd64 vim git subversion curl build-essential
+                   linux-source build-essential linux-headers-amd64 vim git subversion curl
 # cd /usr/src
 # xz -d -k linux-patch-4.9-rt.patch.xz
 # tar xaf linux-source-4.9.tar.xz
@@ -27,7 +27,9 @@ make menuconfig
 
 ``` shell
 #!/bin/sh
-make -j`nproc` bzImage && make -j`nproc` modules && make modules_install && make headers_install && make install && shutdown -h now echo "compile kernel failed " >> failed.txt shutdown -h now
+make -j`nproc` bzImage && make -j`nproc` modules && make modules_install && make headers_install && make install && shutdown -h now
+echo "compile kernel failed " >> failed.txt
+shutdown -h now
 ```
 
 启动运行：
