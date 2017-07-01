@@ -148,3 +148,12 @@ $ cat .gitignore
 !lib.a
 ```
 All the `.swp` files and all the `.a` file except the `lib.a` file will be ignore
+
+
+## git mv
+
+``` shell
+git mv a_file b_file
+git commit --dry-run -a
+git commit -m 'rename'
+```
