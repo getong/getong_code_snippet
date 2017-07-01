@@ -197,3 +197,13 @@ cp $i /tmp
 sleep 10
 done
 ```
+
+## ln must use absolute path as argument
+
+``` shell
+# cd /usr/local/otp_src_20.0
+# for i in `ls`
+do
+ln -sf $PWD/$i /usr/bin
+done
+```
