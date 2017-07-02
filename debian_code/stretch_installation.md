@@ -239,7 +239,7 @@ See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题]
 ## virtualbox-5.1
 
 ``` shell
-# cat "deb http://download.virtualbox.org/virtualbox/debian stretch contrib" > /etc/apt/sources.list.d/virtualbox.list
+# echo "deb http://download.virtualbox.org/virtualbox/debian stretch contrib" > /etc/apt/sources.list.d/virtualbox.list
 # wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- |  apt-key add -
 # apt-get update
 # apt-get install virtualbox-5.1 dkms
@@ -252,8 +252,8 @@ See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题]
 ## vagrant
 
 ``` shell
-# wget -c https://releases.hashicorp.com/vagrant/1.9.5/vagrant_1.9.5_x86_64.deb
-# dpkg -i vagrant_1.9.5_x86_64.deb
+# wget -c https://releases.hashicorp.com/vagrant/1.9.6/vagrant_1.9.6_x86_64.deb
+# dpkg -i vagrant_1.9.6_x86_64.deb
 ```
 
 ## proxychains
