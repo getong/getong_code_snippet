@@ -180,6 +180,12 @@ Restart the network:
 # /etc/init.d/networking restart
 ```
 
+## other software:
+
+``` shell
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin
+```
+
 ## libssl
 The libssl in stretch is `1.1.0f-3` and is the default package.
 And the openssl has change some API in 1.1.0, conflicts with 1.0.0 .
@@ -232,10 +238,9 @@ libcrypto.EVP_CIPHER_CTX_reset(self._ctx)
 ```
 See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题](https://blog.lyz810.com/article/2016/09/shadowsocks-with-openssl-greater-than-110/)
 
-## other software:
-
-``` shell
-# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin
+## SwitchyOmega
+```shell
+wget -c https://github.com/FelisCatus/SwitchyOmega/releases/download/v2.4.6/SwitchyOmega.crx
 ```
 
 ## virtualbox-5.1
