@@ -208,6 +208,7 @@ Install shadowsocks:
         "password": "123456",
         "timeout":600,
         "method": "aes-256-cfb",
+	"fast_open": true,
         "auth": true
 }
 
