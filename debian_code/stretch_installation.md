@@ -16,8 +16,7 @@
 
 ``` shell
 # apt-get build-dep -y linux
-# apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev \
-                   linux-source build-essential linux-headers-amd64 vim git subversion curl
+# apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev linux-source build-essential linux-headers-amd64 vim git subversion curl
 # cd /usr/src
 # xz -d -k linux-patch-4.9-rt.patch.xz
 # tar xaf linux-source-4.9.tar.xz
