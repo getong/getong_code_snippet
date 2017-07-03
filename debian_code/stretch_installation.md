@@ -2,6 +2,12 @@
 
 ## Be carefull when type a command in the console.
 
+## update and upgrade system
+```shell
+# apt-get update
+# apt-get upgrade -y 
+```
+
 ## 安装过程不要使用网络
 1. 国内网络不好，下载镜像源会比较慢，会出现下载不了的情况，耗费大量时间不值得。
 2. 下载的更新软件里面可能会有 _linux_ , 这个在安装过程中会出现安装不了的情况。
