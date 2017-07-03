@@ -1,5 +1,7 @@
 # stretch amd64 installation
 
+## Be carefull when type a command in the console.
+
 ## 安装过程不要使用网络
 1. 国内网络不好，下载镜像源会比较慢，会出现下载不了的情况，耗费大量时间不值得。
 2. 下载的更新软件里面可能会有 _linux_ , 这个在安装过程中会出现安装不了的情况。
@@ -233,7 +235,7 @@ See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题]
 ## other software:
 
 ``` shell
-# apt-get install nemo proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin
 ```
 
 ## virtualbox-5.1
