@@ -244,6 +244,9 @@ libcrypto.EVP_CIPHER_CTX_reset(self._ctx)
 ```
 See the reference: [解决openssl升级到1.1.0后shadowsocks服务报错问题](https://blog.lyz810.com/article/2016/09/shadowsocks-with-openssl-greater-than-110/)
 
+## shadowsocks start with systemd
+see [system service](../shell_code/systemd.md)
+
 ## SwitchyOmega
 ```shell
 wget -c https://github.com/FelisCatus/SwitchyOmega/releases/download/v2.4.6/SwitchyOmega.crx
