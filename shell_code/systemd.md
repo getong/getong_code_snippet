@@ -47,8 +47,8 @@ UMask=0027
 [Install]
 WantedBy=multi-user.target
 
-# systemtemctl enable shadowsocks
-# systemtemctl start shadowsocks
+# systemctl enable shadowsocks
+# systemctl start shadowsocks
 
 ```
 
