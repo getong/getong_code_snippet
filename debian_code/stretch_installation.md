@@ -5,7 +5,7 @@
 ## update and upgrade system
 ```shell
 # apt-get update
-# apt-get upgrade -y 
+# apt-get upgrade -y
 ```
 
 ## 安装过程不要使用网络
@@ -260,6 +260,13 @@ wget -c https://github.com/FelisCatus/SwitchyOmega/releases/download/v2.4.6/Swit
 # VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
 ## or add replace
 # VBoxManage extpack install --replace Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+```
+
+## virtualbox set default VM location in command line
+See [How to change VirtualBox default VM location in command line](https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line)
+
+``` shell
+$ vboxmanage setproperty machinefolder /path/to/directory/
 ```
 
 ## vagrant
