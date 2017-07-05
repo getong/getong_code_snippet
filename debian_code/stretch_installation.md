@@ -308,3 +308,21 @@ $ sudo usermod -aG docker $USER
 
 $ sudo systemctl enable docker
 ```
+
+## install docker using ustc mirror
+
+``` shell
+$ sudo add-apt-repository "deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/debian/ $(lsb_release -cs) stable"
+
+$ curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/debian/gpg | sudo apt-key add -
+
+$ sudo apt-get update
+
+$ sudo apt-get install docker-ce
+
+$ apt-cache madison docker-ce
+
+$ sudo usermod -aG docker $USER
+
+$ sudo systemctl enable docker
+```
