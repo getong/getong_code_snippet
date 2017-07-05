@@ -52,6 +52,13 @@ WantedBy=multi-user.target
 
 ```
 
+## sslocal
+The sslocal is almost the same with sserver, change the _ExecStart_
+
+``` shell
+ExecStart=/usr/local/bin/sslocal -c /etc/shadowsocks/ss_client.config
+```
+
 ## sysctl config
 The `/etc/sysctl.d/local.conf` is
 
