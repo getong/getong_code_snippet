@@ -86,3 +86,20 @@ With some patches in its script.
 Something releated:
 [Use ESL erlang deb, provide fake erlang-nox package so deps behave](https://gist.github.com/RJ/2284940)
 [How to install RabbitMQ with the latest Erlang release on Debian](https://blog.eriksen.com.br/en/how-install-rabbitmq-latest-erlang-release-debian)
+
+
+## centos 7 compile erlang
+
+Enable EPEL repo in CentOS 7
+``` shell
+$ sudo yum install epel-release
+```
+See [Install EPEL, IUS, and Remi repositories on CentOS and Red Hat](https://support.rackspace.com/how-to/install-epel-and-additional-repositories-on-centos-and-red-hat/)
+
+install the wxdiget from elpa
+
+``` shell
+$ sudo yum install wxGTK-gl wxGTK-devel
+```
+> wx* packages have never been part of CentOS base/updates. They are in EPEL.
+See [wxBase/wxGTK/wxGTK-gl packages in centos 7 repos?](https://www.centos.org/forums/viewtopic.php?t=50620)
