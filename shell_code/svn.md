@@ -54,3 +54,10 @@ svn rm svn://svn_server/repo/tags/tag-2017-01-13
 $ svn add --force _build
 $ svn commit -m 'update new dep' _build
 ```
+
+## svn 设置文件可执行权限
+
+``` shell
+$ svn propset svn:executable on filename
+$ svn commit -m 'add executable' filename
+```
