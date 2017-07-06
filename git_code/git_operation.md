@@ -157,3 +157,15 @@ git mv a_file b_file
 git commit --dry-run -a
 git commit -m 'rename'
 ```
+
+## detele local branch
+
+``` shell
+$ git branch -d <branch_name>
+```
+
+## delete remote branch
+
+``` shell
+$ git push origin --delete <branch_name>
+```
