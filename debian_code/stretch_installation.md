@@ -344,3 +344,13 @@ $ xdg-user-dirs-update
 $ xdg-user-dirs-update --set PICTURES /media/user/other_dir
 $ xdg-user-dir PICTURES
 ```
+
+
+## rar
+
+``` shell
+$ wget -c http://rarlab.com/rar/rarlinux-x64-5.4.0.tar.gz
+$ tar xzf rarlinux-x64-5.4.0.tar.gz
+$ cd rar
+$ sudo -i make
+```
