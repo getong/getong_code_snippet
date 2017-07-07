@@ -337,3 +337,10 @@ change the config to be:
 ``` shell
 XDG_PICTURES_DIR="/media/user/other_dir"
 ```
+See [XDG user directories](https://wiki.archlinux.org/index.php/XDG_user_directories)
+
+``` shell
+$ xdg-user-dirs-update
+$ xdg-user-dirs-update --set PICTURES /media/user/other_dir
+$ xdg-user-dir PICTURES
+```
