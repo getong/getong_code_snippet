@@ -326,3 +326,14 @@ $ sudo usermod -aG docker $USER
 
 $ sudo systemctl enable docker
 ```
+
+## change the screen print directory
+
+``` shell
+$ vim ~/.config/user-dirs.dirs
+```
+change the config to be:
+
+``` shell
+XDG_PICTURES_DIR="/media/user/other_dir"
+```
