@@ -169,3 +169,19 @@ $ git branch -d <branch_name>
 ``` shell
 $ git push origin --delete <branch_name>
 ```
+
+## delete added file from git cache, not commited
+
+``` shell
+$ git rm --cached file_name
+```
+The `file_name` is just added to git, not commited.
+
+
+## amend, change the last commit info
+
+``` shell
+$ git add file
+$ git commit --amend
+```
+This will append the `add file` into the last commit info.
