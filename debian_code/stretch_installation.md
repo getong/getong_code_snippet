@@ -354,3 +354,9 @@ $ tar xzf rarlinux-x64-5.4.0.tar.gz
 $ cd rar
 $ sudo -i make
 ```
+## rebar3
+```shell
+$ cd /usr/local/bin
+$ sudo wget -c https://s3.amazonaws.com/rebar3/rebar3
+$ sudo chmod +x rebar3
+```
