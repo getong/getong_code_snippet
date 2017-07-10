@@ -103,3 +103,24 @@ $ sudo yum install wxGTK-gl wxGTK-devel
 ```
 > wx* packages have never been part of CentOS base/updates. They are in EPEL.
 See [wxBase/wxGTK/wxGTK-gl packages in centos 7 repos?](https://www.centos.org/forums/viewtopic.php?t=50620)
+
+
+
+## erlang centos china mirror
+See [使用国内源安装erlang](http://www.jianshu.com/p/27197d58e94c)
+
+``` shell
+# wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+# rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
+```
+Edit /etc/yum.repos.d/erlang_solutions.repo
+centos 6
+
+``` shell
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/erlang-solutions/centos/6/
+```
+
+centos 7
+``` shell
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/erlang-solutions/centos/7/
+```
