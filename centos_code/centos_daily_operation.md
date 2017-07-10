@@ -41,3 +41,13 @@ Note that the package name and repos output here.
 # cd /var/cache/yum/x86_64/7/updates/packages ## the updates is the repo that download package
 # yumdownloader package_names
 ```
+
+
+## install docker using aliyun
+
+see [Docker CE 镜像源站](https://yq.aliyun.com/articles/110806)
+``` shell
+$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+$ sudo yum makecache fast
+$ sudo yum -y install docker-ce
+```
