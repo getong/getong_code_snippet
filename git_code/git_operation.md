@@ -185,3 +185,10 @@ $ git add file
 $ git commit --amend
 ```
 This will append the `add file` into the last commit info.
+
+
+## git commit with future date
+
+``` shell
+$ git commit --date=2017-07-11T12:25:23
+```
