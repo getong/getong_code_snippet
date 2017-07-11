@@ -207,3 +207,17 @@ do
 ln -sf $PWD/$i /usr/bin
 done
 ```
+
+## pip aliyun mirror
+
+``` shell
+vi ~/.pip/pip.conf
+
+```
+change as below:
+
+``` shell
+[global]
+trusted-host =  mirrors.aliyun.com
+index-url = https://mirrors.aliyun.com/pypi/simple
+```
