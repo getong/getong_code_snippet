@@ -192,3 +192,11 @@ This will append the `add file` into the last commit info.
 ``` shell
 $ git commit --date=2017-07-11T12:25:23
 ```
+
+
+## githug answer
+githug is very suitable to master git, but with something difficult.
+The answer is below, check for help.
+[githug 游戏笔记](http://www.jianshu.com/p/e8e6358e81e0)
+[Githug通关全攻略](http://fancyoung.com/blog/githug-cheat-sheet/)
+[Githug – What is it?](https://www.tobscore.com/githug-what-is-it/)
