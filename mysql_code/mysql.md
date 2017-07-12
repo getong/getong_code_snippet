@@ -57,3 +57,12 @@ Also make sure that you don't have skip-networking enabled in your my.cnf.
 MySQL 5.6 或者 MariaDB 10会占用很多内存。这个错误是因为启动的时候申请大块内存失败导致的。
 在my.cnf设置
 innodb_buffer_pool_size=8M
+
+## rand()
+
+``` sql
+select ceiling(rand() * 1000);
+select floor(rand() * 1000);
+update table set column = ceiling(rand() * 1000) where id = 9;
+
+```
