@@ -200,3 +200,6 @@ The answer is below, check for help.
 [githug 游戏笔记](http://www.jianshu.com/p/e8e6358e81e0)
 [Githug通关全攻略](http://fancyoung.com/blog/githug-cheat-sheet/)
 [Githug – What is it?](https://www.tobscore.com/githug-what-is-it/)
+
+## bisect
+see [让 Git Bisect 帮助你](https://www.oschina.net/translate/letting-git-bisect-help-you)
