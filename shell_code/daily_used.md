@@ -221,3 +221,21 @@ change as below:
 trusted-host =  mirrors.aliyun.com
 index-url = https://mirrors.aliyun.com/pypi/simple
 ```
+
+## getfacl
+
+``` shell
+$ getfacl install.sh
+# file: install.sh
+# owner: username
+# group: groupname
+user::rwx
+group::r-x
+other::r-x
+```
+
+## setfacl
+
+``` shell
+$ setfacl -m u:username:rwx filename
+```
