@@ -51,3 +51,10 @@ $ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/c
 $ sudo yum makecache fast
 $ sudo yum -y install docker-ce
 ```
+
+
+## which  repository provide a particular package?
+
+``` shell
+yum list package
+```
