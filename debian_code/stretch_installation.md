@@ -367,3 +367,6 @@ $ cd /usr/local/bin
 $ sudo wget -c https://s3.amazonaws.com/rebar3/rebar3
 $ sudo chmod +x rebar3
 ```
+
+## gnome software options
+每个桌面应用的设置都在顶栏， 要右击才能列出。
