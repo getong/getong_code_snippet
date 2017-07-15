@@ -29,3 +29,13 @@ export PATH=/home/user/.cache/rebar3/bin:$PATH
 REBAR3_ERL_ARGS="-hidden" rebar3 shell --name=a@hostname --setcookie cookie
 ```
 see [Would rebar3 shell add hidden option? #1565](https://github.com/erlang/rebar3/issues/1565)
+
+
+## exclude some beam
+See [Build fails with "Duplicated modules" error ](https://github.com/erlware/relx/issues/463)
+rabbitmq-erlang-client use some module from mochiweb with the same name, so they are `Duplicated modules`.
+The rabbitmq-erlang-client has change the module in the master branch, but not released in 3.6.*, and will release in 3.7.
+So now use the exclude directive.
+```
+{exclude_modules, [{App :: atom(), [Module :: atom()]}]}
+```
