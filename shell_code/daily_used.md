@@ -239,3 +239,10 @@ other::r-x
 ``` shell
 $ setfacl -m u:username:rwx filename
 ```
+
+## < filename command
+
+``` shell
+$ < filename cat	# like `cat filename`
+$ < filename less	# like `less filename`
+```
