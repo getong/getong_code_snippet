@@ -7,3 +7,4 @@
 [StackEdit](https://stackedit.io/editor)
 [stackedit on github](https://github.com/benweet/stackedit)
 [Dillinger](http://dillinger.io/)
+[(GitHub-Flavored) Markdown Editor](https://jbt.github.io/markdown-editor/)
