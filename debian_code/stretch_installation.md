@@ -189,6 +189,10 @@ Restart the network:
 
 ``` shell
 # apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntp ntpdate dstat iftop ngrep sysstat
+
+# enable the cron job to begin collecting the data
+# dpkg-reconfigure sysstat
+
 ```
 
 ## libssl
