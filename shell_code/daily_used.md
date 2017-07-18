@@ -246,3 +246,15 @@ $ setfacl -m u:username:rwx filename
 $ < filename cat	# like `cat filename`
 $ < filename less	# like `less filename`
 ```
+
+## iftop
+view newwork activity
+``` shell
+iftop
+```
+
+## dstat
+
+``` shell
+dstat -nf
+```
