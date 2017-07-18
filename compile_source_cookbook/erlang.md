@@ -124,3 +124,22 @@ centos 7
 ``` shell
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/erlang-solutions/centos/7/
 ```
+
+## compile erlang from source using self compiled openssl
+see [OpenSSL error building Erlang OTP from source](https://stackoverflow.com/questions/6618233/openssl-error-building-erlang-otp-from-source)
+
+compile openssl
+``` shell
+$ tar xzf openssl-1.0.2l.tar.gz
+$ cd openssl-1.0.2l
+$ sh config shared -fPIC --prefix=/usr/local/openssl-1.0.2l
+$ make
+$ make test
+$ sudo make install
+```
+
+compile erlang using compiled openssl
+
+``` shell
+./configure --with-ssl=/usr/local/openssl-1.0.2l
+```
