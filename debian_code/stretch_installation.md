@@ -188,7 +188,7 @@ Restart the network:
 ## other software:
 
 ``` shell
-# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntp ntpdate dstat iftop
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntp ntpdate dstat iftop ngrep sysstat
 ```
 
 ## libssl
@@ -208,7 +208,7 @@ Install shadowsocks:
         "password": "123456",
         "timeout":600,
         "method": "aes-256-cfb",
-	"fast_open": true,
+		"fast_open": true,
         "auth": true
 }
 
