@@ -1,0 +1,4 @@
+# file system
+
+- [ ] XFS
+= [ ] btrfs
