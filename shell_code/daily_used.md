@@ -286,3 +286,21 @@ date -d "+1000000000 second now"
 ``` shell
 shuf filename
 ```
+
+## chattr
+Only the `root` can use this command.
+Prevent file from deleting.
+
+``` shell
+# enable
+# chattr +i filename
+# disable
+# chattr -i filename
+```
+## lsattr
+All users can use it.
+
+``` shell
+$ lsattr filename
+```
+
