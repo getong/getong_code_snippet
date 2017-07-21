@@ -11,6 +11,8 @@
 ## 安装过程不要使用网络
 1. 国内网络不好，下载镜像源会比较慢，会出现下载不了的情况，耗费大量时间不值得。
 2. 下载的更新软件里面可能会有 _linux_ , 这个在安装过程中会出现安装不了的情况。
+3. 注意u盘接口是否接入， 如果没有显示到bios设置界面，那一定是没有挂载上。换另外接口重试。
+4. UEFI 要另外建分区挂载 /boot/efi 目录
 
 ## 编译linux内核
 
@@ -188,7 +190,7 @@ Restart the network:
 ## other software:
 
 ``` shell
-# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat vim
 
 # enable the cron job to begin collecting the data
 # dpkg-reconfigure sysstat
