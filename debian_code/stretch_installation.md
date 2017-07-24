@@ -378,3 +378,9 @@ $ sudo chmod +x rebar3
 
 ## gnome software options
 每个桌面应用的设置都在顶栏， 要右击才能列出。
+
+## mariadb
+
+``` shell
+# apt-get install mariadb-client mariadb-server
+```
