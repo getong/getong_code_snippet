@@ -173,9 +173,11 @@ iface enp0s3 inet static
 address 192.168.1.56
 netmask 255.255.255.0
 gateway 192.168.1.1
+dns-nameservers 192.168.1.1
 ```
 
-And the `/etc/resolv.conf` is missing, create it and write this into it.
+~~And the `/etc/resolv.conf` is missing, create it and write this into it.~~
+The resolv.conf is writen by the resolvconf program, no need to edit it.
 
 ``` shell
 nameserver 192.168.1.1
@@ -190,7 +192,7 @@ Restart the network:
 ## other software:
 
 ``` shell
-# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat vim
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat vim resolvconf
 
 # enable the cron job to begin collecting the data
 # dpkg-reconfigure sysstat
