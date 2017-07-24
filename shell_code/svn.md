@@ -61,3 +61,8 @@ $ svn commit -m 'update new dep' _build
 $ svn propset svn:executable on filename
 $ svn commit -m 'add executable' filename
 ```
+
+## 获取某个版本号对应的分支
+``` shell
+$ svn co svn://svn_server/repo/branches/branch_name -r version_num
+```
