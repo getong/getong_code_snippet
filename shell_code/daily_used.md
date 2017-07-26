@@ -304,3 +304,11 @@ All users can use it.
 $ lsattr filename
 ```
 
+## brctl
+
+``` shell
+# brctl show
+bridge name     bridge id               STP enabled     interfaces
+docker0         8000.024210dc7fcc       no
+```
+
