@@ -312,3 +312,9 @@ bridge name     bridge id               STP enabled     interfaces
 docker0         8000.024210dc7fcc       no
 ```
 
+## readlink to find absolute path
+
+``` shell
+$ readlink -f filename
+```
+
