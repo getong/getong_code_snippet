@@ -317,4 +317,9 @@ docker0         8000.024210dc7fcc       no
 ``` shell
 $ readlink -f filename
 ```
+## join
+
+``` shell
+$ join -o1.1 -o2.2, 2.3 file1 file2
+```
 
