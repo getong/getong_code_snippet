@@ -323,3 +323,9 @@ $ readlink -f filename
 $ join -o1.1 -o2.2, 2.3 file1 file2
 ```
 
+## check the virtualation of the cpu
+
+``` shell
+$ egrep '(vmx|svm)' /proc/cpuinfo
+```
+
