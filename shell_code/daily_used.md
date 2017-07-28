@@ -329,3 +329,10 @@ $ join -o1.1 -o2.2, 2.3 file1 file2
 $ egrep '(vmx|svm)' /proc/cpuinfo
 ```
 
+## column
+format the output text
+``` shell
+$ mount | column -t
+# cat /etc/passwd | column -t -s:
+```
+
