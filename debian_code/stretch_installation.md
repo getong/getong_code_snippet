@@ -192,7 +192,7 @@ Restart the network:
 ## other software:
 
 ``` shell
-# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat vim resolvconf bridge-utils
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat vim resolvconf bridge-utils net-tools
 
 # enable the cron job to begin collecting the data
 # dpkg-reconfigure sysstat

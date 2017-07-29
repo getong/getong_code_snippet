@@ -257,18 +257,18 @@ iftop
 
 see [Linux 下大家喜欢用什么命令查看流量？](https://www.zhihu.com/question/19862245)
 
-> nethogs: 按进程查看流量占用  
-> iptraf: 按连接/端口查看流量  
-> ifstat: 按设备查看流量  
-> ethtool: 诊断工具  
-> tcpdump: 抓包工具  
-> ss: 连接查看工具  
-> 其他: dstat, slurm, nload, bmon  
-> atop nmon collectl vnstat sar iptraf  
-> 监控总体带宽使用--nload、bmon、slurm、bwm-ng、cbm、speedometer和netload  
-> 监控总体带宽使用（批量式输出）--vnstat、ifstat、dstat和collectl  
-> 每个套接字连接的带宽使用--iftop、iptraf、tcptrack、pktstat、netwatch和trafshow  
-> 每个进程的带宽使用--nethogs  
+> nethogs: 按进程查看流量占用
+> iptraf: 按连接/端口查看流量
+> ifstat: 按设备查看流量
+> ethtool: 诊断工具
+> tcpdump: 抓包工具
+> ss: 连接查看工具
+> 其他: dstat, slurm, nload, bmon
+> atop nmon collectl vnstat sar iptraf
+> 监控总体带宽使用--nload、bmon、slurm、bwm-ng、cbm、speedometer和netload
+> 监控总体带宽使用（批量式输出）--vnstat、ifstat、dstat和collectl
+> 每个套接字连接的带宽使用--iftop、iptraf、tcptrack、pktstat、netwatch和trafshow
+> 每个进程的带宽使用--nethogs
 
 ``` shell
 dstat -nf
@@ -336,3 +336,14 @@ $ mount | column -t
 # cat /etc/passwd | column -t -s:
 ```
 
+## route
+
+``` shell
+# route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         gateway         0.0.0.0         UG    0      0        0 enp2s0
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 enp2s0
+```
+ In the `Flags`, `U` is usable, `G` is currently used gateway.
