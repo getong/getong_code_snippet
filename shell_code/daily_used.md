@@ -360,3 +360,9 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 # route del -net 192.168.60.0 netmask 255.255.255.0
 ```
  In the `Flags`, `U` is usable, `G` is currently used gateway.
+
+## get all commands about network in current linux distribution
+
+``` shell
+$ apropos network | less
+```
