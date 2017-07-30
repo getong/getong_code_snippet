@@ -339,11 +339,24 @@ $ mount | column -t
 ## route
 
 ``` shell
-# route
+$ route
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 default         gateway         0.0.0.0         UG    0      0        0 enp2s0
 172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
 192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 enp2s0
+
+$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.1.253   0.0.0.0         UG    0      0        0 enp2s0
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 enp2s0
+
+# add a route table, all packet sent to 192.168.60.0 subnetwork via gateway 192.168.19.1
+# route add -net 192.168.60.0 netmask 255.255.255.0 gw 192.168.19.1
+
+# delete a route table
+# route del -net 192.168.60.0 netmask 255.255.255.0
 ```
  In the `Flags`, `U` is usable, `G` is currently used gateway.
