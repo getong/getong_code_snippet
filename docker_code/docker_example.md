@@ -145,3 +145,6 @@ docker exec -it container_id /bin/sh
 docker exec -d container_id cmd
 echo $?
 ```
+
+## attch 后，如果从stdin中exit，会导致容器的停止， exec 不会
+see [Docker exec与Docker attach](http://blog.csdn.net/halcyonbaby/article/details/46884605)
