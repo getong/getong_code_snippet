@@ -34,6 +34,9 @@ This element has a total size of 4*8 = 32 bits, and it contains a signed integer
 $erl
 1><<3:4/little-signed-integer-unit:8>>.
 <<3,0,0,0>>
-2>
+2> <<10:176/integer>>.
+<<0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10>>
+3><<10:2/integer-unit:8>>.
+<<0,10>>
 
 ```
