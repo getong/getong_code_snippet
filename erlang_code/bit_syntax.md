@@ -40,3 +40,16 @@ $erl
 <<0,10>>
 
 ```
+
+
+## concatenate two binaries in erlang
+
+``` erlang
+28> B1= <<1,2>>.
+<<1,2>>
+29> B2= <<3,4>>.
+<<3,4>>
+30> B3= <<B1/binary, B2/binary>>.
+<<1,2,3,4>>
+```
+see [How do I concatenate two binaries in Erlang?](https://stackoverflow.com/questions/600642/how-do-i-concatenate-two-binaries-in-erlang)
