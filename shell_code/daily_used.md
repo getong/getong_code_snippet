@@ -366,3 +366,49 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 ``` shell
 $ apropos network | less
 ```
+
+## get what cost so much memory
+
+``` shell
+可以使用一下命令查使用内存最多的5个进程
+ps -aux | sort -k4nr | head 5
+或者
+top （然后按下M，注意大写）
+可以使用一下命令查使用CPU最多的5个进程
+ps -aux | sort -k3nr | head 5
+或者
+top （然后按下P，注意大写）
+```
+see [linux 查看 占用 内存 最多的 进程](http://xinkang120.blog.163.com/blog/static/19466822320136296271662/)
+
+## linux garbage collection
+
+``` shell
+通过修改proc系统的drop_caches清理free的cache
+$echo 3 > /proc/sys/vm/drop_caches
+
+drop_caches的详细文档如下：
+Writing to this will cause the kernel to drop clean caches, dentries and inodes from memory, causing that memory to become free.
+To free pagecache:
+* echo 1 > /proc/sys/vm/drop_caches
+To free dentries and inodes:
+* echo 2 > /proc/sys/vm/drop_caches
+To free pagecache, dentries and inodes:
+* echo 3 > /proc/sys/vm/drop_caches
+As this is a non-destructive operation, and dirty objects are notfreeable, the user should run "sync" first in order to make sure allcached objects are freed.
+This tunable was added in 2.6.16.
+
+修改/etc/sysctl.conf 添加如下选项后就不会内存持续增加
+vm.dirty_ratio = 1
+vm.dirty_background_ratio=1
+vm.dirty_writeback_centisecs=2
+vm.dirty_expire_centisecs=3
+vm.drop_caches=3
+vm.swappiness =100
+vm.vfs_cache_pressure=163
+vm.overcommit_memory=2
+vm.lowmem_reserve_ratio=32 32 8
+kern.maxvnodes=3
+
+上面的设置比较粗暴，使cache的作用基本无法发挥。需要根据机器的状况进行适当的调节寻找最佳的折衷。
+```
