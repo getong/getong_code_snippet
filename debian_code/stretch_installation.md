@@ -260,6 +260,13 @@ see [system service](../shell_code/systemd.md)
 wget -c https://github.com/FelisCatus/SwitchyOmega/releases/download/v2.4.6/SwitchyOmega.crx
 ```
 
+## ssr
+
+``` shell
+docker pull breakwa11/shadowsocksr
+docker run -d -p 12345:51348 --restart=always -e PASSWORD=123456 -e METHOD=aes-256-cfb -e PROTOCOL=auth_aes128_sha1 breakwa11/shadowsocksr
+```
+
 ## virtualbox-5.1
 
 ``` shell
