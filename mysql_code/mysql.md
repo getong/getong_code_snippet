@@ -66,3 +66,33 @@ select floor(rand() * 1000);
 update table set column = ceiling(rand() * 1000) where id = 9;
 
 ```
+
+## mysql delete user and add user again fail in 5.6
+see [ERROR 1396 (HY000): Operation CREATE USER failed for 'username'@'localhost' IDENTIFIED BY 'mypassword';](https://stackoverflow.com/questions/17008610/error-1396-hy000-operation-create-user-failed-for-usernamelocalhost-iden)
+
+``` sql
+delete from mysql.user where user='username';
+DROP USER 'username'@'%';
+delete from mysql.db where user='username';
+flush privileges;
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+
+```
+
+## allow user only login from 10.x.x.x subnetwork
+
+``` sql
+CREATE USER 'username'@'10.%' IDENTIFIED BY 'password';
+create database test_subnetwork;
+GRANT ALL PRIVILEGES ON test_subnetwork.* TO 'username'@'10.%' IDENTIFIED BY 'password' WITH GRANT OPTION;
+```
+
+## mariadb set root password
+
+``` shell
+$ sudo mysql -u root
+MariaDB [mysql]> drop user 'root'@'localhost';
+MariaDB [mysql]> create user 'root'@'%' identified by 'password';
+MariaDB [mysql]> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+MariaDB [mysql]> FLUSH PRIVILEGES;
+```
