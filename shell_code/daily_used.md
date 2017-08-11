@@ -412,3 +412,9 @@ kern.maxvnodes=3
 
 上面的设置比较粗暴，使cache的作用基本无法发挥。需要根据机器的状况进行适当的调节寻找最佳的折衷。
 ```
+
+## get the process file descriptor
+
+``` shell
+ls -al /proc/<PID>/fd
+```
