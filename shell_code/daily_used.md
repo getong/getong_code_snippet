@@ -418,3 +418,9 @@ kern.maxvnodes=3
 ``` shell
 ls -al /proc/<PID>/fd
 ```
+
+## meminfo
+
+``` shell
+cat /proc/meminfo
+```
