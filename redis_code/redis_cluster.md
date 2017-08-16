@@ -28,3 +28,6 @@ cluster getkeysinslot <\slot> <\count>
 cluster slaves <\node-id>
 
 ```
+
+## configure a cluster using redis commands
+see [Redis cluster creation (https://stackoverflow.com/questions/21952813/redis-cluster-creation)
