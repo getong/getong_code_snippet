@@ -424,3 +424,9 @@ ls -al /proc/<PID>/fd
 ``` shell
 cat /proc/meminfo
 ```
+
+## get the absolute path of a file
+``` shell
+realpath filename
+/home/user/filename
+```
