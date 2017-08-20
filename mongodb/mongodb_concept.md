@@ -14,3 +14,10 @@
 use foo | db.getSisterDB("foo")
 show dbs | db.getMongo().getDBs()
 show collections | db.getCollectionNames()
+
+
+## explain
+
+```
+db.foo.find({"$or": [{"x : 123"}, {"y": 456}]}).explain()
+```
