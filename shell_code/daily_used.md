@@ -430,3 +430,8 @@ cat /proc/meminfo
 realpath filename
 /home/user/filename
 ```
+
+## find the duplicate files
+``` shell
+fdupes -r . 
+```
