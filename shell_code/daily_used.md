@@ -433,5 +433,11 @@ realpath filename
 
 ## find the duplicate files
 ``` shell
-fdupes -r . 
+fdupes -r .
+```
+
+## get the total tcp connection and memory cost
+
+``` shell
+ss -s && free -g
 ```
