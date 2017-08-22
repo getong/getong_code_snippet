@@ -21,3 +21,9 @@ show collections | db.getCollectionNames()
 ```
 db.foo.find({"$or": [{"x : 123"}, {"y": 456}]}).explain()
 ```
+
+## createUser
+ 管理员必须为用户创建这两个角色中的一个： userAdminAnyDatabase 或 userAdmin
+``` shell
+db.createUser({user: "AdminUser", pwd: "password", roles: ["userAdminAnyDatabase"]})
+```
