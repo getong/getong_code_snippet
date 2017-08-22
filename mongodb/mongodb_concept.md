@@ -27,3 +27,10 @@ db.foo.find({"$or": [{"x : 123"}, {"y": 456}]}).explain()
 ``` shell
 db.createUser({user: "AdminUser", pwd: "password", roles: ["userAdminAnyDatabase"]})
 ```
+
+## auth
+
+``` shell
+use admin
+db.auth("AdminUser", "password")
+```
