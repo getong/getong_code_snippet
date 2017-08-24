@@ -4,7 +4,7 @@
 curl ifconfig.me
 ```
 
-## 监控磁盘空间
+## 监控磁盘空间, 间隔1s输出内容
 ```
 watch -n 1 df
 ```
@@ -440,4 +440,14 @@ fdupes -r .
 
 ``` shell
 ss -s && free -g
+```
+
+## find the top 10  processes which cost memory or cpu most
+
+``` shell
+# memory
+$ ps aux | sort -rnk 4 | head -n 10
+
+# cpu
+$ ps aux | sort -rnk 3 | head -n 10
 ```
