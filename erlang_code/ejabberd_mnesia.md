@@ -159,3 +159,55 @@ set_master(Node) when is_atom(Node) ->
 	    {error, String}
     end.
 ```
+
+## ets:update_counter and mnesia:dirty_update_counter
+
+``` erlang
+%% ets
+Table = ets:new(x, []).
+ets:insert(Table, {x, null}).
+ets:update_counter(Table, x, 1).
+** exception error: bad argument
+     in function  ets:update_counter/3
+	         called as ets:update_counter(#Ref<0.1560783866.2387214337.254665>,x,1)
+
+
+%% mnesia
+mnesia:start().
+rd(table, {a,b}).
+mnesia:create_table(table, [{ram_copies, [node()]}, {type, set}, {attributes, record_info(fields, table)}]).
+
+mnesia:dirty_write({table, a, 2}).
+mnesia:dirty_update_counter({table, a}, 1).
+
+mnesia:dirty_write({table, b, null}).
+
+mnesia:dirty_update_counter({table, b}, 1).
+```
+
+The mnesia output:
+
+``` erlang
+erl
+Erlang/OTP 20 [erts-9.0.4] [source] [64-bit] [smp:4:4] [ds:4:4:10] [async-threads:10] [hipe] [kernel-poll:false]
+
+Eshell V9.0.4  (abort with ^G)
+1> mnesia:start().
+ok
+2> rd(table, {a,b}).
+table
+3> mnesia:create_table(table, [{ram_copies, [node()]}, {type, set}, {attributes, record_info(fields, table)}]).
+{atomic,ok}
+4>
+4> mnesia:dirty_write({table, a, 2}).
+ok
+5> mnesia:dirty_update_counter({table, a}, 1).
+3
+6>
+6> mnesia:dirty_write({table, b, null}).
+ok
+7>
+7> mnesia:dirty_update_counter({table, b}, 1).
+1
+```
+If the `value`  is not an integer, the `Incr` is return.
