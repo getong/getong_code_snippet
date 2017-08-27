@@ -203,3 +203,12 @@ The answer is below, check for help.
 
 ## bisect
 see [让 Git Bisect 帮助你](https://www.oschina.net/translate/letting-git-bisect-help-you)
+
+## git concept
+
+``` shell
+workspace 工作区
+index/stage 暂存区
+repository 仓库区（本地仓库）
+remote 远程仓库
+```
