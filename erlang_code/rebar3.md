@@ -18,7 +18,7 @@ rebar3 as prod release -o other_dir
 cd other_dir
 
 # change the config file
-ERLX_CONFIG_PATH="sys.config" VMARGS_PATH="vm.args" ./erl_proj console
+RELX_CONFIG_PATH="sys.config" VMARGS_PATH="vm.args" ./erl_proj console
 ```
 
 ## rebar3 shell in hidden mode
