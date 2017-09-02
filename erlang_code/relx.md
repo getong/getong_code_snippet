@@ -18,3 +18,11 @@
 >  {neotoma, load}]}.
 
 The [relx wiki](https://github.com/erlware/relx/wiki) is a good place to start.
+
+
+## run_erl and to_erl
+
+``` shell
+run_erl /tmp/erl_pipe /tmp/log_dir "erl"
+to_erl /tmp/erl_pipe
+```
