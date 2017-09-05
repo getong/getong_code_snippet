@@ -10,3 +10,39 @@ $ sh rustup-init.sh
 $ echo 'export PATH=$HOME/.cargo/bin:$PATH' >> ~/.zshrc
 $ source $HOME/.cargo/env
 ```
+
+## rustup usage
+
+``` shell
+## update the rustup script
+rustup self update
+
+## delete updateup script
+rustup self uninstall
+
+## update the rust
+rustup update
+
+## component
+rustup component add rust-src
+rustup component add rust-analysis
+
+```
+
+## nightly build
+
+``` shell
+rustup self update
+rustup update nightly
+rustup component add rls --toolchain nightly
+rustup component add rust-analysis --toolchain nightly
+rustup component add rust-src --toolchain nightly
+```
+
+## cargo usage
+
+``` shell
+cargo install rustfmt
+cargo install racer
+cargo build --release
+```
