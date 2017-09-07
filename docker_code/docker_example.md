@@ -155,3 +155,10 @@ see [Docker exec与Docker attach](http://blog.csdn.net/halcyonbaby/article/detai
 docker cp docker_id:file file
 docker cp file docker:file
 ```
+
+## many parameters together
+
+``` shell
+docker run -d --privileged --restart=always --network host -v $(pwd):/mount_point -e ENV="env"  --name container_name image_name:tag_name
+```
+use host network for performance issue.

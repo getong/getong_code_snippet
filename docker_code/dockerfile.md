@@ -18,3 +18,13 @@ see [CMD](https://itbilu.com/linux/docker/VyhM5wPuz.html#cmd-cmd)
 
 > 也可以通过docker run --entrypoint重写ENTRYPOINT入口点。
 see [ENTRYPOINT](https://itbilu.com/linux/docker/VyhM5wPuz.html#cmd-entrypoint)
+
+
+## timezone
+Add this into dockerfile
+
+``` shell
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+```
+see [Docker Container time & timezone (will not reflect changes)](https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes)
