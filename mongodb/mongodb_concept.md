@@ -42,3 +42,10 @@ var col_list= db.table.findOne();
 for (var col in col_list) { print (col) ; }
 ```
 see [How do I describe a collection in Mongo?](https://stackoverflow.com/questions/6336973/how-do-i-describe-a-collection-in-mongo)
+
+
+## remove
+
+``` shell
+db.test.remove({_id:{$lt:10}})
+```
