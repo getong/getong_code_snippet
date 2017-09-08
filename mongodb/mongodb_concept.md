@@ -34,3 +34,11 @@ db.createUser({user: "AdminUser", pwd: "password", roles: ["userAdminAnyDatabase
 use admin
 db.auth("AdminUser", "password")
 ```
+
+## describe a collection
+
+``` shell
+var col_list= db.table.findOne();
+for (var col in col_list) { print (col) ; }
+```
+see [How do I describe a collection in Mongo?](https://stackoverflow.com/questions/6336973/how-do-i-describe-a-collection-in-mongo)
