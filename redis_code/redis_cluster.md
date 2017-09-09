@@ -53,3 +53,5 @@ OK
 OK
 
 ```
+
+## redis supports raft algorithm
