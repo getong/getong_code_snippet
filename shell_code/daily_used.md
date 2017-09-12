@@ -451,3 +451,9 @@ $ ps aux | sort -rnk 4 | head -n 10
 # cpu
 $ ps aux | sort -rnk 3 | head -n 10
 ```
+
+## generate well spelled password
+
+``` shell
+apg -a 0 -n 10
+```
