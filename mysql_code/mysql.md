@@ -96,3 +96,12 @@ MariaDB [mysql]> create user 'root'@'%' identified by 'password';
 MariaDB [mysql]> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
 MariaDB [mysql]> FLUSH PRIVILEGES;
 ```
+
+## is NULL
+select NULL property
+
+``` sql
+select * from table where column_name is NULL;
+
+```
+__select * from table where column_name = NULL__ not works.
