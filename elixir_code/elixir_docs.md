@@ -1,6 +1,7 @@
 # elixir docs
 [hexdocs](https://hexdocs.pm/)
 [30-days-of-elixir](https://github.com/seven1m/30-days-of-elixir)
+[How to get startedwith Elixir](http://314.tt/blog/how-to-get-startd-with-elixir-and-phoenix/)
 
 # elixir is a erlang application, and can be started in other erlang applications
 
