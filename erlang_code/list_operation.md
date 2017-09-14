@@ -110,3 +110,10 @@ keyfind(_, _, _) ->
 ```
 lists:keyfind/3 is nif implementation, better in performance.
 For [{Key, Value}] proplists, it is better to use lists:keyfind/3 than proplists:get_value/3.
+
+## format a number with padding in Erlang
+
+``` erlang
+string:right(integer_to_list(4), 4, $0).
+```
+see [How to format a number with padding in Erlang](https://stackoverflow.com/questions/1251869/how-to-format-a-number-with-padding-in-erlang)
