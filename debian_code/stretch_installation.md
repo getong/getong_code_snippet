@@ -391,3 +391,9 @@ $ sudo chmod +x rebar3
 ``` shell
 # apt-get install mariadb-client mariadb-server
 ```
+
+## enable virtualbox cross os copy and paste
+
+``` shell
+systemctl restart vboxdrv.service
+```
