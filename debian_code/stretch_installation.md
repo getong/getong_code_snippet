@@ -397,3 +397,10 @@ $ sudo chmod +x rebar3
 ``` shell
 systemctl restart vboxdrv.service
 ```
+
+## add user to sudo group
+
+``` shell
+usermod -aG sudo $USER
+groups
+```
