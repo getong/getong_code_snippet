@@ -457,3 +457,17 @@ $ ps aux | sort -rnk 3 | head -n 10
 ``` shell
 apg -a 0 -n 10
 ```
+
+
+## flock - manage locks from shell scripts
+
+``` shell
+LOCKFILE="/home/xxq/lock_update_check_commit_sh.tmp"
+
+exec 200>$LOCKFILE
+flock -n 200 || {
+    echo "Another user is doing the same thing，please wait.."
+	flock 200
+   }
+```
+see [给shell脚本加锁](http://blog.guoyb.com/2017/09/16/flock/)
