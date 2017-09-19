@@ -403,4 +403,7 @@ systemctl restart vboxdrv.service
 ``` shell
 usermod -aG sudo $USER
 groups
+
+## no password, add this to /etc/sudoers, replace the $USER with the real user name
+$USER  ALL=(ALL) NOPASSWD:ALL
 ```
