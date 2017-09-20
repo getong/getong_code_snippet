@@ -407,4 +407,7 @@ groups
 ## no password, add this to /etc/sudoers, replace the $USER with the real user name
 ## right under the %sudo   ALL=(ALL:ALL) ALL
 $USER  ALL=(ALL) NOPASSWD:ALL
+
+## restart
+systemctl restart sudo
 ```
