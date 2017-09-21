@@ -421,3 +421,4 @@ echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sou
 sudo apt-get update
 sudo apt-get install sublime-text
 ```
+see [Linux Package Manager Repositories](https://www.sublimetext.com/docs/3/linux_repositories.html) for more info.
