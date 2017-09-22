@@ -16,15 +16,16 @@ source ~/kerl/19.3.2/activate
 ## compile from source
 
 ``` shell
-wget -c https://github.com/erlang/otp/archive/OTP-19.3.3.tar.gz
-tar xzf OTP-19.3.3.tar.gz
-cd otp-OTP-19.3.3
+export VERSION=20.0.5
+wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
+tar xzf OTP-$VERSION.tar.gz
+cd otp-OTP-$VERSION
 export ERL_TOP=$PWD
 export PATH=$ERL_TOP/bin:$PATH
 
 ./otp_build autoconf
 
-./configure --prefix=/usr/local/otp_src_19.3.3
+./configure --prefix=/usr/local/otp_src_$VERSION
 make clean
 #using all cores of a cpu
 make -j`nproc` && make -j`nproc` tests
