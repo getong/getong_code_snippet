@@ -1,10 +1,5 @@
 # compile tmux
 
-## download the tmux
-```shell
-wget -c https://github.com/tmux/tmux/releases/download/2.5/tmux-2.5.tar.gz
-```
-
 ## install the deps
 
 CentOS
@@ -21,10 +16,12 @@ apt-get  install -y gcc libevent-dev ncurses-dev build-essential automake
 
 ## compile and install
 ```shell
-$ tar xzf tmux-2.5.tar.gz
-$ cd tmux-2.5
+$ export VERSION=2.5
+$ wget -c https://github.com/tmux/tmux/releases/download/$VERSION/tmux-$VERSION.tar.gz
+$ tar xzf tmux-$VERSION.tar.gz
+$ cd tmux-$VERSION
 $ ./autogen.sh
-$ ./configure --prefix=/usr/local/tmux-2.5
+$ ./configure --prefix=/usr/local/tmux-$VERSION
 $ make
 $ sudo make install
 ```
