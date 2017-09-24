@@ -1,10 +1,33 @@
 # rust types
 
-## basic types
+## primitive types
 ```
+array
+bool
+char
+numeric types
+slice
 str 不可变、静态的字符串
 String 可变、不定长的字符串
+tuple
+function
+pointer
 ```
+
+## numeric types
+
+```
+i8 u8
+i16 u16
+i32 u32
+i64 i64
+i128 u128 ## nightly-only
+isize usize
+f32 f64
+```
+see [primitive type](https://doc.rust-lang.org/std/primitive.array.html)
+see [Primitive Types](https://doc.rust-lang.org/book/first-edition/primitive-types.html)
+
 
 ## string
 
