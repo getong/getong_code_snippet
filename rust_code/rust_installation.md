@@ -44,6 +44,9 @@ rustup component add rust-src --toolchain nightly
 ``` shell
 cargo install rustfmt
 cargo install racer
-cargo build --release
 cargo new project_name --bin
+cargo build --release
+cargo run
+cargo update
+carge install
 ```
