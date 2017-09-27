@@ -162,3 +162,12 @@ docker cp file docker:file
 docker run -d --privileged --restart=always --network host -v $(pwd):/mount_point -e ENV="env"  --name container_name image_name:tag_name
 ```
 use host network for performance issue.
+
+## No such file or directory for /var/lib/docker/overlay2
+
+``` shell
+sudo umount /var/lib/docker/overlay2
+sudo rm -rf /var/lib/docker
+sudo systemctl restart docker
+```
+see [No such file or directory for /var/lib/docker/overlay2 #1396](https://github.com/docker/for-mac/issues/1396)
