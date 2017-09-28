@@ -422,3 +422,17 @@ sudo apt-get update
 sudo apt-get install sublime-text
 ```
 see [Linux Package Manager Repositories](https://www.sublimetext.com/docs/3/linux_repositories.html) for more info.
+
+## set-ntp without ntp
+
+``` shell
+GNOME Automatic Date & Time doesn't use the ntp service, installable via sudo apt-get install ntp. Therefore stopping or uninstalling the service doesn't help.
+
+Systemd timedatectl is used, therefore one command to switch off
+
+timedatectl set-ntp 0
+and one command to switch on
+
+timedatectl set-ntp 1
+```
+see [How to stop automatic time update via terminal?](https://askubuntu.com/questions/683067/how-to-stop-automatic-time-update-via-terminal)
