@@ -49,6 +49,7 @@ cargo build --release
 cargo run
 cargo update
 carge install
+cargo install clippy
 ```
 
 ## rust src path
