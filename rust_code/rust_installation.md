@@ -50,3 +50,9 @@ cargo run
 cargo update
 carge install
 ```
+
+## rust src path
+
+``` shell
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+```
