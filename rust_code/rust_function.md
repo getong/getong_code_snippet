@@ -34,3 +34,15 @@ fn foo<'a>(x :&'a str) -> &'a str {
 	x
 }
 ```
+
+## devive属性
+
+``` rust
+#[devive]
+struct Foo;
+
+fn main() {
+	println!!("{:?}", Foo);
+}
+
+```
