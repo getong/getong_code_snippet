@@ -12,4 +12,4 @@
 	  [11 External Term Format](http://erlang.org/doc/apps/erts/erl_ext_dist.html)
 - [ ] erlang cpu usage
 - [ ] erlang and haproxy
-- [ ] erlang handle the system signals?
+- [x] erlang handle the system signals?
