@@ -70,7 +70,9 @@ fn main() {
 ```
 
 ## move
-
-``` rust
 move 关键字常用在闭包中， 强制闭包获取所有权。
+``` rust
+let mut num = 5;
+let mut plus_num = move |x: i32| num += x
+plus_num(5);
 ```
