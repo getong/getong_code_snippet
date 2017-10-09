@@ -71,6 +71,7 @@ fn main() {
 
 ## move
 move 关键字常用在闭包中， 强制闭包获取所有权。
+没有实现Copy特性的类型默认都是move 特性
 ``` rust
 let mut num = 5;
 let mut plus_num = move |x: i32| num += x
