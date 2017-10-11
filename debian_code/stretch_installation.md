@@ -436,3 +436,9 @@ and one command to switch on
 timedatectl set-ntp 1
 ```
 see [How to stop automatic time update via terminal?](https://askubuntu.com/questions/683067/how-to-stop-automatic-time-update-via-terminal)
+
+## no pcspkr
+
+``` shell
+sudo echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
+```
