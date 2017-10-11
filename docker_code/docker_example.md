@@ -171,3 +171,33 @@ sudo rm -rf /var/lib/docker
 sudo systemctl restart docker
 ```
 see [No such file or directory for /var/lib/docker/overlay2 #1396](https://github.com/docker/for-mac/issues/1396)
+
+## -q cmd option
+
+``` shell
+-q, --quiet           Only show numeric IDs
+```
+
+## delete no tag name images
+
+``` shell
+docker rmi $(docker images -q --filter "dangling=true")
+```
+
+## delete all Exited contrainers
+
+``` shell
+docker rm $(docker ps -a | grep Exited | awk '{print $1}')
+```
+
+## stop and delete all containers
+
+``` shell
+docker rm $(docker ps -a -q)
+```
+
+## delete all images
+
+``` shell
+docker rmi $(docker images -a -q)
+```
