@@ -108,3 +108,20 @@ The `Vec::<i32>::new()` return a vector list.
 The `for i in &a` and the `i` is need to deref, using `*i`.
 The function can be defined inside another function.
 The return statement can just return the function name as a result.
+
+## 在rust 中，当一个函数返回 () 时，可以省略。
+main函数的返回值类型是(), 它是一个特殊的元组--没有元素的元组，称为unit， 它表示一个函数没有任何信息需要返回。
+rust函数不支持多返回值，但可以利用元组来返回多个值。
+发散函数（diverging function） 是rust中的一个特性，发散函数不返回，它使用感叹号！作为返回类型表示。
+
+``` rust
+fn main() {
+    println!("hello");
+	diverging();
+	//println!("world");
+}
+
+fn diverging() -> ! {
+      panic!("This function will never return ");
+  }
+```
