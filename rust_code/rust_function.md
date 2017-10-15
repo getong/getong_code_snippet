@@ -125,3 +125,6 @@ fn diverging() -> ! {
       panic!("This function will never return ");
   }
 ```
+
+## thread
+`thread::spawn` 函数需要一个函数作为参数，而且是 `FnOnce` 类型，所以一般会有 `move` 作为开始。
