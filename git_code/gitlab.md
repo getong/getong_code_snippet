@@ -12,6 +12,7 @@ docker run -p 8030:80 -d --name gitlab-ce \
 	--restart always \
     gitlab/gitlab-ce:$VERSION
 ```
+see [使用 docker 安装 GitLab CE 和 GitLab CI](https://gist.github.com/kxxoling/dfa6659829934edc296a406e52f2d585)
 
 ## docker image update
 Just rm the old container, and run the new version image. The project data will be used in the mounted dir.
