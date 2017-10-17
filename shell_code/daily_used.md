@@ -471,3 +471,10 @@ flock -n 200 || {
    }
 ```
 see [给shell脚本加锁](http://blog.guoyb.com/2017/09/16/flock/)
+
+## check words checksum
+
+``` shell
+echo -n words | md5sum | awk '{print $1}'
+echo -n words | sha1sum | awk '{print $1}'
+```
