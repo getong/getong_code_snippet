@@ -199,7 +199,7 @@ done
 ```
 
 ## ln must use absolute path as argument
-
+ln 硬链接文件，inode相同，指向同一个文件。符号链接实际上是一个文本文件，其中包含的有另一个文件的位置信息。
 ``` shell
 # cd /usr/local/otp_src_20.0
 # for i in `ls`
