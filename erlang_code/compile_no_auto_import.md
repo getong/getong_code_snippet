@@ -32,3 +32,22 @@ $ erl
 1>no_auto_import:start().
 A:1, B:1
 ```
+
+
+## inline
+
+inline often increase performance, but make the compiled binary file lager.
+``` erlang
+-compile(inline).
+```
+
+## warn_shadow_vars
+
+erl compile options
+```
+{erl_opts, [
+        warn_shadow_vars
+]}.
+
+
+```
