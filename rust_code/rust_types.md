@@ -43,3 +43,6 @@ std::path::PathBuf 这是Path的可变版本；
 总之普通字符串就用str和String，路径就用Path和PathBuf，其他是ffi才需要用到的。算是挺清晰的设计。
 ```
 see [Rust为什么会有这么多字符串相似类型？](https://www.zhihu.com/question/30807740)
+
+
+## rust 里的 & 不是指针，是borrow, 对应的 &mut 是mutable borrow.
