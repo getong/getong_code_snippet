@@ -76,6 +76,11 @@ move 关键字常用在闭包中， 强制闭包获取所有权。
 let mut num = 5;
 let mut plus_num = move |x: i32| num += x
 plus_num(5);
+
+let s = String::form(“hello”);
+let b = s += “ world”;  // can not use s anymore
+
+let 标识符A = 标识符B;
 ```
 
 ## higher order function
