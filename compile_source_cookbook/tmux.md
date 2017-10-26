@@ -16,7 +16,7 @@ apt-get  install -y gcc libevent-dev ncurses-dev build-essential automake
 
 ## compile and install
 ```shell
-$ export VERSION=2.5
+$ export VERSION=2.6
 $ wget -c https://github.com/tmux/tmux/releases/download/$VERSION/tmux-$VERSION.tar.gz
 $ tar xzf tmux-$VERSION.tar.gz
 $ cd tmux-$VERSION
