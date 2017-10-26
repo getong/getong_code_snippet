@@ -141,3 +141,12 @@ trait can be derived.
 ## unwrap
 Rust 中“unwrap”是说，“给我计算的结果，并且如果有错误，panic 并停止程序。”
 see [错误处理](https://kaisery.gitbooks.io/rust-book-chinese/content/content/Error%20Handling%20%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86.html)
+
+## Option
+Option 是Rust的系统类型，用来表示值不存在的可能。
+``` rust
+enum Option<T> {
+	None,
+	Some(T),
+}
+```
