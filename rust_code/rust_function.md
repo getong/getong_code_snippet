@@ -150,3 +150,7 @@ enum Option<T> {
 	Some(T),
 }
 ```
+
+## fmt::Debug, fmt::Display
+fmt::Debug 可以打印任何类型数据，但不可控制输出格式。
+fmt::Display 可以控制格式，但需要对类型数据进行impl 操作。
