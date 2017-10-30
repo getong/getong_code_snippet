@@ -105,3 +105,13 @@ select * from table where column_name is NULL;
 
 ```
 __select * from table where column_name = NULL__ not works.
+
+
+## order by multi column
+
+``` 1c-enterprise
+select * from table_name order by id;
+select * from table_name order by id, other_column;
+select * from table_name order by id desc, other_column;
+select * from table_name order by id, other_column desc;
+```
