@@ -117,3 +117,10 @@ For [{Key, Value}] proplists, it is better to use lists:keyfind/3 than proplists
 string:right(integer_to_list(4), 4, $0).
 ```
 see [How to format a number with padding in Erlang](https://stackoverflow.com/questions/1251869/how-to-format-a-number-with-padding-in-erlang)
+
+## delete duplicate element in the list
+
+``` erlang
+ Set = sets:from_list(List),
+ sets:to_list(Set).
+```
