@@ -478,3 +478,10 @@ see [给shell脚本加锁](http://blog.guoyb.com/2017/09/16/flock/)
 echo -n words | md5sum | awk '{print $1}'
 echo -n words | sha1sum | awk '{print $1}'
 ```
+
+## vagrant global-status
+
+view all the vagrant box instance status
+``` shell
+vagrant global-status
+```
