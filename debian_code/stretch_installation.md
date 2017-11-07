@@ -442,3 +442,10 @@ see [How to stop automatic time update via terminal?](https://askubuntu.com/ques
 ``` shell
 sudo echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
 ```
+
+## valgrind
+
+``` shell
+$ apt-get install valgrind
+$  valgrind ls
+```
