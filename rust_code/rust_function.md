@@ -82,6 +82,19 @@ let b = s += “ world”;  // can not use s anymore
 
 let 标识符A = 标识符B;
 ```
+move + copy 可以获取环境变量
+
+``` rust
+fn factory() -> Box<Fn(i32) -> i32> {
+	let num = 5;
+	Box::new(move |x| x + num)
+}
+
+let f = factory();
+let anser = f(1);
+assert_eq!(6, answer);
+```
+
 
 ## higher order function
 
