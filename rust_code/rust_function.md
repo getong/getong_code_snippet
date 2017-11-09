@@ -167,3 +167,12 @@ enum Option<T> {
 ## fmt::Debug, fmt::Display
 fmt::Debug 可以打印任何类型数据，但不可控制输出格式。
 fmt::Display 可以控制格式，但需要对类型数据进行impl 操作。
+
+
+## reverve some vector element
+
+``` rust
+let mut v: Vec<usize> = vec![];
+v.reserve(5_000_000);
+```
+In rust  1.21,  reverve function not make a different.
