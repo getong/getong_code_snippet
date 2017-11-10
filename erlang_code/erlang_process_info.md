@@ -90,3 +90,18 @@ erl>erlang:process_info(Pid, current_function).
 
 ```
 Through this method, I found out what caused our system key process timeout.
+
+
+## 20 top process
+
+``` shell
+rp([{-Reduc, Pid, case process_info(Pid, registered_name) of {registered_name,Name} -> Name; _ -> '_' end} ||
+    {Reduc, Pid} <- lists:sublist(
+    lists:foldl(
+        fun(Pid, L) ->
+                case process_info(Pid, reductions) of
+                    {reductions,Reduc} -> lists:keysort(1, [{-Reduc, Pid} | L]);
+                    undefined -> L
+                end
+        end, [], erlang:processes()), 20)]).
+```
