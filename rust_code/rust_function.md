@@ -176,3 +176,7 @@ let mut v: Vec<usize> = vec![];
 v.reserve(5_000_000);
 ```
 In rust  1.21,  reverve function not make a different.
+
+## sync_channel is synchronous, channel is asynchronous
+std::sync::mpsc::sync_channel is synchronus, and has the buffer size.
+std::sync::mpsc::channel is asynchronus.
