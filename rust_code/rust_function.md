@@ -180,3 +180,15 @@ In rust  1.21,  reverve function not make a different.
 ## sync_channel is synchronous, channel is asynchronous
 std::sync::mpsc::sync_channel is synchronus, and has the buffer size.
 std::sync::mpsc::channel is asynchronus.
+
+## std::mem
+
+``` rust
+use std::mem;
+
+let mut n = 0;
+let mut m = 1;
+mem::swap(&mut n, &mut m);
+mem::size_of_val(&mut n)
+mem::size_of::<isize>();
+```
