@@ -64,3 +64,9 @@ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 $ rustdoc main.rs
 $ cargo doc
 ```
+
+## set nightly as default
+
+``` shell
+rustup default nightly
+```
