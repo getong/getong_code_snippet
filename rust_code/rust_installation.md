@@ -33,6 +33,8 @@ rustup component add rust-analysis
 
 ``` shell
 rustup self update
+rustup install stable
+rustup install nightly
 rustup update nightly
 rustup component add rls --toolchain nightly
 rustup component add rust-analysis --toolchain nightly
