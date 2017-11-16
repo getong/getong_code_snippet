@@ -32,3 +32,6 @@ db.data.update({'name': 'zero'}, {'$set': {'value': NumberInt(0)}})
 
 ```
 see [MongoDB inserts float when trying to insert integer]https://stackoverflow.com/questions/8218484/mongodb-inserts-float-when-trying-to-insert-integer
+
+
+## dropDups option is duplicates on unique index in mongodb 2.7.5
