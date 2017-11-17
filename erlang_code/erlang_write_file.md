@@ -17,3 +17,15 @@ sed  's/\(.\{20\}\).*/\1/' msg.txt
 ```
 
 Change the `20` to be the number of characters of you wanted.
+
+## send file
+tcp send file, very simple, just call the function.
+``` erlang
+file:sendfile(Filename, Socket)
+file:sendfile(RawFile, Socket, Offset, Bytes, Opts)
+```
+ssl send file, only send some bytes data, must read the file and send the reading result through the socket.
+
+``` erlang
+ssl:send(Socket, Data)
+```
