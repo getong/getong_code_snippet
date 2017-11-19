@@ -50,6 +50,8 @@ cargo new project_name --bin
 cargo build --release
 cargo run
 cargo update
+cargo bench
+cargo test
 carge install
 cargo install clippy
 ```
@@ -57,7 +59,7 @@ cargo install clippy
 ## rust src path
 
 ``` shell
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+export RUST_SRC_PATH=“$(rustc —print sysroot)/lib/rustlib/src/rust/src”
 ```
 
 ## rustdoc and cargo
