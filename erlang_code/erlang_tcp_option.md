@@ -250,3 +250,23 @@ listen_on(CallbackModule, IpAddr, Port) when is_tuple(IpAddr) andalso
     end;
 ```
 This function is `undocumented`, and use [ranch](https://github.com/ninenines/ranch) as much as possible.
+
+## shutdown socket
+Closes a socket in one or two directions, with option {exit_on_close, false}. Not close socket.
+``` erlang
+shutdown(Socket, How) -> ok | {error, Reason}
+Types
+
+Socket = socket()
+How = read | write | read_write
+Reason = inet:posix()
+Closes a socket in one or two directions.
+
+How == write means closing the socket for writing, reading from it is still possible.
+
+If How == read or there is no outgoing data buffered in the Socket port, the socket is shut down immediately and any error encountered is returned in Reason.
+
+If there is data buffered in the socket port, the attempt to shutdown the socket is postponed until that data is written to the kernel socket send buffer. If any errors are encountered, the socket is closed and {error, closed} is returned on the next recv/2 or send/2.
+
+Option {exit_on_close, false} is useful if the peer has done a shutdown on the write side.
+```
