@@ -61,3 +61,10 @@ function 7z_dc() {
 function get_dir_file() {
    find $1 -type f
 }
+
+## iperf3
+```
+# iperf3 -s -p 5202
+# iperf3 -c 192.168.89.3 -p 5202
+```
+see [Docker network performance](https://jtway.co/docker-network-performance-b95bce32b4b9)
