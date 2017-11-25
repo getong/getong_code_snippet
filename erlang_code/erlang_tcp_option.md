@@ -270,3 +270,63 @@ If there is data buffered in the socket port, the attempt to shutdown the socket
 
 Option {exit_on_close, false} is useful if the peer has done a shutdown on the write side.
 ```
+
+## controlling_process
+
+``` erlang
+%% copy from gen_tcp.erl
+controlling_process(S, NewOwner) ->
+    case inet_db:lookup_socket(S) of
+	{ok, _Mod} -> % Just check that this is an open socket
+	    inet:tcp_controlling_process(S, NewOwner);
+	Error ->
+	    Error
+    end.
+```
+The `gen_tcp:controlling_process/2` is almost the same `inet:tcp_controlling_process/2`
+
+## Erlang: Avoiding race condition with gen_tcp:controlling_process
+see [Erlang: Avoiding race condition with gen_tcp:controlling_process](https://stackoverflow.com/questions/11409656/erlang-avoiding-race-condition-with-gen-tcpcontrolling-process)
+``` erlang
+-define(TCP_OPTIONS, [binary, {active, false}, ...]).
+
+...
+
+start(Port) ->
+    {ok, Socket} = gen_tcp:listen(Port, ?TCP_OPTIONS),
+    accept(Socket).
+
+accept(ListenSocket) ->
+    case gen_tcp:accept(ListenSocket) of
+        {ok, Socket} ->
+            Pid = spawn(fun() ->
+                io:format("Connection accepted ~n", []),
+                enter_loop(Socket)
+            end),
+            gen_tcp:controlling_process(Socket, Pid),
+            Pid ! ack,
+            accept(ListenSocket);
+        Error ->
+            exit(Error)
+    end.
+
+enter_loop(Sock) ->
+    %% make sure to acknowledge owner rights transmission finished
+    receive ack -> ok end,
+    loop(Sock).
+
+loop(Sock) ->
+    %% set soscket options to receive messages directly into itself
+    inet:setopts(Sock, [{active, once}]),
+    receive
+        {tcp, Socket, Data} ->
+            io:format("Got packet: ~p~n", [Data]),
+            ...,
+            loop(Socket);
+        {tcp_closed, Socket} ->
+            io:format("Socket ~p closed~n", [Socket]);
+        {tcp_error, Socket, Reason} ->
+            io:format("Error on socket ~p reason: ~p~n", [Socket, Reason])
+    end.
+```
+the esockd and ranch project use the same method like above to avoid race condition.
