@@ -46,3 +46,15 @@ see [Rust为什么会有这么多字符串相似类型？](https://www.zhihu.com
 
 
 ## rust 里的 & 不是指针，是borrow, 对应的 &mut 是mutable borrow.
+
+## pointer
+use with as and unsafe
+
+``` rust
+let x = 5;
+let raw = &x as *const i32;
+
+let points_at = unsafe { *raw };
+
+println!("raw points at {}", points_at);
+```
