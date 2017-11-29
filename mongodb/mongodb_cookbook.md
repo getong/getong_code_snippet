@@ -35,3 +35,9 @@ see [MongoDB inserts float when trying to insert integer]https://stackoverflow.c
 
 
 ## dropDups option is duplicates on unique index in mongodb 2.7.5
+
+## ttl
+
+``` shell
+db.collection_name.createIndex({"log_time":1}, {expireAfterSeconds: 10})
+```
