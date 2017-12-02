@@ -247,3 +247,6 @@ fn main() {
     println!("{}", (a4).0);
 }
 ```
+## use and crate
+`use` bring a `trait` into package.
+`extern crate` import package.
