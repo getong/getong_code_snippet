@@ -250,3 +250,11 @@ fn main() {
 ## use and crate
 `use` bring a `trait` into package.
 `extern crate` import package.
+
+## reference call
+
+``` rust
+let mut v = vec![1973, 1968];
+v.sort();
+(&mut v).sort(); // equivalent; much uglier
+```
