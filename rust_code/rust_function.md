@@ -258,3 +258,8 @@ let mut v = vec![1973, 1968];
 v.sort();
 (&mut v).sort(); // equivalent; much uglier
 ```
+## fmt::Display and Debug
+display format {}
+the debug format {:?}
+
+tuple element can be different types, list must be the same type.
