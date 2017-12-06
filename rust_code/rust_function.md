@@ -248,8 +248,31 @@ fn main() {
 }
 ```
 ## use and crate
-`use` bring a `trait` into package.
+`use` bring a `trait` into package, or shorten the namespace.
 `extern crate` import package.
+
+``` rust
+enum Status {
+    Rich,
+    Poor,
+}
+
+enum Work {
+    Civilian,
+    Soldier,
+}
+
+    // Explicitly `use` each name so they are available without
+    // manual scoping.
+    use Status::{Poor, Rich};
+    // Automatically `use` each name inside `Work`.
+    use Work::*;
+
+    // Equivalent to `Status::Poor`.
+    let status = Poor;
+    // Equivalent to `Work::Civilian`.
+    let work = Civilian;
+```
 
 ## reference call
 
