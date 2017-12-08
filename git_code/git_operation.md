@@ -212,3 +212,11 @@ index/stage 暂存区
 repository 仓库区（本地仓库）
 remote 远程仓库
 ```
+
+## git fetch and reset to origin/master
+
+``` shell
+$ git fetch origin
+$ git checkout master
+$ git reset --hard origin/master
+```
