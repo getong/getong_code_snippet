@@ -58,3 +58,19 @@ let points_at = unsafe { *raw };
 
 println!("raw points at {}", points_at);
 ```
+
+## Three pointer types: references, boxes and unsafe poointers.
+
+``` rust
+// References
+&T
+&mut T
+
+// Boxes
+let t = 12;
+let b = Box::new(t);
+
+// Raw Pointers
+*mut T
+*const T
+```
