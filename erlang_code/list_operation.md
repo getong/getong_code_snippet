@@ -124,3 +124,14 @@ see [How to format a number with padding in Erlang](https://stackoverflow.com/qu
  Set = sets:from_list(List),
  sets:to_list(Set).
 ```
+
+## index_of
+
+``` erlang
+index_of(Item, List) -> index_of(Item, List, 1).
+
+index_of(_, [], _)  -> not_found;
+index_of(Item, [Item|_], Index) -> Index;
+index_of(Item, [_|Tl], Index) -> index_of(Item, Tl, Index+1).
+```
+copy from [Erlang lists:index_of function?](https://stackoverflow.com/questions/1459152/erlang-listsindex-of-function)
