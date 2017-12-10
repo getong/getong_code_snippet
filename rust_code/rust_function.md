@@ -155,6 +155,19 @@ trait can be derived.
 Rust 中“unwrap”是说，“给我计算的结果，并且如果有错误，panic 并停止程序。”
 see [错误处理](https://kaisery.gitbooks.io/rust-book-chinese/content/content/Error%20Handling%20%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86.html)
 
+``` rust
+impl<T> Option<T> {
+    fn unwrap(self) -> T {
+        match self {
+            Option::Some(val) => val,
+            Option::None =>
+              panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}
+```
+很多情况下，Rust返回结果可能会出现2种情况，1种正常情况有数值，另外一种情况为没有数值。为了应付这2种情况，Rust的返回值类型为Option，正常情况对应Some，异常情况对应None。 unwrap函数可以获取Some里面包含的数值。
+
 ## Option
 Option 是Rust的系统类型，用来表示值不存在的可能。
 ``` rust
