@@ -453,3 +453,10 @@ $  valgrind ls
 >> 为了防止应用程序使用ALSA的OSS模拟功能而忽略PulseAudio（从而导致其他应用程序无法播放声音），确定snd_pcm_oss模块没有在系统启动时自动加载。如果该模块已经被加载(lsmod | grep oss)，运行下面命令以卸载该模块：
 >> # rmmod snd_pcm_oss
 see [PulseAudio (简体中文)](https://wiki.archlinux.org/index.php/PulseAudio_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+
+## shutter
+screenshot
+
+``` shell
+sudo apt-get install shutter
+```
