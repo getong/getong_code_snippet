@@ -39,6 +39,8 @@ rustup update nightly
 rustup component add rls --toolchain nightly
 rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
+rustup component add rust-docs
+rustup docs
 ```
 
 ## cargo usage
