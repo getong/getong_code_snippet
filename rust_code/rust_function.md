@@ -288,7 +288,7 @@ enum Work {
 ```
 
 ## reference call
-
+the `.` operator implicitly dereferences its left operand, if needed.
 ``` rust
 let mut v = vec![1973, 1968];
 v.sort();
