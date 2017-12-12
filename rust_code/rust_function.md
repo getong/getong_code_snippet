@@ -289,11 +289,29 @@ enum Work {
 
 ## reference call
 the `.` operator implicitly dereferences its left operand, if needed.
+
+``` rust
+struct Anime {
+	name: &'static str,
+	bechdel_pass: bool
+};
+let aria = Anime {
+	name : "Aria: The animation",
+	bechdel_pass: true
+};
+let anime_ref = &aria;
+
+assert_eq!(anime_ref.name, "Aria: The animation");
+
+assert_eq!((*anime_ref).name, "Aria: The animation");
+```
+The `.` operator can also implicitly borrow a reference to its left operand, if needed for a method call.
 ``` rust
 let mut v = vec![1973, 1968];
 v.sort();
 (&mut v).sort(); // equivalent; much uglier
 ```
+The `.` operator borrows and dereferences implicitly.
 ## fmt::Display and Debug
 display format {}
 the debug format {:?}
