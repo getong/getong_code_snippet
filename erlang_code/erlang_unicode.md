@@ -58,3 +58,11 @@ utf8_list_to_string(StrangeList) ->
 %% coding: latin-1
 ```
 The default is UTF-8, but this can make it use local encode.
+
+## jsx encode utf8 words
+
+``` erlang
+UTF8Words = [{<<"word">>, unicode:characters_to_binary("中文")}]，
+jsx:encode(UTF8Words)
+```
+jsx only support list, if the element of the list is tuple, change the tuple element to list.
