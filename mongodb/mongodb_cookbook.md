@@ -41,3 +41,20 @@ see [MongoDB inserts float when trying to insert integer]https://stackoverflow.c
 ``` shell
 db.collection_name.createIndex({"log_time":1}, {expireAfterSeconds: 10})
 ```
+
+## garbage collection
+
+Linux cmd
+``` shell
+$ sudo echo 3 > /proc/sys/vm/drop_caches
+```
+or restart mongod
+
+``` shell
+$ sudo systemctl restart mongod
+```
+mongodb cmd
+
+``` shell
+db.runCommand({closeAllDatabases:1})
+```
