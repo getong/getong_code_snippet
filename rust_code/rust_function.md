@@ -397,3 +397,12 @@ linked list has length: 3
 ```
 The linked list is recursive, and I think this is not very good.
 Please note that `&self`, `*self`, `ref tail`. This is a very good example to understand the reference and derefernce.
+
+## pointer address
+{:p} will print the variable pointer address
+``` rust
+    let x: i32 = 100;
+	let ref y =  x;
+	println!("y={:?}, {:p}", &x, &x);
+	println!("y={:?}, {:p}", y, y);
+```
