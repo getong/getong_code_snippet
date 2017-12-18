@@ -406,3 +406,18 @@ Please note that `&self`, `*self`, `ref tail`. This is a very good example to un
 	println!("y={:?}, {:p}", &x, &x);
 	println!("y={:?}, {:p}", y, y);
 ```
+
+## vector get() function
+
+``` rust
+    let v = vec![1, 2, 3];
+
+    match v.get(1) {
+	// this two are the same
+        //Some(ref t) =>
+        Some(& t) =>
+            println!("{}", t),
+        _ =>
+            println!("other"),
+    }
+```
