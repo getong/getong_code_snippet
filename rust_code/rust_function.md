@@ -479,3 +479,21 @@ fn main() {
 }
 ```
 see [可变性](http://wiki.jikexueyuan.com/project/rust/mutability.html) for more info.
+
+## Comparing References
+Like the `.\ operator, Rust's comparison operators "see through" any number of references, as long as as both operands have thee same type:
+
+``` rust
+let x = 10;
+let y = 10;
+
+let rx = &x;
+let ry = &y;
+
+let rrx = &rx;
+let rry = &ry;
+assert!(rx == ry);
+assert!(rrx <= rry);
+assert!(rrx == rry);
+assert!(!std::ptr::eq(rx, ry));
+```
