@@ -439,3 +439,43 @@ Please note that `&self`, `*self`, `ref tail`. This is a very good example to un
             println!("other"),
     }
 ```
+
+## make part of struct mutable
+
+All parts of a struct is immutable or mutable, like this:
+``` rust
+struct Point {
+	x: i32,
+	y: i32,
+}
+
+let a = Point {
+	x: 10,
+	y: 20,
+ };
+let mut b = Point{
+	x: 30,
+	y: 40,
+};
+```
+The `x`, `y` in point is all immutable, or all mutable at the same time. It is defined as declared.
+
+But it can be modified using `std::cell::Cell`
+
+``` rust
+use std::cell::Cell;
+
+struct Point {
+x: i32,
+y: Cell<i32>,
+}
+
+fn main() {
+	let point = Point { x: 5, y: Cell::new(6) };
+
+	point.y.set(7);
+
+	println!("y: {:?}", point.y);
+}
+```
+see [可变性](http://wiki.jikexueyuan.com/project/rust/mutability.html) for more info.
