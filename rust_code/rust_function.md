@@ -481,7 +481,7 @@ fn main() {
 see [可变性](http://wiki.jikexueyuan.com/project/rust/mutability.html) for more info.
 
 ## Comparing References
-Like the `.\ operator, Rust's comparison operators "see through" any number of references, as long as as both operands have thee same type:
+Like the `.` operator, Rust's comparison operators "see through" any number of references, as long as as both operands have thee same type:
 
 ``` rust
 let x = 10;
