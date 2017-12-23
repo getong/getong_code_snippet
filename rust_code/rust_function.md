@@ -497,3 +497,11 @@ assert!(rrx <= rry);
 assert!(rrx == rry);
 assert!(!std::ptr::eq(rx, ry));
 ```
+
+## Add trait not need dereferences
+
+``` rust
+impl<'a>Add <&'a i32>for i32.
+impl<'a>Add < i32>for i32.
+```
+already impplemented.
