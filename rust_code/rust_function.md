@@ -505,3 +505,22 @@ impl<'a>Add <&'a i32>for i32.
 impl<'a>Add < i32>for i32.
 ```
 already impplemented.
+
+## derive(Default)
+
+``` rust
+#[derive(Default, Debug)]
+struct Point3d {
+    x: i32,
+	y: i32,
+	z: i32,
+ }
+
+let origin = Point3d::default();
+println!("{:?}", origin);
+```
+The output result:
+
+``` rust
+Point3d { x: 0, y: 0, z: 0 }
+```
