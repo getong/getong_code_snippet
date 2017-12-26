@@ -524,3 +524,15 @@ The output result:
 ``` rust
 Point3d { x: 0, y: 0, z: 0 }
 ```
+
+## integer truncate
+
+``` rust
+    // 1000 - 256 - 256 - 256 = 232
+    // Under the hood, the first 8 least significant bits (LSB) are kept,
+    // while the rest towards the most significant bit (MSB) get truncated.
+    println!("1000 as a u8 is : {}", 1000 as u8);
+    // -1 + 256 = 255
+    println!("  -1 as a u8 is : {}", (-1i8) as u8);
+```
+copy from [casting](https://rustbyexample.com/types/cast.html)
