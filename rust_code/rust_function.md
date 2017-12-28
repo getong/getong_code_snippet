@@ -591,3 +591,15 @@ match optional {
 };
 ```
 copy from [if let](https://rustbyexample.com/flow_control/if_let.html)
+
+## cmd arguments
+``` rust
+use std::env;
+
+fn main() {
+    let args = env::args();
+	for arg in args {
+		println!("{}", arg);
+	}
+}
+```
