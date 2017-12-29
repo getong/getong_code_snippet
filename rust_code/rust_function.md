@@ -224,12 +224,33 @@ mem::size_of_val(&mut n)
 mem::size_of::<isize>();
 ```
 
-## box
+## Box
 >> Box, 以及栈和堆
 >>
 >> 在 Rust 中，所有值默认都由栈分配。值也可以通过创建 Box<T> 来装箱（boxed，分配在堆上）。装箱类型是一个智能指针，指向堆分配的 T 类型的值。当一个装箱类型离开作用域时，它的析构器会被调用，内部的对象会被销毁，分配在堆上内存会被释放。
 
 >> 装箱的值可以使用 * 运算符进行解引用；这会移除掉一个间接层（this removes one layer of indirection. ）。
+Box is a reference, use with `*` to change the value.
+
+``` rust
+	let immutable_box = Box::new(5u32);
+
+	println!("immutable_box contains {}", immutable_box);
+
+    // 可变性错误
+    //*immutable_box = 4;
+
+    // **移动** box，改变所有权（和可变性）
+    let mut mutable_box = immutable_box;
+
+    println!("mutable_box contains {}", mutable_box);
+
+    // 修改 box 的内容
+    *mutable_box = 4;
+
+    println!("mutable_box now contains {}", mutable_box);
+```
+copy from [可变性](https://rustwiki.org/zh-CN/rust-by-example/scope/move/mut.html)
 
 ## ref
 使用ref 关键字来得到一个引用
