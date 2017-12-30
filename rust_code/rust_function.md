@@ -625,3 +625,14 @@ fn main() {
 	}
 }
 ```
+## as
+
+``` rust
+// rename crate name
+extern crate xxx as for;
+
+use for::yyy::zzz;
+
+// data casting
+1u32 as usize
+```
