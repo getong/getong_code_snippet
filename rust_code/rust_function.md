@@ -636,3 +636,11 @@ use for::yyy::zzz;
 // data casting
 1u32 as usize
 ```
+
+## iterator type
+
+``` rust
+let v: Vec<_> = (1..20).collect();
+
+let v = (1..20).collect::<Vec<_>>();
+```
