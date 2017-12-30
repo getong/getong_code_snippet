@@ -301,6 +301,7 @@ fn main() {
 ```
 ## use and crate
 `use` bring a `trait` into package, or shorten the namespace.
+`use` can import a item of a crate, a item can be a function, a trait, a binding.
 `extern crate` import package.
 
 ``` rust
