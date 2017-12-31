@@ -644,3 +644,27 @@ let v: Vec<_> = (1..20).collect();
 
 let v = (1..20).collect::<Vec<_>>();
 ```
+## std::T:MAX, std::T:MIN
+
+``` rust
+println!("{}", std::u8::MAX);
+println!("{}", std::u16::MAX);
+println!("{}", std::u32::MAX);
+println!("{}", std::u64::MAX);
+println!("{}", std::usize::MAX);
+println!("{}", std::i8::MAX);
+println!("{}", std::i16::MAX);
+println!("{}", std::i32::MAX);
+println!("{}", std::i64::MAX);
+println!("{}", std::isize::MAX);
+println!("{}", std::u8::MIN);
+println!("{}", std::u16::MIN);
+println!("{}", std::u32::MIN);
+println!("{}", std::u64::MIN);
+println!("{}", std::usize::MIN);
+println!("{}", std::i8::MIN);
+println!("{}", std::i16::MIN);
+println!("{}", std::i32::MIN);
+println!("{}", std::i64::MIN);
+println!("{}", std::isize::MIN);
+```
