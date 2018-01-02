@@ -25,3 +25,10 @@ v.remove(1); // remove the second element
 ``` rust
 assert_eq!(v.pop(), Some(35));
 ```
+
+## swap_remove
+
+``` rust
+v.swap_remove(1);
+std::mem::replace(&mut v[2], 123);
+```
