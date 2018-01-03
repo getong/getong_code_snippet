@@ -644,6 +644,7 @@ let v: Vec<_> = (1..20).collect();
 
 let v = (1..20).collect::<Vec<_>>();
 ```
+The symbol ::<<...> is affectionately known in the Rust community as the turbofish.
 ## std::T:MAX, std::T:MIN
 
 ``` rust
