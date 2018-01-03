@@ -644,7 +644,27 @@ let v: Vec<_> = (1..20).collect();
 
 let v = (1..20).collect::<Vec<_>>();
 ```
+Naturally method calls can be chained, one quirk of Rust syntax is that in a function call or method call, the usual syntax for generic types, `Vec<T>`, does not work:
+
+``` rust
+return Vec<i32>::with_capacity(1000); // error: something about chained comparisons
+let ramp = (0 .. n).collect<Vec<i32>>(); // same error
+```
+The problem is that in expressions, `<` is the less-than operator. The Rust compiler helpfully suggests writing `::<T>` instead of `<T>` in this case, and that solves the problem:
+
+``` rust
+return Vec::<i32>::with_capacity(1000);
+let ramp = (0 .. n).collect::<Vec<i32>>();
+```
 The symbol ::<<...> is affectionately known in the Rust community as the turbofish.
+Alternatively, it is often possible to drop the type parameters and let Rust infer them:
+
+``` rust
+return Vec::with_capacity(1000); // ok, if the fn return type is Vec<i32>
+let ramp: Vec<i32> = (0 ..n).collect(); // ok, variable's type is given
+```
+It's considered good style to omit the types whenever they can be inferred.
+
 ## std::T:MAX, std::T:MIN
 
 ``` rust
