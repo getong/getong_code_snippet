@@ -29,3 +29,16 @@ ssl send file, only send some bytes data, must read the file and send the readin
 ``` erlang
 ssl:send(Socket, Data)
 ```
+
+## check is file
+
+``` erlang
+is_file(Name) ->
+    case filelib:is_file(Name) of
+	true ->
+	    not filelib:is_dir(Name);
+	false ->
+	    false
+    end.
+```
+copy from pp_record.erl
