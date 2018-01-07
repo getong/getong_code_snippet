@@ -721,3 +721,19 @@ fn main() {
 
 ```
 copy from [C-like](https://rustbyexample.com/custom_types/enum/c_like.html)
+
+# Fully Qualified Method Calls
+A methos id just a pecial kind of function. These two calls are equivalent:
+
+``` rust
+"string_word".to_string()
+str::to_string("string_word")
+```
+Since `to_string` is a method of the standard `ToString` trait, there are two more forms you can use:
+
+``` rust
+ToString::to_string("string_word")
+<str as ToString>::to_string("hello")
+```
+All four of these method calls do exactly the same thing.
+The last form, with the angle brackets, specifies both: a fully qualified method call.
