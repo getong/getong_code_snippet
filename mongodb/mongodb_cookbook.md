@@ -58,3 +58,9 @@ mongodb cmd
 ``` shell
 db.runCommand({closeAllDatabases:1})
 ```
+
+## explain is Deprecated in the mongo Shell since v3.0
+
+## db.collection.ensureIndex() is now an alias for db.collection.createIndex().
+
+## Yes dropDupes is now deprecated since version 2.7.5 because it was not possible to predict correctly which document would be deleted in the process.
