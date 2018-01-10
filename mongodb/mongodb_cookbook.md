@@ -70,3 +70,61 @@ db.runCommand({closeAllDatabases:1})
 ``` shell
 db.currentOp();
 ```
+
+## mongod.config sample
+
+``` shell
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+# Where and how to store data.
+storage:
+  dbPath: /var/lib/mongo
+  journal:
+    enabled: true
+
+  engine: "wiredTiger"
+#  mmapv1:
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 4
+
+# how the process runs
+processManagement:
+  fork: true  # fork and run in background
+  pidFilePath: /var/run/mongodb/mongod.pid  # location of pidfile
+
+# network interfaces
+net:
+  port: 27017
+#  bindIp: 0.0.0.0  # Listen to local interface only, comment to listen on all interfaces.
+
+
+#security:
+#  authorization: 'enabled'
+#  keyFile: /opt/mongodb/keyfile
+
+#operationProfiling:
+
+replication:
+  replSetName: rs1
+#  oplogSize=1024
+
+#sharding:
+
+## Enterprise-Only Options
+
+#auditLog:
+
+#snmp:
+```
+copy from [mongod.conf yaml file format example](https://www.mysoftkey.com/mongodb/mongod-conf-yaml-file-format-example/)
+The `wiredTiger` does not work, not know why.
