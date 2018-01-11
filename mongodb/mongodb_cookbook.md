@@ -128,3 +128,9 @@ replication:
 ```
 copy from [mongod.conf yaml file format example](https://www.mysoftkey.com/mongodb/mongod-conf-yaml-file-format-example/)
 The `wiredTiger` does not work, not know why.
+
+## update
+```
+db.users.update({type: 2}, {$set: {value: 2}});
+db.user.update({type: 2}, {$unset: {value: 3}});
+```
