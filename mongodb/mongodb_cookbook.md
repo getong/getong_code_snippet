@@ -132,5 +132,18 @@ The `wiredTiger` does not work, not know why.
 ## update
 ```
 db.users.update({type: 2}, {$set: {value: 2}});
-db.user.update({type: 2}, {$unset: {value: 3}});
+db.users.update({type: 2}, {$unset: {value: 3}});
+db.users.update({type: 2}, {$addToSet: {type: 3}}, false, true);
+```
+
+## pretty
+
+```
+db.users.find().pretty()
+```
+
+## count
+
+```
+db.numbers.count()
 ```
