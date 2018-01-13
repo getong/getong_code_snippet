@@ -153,3 +153,23 @@ get the info of a db or a collection
 db.stats();
 db.uses.stats();
 ```
+
+## createCollection
+
+```
+db.createCollection("users");
+db.createCollection("users", {size: 20000});
+db.createCollection("users", {capped:true, size: 16384, max: 100});
+```
+
+## renameCollection
+
+``` javascript
+db.old_name.renameCollection("new_name");
+```
+
+## createIndex ttl
+
+```
+db.revies.createIndex({time_field:1}, {expireAfterSeconds: 3600});
+```
