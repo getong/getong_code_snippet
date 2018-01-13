@@ -147,3 +147,9 @@ db.users.find().pretty()
 ```
 db.numbers.count()
 ```
+## stats
+get the info of a db or a collection
+```
+db.stats();
+db.uses.stats();
+```
