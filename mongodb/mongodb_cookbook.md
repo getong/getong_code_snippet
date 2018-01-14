@@ -173,3 +173,10 @@ db.old_name.renameCollection("new_name");
 ```
 db.revies.createIndex({time_field:1}, {expireAfterSeconds: 3600});
 ```
+
+## mongodb does not support join
+
+```
+db.colletion_name.find({_id: {$in: other_collection_name['collection_id']}});
+db.colletion_name.find({_id: other_collection_name['_id']});
+```
