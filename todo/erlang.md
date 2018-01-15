@@ -14,3 +14,4 @@
 - [ ] erlang and haproxy
 - [x] erlang handle the system signals?
 - [ ] erlang parse_transform (used in lager and epipe)
+- [ ] tcp message delivery retry
