@@ -64,3 +64,29 @@ docker run -d --privileged --restart=always --network host --name rabbitmq_serve
 > If you need robust connections and channels, we recommend you use Erlang monitors on the returned connection and channel PIDs.
 
 [monitor rabbitmq code snippet](https://gist.github.com/burinov/4287139)
+
+## control commands
+
+``` shell
+rabbitmqctl  [add_vhost|delete_vhost] vhost1
+rabbitmqctl status
+rabbitmqctl list_exchanges
+rabbitmqctl list_bindings
+rabbitmqctl list_users
+rabbitmqctl list_vhosts
+rabbitmqctl add_user user password
+rabbitmqctl change_password username other_password
+rabbitmqctl set_user_tags username administrator
+rabbitmqctl  delete_user username
+rabbitmq-plugins list
+rabbitmq-plugins enable rabbitmq_management
+rabbitmq-plugins disable some_plugin_name
+rabbitmqctl stop
+rabbitmqctl stop_app
+rabbitmqctl stop -n rabbit@remote_ip
+rabbitmq-server -detached
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl join_cluster rabbit@node1
+```
+see [rabbitmq学习笔记](http://blog.51cto.com/lee90/2058126)
