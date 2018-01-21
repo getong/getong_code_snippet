@@ -16,3 +16,10 @@ erlc +debug_info test.erl
 {ok,{_,[{abstract_code,{_,AC}}]}} = beam_lib:chunks(filename:dirname(code:which(test)) ++ "/test.beam",[abstract_code]).
 ```
 lager use the parse_transform option too.
+
+## related modules
+``` erlang
+erl_parse   the erlang parse
+epp    an erlang code preprocessor
+merl    metaprogramming in erlang
+```
