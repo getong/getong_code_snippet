@@ -5,7 +5,7 @@
 
 ``` shell
 export KERL_BUILD_BACKEND=git
-export OTP_GITHUB_URL="https://github.com/erlang/otp"
+export OTP_GITHUB_URL=“https://github.com/erlang/otp”
 kerl update releases
 kerl list releases
 KERL_BUILD_DOCS=yes kerl build 19.3.2 19.3.2
@@ -16,7 +16,7 @@ source ~/kerl/19.3.2/activate
 ## compile from source
 
 ``` shell
-export VERSION=20.1.3
+export VERSION=20.2.2
 wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
 tar xzf OTP-$VERSION.tar.gz
 cd otp-OTP-$VERSION
@@ -25,7 +25,7 @@ export PATH=$ERL_TOP/bin:$PATH
 
 ./otp_build autoconf
 
-./configure --prefix=/usr/local/otp_src_$VERSION
+./configure —prefix=/usr/local/otp_src_$VERSION
 make clean
 #using all cores of a cpu
 make -j`nproc` && make -j`nproc` tests
@@ -73,7 +73,7 @@ apt-get install autoconf libncurses5-dev build-essential \
 centos
 
 ``` shell
-yum groupinstall -y "Development Tools"
+yum groupinstall -y “Development Tools”
 yum install m4 openssl openssl-devel  unixODBC unixODBC-devel \
 	make gcc gcc-c++ kernel-devel ncurses-devel libxslt \
 	fop java-1.8.0-openjdk-devel wxGTK-gl wxGTK-devel tk
@@ -133,7 +133,7 @@ compile openssl
 ``` shell
 $ tar xzf openssl-1.0.2l.tar.gz
 $ cd openssl-1.0.2l
-$ sh config shared -fPIC --prefix=/usr/local/openssl-1.0.2l
+$ sh config shared -fPIC —prefix=/usr/local/openssl-1.0.2l
 $ make
 $ make test
 $ sudo make install
@@ -142,5 +142,5 @@ $ sudo make install
 compile erlang using compiled openssl
 
 ``` shell
-./configure --with-ssl=/usr/local/openssl-1.0.2l
+./configure —with-ssl=/usr/local/openssl-1.0.2l
 ```
