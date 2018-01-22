@@ -88,5 +88,17 @@ rabbitmq-server -detached
 rabbitmqctl stop_app
 rabbitmqctl reset
 rabbitmqctl join_cluster rabbit@node1
+rabbitmqctl join_cluster --ram  rabbit@node1
+rabbitmqctl start_app
+rabbitmqctl environment
+rabbitmqctl status
+rabbitmqctl list_consumers
+rabbitmqctl list_channels
+rabbitmqctl list_connections
+rabbitmqctl rotate_logs
+rabbitmq-plugins enable rabbitmq_shovel
+rabbitmq-plugins enable rabbitmq_shovel_management
+rabbitmqadmin list connections names
+rabbitmqadmin close connection name="127.0.0.1:11111"
 ```
 see [rabbitmq学习笔记](http://blog.51cto.com/lee90/2058126)
