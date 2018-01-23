@@ -102,3 +102,16 @@ rabbitmqadmin list connections names
 rabbitmqadmin close connection name="127.0.0.1:11111"
 ```
 see [rabbitmq学习笔记](http://blog.51cto.com/lee90/2058126)
+
+## RabbitMQ - Message order of delivery
+
+``` shell
+With multiple (parallel) consumers, order of processing cannot be guaranteed.
+
+If you want to ensure the processing order then:
+
+Have only 1 consumer instance at all times
+Or don't use a messaging queue and do the processing in a synchronous blocking method,
+which might sound bad but in many cases and business requirements is completely valid and sometimes even critical
+```
+copy from [RabbitMQ - Message order of delivery](https://stackoverflow.com/questions/21363302/rabbitmq-message-order-of-delivery)
