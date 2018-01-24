@@ -485,3 +485,10 @@ view all the vagrant box instance status
 ``` shell
 vagrant global-status
 ```
+
+## sed
+
+``` shell
+i=abc
+sed -i "s/\$i/$i/g" filename
+```
