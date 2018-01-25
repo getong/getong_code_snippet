@@ -115,3 +115,10 @@ Or don't use a messaging queue and do the processing in a synchronous blocking m
 which might sound bad but in many cases and business requirements is completely valid and sometimes even critical
 ```
 copy from [RabbitMQ - Message order of delivery](https://stackoverflow.com/questions/21363302/rabbitmq-message-order-of-delivery)
+
+## RabbitMQ publisher confirms using the Erlang client
+
+``` erlang
+#'confirm.select_ok'{} = amqp_channel:call(Channel, #'confirm.select'{}), etc().....
+```
+copy from [RabbitMQ publisher confirms using the Erlang client](https://groups.google.com/forum/#!topic/rabbitmq-discuss/-RkJ0Z4C114)
