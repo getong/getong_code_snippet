@@ -128,6 +128,8 @@ replication:
 ```
 copy from [mongod.conf yaml file format example](https://www.mysoftkey.com/mongodb/mongod-conf-yaml-file-format-example/)
 The `wiredTiger` does not work, not know why.
+The reason might be that WiredTiger engine is a new engine, and does not support the old data stored in the MMAPv1 engine.
+The old data must be dump and restore back.
 
 ## update
 ```
@@ -180,3 +182,5 @@ db.revies.createIndex({time_field:1}, {expireAfterSeconds: 3600});
 db.colletion_name.find({_id: {$in: other_collection_name['collection_id']}});
 db.colletion_name.find({_id: other_collection_name['_id']});
 ```
+
+
