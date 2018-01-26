@@ -12,3 +12,5 @@ struct S<'a> {
 	r: &'a i32
 }
 ```
+## coercion
+强制隐式转换，是Rust中仅有的类型隐式转换。
