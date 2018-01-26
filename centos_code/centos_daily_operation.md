@@ -58,3 +58,16 @@ $ sudo yum -y install docker-ce
 ``` shell
 yum list package
 ```
+
+## sudo in centos
+Unlike Debian, the sudo group doest not exist in centos, the sudo group name is wheel
+``` shell
+# add group user
+usermod -aG wheel username
+
+# use visudo to edit sudo user info
+visudo
+
+# allow sudo user not type password, uncomment this line in the sudoer file
+#%wheel ALL=(ALL)NOPASSWD:ALL
+```
