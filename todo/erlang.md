@@ -12,6 +12,8 @@
 	  [11 External Term Format](http://erlang.org/doc/apps/erts/erl_ext_dist.html)
 - [ ] erlang cpu usage
 - [ ] erlang and haproxy
+	[ranch_proxy_protocol](https://github.com/heroku/ranch_proxy_protocol)
 - [x] erlang handle the system signals?
 - [ ] erlang parse_transform (used in lager and epipe)
 - [ ] tcp message delivery retry
+	AMQP protocol might solve this problem.
