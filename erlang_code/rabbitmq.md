@@ -122,3 +122,6 @@ copy from [RabbitMQ - Message order of delivery](https://stackoverflow.com/quest
 #'confirm.select_ok'{} = amqp_channel:call(Channel, #'confirm.select'{}), etc().....
 ```
 copy from [RabbitMQ publisher confirms using the Erlang client](https://groups.google.com/forum/#!topic/rabbitmq-discuss/-RkJ0Z4C114)
+
+## RabbitMQ support aws, k8s, etcd, consul
+They are supported in the behaviour `rabbit_peer_discovery_backend`, and the docs with the example are very good to use.
