@@ -220,3 +220,13 @@ $ git fetch origin
 $ git checkout master
 $ git reset --hard origin/master
 ```
+
+
+## reset
+``` shell
+$ git reset ref123
+$ git reset HEAD^3
+$ git diff
+$ git add —all
+$ git diff —-staged
+```
