@@ -138,6 +138,29 @@ git show commit_id
 ## stash
 ```shell
 $ git stash save filename
+# stash all the changed files, no include the untracked files
+$ git stash save
+
+# stash all the changed files, include the untracked files
+$ git stash save --include-untracked
+
+# list the stash history
+git stash list
+
+# stash apply
+$ git stash apply stash@{0}
+
+# drop
+$ git stash drop stash@{0}
+
+# pop
+$ git stash pop
+$ git stash pop stash@{0}
+
+```
+## clean the repo
+``` shell
+$ git clean -d
 ```
 
 ## git ignore
