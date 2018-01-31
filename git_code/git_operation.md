@@ -253,3 +253,9 @@ $ git diff
 $ git add —all
 $ git diff —-staged
 ```
+
+## blame
+view every line's commit message of a file
+```shell
+$ git blame filename
+```
