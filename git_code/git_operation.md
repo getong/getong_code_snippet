@@ -15,14 +15,14 @@ $ git push
 ```
 
 ## github合并pr， 其中master是要合并到的主干， develop是要被合并的分支
-
+```shell
 git checkout -b develop master
 git pull https://github.com/other/proj develop
 
 git checkout master
 git merge --no-ff develop
 git push origin master
-
+```
 ## can't pull new tags
 Sometimes the new tag in remote repository, pull can't get the new tags. Fetch it.
 
