@@ -259,3 +259,13 @@ view every line's commit message of a file
 ```shell
 $ git blame filename
 ```
+
+## tag
+```shell
+# make a tag
+$ git tag tag_name commit_id
+# show the tag info
+$ git show tag_name
+# get all the tag names
+$ git tag
+```
