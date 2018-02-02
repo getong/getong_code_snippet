@@ -233,3 +233,6 @@
 
 ;;如果有喜欢用鼠标选择emacs文本的同学, 可以试试加上这句配置:
 (setq mouse-drag-copy-region t)
+
+;; turn off debug-on-error by setting it to nil:
+(setq debug-on-error nil)
