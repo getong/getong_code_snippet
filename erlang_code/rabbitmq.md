@@ -125,3 +125,5 @@ copy from [RabbitMQ publisher confirms using the Erlang client](https://groups.g
 
 ## RabbitMQ support aws, k8s, etcd, consul
 They are supported in the behaviour `rabbit_peer_discovery_backend`, and the docs with the example are very good to use.
+[在Kubernetes上使用Sateful Set部署RabbitMQ集群](https://www.kubernetes.org.cn/2629.html)
+[基于Kubernetes（k8s）的RabbitMQ 集群](https://www.kubernetes.org.cn/1304.html)
