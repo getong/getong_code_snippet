@@ -268,4 +268,5 @@ $ git tag tag_name commit_id
 $ git show tag_name
 # get all the tag names
 $ git tag
+$ git push --tags
 ```
