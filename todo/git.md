@@ -2,4 +2,4 @@
 
 - [ ] know git command
 - [ ] gitea, gogs, gitlab
-- [ ] git stash command
+- [x] git stash command
