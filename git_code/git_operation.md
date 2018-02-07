@@ -227,6 +227,14 @@ The answer is below, check for help.
 ## bisect
 see [让 Git Bisect 帮助你](https://www.oschina.net/translate/letting-git-bisect-help-you)
 
+``` shell
+git bisect start
+git bisect bad
+git bisect good
+git bisect reset
+```
+see [.5 Git 工具 - 使用 Git 调试](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E4%BD%BF%E7%94%A8-Git-%E8%B0%83%E8%AF%95)
+
 ## git concept
 
 ``` shell
