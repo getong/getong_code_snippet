@@ -17,3 +17,5 @@
 - [ ] erlang parse_transform (used in lager and epipe)
 - [ ] tcp message delivery retry
 	AMQP protocol might solve this problem.
+- [ ] riak_core
+- [ ] lasp
