@@ -19,3 +19,5 @@
 	AMQP protocol might solve this problem.
 - [ ] riak_core
 - [ ] lasp
+- [ ] cowboy
+- [ ] hackney
