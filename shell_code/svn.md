@@ -66,3 +66,10 @@ $ svn commit -m 'add executable' filename
 ``` shell
 $ svn co svn://svn_server/repo/branches/branch_name -r version_num
 ```
+
+## Undo that SVN add
+
+``` shell
+svn revert --recursive example_folder
+```
+see [Undo that SVN add](http://data.agaric.com/undo-svn-add)
