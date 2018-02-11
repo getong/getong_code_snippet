@@ -56,3 +56,12 @@ ts() ->
 {erl_opts, [nowarn_deprecated_function]}.
 ```
 不推荐使用。有些废弃的函数在模块中没有被删除掉，但不排除以后会。
+
+
+## unsupported api
+``` erlang
+erlang:now() 
+random module
+gen_fsm module
+erlang:get_stacktrace() will be changed in the future
+```
