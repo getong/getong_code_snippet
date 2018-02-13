@@ -1,3 +1,22 @@
+; list the packages you want
+(setq package-list '(edts company indent-guide pangu-spacing spinner))
+
+; list the repositories containing them
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+
+; activate all the packages (in particular autoloads)
+(package-initialize)
+
+; fetch the list of packages available
+(unless package-archive-contents
+    (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+    (unless (package-installed-p package)
+          (package-install package)))
+
 ;;设定光标为短线
 (setq-default cursor-type 'bar)
 
@@ -12,22 +31,22 @@
 
 ;;参考 http://www.aiuxian.com/article/p-823990.html
 ;; Linux下emacs如何和X-Window系统共享剪贴板
-(setq x-select-enable-clipboard t)
-
-;; use xsel to copy/paste in emacs-nox
-(unless window-system
-  (when (getenv "DISPLAY")
-    (defun xsel-cut-function (text &optional push)
-      (with-temp-buffer
-        (insert text)
-        (call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
-    (defun xsel-paste-function()
-      (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
-        (unless (string= (car kill-ring) xsel-output)
-          xsel-output )))
-    (setq interprogram-cut-function 'xsel-cut-function)
-    (setq interprogram-paste-function 'xsel-paste-function)
-    ))
+;;(setq x-select-enable-clipboard t)
+;;
+;;;; use xsel to copy/paste in emacs-nox
+;;(unless window-system
+;;  (when (getenv "DISPLAY")
+;;	(defun xsel-cut-function (text &optional push)
+;;    (with-temp-buffer
+;;		(insert text)
+;;		(call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
+;;	(defun xsel-paste-function()
+;;    (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
+;;		(unless (string= (car kill-ring) xsel-output)
+;;        xsel-output )))
+;;	(setq interprogram-cut-function 'xsel-cut-function)
+;;	(setq interprogram-paste-function 'xsel-paste-function)
+;;	))
 
 
 (global-superword-mode t)
@@ -44,7 +63,7 @@
 (setq linum-format "%3d ")
 (add-hook 'prog-mode-hook 'linum-mode)
 
-;;(setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode t)
 (ido-mode 1)
 (setq column-number-mode t)
 
@@ -60,6 +79,8 @@
 (add-to-list 'auto-mode-alist '("\\.erl?$" . erlang-mode))
 (add-to-list 'auto-mode-alist '("\\.hrl?$" . erlang-mode))
 
+(add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
+(add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
 
 (setq backup-directory-alist (quote (("." . "~/.backups"))))
 (setq version-control t)
@@ -201,11 +222,11 @@
 
 (add-hook 'after-init-hook 'my-after-init-hook)
 (defun my-after-init-hook ()
-  (require 'edts-start))
+ (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_19.1.6/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_19.1.6/lib/erlang")
+(setq erlang-root-dir "/usr/local/otp_src_20.2.3/lib/erlang")
+(setq erlang-man-root "/usr/local/otp_src_20.2.3/lib/erlang")
 
 ;; 关闭文件滑动控件
 (scroll-bar-mode -1)
@@ -219,7 +240,7 @@
 ;; Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
 
-(setq company-idle-delay 0.08)
+(setq company-idle-delay 0.01)
 (setq company-minimum-prefix-length 1)
 
 ;; set default tab char's display width to 4 spaces
@@ -234,5 +255,19 @@
 ;;如果有喜欢用鼠标选择emacs文本的同学, 可以试试加上这句配置:
 (setq mouse-drag-copy-region t)
 
-;; turn off debug-on-error by setting it to nil:
+
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+
+(autoload 'gfm-mode "markdown-mode"
+  "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
+(setq load-path (cons "/usr/local/otp_src_20.2.2/lib/erlang/lib/tools-2.11/emacs"
+                      load-path))
+(setq erlang-root-dir "/usr/local/otp_src_20.2.2/")
+(setq exec-path (cons "/usr/local/otp_src_20.2.2/bin" exec-path))
+(require 'erlang-start)
 (setq debug-on-error nil)
