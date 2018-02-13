@@ -1,3 +1,4 @@
+; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
 (setq package-list '(edts company indent-guide pangu-spacing spinner))
 
