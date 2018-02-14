@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -266,9 +266,9 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_20.2.2/lib/erlang/lib/tools-2.11/emacs"
+(setq load-path (cons "/usr/local/otp_src_20.2.3/lib/erlang/lib/tools-2.11.1/emacs"
                       load-path))
-(setq erlang-root-dir "/usr/local/otp_src_20.2.2/")
-(setq exec-path (cons "/usr/local/otp_src_20.2.2/bin" exec-path))
+(setq exec-path (cons "/usr/local/otp_src_20.2.3/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
+(global-undo-tree-mode)
