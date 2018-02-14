@@ -271,4 +271,6 @@
 (setq exec-path (cons "/usr/local/otp_src_20.2.3/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
+
+;; copy from [Undo Tree](https://www.emacswiki.org/emacs/UndoTree)
 (global-undo-tree-mode)
