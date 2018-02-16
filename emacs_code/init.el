@@ -28,7 +28,10 @@
 (ispell-change-dictionary "american" t)
 
 ;;以tab缩进
-(setq indent-tabs-mode t)
+;;(setq indent-tabs-mode t)
+(setq indent-tabs-mode nil)
+(setq default-tab-width 4)
+
 
 ;;参考 http://www.aiuxian.com/article/p-823990.html
 ;; Linux下emacs如何和X-Window系统共享剪贴板
@@ -53,7 +56,7 @@
 (global-superword-mode t)
 
 (global-hl-line-mode 1)
-(set-face-background 'hl-line "blue")
+(set-face-background 'hl-line "grey")
 (set-face-foreground 'highlight nil)
 
 (blink-cursor-mode 0)
@@ -64,7 +67,7 @@
 (setq linum-format "%3d ")
 (add-hook 'prog-mode-hook 'linum-mode)
 
-(setq-default indent-tabs-mode t)
+;;(setq-default indent-tabs-mode nil)
 (ido-mode 1)
 (setq column-number-mode t)
 
