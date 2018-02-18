@@ -60,7 +60,8 @@
 (set-face-foreground 'highlight nil)
 
 (blink-cursor-mode 0)
-(set-cursor-color "blue")
+(setq blink-cursor-blinks 0)
+(set-cursor-color "black")
 (global-font-lock-mode t)
 
 (global-linum-mode 1)
@@ -277,3 +278,7 @@
 
 ;; copy from [Undo Tree](https://www.emacswiki.org/emacs/UndoTree)
 (global-undo-tree-mode)
+
+(savehist-mode 1)
+(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+(setq savehist-file "~/.emacs.d/savehist")
