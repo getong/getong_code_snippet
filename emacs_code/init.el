@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -61,6 +61,7 @@
 
 (blink-cursor-mode 0)
 (setq blink-cursor-blinks 0)
+(setq-default cursor-type 'bar);光标显示为一竖线
 (set-cursor-color "black")
 (global-font-lock-mode t)
 
@@ -282,3 +283,6 @@
 (savehist-mode 1)
 (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (setq savehist-file "~/.emacs.d/savehist")
+
+(require 'highlight-thing)
+(global-highlight-thing-mode)
