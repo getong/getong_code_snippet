@@ -69,7 +69,7 @@
 (setq linum-format "%3d ")
 (add-hook 'prog-mode-hook 'linum-mode)
 
-;;(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 (ido-mode 1)
 (setq column-number-mode t)
 
