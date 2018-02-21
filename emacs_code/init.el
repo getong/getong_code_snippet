@@ -27,9 +27,16 @@
 ;; use American English as ispell default dictionary
 (ispell-change-dictionary "american" t)
 
-;;以tab缩进
-;;(setq indent-tabs-mode t)
+;; copy from https://www.emacswiki.org/emacs/NoTabs
+(defun infer-indentation-style ()
+  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if        
+  ;; neither, we use the current indent-tabs-mode                               
+  (let ((space-count (how-many "^  " (point-min) (point-max)))
+        (tab-count (how-many "^\t" (point-min) (point-max))))
+    (if (> space-count tab-count) (setq indent-tabs-mode nil))
+    (if (> tab-count space-count) (setq indent-tabs-mode t))))
 (setq indent-tabs-mode nil)
+(infer-indentation-style)
 (setq default-tab-width 4)
 
 
@@ -69,7 +76,7 @@
 (setq linum-format "%3d ")
 (add-hook 'prog-mode-hook 'linum-mode)
 
-(setq-default indent-tabs-mode nil)
+;;(setq-default indent-tabs-mode nil)
 (ido-mode 1)
 (setq column-number-mode t)
 
