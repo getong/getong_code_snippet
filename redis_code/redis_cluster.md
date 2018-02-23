@@ -54,4 +54,28 @@ OK
 
 ```
 
+## make a redis cluster by redis cli command
+copy from [Redis cluster tutorial](https://redis.io/topics/cluster-tutorial)
+redis.conf
+```
+port 7000 # this port might be changed
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+appendonly yes
+```
+
+copy from [全面剖析Redis Cluster原理和应用](http://blog.csdn.net/dc_726/article/details/48552531)
+``` shell
+$ redis-server redis.conf
+$ redis-cli -c -h 192.168.1.100 -p 7000 cluster nodes
+$ redis-cli -c -h 192.168.1.100 -p 7000 cluster meet 192.168.1.100 7001
+$ redis-cli -c -h 192.168.1.100 -p 7000 cluster nodes
+$ redis-cli -c -h 192.168.1.100 -p 7003 cluster replicate 33c0bd93d7c7403ef0239ff01eb79bfa15d2a32c
+$ redis-cli -c -h 192.168.1.100 -p 7004 cluster replicate 63162ed000db9d5309e622ec319a1dcb29a3304e
+$ redis-cli -c -h 192.168.1.100 -p 7000 cluster addslots {0..5000}
+$ redis-cli -c -h 192.168.1.100 -p 7001 cluster addslots {5001..10000}
+```
+That is it.
+
 ## redis supports raft algorithm
