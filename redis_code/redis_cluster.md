@@ -58,11 +58,16 @@ OK
 copy from [Redis cluster tutorial](https://redis.io/topics/cluster-tutorial)
 redis.conf
 ```
-port 7000 # this port might be changed
+bind 192.168.1.100
+# this port might be changed
+port 7000
 cluster-enabled yes
 cluster-config-file nodes.conf
 cluster-node-timeout 5000
 appendonly yes
+daemonize yes
+cluster-require-full-coverage no
+logfile "./redis.log"
 ```
 
 copy from [全面剖析Redis Cluster原理和应用](http://blog.csdn.net/dc_726/article/details/48552531)

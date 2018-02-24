@@ -1,4 +1,4 @@
 # database 
 - [ ] mariadb cluster
-- [ ] redis cluster
+- [x] redis cluster
 - [ ] mongodb cluster
