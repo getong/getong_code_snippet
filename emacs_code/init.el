@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -29,8 +29,8 @@
 
 ;; copy from https://www.emacswiki.org/emacs/NoTabs
 (defun infer-indentation-style ()
-  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if        
-  ;; neither, we use the current indent-tabs-mode                               
+  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
+  ;; neither, we use the current indent-tabs-mode
   (let ((space-count (how-many "^  " (point-min) (point-max)))
         (tab-count (how-many "^\t" (point-min) (point-max))))
     (if (> space-count tab-count) (setq indent-tabs-mode nil))
@@ -238,8 +238,8 @@
  (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_20.2.3/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_20.2.3/lib/erlang")
+(setq erlang-root-dir "/usr/local/otp_src_20.2.4/lib/erlang")
+(setq erlang-man-root "/usr/local/otp_src_20.2.4/lib/erlang")
 
 ;; 关闭文件滑动控件
 (scroll-bar-mode -1)
@@ -278,9 +278,9 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_20.2.3/lib/erlang/lib/tools-2.11.1/emacs"
+(setq load-path (cons "/usr/local/otp_src_20.2.4/lib/erlang/lib/tools-2.11.1/emacs"
                       load-path))
-(setq exec-path (cons "/usr/local/otp_src_20.2.3/bin" exec-path))
+(setq exec-path (cons "/usr/local/otp_src_20.2.4/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
 
