@@ -27,3 +27,7 @@ open(enter, _OldState, _Data) ->
     do_unlock(),
     {keep_state_and_data, [{state_timeout,10000,lock}]};
 ```
+
+## repeat_state and repeat_state_and_data
+
+>> The gen_statem keeps the current state, or does a state transition to the current state if you like, sets NewData, and executes all Actions. If the gen_statem runs with state enter calls, the state enter call is repeated, see type transition_option(), otherwise repeat_state is the same as keep_state.
