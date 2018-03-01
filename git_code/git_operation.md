@@ -279,3 +279,9 @@ $ git show tag_name
 $ git tag
 $ git push --tags
 ```
+
+## revert
+git revert an old commit with a new commit, often used in the public branch.
+```shell
+git revert HEAD~1
+```
