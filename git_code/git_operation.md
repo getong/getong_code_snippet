@@ -271,10 +271,21 @@ $ git blame filename
 
 ## tag
 ```shell
+# new a tag with current commit
+$ git tag tag_name
+
 # make a tag
 $ git tag tag_name commit_id
+
 # show the tag info
 $ git show tag_name
+
+# delete a tag
+$ git tag -d tag_name
+
+# delete the remote tag
+$ git push origin :refs/tags/tag_name
+
 # get all the tag names
 $ git tag
 $ git push --tags
@@ -284,4 +295,9 @@ $ git push --tags
 git revert an old commit with a new commit, often used in the public branch.
 ```shell
 git revert HEAD~1
+```
+
+## archive
+``` shell
+git archive
 ```
