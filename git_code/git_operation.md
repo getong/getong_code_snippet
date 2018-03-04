@@ -301,3 +301,9 @@ git revert HEAD~1
 ``` shell
 git archive
 ```
+
+## change to the last branch
+
+``` shell
+git checkout -
+```
