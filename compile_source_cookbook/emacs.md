@@ -5,7 +5,7 @@ sudo apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev l
 ```
 ## On Debian stretch
 ```shell
-apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng-dev libgif-dev libtiff5-dev libncurses5-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev libwebkitgtk-dev libwebkitgtk-3.0-dev texinfo texlive texlive-metapost
+apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng-dev libgif-dev libtiff5-dev libncurses5-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev libwebkitgtk-dev libwebkitgtk-3.0-dev texinfo texlive texlive-metapost libwebkit2gtk-4.0-dev mailutils
 ```
 ## compile
 ```shell
