@@ -460,3 +460,12 @@ screenshot
 ``` shell
 sudo apt-get install shutter
 ```
+
+## Making /etc/resolv.conf immutable
+copy from [resolv.conf](https://wiki.debian.org/resolv.conf)
+
+``` shell
+rm -f /etc/resolv.conf
+editor /etc/resolv.conf
+chattr +i /etc/resolv.conf
+```
