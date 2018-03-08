@@ -38,7 +38,9 @@ $erl
 <<0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10>>
 3><<10:2/integer-unit:8>>.
 <<0,10>>
-
+4><< _:7/binary, Keep:10/binary, _/bits >> = <<10:176/integer>>.
+5> Keep.
+<<0,0,0,0,0,0,0,0,0,0>>
 ```
 
 
@@ -51,5 +53,7 @@ $erl
 <<3,4>>
 30> B3= <<B1/binary, B2/binary>>.
 <<1,2,3,4>>
+
+31> B4 = << "abc", "cdef", B2/binary>>.
 ```
 see [How do I concatenate two binaries in Erlang?](https://stackoverflow.com/questions/600642/how-do-i-concatenate-two-binaries-in-erlang)
