@@ -40,3 +40,6 @@ start_http_server() ->
 ```
 
 copy from mzb_api_app.erl
+
+## cowboy rest
+The restful way implemented in cowboy is cowboy_rest.erl, and many callback functions can be not implemented.
