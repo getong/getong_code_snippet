@@ -492,3 +492,12 @@ vagrant global-status
 i=abc
 sed -i "s/\$i/$i/g" filename
 ```
+
+## Automatically add newline at end of curl response body
+copy from [Automatically add newline at end of curl response body](https://stackoverflow.com/questions/12849584/automatically-add-newline-at-end-of-curl-response-body/14614203#14614203)
+
+``` shell
+#adding the following to your ~/.curlrc file:
+
+-w "\n"
+```
