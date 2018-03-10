@@ -501,3 +501,8 @@ copy from [Automatically add newline at end of curl response body](https://stack
 
 -w "\n"
 ```
+Or:
+
+``` shell
+curl example.com; echo
+```
