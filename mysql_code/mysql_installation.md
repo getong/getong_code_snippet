@@ -33,3 +33,11 @@ in my.conf, comment the line `bind-address = 127.0.0.1`
 ``` shell
 #bind-address = 127.0.0.1
 ```
+
+## start and stop mariadb
+
+``` shell
+sudo systemctl stop mariadb.service
+sudo systemctl start mariadb.service
+sudo systemctl enable mariadb.service
+```
