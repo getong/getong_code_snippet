@@ -25,7 +25,7 @@ export PATH=$ERL_TOP/bin:$PATH
 
 ./otp_build autoconf
 
-./configure —prefix=/usr/local/otp_src_$VERSION
+./configure --prefix=/usr/local/otp_src_$VERSION
 make clean
 #using all cores of a cpu
 make -j`nproc` && make -j`nproc` tests
@@ -133,7 +133,7 @@ compile openssl
 ``` shell
 $ tar xzf openssl-1.0.2l.tar.gz
 $ cd openssl-1.0.2l
-$ sh config shared -fPIC —prefix=/usr/local/openssl-1.0.2l
+$ sh config shared -fPIC --prefix=/usr/local/openssl-1.0.2l
 $ make
 $ make test
 $ sudo make install
