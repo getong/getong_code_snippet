@@ -310,7 +310,7 @@ See [Docker CE 镜像源站](https://yq.aliyun.com/articles/110806)
 $ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/debian/ $(lsb_release -cs) stable"
 ```
 
-## install docker in stratch
+## install docker in stretch
 see [Get Docker CE for Debian](https://docs.docker.com/engine/installation/linux/docker-ce/debian/)
 ```shell
 
