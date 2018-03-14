@@ -61,3 +61,20 @@ AuthorizedKeysFile .ssh/authorized_keys ## key filename
 
 #service sshd restart
 ```
+
+## keep SSH sessions alive and prevent the SSH timeout
+copy from [SSH timeout due to inactivity is annoying. Here’s how to keep your SSH sessions alive and prevent the SSH timeout](https://bjornjohansen.no/ssh-timeout)
+
+``` shell
+# Prevent SSH timeout on the client side
+# add this in ~/.ssh/config
+ServerAliveInterval 120
+
+# Prevent SSH timeout on the server side
+# add these two in /etc/ssh/sshd_config
+ClientAliveInterval 120
+ClientAliveCountMax 720
+
+# and then restart sshd
+systemctl restart sshd
+```
