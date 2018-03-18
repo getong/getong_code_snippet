@@ -18,6 +18,7 @@
 - [ ] tcp message delivery retry
 	AMQP protocol might solve this problem.
 - [ ] riak_core
+- [ ] riak_ensemble
 - [ ] lasp
 - [ ] cowboy
 - [ ] hackney
