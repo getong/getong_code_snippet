@@ -229,8 +229,8 @@
  (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_20.2.4/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_20.2.4/lib/erlang")
+(setq erlang-root-dir "/usr/local/otp_src_20.3.1/lib/erlang")
+(setq erlang-man-root "/usr/local/otp_src_2032.1/lib/erlang")
 
 ;; 关闭文件滑动控件
 (scroll-bar-mode -1)
@@ -269,9 +269,9 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_20.2.4/lib/erlang/lib/tools-2.11.1/emacs"
+(setq load-path (cons "/usr/local/otp_src_20.3.1/lib/erlang/lib/tools-2.11.2/emacs"
                       load-path))
-(setq exec-path (cons "/usr/local/otp_src_20.2.4/bin" exec-path))
+(setq exec-path (cons "/usr/local/otp_src_20.3.1/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
 
