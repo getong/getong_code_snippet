@@ -68,3 +68,14 @@ function get_dir_file() {
 # iperf3 -c 192.168.89.3 -p 5202
 ```
 see [Docker network performance](https://jtway.co/docker-network-performance-b95bce32b4b9)
+
+## Makefile, continue after a command fails
+see [Make: how to continue after a command fails?](https://stackoverflow.com/questions/2670130/make-how-to-continue-after-a-command-fails)
+
+>> To ignore errors in a command line, write a - at the beginning of the line's text (after the initial tab). The - is discarded before the command is passed to the shell for execution.
+
+>> For example,
+``` shell
+clean:
+  -rm -f *.o
+```
