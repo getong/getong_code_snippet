@@ -142,5 +142,5 @@ $ sudo make install
 compile erlang using compiled openssl
 
 ``` shell
-./configure —with-ssl=/usr/local/openssl-1.0.2l
+./configure --with-ssl=/usr/local/openssl-1.0.2l
 ```
