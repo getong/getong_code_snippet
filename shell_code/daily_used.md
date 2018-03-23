@@ -506,3 +506,15 @@ Or:
 ``` shell
 curl example.com; echo
 ```
+
+## apt-get
+
+``` shell
+apt-get policy package_name
+```
+
+## vagrant ssh-config
+
+``` shell
+vagrant ssh-config
+```
