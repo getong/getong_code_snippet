@@ -16,7 +16,7 @@ source ~/kerl/19.3.2/activate
 ## compile from source
 
 ``` shell
-export VERSION=20.3.1
+export VERSION=20.3.2
 wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
 tar xzf OTP-$VERSION.tar.gz
 cd otp-OTP-$VERSION
@@ -66,7 +66,7 @@ debian stretch
 ```shell
 apt-get build-dep erlang
 apt-get install autoconf libncurses5-dev build-essential \
-    libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
+    libssl1.0-dev libwxgtk3.0-dev libgl1-mesa-dev \
     libglu1-mesa-dev libpng-dev default-jdk g++ libxml2-utils
 ```
 
