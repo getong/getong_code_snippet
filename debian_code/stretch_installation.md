@@ -469,3 +469,9 @@ rm -f /etc/resolv.conf
 editor /etc/resolv.conf
 chattr +i /etc/resolv.conf
 ```
+## ssd driver
+
+ext4 mount option add `discard` in the `/etc/fstab`
+``` shell
+/dev/sda1  /       ext4   defaults,noatime,discard   0  1
+```
