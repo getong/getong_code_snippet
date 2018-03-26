@@ -307,3 +307,9 @@ git archive
 ``` shell
 git checkout -
 ```
+
+## set upstream branch to local branch
+
+``` shell
+git branch --set-upstream-to=origin/branch_name local_branch_name
+```
