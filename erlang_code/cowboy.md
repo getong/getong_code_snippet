@@ -41,5 +41,17 @@ start_http_server() ->
 
 copy from mzb_api_app.erl
 
+``` erlang
+Dispatch = cowboy_router:compile([
+        {'_', [{"/", hello_handler, []}]}
+    ]),
+    {ok, _} = cowboy:start_clear(my_http_listener,
+        [{port, 8080}],
+        #{env => #{dispatch => Dispatch}}
+    ),
+```
+>> For this tutorial we map the path / to the handler module hello_handler.
+copy from [Nine Nines: Getting started](https://ninenines.eu/docs/en/cowboy/2.2/guide/getting_started/)
+
 ## cowboy rest
 The restful way implemented in cowboy is cowboy_rest.erl, and many callback functions can be not implemented.
