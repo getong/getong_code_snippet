@@ -55,3 +55,27 @@ copy from [Nine Nines: Getting started](https://ninenines.eu/docs/en/cowboy/2.2/
 
 ## cowboy rest
 The restful way implemented in cowboy is cowboy_rest.erl, and many callback functions can be not implemented.
+
+
+## cowboy start spec
+
+``` erlang
+Dispatch = cowboy_router:compile([
+    %% {HostMatch, list({PathMatch, Handler, InitialState})}
+    {'_', [{'_', my_handler, #{}}]}
+]),
+%% Name, NbAcceptors, TransOpts, ProtoOpts
+cowboy:start_clear(my_http_listener,
+    [{port, 8080}],
+    #{env => #{dispatch => Dispatch}}
+).
+```
+copy from [Nine Nines: Routing](https://ninenines.eu/docs/en/cowboy/2.2/guide/routing/)
+
+## live update
+
+``` erlang
+Dispatch = cowboy_router:compile(Routes),
+cowboy:set_env(my_http_listener, dispatch, Dispatch).
+```
+copy from [Nine Nines: Routing](https://ninenines.eu/docs/en/cowboy/2.2/guide/routing/)
