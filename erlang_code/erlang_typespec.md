@@ -6,4 +6,5 @@ for example, the iolist is defined:
 ```
 iolist()::maybe_improper_list(byte() | binary() | iolist(), binary() | [])
 ```
+An iolist is a list containing binaries, characters, strings or other iolists.
 use iolist for performance.
