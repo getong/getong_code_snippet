@@ -518,3 +518,12 @@ apt-get policy package_name
 ``` shell
 vagrant ssh-config
 ```
+
+## fuser
+
+``` shell
+fuser -n tcp|udp -v <port number>[,<remote addresss>[,<remote port>]
+$ fuser -n tcp -v 515
+                     用户     进程号 权限   命令
+6160/tcp:            user_name 12345 F....  beam.smp
+```
