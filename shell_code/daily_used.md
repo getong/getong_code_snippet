@@ -527,3 +527,10 @@ $ fuser -n tcp -v 515
                      用户     进程号 权限   命令
 6160/tcp:            user_name 12345 F....  beam.smp
 ```
+
+## netstat
+`-a` print all ports, `-p` print process name, `-A` protocol name
+``` shell
+$ sudo netstat -a -p -A inet
+$ sudo netstat -a -p -A inet6
+```
