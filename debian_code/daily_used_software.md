@@ -14,4 +14,5 @@ supervisor
 systemd
 python-pip
 nemo
+git
 ```
