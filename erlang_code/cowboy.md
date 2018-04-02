@@ -79,3 +79,28 @@ Dispatch = cowboy_router:compile(Routes),
 cowboy:set_env(my_http_listener, dispatch, Dispatch).
 ```
 copy from [Nine Nines: Routing](https://ninenines.eu/docs/en/cowboy/2.2/guide/routing/)
+
+
+## parse post data
+
+application/x-www-form-urlencoded
+
+``` shell
+curl -d "abc=abc" http://localhost/order
+```
+cowboy code
+``` erlang
+{ok, KeyValues, Req} = cowboy_req:read_urlencoded_body(Req0).
+```
+application/json
+
+``` shell
+curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz","password":"xyz"}' http://127.0.0.1
+```
+
+cowboy code
+
+``` erlang
+{ok, Data, Req} = cowboy_req:read_body(Req0),
+jiffy:decode(Data).
+```
