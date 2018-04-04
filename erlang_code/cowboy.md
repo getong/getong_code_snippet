@@ -104,3 +104,12 @@ cowboy code
 {ok, Data, Req} = cowboy_req:read_body(Req0),
 jiffy:decode(Data).
 ```
+
+## Resource design
+
+```
+If you implement the methods GET and/or HEAD, you must implement one ProvideResource callback for each content-type returned by the content_types_provided callback.
+If you implement the methods PUT, POST and/or PATCH, you must implement the content_types_accepted callback, and one AcceptCallback callback for each content-type it returns.
+If you implement the method DELETE, you must implement the delete_resource callback.
+```
+copy from [Designing a resource handler](https://ninenines.eu/docs/en/cowboy/2.2/guide/resource_design/)
