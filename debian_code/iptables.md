@@ -23,3 +23,10 @@ While this article is targeted at Ubuntu, it applies to Debian as well. Check it
 iptables -A INPUT -i eth0 -pudp -m multiport --destination-port 135,136 -j DROP
 iptables -A OUTPUT -i eth0 -p tcp -m multiport --destination-port 2049,1080,3128 --syn -j REJECT
 ```
+
+## table
+filter, nat, mangle table, the default table is filter
+
+``` shell
+iptables -t nat ...
+```
