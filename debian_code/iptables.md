@@ -31,3 +31,8 @@ filter, nat, mangle table, the default table is filter
 iptables -t nat ...
 iptables -A INPUT ...
 ```
+## nftables
+nfttables is used to replace iptables, and it comes with linux kernel 3.13 .
+
+## ufw
+ufw is nice for very basic operations, and it uses iptables behind-the-scenes to do them.
