@@ -1,3 +1,4 @@
 # iptables
 - [ ] iptables
 - [ ] nftables
+- [ ] ufw
