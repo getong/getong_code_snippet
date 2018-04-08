@@ -475,3 +475,12 @@ ext4 mount option add `discard` in the `/etc/fstab`
 ``` shell
 /dev/sda1  /       ext4   defaults,noatime,discard   0  1
 ```
+
+## fcitx not work with sublime
+
+copy from [fcitx doesn't work with Sublime Text 3 and RStudio](https://askubuntu.com/questions/842418/fcitx-doesnt-work-with-sublime-text-3-and-rstudio/842429)
+``` shell
+git clone https://github.com/lyfeyaj/sublime-text-imfix.git
+cd sublime-text-imfix
+./sublime-imfix
+```
