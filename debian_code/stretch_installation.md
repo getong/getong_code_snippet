@@ -484,3 +484,16 @@ git clone https://github.com/lyfeyaj/sublime-text-imfix.git
 cd sublime-text-imfix
 ./sublime-imfix
 ```
+
+## install php 7.2
+copy from [Installing Php 7.2 On Debian 8 Jessie And Debian 9 Stretch](https://www.chris-shaw.com/blog/installing-php-7.2-on-debian-8-jessie-and-debian-9-stretch)
+``` shell
+sudo apt-get install apt-transport-https lsb-release ca-certificates
+#sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+wget https://packages.sury.org/php/apt.gpg
+sudo apt-key add apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+apt-get update
+sudo apt-get install php7.2
+sudo apt-get install php7.2-cli php7.2-common php7.2-curl php7.2-gd php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-xml
+```
