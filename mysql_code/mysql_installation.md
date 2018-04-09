@@ -41,3 +41,22 @@ sudo systemctl stop mariadb.service
 sudo systemctl start mariadb.service
 sudo systemctl enable mariadb.service
 ```
+
+## mariadb on debian stretch
+
+``` shell
+sudo apt-get install software-properties-common dirmngr
+sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
+sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.2/debian stretch main'
+sudo apt-get update
+sudo apt-get install mariadb-server
+```
+the source mirror:
+
+``` shell
+# MariaDB 10.2 repository list - created 2018-04-09 08:23 UTC
+# http://downloads.mariadb.org/mariadb/repositories/
+deb [arch=amd64,i386,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.2/debian stretch main
+deb-src http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.2/debian stretch main
+```
+copy from [mariadb installation](https://downloads.mariadb.org/mariadb/repositories/#mirror=tuna&distro=Debian&distro_release=stretch--stretch&version=10.2)
