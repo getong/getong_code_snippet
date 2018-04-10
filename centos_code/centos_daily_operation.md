@@ -71,3 +71,11 @@ visudo
 # allow sudo user not type password, uncomment this line in the sudoer file
 #%wheel ALL=(ALL)NOPASSWD:ALL
 ```
+
+## stop firewall in centos 7
+
+``` shell
+systemctl stop firewalld
+systemctl disable firewalld
+```
+copy from [How to Stop and Disable Firewalld on CentOS 7](https://www.liquidweb.com/kb/how-to-stop-and-disable-firewalld-on-centos-7/)
