@@ -37,3 +37,20 @@ Ubuntu/Debian: edit your /etc/default/docker file with the -g option: DOCKER_OPT
 Fedora/Centos: edit /etc/sysconfig/docker, and add the -g option in the other_args variable: ex. other_args="-g /var/lib/testdir". If there’s more than one option, make sure you enclose them in " ". After a restart, (service docker restart) Docker should use the new directory.
 ```
 copy from [How do I change the Docker image installation directory?](https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169)
+
+## docker with proxy
+
+copy from [Configure Docker to use a proxy server](https://docs.docker.com/network/proxy/)
+``` shell
+#edit ~/.docker/config.json
+{
+ "proxies":
+ {
+   "default":
+   {
+     "httpProxy": "http://127.0.0.1:3001",
+     "noProxy": "*.test.example.com,.example2.com"
+   }
+ }
+}
+```
