@@ -14,3 +14,9 @@ alpine use musl to replace glibc
 ``` shell
 apk add musl-dev
 ```
+
+## gcc, g++, git
+
+``` shell
+apk add ca-certificates openssl git gcc g++
+```
