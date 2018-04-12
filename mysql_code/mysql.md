@@ -115,3 +115,19 @@ select * from table_name order by id, other_column;
 select * from table_name order by id desc, other_column;
 select * from table_name order by id, other_column desc;
 ```
+
+## change the password
+
+``` shell
+# change /etc/mysql/my.cnf
+[mysqld]
+skip-grant-tables
+```
+Then restart mariadb service
+
+``` shell
+sudo systemctl restart mariadb.service
+# change password in the mysql shell
+mysql -u root -p
+```
+copy from [mariadb或mysql下忘记密码找回](https://blog.csdn.net/wen_dy/article/details/51829296)
