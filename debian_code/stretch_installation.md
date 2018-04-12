@@ -502,3 +502,13 @@ sudo apt-get install php7.2-cli php7.2-common php7.2-curl php7.2-gd php7.2-json 
 ``` shell
 apt-get install net-tools
 ```
+
+## privoxy
+privoxy is http proxy, and it can convert socks5 proxy into http proxy.
+
+``` shell
+$ sudo apt-get install privoxy
+$ sudo echo "forward-socks5   /               127.0.0.1:1080 ." >>  /etc/privoxy/config
+$ sudo systemctl restart privoxy
+$ http_proxy=http://127.0.0.1:8118 w3m www.google.com
+```
