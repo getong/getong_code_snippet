@@ -48,7 +48,7 @@ copy from [Configure Docker to use a proxy server](https://docs.docker.com/netwo
  {
    "default":
    {
-     "httpProxy": "http://127.0.0.1:3001",
+     "http_Proxy": "http://127.0.0.1:3001",
      "noProxy": "*.test.example.com,.example2.com"
    }
  }
