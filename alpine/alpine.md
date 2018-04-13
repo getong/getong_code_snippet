@@ -20,3 +20,11 @@ apk add musl-dev
 ``` shell
 apk add ca-certificates openssl git gcc g++
 ```
+
+## timezone
+
+copy from [Setting the timezone](https://wiki.alpinelinux.org/wiki/Setting_the_timezone)
+``` shell
+apk add tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+apk del tzdata
+```
