@@ -23,4 +23,4 @@
 - [ ] cowboy
 - [ ] hackney
 - [ ] common test
-- [ ] dialyzer
+- [x] dialyzer
