@@ -322,3 +322,9 @@ git reflog
 git reest HEAD@{1}
 ```
 copy from [Undoing git reset?](https://stackoverflow.com/questions/2510276/undoing-git-reset)
+
+## get the current branch name
+
+``` shell
+$ git rev-parse --abbrev-ref HEAD
+```
