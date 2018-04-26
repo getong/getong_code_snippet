@@ -66,3 +66,17 @@ UTF8Words = [{<<"word">>, unicode:characters_to_binary("中文")}]，
 jsx:encode(UTF8Words)
 ```
 jsx only support list, if the element of the list is tuple, change the tuple element to list.
+
+## unicode regxp pattern match
+
+``` erlang
+1> re:run("hello 中国 ren", "[\x{4e00}-\x{9fff}]+", [unicode]).
+2> {ok, RegUni} = re:compile("\\p{L}{5}", [unicode]).
+ {ok,{re_pattern,0,1,0,
+                 <<69,82,67,80,77,0,0,0,0,8,0,0,1,0,0,0,255,255,255,255,
+                   255,255,...>>}}
+3> re:run(<<"こんにちは"/utf8>>, RegUni).
+```
+copy from
+[Erlang 0062] Erlang Unicode 两三事](https://www.cnblogs.com/me-sa/archive/2012/05/31/erlang-unicode.html)
+[erlang-questions Regexp Matching on Unicode](http://erlang.org/pipermail/erlang-questions/2016-December/091115.html)
