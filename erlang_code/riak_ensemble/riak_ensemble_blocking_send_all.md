@@ -220,3 +220,49 @@ wait_for_quorum(Pid) ->
             {timeout, Replies}
     end.
 ```
+
+
+## often, the blocking_send_all/5 and the wait_for_quorum/1 is in the defferent process
+
+``` erlang
+
+all_trust_majority(Id, Peers, Views) ->
+    X = riak_ensemble_msg:blocking_send_all(all_exchange, Id, Peers,
+                                            Views, all),
+    {Future, _} = X,
+    Parent = self(),
+    spawn_link(fun() ->
+                       Result = case riak_ensemble_msg:wait_for_quorum(Future) of
+                                    {quorum_met, Replies} ->
+                                        {ok, [Peer || {Peer,_} <- Replies]};
+                                    {timeout, _Replies} ->
+                                        failed
+                                end,
+                       %% io:format(user, "all_trust majority: ~p~n", [Result]),
+                       Parent ! {trust, Result}
+               end),
+    receive {trust, Trusted} ->
+            Trusted
+    end.
+```
+copy from riak_ensemble_exchange.erl
+
+## try_cmomit force the blocking_send_all/5 and the wait_for_quorum/1 is in the the same process
+I think it must force the auorm of followers commit the msg.
+
+``` erlang
+-spec try_commit(fact(), state()) -> {failed, state()} | {ok, state()}.
+try_commit(NewFact0, State) ->
+    Views = views(State),
+    NewFact = increment_sequence(NewFact0),
+    State2 = local_commit(NewFact, State),
+    {Future, State3} = blocking_send_all({commit, NewFact}, State2),
+    case wait_for_quorum(Future) of
+        {quorum_met, _Replies} ->
+            State4 = State3#state{last_views=Views},
+            {ok, State4};
+        {timeout, _Replies} ->
+            {failed, set_leader(undefined, State3)}
+    end.
+```
+copy from riak_ensemble_peer.erl
