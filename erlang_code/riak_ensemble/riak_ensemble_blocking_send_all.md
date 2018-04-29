@@ -248,7 +248,7 @@ all_trust_majority(Id, Peers, Views) ->
 copy from riak_ensemble_exchange.erl
 
 ## try_cmomit force the blocking_send_all/5 and the wait_for_quorum/1 is in the the same process
-___I think it must force the auorm of followers commit the msg.___
+~~I think it must force the auorm of followers commit the msg.~~
 It doesn't care what the view write, the leader writes and success.
 
 ``` erlang
