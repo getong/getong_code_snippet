@@ -267,3 +267,33 @@ try_commit(NewFact0, State) ->
     end.
 ```
 copy from riak_ensemble_peer.erl
+
+## Extra
+
+``` erlang
+leading(ping_quorum, From, State=#state{fact=Fact, id=Id, members=Members,
+                                        tree_ready=TreeReady}) ->
+    NewFact = increment_sequence(Fact),
+    State2 = local_commit(NewFact, State),
+    {Future, State3} = blocking_send_all({commit, NewFact}, State2),
+    Extra = case lists:member(Id, Members) of
+                true  -> [{Id,ok}];
+                false -> []
+            end,
+    spawn_link(fun() ->
+                       %% TODO: Should this be hardcoded?
+                       timer:sleep(1000),
+                       Result = case wait_for_quorum(Future) of
+                                    {quorum_met, Replies} ->
+                                        %% io:format("met: ~p~n", [Replies]),
+                                        Extra ++ Replies;
+                                    {timeout, _Replies} ->
+                                        %% io:format("timeout~n"),
+                                        Extra
+                                end,
+                       gen_fsm:reply(From, {Id, TreeReady, Result})
+               end),
+    {next_state, leading, State3};
+```
+
+copy from riak_ensemble_peer.erl
