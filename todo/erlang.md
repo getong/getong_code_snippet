@@ -19,7 +19,7 @@
 	AMQP protocol might solve this problem.
 - [ ] riak_core
 - [ ] riak_ensemble
-- [ ] why riak_ensemble try_commit will spawn in another process?
+- [x] why riak_ensemble try_commit will spawn in another process?
 - [ ] lasp
 - [ ] cowboy
 - [ ] hackney
