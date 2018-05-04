@@ -189,3 +189,9 @@ db.colletion_name.find({_id: other_collection_name['_id']});
 mongod --config /etc/mongod.conf
 mongod -f /etc/mongod.conf
 ```
+
+## mongodb running in docker
+``` shell
+docker run -d --privileged --restart=always --network host -v $PWD/db:/data/db  -v $PWD/config:/mongodb_config --name my_own_mongo mongo:3.6.4-jessie -f /mongodb_config/config_file
+```
+
