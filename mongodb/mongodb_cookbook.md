@@ -183,4 +183,9 @@ db.colletion_name.find({_id: {$in: other_collection_name['collection_id']}});
 db.colletion_name.find({_id: other_collection_name['_id']});
 ```
 
+## mongodb start with configuration file
 
+``` shell
+mongod --config /etc/mongod.conf
+mongod -f /etc/mongod.conf
+```
