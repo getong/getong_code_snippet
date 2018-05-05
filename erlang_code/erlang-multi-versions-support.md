@@ -60,8 +60,26 @@ ts() ->
 
 ## unsupported api
 ``` erlang
-erlang:now() 
+erlang:now()
 random module
 gen_fsm module
 erlang:get_stacktrace() will be changed in the future
+```
+## erlang 21 deprecated get_stacktrace function
+
+``` erlang
+-ifdef(fun_stacktrace).
+-define(WITH_STACKTRACE(T, R, S), T:R -> S = erlang:get_stacktrace(),).
+-else.
+-define(WITH_STACKTRACE(T, R, S), T:R:S ->).
+-endif.
+```
+copy from rebar3 rebar.hrl
+
+The rebar.config
+
+``` erlang
+{erl_opts, [
+    {platform_define, "^(R|1|20)", fun_stacktrace}
+]}.
 ```
