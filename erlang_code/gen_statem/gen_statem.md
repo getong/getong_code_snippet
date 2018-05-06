@@ -31,3 +31,6 @@ open(enter, _OldState, _Data) ->
 ## repeat_state and repeat_state_and_data
 
 >> The gen_statem keeps the current state, or does a state transition to the current state if you like, sets NewData, and executes all Actions. If the gen_statem runs with state enter calls, the state enter call is repeated, see type transition_option(), otherwise repeat_state is the same as keep_state.
+
+## timeout option
+The timeout argument, for example, like 5000, is spawn in a new process. And then gen_statm:call/3 will not pass the `Caller` as the call process. Use dirty_timeout.
