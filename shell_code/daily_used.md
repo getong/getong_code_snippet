@@ -534,3 +534,8 @@ $ fuser -n tcp -v 515
 $ sudo netstat -a -p -A inet
 $ sudo netstat -a -p -A inet6
 ```
+## hexdump
+print the binary file
+```
+hexdump -C bin_file
+```
