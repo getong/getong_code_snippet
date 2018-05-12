@@ -21,7 +21,7 @@
 - [ ] riak_ensemble
 - [x] why riak_ensemble try_commit will spawn in another process?
 - [ ] lasp
-- [ ] cowboy
-- [ ] hackney
+- [ ] cowboy, cowboy rest callback module
+- [x] hackney, just like httpc
 - [ ] common test
 - [x] dialyzer
