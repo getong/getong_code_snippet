@@ -131,3 +131,12 @@ sudo systemctl restart mariadb.service
 mysql -u root -p
 ```
 copy from [mariadb或mysql下忘记密码找回](https://blog.csdn.net/wen_dy/article/details/51829296)
+
+
+## stop mariadb performance schema
+mariadb will use 400MB RAM in the performace mode by defult, and with other memory in case of database. Disable it by adding this unde mysqld
+```
+performance_schema = off
+```
+
+In the production environment, use it by recommend. But if it is used under test mode, disable it.
