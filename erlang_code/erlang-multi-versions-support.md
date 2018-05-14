@@ -83,3 +83,8 @@ The rebar.config
     {platform_define, "^(R|1|20)", fun_stacktrace}
 ]}.
 ```
+
+## gen_fsm_compat
+The gen_fsm is deprecated by erlang team, but the gen_fsm_compat is copied and maintained by Heinz N. Gies.
+The two modules are almost the same.
+[gen_fsm_compat](https://gitlab.com/Project-FiFo/gen_fsm_compat)
