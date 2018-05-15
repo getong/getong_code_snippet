@@ -140,3 +140,14 @@ performance_schema = off
 ```
 
 In the production environment, use it by recommend. But if it is used under test mode, disable it.
+
+## replace into
+
+``` sql
+
+1. replace into tbl_name(col_name, ...) values(...)
+2. replace into tbl_name(col_name, ...) select ...
+3. replace into tbl_name set col_name=value, ...
+```
+use it carefully.
+copy from [MySQL replace into 用法（insert into 的增强版）](https://blog.csdn.net/risingsun001/article/details/38977797)
