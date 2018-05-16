@@ -90,3 +90,9 @@ transition(State=#state{id=Id, fact=Fact}) ->
             Failed
     end.
 ```
+
+
+## two stable state
+
+The leader state is the most update state of the group process, and following state is a copy of the leader state, and the following state exchange data within a `FOLLOWER_TIMEOUT` constant.
+If the following exchange data failed, it change to probe state and start to election.
