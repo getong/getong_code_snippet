@@ -25,3 +25,4 @@
 - [x] hackney, just like httpc
 - [ ] common test
 - [x] dialyzer
+- [ ] erlang application prep_stop

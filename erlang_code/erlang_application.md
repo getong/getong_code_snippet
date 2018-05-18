@@ -25,3 +25,17 @@ The `sys.config` is all the `env` variables collection.
 7> E1 == E2.
 true
 ```
+
+## prep_stop
+
+``` erlang
+%% Prepare the application for termination.
+%% This function is called when an application is about to be stopped,
+%% before shutting down the processes of the application.
+prep_stop(State) ->
+    ejabberd_listener:stop_listeners(),
+    ejabberd_sm:stop(),
+    gen_mod:stop_modules(),
+    State.
+```
+copy from ejabberd_app.erl
