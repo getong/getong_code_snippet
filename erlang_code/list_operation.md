@@ -135,3 +135,22 @@ index_of(Item, [Item|_], Index) -> Index;
 index_of(Item, [_|Tl], Index) -> index_of(Item, Tl, Index+1).
 ```
 copy from [Erlang lists:index_of function?](https://stackoverflow.com/questions/1459152/erlang-listsindex-of-function)
+
+## Breaking out of lists:foreach "loop"
+use throw ... catch to quickly break lists operation, no need to handle all elements of a list.
+
+``` erlang
+try lists:foreach(
+        fun(1) ->
+                throw(found_one);
+           (X) ->
+                io:format("~p~n", [X])
+        end,
+        [2, 4, 5, 1, 2, 5])
+catch
+    throw:found_one ->
+        found_one
+end.
+```
+copy from [Erlang : Breaking out of lists:foreach "loop"](https://stackoverflow.com/questions/1820241/erlang-breaking-out-of-listsforeach-loop)
+also see [Easy way to break foldl](https://stackoverflow.com/questions/8412446/easy-way-to-break-foldl)
