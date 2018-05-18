@@ -512,3 +512,10 @@ $ sudo echo "forward-socks5   /               127.0.0.1:1080 ." >>  /etc/privoxy
 $ sudo systemctl restart privoxy
 $ http_proxy=http://127.0.0.1:8118 w3m www.google.com
 ```
+
+## apt-get download packages --download-only
+
+``` shell
+apt-get install --download-only package
+```
+copy from [How to download package not install it with apt-get command?](https://unix.stackexchange.com/questions/408346/how-to-download-package-not-install-it-with-apt-get-command)
