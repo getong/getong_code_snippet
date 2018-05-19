@@ -519,3 +519,11 @@ $ http_proxy=http://127.0.0.1:8118 w3m www.google.com
 apt-get install --download-only package
 ```
 copy from [How to download package not install it with apt-get command?](https://unix.stackexchange.com/questions/408346/how-to-download-package-not-install-it-with-apt-get-command)
+
+## cups
+Often shutdown a computer need a lot of time, the cups is the reason. Stop it.
+
+``` shell
+$ sudo systemctl stop cups
+$ sudo systemctl disable cups
+```
