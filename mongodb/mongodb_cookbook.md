@@ -198,3 +198,113 @@ docker run -d --privileged --restart=always --network host -v $PWD/db:/data/db  
 ```
 
 Is there  a better way to do this?
+
+
+## Deploy a MongoDB Cluster in 9 steps Using Docker
+
+``` shell
+# step 1
+root@node*:/# export node1=10.11.32.174
+root@node*:/# export node2=10.11.33.37
+root@node*:/# export node3=10.11.31.176
+
+# step 2
+root@node*:/# mkdir -p /home/core
+root@node*:/# cd /home/core
+root@node*:/# openssl rand -base64 741 > mongodb-keyfile
+root@node*:/# chmod 600 mongodb-keyfile
+root@node*:/# sudo chown 999 mongodb-keyfile
+
+# step 3
+root@node1:/# docker run --name mongo \
+-v /home/core/mongo-files/data:/data/db \
+-v /home/core/mongo-files:/opt/keyfile \
+--hostname="node1.example.com" \
+-p 27017:27017 \
+-d mongo:2.6.5 --smallfiles
+
+root@node1:/# docker exec -it mongo /bin/bash
+root@node1:/# mongo
+> use admin
+switched to db admin
+> db.createUser( {
+     user: "siteUserAdmin",
+     pwd: "password",
+     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+   });
+> db.createUser( {
+     user: "siteRootAdmin",
+     pwd: "password",
+     roles: [ { role: "root", db: "admin" } ]
+   });
+> exit
+bye
+root@node1:/# exit
+
+# step 4
+root@node1:/# docker stop mongo
+root@node1:/# docker rm mongo
+
+# step 5
+root@node1:/# docker run \
+--name mongo \
+-v /home/core/mongo-files/data:/data/db \
+-v /home/core/mongo-files:/opt/keyfile \
+--hostname="node1.example.com" \
+--add-host node1.example.com:${node1} \
+--add-host node2.example.com:${node2} \
+--add-host node3.example.com:${node3} \
+-p 27017:27017 -d mongo:2.6.5 \
+--smallfiles \
+--keyFile /opt/keyfile/mongodb-keyfile \
+--replSet "rs0"
+
+# step 6
+root@node1:/# docker exec -it mongo /bin/bash
+root@node1:/# mongo
+MongoDB shell version: 2.6.5
+> use admin
+switched to db admin
+> db.auth("siteRootAdmin", "password");
+> rs.initiate()
+
+# step 7
+> rs.conf()
+
+# step 8
+#Perform on Node 2
+root@node2:/# docker run \
+--name mongo \
+-v /home/core/mongo-files/data:/data/db \
+-v /home/core/mongo-files:/opt/keyfile \
+--hostname="node2.example.com" \
+--add-host node1.example.com:${node1} \
+--add-host node2.example.com:${node2} \
+--add-host node3.example.com:${node3} \
+-p 27017:27017 -d mongo:2.6.5 \
+--smallfiles \
+--keyFile /opt/keyfile/mongodb-keyfile \
+--replSet "rs0"
+
+# Perform on Node 3
+root@node3:/# docker run \
+--name mongo \
+-v /home/core/mongo-files/data:/data/db \
+-v /home/core/mongo-files:/opt/keyfile \
+--hostname="node3.example.com" \
+--add-host node1.example.com:${node1} \
+--add-host node2.example.com:${node2} \
+--add-host node3.example.com:${node3} \
+-p 27017:27017 -d mongo:2.6.5 \
+--smallfiles \
+--keyFile /opt/keyfile/mongodb-keyfile \
+--replSet "rs0"
+
+# step 9
+rs0:PRIMARY> rs.add("node2.example.com")
+rs0:PRIMARY> rs.add("node3.example.com")
+rs0:PRIMARY> rs.status()
+```
+copy from [Deploy a MongoDB Cluster in 9 steps Using Docker](https://medium.com/@gargar454/deploy-a-mongodb-cluster-in-steps-9-using-docker-49205e231319)
+also see [
+Enforce Keyfile Access Control in a Replica Set](https://docs.mongodb.com/manual/tutorial/enforce-keyfile-access-control-in-existing-replica-set/)
