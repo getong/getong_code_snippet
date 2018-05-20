@@ -151,3 +151,28 @@ In the production environment, use it by recommend. But if it is used under test
 ```
 use it carefully.
 copy from [MySQL replace into 用法（insert into 的增强版）](https://blog.csdn.net/risingsun001/article/details/38977797)
+
+## mysql触发器报错 1422 Explicit or implicit commit is not allowed in stored function or trigger.
+在mysql的事务中执行select中遇到这个错误，搜索发现如下：
+```
+这个错误的中文翻译是“在存储函数或触发器中不允许显式或隐式提交”。
+
+```
+copy from [mysql触发器报错 1422](https://www.cnblogs.com/marx-luo/p/6713086.html)
+
+```
+默认情况下, MySQL启用自动提交模式（变量autocommit为ON）。这意味着, 只要你执行DML操作的语句,MySQL会立即隐式提交事务（Implicit Commit）。
+```
+copy from [MySQL的自动提交模式](https://www.cnblogs.com/kerrycode/p/8649101.html)
+
+```
+DML（data manipulation language）：
+       它们是SELECT、UPDATE、INSERT、DELETE，就象它的名字一样，这4条命令是用来对数据库里的数据进行操作的语言
+DDL（data definition language）：
+       DDL比DML要多，主要的命令有CREATE、ALTER、DROP等，DDL主要是用在定义或改变表（TABLE）的结构，数据类型，表之间的链接和约束等初始化工作上，他们大多在建立表时使用
+DCL（Data Control Language）：
+       是数据库控制功能。是用来设置或更改数据库用户或角色权限的语句，包括（grant,deny,revoke等）语句。在默认状态下，只有sysadmin,dbcreator,db_owner或db_securityadmin等人员才有权力执行DCL
+```
+copy from [DML、DDL、DCL区别](https://blog.csdn.net/level_level/article/details/4248685)
+
+结论就是由于自动提交模式下，开启了事务操作，然后在事务操作里面包括了DML的操作，导致了这个错误。要么不用事务，要么在事务里面不使用DML。
