@@ -39,3 +39,4 @@ prep_stop(State) ->
     State.
 ```
 copy from ejabberd_app.erl
+The prep_stop/1 function is very powerfull.
