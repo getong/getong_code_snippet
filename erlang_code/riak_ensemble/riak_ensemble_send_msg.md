@@ -195,3 +195,28 @@ quorum_timeout(#msgstate{replies=Replies}) ->
     #msgstate{awaiting=undefined, timer=undefined, replies=[]}.
 
 ```
+
+
+## example
+
+``` erlang
+X = riak_ensemble_msg:blocking_send_all(exchange, Id, Peers,
+                                       Views, Required),
+```
+copy from riak_ensemble_exchange.erl
+
+``` erlang
+common({exchange, From}, State, StateName) ->
+    case State#state.tree_trust of
+        true ->
+            reply(From, ok, State);
+        false ->
+            reply(From, nack, State)
+    end,
+    {next_state, StateName, State};
+```
+copy from riak_ensemble_peer.erl
+
+The `Msg` variable now is `exchange`, and `exchange` is not tuple, so the new msg made by `make_request(Msg)` is `{exchange, From}`.
+And in the riak_ensemble_peer.erl module file, the common/3 function handle the `{exchange, From}` msg.
+That is it.
