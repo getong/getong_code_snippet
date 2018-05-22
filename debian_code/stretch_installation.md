@@ -527,3 +527,11 @@ Often shutdown a computer need a lot of time, the cups is the reason. Stop it.
 $ sudo systemctl stop cups
 $ sudo systemctl disable cups
 ```
+
+## convert CSV to XLS file on linux
+
+``` shell
+$ sudo apt-get install gnumeric
+$ ssconvert example.csv example.xlsx
+```
+copy from [convert CSV to XLS file on linux](https://unix.stackexchange.com/questions/158254/convert-csv-to-xls-file-on-linux)
