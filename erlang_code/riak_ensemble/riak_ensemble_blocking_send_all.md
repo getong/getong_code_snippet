@@ -248,8 +248,10 @@ all_trust_majority(Id, Peers, Views) ->
 copy from riak_ensemble_exchange.erl
 
 ## try_cmomit force the blocking_send_all/5 and the wait_for_quorum/1 is in the the same process
-~~I think it must force the auorm of followers commit the msg.~~
-It doesn't care what the view write, the leader writes and success.
+~~I think it must force the quorm of followers commit the msg.~~
+~~It doesn't care what the view write, the leader writes and success.~~
+The `{quorum_met, _Replies}` message means that some other member, at least one member commit the new fact, and then it continues to be the leading status. It does not check how many num of `_Replies`.
+If none of the members commit the new fact, so the `{timeout, _Replies}` message returns, and it change to be set leader undefined.
 
 ``` erlang
 -spec try_commit(fact(), state()) -> {failed, state()} | {ok, state()}.
