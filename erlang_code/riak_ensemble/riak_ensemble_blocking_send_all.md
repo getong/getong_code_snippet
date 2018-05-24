@@ -174,6 +174,9 @@ wait_for_quorum(Pid) ->
             {timeout, Replies}
     end.
 ```
+Note that the `collector/4` function, it filters the `Id`, and not send_request to it.
+All other `Peer` except the `Id` might receive the request, for the `maybe_send_request` may drop some msgs.
+
 ## used example
 ```
 %% copy from the riak-ensemble_peer.erl
