@@ -96,3 +96,20 @@ transition(State=#state{id=Id, fact=Fact}) ->
 
 The leader state is the most update state of the group process, and following state is a copy of the leader state, and the following state exchange data within a `FOLLOWER_TIMEOUT` constant.
 If the following exchange data failed, it change to probe state and start to election.
+
+
+## maybe follow
+
+``` erlang
+maybe_follow(_, State=#state{tree_trust=false}) ->
+    %% This peer is untrusted and must perform an exchange
+    exchange(init, State);
+maybe_follow(undefined, State) ->
+    election(init, set_leader(undefined, State));
+maybe_follow(Leader, State=#state{id=Leader}) ->
+    election(init, set_leader(undefined, State));
+maybe_follow(Leader, State) ->
+    %% TODO: Should we use prefollow instead of following(not_ready)?
+    following(not_ready, set_leader(Leader, State)).
+```
+This function change from the probe status to other status, and finally be the leading status.
