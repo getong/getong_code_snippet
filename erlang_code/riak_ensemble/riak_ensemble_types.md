@@ -113,3 +113,5 @@ maybe_follow(Leader, State) ->
     following(not_ready, set_leader(Leader, State)).
 ```
 This function change from the probe status to other status, and finally be the leading status.
+
+## election -> prepare -> prelead -> leading
