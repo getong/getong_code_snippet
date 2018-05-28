@@ -88,3 +88,12 @@ The rebar.config
 The gen_fsm is deprecated by erlang team, but the gen_fsm_compat is copied and maintained by Heinz N. Gies.
 The two modules are almost the same.
 [gen_fsm_compat](https://gitlab.com/Project-FiFo/gen_fsm_compat)
+
+## rebar_erl_vsn
+[rebar_erl_vsn](https://github.com/project-fifo/rebar_erl_vsn)
+Use it by adding this to rebar.config
+
+``` erlang
+{plugins, [rebar_erl_vsn]}.
+{provider_hooks, [{pre, [{compile, erl_vsn}]}]}.
+```
