@@ -27,5 +27,9 @@ When Async is false: if Info is true, the Result is returned by erlang:cancel_ti
 
 When Async is true: if Info is true, a message on the form {cancel_timer, TimerRef, Result} is sent to the caller of erlang:cancel_timer() when the cancellation operation has been performed, otherwise no message is sent.
 
+If Result is an integer, it represents the time in milliseconds left until the canceled timer would have expired.
+
+If Result is false, a timer corresponding to TimerRef could not be found. This can be either because the timer had expired, already had been canceled, or because TimerRef never corresponded to a timer. Even if the timer had expired, it does not tell you if the time-out message has arrived at its destination yet.
+
 
 ```
