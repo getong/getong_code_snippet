@@ -26,3 +26,4 @@
 - [ ] common test
 - [x] dialyzer
 - [ ] erlang application prep_stop
+- [ ] couchdb
