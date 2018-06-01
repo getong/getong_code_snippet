@@ -16,5 +16,5 @@ It might be released with erlang 20, and use the Kademlia tree to achieve it.
 
 More info:
 [Scaling Distributed Erlang](http://www.elixirconf.eu/elixirconf2016/zandra-norman)
-[slide](http://s3.amazonaws.com/erlang-conferences-production/media/files/000/000/074/original/Zandra_Norman_ScalingDistributedErlang.pdf?1462891793)
+[slide](http://s3.amazonaws.com/erlang-conferences-production/media/files/000/000/074/original/Zandra_Norman_ScalingDistributedErlang.pdf)
 [video](https://youtu.be/usEs3GPnZDg)
