@@ -25,5 +25,5 @@
 - [x] hackney, just like httpc
 - [ ] common test
 - [x] dialyzer
-- [ ] erlang application prep_stop
+- [x] erlang application prep_stop
 - [ ] couchdb
