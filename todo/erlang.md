@@ -27,3 +27,4 @@
 - [x] dialyzer
 - [x] erlang application prep_stop
 - [ ] couchdb
+- [ ] zotonic
