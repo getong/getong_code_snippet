@@ -34,3 +34,4 @@ open(enter, _OldState, _Data) ->
 
 ## timeout option
 The timeout argument, for example, like 5000, is spawn in a new process. And then gen_statm:call/3 will not pass the `Caller` as the call process. Use dirty_timeout.
+But in the return data, the timeout, like 5000, will generate a `timeout` msg. Just like other behaviours.
