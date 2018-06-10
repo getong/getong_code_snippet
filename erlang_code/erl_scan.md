@@ -50,3 +50,13 @@ string_to_term(String) when is_list(String) ->
             error
     end.
 ```
+
+
+## integer, binary, list
+
+``` erlang
+1> binary:encode_unsigned(1258555).
+<<19,52,59>>
+2> integer_to_binary(1258555).
+<<"1258555">>
+```
