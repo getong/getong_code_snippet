@@ -29,3 +29,4 @@
 - [ ] couchdb
 - [ ] zotonic
 - [ ] msgpack. It seems that msgpack is better than protobuf, right or not?
+- [ ] sext
