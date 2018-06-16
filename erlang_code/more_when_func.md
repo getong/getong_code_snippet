@@ -1,4 +1,4 @@
-use when in case of many nest code
+## use when in case of many nest code
 ```
 %% in riak_ensemble riak_ensemble_lease.erl
 check_lease({_, T}) ->
@@ -15,3 +15,15 @@ check_lease({_, T}) ->
     end.
 ```
 the `when` is used to avoid many nest codes.
+
+## case example
+
+``` erlang
+case Var of
+    X when x > 0 andalso X < 10 ->
+        ok;
+    X when x > 10 andalso X < 20 ->
+        ok;
+    ...
+end
+```
