@@ -32,3 +32,4 @@
 - [ ] sext
 - [ ] erlang release upgrade.
       see [12 Appup Cookbook](http://erlang.org/doc/design_principles/appup_cookbook.html)
+- [ ] dht
