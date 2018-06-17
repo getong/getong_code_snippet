@@ -9,6 +9,9 @@
 ## arweave
 [arweave](https://github.com/ArweaveTeam/arweave)
 
+## abci_server
+[abci_server](https://github.com/KrzysiekJ/abci_server]
+
 ## serialize
 aec_serialization:serialize/4 function returns a binary.
 
