@@ -15,7 +15,7 @@
 	[ranch_proxy_protocol](https://github.com/heroku/ranch_proxy_protocol)
 - [x] erlang handle the system signals?
 - [ ] erlang parse_transform (used in lager and epipe)
-- [ ] tcp message delivery retry
+- [x] tcp message delivery retry
 	AMQP protocol might solve this problem.
 - [ ] riak_core
 - [ ] riak_ensemble
