@@ -60,3 +60,28 @@ sha(Namespace, Name) ->
 
 ```
 Note that, sha_init, sha_update, sha_final and other functions are suggested to be replaced with hash_* functions.
+
+
+## base58 libp2p
+
+``` erlang
+-spec base58check_encode(binary(), binary()) -> string().
+base58check_encode(Version, Payload) ->
+  VPayload = <<Version/binary, Payload/binary>>,
+  <<Checksum:4/binary, _/binary>> = crypto:hash(sha256, crypto:hash(sha256, VPayload)),
+  Result = <<VPayload/binary, Checksum/binary>>,
+  base58:binary_to_base58(Result).
+
+-spec base58check_decode(string()) -> {'ok',<<_:8>>,binary()} | {error,bad_checksum}.
+base58check_decode(B58) ->
+  Bin = base58:base58_to_binary(B58),
+  PayloadSize = byte_size(Bin) - 5,
+  <<Version:1/binary, Payload:PayloadSize/binary, Checksum:4/binary>> = Bin,
+  %% validate the checksum
+  case crypto:hash(sha256, crypto:hash(sha256, <<Version/binary, Payload/binary>>)) of
+    <<Checksum:4/binary, _/binary>> ->
+      {ok, Version, Payload};
+    _ ->
+      {error, bad_checksum}
+  end.
+```
