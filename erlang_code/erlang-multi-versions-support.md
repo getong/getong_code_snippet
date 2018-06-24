@@ -97,3 +97,6 @@ Use it by adding this to rebar.config
 {plugins, [rebar_erl_vsn]}.
 {provider_hooks, [{pre, [{compile, erl_vsn}]}]}.
 ```
+
+## stacktrace_compat
+[stacktrace_compat](https://github.com/g-andrade/stacktrace_compat/)
