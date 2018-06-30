@@ -31,3 +31,13 @@ We can change it without restarting.
 $ redis-cli
 1>CONFIG SET save ""
 ```
+
+## redis on travis ci needs sudo
+see [Redis fails to start on trusty beta image](https://github.com/travis-ci/travis-ci/issues/7941)
+add this in .travis.yml
+
+```
+sudo: required
+services:
+  - redis-server
+```
