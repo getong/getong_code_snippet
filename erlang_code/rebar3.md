@@ -39,3 +39,13 @@ So now use the exclude directive.
 ```
 {exclude_modules, [{App :: atom(), [Module :: atom()]}]}
 ```
+
+## edoc option
+copy from [edoc: error in doclet 'edoc_doclet' when using macro in -type](http://erlang.org/pipermail/erlang-questions/2015-October/086562.html)
+add below into rebar.config
+```
+{edoc_opts, [
+    {includes,["deps/gpb/include"]},
+    {preprocess, true}
+    ]}.
+```
