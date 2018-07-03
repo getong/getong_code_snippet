@@ -20,6 +20,7 @@ apk add musl-dev
 ``` shell
 apk add ca-certificates openssl git gcc g++
 ```
+It often add gcc and g++ in the production environment.
 
 ## timezone
 
