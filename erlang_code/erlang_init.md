@@ -34,3 +34,11 @@ stop(_State) ->
     ok.
 ```
 see [Erlang: does the application behavior trap SIGTERM?](https://stackoverflow.com/questions/42912781/erlang-does-the-application-behavior-trap-sigterm)
+
+## use halt/1 in erlang cmd operation
+
+``` erlang
+fail() ->
+    io:format("fail", []),
+    halt(1).
+```
