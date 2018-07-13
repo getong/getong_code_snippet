@@ -322,7 +322,7 @@ git branch --set-upstream-to=origin/branch_name local_branch_name
 ``` shell
 git reset HEAD~1
 git reflog
-git reest HEAD@{1}
+git reset HEAD@{1}
 ```
 copy from [Undoing git reset?](https://stackoverflow.com/questions/2510276/undoing-git-reset)
 
