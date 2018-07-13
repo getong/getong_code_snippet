@@ -49,3 +49,12 @@ add below into rebar.config
     {preprocess, true}
     ]}.
 ```
+## rebar3 use proxy
+
+``` shell
+export http_proxy=http://127.0.0.1:8118
+export https_proxy=http://127.0.0.1:8118
+rebar3 update
+rebar3 upgrade
+```
+The 8118 is set up by privoxy.
