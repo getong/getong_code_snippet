@@ -29,3 +29,10 @@ or check the ebin
 ``` shell
 dialyzer -r ebin
 ```
+
+## typer
+After dialyzer adds apps, it can use typer to generate code spec.
+
+``` shell
+typer -r src --show -I _build/default/lib/ -I include
+```
