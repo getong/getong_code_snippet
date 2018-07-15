@@ -16,6 +16,8 @@ dialyzer --add_to_plt --apps crypto compiler public_key
 
 ``` shell
 dialyzer -r src --src
+dialyzer -r src test --src
+dialyzer -r src test -I include --src
 ```
 or use the rebar3:
 
