@@ -58,3 +58,37 @@ rebar3 update
 rebar3 upgrade
 ```
 The 8118 is set up by privoxy.
+
+## push library to hex.pm
+copy from [Publishing a package](https://github.com/tsloughter/rebar3_hex)
+Using the [rebar3_hex](https://github.com/tsloughter/rebar3_hex)
+``` shell
+# add this to ~/.config/rebar3/rebar.config
+echo "{plugins, [rebar3_hex]}." >> ~/.config/rebar3/rebar.config
+
+# register the hex.pm
+rebar3 hex user register
+
+## login the hex.pm
+rebar3 hex user auth
+
+## under the project, fix the code and version info
+
+## push
+ rebar3 hex publish
+
+```
+The hex commands:
+
+``` shell
+hex config <key> [<value>]
+hex cut [-i major|minor|patch]
+hex docs
+hex info [<package> [<version>]]
+hex key [remove key_name|list]
+hex publish
+hex owners [add <package> <email>|remove <package> <email>|list <package>]
+hex user [register|whoami|auth|deauth|reset_password]
+hex search <term>
+```
+copy from [rebar3_hex](https://github.com/tsloughter/rebar3_hex)
