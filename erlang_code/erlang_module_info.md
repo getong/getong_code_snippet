@@ -337,3 +337,12 @@ $erl
 ok
 ```
 We can see the +, - symbols are all erlang module functions.
+
+## update module record info
+
+``` erlang
+code_change('1.0', {freq, Free, Alloc}, _Extra) ->
+    {ok, {freq, Free, Alloc, []}};
+code_change({down, '1.0'}, {freq, Free, Alloc, Blocked}, _Extra) ->
+    {ok, {freq, Free ++ Blocked, Alloc}}.
+```
