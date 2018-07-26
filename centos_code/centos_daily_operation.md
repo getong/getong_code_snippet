@@ -79,3 +79,18 @@ systemctl stop firewalld
 systemctl disable firewalld
 ```
 copy from [How to Stop and Disable Firewalld on CentOS 7](https://www.liquidweb.com/kb/how-to-stop-and-disable-firewalld-on-centos-7/)
+
+## search available package versions in rpm systems
+
+``` shell
+# Redhat based system
+yum --showduplicates list <package>
+
+# SuSE system
+yum --showduplicates list <package>
+
+# debian based system
+apt-cache policy <package>
+apt-cache madison <package>
+```
+copy from [How to check available package versions in rpm systems?](https://unix.stackexchange.com/questions/6263/how-to-check-available-package-versions-in-rpm-systems)
