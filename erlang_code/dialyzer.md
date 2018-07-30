@@ -36,3 +36,6 @@ After dialyzer adds apps, it can use typer to generate code spec.
 ``` shell
 typer -r src --show -I _build/default/lib/ -I include
 ```
+
+## rebar3 dialyzer
+see the [rebar3 dialyzer](https://www.rebar3.org/docs/commands#section-dialyzer)
