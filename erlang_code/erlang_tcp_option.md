@@ -337,3 +337,9 @@ Since 1.6.0, as erlang/otp 21 is released, ssl:handshake/1 is recommended to use
 -deprecated([start_listener/6, child_spec/6, accept_ack/1]).
 ```
 As I check some code I wrote one year ago, I just used these deprecated functions. And I find other projects using these functions. A lot code need to be rewriten.
+The new code is much more simple, just use the two main functions:
+
+``` erlang
+ranch:start_listener/5
+ranch:handshake/2
+```
