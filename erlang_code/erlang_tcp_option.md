@@ -330,3 +330,10 @@ loop(Sock) ->
     end.
 ```
 the esockd and ranch project use the same method like above to avoid race condition.
+
+## ranch 2.0 changement
+Since 1.6.0, as erlang/otp 21 is released, ssl:handshake/1 is recommended to use, and this function change some API not suitable. Some functions sre deperecated.
+``` erlang
+-deprecated([start_listener/6, child_spec/6, accept_ack/1]).
+```
+As I check some code I wrote one year ago, I just used these deprecated functions. And I find other projects using these functions. A lot code need to be rewriten.
