@@ -57,3 +57,24 @@ $erl
 31> B4 = << "abc", "cdef", B2/binary>>.
 ```
 see [How do I concatenate two binaries in Erlang?](https://stackoverflow.com/questions/600642/how-do-i-concatenate-two-binaries-in-erlang)
+
+
+## mongodb object_id
+
+``` erlang
+%% @private
+-spec oid_machineprocid() -> <<_:40>>.
+oid_machineprocid() ->
+    OSPid = list_to_integer(os:getpid()),
+    {ok, Hostname} = inet:gethostname(),
+    <<MachineId:3/binary, _/binary>> = erlang:md5(Hostname),
+    <<MachineId:3/binary, OSPid:16/big>>.
+
+%% @doc Fresh object id
+-spec object_id() -> bson:objectid().
+object_id() ->
+    Now = bson:unixtime_to_secs(bson:timenow()),
+    MPid = ets:lookup_element(?MODULE, oid_machineprocid, 2),
+    N = ets:update_counter(?MODULE, oid_counter, 1),
+    bson:objectid(Now, MPid, N).
+```
