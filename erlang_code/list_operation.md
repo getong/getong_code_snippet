@@ -154,3 +154,48 @@ end.
 ```
 copy from [Erlang : Breaking out of lists:foreach "loop"](https://stackoverflow.com/questions/1820241/erlang-breaking-out-of-listsforeach-loop)
 also see [Easy way to break foldl](https://stackoverflow.com/questions/8412446/easy-way-to-break-foldl)
+
+## ets foldl and foldr functions
+
+``` erlang
+foldl(F, Accu, T) ->
+    ets:safe_fixtable(T, true),
+    First = ets:first(T),
+    try
+        do_foldl(F, Accu, First, T)
+    after
+	ets:safe_fixtable(T, false)
+    end.
+
+do_foldl(F, Accu0, Key, T) ->
+    case Key of
+	'$end_of_table' ->
+	    Accu0;
+	_ ->
+	    do_foldl(F,
+		     lists:foldl(F, Accu0, ets:lookup(T, Key)),
+		     ets:next(T, Key), T)
+    end.
+
+foldr(F, Accu, T) ->
+    ets:safe_fixtable(T, true),
+    Last = ets:last(T),
+    try
+        do_foldr(F, Accu, Last, T)
+    after
+        ets:safe_fixtable(T, false)
+    end.
+
+do_foldr(F, Accu0, Key, T) ->
+    case Key of
+	'$end_of_table' ->
+	    Accu0;
+	_ ->
+	    do_foldr(F,
+		     lists:foldr(F, Accu0, ets:lookup(T, Key)),
+		     ets:prev(T, Key), T)
+    end.
+```
+The foldl and foldr both use the `ets:saafe_fixtable/2` function to ensure the ets lock the table data.
+The `ets:first/1` get the first data, and then use the `ets:next/2` function to get the next data.
+The `ets:last/1` get the last data, and then use the `ets:prev/2` function to get the previous data.
