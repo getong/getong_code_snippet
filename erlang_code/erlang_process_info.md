@@ -92,7 +92,7 @@ erl>erlang:process_info(Pid, current_function).
 Through this method, I found out what caused our system key process timeout.
 
 
-## 20 top process
+## top 20 processes
 
 ``` shell
 rp([{-Reduc, Pid, case process_info(Pid, registered_name) of {registered_name,Name} -> Name; _ -> '_' end} ||
@@ -105,3 +105,10 @@ rp([{-Reduc, Pid, case process_info(Pid, registered_name) of {registered_name,Na
                 end
         end, [], erlang:processes()), 20)]).
 ```
+
+## fullsweep_after
+
+``` erlang
+{fullsweep_after, Number}
+```
+The `Number` means that after Number generation garbage collection, it operates a full garbage collection.
