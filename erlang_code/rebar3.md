@@ -92,3 +92,6 @@ hex user [register|whoami|auth|deauth|reset_password]
 hex search <term>
 ```
 copy from [rebar3_hex](https://github.com/tsloughter/rebar3_hex)
+
+## releases
+see the manual [Elixir: how can I leverage release_handler?](https://stackoverflow.com/questions/36196148/elixir-how-can-i-leverage-release-handler)
