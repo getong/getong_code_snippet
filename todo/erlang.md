@@ -30,7 +30,7 @@
 - [ ] zotonic
 - [ ] msgpack. It seems that msgpack is better than protobuf, right or not?
 - [ ] sext
-- [ ] erlang release upgrade.
+- [ ] erlang release upgrade, rebar3 work with appup source file.
       see [12 Appup Cookbook](http://erlang.org/doc/design_principles/appup_cookbook.html)
 - [ ] dht
 - [x] new ssl handshake
