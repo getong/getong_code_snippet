@@ -378,6 +378,8 @@ top （然后按下M，注意大写）
 ps -aux | sort -k3nr | head 5
 或者
 top （然后按下P，注意大写）
+top -c 显示进程运行信息列表
+top -Hp pid_num 显示一个进程的线程运行信息列表
 ```
 see [linux 查看 占用 内存 最多的 进程](http://xinkang120.blog.163.com/blog/static/19466822320136296271662/)
 
