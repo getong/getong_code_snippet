@@ -346,3 +346,11 @@ code_change('1.0', {freq, Free, Alloc}, _Extra) ->
 code_change({down, '1.0'}, {freq, Free, Alloc, Blocked}, _Extra) ->
     {ok, {freq, Free ++ Blocked, Alloc}}.
 ```
+
+## add vsn attribute
+
+``` erlang
+-vsn("1.0").
+```
+Adding the vsn attribute makes the appup and relup operations more convient.
+
