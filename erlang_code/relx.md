@@ -26,3 +26,24 @@ The [relx wiki](https://github.com/erlware/relx/wiki) is a good place to start.
 run_erl /tmp/erl_pipe /tmp/log_dir "erl"
 to_erl /tmp/erl_pipe
 ```
+
+## the relx make the release_handler more robust
+
+The relx also uses the `release_handler`, but it makes the release upgrade opeation more robost
+``` erlang
+%% we now have the location of the release package, however
+%% release handler expects a fixed nomenclature (<relname>.tar.gz)
+%% so give it just that by creating a symlink to the tarball
+%% we found.
+%% make sure that the dir where we're creating the link in exists
+ok = filelib:ensure_dir(filename:join([filename:dirname(ReleaseLink), "dummy"])),
+%% create the symlink pointing to the full path name of the
+%% release package we found
+case file:make_symlink(filename:absname(Filename), ReleaseLink) of
+    ok ->
+     ok;
+    {error, eperm} -> % windows!
+     {ok,_} = file:copy(filename:absname(Filename), ReleaseLink)
+end,
+```
+The other is the same.
