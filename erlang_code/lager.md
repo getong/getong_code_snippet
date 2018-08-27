@@ -14,3 +14,6 @@ rotate_log() ->
       end, gen_event:which_handlers(lager_event)).
 ```
 copy from `ejabberd_logger.erl`. In case of `lager_crash_log` not run, adds `catch`.
+
+## erlang 21 introduces logger module, which is inspired by lager partly.
+The error_logger is deprecated by default in erlang 21, and lager enables error_logger by default.
