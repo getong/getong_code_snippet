@@ -99,4 +99,17 @@ Use it by adding this to rebar.config
 ```
 
 ## stacktrace_compat
-[stacktrace_compat](https://github.com/g-andrade/stacktrace_compat/)
+~~[stacktrace_compat](https://github.com/g-andrade/stacktrace_compat/)~~
+use the code below:
+
+``` erlang
+-ifdef(OTP_RELEASE). %% this implies 21 or higher
+-define(EXCEPTION(Class, Reason, Stacktrace), Class:Reason:Stacktrace).
+-define(GET_STACK(Stacktrace), Stacktrace).
+-else.
+-define(EXCEPTION(Class, Reason, _), Class:Reason).
+-define(GET_STACK(_), erlang:get_stacktrace()).
+-endif.
+```
+
+## error_logger is not enabled by default and use logger since erlang 21, but it is still possible to use error_logger.
