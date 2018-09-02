@@ -85,3 +85,4 @@ base58check_decode(B58) ->
       {error, bad_checksum}
   end.
 ```
+The aeternity project also uses base58 for performance reason. base58 might be better on some areas.
