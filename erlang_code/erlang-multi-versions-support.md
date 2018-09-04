@@ -113,3 +113,39 @@ use the code below:
 ```
 
 ## error_logger is not enabled by default and use logger since erlang 21, but it is still possible to use error_logger.
+
+## erl_opts
+erlang compiler has the option `erl_opts` to include customize options.
+There are two ways to change the erl_opts with the rebar.
+One is to change it with the `rebar.config.script`
+
+``` erlang
+HaveDreyfus = code:lib_dir(dreyfus) /= {error, bad_name}.
+
+if not HaveDreyfus -> CONFIG; true ->
+    CurrOpts = case lists:keyfind(erl_opts, 1, CONFIG) of
+        {erl_opts, Opts} -> Opts;
+        false -> []
+    end,
+    NewOpts = [{d, 'HAVE_DREYFUS'} | CurrOpts],
+    lists:keystore(erl_opts, 1, CONFIG, {erl_opts, NewOpts})
+end.
+```
+copy from couchdb/src/mango/rebar.config.script
+
+The other way is to use with rebar3 plugin:
+
+``` erlang
+-spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
+do(State) ->
+    Vsns = add_events(enumerate(version())),
+    AppInfo = rebar_state:current_app(State),
+    ErlOpts = rebar_app_info:get(AppInfo, erl_opts, []),
+    AppInfo1 = rebar_app_info:set(AppInfo, erl_opts, Vsns ++ ErlOpts),
+    %%io:format("vsns: ~p~n", [Vsns]),
+    State1 = rebar_state:current_app(State, AppInfo1),
+    {ok, State1}.
+```
+copy from rebar_erl_vsn
+
+They get the local `erl_opts` options, and append the customize options to it.
