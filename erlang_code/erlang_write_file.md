@@ -42,3 +42,10 @@ is_file(Name) ->
     end.
 ```
 copy from pp_record.erl
+
+## datasync before close file
+
+``` erlang
+_ = file:datasync(FD),
+_ = file:close(FD),
+copy from lager_file_backend.erl```
