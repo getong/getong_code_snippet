@@ -49,3 +49,13 @@ copy from pp_record.erl
 _ = file:datasync(FD),
 _ = file:close(FD),
 copy from lager_file_backend.erl```
+
+## inode
+
+``` erlang
+-include_lib("kernel/include/file.hrl").
+case file:read_file_info(Name) of
+    {ok, FInfo} ->
+        Inode = FInfo#file_info.inode,
+```
+copy from lager_rotator_default.erl
