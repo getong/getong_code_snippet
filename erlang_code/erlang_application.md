@@ -40,3 +40,55 @@ prep_stop(State) ->
 ```
 copy from ejabberd_app.erl
 The prep_stop/1 function is very powerfull.
+
+## The `State` in the start/2 and stop/1
+
+``` erlang
+Module:start(StartType, StartArgs) -> {ok, Pid} | {ok, Pid, State} | {error, Reason}
+
+The function is to return {ok,Pid} or {ok,Pid,State}, where Pid is the pid of the top supervisor and State is any term. If
+omitted, State defaults to []. If the application is stopped later, State is passed to Module:prep_stop/1.
+
+Module:stop(State)
+State is the return value of Module:prep_stop/1, if such a function exists. Otherwise State is taken from the return value of
+Module:start/2.
+```
+An example is the lager:
+
+``` erlang
+start(_StartType, _StartArgs) ->
+    {ok, Pid} = lager_sup:start_link(),
+    SavedHandlers = boot(),
+    _ = boot('__all_extra'),
+    _ = boot('__traces'),
+    clean_up_config_checks(),
+    {ok, Pid, SavedHandlers}.
+
+boot() ->
+    %% Handle the default sink.
+    determine_async_behavior(?DEFAULT_SINK,
+                             application:get_env(lager, async_threshold, undefined),
+                             application:get_env(lager, async_threshold_window, undefined)),
+
+    _ = maybe_install_sink_killer(?DEFAULT_SINK, application:get_env(lager, killer_hwm, undefined),
+                                  application:get_env(lager, killer_reinstall_after, undefined)),
+
+    start_handlers(?DEFAULT_SINK,
+                   application:get_env(lager, handlers, ?DEFAULT_HANDLER_CONF)),
+
+    lager:update_loglevel_config(?DEFAULT_SINK),
+
+    SavedHandlers = start_error_logger_handler(
+                      application:get_env(lager, error_logger_redirect, true),
+                      interpret_hwm(application:get_env(lager, error_logger_hwm, 0)),
+                      application:get_env(lager, error_logger_whitelist, [])
+                     ),
+
+    SavedHandlers.
+
+stop(Handlers) ->
+    lists:foreach(fun(Handler) ->
+          error_logger:add_report_handler(Handler)
+      end, Handlers).
+```
+If start the lager application, it will stop some error_logger handlers, and if stop the lager application, it will start the stopped handlers.
