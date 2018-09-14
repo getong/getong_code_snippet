@@ -59,3 +59,15 @@ case file:read_file_info(Name) of
         Inode = FInfo#file_info.inode,
 ```
 copy from lager_rotator_default.erl
+
+## format_error
+There are the same `format_error` function in module `file` and `io`.
+
+``` erlang
+%% io:format_error/1
+For a specified error returned by any function in this module, this function returns a descriptive string of the error in English. For file errors, function file:format_error (Posix) is to be called.
+
+%% file:format_error/1
+Given the error returned by any function in this module, this function returns a descriptive string of the error in English. For file errors, function format_error/1 in module file is called.
+```
+They are almost the same.
