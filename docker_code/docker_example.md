@@ -201,3 +201,9 @@ docker rm $(docker ps -a -q)
 ``` shell
 docker rmi $(docker images -a -q)
 ```
+
+## start the stopped container
+
+``` shell
+docker start container_id
+```
