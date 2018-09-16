@@ -164,4 +164,4 @@ should_flush(_) ->
 ```
 copy from lager_util.erl
 
-The code style is much the same with `ejabberd_shaper.erl`,.
+The code style is much the same with `ejabberd_shaper.erl`. Make the config data in the data state, and check some value with it.
