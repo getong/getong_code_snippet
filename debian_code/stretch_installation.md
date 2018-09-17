@@ -142,9 +142,10 @@ $ sudo make install
 ```
 ## gem source
 ```shell
-$ sudo gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
+$ sudo gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
 $ sudo gem update --system
 $ sudo gem install githug
+$ sudo gem install travis-lint
 ```
 
 ## swap caps and ctrl
