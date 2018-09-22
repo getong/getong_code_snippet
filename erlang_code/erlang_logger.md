@@ -27,3 +27,21 @@ or add the kernel option in the sys.config
                 #{template => [msg,"\n"]}}}}
     ]}]}
 ```
+
+## stop supervisor report
+
+``` erlang
+logger:add_primary_filter(stop_sup_reports,{fun(#{log:=#{label:={supervisor,child_terminated}}},_)
+-> stop; (_,_) -> ignore end, ok}).
+
+logger:add_primary_filter(stop_sup_reports,{fun(#{msg:={report,#{label:={supervisor,child_terminated},report:=R}}},_)
+-> case proplists:get_value(supervisor,R) of {local,fah_sup} -> stop; _ ->
+ignore end; (_,_) -> ignore end, ok}).
+
+
+logger:add_primary_filter(stop_sup_reports,{fun(#{msg:={report,#{label:={supervisor,child_terminated},report:=R}}},_)
+-> Child = proplists:get_value(offender,R), case
+proplists:get_value(id,Child) of fah -> stop; _ -> ignore end; (_,_) ->
+ignore end, ok}).
+```
+copy from [Prevent my crashing gen_server to produce any error message](http://erlang.org/pipermail/erlang-questions/2018-September/096339.html)
