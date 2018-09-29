@@ -42,3 +42,6 @@ fail() ->
     io:format("fail", []),
     halt(1).
 ```
+
+## ct_slave
+the `stop` function in ct_slave module is just use the `init:stop/1` function to ensure the node is not connected.
