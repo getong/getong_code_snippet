@@ -44,4 +44,4 @@ fail() ->
 ```
 
 ## ct_slave
-the `stop` function in ct_slave module is just use the `init:stop/1` function to ensure the node is not connected.
+the `stop` function in ct_slave module is just use the `init:stop/0` function to ensure the node is not connected.
