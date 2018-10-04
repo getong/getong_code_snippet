@@ -113,3 +113,28 @@ If you implement the methods PUT, POST and/or PATCH, you must implement the cont
 If you implement the method DELETE, you must implement the delete_resource callback.
 ```
 copy from [Designing a resource handler](https://ninenines.eu/docs/en/cowboy/2.2/guide/resource_design/)
+
+## websocket
+
+``` erlang
+%% The init/2 callback is called when the request is received.
+%% To establish a Websocket connection, you must switch to the cowboy_websocket module:
+init(Req, State) ->
+    {cowboy_websocket, Req, State}.
+
+
+
+%% Cowboy will call websocket_handle/2 whenever a text, binary, ping or pong frame arrives from the client.
+websocket_handle(Frame = {text, _}, State) ->
+    {reply, Frame, State};
+websocket_handle(_Frame, State) ->
+    {ok, State}.
+
+%% Cowboy will call websocket_info/2 whenever an Erlang message arrives.
+websocket_info({log, Text}, State) ->
+    {reply, {text, Text}, State};
+websocket_info(_Info, State) ->
+    {ok, State}.
+```
+
+More info see [Websocket handlers](https://ninenines.eu/docs/en/cowboy/2.5/guide/ws_handlers/)
