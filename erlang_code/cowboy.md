@@ -122,8 +122,6 @@ copy from [Designing a resource handler](https://ninenines.eu/docs/en/cowboy/2.2
 init(Req, State) ->
     {cowboy_websocket, Req, State}.
 
-
-
 %% Cowboy will call websocket_handle/2 whenever a text, binary, ping or pong frame arrives from the client.
 websocket_handle(Frame = {text, _}, State) ->
     {reply, Frame, State};
@@ -138,3 +136,7 @@ websocket_info(_Info, State) ->
 ```
 
 More info see [Websocket handlers](https://ninenines.eu/docs/en/cowboy/2.5/guide/ws_handlers/)
+
+## gun, the erlang websocket client
+see [How do you use Gun as a Cowboy client?](https://stackoverflow.com/questions/45005984/how-do-you-use-gun-as-a-cowboy-client)
+[Websocket](https://ninenines.eu/docs/en/gun/1.3/guide/websocket/)
