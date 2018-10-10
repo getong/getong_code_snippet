@@ -343,3 +343,4 @@ The new code is much more simple, just use the two main functions:
 ranch:start_listener/5
 ranch:handshake/2
 ```
+If the calback module uses `proc_lib` to start a process, it no more needs to use `proc_lib:init_ack/2` function, ranch does it. More convinent.
