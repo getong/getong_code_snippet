@@ -38,3 +38,7 @@ see [how-to-support-chinese-in-http-request-body-erlang](https://gist.github.com
 see [MOCHIWEB参数化模型REQ相关功能](http://coolshell.cn/articles/1516.html)
 see [Using mochiweb to create a web framework in erlang](http://willcodeforfoo.com/2009/07/using-mochiweb-to-create-a-web-framework-in-erlang)
 see [Simple JSON request with cURL to Mochiweb](https://stackoverflow.com/questions/10439603/simple-json-request-with-curl-to-mochiweb)
+
+## hackney & gun
+hackney is an HTTP client library, it offers a pool client feartur.
+gun is also  HTTP client library, and it supports websocket.
