@@ -332,3 +332,10 @@ copy from [Undoing git reset?](https://stackoverflow.com/questions/2510276/undoi
 $ git rev-parse --abbrev-ref HEAD
 ```
 see [How to get the current branch name in Git?](https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git)
+
+## submodule
+
+``` shell
+git submodule
+git submodule add git_url git_name
+```
