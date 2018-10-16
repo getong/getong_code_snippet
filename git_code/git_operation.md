@@ -338,4 +338,6 @@ see [How to get the current branch name in Git?](https://stackoverflow.com/quest
 ``` shell
 git submodule
 git submodule add git_url git_name
+git submodule init git_name
+git submodule update git_name
 ```
