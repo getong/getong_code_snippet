@@ -55,3 +55,13 @@ systemctl disable kubelet
 systemctl stop ebtables.service
 systemctl disable ebtables.service
 ```
+
+## k8s state
+
+```
+Pods are 100% volatile, all the time!
+You can't make sure a Pod will always have the same IP.
+Pods don't have deterministic IPs, but can have deterministic DNS.
+Pods always have the same name.
+```
+copy from [slide](https://codesync.global/uploads/media/default/0001/01/7760ae3859f5d53c9f98b8bbff275d7060f6a806.pdf)
