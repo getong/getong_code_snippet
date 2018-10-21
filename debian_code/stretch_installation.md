@@ -536,3 +536,9 @@ $ sudo apt-get install gnumeric
 $ ssconvert example.csv example.xlsx
 ```
 copy from [convert CSV to XLS file on linux](https://unix.stackexchange.com/questions/158254/convert-csv-to-xls-file-on-linux)
+
+## tshark
+
+``` shell
+apt-get install tshark
+```
