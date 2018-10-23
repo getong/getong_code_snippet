@@ -140,3 +140,21 @@ More info see [Websocket handlers](https://ninenines.eu/docs/en/cowboy/2.5/guide
 ## gun, the erlang websocket client
 see [How do you use Gun as a Cowboy client?](https://stackoverflow.com/questions/45005984/how-do-you-use-gun-as-a-cowboy-client)
 [Websocket](https://ninenines.eu/docs/en/gun/1.3/guide/websocket/)
+
+## cowboy_http.erl main loop funcion
+
+``` erlang
+loop(State=#state{parent=Parent, socket=Socket, transport=Transport, opts=Opts,
+		timer=TimerRef, children=Children, in_streamid=InStreamID,
+		last_streamid=LastStreamID, streams=Streams}, Buffer) ->
+```
+It has two arguments, one is the current `State`, the other is the `Buffer`.
+The cowboy_http.erl uses active once mode, the before_loop function set the mode every time.
+
+``` erlang
+before_loop(State=#state{socket=Socket, transport=Transport}, Buffer) ->
+	%% @todo disable this when we get to the body, until the stream asks for it?
+	%% Perhaps have a threshold for how much we're willing to read before waiting.
+	Transport:setopts(Socket, [{active, once}]),
+	loop(State, Buffer).
+```
