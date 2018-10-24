@@ -42,3 +42,22 @@ see [Simple JSON request with cURL to Mochiweb](https://stackoverflow.com/questi
 ## hackney & gun
 hackney is an HTTP client library, it offers a pool client feartur.
 gun is also  HTTP client library, and it supports websocket.
+
+
+## query string
+
+``` shell
+%% @doc calculate canonical query string out of query params and according to v4 documentation
+canonical_query_string([]) ->
+    "";
+canonical_query_string(Params) ->
+    Normalized = [{nodefinder_ec2_api_http:url_encode(Name), nodefinder_ec2_api_http:url_encode(nodefinder_ec2_api_http:value_to_string(Value))} || {Name, Value} <- Params],
+    Sorted = lists:keysort(1, Normalized),
+    lists:join($&,
+               [case Value of
+                    [] -> [Key, "="];
+                    _ -> [Key, "=", Value]
+                end
+                || {Key, Value} <- Sorted, Value =/= none, Value =/= undefined]).
+```
+copy from nodefinder_ec2_api_aws.erl
