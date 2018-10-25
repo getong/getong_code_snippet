@@ -158,3 +158,33 @@ before_loop(State=#state{socket=Socket, transport=Transport}, Buffer) ->
 	Transport:setopts(Socket, [{active, once}]),
 	loop(State, Buffer).
 ```
+## cowboy http module, the in_state represents the current http state
+
+``` erlang
+parse(<<>>, State) ->
+	before_loop(State, <<>>);
+%% Do not process requests that come in after the last request
+%% and discard the buffer if any to save memory.
+parse(_, State=#state{in_streamid=InStreamID, in_state=#ps_request_line{},
+		last_streamid=LastStreamID}) when InStreamID > LastStreamID ->
+	before_loop(State, <<>>);
+parse(Buffer, State=#state{in_state=#ps_request_line{empty_lines=EmptyLines}}) ->
+	after_parse(parse_request(Buffer, State, EmptyLines));
+parse(Buffer, State=#state{in_state=PS=#ps_header{headers=Headers, name=undefined}}) ->
+	after_parse(parse_header(Buffer,
+		State#state{in_state=PS#ps_header{headers=undefined}},
+		Headers));
+parse(Buffer, State=#state{in_state=PS=#ps_header{headers=Headers, name=Name}}) ->
+	after_parse(parse_hd_before_value(Buffer,
+		State#state{in_state=PS#ps_header{headers=undefined, name=undefined}},
+		Headers, Name));
+parse(Buffer, State=#state{in_state=#ps_body{}}) ->
+	%% @todo We do not want to get the body automatically if the request doesn't ask for it.
+	%% We may want to get bodies that are below a threshold without waiting, and buffer them
+	%% until the request asks, though.
+	after_parse(parse_body(Buffer, State)).
+
+before_parse_headers(Rest, State, M, A, P, Q, V) ->
+	parse_header(Rest, State#state{in_state=#ps_header{
+		method=M, authority=A, path=P, qs=Q, version=V}}, #{}).
+```
