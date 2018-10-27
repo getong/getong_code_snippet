@@ -188,3 +188,58 @@ before_parse_headers(Rest, State, M, A, P, Q, V) ->
 	parse_header(Rest, State#state{in_state=#ps_header{
 		method=M, authority=A, path=P, qs=Q, version=V}}, #{}).
 ```
+
+## cowboy reset
+The callback and optional_callbacks attributes
+
+``` erlang
+-callback delete_completed(Req, State)
+	-> {boolean(), Req, State}
+	| {stop, Req, State}
+	| {switch_handler(), Req, State}
+	when Req::cowboy_req:req(), State::any().
+-optional_callbacks([delete_completed/2]).
+```
+And the function implement:
+
+``` erlang
+%% delete_completed/2 indicates whether the resource has been deleted yet.
+delete_completed(Req, State) ->
+	expect(Req, State, delete_completed, true, fun has_resp_body/2, 202).
+
+expect(Req, State, Callback, Expected, OnTrue, OnFalse) ->
+	case call(Req, State, Callback) of
+		no_call ->
+			next(Req, State, OnTrue);
+		{stop, Req2, HandlerState} ->
+			terminate(Req2, State#state{handler_state=HandlerState});
+		{Switch, Req2, HandlerState} when element(1, Switch) =:= switch_handler ->
+			switch_handler(Switch, Req2, HandlerState);
+		{Expected, Req2, HandlerState} ->
+			next(Req2, State#state{handler_state=HandlerState}, OnTrue);
+		{_Unexpected, Req2, HandlerState} ->
+			next(Req2, State#state{handler_state=HandlerState}, OnFalse)
+	end.
+
+call(Req, State=#state{handler=Handler, handler_state=HandlerState},
+		Callback) ->
+	case erlang:function_exported(Handler, Callback, 2) of
+		true ->
+			try
+				Handler:Callback(Req, HandlerState)
+			catch Class:Reason ->
+				error_terminate(Req, State, Class, Reason)
+			end;
+		false ->
+			no_call
+	end.
+
+next(Req, State, Next) when is_function(Next) ->
+	Next(Req, State);
+next(Req, State, StatusCode) when is_integer(StatusCode) ->
+	respond(Req, State, StatusCode).
+
+respond(Req, State, StatusCode) ->
+	terminate(cowboy_req:reply(StatusCode, Req), State).
+```
+The `expect` function will check the calback module `function_exported` the `Callback` function exist, if not, Call the `Next` function or terminate function.
