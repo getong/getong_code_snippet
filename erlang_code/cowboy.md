@@ -243,3 +243,11 @@ respond(Req, State, StatusCode) ->
 	terminate(cowboy_req:reply(StatusCode, Req), State).
 ```
 The `expect` function will check the calback module `function_exported` the `Callback` function exist, if not, Call the `Next` function or terminate function.
+
+## stop_listener
+
+``` erlang
+-spec stop_listener(ranch:ref()) -> ok | {error, not_found}.
+stop_listener(Ref) ->
+	ranch:stop_listener(Ref).
+```
