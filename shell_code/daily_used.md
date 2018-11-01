@@ -541,3 +541,10 @@ print the binary file
 ```
 hexdump -C bin_file
 ```
+
+## cut video file
+
+``` shell
+ffmpeg -ss 0:7:0 -i filename -c copy -t 1:0:0 outfilename
+```
+From the beginning at `0:7:0` and the total time is `1:0:0`.
