@@ -130,3 +130,6 @@ They are supported in the behaviour `rabbit_peer_discovery_backend`, and the doc
 
 ## Rabbitmq Peer Discovery
 [Cluster Formation and Peer Discovery](http://www.rabbitmq.com/cluster-formation.html)
+
+##  delete ets table data
+rabbitmq-server starts a `rabbit_core_metrics_gc` process to check the ets table data in 120s time.
