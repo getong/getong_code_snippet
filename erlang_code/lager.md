@@ -17,3 +17,6 @@ copy from `ejabberd_logger.erl`. In case of `lager_crash_log` not run, adds `cat
 
 ## erlang 21 introduces logger module, which is inspired by lager partly.
 The error_logger is deprecated by default in erlang 21, and lager enables error_logger by default.
+
+## erlang 21 introduces logger, which can be replaced lager
+The [emqx](https://github.com/emqx/emqx) just use logger to replace lager.
