@@ -53,14 +53,16 @@
 
 (global-superword-mode t)
 
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "grey")
-(set-face-foreground 'highlight nil)
+(global-hl-line-mode t)
+;;(set-face-background 'hl-line "blue")
+;;(set-face-foreground 'highlight nil)
+(set-face-background 'hl-line "#BEBEBE")
+(set-face-foreground 'hl-line "#0000000")
 
 (blink-cursor-mode 0)
 (setq blink-cursor-blinks 0)
 (setq-default cursor-type 'bar);光标显示为一竖线
-(set-cursor-color "black")
+(set-cursor-color "blue")
 (global-font-lock-mode t)
 
 (global-linum-mode 1)
@@ -224,13 +226,13 @@
 (setq x-underline-at-descent-line t)
 
 
-(add-hook 'after-init-hook 'my-after-init-hook)
-(defun my-after-init-hook ()
- (require 'edts-start))
+;(add-hook 'after-init-hook 'my-after-init-hook)
+;(defun my-after-init-hook ()
+; (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_20.3.1/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_2032.1/lib/erlang")
+(setq erlang-root-dir "/usr/local/otp_src_21.1.1/lib/erlang")
+(setq erlang-man-root "/usr/local/otp_src_21.1.1/lib/erlang")
 
 ;; 关闭文件滑动控件
 (scroll-bar-mode -1)
@@ -269,9 +271,9 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_20.3.1/lib/erlang/lib/tools-2.11.2/emacs"
+(setq load-path (cons "/usr/local/otp_src_21.1.1/lib/erlang/lib/tools-3.0.1/emacs"
                       load-path))
-(setq exec-path (cons "/usr/local/otp_src_20.3.1/bin" exec-path))
+(setq exec-path (cons "/usr/local/otp_src_21.1.1/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
 
