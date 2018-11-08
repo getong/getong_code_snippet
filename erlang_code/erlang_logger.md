@@ -45,3 +45,45 @@ proplists:get_value(id,Child) of fah -> stop; _ -> ignore end; (_,_) ->
 ignore end, ok}).
 ```
 copy from [Prevent my crashing gen_server to produce any error message](http://erlang.org/pipermail/erlang-questions/2018-September/096339.html)
+
+## logger_handler_watcher
+
+The logger_handler_watcher process will be started by logger_sup.erlang
+
+``` erlang
+init([]) ->
+
+    SupFlags = #{strategy => one_for_one,
+                 intensity => 1,
+                 period => 5},
+
+    Watcher = #{id => logger_handler_watcher,
+                start => {logger_handler_watcher, start_link, []},
+                shutdown => brutal_kill},
+
+    {ok, {SupFlags, [Watcher]}}.
+```
+And it monitor the logger handlers
+``` erlang
+handle_call({register,Id,Pid}, _From, #state{handlers=Hs}=State) ->
+    Ref = erlang:monitor(process,Pid),
+    Hs1 = lists:keystore(Id,1,Hs,{Id,Ref}),
+    {reply, ok, State#state{handlers=Hs1}}.
+
+handle_info({'DOWN',Ref,process,_,shutdown}, #state{handlers=Hs}=State) ->
+    case lists:keytake(Ref,2,Hs) of
+        {value,{Id,Ref},Hs1} ->
+            %% Probably terminated by supervisor. Remove the handler to avoid
+            %% error printouts due to failing handler.
+            _ = case logger:get_handler_config(Id) of
+                    {ok,_} ->
+                        logger:remove_handler(Id);
+                    _ ->
+                        ok
+                end,
+            {noreply,State#state{handlers=Hs1}};
+        false ->
+            {noreply, State}
+    end;
+handle_info({'DOWN',Ref,process,_,_OtherReason}, #state{handlers=Hs}=State) ->
+    {noreply,State#state{handlers=lists:keydelete(Ref,2,Hs)}};```
