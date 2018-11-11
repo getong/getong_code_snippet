@@ -221,8 +221,21 @@ let mut n = 0;
 let mut m = 1;
 mem::swap(&mut n, &mut m);
 mem::size_of_val(&mut n)
-mem::size_of::<isize>();
+println!("size of isize {} ", mem::size_of::<isize>());
+println!("size of i8 {} ", mem::size_of::<i8>());
+println!("size of char {} ", mem::size_of::<char>());
+println!("size of () {} ", mem::size_of::<()>());
+
 ```
+The output:
+
+```
+size of isize 8
+size of i8 1
+size of char 4
+size of () 0
+```
+the memory of `()` is 0, and the size of `char` is 4, much more than `i8`.
 
 ## Box
 >> Box, 以及栈和堆
