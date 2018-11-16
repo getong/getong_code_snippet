@@ -110,6 +110,12 @@ git rebase -i HEAD~5
 git rebase --abort
 git rebase --continue
 ```
+rebase to a branch
+
+``` shell
+git rebase master
+git push -f
+```
 
 ## remote show
 
