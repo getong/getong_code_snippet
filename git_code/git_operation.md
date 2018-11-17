@@ -217,6 +217,7 @@ $ git add file
 $ git commit --amend
 ```
 This will append the `add file` into the last commit info.
+amending(修正) will always change the last commit message and the commit hash value.
 
 
 ## git commit with future date
