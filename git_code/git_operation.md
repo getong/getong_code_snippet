@@ -348,3 +348,8 @@ git submodule add git_url git_name
 git submodule init git_name
 git submodule update git_name
 ```
+
+## squash two non-consecutive commit
+
+use `git rebase -i` and pick the commit just below the one you want to squash.
+see [How do I squash two non-consecutive commits](https://stackoverflow.com/questions/3921708/how-do-i-squash-two-non-consecutive-commits)\[
