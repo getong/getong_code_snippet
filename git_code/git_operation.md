@@ -31,6 +31,8 @@ Sometimes the new tag in remote repository, pull can't get the new tags. Fetch i
 
 ``` shell
 git fetch --tags
+git fetch upstream --tags
+git fetch origin --tags
 ```
 
 ## push more than one repositories at one time
