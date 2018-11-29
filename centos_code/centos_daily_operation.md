@@ -58,6 +58,11 @@ $ sudo yum -y install docker-ce
 ``` shell
 yum list package
 ```
+for example, the docker-ce:
+
+``` shell
+yum list --showduplicates 'docker-ce' | grep '18.03.*el' | tail -1 | awk '{print $2}'
+```
 
 ## sudo in centos
 Unlike Debian, the sudo group doest not exist in centos, the sudo group name is wheel

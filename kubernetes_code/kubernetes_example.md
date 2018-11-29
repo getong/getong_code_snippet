@@ -65,3 +65,10 @@ Pods don't have deterministic IPs, but can have deterministic DNS.
 Pods always have the same name.
 ```
 copy from [slide](https://codesync.global/uploads/media/default/0001/01/7760ae3859f5d53c9f98b8bbff275d7060f6a806.pdf)
+
+## install the suitable docker-ce
+
+``` shell
+export VERSION=18.03 && curl -sSL get.docker.com | sh
+```
+see [Which kubernetes version is supported in docker version 18.09](https://stackoverflow.com/questions/53256739/which-kubernetes-version-is-supported-in-docker-version-18-09)
