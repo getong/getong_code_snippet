@@ -87,3 +87,5 @@ handle_info({'DOWN',Ref,process,_,shutdown}, #state{handlers=Hs}=State) ->
     end;
 handle_info({'DOWN',Ref,process,_,_OtherReason}, #state{handlers=Hs}=State) ->
     {noreply,State#state{handlers=lists:keydelete(Ref,2,Hs)}};```
+
+## [Erlang/OTP 21's new logger](https://ferd.ca/erlang-otp-21-s-new-logger.html)
