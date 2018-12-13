@@ -95,3 +95,7 @@ copy from [rebar3_hex](https://github.com/tsloughter/rebar3_hex)
 
 ## releases
 see the manual [Elixir: how can I leverage release_handler?](https://stackoverflow.com/questions/36196148/elixir-how-can-i-leverage-release-handler)
+
+## rebar3_gpb_plugin
+if the project is a `app` rebar3 project type, just add all the options into the rebar.config.
+But if the project is `release`, another rebar3 project type, just move all the option into the `apps/project_name/rebar.config`, only add this plugin into the rebar.config right under the project. See the examples in the plugin, they demonstrates it.
