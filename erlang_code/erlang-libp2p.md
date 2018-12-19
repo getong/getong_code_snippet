@@ -136,3 +136,14 @@ handle_send_result(_, {error, Error}, State=#state{})  ->
     {stop, {error, Error}, State}.
 ```
 Every send data, will get a ref, and if the timeout, it will notice it at once.
+
+## the ets table
+
+``` erlang
+TID = ets:new(Name, [public, ordered_set, {read_concurrency, true}]),
+ets:insert(TID, {?SUP, self()}),
+ets:insert(TID, {?NAME, Name}),
+ets:insert(TID, {?OPTS, Opts}),
+```
+copy from libp2p_swarm_sup.erl.
+All the process start with this `TID` and all options are stored in this ets table.
