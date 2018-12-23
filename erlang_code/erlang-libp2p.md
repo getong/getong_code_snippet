@@ -147,3 +147,21 @@ ets:insert(TID, {?OPTS, Opts}),
 ```
 copy from libp2p_swarm_sup.erl.
 All the process start with this `TID` and all options are stored in this ets table.
+
+## the config info
+
+``` erlang
+-define(CONNECTION_HANDLER, connection_handler).
+-define(STREAM_HANDLER, stream_handler).
+-define(TRANSPORT, transport).
+-define(SESSION, session).
+-define(LISTENER, listener).
+-define(GROUP, group).
+-define(RELAY, relay).
+-define(PROXY, proxy).
+
+-spec insert_pid(ets:tab(), atom(), term(), pid() | undefined) -> true.
+insert_pid(TID, Kind, Ref, Pid) ->
+    ets:insert(TID, {{Kind, Ref}, Pid}).
+```
+The `Kind` is connection_handler, stream_handler, transport, session, listener, group, replay, proxy. The `Ref` is often `pid` atom.
