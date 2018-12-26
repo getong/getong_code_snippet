@@ -89,3 +89,6 @@ true
 iex> is_atom(Module)
 true
 ```
+
+## boolean
+true, false, nil.
