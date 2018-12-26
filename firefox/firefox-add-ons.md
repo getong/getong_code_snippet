@@ -3,3 +3,4 @@
 ## Privacy Badger
 ## HTTPS Everywhere
 ## Certificate Patrol
+## Adblock Plus 
