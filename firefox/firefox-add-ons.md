@@ -2,5 +2,5 @@
 ## Noscript
 ## Privacy Badger
 ## HTTPS Everywhere
-## Certificate Patrol
-## Adblock Plus 
+~~~## Certificate Patrol~~~
+## Adblock Plus
