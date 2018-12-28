@@ -542,3 +542,10 @@ copy from [convert CSV to XLS file on linux](https://unix.stackexchange.com/ques
 ``` shell
 apt-get install tshark
 ```
+
+## graphviz
+
+elixir xref will generate with graphviz.
+``` shell
+sudo apt-get install graphviz
+```
