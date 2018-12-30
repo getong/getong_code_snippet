@@ -21,3 +21,4 @@ More info:
 
 ## Scaling Erlang cluster to 10,000 nodes
 see it at [Maxim Fedorov - Scaling Erlang cluster to 10,000 nodes | Code Mesh LDN 18](https://www.youtube.com/watch?v=FJQyv26tFZ8)
+erlang registry is the problem.
