@@ -1,3 +1,5 @@
+# struct
+```
 defmodule Db do
 
   defstruct [
@@ -15,3 +17,5 @@ defmodule Db2 do
     style: nil, color: nil, opts: %{}
 
 end
+```
+struct is very like the map type, but the struct often works with the module name.
