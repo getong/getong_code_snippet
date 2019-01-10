@@ -35,3 +35,11 @@ open(enter, _OldState, _Data) ->
 ## timeout option
 The timeout argument, for example, like 5000, is spawn in a new process. And then gen_statm:call/3 will not pass the `Caller` as the call process. Use dirty_timeout.
 But in the return data, the timeout, like 5000, will generate a `timeout` msg. Just like other behaviours.
+
+## three types of timeout
+```
+ event_timeout, generic_timeout, state_timeout
+Any event cancels an event_timeout() so a zero time event time-out is only generated if the event queue is empty.
+
+A state change cancels a state_timeout() and any new transition option of this type belongs to the new state.
+```
