@@ -43,3 +43,38 @@ Any event cancels an event_timeout() so a zero time event time-out is only gener
 
 A state change cancels a state_timeout() and any new transition option of this type belongs to the new state.
 ```
+
+
+## next_event
+```
+enter_action() = 
+    hibernate |
+    {hibernate, Hibernate :: hibernate()} |
+    timeout_action() |
+    reply_action()
+
+action() = 
+    postpone |
+    {postpone, Postpone :: postpone()} |
+    {next_event, EventType :: event_type(), EventContent :: term()} |
+    enter_action()
+
+state_callback_result(ActionType) = 
+    {keep_state, NewData :: data()} |
+    {keep_state, NewData :: data(), Actions :: [ActionType] | ActionType} |
+    keep_state_and_data |
+    {keep_state_and_data, Actions :: [ActionType] | ActionType} |
+    {repeat_state, NewData :: data()} |
+    {repeat_state, NewData :: data(), Actions :: [ActionType] | ActionType} |
+    repeat_state_and_data |
+    {repeat_state_and_data, Actions :: [ActionType] | ActionType} |
+    stop |
+    {stop, Reason :: term()} |
+    {stop, Reason :: term(), NewData :: data()} |
+    {stop_and_reply, Reason :: term(), Replies :: [reply_action()] | reply_action()} |
+    {stop_and_reply, Reason :: term(), Replies :: [reply_action()] | reply_action(), NewData :: data()}
+
+ActionType is enter_action() if the state callback was called with a state enter call 
+and action() if the state callback was called with an event.
+```
+see [gen_fsm から gen_statem へ](https://blog.jxck.io/entries/2017-05-18/gen_statem.html) for a example, google translate might be help.
