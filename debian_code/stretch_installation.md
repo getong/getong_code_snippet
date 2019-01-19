@@ -549,3 +549,9 @@ elixir xref will generate with graphviz.
 ``` shell
 sudo apt-get install graphviz
 ```
+## whois
+
+``` shell
+sudo apt-get install whois
+mkpasswd
+```
