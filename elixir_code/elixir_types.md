@@ -92,3 +92,17 @@ true
 
 ## boolean
 true, false, nil.
+
+## binary match
+
+``` elixir
+iex(1)> << sign::size(1), exp::size(11), mantissa::size(52) >> = << 3.14159::float>>
+iex(2)> ( 1 + mantissa / :math.pow(2, 52)) * :math.pow(2, exp-1023)
+```
+the erlang code is just like this:
+
+``` erlang
+erl
+1> << Sign:1, Exp:11, Matissa:52 >> = << 3.14159/float >>.
+2> ( 1 + Matissa / math:pow(2, 52)) * math:pow(2, Exp-1023).
+```
