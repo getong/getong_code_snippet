@@ -555,3 +555,9 @@ sudo apt-get install graphviz
 sudo apt-get install whois
 mkpasswd
 ```
+
+## time
+
+``` shell
+sudo apt-get install time
+```
