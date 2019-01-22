@@ -29,3 +29,9 @@ copy from [Setting the timezone](https://wiki.alpinelinux.org/wiki/Setting_the_t
 apk add tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 apk del tzdata
 ```
+
+## use the ustc mirror
+
+``` shell
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+```
