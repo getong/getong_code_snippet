@@ -47,3 +47,8 @@ case file:make_symlink(filename:absname(Filename), ReleaseLink) of
 end,
 ```
 The other is the same.
+
+## the comment in the vm.args
+The comment in the vm.args should be started with `#`, and not the `%`.
+Even though the `%` is the beginning of the erlang code, the `%` can not be used in the `vm.args`. Because the `vm.args` is used by the command `run_erl` in the shell.
+The `#` is the shell comment beginner.
