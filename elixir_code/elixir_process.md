@@ -18,3 +18,13 @@ c("module_name.ex")
 :sys.resume(ProcName)
 ```
 This is a example from <<Programming Elixir>>
+
+
+## BEAM, scheduler, process
+
+```
+BEAM is a single OS process.
+Scheduler is an OS thread responsible for executing multiple processes.
+Erlang process is a unit of concurrent execution.
+BEAM uses multiple schedulers to parallelize the work ovr available CPU cores.
+```
