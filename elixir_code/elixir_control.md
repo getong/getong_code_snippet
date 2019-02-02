@@ -41,3 +41,14 @@ case File.open("filename") do
 		error
 end
 ```
+
+## with can simplefy case statement
+The case statement will check the conditions in many lines, the `with` will simplify the conditions in very few statements.
+```
+def extract do  
+with {:ok, thing} <- other_func() do
+thing
+end
+end
+```
+if the other_func() does not return the tuple with the beginning of :ok, it just will return the other result from the other_func().
