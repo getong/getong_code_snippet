@@ -13,6 +13,7 @@
 - [ ] erlang cpu usage
 - [ ] erlang and haproxy
 	[ranch_proxy_protocol](https://github.com/heroku/ranch_proxy_protocol)
+	the ranch includes the proxy option
 - [x] erlang handle the system signals?
 - [ ] erlang parse_transform (used in lager and epipe)
 - [x] tcp message delivery retry
