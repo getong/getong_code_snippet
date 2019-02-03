@@ -8,5 +8,9 @@ mix deps.get
 mix compile
 mix format
 mix format filename
+mix release
+mix local.hex
+mix local.rebar
+mix clean
 
 ```
