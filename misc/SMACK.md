@@ -5,3 +5,6 @@ Flink, Kubernetes
 
 ## stream architecture
 storm, spark, flink are the stream architecture, and hadoop is the batch architecture. The stream is more efficient.
+
+## kubernetes and calico
+calico is much the same with host network now.
