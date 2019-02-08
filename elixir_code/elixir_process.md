@@ -28,3 +28,11 @@ Scheduler is an OS thread responsible for executing multiple processes.
 Erlang process is a unit of concurrent execution.
 BEAM uses multiple schedulers to parallelize the work ovr available CPU cores.
 ```
+
+## elixir Registry
+```
+Registry.start_link/2
+Registry.register/3
+Registry.lookup/2
+```
+If the process registered in the registry dies, it will automaticly deleted in the Registry
