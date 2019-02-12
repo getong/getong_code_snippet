@@ -12,5 +12,5 @@ mix release
 mix local.hex
 mix local.rebar
 mix clean
-
+mix run -e "Lib.fun()"
 ```
