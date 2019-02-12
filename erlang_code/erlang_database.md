@@ -14,6 +14,6 @@
 
 ## dalmatinerdb
 
-## adtidote
+## antidote
 
 ## leveled
