@@ -72,3 +72,6 @@ copy from [slide](https://codesync.global/uploads/media/default/0001/01/7760ae38
 export VERSION=18.03 && curl -sSL get.docker.com | sh
 ```
 see [Which kubernetes version is supported in docker version 18.09](https://stackoverflow.com/questions/53256739/which-kubernetes-version-is-supported-in-docker-version-18-09)
+
+## docs
+a handy example: [使用kubeadm创建一个K8s 1.10的Cluster](https://zhuanlan.zhihu.com/p/31398416)
