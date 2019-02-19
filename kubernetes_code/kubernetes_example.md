@@ -75,3 +75,4 @@ see [Which kubernetes version is supported in docker version 18.09](https://stac
 
 ## docs
 a handy example: [使用kubeadm创建一个K8s 1.10的Cluster](https://zhuanlan.zhihu.com/p/31398416)
+[使用kubeadm安装Kubernetes 1.11](https://zhuanlan.zhihu.com/p/40931670)
