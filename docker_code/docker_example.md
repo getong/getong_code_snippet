@@ -29,6 +29,7 @@ docker exec web ps
 docker rename web web-old
 
 # save and load
+## save the image
 docker save -o nginx.tar nginx
 docker load --input nginx.tar
 
@@ -110,6 +111,7 @@ docker build -t tag_name -f dockerfile .
 
 # export and import
 # Note that, export is very likely with the save, but it removes the commit history.
+# export the container
 docker export --output new_image.tar container_id
 docker import new_image.tar new_images:tag_name
 docker import http://example.com/exampleimage.tgz img_name:tag_name
