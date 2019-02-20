@@ -548,3 +548,18 @@ hexdump -C bin_file
 ffmpeg -ss 0:7:0 -i filename -c copy -t 1:0:0 outfilename
 ```
 From the beginning at `0:7:0` and the total time is `1:0:0`.
+
+## echo and sudo
+
+``` shell
+echo "Text I want to write" | sudo tee /path/to/file > /dev/null
+sudo sh -c 'echo "Text I want to write" > /path/to/file'
+echo "Text I want to write" | sudo tee -a /path/to/file > /dev/null
+sudo sh -c 'echo "Text I want to write" >> /path/to/file'
+```
+This won't work:
+
+``` shell
+sudo echo "Text I want to write" > /path/to/file
+```
+copy from ["sudo echo" does not work together in Ubuntu](https://blogs.oracle.com/joshis/sudo-echo-does-not-work-together-in-ubuntu-another-waste-of-time-issue)
