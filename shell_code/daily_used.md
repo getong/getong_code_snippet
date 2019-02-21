@@ -563,3 +563,14 @@ This won't work:
 sudo echo "Text I want to write" > /path/to/file
 ```
 copy from ["sudo echo" does not work together in Ubuntu](https://blogs.oracle.com/joshis/sudo-echo-does-not-work-together-in-ubuntu-another-waste-of-time-issue)
+
+## disable swap
+
+``` shell
+#temporary
+sysctl -w vm.swappiness=0
+
+#permanently
+echo "vm.swappiness = 0">> /etc/sysctl.conf
+sysctl -p
+```
