@@ -574,3 +574,6 @@ sysctl -w vm.swappiness=0
 echo "vm.swappiness = 0">> /etc/sysctl.conf
 sysctl -p
 ```
+## 137 signal
+
+When the os process is closed by the 137 signal, the most probably reason is the lack of memory.
