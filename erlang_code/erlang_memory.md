@@ -21,3 +21,4 @@ We can get the memory from the `erlang:memory` function.
 {code,4092041},
 {ets,274000}]
 ```
+If the process's memory grows very quickly, the reason might be the message overload. The tcp stream data, and internal state not set properly, and single process bottleneck, all these might cause the memory increasing very high.
