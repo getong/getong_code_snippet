@@ -22,3 +22,9 @@ We can get the memory from the `erlang:memory` function.
 {ets,274000}]
 ```
 If the process's memory grows very quickly, the reason might be the message overload. The tcp stream data, and internal state not set properly, and single process bottleneck, all these might cause the memory increasing very high.
+
+## get the top 10 most use memory processes
+
+```
+lists:sublist(lists:reverse(lists:keysort(2, lists:foldl(fun(Pid, Acc) -> case process_info(Pid, memory) of {memory, M} -> [{Pid, M} | Acc]; _ -> Acc end end, [], processes()))), 10).
+```
