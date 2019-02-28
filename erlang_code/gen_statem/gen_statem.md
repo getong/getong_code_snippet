@@ -32,7 +32,8 @@ open(enter, _OldState, _Data) ->
 
 >> The gen_statem keeps the current state, or does a state transition to the current state if you like, sets NewData, and executes all Actions. If the gen_statem runs with state enter calls, the state enter call is repeated, see type transition_option(), otherwise repeat_state is the same as keep_state.
 
-## timeout option
+## gen_statem:call and timeout option
+The gen_statem:call/3 function use clean_timeout as default, it will spawn a proxy process, and so in the gen_statem callback module, the `Caller` does not contains the original caller process, the `Caller` contains the proxy process instead. So if using the default timeout or the clean_timeout, take the original caller process pid into the `call` function, and deal with `Caller` variable carefully.
 The timeout argument, for example, like 5000, is spawn in a new process. And then gen_statm:call/3 will not pass the `Caller` as the call process. Use dirty_timeout.
 But in the return data, the timeout, like 5000, will generate a `timeout` msg. Just like other behaviours.
 
@@ -47,19 +48,19 @@ A state change cancels a state_timeout() and any new transition option of this t
 
 ## next_event
 ```
-enter_action() = 
+enter_action() =
     hibernate |
     {hibernate, Hibernate :: hibernate()} |
     timeout_action() |
     reply_action()
 
-action() = 
+action() =
     postpone |
     {postpone, Postpone :: postpone()} |
     {next_event, EventType :: event_type(), EventContent :: term()} |
     enter_action()
 
-state_callback_result(ActionType) = 
+state_callback_result(ActionType) =
     {keep_state, NewData :: data()} |
     {keep_state, NewData :: data(), Actions :: [ActionType] | ActionType} |
     keep_state_and_data |
@@ -74,7 +75,7 @@ state_callback_result(ActionType) =
     {stop_and_reply, Reason :: term(), Replies :: [reply_action()] | reply_action()} |
     {stop_and_reply, Reason :: term(), Replies :: [reply_action()] | reply_action(), NewData :: data()}
 
-ActionType is enter_action() if the state callback was called with a state enter call 
+ActionType is enter_action() if the state callback was called with a state enter call
 and action() if the state callback was called with an event.
 ```
 see [gen_fsm から gen_statem へ](https://blog.jxck.io/entries/2017-05-18/gen_statem.html) for a example, google translate might be help.
