@@ -28,3 +28,10 @@ If the process's memory grows very quickly, the reason might be the message over
 ```
 lists:sublist(lists:reverse(lists:keysort(2, lists:foldl(fun(Pid, Acc) -> case process_info(Pid, memory) of {memory, M} -> [{Pid, M} | Acc]; _ -> Acc end end, [], processes()))), 10).
 ```
+
+## momory allocator
+
+```
+[{{A, N}, Data} || A <- [temp_alloc, eheap_alloc, binary_alloc, ets_alloc, driver_alloc, sl_alloc, ll_alloc, fix_alloc, std_alloc], {instance, N, Data} <- erlang:system_info({allocator,A})].
+```
+copy from [Memory constantly increasing - possibly fragmentation?](https://groups.google.com/forum/#!topic/rabbitmq-users/ALeIZ6VXJfc)
