@@ -51,3 +51,10 @@ get_env_l([H|T], [_|_] = L) ->
 get_env_l(_, _) ->
     undefined.
 ```
+
+## erlang vm args
+
+``` erlang
+-smp auto +P 134217727 +K true +A 64 -rate 1200 +stbt db +scl false +sfwi 500 +spp true +zdbbl 8092
+```
+copy from [Improve erlang cowboy performance](https://stackoverflow.com/questions/53667669/improve-erlang-cowboy-performance)
