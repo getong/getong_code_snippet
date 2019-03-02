@@ -577,3 +577,17 @@ sysctl -p
 ## 137 signal
 
 When the os process is closed by the 137 signal, the most probably reason is the lack of memory.
+
+## enable swappiness
+see [How To Add Swap Space on Ubuntu 16.04](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04)
+
+``` shell
+sudo swapon --show
+sudo fallocate -l 1G /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+sudo sysctl vm.swappiness=10
+sudo sysctl vm.vfs_cache_pressure=50
+
+```
