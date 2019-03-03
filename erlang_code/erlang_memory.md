@@ -35,3 +35,4 @@ lists:sublist(lists:reverse(lists:keysort(2, lists:foldl(fun(Pid, Acc) -> case p
 [{{A, N}, Data} || A <- [temp_alloc, eheap_alloc, binary_alloc, ets_alloc, driver_alloc, sl_alloc, ll_alloc, fix_alloc, std_alloc], {instance, N, Data} <- erlang:system_info({allocator,A})].
 ```
 copy from [Memory constantly increasing - possibly fragmentation?](https://groups.google.com/forum/#!topic/rabbitmq-users/ALeIZ6VXJfc)
+Be default, there will be one instance of each allocators per scheduler.
