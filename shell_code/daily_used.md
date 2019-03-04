@@ -591,3 +591,7 @@ sudo sysctl vm.swappiness=10
 sudo sysctl vm.vfs_cache_pressure=50
 
 ```
+
+## ssh through proxy
+It might be coped with ssh_config, but still not know how to use.
+Just use proxychains with ssh.
