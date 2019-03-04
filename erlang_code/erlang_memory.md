@@ -36,3 +36,17 @@ lists:sublist(lists:reverse(lists:keysort(2, lists:foldl(fun(Pid, Acc) -> case p
 ```
 copy from [Memory constantly increasing - possibly fragmentation?](https://groups.google.com/forum/#!topic/rabbitmq-users/ALeIZ6VXJfc)
 Be default, there will be one instance of each allocators per scheduler.
+recon plays a very important role in debugging. The script analyses the erl_crash.dump very well.
+The comman memory leak is eheap_allocator problem, the main reason for that is the message in the process grows a lot, and even that the tcp binary data do not send to the client in a short time.
+When debugging this problem, just adding some process time by time, and check the new processes. For example:
+
+``` shell
+1> OldProcesses = processes().
+%% add quite few processes
+2> NewProcesses = processes() -- OldProcesses.
+%% check the current function of the process:
+3> process_info(Pid, current_function).
+%% check the message
+4> process_info(Pid, messages).
+```
+process_info/1 or process_info/2 function are the key weapon we can use in the production.
