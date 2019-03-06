@@ -1,0 +1,53 @@
+# phoenix example
+
+## install inotify-tools
+
+``` shell
+sudo apt-get install -y inotify-tools
+```
+
+## running postgres with docker
+
+``` shell
+docker run --name postgres_instance -e POSTGRES_PASSWORD=aek4iTu6 -d -p 15432:5432 postgres:11.2-alpine
+```
+psql connection:
+
+``` shell
+ PGPASSWORD=aek4iTu6 psql -h localhost -U postgres  -p 15432
+```
+
+## phoenix example
+
+``` shell
+## install hex
+$ mix local.hex
+
+## install phoenix framework
+$ mix archive.install hex phx_new 1.4.1
+
+## phoenix hello project, when installing dependencies choose yes
+$ mix phx.new hello
+
+## cd hello
+$ cd hello
+```
+edit the config/dev.exs like below:
+
+```
+config :hello, Hello.Repo,
+  username: "postgres",
+  password: "aek4iTu6",
+  database: "postgres",
+  hostname: "localhost",
+  port: 15432,
+  pool_size: 10
+```
+Then continue:
+
+``` shell
+## Start your Phoenix app with:
+$ mix phx.server
+## You can also run your app inside IEx (Interactive Elixir) as:
+$ iex -S mix phx.server
+```
