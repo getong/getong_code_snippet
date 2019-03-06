@@ -29,6 +29,11 @@ $ mix archive.install hex phx_new 1.4.1
 ## phoenix hello project, when installing dependencies choose yes
 $ mix phx.new hello
 
+## If in the last step, you choose no, you can do this manually
+$ cd hello
+$ mix deps.get
+$ cd assets && npm install && node node_modules/webpack/bin/webpack.js --mode development
+
 ## cd hello
 $ cd hello
 ```
