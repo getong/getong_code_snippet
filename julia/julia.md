@@ -21,3 +21,14 @@ map(round, [1.2, 3.5, 1.7])
 语句块：   begin, quote, let, end, do
 混合编程： ccall
 ```
+
+## random function
+
+``` julia
+## 均匀分布的随机数
+rand()
+## 整态分布的随机数
+randn()
+## 指数分布的随机数
+randexp()
+```
