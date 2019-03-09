@@ -344,3 +344,14 @@ ranch:start_listener/5
 ranch:handshake/2
 ```
 If the calback module uses `proc_lib` to start a process, it no more needs to use `proc_lib:init_ack/2` function, ranch does it. More convinent.
+
+## SO_REUSEPORT option
+The tcp option is SO_REUSEPORT, the information about it see [socket选项 SO_REUSEPORT](https://my.oschina.net/miffa/blog/390931)
+
+And erlang supports it with:
+```
+{reuseaddr, Boolean}
+Allows or disallows local reuse of port numbers. By default, reuse is disallowed.
+```
+And ranch uses it with this pr [acceptor-conns_sup pairs](https://github.com/ninenines/ranch/pull/198).
+The main idea is one conns_sup for each acceptor.
