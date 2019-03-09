@@ -347,6 +347,7 @@ If the calback module uses `proc_lib` to start a process, it no more needs to us
 
 ## SO_REUSEPORT option
 The tcp option is SO_REUSEPORT, the information about it see [socket选项 SO_REUSEPORT](https://my.oschina.net/miffa/blog/390931)
+Or [Socket options SO_REUSEADDR and SO_REUSEPORT, how do they differ? Do they mean the same across all major operating systems](https://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t)
 
 And erlang supports it with:
 ```
