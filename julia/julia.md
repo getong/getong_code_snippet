@@ -29,6 +29,14 @@ map(round, [1.2, 3.5, 1.7])
 rand()
 ## 整态分布的随机数
 randn()
-## 指数分布的随机数
-randexp()
+
+## 100个Float64元素列表
+rand(100)
+## 100个Float32元素列表
+rand(Float32, 100)
+
+## 100个float64元素列表
+randn(100)
+## 100个Float32元素列表
+randn(Float32, 100)
 ```
