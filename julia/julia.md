@@ -39,4 +39,8 @@ rand(Float32, 100)
 randn(100)
 ## 100个Float32元素列表
 randn(Float32, 100)
+
+## randexp
+using Random
+randexp()
 ```
