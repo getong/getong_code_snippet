@@ -44,3 +44,11 @@ randn(Float32, 100)
 using Random
 randexp()
 ```
+
+## do syntax
+
+``` julia
+map([1,2,3]) do x
+2x
+end
+```
