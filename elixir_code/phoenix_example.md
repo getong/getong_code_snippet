@@ -59,3 +59,6 @@ $ mix phx.server
 ## You can also run your app inside IEx (Interactive Elixir) as:
 $ iex -S mix phx.server
 ```
+
+## learn phoenix framework
+[Learn Phoenix (Web App) Framework](https://github.com/dwyl/learn-phoenix-framework)
