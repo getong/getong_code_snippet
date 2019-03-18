@@ -29,6 +29,9 @@ $ mix archive.install hex phx_new 1.4.1
 ## phoenix hello project, when installing dependencies choose yes
 $ mix phx.new hello
 
+## with --no-ecto option
+$ mix phx.new hello --no-ecto
+
 ## If in the last step, you choose no, you can do this manually
 $ cd hello
 $ mix deps.get
