@@ -24,7 +24,7 @@ psql connection:
 $ mix local.hex
 
 ## install phoenix framework
-$ mix archive.install hex phx_new 1.4.1
+$ mix archive.install hex phx_new 1.4.2
 
 ## phoenix hello project, when installing dependencies choose yes
 $ mix phx.new hello
