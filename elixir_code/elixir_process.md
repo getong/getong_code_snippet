@@ -36,3 +36,6 @@ Registry.register/3
 Registry.lookup/2
 ```
 If the process registered in the registry dies, it will automaticly deleted in the Registry
+
+## max concurrency
+The Task.async_stream/4 functon can sets the option :max_concurrency, to set the maximum number of tasks to run at the same time. Defaults to System.schedulers_online/0.
