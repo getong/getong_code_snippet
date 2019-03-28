@@ -1,8 +1,8 @@
 # julia compile from source
 
 ```
-tar xzf julia-0.5.1-full.tar.gz
-cd julia-0.5.1
+tar xzf julia-1.1.0-full.tar.gz
+cd julia-1.1.0
 sudo apt-get install cmake gfortran
 make
 ```
