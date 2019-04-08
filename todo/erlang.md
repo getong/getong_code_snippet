@@ -35,3 +35,4 @@
       see [12 Appup Cookbook](http://erlang.org/doc/design_principles/appup_cookbook.html), the relx might be much better.
 - [ ] dht
 - [x] new ssl handshake
+- [ ] docker open network erlang:open_port/2 failure
