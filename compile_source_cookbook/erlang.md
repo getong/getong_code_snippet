@@ -64,10 +64,10 @@ apt-get build-dep erlang
 ```
 debian stretch
 ```shell
-apt-get build-dep erlang
-apt-get install autoconf libncurses5-dev build-essential \
-    libssl1.0-dev libwxgtk3.0-dev libgl1-mesa-dev \
-    libglu1-mesa-dev libpng-dev default-jdk g++ libxml2-utils
+sudo apt-get build-dep -y erlang
+sudo apt-get install -y autoconf libncurses5-dev build-essential \
+    libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
+    libglu1-mesa-dev libpng12-dev default-jdk g++ libxml2-utils
 ```
 
 centos
