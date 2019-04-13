@@ -210,3 +210,8 @@ docker rmi $(docker images -a -q)
 ``` shell
 docker start container_id
 ```
+
+## debian 9.8 docker installation error
+In debian 9.8, there might be a error, the docker install might be failed.
+see [Docker CE install failed on debian 9.8](https://github.com/docker/for-linux/issues/598)
+The solution is reboot the debian system, and then reinstall the docker.
