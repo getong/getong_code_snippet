@@ -99,3 +99,17 @@ see the manual [Elixir: how can I leverage release_handler?](https://stackoverfl
 ## rebar3_gpb_plugin
 if the project is a `app` rebar3 project type, just add all the options into the rebar.config.
 But if the project is `release`, another rebar3 project type, just move all the option into the `apps/project_name/rebar.config`, only add this plugin into the rebar.config right under the project. See the examples in the plugin, they demonstrates it.
+
+## rebar3 mirror repo
+The official mirror repo is https://repo.hex.pm , but this can be changed by setting the `HEX_CDN` and `HEX_MIRROR` environment variable.
+
+``` shell
+export HEX_CDN=https://hexpm.upyun.com
+export HEX_MIRROR=https://hexpm.upyun.com
+```
+
+Or run command like this:
+
+``` shell
+HEX_MIRROR=https://hexpm.upyun.com rebar3 compile
+```
