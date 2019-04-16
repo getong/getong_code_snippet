@@ -561,3 +561,26 @@ mkpasswd
 ``` shell
 sudo apt-get install time
 ```
+
+## netease-cloud-music
+
+``` shell
+wget -c https://d1.music.126.net/dmusic/netease-cloud-music_1.1.0_amd64_ubuntu.deb
+sudo dpkg -i netease-cloud-music_1.1.0_amd64_ubuntu.deb
+sudo apt-get install -f
+```
+Edit the destop file
+
+``` shell
+vim /usr/share/applications/netease-cloud-music.desktop
+```
+change the line
+``` shell
+Exec=netease-cloud-music %U
+```
+to be
+
+``` shell
+Exec=sh -c "unset SESSION_MANAGER && netease-cloud-music %U"
+```
+copied from [伤心，debian9安装最新的网易云音乐打不开](http://tieba.baidu.com/p/5453477038)
