@@ -62,3 +62,15 @@ $ iex -S mix phx.server
 
 ## learn phoenix framework
 [Learn Phoenix (Web App) Framework](https://github.com/dwyl/learn-phoenix-framework)
+
+## postgres dump db struct
+
+export db struct
+``` shell
+PGPASSWORD=abc123 pg_dump -h localhost -U user -C -p 5432 -s db -f db_struct.sql
+```
+import db struct
+
+``` shell
+PGPASSWORD=abc123 psql -h localhost -U user -p 5432 -f db_struct.sql
+```
