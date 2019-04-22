@@ -28,3 +28,20 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ```
 see [Docker Container time & timezone (will not reflect changes)](https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes)
+
+## --from directive
+
+``` shell
+FROM elixir:alpine
+ARG project_id
+...
+FROM alpine:latest
+COPY --from=0 /opt/release .
+```
+build command:
+
+``` shell
+docker build -t abc -f dockerfile . --build-arg project_id=abc
+```
+
+copy from [Run an Elixir Phoenix app in containers using Google Kubernetes Engine](https://cloud.google.com/community/tutorials/elixir-phoenix-on-kubernetes-google-container-engine)
