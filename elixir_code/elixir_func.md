@@ -41,21 +41,27 @@ x = Enum.to_list( 1 .. 5)
 BEAM distinguishes three types of runtime errors: errors, exits, and throws.
 
 ``` elixir
-try do  
+try do
   ...
-catch error_type, error_value -> 
+catch error_type, error_value ->
   ...
 end
 
 ```
 or
 ``` elixir
-try do  
+try do
   ...
-catch error_type1, error_value1 -> 
+catch error_type1, error_value1 ->
   ...
-catch error_type2, error_value2 -> 
+catch error_type2, error_value2 ->
   ...
 end
 
+```
+
+## Base
+
+``` elixir
+:crypto.hash(:md5, content) |> Base.encode16
 ```
