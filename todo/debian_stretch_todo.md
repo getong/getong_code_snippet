@@ -6,3 +6,4 @@
 - [x] ignore the driver message output on the framebuffer
   won;t fix. It is because the hardware not support the USB 3 device.
   see [USB low speed devices fail to enumerate on high speed hub (high speed devices are OK) #273](https://github.com/raspberrypi/linux/issues/273)
+- [ ] disk installation with iso file
