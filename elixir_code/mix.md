@@ -18,3 +18,14 @@ mix new --umbrella project
 ## might be in elixir 1.9 without distillery
 mix release
 ```
+
+## add erl_otps
+
+```
+def project do
+  [...,
+  erlc_options:  [:no_debug_info, {:i, 'myinclude'}],
+  ...]
+end
+```
+copy from [Allow mix to pass compiler options to erlang](https://github.com/elixir-lang/elixir/issues/2665)
