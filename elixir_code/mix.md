@@ -29,3 +29,10 @@ def project do
 end
 ```
 copy from [Allow mix to pass compiler options to erlang](https://github.com/elixir-lang/elixir/issues/2665)
+and compile like below:
+
+``` shell
+mix deps.get
+MIX_ENV=prod mix compile --no-debug-info
+MIX_ENV=prod mix release
+```
