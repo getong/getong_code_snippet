@@ -32,3 +32,16 @@ copy from [More about Ecto and Ecto queries](http://whatdidilearn.info/2018/03/1
     end
 ```
 copy from [ecto中的复合主键](https://xbuba.com/questions/55038829)
+elixir schema definition
+
+``` elixir
+  @primary_key false
+  schema "players" do
+    field :name, :string, primary_key: true
+    field :position, :string, primary_key: true
+    field :number, :integer
+
+    timestamps
+  end
+```
+copy from [Support for composite primary keys in schema](https://github.com/elixir-ecto/ecto/pull/1210)
