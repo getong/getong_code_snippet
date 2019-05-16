@@ -45,3 +45,11 @@ elixir schema definition
   end
 ```
 copy from [Support for composite primary keys in schema](https://github.com/elixir-ecto/ecto/pull/1210)
+
+## rename postgres table
+
+``` elixir
+qry = "ALTER TABLE abc RENAME to abc_20190516;"
+Ecto.Adapters.SQL.query(Repo, qry, [])
+```
+copy from [How to use raw sql with ecto Repo](https://stackoverflow.com/questions/27751216/how-to-use-raw-sql-with-ecto-repo)
