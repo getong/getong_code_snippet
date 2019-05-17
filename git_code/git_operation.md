@@ -355,3 +355,13 @@ git submodule update git_name
 
 use `git rebase -i` and pick the commit just below the one you want to squash.
 see [How do I squash two non-consecutive commits](https://stackoverflow.com/questions/3921708/how-do-i-squash-two-non-consecutive-commits)\[
+
+## prune tags
+
+``` shell
+git config fetch.prune true
+git config fetch.pruneTags true
+git fetch upstream --prune --tags
+git reset upstream/master
+git push origin master --tags --prune
+```
