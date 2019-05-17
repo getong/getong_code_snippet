@@ -359,8 +359,8 @@ see [How do I squash two non-consecutive commits](https://stackoverflow.com/ques
 ## prune tags
 
 ``` shell
-git config fetch.prune true
-git config fetch.pruneTags true
+git config fetch.prune true --global
+git config fetch.pruneTags true --global
 git fetch upstream --prune --tags
 git reset upstream/master
 git push origin master --tags --prune
