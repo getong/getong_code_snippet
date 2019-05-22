@@ -584,3 +584,10 @@ to be
 Exec=sh -c "unset SESSION_MANAGER && netease-cloud-music %U"
 ```
 copied from [伤心，debian9安装最新的网易云音乐打不开](http://tieba.baidu.com/p/5453477038)
+
+## Increasing the amount of inotify watchers
+
+``` shell
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+copy from [Increasing the amount of inotify watchers](https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers)
