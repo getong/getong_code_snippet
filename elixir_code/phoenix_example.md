@@ -74,3 +74,6 @@ import db struct
 ``` shell
 PGPASSWORD=abc123 psql -h localhost -U user -p 5432 -f db_struct.sql
 ```
+
+## Building a JSON API in Elixir with Phoenix 1.4
+A very good example for JSON API on [Building a JSON API in Elixir with Phoenix 1.4](https://lobotuerto.com/blog/building-a-json-api-in-elixir-with-phoenix/)
