@@ -9,12 +9,12 @@ sudo apt-get install -y inotify-tools
 ## running postgres with docker
 
 ``` shell
-docker run --name postgres_instance -e POSTGRES_PASSWORD=aek4iTu6 -d -p 15432:5432 postgres:11.2-alpine
+docker run --name postgres_instance -e TZ=Asia/Shanghai -e POSTGRES_USER=user_name -e POSTGRES_PASSWORD=aek4iTu6 -e POSTGRES_DB=db_name -d -p 15432:5432 postgres:11.3
 ```
 psql connection:
 
 ``` shell
- PGPASSWORD=aek4iTu6 psql -h localhost -U postgres  -p 15432
+ PGPASSWORD=aek4iTu6 psql -h localhost -U user_name  -p 15432 db_name
 ```
 
 ## phoenix example
