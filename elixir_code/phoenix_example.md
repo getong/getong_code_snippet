@@ -77,3 +77,14 @@ PGPASSWORD=abc123 psql -h localhost -U user -p 5432 -f db_struct.sql
 
 ## Building a JSON API in Elixir with Phoenix 1.4
 A very good example for JSON API on [Building a JSON API in Elixir with Phoenix 1.4](https://lobotuerto.com/blog/building-a-json-api-in-elixir-with-phoenix/)
+
+## make resource paths with a different key than :id
+The default key in the path is :id, and the :id is the default key autogenerate in the table.
+But some time, the default key is not the :id in the table definition. So we need to set a different key in the resource.
+According to [Ecto+Phoenix: How to make resource paths with a different key than :id?](https://stackoverflow.com/questions/37512534/ectophoenix-how-to-make-resource-paths-with-a-different-key-than-id), the right method is to `to_param`.
+
+``` elixir
+@derive {Phoenix.Param, key: :username}
+schema "users" do
+```
+Copy from [Phoenix.Param](https://hexdocs.pm/phoenix/Phoenix.Param.html#to_param/1)
