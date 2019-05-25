@@ -88,3 +88,25 @@ According to [Ecto+Phoenix: How to make resource paths with a different key than
 schema "users" do
 ```
 Copy from [Phoenix.Param](https://hexdocs.pm/phoenix/Phoenix.Param.html#to_param/1)
+
+## Unique Identifier For Session
+copy from [Unique Identifier For Session](https://elixirforum.com/t/unique-identifier-for-session/13778)
+``` elixir
+## add this into mix.exs
+  defp deps do
+    [
+    ...
+      {:elixir_uuid, "~> 1.2"}
+    ]
+  end
+
+## create_token and validate_token
+def create_token() do
+  uuid = UUID.generate_v4() # you probably need to get a UUID package, therefore this is pseudo code
+  Phoenix.Token.sign(YourApp.Endpoint, "your secret salt", uuid)
+end
+
+def validate_token(token) do
+  Phoenix.Token.verify(YourApp.Endpoint, "your secret salt", token, max_age: 5 * 60)
+end
+```
