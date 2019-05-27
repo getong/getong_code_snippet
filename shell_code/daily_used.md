@@ -155,6 +155,7 @@ awk '{print substr($0, index($0, $N))}'
 ``` shell
 curl -d "msg=a&msg1=b" url
 curl url -X POST -H 'Content-Type: application/json' -d '{"msg": "a", "msg2": "b"}'
+curl -H "Content-Type: application/json" --cookie "key1=1;key2=2" -X GET url
 ```
 
 ## cat words to file
