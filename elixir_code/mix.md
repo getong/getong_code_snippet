@@ -17,6 +17,9 @@ mix run -e "Lib.fun()"
 mix new --umbrella project
 ## might be in elixir 1.9 without distillery
 mix release
+
+## search the packages about react
+mix hex.search react
 ```
 
 ## add erl_otps
