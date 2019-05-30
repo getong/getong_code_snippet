@@ -110,3 +110,11 @@ def validate_token(token) do
   Phoenix.Token.verify(YourApp.Endpoint, "your secret salt", token, max_age: 5 * 60)
 end
 ```
+
+## cookies
+
+```
+`conn.cookies` the request cookies with the response cookies
+`conn.req_cookies` the request cookies (without the response ones), of course there is `coon.resp_cookies` for the response cookies.
+```
+copy from [Elixir/Phoenix - Accessing user's cookie: conn.cookies vs conn.req_cookies vs conn.req_headers](https://stackoverflow.com/questions/51075838/elixir-phoenix-accessing-users-cookie-conn-cookies-vs-conn-req-cookies-vs-co)
