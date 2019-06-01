@@ -53,3 +53,6 @@ qry = "ALTER TABLE abc RENAME to abc_20190516;"
 Ecto.Adapters.SQL.query(Repo, qry, [])
 ```
 copy from [How to use raw sql with ecto Repo](https://stackoverflow.com/questions/27751216/how-to-use-raw-sql-with-ecto-repo)
+
+## Elixir Ecto: 多对多关系
+read the doc [Elixir Ecto: 多对多关系](https://segmentfault.com/a/1190000005036198)
