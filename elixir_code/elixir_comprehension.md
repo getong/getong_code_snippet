@@ -16,6 +16,10 @@ iex(5)> for << << b1::size(2), b2::size(3), b3::size(3) >> <- "hello">>, do: "0#
 ["0150", "0145", "0154", "0154", "0157"]
 iex(6)> for x <- ~w{ cat dog }, into: %{}, do: { x, String.upcase(x)}
 %{"cat" => "CAT", "dog" => "DOG"}
-iex(7)> for x <- ~w{ cat dog }, into: %{"ant" => "ANT"}, do: { x, String.upcase(x)}
-%{"ant" => "ANT", "cat" => "CAT", "dog" => "DOG"}
+iex(7)> for x <- ~w{ cat dog }, into: %{}, do: { x, String.upcase(x)}
+%{"cat" => "CAT", "dog" => "DOG"}
+iex(8) for <<x <- "AbCabCABc">>, x in ?a..?z, reduce: %{} do
+  acc -> Map.update(acc, <<x>>, 1, & &1 + 1)
+end
+%{"a" => 1, "b" => 2, "c" => 1}
 ```
