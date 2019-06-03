@@ -17,4 +17,4 @@
 
 [core]
 	editor = vim
-    autocrlf = true
+#    autocrlf = true
