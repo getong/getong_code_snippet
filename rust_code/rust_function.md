@@ -106,6 +106,7 @@ fn main() {
        b.push(get_func(*i)(*i));
    }
    println!("{:?}", b);
+   assert_eq!(true_maker()(), true);
 }
 
 fn get_func(n: i32) -> fn(i32) -> i32 {
@@ -121,6 +122,10 @@ fn get_func(n: i32) -> fn(i32) -> i32 {
         dec
     }
 }
+
+fn is_true() -> bool { true}
+fn true_maker() -> fn() -> bool { is_true }
+
 ```
 The `Vec::<i32>::new()` return a vector list.
 The `for i in &a` and the `i` is need to deref, using `*i`.
