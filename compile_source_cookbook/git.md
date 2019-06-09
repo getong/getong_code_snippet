@@ -2,7 +2,7 @@
 
 ``` shell
 $ sudo apt-get install -y libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev asciidoc xmlto docbook2x dblatex asciidoc-dblatex
-$ export VERSION=2.21.0
+$ export VERSION=2.22.0
 $ wget -c https://www.kernel.org/pub/software/scm/git/git-$VERSION.tar.xz
 $ wget -c https://www.kernel.org/pub/software/scm/git/git-$VERSION.tar.sign
 $ gpg --verify git-$VERSION.tar.sign git-$VERSION.tar.xz
