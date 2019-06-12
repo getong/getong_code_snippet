@@ -12,6 +12,7 @@ mix release
 mix local.hex
 mix local.rebar
 mix clean
+mix deps.update --all
 mix run -e "Lib.fun()"
 ## umbrella project, then cd apps and create other elixie project
 mix new --umbrella project
