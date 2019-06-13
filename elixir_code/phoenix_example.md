@@ -24,7 +24,7 @@ psql connection:
 $ mix local.hex --force
 
 ## install phoenix framework
-$ mix archive.install hex phx_new 1.4.7 --force
+$ mix archive.install hex phx_new 1.4.8 --force
 
 ## phoenix hello project, when installing dependencies choose yes
 $ mix phx.new hello
@@ -118,3 +118,17 @@ end
 `conn.req_cookies` the request cookies (without the response ones), of course there is `coon.resp_cookies` for the response cookies.
 ```
 copy from [Elixir/Phoenix - Accessing user's cookie: conn.cookies vs conn.req_cookies vs conn.req_headers](https://stackoverflow.com/questions/51075838/elixir-phoenix-accessing-users-cookie-conn-cookies-vs-conn-req-cookies-vs-co)
+
+## configure the option
+
+``` elixir
+config :example, Example.Endpoint,
+  http: [
+    port: 4000,
+    transport_options: [
+      num_acceptors: 50, ## default is 100
+      max_connections: 8888 ## default is 16_384
+    ]
+  ],
+```
+see the [Plug.Cowboy](https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html)
