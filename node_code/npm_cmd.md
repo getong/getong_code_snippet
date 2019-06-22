@@ -34,3 +34,9 @@ and you can use `start`, `test` and other commands in the scripts:
 npm start
 npm test
 ```
+
+## install typescript
+
+``` shell
+sudo npm install -g typescript
+```
