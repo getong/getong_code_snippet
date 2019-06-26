@@ -40,3 +40,15 @@ mix deps.get
 MIX_ENV=prod mix compile --no-debug-info
 MIX_ENV=prod mix release
 ```
+
+## elixir 1.9, the Config module has moved to elixir.
+the before
+``` elixir
+use Mix.Config
+```
+and now
+
+``` elixir
+import Config
+```
+see [Config](https://hexdocs.pm/elixir/Config.html)
