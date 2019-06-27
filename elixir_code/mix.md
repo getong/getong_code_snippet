@@ -52,3 +52,17 @@ and now
 import Config
 ```
 see [Config](https://hexdocs.pm/elixir/Config.html)
+
+## elixirc_options
+
+``` elixir
+# in the mix.exs
+def project do
+[
+...
+erlc_options: [{:parse_transform, :lager_transform}, :warn_missing_spec, :warnings_as_errors],
+elixirc_options: [warnings_as_errors: true]
+...
+]
+end
+```
