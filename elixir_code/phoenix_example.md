@@ -141,3 +141,6 @@ see the [Plug.Cowboy](https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html)
 ``` shell
 mix phx.gen.secret
 ```
+
+## guardian
+[guardian](https://elixirschool.com/zh-hans/lessons/libraries/guardian/)
