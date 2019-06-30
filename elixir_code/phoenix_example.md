@@ -144,3 +144,7 @@ mix phx.gen.secret
 
 ## guardian
 [guardian](https://elixirschool.com/zh-hans/lessons/libraries/guardian/)
+
+## websocket
+[phoenix_chat_example](https://github.com/chrismccord/phoenix_chat_example)
+[Elixir WebSocket Chat Example w/o Phoenix](https://medium.com/@loganbbres/elixir-websocket-chat-example-c72986ab5778)
