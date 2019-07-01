@@ -148,3 +148,7 @@ mix phx.gen.secret
 ## websocket
 [phoenix_chat_example](https://github.com/chrismccord/phoenix_chat_example)
 [Elixir WebSocket Chat Example w/o Phoenix](https://medium.com/@loganbbres/elixir-websocket-chat-example-c72986ab5778)
+
+## plug parsers
+Plug only have default parsers to json, multipart and urlencoded.
+see [Only allowing XML requests](https://elixirforum.com/t/only-allowing-xml-requests/5153/2)
