@@ -56,3 +56,19 @@ copy from [How to use raw sql with ecto Repo](https://stackoverflow.com/question
 
 ## Elixir Ecto: 多对多关系
 read the doc [Elixir Ecto: 多对多关系](https://segmentfault.com/a/1190000005036198)
+
+## Ecto query pipeline
+
+``` elixir
+def getProductByNameAndBrand(name, brand) do
+    Api.Product |> Ecto.Query.where(name: ^name) |> Ecto.Query.where(brand: ^brand) |> all
+  end
+```
+copy from [Ecto 'where and where' clause](https://stackoverflow.com/questions/44211863/ecto-where-and-where-clause)
+
+``` elixir
+"users"
+|> where([u], u.age > 18)
+|> select([u], u.name)
+```
+copy from [Ecto.Query](https://hexdocs.pm/ecto/Ecto.Query.html)
