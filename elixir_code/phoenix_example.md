@@ -152,3 +152,16 @@ mix phx.gen.secret
 ## plug parsers
 Plug only have default parsers to json, multipart and urlencoded.
 see [Only allowing XML requests](https://elixirforum.com/t/only-allowing-xml-requests/5153/2)
+
+## Bcrypt
+add Bcrypt in the mix.ex
+``` shell
+{:bcrypt_elixir, "~> 2.0"}
+```
+basic usage:
+
+``` shell
+salt = Bcrypt.gen_salt(5)
+hash = Bcrypt.Base.hash_password(password = "test_password", salt)
+Bcrypt.verify_pass(password = "test_password", hash)
+```
