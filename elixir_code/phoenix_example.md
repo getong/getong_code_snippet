@@ -164,4 +164,17 @@ basic usage:
 salt = Bcrypt.gen_salt(5)
 hash = Bcrypt.Base.hash_password(password = "test_password", salt)
 Bcrypt.verify_pass(password = "test_password", hash)
+
+## belongs_to
+gen the schema
+``` shell
+mix phx.gen.schema UserServer user_server body:text video_id:references:videos
+```
+in the schema
+
+``` elixir
+schema user_server do
+field :body, :string
+belogs_to :video, Video
+end
 ```
