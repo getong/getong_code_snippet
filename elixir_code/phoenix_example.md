@@ -178,3 +178,26 @@ field :body, :string
 belogs_to :video, Video
 end
 ```
+
+## scrivener_ecto
+
+in the mix.exs file:
+
+``` elixir
+{:scrivener_ecto, "~> 2.2"}
+```
+
+in the Repo.ex
+
+``` elixir
+defmodule MyApp.Repo do
+  use Ecto.Repo, otp_app: :my_app, adapter: Ecto.Adapters.Postgres
+  use Scrivener, page_size: 10
+end
+```
+
+usage:
+
+``` elixir
+Schema |> Imcircle.Repo.paginate(page: 1)
+```
