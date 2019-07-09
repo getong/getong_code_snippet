@@ -201,3 +201,9 @@ usage:
 ``` elixir
 Schema |> Imcircle.Repo.paginate(page: 1)
 ```
+
+## view and template
+
+```
+it’s worth emphasizing that a view in Phoenix is just a module, and templates are just functions.
+```
