@@ -207,3 +207,33 @@ Schema |> Imcircle.Repo.paginate(page: 1)
 ```
 it’s worth emphasizing that a view in Phoenix is just a module, and templates are just functions.
 ```
+
+## file upload
+[File Uploads](https://phoenixframework.org/blog/file-uploads)
+[Elixir / Phoenix — Uploading images locally (With ARC)](https://medium.com/@Stephanbv/elixir-phoenix-uploading-images-locally-with-arc-b1d5ec88f7a)
+
+``` elixir
+<%= form_for @changeset, @action, [multipart: true], fn f -> %>
+  <div class="form-group">
+    <label>Photo</label>
+    <%= file_input f, :photo, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+```
+
+in the controller:
+
+``` elixir
+def create(conn, %{"user" => user_params}) do
+    IO.inspect user_params
+    if upload = user_params["photo"] do
+        extension = Path.extname(upload.filename)
+        File.cp(upload.path, "/media/#{user.id}-profile#{extension}")
+    end
+    ...
+end
+```
