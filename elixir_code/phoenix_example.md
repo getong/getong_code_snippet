@@ -213,7 +213,7 @@ it’s worth emphasizing that a view in Phoenix is just a module, and templates 
 [Elixir / Phoenix — Uploading images locally (With ARC)](https://medium.com/@Stephanbv/elixir-phoenix-uploading-images-locally-with-arc-b1d5ec88f7a)
 
 ``` elixir
-<%= form_for @changeset, @action, [multipart: true], fn f -> %>
+<%= form_for @conn, Routes.page_path(:conn, :upload_img), [multipart: true], fn f -> %>
   <div class="form-group">
     <label>Photo</label>
     <%= file_input f, :photo, class: "form-control" %>
