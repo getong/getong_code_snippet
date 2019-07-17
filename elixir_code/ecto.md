@@ -119,3 +119,14 @@ explain multi
 ``` elixir
 Multi.to_list(multi)
 ```
+
+## convert the ecto statement to sql
+
+``` elixir
+query = from Table, select: [:id]
+Ecto.Adapters.SQL.to_sql(:all, Repo, query)
+
+Repo.to_sql(:all, query)
+
+IO.puts(elem(Imcircle.Repo.to_sql(:all, query), 0))
+```
