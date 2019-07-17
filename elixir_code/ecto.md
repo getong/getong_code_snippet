@@ -80,3 +80,42 @@ Receives a source that is to be joined to the query and a condition for the join
 ```
 see [图解 SQL 里的各种 JOIN](https://mazhuang.org/2017/09/11/joins-in-sql/)
 [Visual Representation of SQL Joins](https://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins)
+
+## transaction
+The first way to run Repo.transaction is by passing in a function containing the operations you'd like to run within transaction.
+
+``` elixir
+Repo.transaction(fn ->
+    Repo.insert(variable)
+end)
+```
+rollback
+
+``` elixir
+Repo.transaction(fn ->
+    case Repo.insert(variable) do
+      {:ok, _variable} ->
+          :ok
+      {:error, _error_reason} ->
+         Repo.rollback("insert failed")
+    end
+end)
+```
+
+The second way is to use Multi module.
+
+``` elixir
+multi =
+    Multi.new()
+    |> Multi.insert(:a, a)
+    |> Multi.update(:b, b)
+    |> Multi.run(:c, M, :function, args)
+
+Repo.transaction(multi)
+```
+
+explain multi
+
+``` elixir
+Multi.to_list(multi)
+```
