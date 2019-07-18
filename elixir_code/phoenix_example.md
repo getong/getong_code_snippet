@@ -237,3 +237,13 @@ def create(conn, %{"user" => user_params}) do
     ...
 end
 ```
+
+## show images in the browser
+[Creating a Photo Gallery in Phoenix with Arc - Part 1](https://experimentingwithcode.com/creating-a-photo-gallery-in-phoenix-with-arc-part-1/)
+
+``` elixir
+plug Plug.Static,
+  at: "/uploads",
+  from: Path.expand("./uploads"),
+  gzip: false
+```
