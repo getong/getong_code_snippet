@@ -11,3 +11,9 @@ gpg --keyserver keyserver.ubuntu.com --recv-keys  03D6E495
 ```
 gpg --verify julia-0.5.1-full.tar.gz.asc julia-0.5.1-full.tar.gz
 ```
+
+## restart the gpg-agent
+
+```
+gpgconf --kill gpg-agent
+```
