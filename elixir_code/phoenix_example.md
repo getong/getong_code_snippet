@@ -247,3 +247,16 @@ plug Plug.Static,
   from: Path.expand("./uploads"),
   gzip: false
 ```
+
+## enable websocket
+edit the endpoint.ex
+
+``` elixir
+socket "/socket", Web.UserSocket,
+websocket: true,
+longpoll: false
+```
+edit usersocket.ex
+```
+channel "room:*", Web.RoomChannel
+```
