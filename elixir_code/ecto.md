@@ -130,3 +130,13 @@ Repo.to_sql(:all, query)
 
 IO.puts(elem(Imcircle.Repo.to_sql(:all, query), 0))
 ```
+
+## Upserts
+
+``` elixir
+{:ok, ignored} = MyRepo.insert(%Post{title: "this is unique"}, on_conflict: :nothing)
+on_conflict = [set: [body: "updated"]]
+{:ok, updated} = MyRepo.insert(%Post{title: "this is unique"},
+                               on_conflict: on_conflict, conflict_target: :title)
+
+```
