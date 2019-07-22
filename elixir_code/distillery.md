@@ -13,8 +13,8 @@ end
 ## release
 
 ``` elixir
-mix release.init
-mix release
-# will tar the target system
-MIX_ENV=prod mix release
+mix distillery.init
+mix distillery.release
+mix distillery.release.clean
+mix distillery.gen.appup
 ```
