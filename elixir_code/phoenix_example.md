@@ -260,3 +260,6 @@ edit usersocket.ex
 ```
 channel "room:*", Web.RoomChannel
 ```
+
+## How To Get Phoenix & VueJS working Together
+[How To Get Phoenix & VueJS working Together](https://elixirforum.com/t/how-to-get-phoenix-vuejs-working-together/5108)
