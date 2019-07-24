@@ -244,7 +244,8 @@ end
 ``` elixir
 plug Plug.Static,
   at: "/uploads",
-  from: Path.expand("./uploads"),
+  # from: Path.expand("./uploads"),
+  from: "./uploads",
   gzip: false
 ```
 
