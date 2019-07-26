@@ -602,3 +602,11 @@ Just use proxychains with ssh.
 ``` shell
 lsblk -f
 ```
+
+## convert ebook
+
+``` shell
+sudo apt-get install calibre
+ebook-convert file.epub file.pdf
+ebook-convert file.pdf file.epub --enable-heuristics
+```
