@@ -6,7 +6,7 @@
 # apt-get update
 # apt-get upgrade -y
 ```
-## add the /sbin to the PATH
+## add the /sbin to the root user PATH variable
 
 ``` shell
 export PATH=/sbin:$PATH
@@ -33,13 +33,13 @@ CONFIG_SATA_PMP=n
 and then compile and install the kernel
 
 ``` shell
-make menuconfig
-make -j`nproc` bzImage
-make -j`nproc` modules
-make modules_install
-make headers_install
-make install
-/sbin/shutdown -h now
+# make menuconfig
+# make -j`nproc` bzImage
+# make -j`nproc` modules
+# make modules_install
+# make headers_install
+# make install
+# /sbin/shutdown -h now
 ```
 
 ## update-grub
@@ -53,5 +53,39 @@ GRUB_CMDLINE_LINUX="noapic acpi=off"
 and then run the command:
 
 ``` shell
-update-grub
+# update-grub
+```
+
+## static the network
+check the network link name:
+
+``` shell
+$ ip a
+```
+
+edit the /etc/network/interfaces:
+``` shell
+auto enp2s0
+allow-hotplug enp2s0
+iface enp2s0 inet static
+address 192.168.1.100
+netmask 255.255.255.0
+gateway 192.168.1.1
+dns-nameservers 192.168.1.1
+```
+disable the NetworkManager
+
+``` shell
+$ sudo systemctl disable NetworkManager
+$ sudo systemctl stop NetworkManager
+```
+
+## install docker
+``` shell
+curl -fsSL https://get.docker.com | sudo bash -s docker --mirror Aliyun
+```
+add the current user to the docker group
+
+``` shell
+$ sudo usermod -aG docker $USER
 ```
