@@ -68,6 +68,7 @@ edit the /etc/network/interfaces:
 auto enp2s0
 allow-hotplug enp2s0
 iface enp2s0 inet static
+broadcast 192.168.1.255
 address 192.168.1.100
 netmask 255.255.255.0
 gateway 192.168.1.1
