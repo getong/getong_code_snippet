@@ -74,11 +74,12 @@ netmask 255.255.255.0
 gateway 192.168.1.1
 dns-nameservers 192.168.1.1
 ```
-disable the NetworkManager
+disable the NetworkManager, and enable networking
 
 ``` shell
 $ sudo systemctl disable NetworkManager
 $ sudo systemctl stop NetworkManager
+$ sudo systemctl enable networking
 ```
 
 ## install docker
