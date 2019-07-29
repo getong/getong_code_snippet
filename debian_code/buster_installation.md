@@ -16,7 +16,7 @@ export PATH=/sbin:$PATH
 
 ``` shell
 # apt-get build-dep -y linux
-# apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free
+# apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free firmware-realtek
 # cd /usr/src
 # xz -d -k linux-patch-4.19-rt.patch.xz
 # tar xaf linux-source-4.19.tar.xz
