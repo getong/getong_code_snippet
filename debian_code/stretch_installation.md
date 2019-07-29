@@ -441,6 +441,7 @@ see [How to stop automatic time update via terminal?](https://askubuntu.com/ques
 ## no pcspkr
 
 ``` shell
+sudo rmmod pcspkr
 sudo echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
 ```
 
