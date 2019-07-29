@@ -7,6 +7,10 @@ sudo apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev l
 ```shell
 apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng-dev libgif-dev libtiff5-dev libncurses5-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev libwebkitgtk-dev libwebkitgtk-3.0-dev texinfo texlive texlive-metapost libwebkit2gtk-4.0-dev mailutils
 ```
+## on Debian buster
+```shell
+apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng-dev libgif-dev libtiff5-dev libncurses5-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev texinfo texlive texlive-metapost libwebkit2gtk-4.0-dev mailutils gir1.2-gconf-2.0 libgconf2-dev
+```
 ## compile
 ```shell
 export VERSION=26.2.90
