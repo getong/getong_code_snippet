@@ -91,3 +91,11 @@ add the current user to the docker group
 ``` shell
 $ sudo usermod -aG docker $USER
 ```
+
+## trash-cli setting
+
+``` shell
+sudo rm -rf /[partition mount]/.Trash-`id -u user_name`
+sudo mkdir /[partition mount]/.Trash-`id -u user_name`
+sudo chown user_name:user_group /[partition mount]/.Trash-`id -u user_name`
+```
