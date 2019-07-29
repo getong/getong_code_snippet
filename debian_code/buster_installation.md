@@ -99,3 +99,15 @@ sudo rm -rf /[partition mount]/.Trash-`id -u user_name`
 sudo mkdir /[partition mount]/.Trash-`id -u user_name`
 sudo chown user_name:user_group /[partition mount]/.Trash-`id -u user_name`
 ```
+
+## fcitx installation
+```shell
+# apt-get install fcitx-ui-classic fcitx-frontend-fbterm fcitx-frontend-gtk3 im-switch
+# sudo chmod u+s /usr/bin/fbterm
+# im-config
+```
+set the fcitx as the default input method
+Edit ~/.fbtermrc
+```shell
+input-method=fcitx-fbterm
+```
