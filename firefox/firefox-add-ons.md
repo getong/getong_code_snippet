@@ -4,3 +4,4 @@
 ## HTTPS Everywhere
 ~~~## Certificate Patrol~~~
 ## Adblock Plus
+## FoxyProxy Standard
