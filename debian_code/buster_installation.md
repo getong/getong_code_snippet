@@ -127,3 +127,8 @@ cat /sys/class/net/$i/operstate
 done
 ```
 copy from [How to detect whether a physical cable is connected to network card slot on Linux](https://linuxconfig.org/how-to-detect-whether-a-physical-cable-is-connected-to-network-card-slot-on-linux)
+
+## Network Manager status
+``` shell
+nmcli dev status
+```
