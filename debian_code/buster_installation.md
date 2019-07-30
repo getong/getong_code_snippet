@@ -132,3 +132,13 @@ copy from [How to detect whether a physical cable is connected to network card s
 ``` shell
 nmcli dev status
 ```
+
+## network tool
+
+``` shell
+sudo apt install net-tools lshw ethtool
+sudo lshw -class network -short
+sudo ethtool enp2s0
+sudo ethtool -i enp2s0
+ip a s enp2s0
+```
