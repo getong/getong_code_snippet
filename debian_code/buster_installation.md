@@ -111,3 +111,8 @@ Edit ~/.fbtermrc
 ```shell
 input-method=fcitx-fbterm
 ```
+## ifup
+
+``` shell
+sudo ifup enp2s0
+```
