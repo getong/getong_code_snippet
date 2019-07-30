@@ -116,3 +116,14 @@ input-method=fcitx-fbterm
 ``` shell
 sudo ifup enp2s0
 ```
+## check the physical cable is up and its state
+
+``` shell
+for i in $(ls /sys/class/net)
+do
+echo $i
+cat /sys/class/net/$i/carrier
+cat /sys/class/net/$i/operstate
+done
+```
+copy from [How to detect whether a physical cable is connected to network card slot on Linux](https://linuxconfig.org/how-to-detect-whether-a-physical-cable-is-connected-to-network-card-slot-on-linux)
