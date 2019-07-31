@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -231,8 +231,8 @@
 ; (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_21.1.1/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_21.1.1/lib/erlang")
+(setq erlang-root-dir "/usr/local/otp_src_22.0.7/lib/erlang")
+(setq erlang-man-root "/usr/local/otp_src_22.0.7/lib/erlang")
 
 ;; 关闭文件滑动控件
 (scroll-bar-mode -1)
@@ -271,9 +271,9 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_21.1.1/lib/erlang/lib/tools-3.0.1/emacs"
+(setq load-path (cons "/usr/local/otp_src_22.0.7/lib/erlang/lib/tools-3.2/emacs"
                       load-path))
-(setq exec-path (cons "/usr/local/otp_src_21.1.1/bin" exec-path))
+(setq exec-path (cons "/usr/local/otp_src_22.0.7/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
 
@@ -308,3 +308,8 @@
 (setq switch-window-shortcut-style 'qwerty)
 (setq switch-window-qwerty-shortcuts
       '("a" "s" "d" "f" "j" "k" "l" ";" "w" "e" "i" "o"))
+
+(add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
+(add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
+(require 'elixir-mode)
+(require 'alchemist)
