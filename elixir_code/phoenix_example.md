@@ -294,3 +294,4 @@ then type these in the open terminal
 {  "topic": "room:lobby",  "event": "echo",  "payload": { "hello": "world" },  "ref": 0}
 ```
 all are copied from [Websocket Clients and Phoenix Channels](http://graemehill.ca/websocket-clients-and-phoenix-channels/).
+[Use wscat to Connect to a WebSocket API and Send Messages to It](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html)
