@@ -140,3 +140,27 @@ on_conflict = [set: [body: "updated"]]
                                on_conflict: on_conflict, conflict_target: :title)
 
 ```
+
+## bigint type
+
+``` shell
+mix phx.gen.context Context Schema table_name type:integer
+```
+then in the migration file, change the `integer` to `bigint`
+befor:
+
+``` elixir
+add :type, :integer
+```
+after:
+
+``` elixir
+add :type, :bigint
+```
+then run the migrate command:
+
+``` shell
+mix ecto.migrate
+```
+the default `id` type in the ecto is :bigint
+see [:bigint field type](https://github.com/elixir-ecto/postgrex/issues/316)
