@@ -142,3 +142,9 @@ sudo ethtool enp2s0
 sudo ethtool -i enp2s0
 ip a s enp2s0
 ```
+
+## install libgail-common libcanberra-gtk-module for erlang observer module
+
+``` shell
+sudo apt install -y libgail-common libcanberra-gtk-module
+```
