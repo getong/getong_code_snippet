@@ -264,3 +264,33 @@ channel "room:*", Web.RoomChannel
 
 ## How To Get Phoenix & VueJS working Together
 [How To Get Phoenix & VueJS working Together](https://elixirforum.com/t/how-to-get-phoenix-vuejs-working-together/5108)
+
+## channel detail
+the default protocol is websocket, but the data transport is serialized by its serializer.ex module, see phoenix/lib/phoenix/socket/serializer.ex and also phoenix/lib/phoenix/socket/serializers, currently it has two implementations: v1_json_serializer.ex and v2_json_serializer.ex.
+And its data form is just like:
+
+``` json
+{
+  "topic": "...",
+  "event": "...",
+  "payload": {},
+  "ref": 0
+}
+```
+these four fields are all needed.
+[Websocket Clients and Phoenix Channels](http://graemehill.ca/websocket-clients-and-phoenix-channels/) is a must read.
+
+## use wscat to connect phoenix channel
+
+``` shell
+sudo npm install -g wscat
+wscat -c "ws://localhost:4000/socket/websocket"
+```
+then type these in the open terminal
+
+``` json
+{  "topic": "room:lobby",  "event": "phx_join",  "payload": {},  "ref": 0}
+{  "topic": "room:lobby",  "event": "heartbeat",  "payload": {},  "ref": 0}
+{  "topic": "room:lobby",  "event": "echo",  "payload": { "hello": "world" },  "ref": 0}
+```
+all are copied from [Websocket Clients and Phoenix Channels](http://graemehill.ca/websocket-clients-and-phoenix-channels/).
