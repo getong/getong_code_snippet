@@ -50,7 +50,15 @@ string_to_term(String) when is_list(String) ->
             error
     end.
 ```
+or like below:
 
+``` erlang
+{ok, Scan1, _} = erl_scan:string("String.").
+{ok,P}=erl_parse:parse_exprs(Scan1).
+erl_eval:exprs(P, []).
+P.
+```
+copy from [erlang字符串动态解析成为Erlang数据结构（去掉“”）](https://www.cnblogs.com/daofen/p/6047789.html)
 
 ## integer, binary, list
 
