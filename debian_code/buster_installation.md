@@ -143,14 +143,8 @@ sudo ethtool -i enp2s0
 ip a s enp2s0
 ```
 
-## install libgail-common libcanberra-gtk-module for erlang observer module
-
-``` shell
-sudo apt install -y libgail-common libcanberra-gtk-module
-```
-
 ## rename
 
 ``` shell
-sudo apt-get install rename
+sudo apt-get install rename inotify-tools jigdo-file
 ```
