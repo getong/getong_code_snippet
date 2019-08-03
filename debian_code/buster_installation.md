@@ -148,3 +148,9 @@ ip a s enp2s0
 ``` shell
 sudo apt install -y libgail-common libcanberra-gtk-module
 ```
+
+## rename
+
+``` shell
+sudo apt-get install rename
+```
