@@ -69,6 +69,11 @@ sudo apt-get install -y autoconf libncurses5-dev build-essential \
     libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
     libglu1-mesa-dev libpng12-dev default-jdk g++ libxml2-utils
 ```
+debian buster
+install libgail-common libcanberra-gtk-module for erlang observer module
+``` shell
+sudo apt install -y libgail-common libcanberra-gtk-module
+```
 
 centos
 
