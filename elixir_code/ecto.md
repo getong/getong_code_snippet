@@ -164,3 +164,23 @@ mix ecto.migrate
 ```
 the default `id` type in the ecto is :bigint
 see [:bigint field type](https://github.com/elixir-ecto/postgrex/issues/316)
+
+## post schema
+Writing a Custom Migration Task with Ecto Migrator
+``` shell
+defmodule MyApp.ReleaseTasks do
+  def migrate do
+   {:ok, _} = Application.ensure_all_started(:my_app)
+    path = Application.app_dir(:my_app, "priv/repo/migrations")
+    Ecto.Migrator.run(MyApp.Repo, path, :up, all: true)
+  end
+end
+```
+copy from [Run Ecto Migrations in Production with Distillery Boot Hooks](https://medium.com/flatiron-labs/run-ecto-migrations-in-production-with-distillery-boot-hooks-7f576d2b93ed)
+user `prefix` option to indicate the postgresql schema.
+
+create a new schema:
+
+``` elixir
+Ecto.Adapters.SQL.query(MyApp.Repo, "create schema schema_name")
+```
