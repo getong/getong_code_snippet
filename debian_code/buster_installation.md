@@ -5,6 +5,7 @@
 ``` shell
 # apt-get update
 # apt-get upgrade -y
+# apt-get install vim zsh curl git -y
 ```
 ## add the /sbin to the root user PATH variable
 
