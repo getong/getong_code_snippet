@@ -149,3 +149,13 @@ ip a s enp2s0
 ``` shell
 sudo apt-get install rename inotify-tools jigdo-file calibre
 ```
+
+## ifdown and ifup
+
+``` shell
+sudo systemctl stop ModemManager
+sudo systemctl disable ModemManager
+sudo ifdown enp2s0
+sudo ifup enp2s0
+sudo systemctl restart networking
+```
