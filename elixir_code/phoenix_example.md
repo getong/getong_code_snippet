@@ -295,3 +295,20 @@ then type these in the open terminal
 ```
 all are copied from [Websocket Clients and Phoenix Channels](http://graemehill.ca/websocket-clients-and-phoenix-channels/).
 [Use wscat to Connect to a WebSocket API and Send Messages to It](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html)
+
+## phoenix channel ip
+
+``` elixir
+  socket("/socket", MyApp.Web.UserSocket,
+    websocket: [connect_info: [:peer_data, :x_headers]],
+    longpoll: [connect_info: [:peer_data, :x_headers]]
+  )
+
+  info: %{
+  peer_data: %{address: {127, 0, 0, 1}, port: 52372, ssl_cert: nil},
+  x_headers: []
+}
+```
+copy from [Phoenix socket/channels security / IP identification](https://elixirforum.com/t/phoenix-socket-channels-security-ip-identification/1463)
+
+also see [Endpoint](https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3)
