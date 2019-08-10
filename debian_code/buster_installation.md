@@ -5,7 +5,7 @@
 ``` shell
 # apt-get update
 # apt-get upgrade -y
-# apt-get install vim zsh curl git -y
+# apt-get install vim zsh curl nemo git moc moc-ffmpeg-plugin -y
 ```
 ## add the /sbin to the root user PATH variable
 
