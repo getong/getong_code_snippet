@@ -159,3 +159,11 @@ sudo ifdown enp2s0
 sudo ifup enp2s0
 sudo systemctl restart networking
 ```
+## select and install
+
+``` shell
+dpkg --get-selections > selectfile
+
+dpkg --set-selections < selectfile
+apt-get dselect-upgrade
+```
