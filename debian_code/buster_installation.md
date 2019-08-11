@@ -167,3 +167,13 @@ dpkg --get-selections > selectfile
 dpkg --set-selections < selectfile
 apt-get dselect-upgrade
 ```
+
+## gnome-tweak-tool swap caps and ctrl key
+
+``` shell
+sudo apt-get install gnome-tweak-tool
+## then in the gnome-tweak-tool - keyboard --additional setting
+# ctrl section, swap ctrl and caps
+```
+copy from [How do I remap the Caps Lock and Ctrl keys?](https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys)
+The gnome 3.30 is much more different than before.
