@@ -147,7 +147,7 @@ ip a s enp2s0
 ## rename
 
 ``` shell
-sudo apt-get install rename inotify-tools jigdo-file calibre dkms rsync
+sudo apt-get install rename inotify-tools jigdo-file calibre dkms rsync k3b
 ```
 
 ## ifdown and ifup
