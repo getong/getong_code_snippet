@@ -106,3 +106,16 @@ erl
 1> << Sign:1, Exp:11, Matissa:52 >> = << 3.14159/float >>.
 2> ( 1 + Matissa / math:pow(2, 52)) * math:pow(2, Exp-1023).
 ```
+
+## binary and list
+list to string
+``` elixir
+[130, 161, 98, 1, 161, 97, 1] |> Enum.map_join(",", fn v -> to_string(v) end)
+"130,161,98,1,161,97,1"
+```
+
+string to list
+
+``` elixir
+"130,161,98,1,161,97,1" |> String.split(",") |> Enum.map(&String.to_integer/1)
+```
