@@ -39,6 +39,8 @@ npm test
 
 ``` shell
 sudo npm install -g typescript
+sudo npm install -g @angular/cli
+sudo npm install -g yarn
 ```
 ## taobao mirror
 
