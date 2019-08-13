@@ -177,3 +177,11 @@ sudo apt-get install gnome-tweak-tool
 ```
 copy from [How do I remap the Caps Lock and Ctrl keys?](https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys)
 The gnome 3.30 is much more different than before.
+
+## jmtpfs mtp-tools
+
+``` shell
+sudo apt-get install jmtpfs mtp-tools
+```
+The mount path is `/run/user/$USER/gvfs`
+copy from [Where are MTP mounted devices located in the filesystem?](https://askubuntu.com/questions/342319/where-are-mtp-mounted-devices-located-in-the-filesystem)
