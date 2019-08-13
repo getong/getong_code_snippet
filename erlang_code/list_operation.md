@@ -199,3 +199,25 @@ do_foldr(F, Accu0, Key, T) ->
 The foldl and foldr both use the `ets:saafe_fixtable/2` function to ensure the ets lock the table data.
 The `ets:first/1` get the first data, and then use the `ets:next/2` function to get the next data.
 The `ets:last/1` get the last data, and then use the `ets:prev/2` function to get the previous data.
+
+## binary and list convert
+
+list to binary
+``` erlang
+A = [130, 161, 98, 1, 161, 97, 1].
+lists:foldr(fun(X, Acc) ->
+                        case Acc of
+                            <<>> ->
+                                integer_to_binary(X);
+                            _ ->
+                                << (integer_to_binary(X))/binary, ",", Acc/binary>>
+                        end
+                end, <<>>, A).
+%% <<"130,161,98,1,161,97,1">>
+```
+ binary to list
+```erlang
+A = <<"130,161,98,1,161,97,1">>.
+lists:map(fun(E) -> binary_to_integer(E) end, binary:split(A, <<",">>, [global])).
+%% [130,161,98,1,161,97,1]
+```
