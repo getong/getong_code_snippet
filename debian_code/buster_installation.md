@@ -185,3 +185,10 @@ sudo apt-get install jmtpfs mtp-tools
 ```
 The mount path is `/run/user/$USER/gvfs`
 copy from [Where are MTP mounted devices located in the filesystem?](https://askubuntu.com/questions/342319/where-are-mtp-mounted-devices-located-in-the-filesystem)
+
+## VirtualBox can't enable the AMD-V extension. Please disable the KVM kernel extension, recompile your kernel and reboot (VERR_SVM_IN_USE).
+
+```
+I am back to a broken minikube start command, after uninstalling KVM to get VirtualBox working again.
+```
+copy from [virtualbox + AMD cpu's: This computer doesn't have VT-X/AMD-v enabled.](https://github.com/kubernetes/minikube/issues/3706)
