@@ -86,3 +86,81 @@ base58check_decode(B58) ->
   end.
 ```
 The aeternity project also uses base58 for performance reason. base58 might be better on some areas.
+
+## aes128 + pkcs#7填充
+
+``` erlang
+encode(Bin) ->
+    Len = erlang:size(Bin),
+    Value = 16 - (Len rem 16),
+    PadBin = binary:copy(<<Value>>, Value),
+    EncodeB = crypto:block_encrypt(aes_cbc128, ?AES_KEY, ?AES_IV, <<Bin/binary, PadBin/binary>>),
+    base64:encode(EncodeB).
+
+
+decode(Bin) ->
+    Bin1 = base64:decode(Bin),
+    case erlang:size(Bin1) rem 16 of
+        0 ->
+            Bin2 = crypto:block_decrypt(aes_cbc128, ?AES_KEY, ?AES_IV, Bin1),
+            binary:part(Bin2, {0, byte_size(Bin2) - binary:last(Bin2)});
+        _ ->
+            {error, 1102}
+    end.
+```
+copy from [erlang aes加密](https://www.jianshu.com/p/90d2fe44f6fe)
+
+## gcm
+
+``` elixir
+# Gen once (see also https://hexdocs.pm/plug/Plug.Crypto.KeyGenerator.html#content)
+k = :crypto.strong_rand_bytes(32)
+
+# Gen every time you encrypt a message
+iv = :crypto.strong_rand_bytes(32)
+{ct, tag} = :crypto.block_encrypt(:aes_gcm, k, iv, {"AES128GCM", msg})
+payload = Base.encode16(iv <> tag <> ct)
+
+## decrypt
+<<iv::binary-32, tag::binary-16, ct::binary>> = Base.decode16!(payload)
+:crypto.block_decrypt(:aes_gcm, k, iv, {"AES128GCM", ct, tag})
+```
+copy from [how to encrypt and decrypt with AES CBC 128 in Elixir](https://stackoverflow.com/questions/37629194/how-to-encrypt-and-decrypt-with-aes-cbc-128-in-elixir)
+and something like below:
+
+``` elixir
+defmodule Encrypt do
+  @aad "AES256GCM"
+  ...
+  def encrypt(val, key) do
+    mode       = :aes_gcm
+    secret_key = :base64.decode(key)
+    iv         = :crypto.strong_rand_bytes(16)
+    {ciphertext, ciphertag} = :crypto.block_encrypt(mode, secret_key, {@aad, to_string(val), 16})
+  end
+end
+```
+copy from [Building an Elixir Encryption Engine with Erlang's Crypto Module](https://www.thegreatcodeadventure.com/elixir-encryption-with-erlang-crypto/)
+
+## use the new crypt api
+
+```
+crypto_one_time/4
+crypto_one_time/5
+crypto_one_time_aead/6
+crypto_one_time_aead/7
+```
+example:
+
+``` erlang
+crypto:start().
+Key = <<1:128>>.
+IV = <<0:128>>.
+Txt = [<<"First bytes">>,<<"Second bytes">>].
+crypto:crypto_one_time(aes_128_ctr, Key, IV, Txt, true).
+
+Txt2 = [<<"First bytes">>,<<"Second bytes">>].
+AAD2 = <<"Some bytes">>.
+crypto:crypto_one_time_aead(aes_128_gcm, Key, IV, Txt2, AAD2, true).
+```
+copy from [new_api](http://erlang.org/doc/apps/crypto/new_api.html)
