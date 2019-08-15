@@ -610,3 +610,12 @@ sudo apt-get install calibre
 ebook-convert file.epub file.pdf
 ebook-convert file.pdf file.epub --enable-heuristics
 ```
+
+## replace the “
+
+``` shell
+sed -i 's#\“"#\"#g' filename
+# or
+sed -i 's:\“":\":g' filename
+```
+copy from [Linux sed替换中文引号为英文引号](https://blog.csdn.net/qq_35457078/article/details/85219384)
