@@ -14,6 +14,9 @@ apt update && apt upgrade
 # or change the $PREFIX/etc/apt/sources.list
 # The termux repository mirror from TUNA:
 deb https://mirrors.tuna.tsinghua.edu.cn/termux stable main
+
+## then run
+pkg up
 ```
 
 ## other resource
