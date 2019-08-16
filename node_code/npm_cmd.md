@@ -42,8 +42,8 @@ sudo npm install -g typescript
 sudo npm install -g @angular/cli
 sudo npm install -g yarn
 sudo npm install -g npm
-sudo npm isntall -g ts-node
-sudo npm isntall -g gulp-cli
+sudo npm install -g ts-node
+sudo npm install -g gulp-cli
 sudo npm install -g webpack
 ```
 ## taobao mirror
