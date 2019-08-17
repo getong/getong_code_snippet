@@ -184,3 +184,14 @@ create a new schema:
 ``` elixir
 Ecto.Adapters.SQL.query(MyApp.Repo, "create schema schema_name")
 ```
+## use variable in ecto query prefix
+
+``` elixir
+query =
+        from u in User,
+          order_by: [asc: u.full_name, asc: u.id],
+          select: struct(u, [:id, :first_name, :last_name, :full_name])
+query = Map.put(query, :prefix, params["prefix"])
+Repo.all(query)
+```
+copy from [Using variable in ecto query prefix](https://elixirforum.com/t/using-variable-in-ecto-query-prefix/21178/4)
