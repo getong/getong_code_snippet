@@ -65,3 +65,11 @@ npm set node_inspector_cdnurl https://npm.taobao.org/mirrors/node-inspector # no
 npm cache clean --force # 清空缓存
 ```
 copy from [npm 淘宝镜像配置](https://gist.github.com/52cik/c1de8926e20971f415dd)
+
+## ts-node
+``` shell
+ts-node ts_source_file
+# repl
+ts-node
+>
+```
