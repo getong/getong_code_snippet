@@ -34,3 +34,9 @@ cd assets
 yarn add vue vue-template-compiler vuedraggable
 yarn add --dev node-sass sass-loader vue-loader vue-style-loader
 ```
+
+## comman packages
+
+``` shell
+yarn global add parcel-bundler typescript @angular/cli ts-node gulp-cli webpack
+```
