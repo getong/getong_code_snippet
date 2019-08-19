@@ -52,6 +52,16 @@ sudo npm install -g webpack
 npm set registry https://r.npm.taobao.org # 注册模块镜像
 npm set disturl https://npm.taobao.org/dist # node-gyp 编译依赖的 node 源码镜像
 
+## 查看npm当前镜像源
+npm config get registry
+## 设置npm镜像源为淘宝镜像
+npm config set registry https://registry.npm.taobao.org/
+
+## 查看yarn当前镜像源
+yarn config get registry
+## 设置yarn镜像源为淘宝镜像
+yarn config set registry https://registry.npm.taobao.org/
+
 ## 以下选择添加
 npm set sass_binary_site https://npm.taobao.org/mirrors/node-sass # node-sass 二进制包镜像
 npm set electron_mirror https://npm.taobao.org/mirrors/electron/ # electron 二进制包镜像
@@ -65,6 +75,7 @@ npm set node_inspector_cdnurl https://npm.taobao.org/mirrors/node-inspector # no
 npm cache clean --force # 清空缓存
 ```
 copy from [npm 淘宝镜像配置](https://gist.github.com/52cik/c1de8926e20971f415dd)
+copy from [npm，yarn如何查看源和换源](https://zhuanlan.zhihu.com/p/35856841)
 
 ## ts-node
 ``` shell
