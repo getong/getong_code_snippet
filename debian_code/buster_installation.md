@@ -192,3 +192,15 @@ copy from [Where are MTP mounted devices located in the filesystem?](https://ask
 I am back to a broken minikube start command, after uninstalling KVM to get VirtualBox working again.
 ```
 copy from [virtualbox + AMD cpu's: This computer doesn't have VT-X/AMD-v enabled.](https://github.com/kubernetes/minikube/issues/3706)
+
+## pandoc
+
+``` shell
+sudo apt-get install -y pandoc
+```
+
+## build-dep
+
+``` shell
+sudo apt-get build-dep -y emacs erlang git julia tmux
+```
