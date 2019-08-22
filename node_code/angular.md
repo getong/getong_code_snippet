@@ -5,6 +5,7 @@
 ``` shell
 sudo yarn global add @angular/cli
 ng new my-dream-app
+ng new --style sass --commit false -g true --routing false my-dream-app
 cd my-dream-app
 ng serve
 ng build
