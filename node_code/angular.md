@@ -35,4 +35,7 @@ copy from [Using Yarn with Angular CLI v6+](https://medium.com/@beeman/using-yar
 ``` shell
 ng generate component users
 ng generate service users
+ng generate module users
+ng generate directive users
+ng generate class users
 ```
