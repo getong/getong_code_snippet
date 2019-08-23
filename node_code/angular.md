@@ -30,3 +30,8 @@ or change the ~/.angular-config.json
 }
 ```
 copy from [Using Yarn with Angular CLI v6+](https://medium.com/@beeman/using-yarn-with-angular-cli-v6-7f53a7678b93)
+
+## generate
+``` shell
+ng generate component users
+```
