@@ -38,5 +38,5 @@ yarn add --dev node-sass sass-loader vue-loader vue-style-loader
 ## comman packages
 
 ``` shell
-yarn global add parcel-bundler typescript @angular/cli ts-node gulp-cli webpack
+yarn global add parcel-bundler typescript @angular/cli ts-node gulp-cli webpack prettier
 ```
