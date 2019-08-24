@@ -38,4 +38,5 @@ ng generate service users
 ng generate module users
 ng generate directive users
 ng generate class users
+ng generate pipe users
 ```
