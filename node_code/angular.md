@@ -40,3 +40,9 @@ ng generate directive users
 ng generate class users
 ng generate pipe users
 ```
+
+## add
+``` shell
+ng add @ngx-translator/core
+ng add @ngx-translator/http-loader
+```
