@@ -8,3 +8,6 @@ see [phoenix_react_playground](https://github.com/resir014/phoenix_react_playgro
 The angular 7 seems create a individual project, not only a library, so a little harder to work with.
 see [Using Angular 4 with Phoenix Framework 1.3](http://blog.dtengeri.com/2017/10/phoenix-angular.html)
 [Elixir/Phoenix+Angularで環境構築](https://qiita.com/tamanugi/items/d3e00937f1ee0bd49770)
+
+## phoenix work with webpack, sass
+see [How to use SASS/SCSS with Webpack in Phoenix 1.4](https://andrewtimberlake.com/blog/2018/06/how-to-use-sass-scss-with-webpack-in-phoenix-1-4)
