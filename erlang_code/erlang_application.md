@@ -92,3 +92,11 @@ stop(Handlers) ->
       end, Handlers).
 ```
 If start the lager application, it will stop some error_logger handlers, and if stop the lager application, it will start the stopped handlers.
+
+## erlang command history
+enable the erlang command history:
+
+``` shell
+export ERL_AFLAGS="-kernel shell_history enabled"
+```
+copy from [How do I save IEx history?](https://stackoverflow.com/questions/45405070/how-do-i-save-iex-history)
