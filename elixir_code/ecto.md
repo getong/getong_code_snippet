@@ -195,3 +195,44 @@ query = Map.put(query, :prefix, params["prefix"])
 Repo.all(query)
 ```
 copy from [Using variable in ecto query prefix](https://elixirforum.com/t/using-variable-in-ecto-query-prefix/21178/4)
+
+## Multi work with pipeline
+
+work with the previous operation result
+``` elixir
+Ecto.Multi.new()
+|> Ecto.Multi.insert(:team, team_changeset)
+|> Ecto.Multi.run(:user, fn repo, %{team: team} ->
+  # Use the inserted team.
+  repo.update(user_changeset)
+end)
+
+Ecto.Multi.new()
+|> Ecto.Multi.insert_all(:users, MyApp.User, users)
+|> Ecto.Multi.run(:pro_users, fn _repo, %{users: users} ->
+  result = Enum.filter(users, &(&1.role == "pro"))
+  {:ok, result}
+end)
+```
+
+work with multiple Multis and dynanic data:
+
+``` elixir
+posts_multi =
+  posts
+  |> Stream.filter(fn post ->
+    # Filter old posts...
+  end)
+  |> Stream.map(fn post ->
+    # Create changesets.
+    Ecto.Changeset.change(post, %{category: "new"})
+  end)
+  |> Stream.map(fn post_cs ->
+    # Create a Multi with a single update
+    # operation, generating a unique key for the op.
+    key = String.to_atom("post_#{post_cs.data.id})
+    Ecto.Multi.update(Ecto.Multi.new(), key, post_cs)
+  end)
+  |> Enum.reduce(Multi.new(), &Multi.append/2)
+```
+copy from [A brief guide to Ecto.Multi](https://medium.com/heresy-dev/a-brief-guide-to-ecto-multi-9c8ea0c729f0)
