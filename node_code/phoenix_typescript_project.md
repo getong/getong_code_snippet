@@ -11,3 +11,8 @@ see [Using Angular 4 with Phoenix Framework 1.3](http://blog.dtengeri.com/2017/1
 
 ## phoenix work with webpack, sass
 see [How to use SASS/SCSS with Webpack in Phoenix 1.4](https://andrewtimberlake.com/blog/2018/06/how-to-use-sass-scss-with-webpack-in-phoenix-1-4)
+
+## avia example
+avia is a good example which works with phoenix and angular 7.
+[avia](https://github.com/aviacommerce/avia)
+[angularspree](https://github.com/aviabird/angularspree)
