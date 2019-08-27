@@ -3,6 +3,7 @@
 ## common usage
 
 ```
+## always use the init command to init your typescript project
 yarn init
 yarn add [package]
 yarn add [package]@[version]
