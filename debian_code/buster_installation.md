@@ -204,3 +204,11 @@ sudo apt-get install -y pandoc
 ``` shell
 sudo apt-get build-dep -y emacs erlang git julia tmux
 ```
+
+## install the docker-compose
+
+``` shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+```
+copy from [Install Docker Compose](https://docs.docker.com/compose/install/)
