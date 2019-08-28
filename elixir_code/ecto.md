@@ -236,3 +236,23 @@ posts_multi =
   |> Enum.reduce(Multi.new(), &Multi.append/2)
 ```
 copy from [A brief guide to Ecto.Multi](https://medium.com/heresy-dev/a-brief-guide-to-ecto-multi-9c8ea0c729f0)
+
+## insert_all
+
+``` elixir
+list_list =
+a_very_long_list
+|> Stream.map(fn _id ->
+## here might be a map, not the schema struct
+%{a: "a",
+b: "b",
+c: "c"
+} end)
+|> Stream.chunk_every(5000)
+|> Enum.to_list()
+
+Enum.each(list_list, fn list ->
+      Repo.insert_all(SchemaTable, list)
+    end)
+```
+The SchemaTable property list must all be set in the map list without the id property.
