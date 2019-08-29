@@ -256,3 +256,14 @@ Enum.each(list_list, fn list ->
     end)
 ```
 The SchemaTable property list must all be set in the map list without the id property.
+
+## dynamic table name
+copy from [How can you dynamically set a schema table name for a ecto model](https://stackoverflow.com/questions/40687186/how-can-you-dynamically-set-a-schema-table-name-for-a-ecto-model)
+
+``` elixir
+## query
+from p in {"posts2", Post}, where p.id == 1
+
+## insert or update
+Ecto.put_meta(struct, source: "source")
+```
