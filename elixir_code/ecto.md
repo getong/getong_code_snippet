@@ -267,3 +267,20 @@ from p in {"posts2", Post}, where p.id == 1
 ## insert or update
 Ecto.put_meta(struct, source: "source")
 ```
+
+## Date/time intevals
+Date/time intervals: datetime_add/3, date_add/3, from_now/2, ago/2
+copy from [Ecto.Query.API](https://hexdocs.pm/ecto/Ecto.Query.API.html)
+
+``` elixir
+# Get all items published since the last month
+## The following intervals are supported: year, month, week, day, hour, minute, second, millisecond and microsecond.
+from p in Post, where: p.published_at >
+                       datetime_add(^NaiveDateTime.utc_now, -1, "month")
+# Get all items published since the last month
+The following intervals are supported: year, month, week, day, hour, minute, second, millisecond and microsecond.
+from p in Post, where: p.published_at >
+                       datetime_add(^NaiveDateTime.utc_now, -1, "month")
+from a in Account, where: a.expires_at < from_now(3, "month")
+from p in Post, where: p.published_at > ago(3, "month")
+```
