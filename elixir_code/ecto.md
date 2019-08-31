@@ -284,3 +284,28 @@ from p in Post, where: p.published_at >
 from a in Account, where: a.expires_at < from_now(3, "month")
 from p in Post, where: p.published_at > ago(3, "month")
 ```
+
+## implement the Access behaviour for the Ecto.Schema file
+put the below code into the schema file
+``` elixir
+@behaviour Access
+
+defdelegate fetch(map, key), to: Map
+
+defdelegate get_and_update(map, key, fun), to: Map
+
+defdelegate pop(map, key), to: Map
+```
+As we all know, the schema is a map in elixir, and the Access behaviour needs to implement three callbacks:
+
+``` elixir
+fetch(term, key)
+get_and_update(data, key, function)
+pop(data, key)
+```
+here I just delegate the three functiosn to the Map module, and we can use Schema like this:
+
+``` elixir
+a = %Schema{}
+a["property_a"]
+```
