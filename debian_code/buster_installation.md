@@ -222,3 +222,9 @@ copy from [Install Docker Compose](https://docs.docker.com/compose/install/)
 ``` shell
 sudo apt-get install -y pwgen ffmpeg
 ```
+
+## redis-server
+
+``` shell
+sudo apt-get build-dep redis-server
+```
