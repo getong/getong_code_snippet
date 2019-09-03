@@ -17,6 +17,10 @@ deb https://mirrors.tuna.tsinghua.edu.cn/termux stable main
 
 ## then run
 pkg up
+
+## install the zsh, termux-ohmyzsh
+pkg install vim curl wget git unzip unrar
+sh -c "$(curl -fsSL https://github.com/Cabbagec/termux-ohmyzsh/raw/master/install.sh)"
 ```
 
 ## other resource
