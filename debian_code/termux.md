@@ -21,6 +21,7 @@ pkg up
 ## install the zsh, termux-ohmyzsh
 pkg install vim curl wget git unzip unrar
 sh -c "$(curl -fsSL https://github.com/Cabbagec/termux-ohmyzsh/raw/master/install.sh)"
+pkg add nodejs yarn
 ```
 
 ## other resource
