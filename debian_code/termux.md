@@ -19,7 +19,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/termux stable main
 pkg up
 
 ## install the zsh, termux-ohmyzsh
-pkg install vim curl wget git unzip unrar
+pkg install vim curl wget git unzip unrar zsh
 sh -c "$(curl -fsSL https://github.com/Cabbagec/termux-ohmyzsh/raw/master/install.sh)"
 pkg add nodejs yarn rust erlang
 ```
