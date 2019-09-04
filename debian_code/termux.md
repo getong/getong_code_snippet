@@ -32,3 +32,12 @@ pkg add nodejs yarn rust erlang
 ``` shell
 pkg add python2 make clang
 ```
+
+## isntall the unstable repository
+
+``` shell
+pkg install unstable-repo
+apt-get update
+apt-get upgrade
+pkg add elixir -y
+```
