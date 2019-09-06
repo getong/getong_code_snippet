@@ -312,3 +312,21 @@ all are copied from [Websocket Clients and Phoenix Channels](http://graemehill.c
 copy from [Phoenix socket/channels security / IP identification](https://elixirforum.com/t/phoenix-socket-channels-security-ip-identification/1463)
 
 also see [Endpoint](https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3)
+
+## layout
+``` elixir
+layout(conn)
+false
+
+conn = put_layout conn, {AppView, "application.html"}
+layout(conn)
+{AppView, "application.html"}
+
+conn = put_layout conn, "print.html"
+layout(conn)
+{AppView, "print.html"}
+
+conn = put_layout conn, :print
+layout(conn)
+{AppView, :print}
+``` 
