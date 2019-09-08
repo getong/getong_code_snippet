@@ -330,3 +330,5 @@ conn = put_layout conn, :print
 layout(conn)
 {AppView, :print}
 ```
+## CorsPlug
+see [CorsPlug](https://hexdocs.pm/cors_plug/readme.html#content)
