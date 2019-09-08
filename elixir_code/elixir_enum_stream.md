@@ -12,3 +12,6 @@ File.stream!("/path/to/file")
 |> Stream.into(File.stream!("/path/to/other/file"))
 |> Stream.run()
 ```
+
+## Enum.at
+The `Enum.at` is the `lists:nth/2` in erlang.
