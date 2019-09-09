@@ -143,3 +143,11 @@ and you can also change the tslint.json
   "rulesDirectory": []
 }
 ```
+
+## general development step by step
+
+``` shell
+tsc
+node output/index.js
+
+``` 
