@@ -217,10 +217,10 @@ sudo chmod +x /usr/local/bin/docker-compose
 ```
 copy from [Install Docker Compose](https://docs.docker.com/compose/install/)
 
-## pwgen, ffmpeg
+## pwgen, ffmpeg, expect
 
 ``` shell
-sudo apt-get install -y pwgen ffmpeg
+sudo apt-get install -y pwgen ffmpeg expect
 ```
 
 ## redis-server
