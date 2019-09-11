@@ -103,7 +103,7 @@ sudo chown user_name:user_group /[partition mount]/.Trash-`id -u user_name`
 
 ## fcitx installation
 ```shell
-# apt-get install fcitx-ui-classic fcitx-frontend-fbterm fcitx-frontend-gtk3 im-switch
+# sudo apt-get install fcitx-ui-classic fcitx-frontend-fbterm fcitx-frontend-gtk3 im-config
 # sudo chmod u+s /usr/bin/fbterm
 # im-config
 ```
@@ -227,4 +227,10 @@ sudo apt-get install -y pwgen ffmpeg
 
 ``` shell
 sudo apt-get build-dep redis-server
+```
+
+## wireless driver
+
+``` shell
+sudo apt-get install -y firmware-atheros
 ```
