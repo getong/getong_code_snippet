@@ -5,3 +5,5 @@
 ~~~## Certificate Patrol~~~
 ## Adblock Plus
 ## FoxyProxy Standard
+
+## chrome does have the same plugins as well
