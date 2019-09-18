@@ -157,6 +157,13 @@ after:
 ``` elixir
 add :type, :bigint
 ```
+
+and change the schema file:
+
+``` elixir
+field :type, :id
+```
+
 then run the migrate command:
 
 ``` shell
