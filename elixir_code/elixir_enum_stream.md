@@ -15,3 +15,9 @@ File.stream!("/path/to/file")
 
 ## Enum.at
 The `Enum.at` is the `lists:nth/2` in erlang.
+
+## group_by
+
+``` elixir
+Enum.group_by(list, fn {key, _value} -> key end, fn {_key, value} -> value end)
+```
