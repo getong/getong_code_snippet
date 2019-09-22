@@ -316,3 +316,46 @@ here I just delegate the three functiosn to the Map module, and we can use Schem
 a = %Schema{}
 a["property_a"]
 ```
+
+## select_merge
+
+``` elixir
+ def for_admission(query \\ AdmissionEvent, admission) do
+    from(ae in query,
+      where: ae.admission_id == ^admission.id,
+      order_by: [desc: ae.occurred_at],
+
+      #### STEP TWO ####
+      #  Join on User  #
+      ##################
+      join: u in User,
+      on: ae.admitter_uuid == u.uuid,
+
+      ############ STEP THREE #############
+      #  Select Merge into Virtual Field  #
+      #####################################
+      select_merge: %{admitter_name: u.full_name}
+    )
+  end
+end
+```
+the output:
+
+``` elixir
+iex(1)> admission = Repo.get(Admission, 1)
+iex(2)> AdmissionEvent.for_admission(admission) |> Repo.all()
+[
+  %Registrar.Tracking.AdmissionEvent{
+    __meta__: #Ecto.Schema.Metadata<:loaded, "admission_events">,
+    action: "Student Admitted",
+    admission_id: 3,
+    admitter_name: "Albus Dumbledore",
+    id: 1,
+    occurred_at: ~N[2019-07-29 02:22:18]
+  }
+]
+iex(3)> event = List.first(events)
+iex(4)> event.admitter_name
+"Albus Dumbledore"
+```
+copy from [TIL How to Select Merge with Ecto.Query](https://dev.to/ktravers/til-how-to-select-merge-with-ecto-query-1944)
