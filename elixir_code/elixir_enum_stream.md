@@ -3,6 +3,7 @@ Enum模块每次运算都会产生新的数值，而Stream不会。使用Stream�
 a example see [Processing Large CSV files with Elixir
 Streams](https://www.poeticoding.com/processing-large-csv-files-with-elixir-streams/)
 
+## range is a stream
 
 ## Stream.run
 
