@@ -244,7 +244,7 @@ posts_multi =
 ```
 copy from [A brief guide to Ecto.Multi](https://medium.com/heresy-dev/a-brief-guide-to-ecto-multi-9c8ea0c729f0)
 
-## insert_all
+## insert_all act like upsert_all
 
 ``` elixir
 list_list =
@@ -263,6 +263,13 @@ Enum.each(list_list, fn list ->
     end)
 ```
 The SchemaTable property list must all be set in the map list without the id property.
+
+## insert act like upsert
+
+``` elixir
+data = %Data{}
+Repo.insert(data, conflict_target: unchange_list, on_conflict: {replace: change_list})
+```
 
 ## dynamic table name
 copy from [How can you dynamically set a schema table name for a ecto model](https://stackoverflow.com/questions/40687186/how-can-you-dynamically-set-a-schema-table-name-for-a-ecto-model)
