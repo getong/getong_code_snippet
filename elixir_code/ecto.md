@@ -268,7 +268,7 @@ The SchemaTable property list must all be set in the map list without the id pro
 
 ``` elixir
 data = %Data{}
-Repo.insert(data, conflict_target: unchange_list, on_conflict: {replace: change_list})
+Repo.insert(data, conflict_target: unchange_list, on_conflict: {:replace, change_list})
 ```
 
 ## dynamic table name
