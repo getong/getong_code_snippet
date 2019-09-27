@@ -286,6 +286,7 @@ See [How to change VirtualBox default VM location in command line](https://askub
 
 ``` shell
 $ vboxmanage setproperty machinefolder /path/to/directory/
+$ vboxmanage list systemproperties | grep folder
 ```
 
 ## vagrant
