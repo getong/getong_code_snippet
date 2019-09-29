@@ -30,3 +30,11 @@ SELECT EXISTS (
    );
 ```
 copy from [How to check if a table exists in a given schema](https://stackoverflow.com/questions/20582500/how-to-check-if-a-table-exists-in-a-given-schema)
+
+## alter sequence
+
+``` sql
+ALTER SEQUENCE product_id_seq RESTART WITH 1453
+```
+`product` is the table name
+copy from [Reset auto increment counter in postgres](https://stackoverflow.com/questions/5342440/reset-auto-increment-counter-in-postgres)
