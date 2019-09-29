@@ -99,3 +99,10 @@ apt-cache policy <package>
 apt-cache madison <package>
 ```
 copy from [How to check available package versions in rpm systems?](https://unix.stackexchange.com/questions/6263/how-to-check-available-package-versions-in-rpm-systems)
+
+## install the trash-cli
+
+``` shell
+sudo yum install python-setuptools
+sudo easy_install trash-cli
+```
