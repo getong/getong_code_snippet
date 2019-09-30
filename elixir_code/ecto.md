@@ -366,3 +366,11 @@ iex(4)> event.admitter_name
 "Albus Dumbledore"
 ```
 copy from [TIL How to Select Merge with Ecto.Query](https://dev.to/ktravers/til-how-to-select-merge-with-ecto-query-1944)
+
+## update
+Updates are used to update the filtered entries. In order for updates to be applied, Ecto.Repo.update_all/3 must be invoked.
+
+``` elixir
+query = from(u in User, update: [set: [name: "new name"]])
+Repo.update_all(query, [], [])
+```
