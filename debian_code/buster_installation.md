@@ -5,7 +5,7 @@
 ``` shell
 # apt-get update
 # apt-get upgrade -y
-# apt-get install vim zsh curl nemo git moc moc-ffmpeg-plugin -y
+# apt-get install -y vim zsh curl nemo git moc moc-ffmpeg-plugin unzip p7zip-full
 ```
 ## add the /sbin to the root user PATH variable
 
@@ -93,6 +93,7 @@ sudo apt-get install -y \
     software-properties-common
 sudo curl -fsSL https://get.docker.com | sudo bash -s docker --mirror Aliyun
 ## or use this command
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
@@ -247,11 +248,20 @@ sudo apt-get build-dep redis-server
 sudo apt-get install -y firmware-atheros
 ```
 
-## isntall the nodejs
+## install the nodejs
 
 ``` shell
 wget -c https://nodejs.org/dist/v12.11.0/node-v12.11.0-linux-x64.tar.xz
 sudo tar xaf node-v12.11.0-linux-x64.tar.xz -C /usr/local
 echo "PATH=/usr/local/node-v12.11.0-linux-x64/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
+```
+
+## install the dart
+
+``` shell
+sudo sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+sudo apt-get update
+sudo apt-get install dart
 ```
