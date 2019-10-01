@@ -85,17 +85,29 @@ $ sudo systemctl enable networking
 
 ## install docker
 ``` shell
-curl -fsSL https://get.docker.com | sudo bash -s docker --mirror Aliyun
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common
+sudo curl -fsSL https://get.docker.com | sudo bash -s docker --mirror Aliyun
+## or use this command
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo systemctl enable docker
+sudo systemctl start docker
+# add the current user to the docker group
+sudo usermod -aG docker $USER
 ```
-add the current user to the docker group
-
-``` shell
-$ sudo usermod -aG docker $USER
-```
-
 ## trash-cli setting
 
 ``` shell
+sudo apt-get install trash-cli
 sudo rm -rf /[partition mount]/.Trash-`id -u user_name`
 sudo mkdir /[partition mount]/.Trash-`id -u user_name`
 sudo chown user_name:user_group /[partition mount]/.Trash-`id -u user_name`
@@ -239,7 +251,7 @@ sudo apt-get install -y firmware-atheros
 
 ``` shell
 wget -c https://nodejs.org/dist/v12.11.0/node-v12.11.0-linux-x64.tar.xz
-sudo tar xaf node-v12.11.0-linux-x64.tar.xz -C /user/local
+sudo tar xaf node-v12.11.0-linux-x64.tar.xz -C /usr/local
 echo "PATH=/usr/local/node-v12.11.0-linux-x64/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
 ```
