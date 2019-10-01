@@ -140,6 +140,19 @@ on_conflict = [set: [body: "updated"]]
                                on_conflict: on_conflict, conflict_target: :title)
 
 ```
+or use the query paramter:
+
+``` elixir
+query =
+      Query.from(post in Post,
+        where: post.number == 1,
+        update: [set: [number: post.number + 1]]
+      )
+Repo.insert(%Post{number: 1},
+      on_conflict: query,
+      conflict_target: :number
+    )
+```
 
 ## bigint type
 
@@ -373,4 +386,10 @@ Updates are used to update the filtered entries. In order for updates to be appl
 ``` elixir
 query = from(u in User, update: [set: [name: "new name"]])
 Repo.update_all(query, [], [])
+```
+## delete
+
+``` elixir
+query = from(post in Post, where: post.name == "abc")
+Repo.delete_all(query)
 ```
