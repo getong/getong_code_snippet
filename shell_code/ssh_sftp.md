@@ -50,9 +50,11 @@ ssh user@host -p port
 #chmod 755 ~/.ssh
 #ssh-keygen -t rsa  # enter the password of the key, not the user's password
 #cd ~/.ssh
-#cp id_rsa.pub authorized_keys
+#mv id_rsa.pub authorized_keys
 #chmod 600 authorized_keys
-#chmod 600 id_rsa
+## delete the id_rsa file
+#rm id_rsa
+
 
 #vi /etc/ssh/sshd_config
 
