@@ -265,3 +265,12 @@ sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debi
 sudo apt-get update
 sudo apt-get install dart
 ```
+
+## install the rar
+
+``` shell
+$ wget -c http://rarlab.com/rar/rarlinux-x64-5.7.1.tar.gz
+$ tar xzf rarlinux-x64-5.7.1.tar.gz
+$ cd rar
+$ sudo make
+```
