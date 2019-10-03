@@ -393,3 +393,26 @@ Repo.update_all(query, [], [])
 query = from(post in Post, where: post.name == "abc")
 Repo.delete_all(query)
 ```
+
+## catch the ecto error
+
+``` elixir
+chset =
+  %SomeModel{}
+  |> SomeModel.changeset(attrs)
+try do
+  chset
+  |> Repo.insert()
+catch :error,  %Postgrex.Error{postgres: %{code: :invalid_password}} ->
+  { :error ,
+    chset
+    |> Changeset.add_error(:username, "may be invalid")
+    |> Changeset.add_error(:password, "may be invalid")
+  }
+else
+  {:ok, lr} -> {:ok, Map.put(lr, :password, nil)}
+  error -> error
+end
+```
+
+copy from [Elixir - try/catch vs try/rescue?](https://stackoverflow.com/questions/40280887/elixir-try-catch-vs-try-rescue)
