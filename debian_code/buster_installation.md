@@ -283,3 +283,11 @@ gsettings set org.gnome.desktop.background show-desktop-icons false
 gsettings set org.nemo.desktop show-desktop-icons true
 ```
 copy from [How to Install and Make Nemo the Default File Manager in Ubuntu](https://itsfoss.com/install-nemo-file-manager-ubuntu/)
+
+## dmsetup and cryptsetup
+
+``` shell
+sudo apt-get install dmsetup cryptsetup
+```
+copy from [linux加密文件系统](https://blog.csdn.net/dj0379/article/details/50543939)
+also see [How to Encrypt Filesystem using LUKS in Linux ](https://linoxide.com/linux-how-to/encrypt-linux-filesystem/)
