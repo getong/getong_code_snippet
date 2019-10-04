@@ -1,10 +1,10 @@
 # centos daily operations
 
-## set timezone
+## set timezone without reboot
 
 ``` shell
-# timedatectl list-timezones
-# timedatectl set-timezone Asia/Shanghai
+$ timedatectl list-timezones
+$ sudo timedatectl set-timezone Asia/Shanghai
 ```
 
 ## install fastestmirror
