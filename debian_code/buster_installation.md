@@ -274,3 +274,12 @@ $ tar xzf rarlinux-x64-5.7.1.tar.gz
 $ cd rar
 $ sudo make
 ```
+
+## set nemo as the Default File Manager
+
+``` shell
+xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
+gsettings set org.gnome.desktop.background show-desktop-icons false
+gsettings set org.nemo.desktop show-desktop-icons true
+```
+copy from [How to Install and Make Nemo the Default File Manager in Ubuntu](https://itsfoss.com/install-nemo-file-manager-ubuntu/)
