@@ -251,7 +251,7 @@ sudo apt-get install -y firmware-atheros
 ## install the nodejs
 
 ``` shell
-wget -c https://nodejs.org/dist/v12.11.0/node-v12.11.1-linux-x64.tar.xz
+wget -c https://nodejs.org/dist/v12.11.1/node-v12.11.1-linux-x64.tar.xz
 sudo tar xaf node-v12.11.1-linux-x64.tar.xz -C /usr/local
 echo "PATH=/usr/local/node-v12.11.1-linux-x64/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
@@ -287,7 +287,7 @@ copy from [How to Install and Make Nemo the Default File Manager in Ubuntu](http
 ## dmsetup and cryptsetup
 
 ``` shell
-sudo apt-get install dmsetup cryptsetup
+sudo apt-get install dmsetup cryptsetup lvm2
 ```
 copy from [linux加密文件系统](https://blog.csdn.net/dj0379/article/details/50543939)
 also see [How to Encrypt Filesystem using LUKS in Linux ](https://linoxide.com/linux-how-to/encrypt-linux-filesystem/)
