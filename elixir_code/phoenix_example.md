@@ -9,7 +9,7 @@ sudo apt-get install -y inotify-tools
 ## running postgres with docker
 
 ``` shell
-docker run --name postgres_instance -e TZ=Asia/Shanghai -e POSTGRES_USER=user_name -e POSTGRES_PASSWORD=aek4iTu6 -e POSTGRES_DB=db_name -d -p 15432:5432 postgres:11.3
+docker run --name postgres_instance -e TZ=Asia/Shanghai -e POSTGRES_USER=user_name -e POSTGRES_PASSWORD=aek4iTu6 -e POSTGRES_DB=db_name -d -p 15432:5432 postgres:12.0
 ```
 psql connection:
 
