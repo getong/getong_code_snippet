@@ -251,9 +251,9 @@ sudo apt-get install -y firmware-atheros
 ## install the nodejs
 
 ``` shell
-wget -c https://nodejs.org/dist/v12.11.1/node-v12.11.1-linux-x64.tar.xz
-sudo tar xaf node-v12.11.1-linux-x64.tar.xz -C /usr/local
-echo "PATH=/usr/local/node-v12.11.1-linux-x64/bin:$PATH" >> ~/.zshrc
+wget -c https://nodejs.org/dist/v12.12.0/node-v12.12.0-linux-x64.tar.xz
+sudo tar xaf node-v12.12.0-linux-x64.tar.xz -C /usr/local
+echo "PATH=/usr/local/node-v12.12.0-linux-x64/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
 ```
 
