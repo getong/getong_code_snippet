@@ -619,3 +619,14 @@ sed -i 's#\“"#\"#g' filename
 sed -i 's:\“":\":g' filename
 ```
 copy from [Linux sed替换中文引号为英文引号](https://blog.csdn.net/qq_35457078/article/details/85219384)
+
+## ssh-agent
+
+``` shell
+rm ~/.ssh/.auth_socket
+ssh-agent -a ~/.ssh/.auth_socket
+# 31018 is the pid
+echo 31018 > ~/.ssh/.auth_pid
+export SSH_AGENT_PID=`cat $HOME/.ssh/.auth_pid`
+ssh-add id_rsa
+```
