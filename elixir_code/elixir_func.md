@@ -65,3 +65,19 @@ end
 ``` elixir
 :crypto.hash(:md5, content) |> Base.encode16
 ```
+
+## File and IO
+
+``` elixir
+{:ok, file} = File.open("a.txt", [:write])
+IO.puts(file, "test word")
+```
+a test sample for the library Ink:
+
+``` elixir
+config :logger, Ink,
+  name: "project_name",
+  level: :info,
+  io_device: elem(File.open("a.txt", [:write]), 1),
+  metadata: [:pid]
+```
