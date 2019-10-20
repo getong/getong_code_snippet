@@ -11,7 +11,7 @@ import Ecto.Query
 def list_messages(room_id, limit \\ 15) do
   Repo.all(
     from msg in Message,
-    join: user in assoc(msg, :user),
+    left_join: user in assoc(msg, :user),
     where: msg.room_id == ^room_id,
     order_by: [desc: msg.inserted_at],
     limit: ^limit,
@@ -78,6 +78,7 @@ copy from [Ecto.Query](https://hexdocs.pm/ecto/Ecto.Query.html)
 ```
 Receives a source that is to be joined to the query and a condition for the join. The join condition can be any expression that evaluates to a boolean value. The join is by default an inner join, the qualifier can be changed by giving the atoms: :inner, :left, :right, :cross, :full, :inner_lateral or :left_lateral. For a keyword query the :join keyword can be changed to: :inner_join, :left_join, :right_join, :cross_join, :full_join, :inner_lateral_join or :left_lateral_join.
 ```
+The use the :left_join is very common.
 see [图解 SQL 里的各种 JOIN](https://mazhuang.org/2017/09/11/joins-in-sql/)
 [Visual Representation of SQL Joins](https://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins)
 
