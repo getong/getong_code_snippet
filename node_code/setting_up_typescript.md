@@ -30,6 +30,7 @@ change the file to be :
     "module": "commonjs",
     "strict": true,
     "outDir": "dist",
+    "rootDir": "./src",
     "sourceMap": true
   }
 }
@@ -150,4 +151,4 @@ and you can also change the tslint.json
 tsc
 node output/index.js
 
-``` 
+```
