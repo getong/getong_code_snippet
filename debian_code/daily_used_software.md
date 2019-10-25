@@ -9,6 +9,7 @@ vim
 tmux
 trash-cli
 proxychains
+proxychains4
 ansible
 supervisor
 systemd

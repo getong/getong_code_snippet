@@ -630,3 +630,9 @@ echo 31018 > ~/.ssh/.auth_pid
 export SSH_AGENT_PID=`cat $HOME/.ssh/.auth_pid`
 ssh-add id_rsa
 ```
+
+## get ip
+
+``` shell
+curl ipinfo.io
+```
