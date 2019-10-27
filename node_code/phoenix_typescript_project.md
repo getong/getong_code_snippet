@@ -4,6 +4,11 @@
 see [A Phoenix+React initial setup that actually works](https://medium.com/@resir014/a-phoenix-react-initial-setup-that-actually-works-c943e48f1e9e)
 see [phoenix_react_playground](https://github.com/resir014/phoenix_react_playground)
 
+``` shell
+yarn add -D @types/phoenix @types/react @types/react-dom @types/react-redux
+```
+copy from [React+Sass+Typescript with Phoenix framework using Webpack](https://medium.com/@tommyblue/react-sass-typescript-with-phoenix-framework-using-webpack-af0c8f7282d9)
+
 ## phoenix work with angular
 The angular 7 seems create a individual project, not only a library, so a little harder to work with.
 see [Using Angular 4 with Phoenix Framework 1.3](http://blog.dtengeri.com/2017/10/phoenix-angular.html)
