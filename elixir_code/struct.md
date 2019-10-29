@@ -25,3 +25,18 @@ struct is very like the map type, but the struct often works with the module nam
 ``` elixir
 Map.from_struct(struct)
 ```
+## default values
+
+``` elixir
+defmodule User do
+  defstruct [:email, name: "John", age: 27]
+end
+```
+## required values
+
+``` elixir
+defmodule Car do
+ @enforce_keys [:make]
+ defstruct [:model, :make]
+end
+```
