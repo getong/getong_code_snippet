@@ -81,3 +81,17 @@ config :logger, Ink,
   io_device: elem(File.open("a.txt", [:write]), 1),
   metadata: [:pid]
 ```
+
+## exception
+
+``` elixir
+def unreliable_method do
+  # do something
+  :ok
+rescue
+  err ->
+    Logger.error(Exception.format(:error, err, __STACKTRACE__))
+    {:error, :processing_failed}
+end
+```
+copy from [Elixir: Correct way of printing __STACKTRACE__](https://stackoverflow.com/questions/53589585/elixir-correct-way-of-printing-stacktrace)
