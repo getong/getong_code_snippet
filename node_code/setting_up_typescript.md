@@ -152,3 +152,9 @@ tsc
 node output/index.js
 
 ```
+
+## add types example
+
+``` shell
+yarn add lowdb @types/lowdb
+```
