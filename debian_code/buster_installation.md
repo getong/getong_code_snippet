@@ -291,3 +291,10 @@ sudo apt-get install dmsetup cryptsetup lvm2
 ```
 copy from [linux加密文件系统](https://blog.csdn.net/dj0379/article/details/50543939)
 also see [How to Encrypt Filesystem using LUKS in Linux ](https://linoxide.com/linux-how-to/encrypt-linux-filesystem/)
+
+## progress, formerly known as 'cv'
+
+``` shell
+sudo apt-get install progress
+progress -w
+```
