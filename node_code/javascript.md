@@ -21,3 +21,14 @@ more on [Here are the most popular ways to make an HTTP request in JavaScript](h
 
 ## MDN JavaScript page
 [MDN JavaScript](https://developer.mozilla.org/en-US/docs/Web/javascript)
+
+## code example
+
+``` javascript
+typeof(null) === 'object'
+Number("100")
+String(100)
+let a = NaN
+typeof(a) == 'number'
+100 + undefined === NaN
+```
