@@ -417,3 +417,15 @@ end
 ```
 
 copy from [Elixir - try/catch vs try/rescue?](https://stackoverflow.com/questions/40280887/elixir-try-catch-vs-try-rescue)
+
+## foreign_key and references
+
+``` elixir
+belongs_to :ref, Project.Ref,
+    ## current a_name in this schema
+      foreign_key: :a_name,
+      ## b_name in the Project.Ref
+      references: :b_name,
+      ## not define field
+      define_field: false
+```
