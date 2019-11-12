@@ -32,3 +32,9 @@ let a = NaN
 typeof(a) == 'number'
 100 + undefined === NaN
 ```
+
+## prettier
+
+``` shell
+prettier --check  --write css/* js/*
+```
