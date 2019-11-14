@@ -38,3 +38,17 @@ ALTER SEQUENCE product_id_seq RESTART WITH 1453
 ```
 `product` is the table name
 copy from [Reset auto increment counter in postgres](https://stackoverflow.com/questions/5342440/reset-auto-increment-counter-in-postgres)
+
+## ERROR: column c.relhasoids does not exist
+the client and server version should be the same, the 12 version.
+
+``` shell
+docker exec -it postgres_container_name psql your_connection_string
+```
+copy from [How to fix “ERROR: column c.relhasoids does not exist” in Postgres?](https://stackoverflow.com/questions/58461178/how-to-fix-error-column-c-relhasoids-does-not-exist-in-postgres)
+
+## change schema
+
+``` sql
+set search_path to schema1, schema2;
+```
