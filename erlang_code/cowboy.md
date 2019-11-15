@@ -251,3 +251,6 @@ The `expect` function will check the calback module `function_exported` the `Cal
 stop_listener(Ref) ->
 	ranch:stop_listener(Ref).
 ```
+
+## cowboy cors
+look at [Add CORS example](https://github.com/ninenines/cowboy/pull/1001)
