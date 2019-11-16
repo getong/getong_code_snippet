@@ -298,3 +298,9 @@ also see [How to Encrypt Filesystem using LUKS in Linux ](https://linoxide.com/l
 sudo apt-get install progress
 progress -w
 ```
+## stop bluetooth
+
+``` shell
+systemctl stop  bluetooth
+systemctl disable  bluetooth
+```
