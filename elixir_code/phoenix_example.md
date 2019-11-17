@@ -358,3 +358,9 @@ defp timestamp do
   defp pad(i) when i < 10, do: << ?0, ?0 + i >>
   defp pad(i), do: to_string(i)
 ```
+
+## cors
+
+``` elixir
+{:cors_plug, "~> 2.0"}
+```
