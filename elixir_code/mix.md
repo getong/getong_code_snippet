@@ -16,7 +16,6 @@ mix deps.update --all
 mix run -e "Lib.fun()"
 ## umbrella project, then cd apps and create other elixie project
 mix new --umbrella project
-## might be in elixir 1.9 without distillery
 mix release
 
 ## search the packages about react
