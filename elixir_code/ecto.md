@@ -429,3 +429,12 @@ belongs_to :ref, Project.Ref,
       ## not define field
       define_field: false
 ```
+
+## migration
+
+``` elixir
+create unique_index(:posts, [:slug])
+drop unique_index(:posts, [:name])
+```
+[Phoenix: Ecto migrations cheatsheet](https://devhints.io/phoenix-migrations)
+[Phoenix: Ecto cheatsheet](https://devhints.io/phoenix-ecto)
