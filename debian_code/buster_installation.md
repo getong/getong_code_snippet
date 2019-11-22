@@ -304,3 +304,10 @@ progress -w
 systemctl stop  bluetooth
 systemctl disable  bluetooth
 ```
+
+## video download helper
+
+``` shell
+wget -c https://github.com/mi-g/vdhcoapp/releases/download/v1.3.0/net.downloadhelper.coapp-1.3.0-1_amd64.deb
+sudo dpkg -i net.downloadhelper.coapp-1.3.0-1_amd64.deb
+```
