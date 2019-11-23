@@ -31,6 +31,10 @@ String(100)
 let a = NaN
 typeof(a) == 'number'
 100 + undefined === NaN
+
+let names = ["Hat", "Boots", "Gloves"];
+let prices = [];
+let combinedArray = [...names, ...prices];
 ```
 
 ## prettier
