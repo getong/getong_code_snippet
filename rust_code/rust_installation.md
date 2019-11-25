@@ -13,6 +13,20 @@ $ echo 'export PATH=$HOME/.cargo/bin:$PATH' >> ~/.zshrc
 $ source $HOME/.cargo/env
 
 ```
+## rustup install the stable by default
+
+``` shell
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+```
+
+## another method install the rust
+
+``` shell
+RUSTUP_HOME=~/rustup && CARGO_HOME=~/cargo && PATH=~/cargo/bin:$PATH && RUST_VERSION=1.39.0
+wget -c https://static.rust-lang.org/rustup/archive/1.20.2/x86_64-unknown-linux-gnu/rustup-init
+chmod +x rustup-init
+./rustup-init -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION
+```
 
 ## rustup usage
 
