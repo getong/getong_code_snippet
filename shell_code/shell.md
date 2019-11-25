@@ -122,3 +122,52 @@ and append this into ~/.tmux.conf
 set -g update-environment -r
 ```
 copy from [TMUX and SSH auto-login with ssh-agent (finally!)](https://development.robinwinslow.uk/2012/07/20/tmux-and-ssh-auto-login-with-ssh-agent-finally/)
+
+
+## install multiple languages on travis-ci.org
+[How to set up Travis CI with multiple languages](https://stackoverflow.com/questions/27644586/how-to-set-up-travis-ci-with-multiple-languages)
+``` shell
+matrix:
+  include:
+    - language: python
+      python: 2.7
+      before_script:
+        - cd backend/tests
+      script:
+        - python -m unittest discover
+
+    - language: android
+      dist: trusty
+      jdk: oraclejdk8
+      android:
+        components:
+          - tools
+          - android-25
+          - build-tools-25.0.3
+      before_script:
+        - cd android/AppName
+      script:
+        - ./gradlew build connectedCheck
+
+    - language: objective-c
+      os: osx
+      osx_image: xcode8.3
+      before_script:
+        - cd ios/AppName
+      script:
+        - xcodebuild -workspace AppName.xcworkspace -scheme AppName
+          -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3' build test
+
+notifications:
+  email:
+    - yourname@gmail.com
+```
+or
+
+``` shell
+before_install:
+  - wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
+  - source ~/.nvm/nvm.sh
+  - nvm install 5 # for Node v5
+  - node --version
+```
