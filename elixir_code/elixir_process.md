@@ -39,3 +39,31 @@ If the process registered in the registry dies, it will automaticly deleted in t
 
 ## max concurrency
 The Task.async_stream/4 functon can sets the option :max_concurrency, to set the maximum number of tasks to run at the same time. Defaults to System.schedulers_online/0.
+
+## Registry
+Registry all keys
+``` elixir
+defmodule MyApp.Sensor.Registry do
+  @doc """
+  Lists all the registered sensors from the registry.
+  """
+  @spec list_sensors!(module) :: [{String.t(), pid, any}]
+  def list_sensors!(registry \\ __MODULE__) do
+    try do
+      # The args for `lookup_element` are taken from the private function
+      # `info/1` from the `Registry` module.
+      {_kind, _partitions, table, _pid_ets, _} =
+        :ets.lookup_element(registry, -1, 2)
+
+      # select_all is the result of `:ets.fun2ms(&(&1))` which works from iex
+      # but not when compiled for reasons beyond my comprehension
+      select_all = [{:"$1", [], [:"$1"]}]
+      :ets.select(table, select_all)
+    catch
+      :error, :badarg ->
+        raise ArgumentError, "#{inspect(registry)} is not running"
+    end
+  end
+end
+```
+copy from [How to get keys (pids) of registered via Register children](https://stackoverflow.com/questions/42086249/how-to-get-keys-pids-of-registered-via-register-children)
