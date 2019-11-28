@@ -67,3 +67,9 @@ defmodule MyApp.Sensor.Registry do
 end
 ```
 copy from [How to get keys (pids) of registered via Register children](https://stackoverflow.com/questions/42086249/how-to-get-keys-pids-of-registered-via-register-children)
+It looks like this:
+``` elixir
+{_kind, _partitions, table, _pid_ets, _} = :ets.lookup_element(:'ModuleName', -1, 2)
+select_all = [{:"$1", [], [:"$1"]}]
+:ets.select(table, select_all)
+```
