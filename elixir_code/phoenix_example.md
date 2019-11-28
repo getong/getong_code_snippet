@@ -364,3 +364,9 @@ defp timestamp do
 ``` elixir
 {:cors_plug, "~> 2.0"}
 ```
+
+## broadcast
+
+``` elixir
+Phoenix.Endpoint.broadcast(topic, event, msg)
+```
