@@ -48,7 +48,7 @@ man() {
 
 # 7z compress
 function 7z_cp() {
-	7z a -p -mhe -t7z -m0=lzma -mx=0 -mfb=64 -md=32m -ms=on $1.7z $1 &> /dev/null
+	7z a -p`cat password.txt` -mhe -t7z -m0=lzma -mx=0 -mfb=64 -md=32m -ms=on $1.7z $1 &> /dev/null
 }
 
 # 7z decompress
