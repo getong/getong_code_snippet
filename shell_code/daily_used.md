@@ -636,3 +636,9 @@ ssh-add id_rsa
 ``` shell
 curl ipinfo.io
 ```
+
+## get disk partition uuid
+
+``` shell
+blkid
+```
