@@ -301,8 +301,8 @@ progress -w
 ## stop bluetooth
 
 ``` shell
-systemctl stop  bluetooth
-systemctl disable  bluetooth
+systemctl stop bluetooth
+systemctl disable bluetooth
 ```
 
 ## video download helper
