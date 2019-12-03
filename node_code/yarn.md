@@ -39,7 +39,7 @@ yarn add --dev node-sass sass-loader vue-loader vue-style-loader
 ## comman packages
 
 ``` shell
-for i in parcel-bundler typescript @angular/cli ts-node gulp-cli webpack prettier tsun @types/node mocha nodemon phantom inquirer tsc-watch 
+for i in parcel-bundler typescript @angular/cli ts-node gulp-cli webpack prettier tsun @types/node mocha nodemon phantom inquirer tsc-watch jest @types/jest ts-jest
 do
 yarn global add $i
 done
