@@ -22,7 +22,7 @@
 - [ ] riak_ensemble
 - [x] why riak_ensemble try_commit will spawn in another process?
 - [ ] lasp, partisan, hyparview a gossip protocol
-- [ ] cowboy, cowboy rest callback module
+- [x] cowboy, cowboy rest callback module
 - [x] hackney, just like httpc
 - [ ] common test
 - [x] dialyzer
