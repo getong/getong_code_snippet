@@ -23,7 +23,7 @@ export PATH=/sbin:$PATH
 # tar xaf linux-source-4.19.tar.xz
 # cd linux-source-4.19
 # patch -p1 < ../linux-patch-4.19-rt.patch
-# cp /boot/config-4.19.0-5-amd64 .config
+# cp /boot/config-4.19.0-6-amd64 .config
 ```
 edit the .config file
 
