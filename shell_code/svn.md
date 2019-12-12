@@ -73,3 +73,43 @@ $ svn co svn://svn_server/repo/branches/branch_name -r version_num
 svn revert --recursive example_folder
 ```
 see [Undo that SVN add](http://data.agaric.com/undo-svn-add)
+
+## force vimdiff long line wrap
+
+``` vim-script
+au VimEnter * if &diff | execute 'windo set wrap' | endif
+```
+
+## use vimdiff as the vim diff tool
+add the diffwrap.sh to /usr/local/bin/
+``` shell
+#!/bin/sh
+
+# Configure your favorite diff program here.
+DIFF="/usr/bin/vimdiff"
+
+# Subversion provides the paths we need as the sixth and seventh
+# parameters.
+LEFT=${6}
+RIGHT=${7}
+
+# Call the diff command
+$DIFF $LEFT $RIGHT
+```
+then add executeable flag to it:
+
+``` shell
+chmod a+x diffwrap.sh
+```
+
+add the diff-cmd to ~/.subversion/config
+
+```
+diff-cmd = /usr/loca/bin/diffwrap.sh
+```
+use it:
+
+``` shell
+svn diff
+```
+copy from [Improving svn diff with the Power of Vim](http://www.coreymaynard.com/blog/improving-svn-diff-with-the-power-of-vim/)
