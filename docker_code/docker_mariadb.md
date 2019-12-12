@@ -34,3 +34,11 @@ MariaDB [(none)]> show databases;
 mysql -uroot -p -h127.0.0.1 -P 4444
 ```
 It must use `-h` parameter.
+
+## start phpmyadmin
+
+``` shell
+docker run --name my-own-mariadb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mariadb:10.4.10
+docker run --name my-own-phpmyadmin -d --link my-own-mariadb:db -p 8080:80 phpmyadmin/phpmyadmin:4.9
+curl http://127.0.0.1:8080
+```
