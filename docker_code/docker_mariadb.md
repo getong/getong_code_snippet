@@ -42,3 +42,4 @@ docker run --name my-own-mariadb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d m
 docker run --name my-own-phpmyadmin -d --link my-own-mariadb:db -p 8080:80 phpmyadmin/phpmyadmin:4.9
 curl http://127.0.0.1:8080
 ```
+read from [Run MySQL & phpMyAdmin locally in 3 steps using Docker](https://medium.com/@migueldoctor/run-mysql-phpmyadmin-locally-in-3-steps-using-docker-74eb735fa1fc)
