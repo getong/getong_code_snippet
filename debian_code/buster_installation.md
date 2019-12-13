@@ -311,3 +311,9 @@ systemctl disable bluetooth
 wget -c https://github.com/mi-g/vdhcoapp/releases/download/v1.3.0/net.downloadhelper.coapp-1.3.0-1_amd64.deb
 sudo dpkg -i net.downloadhelper.coapp-1.3.0-1_amd64.deb
 ```
+
+## fix erlang start observer warning
+
+``` shell
+sudo apt-get install -y libcanberra-gtk-module libgail-common
+```
