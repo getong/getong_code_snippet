@@ -11,6 +11,15 @@ sudo apt-get install -y inotify-tools
 ``` shell
 docker run --name postgres_instance -e TZ=Asia/Shanghai -e POSTGRES_USER=user_name -e POSTGRES_PASSWORD=aek4iTu6 -e POSTGRES_DB=db_name -d -p 15432:5432 postgres:12.1
 ```
+
+## pgadmin
+
+``` shell
+docker run -p 2080:80 -e "PGADMIN_DEFAULT_EMAIL=email_user@domain.com" -e "PGADMIN_DEFAULT_PASSWORD=quush2La" -d dpage/pgadmin4:4.16
+curl https://localhost:2080
+```
+It must notes that the postgres should be `local_ip:15432`, not `localhost:15432`.
+
 psql connection:
 
 ``` shell
