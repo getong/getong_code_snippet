@@ -116,8 +116,8 @@ See [wxBase/wxGTK/wxGTK-gl packages in centos 7 repos?](https://www.centos.org/f
 See [使用国内源安装erlang](http://www.jianshu.com/p/27197d58e94c)
 
 ``` shell
-# wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
-# rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
+# wget https://packages.erlang-solutions.com/erlang-solutions-2.0-1.noarch.rpm
+# rpm -Uvh erlang-solutions-2.0-1.noarch.rpm
 ```
 Edit /etc/yum.repos.d/erlang_solutions.repo
 centos 6
