@@ -15,8 +15,8 @@ dependencies:
   pre:
     - chmod 755 rebar3
     - sudo cp rebar3  /usr/bin
-    - wget http://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
-    - sudo dpkg -i erlang-solutions_1.0_all.deb
+    - wget http://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
+    - sudo dpkg -i erlang-solutions_2.0_all.deb
     - sudo apt-get install software-properties-common
     - sudo add-apt-repository -y ppa:avsm/ppa
     - sudo apt-get update
