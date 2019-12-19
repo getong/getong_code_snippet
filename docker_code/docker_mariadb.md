@@ -7,7 +7,7 @@ See the reference [使用dokcer 构建 mariadb 数据库](http://dockone.io/arti
 ``` shell
 mkdir -p /data/mysql/data
 chcon -Rt svirt_sandbox_file_t /data/mysql/data
-docker run --privileged -v /data/mysql/data:/var/lib/mysql -p 4444:3306 -e MYSQL_DATABASE=test_db -e MYSQL_USER=user_a -e MYSQL_ROOT_PASSWORD=zan3Kie1 --name mariadb_instance -d mariadb:10.4.11 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+docker run --privileged -v /data/mysql/data:/var/lib/mysql -p 4444:3306 -e MYSQL_DATABASE=test_db -e MYSQL_USER=user_a -e MYSQL_ROOT_PASSWORD=zan3Kie1 --name mariadb_instance -d mariadb:10.4.11 --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
 
 ```
 If not root user, it must uses `--privileged` parameter to obtain root privilege.
