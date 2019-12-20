@@ -317,3 +317,27 @@ sudo dpkg -i net.downloadhelper.coapp-1.3.0-1_amd64.deb
 ``` shell
 sudo apt-get install -y libcanberra-gtk-module libgail-common
 ```
+
+## install nodejs in debian
+see [How To Install Node.js on Debian 9](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-debian-9)
+
+``` shell
+curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+```
+
+see [How To Install Node.js on Debian 10](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-debian-10)
+
+``` shell
+curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+```
+then install the yarn:
+
+``` shell
+curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update && sudo apt-get install yarn
+```
