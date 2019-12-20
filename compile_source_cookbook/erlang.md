@@ -16,7 +16,7 @@ source ~/kerl/19.3.2/activate
 ## compile from source
 
 ``` shell
-export VERSION=22.2
+export VERSION=22.2.1
 wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
 tar xzf OTP-$VERSION.tar.gz
 cd otp-OTP-$VERSION
