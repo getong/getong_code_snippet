@@ -5,7 +5,7 @@
 ``` shell
 # apt-get update
 # apt-get upgrade -y
-# apt-get install -y vim zsh curl nemo git moc moc-ffmpeg-plugin unzip p7zip-full
+# apt-get install -y vim zsh curl nemo git moc moc-ffmpeg-plugin unzip p7zip-full w3m w3m-img proxychains
 ```
 ## add the /sbin to the root user PATH variable
 
@@ -18,6 +18,7 @@ export PATH=/sbin:$PATH
 ``` shell
 # apt-get build-dep -y linux
 # apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free firmware-realtek
+# apt-get install -y firmware-linux-free firmware-linux-nonfree libncurses6 libncurses-dev linux-source build-essential linux-headers-amd64 
 # cd /usr/src
 # xz -d -k linux-patch-4.19-rt.patch.xz
 # tar xaf linux-source-4.19.tar.xz
