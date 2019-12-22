@@ -5,7 +5,7 @@ export LS_OPTIONS='--color=auto'
 alias ls='ls $LS_OPTIONS'
 export PATH=/usr/local/tmux-2.4/bin:$PATH
 
-alias fbterm="zsh ~/.background_fbterm /usr/share/images/desktop-base/spacefun-grub-widescreen2.png"
+# alias fbterm="zsh ~/.background_fbterm /usr/share/images/desktop-base/spacefun-grub-widescreen2.png"
 tmux_init()
 {
     tmux new-session -s "getong" -d #-n "local"     开启一个会话
