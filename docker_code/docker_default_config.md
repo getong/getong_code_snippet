@@ -54,3 +54,18 @@ copy from [Configure Docker to use a proxy server](https://docs.docker.com/netwo
  }
 }
 ```
+
+## add docker mirror
+add this file, /etc/docker/daemon.json
+
+``` shell
+{
+        "registry-mirrors": ["http://hub-mirror.c.163.com"]
+}
+```
+then
+
+``` shell
+sudo systemctl restart docker
+```
+copy from [docker设置国内镜像源](https://blog.csdn.net/whatday/article/details/8677060)
