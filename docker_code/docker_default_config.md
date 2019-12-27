@@ -60,7 +60,7 @@ add this file, /etc/docker/daemon.json
 
 ``` shell
 {
-        "registry-mirrors": ["http://hub-mirror.c.163.com"]
+        "registry-mirrors": ["https://registry.docker-cn.com", "http://hub-mirror.c.163.com"]
 }
 ```
 then
@@ -68,4 +68,4 @@ then
 ``` shell
 sudo systemctl restart docker
 ```
-copy from [docker设置国内镜像源](https://blog.csdn.net/whatday/article/details/8677060)
+copy from [docker设置国内镜像源](https://blog.csdn.net/whatday/article/details/86770609)
