@@ -31,7 +31,11 @@ svn mergeinfo svn://svn_server/repo/trunk --show-revs eligible
 ```
 svn -r 99:120 merge svn://svn_server/repo/trunk
 ```
+回滚代码, 反向合并
 
+``` shell
+svn merge -r 20:10 file_or_dir
+```
 
 
 ## 建立tags
