@@ -30,4 +30,23 @@ gpg --list-secret-keys
 
 ## export key
 gpg --armor --export pub-GPG-KEY-ID
+
+## use below
+gpg --export ${ID} > public.key
+gpg --export-secret-key ${ID} > private.key
+
+## import key
+gpg --import public.key
+gpg --import private.key
+gpg --edit-key {KEY} trust quit
 ```
+copy from [How to import secret gpg key (copied from one machine to another)?](https://unix.stackexchange.com/questions/184947/how-to-import-secret-gpg-key-copied-from-one-machine-to-another)
+
+## gpg Inappropriate ioctl for device
+
+``` shell
+echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+echo "use-agent
+pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+```
+copy from [gpg: 签名时失败处理](https://blog.csdn.net/wenbo20182/article/details/72850810)
