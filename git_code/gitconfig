@@ -1,7 +1,7 @@
 [user]
 	name = user
 	email = username@users.noreply.github.com
-    signingkey = asbddddddddd
+	signingkey = asbddddddddd
 [color]
 	ui = true
 [push]
@@ -14,7 +14,7 @@
 	tool = vimdiff
 
 [credential]
-		helper = cache --timeout=36000
+	helper = cache --timeout=360000
 
 [core]
 	editor = vim
