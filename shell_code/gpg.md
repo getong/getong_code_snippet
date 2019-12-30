@@ -57,3 +57,10 @@ copy from [gpg: 签名时失败处理](https://blog.csdn.net/wenbo20182/article/
 echo "default-cache-ttl 3600" >> ~/.gnupg/gpg-agent.conf
 ```
 copy from [Remember GPG password when signing git commits](https://stackoverflow.com/questions/36847431/remember-gpg-password-when-signing-git-commits)
+
+## use  console-based prompt and reload gpg setting
+copy from [How to force GPG to use console-mode pinentry to prompt for passwords?](https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords)
+``` shell
+echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
+gpg-connect-agent reloadagent /bye
+```
