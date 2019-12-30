@@ -7,8 +7,8 @@ tar xaf ruby-2.7.0.tar.xz
 cd ruby-2.7.0
 ./configure --prefix=/usr/local/ruby-2.7.0
 make
-make test
 make capi
+make check
 sudo make install
 ```
 
