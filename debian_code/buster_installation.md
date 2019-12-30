@@ -349,3 +349,9 @@ sudo apt-get update && sudo apt-get install yarn
 sudo apt-get install pinentry-tty
 sudo update-alternatives --config pinentry
 ```
+
+## doxygen
+
+``` shell
+sudo apt-get install doxygen
+```
