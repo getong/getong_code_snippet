@@ -355,3 +355,13 @@ sudo update-alternatives --config pinentry
 ``` shell
 sudo apt-get install doxygen
 ```
+
+## fun commands
+
+``` shell
+$ sudo sudo apt-get install cmatrix sl cowsay rig
+$ cmatrix
+$ sl
+$ cowsay "hello world"
+$ rig
+```
