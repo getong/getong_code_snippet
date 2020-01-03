@@ -158,3 +158,15 @@ node output/index.js
 ``` shell
 yarn add lowdb @types/lowdb
 ```
+
+## allowJs
+
+``` javascript
+{
+    "compilerOptions": {
+    ...
+    "allowJs": true
+    ...
+    }
+}
+```
