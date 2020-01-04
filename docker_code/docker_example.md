@@ -215,3 +215,9 @@ docker start container_id
 In debian 9.8, there might be a error, the docker install might be failed.
 see [Docker CE install failed on debian 9.8](https://github.com/docker/for-linux/issues/598)
 The solution is reboot the debian system, and then reinstall the docker.
+
+## start with /sbin/init
+
+``` shell
+docker run -ti -d --privileged=true ubuntu:16.04  "/sbin/init"
+```
