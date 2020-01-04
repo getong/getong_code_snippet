@@ -165,7 +165,8 @@ yarn add lowdb @types/lowdb
 {
     "compilerOptions": {
     ...
-    "allowJs": true
+    "allowJs": true,
+    "checkJs": true
     ...
     }
 }
