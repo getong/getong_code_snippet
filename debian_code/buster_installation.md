@@ -365,3 +365,9 @@ $ sl
 $ cowsay "hello world"
 $ rig
 ```
+
+## kvm
+
+``` shell
+sudo apt-get install qemu-kvm virt-manager
+```
