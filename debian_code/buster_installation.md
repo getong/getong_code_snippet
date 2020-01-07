@@ -371,3 +371,9 @@ $ rig
 ``` shell
 sudo apt-get install qemu-kvm virt-manager
 ```
+
+## linux-perf
+
+``` shell
+sudo apt-get install -y linux-perf systemtap
+```
