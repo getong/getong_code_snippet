@@ -377,3 +377,10 @@ sudo apt-get install qemu-kvm virt-manager
 ``` shell
 sudo apt-get install -y linux-perf systemtap
 ```
+
+## software-properties-common
+For add-apt-repository command
+
+``` shell
+sudo apt-get install software-properties-common
+```
