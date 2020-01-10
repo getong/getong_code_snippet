@@ -3,7 +3,7 @@
 ## pull the tag
 
 ```
-docker pull elasticsearch:7.5.0
+docker pull elasticsearch:7.5.1
 ```
 
 ## run the elasticsearch:
@@ -19,3 +19,6 @@ see [elasticsearch.md](https://github.com/jaywcjlove/docker-tutorial/blob/master
 [docker安装elasticsearch](https://juejin.im/post/5ca0d12c518825550b35be6d)
 [How to Setup Elasticsearch on Ubuntu 18.04 & 16.04 LTS](https://tecadmin.net/setup-elasticsearch-on-ubuntu/)
 [Install Elasticsearch with Debian Package](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html)
+
+## elasticsearch needs much more memory
+When in development, start it as needed.
