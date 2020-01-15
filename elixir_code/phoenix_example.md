@@ -379,3 +379,6 @@ defp timestamp do
 ``` elixir
 Phoenix.Endpoint.broadcast(topic, event, msg)
 ```
+
+## phoenix encryption example
+[phoenix-ecto-encryption-example](https://github.com/dwyl/phoenix-ecto-encryption-example)
