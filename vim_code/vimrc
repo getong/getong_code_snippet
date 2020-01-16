@@ -21,7 +21,7 @@ set incsearch
 set fencs=utf-8,gbk
 set equalalways
 syntax on
-set list lcs=tab:\|\ 
+set list lcs=tab:\|\
 "set paste
 set cursorline
 set ruler
@@ -68,3 +68,8 @@ set visualbell
 set autoread
 set list
 set autoindent
+" copy from https://makandracards.com/makandra/11541-how-to-not-leave-trailing-whitespace-using-your-editor-or-git
+autocmd BufWritePre * :%s/\s\+$//e
+" Show trailing whitepace and spaces before a tab:
+:highlight ExtraWhitespace ctermbg=red guibg=red
+:autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
