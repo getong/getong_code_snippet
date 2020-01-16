@@ -357,3 +357,6 @@ git reset upstream/master
 git push origin master --tags --prune
 ```
 copy from [In git, how do I sync my tags against a remote server?](https://stackoverflow.com/questions/10491146/in-git-how-do-i-sync-my-tags-against-a-remote-server)
+
+## github permanent links
+see [Getting permanent links to files on Github or Gitlab](https://makandracards.com/makandra/31613-getting-permanent-links-to-files-on-github-or-gitlab)
