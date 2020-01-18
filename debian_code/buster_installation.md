@@ -270,8 +270,8 @@ sudo apt-get install dart
 ## install the rar
 
 ``` shell
-$ wget -c http://rarlab.com/rar/rarlinux-x64-5.7.1.tar.gz
-$ tar xzf rarlinux-x64-5.7.1.tar.gz
+$ wget -c http://rarlab.com/rar/rarlinux-x64-5.8.0.tar.gz
+$ tar xzf rarlinux-x64-5.8.0.tar.gz
 $ cd rar
 $ sudo make
 ```
