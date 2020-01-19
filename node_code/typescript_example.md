@@ -23,3 +23,19 @@ let products: Product[] = [hat, gloves, umbrella, mirrorShades, darkShades];
 products.forEach(prod => console.log(`${prod.name}: ${prod.price} `
     + `${ prod.hasFeature ? prod.hasFeature(Feature.Waterproof) : "false" }`));
 ```
+
+
+## types system
+
+``` typescript
+boolean
+number
+string
+void
+null
+undefined
+object
+any
+unknown
+never
+```
