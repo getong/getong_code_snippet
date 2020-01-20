@@ -39,3 +39,6 @@ any
 unknown
 never
 ```
+
+## use grapheme-splitter to split non-ascii string
+
