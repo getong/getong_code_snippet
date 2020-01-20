@@ -384,3 +384,9 @@ For add-apt-repository command
 ``` shell
 sudo apt-get install software-properties-common
 ```
+
+## docbook2x, asciidoc-dblatex
+
+``` shell
+sudo apt-get install docbook2x asciidoc-dblatex asciidoc
+```
