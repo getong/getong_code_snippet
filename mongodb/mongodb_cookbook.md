@@ -194,7 +194,9 @@ mongod -f /etc/mongod.conf
 ``` shell
 chmod -R go+w .
 
-docker run -d --privileged --restart=always --network host -v $PWD/db:/data/db  -v $PWD/config:/mongodb_config --name my_own_mongo mongo:3.6.4-jessie -f /mongodb_config/config_file
+docker run -d --privileged --restart=always --network host -v $PWD/db:/data/db  -v $PWD/config:/mongodb_config --name my_own_mongo mongo:4.2-bionic -f /mongodb_config/config_file
+docker run -d --network some-network --name some-mongo -p 8081:8081 -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret mongo:4.2-bionic
+docker run -d --network some-network --name some-mongo -p 8082:8081 -v $PWD:/mongo_config -e MONGO_INITDB_ROOT_USERNAME_FILE=/mongo_config/user_name_file -e MONGO_INITDB_ROOT_PASSWORD_FILE=/mongo_config/secret_file mongo:4.2-bionic
 ```
 
 Is there  a better way to do this?
