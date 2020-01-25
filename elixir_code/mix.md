@@ -20,6 +20,9 @@ mix new --umbrella project
 
 ## search the packages about react
 mix hex.search react
+
+mix hex.repo list
+mix hex.repo set hexpm --url https://hexpm.upyun.com
 ```
 
 ## add erl_otps
