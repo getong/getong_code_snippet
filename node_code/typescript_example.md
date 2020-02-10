@@ -38,7 +38,7 @@ object
 any
 unknown
 never
+symbol
 ```
 
 ## use grapheme-splitter to split non-ascii string
-
