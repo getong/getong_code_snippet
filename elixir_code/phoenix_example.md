@@ -33,7 +33,7 @@ psql connection:
 $ mix local.hex --force
 
 ## install phoenix framework
-$ mix archive.install hex phx_new 1.4.12 --force
+$ mix archive.install hex phx_new 1.4.13 --force
 
 ## phoenix hello project, when installing dependencies choose yes
 $ mix phx.new hello
