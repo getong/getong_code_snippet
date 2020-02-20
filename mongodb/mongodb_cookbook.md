@@ -344,3 +344,15 @@ install:
 ``` shell
 sudo yum install -y mongodb-org
 ```
+
+## add username
+
+``` shell
+db.createUser({user: "username" ,
+    pwd: passwordPrompt(),      // Or  "<cleartext password>"
+    roles: [{role: "readWriteAnyDatabase", db: "admin"}, "readWrite"]})
+```
+copy from [Mongodb 用户权限管理及配置](https://blog.51cto.com/wzlinux/2153062)
+also see[db.createUser()](https://docs.mongodb.com/manual/reference/method/db.createUser/)
+
+## robo3t often need to connect to admin database, and then change the database.
