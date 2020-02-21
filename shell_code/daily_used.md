@@ -642,3 +642,9 @@ curl ipinfo.io
 ``` shell
 blkid
 ```
+
+## clean zsh env
+
+``` shell
+sh -c 'env HOME=$(mktemp -d) zsh'
+```
