@@ -35,6 +35,14 @@ typeof(a) == 'number'
 let names = ["Hat", "Boots", "Gloves"];
 let prices = [];
 let combinedArray = [...names, ...prices];
+
+let A = function(name, value) {
+    this.name = name;
+    this.value = value;
+}
+Object.setPrototypeOf(A.prototype, B.prototype);
+A.call(this, name, value);
+A.prototype.getInfo = function() {}
 ```
 
 ## prettier
