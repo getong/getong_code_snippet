@@ -43,6 +43,25 @@ see [Simple JSON request with cURL to Mochiweb](https://stackoverflow.com/questi
 hackney is an HTTP client library, it offers a pool client feartur.
 gun is also  HTTP client library, and it supports websocket.
 
+``` erlang
+application:start(crypto),
+application:start(public_key),
+application:start(ssl),
+application:start(hackney).
+PoolName = mypool,
+Options = [{timeout, 150000}, {max_connections, 100}],
+ok = hackney_pool:start_pool(PoolName, Options),
+
+
+Method = get,
+URL = <<"https://friendpaste.com">>,
+Headers = [],
+Payload = <<>>,
+Options = [{pool, default}],
+{ok, StatusCode, RespHeaders, ClientRef} = hackney:request(Method, URL, Headers,
+                                                        Payload, Options).
+```
+copy from [hackney](https://github.com/benoitc/hackney)
 
 ## query string
 
