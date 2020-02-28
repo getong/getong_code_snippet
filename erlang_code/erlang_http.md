@@ -63,6 +63,22 @@ Options = [{pool, default}],
 ```
 copy from [hackney](https://github.com/benoitc/hackney)
 
+## username and password
+curl example:
+``` shell
+curl --user name:password http://www.example.com
+curl -u name:password http://www.example.com
+```
+copy from [curl设置http头Authentication实现http基本认证](https://blog.csdn.net/bytxl/article/details/50379488)
+hackney example:
+
+``` shell
+Url = <<"http://localhost:8000/basic-auth/username/password">>,
+Options = [{basic_auth, {<<"username">>, <<"password">>}}],
+{ok, StatusCode, _, _} = hackney:request(get, URL, [], <<>>, Options)
+```
+copy from Basic auth with Hackney](https://lookonmyworks.co.uk/2015/02/19/basic-auth-with-hackney/)
+
 ## query string
 
 ``` shell
