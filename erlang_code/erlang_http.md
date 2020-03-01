@@ -79,6 +79,18 @@ Options = [{basic_auth, {<<"username">>, <<"password">>}}],
 ```
 copy from Basic auth with Hackney](https://lookonmyworks.co.uk/2015/02/19/basic-auth-with-hackney/)
 
+## elastic example
+
+``` shell
+## curl
+curl --user user:password -H "Content-Type: application/json" -X PUT  http://127.0.0.1:9200/_bulk -d '
+{ "index" : { "_index" : "table_name", "_type" : "_doc"} }
+{"a":"1","b":"2"}
+'
+## erlang
+hackney:request(put, <<"http://127.0.0.1:9200/_bulk">>, [{<<"Content-Type">>, <<"application/json">>}, {<<"connection">>, <<"keep-alive">>}], jsx:encode({"a" => 1, "b" => 2}), []).
+```
+
 ## query string
 
 ``` shell
