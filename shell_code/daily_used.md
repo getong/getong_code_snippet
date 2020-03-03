@@ -648,3 +648,10 @@ blkid
 ``` shell
 sh -c 'env HOME=$(mktemp -d) zsh'
 ```
+
+## continue broken scp (secure copy) command process with rsync
+
+``` shell
+rsync -P -e "ssh -i id_rsa" user@ip:src_file dest_file
+```
+copy from [How to resume scp with partially copied files? [closed]](https://stackoverflow.com/questions/26411225/how-to-resume-scp-with-partially-copied-files/26411449)
