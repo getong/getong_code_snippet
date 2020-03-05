@@ -6,7 +6,7 @@
 $ apt-get install mariadb-server mariadb-client
 ```
 
-## mysql_secure_installation
+## mysql_secure_installation, for mysql 5.6 only
 
 set the root user's password
 ``` shell
@@ -60,3 +60,67 @@ deb [arch=amd64,i386,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/1
 deb-src http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.2/debian stretch main
 ```
 copy from [mariadb installation](https://downloads.mariadb.org/mariadb/repositories/#mirror=tuna&distro=Debian&distro_release=stretch--stretch&version=10.2)
+
+## mysql 8 installation
+
+``` shell
+wget https://repo.mysql.com/yum/mysql-8.0-community/el/7/x86_64/mysql80-community-release-el7-3.noarch.rpm
+rpm -ivh mysql80-community-release-el7-3.noarch.rpm
+```
+Then change the /etc/yum.repos.d/mysql-community.repo file according to [Mysql Community Edition 镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/mysql/)
+
+```
+[mysql-connectors-community]
+name=MySQL Connectors Community
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-connectors-community-el7/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+
+[mysql-tools-community]
+name=MySQL Tools Community
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql-tools-community-el7/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+
+[mysql56-community]
+name=MySQL 5.6 Community Server
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql56-community-el7/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+
+[mysql57-community]
+name=MySQL 5.7 Community Server
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql57-community-el7/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+
+[mysql80-community]
+name=MySQL 8.0 Community Server
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql80-community-el7/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+```
+And run the command:
+
+``` shell
+yum makecache fast
+yum install -y mysql-community-server
+
+systemctl start mysqld
+grep -R "password" /var/log/mysqld.log
+A temporary password is generated for root@localhost: xxxxx
+```
+The xxxxx is your temporary password.
+Change the mysql password:
+
+``` shell
+mysql -uroot -pxxx
+> alter user 'root'@'localhost' identified by 'yyyyyy'; ## change your password here
+> update mysql.user set host='%' where user='root';
+> flush privileges;
+```
