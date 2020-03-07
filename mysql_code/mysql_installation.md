@@ -64,7 +64,7 @@ copy from [mariadb installation](https://downloads.mariadb.org/mariadb/repositor
 ## mysql 8 installation
 
 ``` shell
-wget https://repo.mysql.com/yum/mysql-8.0-community/el/7/x86_64/mysql80-community-release-el7-3.noarch.rpm
+wget https://mirrors.tuna.tsinghua.edu.cn/mysql/yum/mysql80-community-el7/mysql80-community-release-el7-3.noarch.rpm
 rpm -ivh mysql80-community-release-el7-3.noarch.rpm
 ```
 Then change the /etc/yum.repos.d/mysql-community.repo file according to [Mysql Community Edition 镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/mysql/)
