@@ -390,3 +390,14 @@ sudo apt-get install software-properties-common
 ``` shell
 sudo apt-get install docbook2x asciidoc-dblatex asciidoc
 ```
+
+## install faketime
+
+``` shell
+git clone https://github.com/wolfcw/libfaketime
+cd libfaketime
+make
+sudo make install
+faketime '2018-03-27 21:04:52' date
+```
+copy from [使用faketime修改单个应用程序的系统时间](http://inorz.net/2018/03/26/modifies-the-system-time-for-a-single-application/)
