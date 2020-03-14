@@ -13,3 +13,5 @@
 ```
 When storing files into the file system, it gets the localtime, and change it to the universaltime, but convert it into posix time as a number.
 When getting the file atime, mtime, ctime, it fetch the posix time as a number, and then convert it into universaltime, and finally change it to localtime.
+
+## loop cycle time need to check the begin and end time, in some situation, the time is the end, not the begin.
