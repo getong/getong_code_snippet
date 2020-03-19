@@ -407,3 +407,10 @@ adb is used for Android development.
 ``` shell
 sudo apt-get install adb
 ```
+
+## disable some permission on huawei device
+
+copy from [关闭多任务振动方法](https://club.huawei.com/thread-18084606-1-1.html)
+``` shell
+adb shell sh /sdcard/Android/data/com.zzzmode.appopsx/opsx.sh
+```
