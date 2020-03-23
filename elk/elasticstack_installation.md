@@ -10,3 +10,5 @@ echo "deb https://mirrors.tuna.tsinghua.edu.cn/elasticstack/7.x/apt/ stable main
 
 sudo apt-get update && sudo apt-get install elasticsearch
 ```
+
+copy from [Install Elasticsearch with Debian Package](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html)
