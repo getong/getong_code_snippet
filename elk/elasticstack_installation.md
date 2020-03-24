@@ -16,3 +16,6 @@ copy from [Install Elasticsearch with Debian Package](https://www.elastic.co/gui
 
 ## huawei mirroro
 [elasticsearch](https://mirrors.huaweicloud.com/elasticsearch/)
+
+## install elk in debian
+[How to Install ELK Stack on Debian 9](https://www.rosehosting.com/blog/how-to-install-the-elk-stack-on-debian-9/)
