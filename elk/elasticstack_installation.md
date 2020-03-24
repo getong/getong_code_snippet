@@ -1,5 +1,6 @@
 # elastic stack installation
 
+## install in debian
 ``` shell
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt-get install apt-transport-https
@@ -12,3 +13,6 @@ sudo apt-get update && sudo apt-get install elasticsearch
 ```
 
 copy from [Install Elasticsearch with Debian Package](https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html)
+
+## huawei mirroro
+[elasticsearch](https://mirrors.huaweicloud.com/elasticsearch/)
