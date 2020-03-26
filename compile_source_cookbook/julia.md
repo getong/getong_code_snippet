@@ -1,6 +1,8 @@
 q# julia compile from source
 
 ```
+sudo apt-get build-dep julia
+sudo apt-get install -y gfortran
 export VERSION=1.4.0
 wget -c
 tar xzf julia-$VERSION-full.tar.gz
