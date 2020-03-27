@@ -6,6 +6,7 @@
 # apt-get update
 # apt-get upgrade -y
 # apt-get install -y vim zsh curl nemo git moc moc-ffmpeg-plugin unzip p7zip-full w3m w3m-img proxychains
+# systemctl set-default multi-user.target
 ```
 ## add the /sbin to the root user PATH variable
 
@@ -17,14 +18,13 @@ export PATH=/sbin:$PATH
 
 ``` shell
 # apt-get build-dep -y linux
-# apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free firmware-realtek
-# apt-get install -y firmware-linux-free firmware-linux-nonfree libncurses6 libncurses-dev linux-source build-essential linux-headers-amd64 libelf-dev libssl-dev
+# apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free firmware-realtek libncurses6 libncurses-dev linux-source build-essential linux-headers-amd64 libelf-dev libssl-dev
 # cd /usr/src
 # xz -d -k linux-patch-4.19-rt.patch.xz
 # tar xaf linux-source-4.19.tar.xz
 # cd linux-source-4.19
 # patch -p1 < ../linux-patch-4.19-rt.patch
-# cp /boot/config-4.19.0-6-amd64 .config
+# cp /boot/config-4.19.0-8-amd64 .config
 ```
 edit the .config file
 
