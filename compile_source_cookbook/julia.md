@@ -9,6 +9,7 @@ tar xzf julia-$VERSION-full.tar.gz
 cd julia-$VERSION
 echo "USE_BINARYBUILDER=0\nprefix=/usr/local/julia-$VERSION" >> Make.user
 make
+make docs
 sudo make install
 ```
 check the avx cpu option
