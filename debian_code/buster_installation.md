@@ -220,7 +220,7 @@ sudo apt-get install -y pandoc
 ## build-dep
 
 ``` shell
-sudo apt-get build-dep -y emacs erlang git julia tmux
+sudo apt-get build-dep -y emacs erlang git julia tmux nodejs redis-server
 ```
 
 ## install the docker-compose
@@ -235,12 +235,6 @@ copy from [Install Docker Compose](https://docs.docker.com/compose/install/)
 
 ``` shell
 sudo apt-get install -y pwgen ffmpeg expect
-```
-
-## redis-server
-
-``` shell
-sudo apt-get build-dep redis-server
 ```
 
 ## wireless driver
