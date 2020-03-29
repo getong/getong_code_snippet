@@ -8,9 +8,9 @@ wget -c https://github.com/JuliaLang/julia/releases/download/v$VERSION/julia-$VE
 tar xzf julia-$VERSION-full.tar.gz
 cd julia-$VERSION
 echo "USE_BINARYBUILDER=0\nprefix=/usr/local/julia-$VERSION" >> Make.user
-make
-make docs
-sudo make install
+make -j `nproc`
+make -j `nproc` docs
+sudo make `nproc` install
 ```
 check the avx cpu option
 
