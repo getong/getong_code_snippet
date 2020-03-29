@@ -414,3 +414,20 @@ copy from [关闭多任务振动方法](https://club.huawei.com/thread-18084606-
 ``` shell
 adb shell sh /sdcard/Android/data/com.zzzmode.appopsx/opsx.sh
 ```
+
+## disable Bluetooth support
+To disable Bluetooth support in PulseAudio, make sure that the following lines are commented out in the configuration file in use (~/.config/pulse/default.pa or /etc/pulse/default.pa): 
+```
+~/.config/pulse/default.pa
+
+### Automatically load driver modules for Bluetooth hardware
+#.ifexists module-bluetooth-policy.so
+#load-module module-bluetooth-policy
+#.endif
+
+#.ifexists module-bluetooth-discover.so
+#load-module module-bluetooth-discover
+#.endif
+
+```
+copy from [Disable_Bluetooth_support](https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Disable_Bluetooth_support)
