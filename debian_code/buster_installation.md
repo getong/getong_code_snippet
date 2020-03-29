@@ -17,7 +17,7 @@ export PATH=/sbin:$PATH
 ## compile the linux kernel
 
 ``` shell
-# apt-get build-dep -y linux
+# apt-get build-dep -y linux-source
 # apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free firmware-realtek libncurses6 libncurses-dev linux-source build-essential linux-headers-amd64 libelf-dev libssl-dev
 # cd /usr/src
 # xz -d -k linux-patch-4.19-rt.patch.xz
