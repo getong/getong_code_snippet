@@ -226,9 +226,9 @@
 (setq x-underline-at-descent-line t)
 
 
-;(add-hook 'after-init-hook 'my-after-init-hook)
-;(defun my-after-init-hook ()
-; (require 'edts-start))
+(add-hook 'after-init-hook 'my-after-init-hook)
+(defun my-after-init-hook ()
+ (require 'edts-start))
 
 
 (setq erlang-root-dir "/usr/local/otp_src_22.3/lib/erlang")
