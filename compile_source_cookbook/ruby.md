@@ -2,10 +2,10 @@
 Compile ruby
 
 ``` shell
-wget -c https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.0.tar.gz
-tar xaf ruby-2.7.0.tar.xz
-cd ruby-2.7.0
-./configure --prefix=/usr/local/ruby-2.7.0
+wget -c https://cache.ruby-lang.org/pub/ruby/2.7/ruby-2.7.1.tar.gz
+tar xaf ruby-2.7.1.tar.xz
+cd ruby-2.7.1
+./configure --prefix=/usr/local/ruby-2.7.1
 make
 make capi
 make check
