@@ -61,3 +61,6 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update && sudo apt install --no-install-recommends yarn
 ```
+
+## nodejs v13.12.0 does not work on some old cpu
+see [zlib Illegal Instruction on CPU without SSSE3 support](https://github.com/nodejs/node/issues/32553)
