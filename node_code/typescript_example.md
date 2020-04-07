@@ -42,3 +42,17 @@ symbol
 ```
 
 ## use grapheme-splitter to split non-ascii string
+
+## apply, call, and bind
+
+``` typescript
+function add(a: number, b: number): void {
+    console.log("a + b is " + (a + b));
+}
+
+add(10, 20);
+add.apply(null, [10, 20]);
+add.call(null, 10, 20);
+add.bind(null, 10, 20)()
+
+```
