@@ -338,8 +338,12 @@ see [How to get the current branch name in Git?](https://stackoverflow.com/quest
 ``` shell
 git submodule
 git submodule add git_url git_name
+git add git_name .gitmodules
+git commit -m 'add submodule' git .gitmodules
 git submodule init git_name
 git submodule update git_name
+# or
+git submodule update --remote
 ```
 
 ## squash two non-consecutive commit
