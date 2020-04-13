@@ -15,3 +15,17 @@ class ClassName {
 ``` dart
 int funcName() => 42;
 ```
+
+## get and set
+
+``` dart
+class myClass {
+  String name;
+  String get getName => name;
+  set setName(String aValue) => name = aValue;
+}
+
+var myObject = myClass();
+myObject.setName = "Sanjib";
+print(myObject.getName);
+```
