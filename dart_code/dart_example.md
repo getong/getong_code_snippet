@@ -29,3 +29,13 @@ var myObject = myClass();
 myObject.setName = "Sanjib";
 print(myObject.getName);
 ```
+
+## override
+@override is not a must tag, with it can enhances the code reading.
+
+``` dart
+@override
+void hello() {
+    return "world";
+}
+```
