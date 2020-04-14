@@ -39,3 +39,10 @@ void hello() {
     return "world";
 }
 ```
+
+## mixin
+
+``` dart
+class A extends B with C
+```
+A can inheritance B class and use C class functions.
