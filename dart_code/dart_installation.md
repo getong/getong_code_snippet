@@ -10,3 +10,9 @@ wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stab
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/dart-archive/channels/stable/release/2.7.2/sdk/dartsdk-linux-x64-release.zip
 unzip dartsdk-linux-x64-release.zip
 ```
+
+## android studio
+
+```
+https://developer.android.google.cn/studio
+```
