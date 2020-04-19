@@ -13,7 +13,7 @@ kerl install 19.3.2 ~/kerl/19.3.2
 source ~/kerl/19.3.2/activate
 ```
 
-## compile from source
+## in linux, compile from source
 
 ``` shell
 export VERSION=22.3.2
@@ -34,6 +34,30 @@ export LANG=en
 make -j`nproc` docs
 
 sudo make install && sudo make install-docs
+```
+
+## in macosx, compile from source
+
+``` shell
+brew install fop openssl unixodbc wxmac
+export VERSION=22.3.2
+wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
+tar xzf OTP-$VERSION.tar.gz
+cd otp-OTP-$VERSION
+export ERL_TOP=$PWD
+export PATH=$ERL_TOP/bin:$PATH
+
+./otp_build autoconf
+
+./configure --prefix=/usr/local/Cellar/otp_src_$VERSION --with-ssl=/usr/local/Cellar/openssl@1.1/1.1.1f
+make clean
+#using all cores of a cpu
+make -j`nproc` && make -j`nproc` tests
+
+export LANG=en
+make -j`nproc` docs
+
+make install && make install-docs
 ```
 
 ## g++: internal compiler error: Killed (program cc1plus)
