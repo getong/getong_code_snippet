@@ -36,3 +36,5 @@ see [在Mac中设置Ctrl+C/V进行复制/粘贴](https://support.apple.com/zh-cn
 
 ## macosx keyboard shortcuts
 see [Mac 键盘快捷键](https://support.apple.com/zh-cn/HT201236)
+
+## change keyboard key position by using Karabiner-Elements
