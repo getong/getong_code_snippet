@@ -64,3 +64,18 @@ copy from [How to force GPG to use console-mode pinentry to prompt for passwords
 echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
 gpg-connect-agent reloadagent /bye
 ```
+## delete keys
+Generally, it can use the command:
+
+``` shell
+gpg --delete-keys xxxx
+```
+but sometimes, it can be deleted by this command:
+
+``` shell
+gpg --list-secret-keys --with-keygrip
+gpg-connect-agent "delete_key <keygrip>" /bye
+gpg --list-keys
+gpg --delete-keys xxxxx-keys
+```
+copy from [Unable to delete private subkeys in GnuPG if no master key present](https://superuser.com/questions/1388426/unable-to-delete-private-subkeys-in-gnupg-if-no-master-key-present)
