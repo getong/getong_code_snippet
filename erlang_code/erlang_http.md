@@ -63,6 +63,48 @@ Options = [{pool, default}],
 ```
 copy from [hackney](https://github.com/benoitc/hackney)
 
+gun example:
+
+``` erlang
+{ok, ConnPid} = gun:open("example.org", 443).
+%% or
+{ok, ConnPid} = gun:open("example.org", 8443, #{transport => tls}).
+%% wait for connection is ready.
+{ok, Protocol} = gun:await_up(ConnPid).
+%% get method
+StreamRef = gun:get(ConnPid, "/organizations/ninenines").
+%% head method
+StreamRef = gun:head(ConnPid, "/organizations/ninenines").
+
+%% post method
+Body = "{\"msg\": \"Hello world!\"}",
+StreamRef = gun:post(ConnPid, "/organizations/ninenines", [
+    {<<"content-type">>, "application/json"}
+], Body).
+
+%% send file
+sendfile(ConnPid, StreamRef, Filepath) ->
+    {ok, IoDevice} = file:open(Filepath, [read, binary, raw]),
+    do_sendfile(ConnPid, StreamRef, IoDevice).
+
+do_sendfile(ConnPid, StreamRef, IoDevice) ->
+    case file:read(IoDevice, 8000) of
+        eof ->
+            gun:data(ConnPid, StreamRef, fin, <<>>),
+            file:close(IoDevice);
+        {ok, Bin} ->
+            gun:data(ConnPid, StreamRef, nofin, Bin),
+            do_sendfile(ConnPid, StreamRef, IoDevice)
+    end.
+
+%% delete method
+StreamRef = gun:delete(ConnPid, "/organizations/ninenines").
+
+%% options method
+StreamRef = gun:options(ConnPid, "/organizations/ninenines").
+```
+copy from [99s gun http](https://ninenines.eu/docs/en/gun/2.0/guide/http/)
+
 ## username and password
 curl example:
 ``` shell
