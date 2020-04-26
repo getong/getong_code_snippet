@@ -60,6 +60,38 @@ make -j`nproc` docs
 make install && make install-docs
 ```
 
+## in macosx, compile from source some old version
+
+``` shell
+wget -c https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
+tar xzf openssl-1.0.2u.tar.gz
+./Configure --prefix=/usr/local/Cellar/openssl-1.0.2u shared -fPIC darwin64-x86_64-cc
+make
+make test
+make install
+
+export CPPFLAGS=-I/usr/local/Cellar/openssl-1.0.2u/include
+export LDFLAGS=-L/usr/local/Cellar/openssl-1.0.2u/lib
+export VERSION=18.3.4.11
+wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
+tar xzf OTP-$VERSION.tar.gz
+cd otp-OTP-$VERSION
+export ERL_TOP=$PWD
+export PATH=$ERL_TOP/bin:$PATH
+
+./otp_build autoconf
+
+./configure --prefix=/usr/local/Cellar/otp_src_$VERSION --with-ssl=/usr/local/Cellar/openssl-1.0.2u/ --without-wx
+make clean
+#using all cores of a cpu
+make -j`nproc` && make -j`nproc` tests
+
+export LANG=en
+make -j`nproc` docs
+
+make install && make install-docs
+```
+
 ## g++: internal compiler error: Killed (program cc1plus)
 The main reason is the memory is not enough, use the swap file to solve it.
 
