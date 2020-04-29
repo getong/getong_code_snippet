@@ -344,6 +344,7 @@ git submodule init git_name
 git submodule update git_name
 # or
 git submodule update --remote
+git submodule update --checkout
 ```
 
 ## squash two non-consecutive commit
