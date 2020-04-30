@@ -49,7 +49,7 @@ export PATH=$ERL_TOP/bin:$PATH
 
 ./otp_build autoconf
 
-./configure --prefix=/usr/local/Cellar/otp_src_$VERSION --with-ssl=/usr/local/Cellar/openssl@1.1/1.1.1f
+./configure --prefix=/usr/local/opt/otp_src_$VERSION --with-ssl=`brew --prefix openssl`
 make clean
 #using all cores of a cpu
 make -j`nproc` && make -j`nproc` tests
@@ -65,13 +65,13 @@ make install && make install-docs
 ``` shell
 wget -c https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
 tar xzf openssl-1.0.2u.tar.gz
-./Configure --prefix=/usr/local/Cellar/openssl-1.0.2u shared -fPIC darwin64-x86_64-cc
+./Configure --prefix=/usr/local/opt/openssl-1.0.2u shared -fPIC darwin64-x86_64-cc
 make
 make test
 make install
 
-export CPPFLAGS=-I/usr/local/Cellar/openssl-1.0.2u/include
-export LDFLAGS=-L/usr/local/Cellar/openssl-1.0.2u/lib
+export CPPFLAGS=-I/usr/local/opt/openssl-1.0.2u/include
+export LDFLAGS=-L/usr/local/opt/openssl-1.0.2u/lib
 export VERSION=18.3.4.11
 wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
 tar xzf OTP-$VERSION.tar.gz
@@ -81,7 +81,7 @@ export PATH=$ERL_TOP/bin:$PATH
 
 ./otp_build autoconf
 
-./configure --prefix=/usr/local/Cellar/otp_src_$VERSION --with-ssl=/usr/local/Cellar/openssl-1.0.2u/ --without-wx
+./configure --prefix=/usr/local/opt/otp_src_$VERSION --with-ssl=/usr/local/opt/openssl-1.0.2u/ --without-wx
 make clean
 #using all cores of a cpu
 make -j`nproc` && make -j`nproc` tests
