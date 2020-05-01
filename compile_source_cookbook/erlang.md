@@ -16,7 +16,7 @@ source ~/kerl/19.3.2/activate
 ## in linux, compile from source
 
 ``` shell
-export VERSION=22.3.2
+export VERSION=22.3.3
 wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
 tar xzf OTP-$VERSION.tar.gz
 cd otp-OTP-$VERSION
@@ -40,7 +40,7 @@ sudo make install && sudo make install-docs
 
 ``` shell
 brew install fop openssl unixodbc wxmac
-export VERSION=22.3.2
+export VERSION=22.3.3
 wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
 tar xzf OTP-$VERSION.tar.gz
 cd otp-OTP-$VERSION
