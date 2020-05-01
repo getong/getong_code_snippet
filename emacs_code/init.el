@@ -87,6 +87,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
 (add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
+(add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode))
 
 (setq backup-directory-alist (quote (("." . "~/.backups"))))
 (setq version-control t)
