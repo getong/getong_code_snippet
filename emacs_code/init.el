@@ -30,6 +30,9 @@
 (setq-default indent-tabs-mode nil)
 (setq default-tab-width 4)
 
+(setq dart-server-sdk-path "~/flutter/bin/cache/dart-sdk/")
+(setq dart-server-enable-analysis-server t)
+(add-hook 'dart-server-hook 'flycheck-mode)
 
 ;;参考 http://www.aiuxian.com/article/p-823990.html
 ;; Linux下emacs如何和X-Window系统共享剪贴板
@@ -236,7 +239,7 @@
 (setq erlang-man-root "/usr/local/otp_src_22.3/lib/erlang")
 
 ;; 关闭文件滑动控件
-(scroll-bar-mode -1)
+;;(scroll-bar-mode -1)
 
 ;; 开启全局 Company 补全
 (global-company-mode 1)
