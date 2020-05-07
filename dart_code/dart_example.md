@@ -46,3 +46,9 @@ void hello() {
 class A extends B with C
 ```
 A can inheritance B class and use C class functions.
+
+## null check
+
+``` dart
+x ??= 3;
+```

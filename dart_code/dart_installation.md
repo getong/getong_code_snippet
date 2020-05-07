@@ -16,3 +16,9 @@ unzip dartsdk-linux-x64-release.zip
 ```
 https://developer.android.google.cn/studio
 ```
+
+## pub install package
+
+``` shell
+pub global active package_names
+```
