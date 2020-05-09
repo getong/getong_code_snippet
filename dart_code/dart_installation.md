@@ -9,6 +9,11 @@ https://mirrors.tuna.tsinghua.edu.cn/flutter
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/linux/flutter_linux_v1.12.13%2Bhotfix.9-stable.tar.xz
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/dart-archive/channels/stable/release/2.7.2/sdk/dartsdk-linux-x64-release.zip
 unzip dartsdk-linux-x64-release.zip
+
+## or
+wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.1/sdk/dartsdk-macos-x64-release.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.17.0-stable.zip
+
 ```
 
 ## android studio
