@@ -22,6 +22,9 @@ export PUB_HOSTED_URL=https://pub.flutter-io.cn
 export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 flutter pub get
 
+## on mac, open a simulator
+open -a Simulator
+
 ## run the flutter application
 flutter run
 ```
