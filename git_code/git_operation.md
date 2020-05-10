@@ -365,3 +365,13 @@ copy from [In git, how do I sync my tags against a remote server?](https://stack
 
 ## github permanent links
 see [Getting permanent links to files on Github or Gitlab](https://makandracards.com/makandra/31613-getting-permanent-links-to-files-on-github-or-gitlab)
+
+## change the commit author
+
+``` shell
+## xxxx is the commit hash
+git rebase -i xxxx
+git commit --amend --author='username <user_email>' --no-edit
+git rebase --continue
+git push -f
+```
