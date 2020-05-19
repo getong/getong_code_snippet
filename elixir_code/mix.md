@@ -68,3 +68,11 @@ elixirc_options: [warnings_as_errors: true]
 ]
 end
 ```
+
+## erlang 23 set unsafe_https
+
+``` shell
+mix hex.config unsafe_https true
+```
+
+copy from [Instll phx_new 1.5.1 and possible ssl issue](https://elixirforum.com/t/instll-phx-new-1-5-1-and-possible-ssl-issue/31015)
