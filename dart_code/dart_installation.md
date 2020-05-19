@@ -11,9 +11,9 @@ wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/dart-archive/channels/stabl
 unzip dartsdk-linux-x64-release.zip
 
 ## or
-wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.1/sdk/dartsdk-macos-x64-release.zip
-wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.17.0-stable.zip
-wget -c https://storage.flutter-io.cn/dart-archive/channels/beta/release/2.8.1/api-docs/dartdocs-gen-api.zip
+wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.2/sdk/dartsdk-macos-x64-release.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.17.1-stable.zip
+wget -c https://storage.flutter-io.cn/dart-archive/channels/beta/release/2.8.2/api-docs/dartdocs-gen-api.zip
 ```
 
 ## android studio
