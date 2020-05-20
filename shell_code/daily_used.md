@@ -661,3 +661,11 @@ copy from [How to resume scp with partially copied files? [closed]](https://stac
 ``` shell
 mv ~/.local/share/keyrings/ ~/.local/share/keyrings.bak
 ```
+
+## apt just download but not install packages
+
+``` shell
+sudo apt-get install --download-only pppoe
+sudo apt-get upgrade --download-only
+```
+copy from [How to download package not install it with apt-get command?](https://unix.stackexchange.com/questions/408346/how-to-download-package-not-install-it-with-apt-get-command)
