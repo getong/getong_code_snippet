@@ -176,3 +176,15 @@ DCL（Data Control Language）：
 copy from [DML、DDL、DCL区别](https://blog.csdn.net/level_level/article/details/4248685)
 
 结论就是由于自动提交模式下，开启了事务操作，然后在事务操作里面包括了DML的操作，导致了这个错误。要么不用事务，要么在事务里面不使用DML。
+
+## copy table data
+
+``` sql
+CREATE TABLE new_table LIKE old_table;
+INSERT new_table SELECT * FROM old_table;
+
+## or
+CREATE TABLE destination_db.new_table LIKE source_db.old_table;
+INSERT destination_db.new_table SELECT * FROM source_db.old_table;
+```
+copy from [How to duplicate a MySQL table, including indexes and data?](https://tableplus.com/blog/2018/11/how-to-duplicate-a-table-in-mysql.html)
