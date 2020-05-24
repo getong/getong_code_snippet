@@ -39,7 +39,7 @@ see [Mac 键盘快捷键](https://support.apple.com/zh-cn/HT201236)
 
 ## change keyboard key position by using Karabiner-Elements
 
-## install intel-power-gadget
+~~## install intel-power-gadget~~
 
 ``` shell
 brew cask install intel-power-gadget
