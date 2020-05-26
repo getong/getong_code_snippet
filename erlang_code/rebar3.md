@@ -106,6 +106,9 @@ The official mirror repo is https://repo.hex.pm , but this can be changed by set
 ``` shell
 export HEX_CDN=https://hexpm.upyun.com
 export HEX_MIRROR=https://hexpm.upyun.com
+
+mkdir -p ~/.config/rebar3
+echo '{rebar_packages_cdn, "https://hexpm.upyun.com"}.' >> ~/.config/rebar3/rebar.config
 ```
 
 Or run command like this:
