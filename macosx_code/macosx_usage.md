@@ -45,3 +45,10 @@ see [Mac 键盘快捷键](https://support.apple.com/zh-cn/HT201236)
 brew cask install intel-power-gadget
 ```
 copy from [How I fixed my VirtualBox VMs randomly crashing on macOS](https://angristan.xyz/2020/02/crashes-virtualbox-macos-intel-power-gadget/)
+
+## Remove .DS_Store in macOS
+
+``` shell
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+```
+copy from [Remove .DS_Store in macOS](https://wp-mix.com/remove-ds_store-in-macos/)
