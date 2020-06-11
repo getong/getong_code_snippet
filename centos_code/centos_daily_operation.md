@@ -106,3 +106,12 @@ copy from [How to check available package versions in rpm systems?](https://unix
 sudo yum install python-setuptools
 sudo easy_install trash-cli
 ```
+
+## install specific version of package
+
+``` shell
+yum --showduplicate list firefox
+yum install [package-name]-[version].[architecture]
+yum install firefox-31.5.3-3.el7_1.x86_64
+```
+copy from [CentOS / RHEL : How to install a specific version of rpm package using YUM](https://www.thegeekdiary.com/centos-rhel-how-to-install-a-specific-version-of-rpm-package-using-yum/)
