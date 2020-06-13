@@ -52,3 +52,9 @@ copy from [How I fixed my VirtualBox VMs randomly crashing on macOS](https://ang
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 ```
 copy from [Remove .DS_Store in macOS](https://wp-mix.com/remove-ds_store-in-macos/)
+
+## install julia
+
+``` shell
+brew cask install julia
+```
