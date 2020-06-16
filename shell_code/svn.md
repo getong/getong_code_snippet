@@ -117,3 +117,12 @@ use it:
 svn diff
 ```
 copy from [Improving svn diff with the Power of Vim](http://www.coreymaynard.com/blog/improving-svn-diff-with-the-power-of-vim/)
+
+## svn checksum error
+
+``` shell
+cd svn_dir
+svn update --set-depth empty
+svn update --set-depth infinity
+```
+copy from [svn错误：更新源码出现校验和不匹配问题](https://blog.csdn.net/yyqasg/article/details/78788011)
