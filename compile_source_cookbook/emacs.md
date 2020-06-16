@@ -35,3 +35,20 @@ yum install -y `yum deplist emacs | grep provider | awk -F: '{print $2}' | awk '
 yum install -y libX11-devel libjpeg-turbo-devel libpng-devel libtiff-devel libXpm-devel giflib-devel openjpeg-devel gtk2-devel ncurses-devel m17n-lib-devel texinfo
 texlive texinfo-tex texlive-dvips texlive-metapost libXpm-devel openjpeg2-devel turbojpeg-devel gnutls-devel libxml2-devel GConf2-devel dbus-devel wxGTK-devel gtk3-devel webkitgtk3-devel webkitgtk-devel
 ```
+
+## on macos
+
+``` shell
+export LDFLAGS="-L/usr/local/opt/libxml2/lib"
+export CPPFLAGS="-I/usr/local/opt/libxml2/include"
+./autogen.sh
+./configure --with-ns
+make clean
+make -j`nproc`
+make  check -j`nproc`
+make docs -j`nproc`
+make install
+make install-doc
+
+mv nextstep/Emacs.app /Applications
+```
