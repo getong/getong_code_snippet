@@ -375,3 +375,21 @@ git commit --amend --author='username <user_email>' --no-edit
 git rebase --continue
 git push -f
 ```
+
+## git subtree
+
+``` shell
+git subtree add   --prefix=<prefix> <commit>
+git subtree add   --prefix=<prefix> <repository> <ref>
+git subtree pull  --prefix=<prefix> <repository> <ref>
+git subtree push  --prefix=<prefix> <repository> <ref>
+git subtree merge --prefix=<prefix> <commit>
+git subtree split --prefix=<prefix> [OPTIONS] [<commit>]
+```
+example:
+
+``` shell
+git subtree add --prefix=sub/libpng https://github.com/test/libpng.git master --squash
+```
+
+copy from [git subtree教程](https://segmentfault.com/a/1190000012002151)
