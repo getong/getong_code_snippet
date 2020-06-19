@@ -43,3 +43,9 @@ docker run --name my-own-phpmyadmin -d --link my-own-mariadb:db -p 8080:80 phpmy
 curl http://127.0.0.1:8080
 ```
 read from [Run MySQL & phpMyAdmin locally in 3 steps using Docker](https://medium.com/@migueldoctor/run-mysql-phpmyadmin-locally-in-3-steps-using-docker-74eb735fa1fc)
+
+## phpmyadmin connect to remote server
+
+``` shell
+docker run --privileged --restart=always --name other_phpmyadmin -d -e PMA_HOST=remote_host_or_ip -e PMA_PORT=remote_port -e MYSQL_USER=remote_user -e MYSQL_PASSWORD=remote_password  -p 8888:80 phpmyadmin/phpmyadmin:5.0.2
+```
