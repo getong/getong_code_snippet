@@ -8,3 +8,7 @@ add this two code in your init.el file
 (require 'elixir-mode)
 (require 'alchemist)
 ```
+
+
+## configuration
+seee [configuration](https://alchemist.readthedocs.io/en/latest/configuration/)
