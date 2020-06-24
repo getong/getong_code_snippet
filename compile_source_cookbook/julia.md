@@ -3,7 +3,7 @@
 ```
 sudo apt-get build-dep -y julia
 sudo apt-get install -y gfortran
-export VERSION=1.4.0
+export VERSION=1.4.2
 wget -c https://github.com/JuliaLang/julia/releases/download/v$VERSION/julia-$VERSION-full.tar.gz
 tar xzf julia-$VERSION-full.tar.gz
 cd julia-$VERSION
