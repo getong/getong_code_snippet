@@ -58,3 +58,9 @@ copy from [Remove .DS_Store in macOS](https://wp-mix.com/remove-ds_store-in-maco
 ``` shell
 brew cask install julia
 ```
+
+## brew download cache directory
+
+``` shell
+~/Library/Caches/Homebrew/downloads
+```
