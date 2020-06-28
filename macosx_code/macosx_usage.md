@@ -64,3 +64,9 @@ brew cask install julia
 ``` shell
 ~/Library/Caches/Homebrew/downloads
 ```
+
+## docker desktop
+
+``` shell
+https://mirrors.aliyun.com/docker-toolbox/mac/docker-for-mac/stable/Docker.dmg
+```
