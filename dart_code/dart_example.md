@@ -52,3 +52,10 @@ A can inheritance B class and use C class functions.
 ``` dart
 x ??= 3;
 ```
+
+## Cascades
+
+``` dart
+"String".length.toString(); // 6
+"String"..length.toString(); // "String"
+```
