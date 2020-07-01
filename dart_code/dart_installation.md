@@ -12,7 +12,7 @@ unzip dartsdk-linux-x64-release.zip
 
 ## or
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.4/sdk/dartsdk-macos-x64-release.zip
-wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.17.4-stable.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.17.5-stable.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.4/api-docs/dartdocs-gen-api.zip
 
 wget -c https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.17.4-stable.zip
