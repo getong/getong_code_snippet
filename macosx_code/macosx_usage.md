@@ -77,3 +77,9 @@ https://mirrors.aliyun.com/docker-toolbox/mac/docker-for-mac/stable/Docker.dmg
 brew tap homebrew/cask-versions
 brew cask install android-studio visual-studio unity-hub epic-games
 ```
+
+## Simulator
+
+``` shell
+open -a Simulator
+```
