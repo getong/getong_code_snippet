@@ -61,3 +61,11 @@ x ??= 3;
 "String".length.toString(); // 6
 "String"..length.toString(); // "String"
 ```
+
+
+## type
+
+``` dart
+var type_string = <String> ['a', 'b', 'c'];
+print(type_string);
+```
