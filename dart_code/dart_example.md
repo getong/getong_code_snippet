@@ -44,6 +44,8 @@ void hello() {
 
 ``` dart
 class A extends B with C
+// Use A class all methods and the methods that B class does not cover
+class T = A with B;
 ```
 A can inheritance B class and use C class functions.
 
