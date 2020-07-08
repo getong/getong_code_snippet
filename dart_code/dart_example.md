@@ -16,7 +16,7 @@ class ClassName {
 int funcName() => 42;
 ```
 
-## get and set
+## get and set function
 
 ``` dart
 class myClass {
@@ -68,4 +68,14 @@ x ??= 3;
 ``` dart
 var type_string = <String> ['a', 'b', 'c'];
 print(type_string);
+```
+
+## Set, StringBuffer data type
+
+``` dart
+Set mySet = {1, 2, 3};
+mySet.lookup(2);
+
+StringBuffer stringBuffer = StringBuffer('test string');
+stringBuffer.write(' append string');
 ```
