@@ -79,3 +79,33 @@ mySet.lookup(2);
 StringBuffer stringBuffer = StringBuffer('test string');
 stringBuffer.write(' append string');
 ```
+
+
+## Future class
+
+``` dart
+import 'dart:async';
+
+void main(){
+
+  print("The main UI thread is starting on here.");
+  Future<String> displayingNewsHeadlines = Future.delayed(Duration(seconds: 1), (){
+      return "The latest headlines are displayed here after 1 second.";
+  });
+
+  displayingNewsHeadlines.then((displayString){
+      print("Displaying news headlines here: $displayingNewsHeadlines, the displayString : $displayString");
+  });
+  print("The main UI thread ends.");
+
+}
+
+```
+the output:
+
+```
+The main UI thread is starting on here.
+The main UI thread ends.
+Displaying news headlines here: Instance of 'Future<String>', the displayString : The latest headlines are displayed here after 1 second.
+```
+It is noted that, the Future object still runs after the end of the main function.
