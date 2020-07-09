@@ -83,3 +83,9 @@ brew cask install android-studio visual-studio unity-hub epic-games
 ``` shell
 open -a Simulator
 ```
+
+## android-platform-tools
+
+``` shell
+brew cask install android-platform-tools
+```
