@@ -109,3 +109,11 @@ The main UI thread ends.
 Displaying news headlines here: Instance of 'Future<String>', the displayString : The latest headlines are displayed here after 1 second.
 ```
 It is noted that, the Future object still runs after the end of the main function.
+Some methods:
+
+``` dart
+catchError(Function onError, {bool test(Object error)}) → Future<T>
+then<R>(FutureOr<R> onValue(T value), {Function onError}) → Future<R>
+timeout(Duration timeLimit, {FutureOr<T> onTimeout()}) → Future<T>
+whenComplete(FutureOr action()) → Future<T>
+```
