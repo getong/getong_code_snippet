@@ -188,3 +188,10 @@ CREATE TABLE destination_db.new_table LIKE source_db.old_table;
 INSERT destination_db.new_table SELECT * FROM source_db.old_table;
 ```
 copy from [How to duplicate a MySQL table, including indexes and data?](https://tableplus.com/blog/2018/11/how-to-duplicate-a-table-in-mysql.html)
+
+## add default valut to BLOB, GEOMETRY, JSON type data
+add this to my.cnf
+``` sql
+set sql_mode="NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
+```
+copy from [mysql给text设置一个默认值(干货)](https://juejin.im/post/5d64c3615188256bf6119a86)
