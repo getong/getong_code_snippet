@@ -52,3 +52,12 @@ map([1,2,3]) do x
 2x
 end
 ```
+
+## install package
+
+``` julia
+julia> # Type "]" to enter Pkg REPL-mode.
+pkg > registry add https://mirrors.ustc.edu.cn/julia/registries/General.git
+pkg > Pkg.add("JuMP")
+pkg > Pkg.add("GLPK")
+```
