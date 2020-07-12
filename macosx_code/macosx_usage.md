@@ -88,4 +88,11 @@ open -a Simulator
 
 ``` shell
 brew cask install android-platform-tools
+
+```
+
+## pandoc
+
+``` shell
+brew install pandoc
 ```
