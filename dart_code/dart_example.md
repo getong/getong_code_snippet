@@ -117,3 +117,13 @@ then<R>(FutureOr<R> onValue(T value), {Function onError}) → Future<R>
 timeout(Duration timeLimit, {FutureOr<T> onTimeout()}) → Future<T>
 whenComplete(FutureOr action()) → Future<T>
 ```
+
+## runZonedGuarded function
+
+``` dart
+// 这样就可以处理所有未处理的异常了。
+void main() async {
+  runZonedGuarded(() => runApp(const App()));
+ }
+```
+copy from [Flutter runZonedGuarded捕捉不到未处理错误问题的原因](https://segmentfault.com/a/1190000022892971)
