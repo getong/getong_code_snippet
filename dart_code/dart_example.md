@@ -68,6 +68,8 @@ x ??= 3;
 ``` dart
 var type_string = <String> ['a', 'b', 'c'];
 print(type_string);
+print("hello" + "world");
+print("hello" * 2);
 ```
 
 ## Set, StringBuffer data type
