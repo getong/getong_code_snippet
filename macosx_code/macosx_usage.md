@@ -96,3 +96,11 @@ brew cask install android-platform-tools
 ``` shell
 brew install pandoc
 ```
+
+
+## upgrade
+
+``` shell
+brew upgrade
+brew cask upgrade
+```
