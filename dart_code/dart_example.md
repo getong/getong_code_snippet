@@ -129,3 +129,10 @@ void main() async {
  }
 ```
 copy from [Flutter runZonedGuarded捕捉不到未处理错误问题的原因](https://segmentfault.com/a/1190000022892971)
+
+## Isolate
+
+``` dart
+Isolate.spawn<T>(void entryPoint(T message), T message, {bool paused: false, bool errorsAreFatal, SendPort onExit, SendPort onError, String debugName}) → Future<Isolate>
+Isolate.kill({int priority: beforeNextEvent}) → void
+```
