@@ -15,7 +15,7 @@ wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.4
 wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.17.5-stable.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.4/api-docs/dartdocs-gen-api.zip
 
-wget -c https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.17.4-stable.zip
+wget -c https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.17.5-stable.zip
 wget -c https://storage.googleapis.com/dart-archive/channels/stable/release/2.8.4/api-docs/dartdocs-gen-api.zip
 ```
 get the download link from [Dart SDK archive](https://dart.dev/tools/sdk/archive)
