@@ -13,7 +13,7 @@ sudo apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev l
 ```
 ## compile
 ```shell
-export VERSION=27.0.90
+export VERSION=27.1
 wget -c https://github.com/emacs-mirror/emacs/archive/emacs-$VERSION.tar.gz
 tar xzf emacs-emacs-$VERSION.tar.gz
 cd emacs-$VERSION
