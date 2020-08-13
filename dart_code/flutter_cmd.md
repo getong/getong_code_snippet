@@ -28,3 +28,10 @@ open -a Simulator
 ## run the flutter application
 flutter run
 ```
+
+## fluter key functions
+
+``` dart
+Widget.build/1 function will build the UI.
+setState/1 function will rebuild the UI.
+```
