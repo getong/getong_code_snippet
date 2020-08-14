@@ -14,10 +14,10 @@ unzip dartsdk-linux-x64-release.zip
 ## wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.8.4/sdk/dartsdk-macos-x64-release.zip
 
 
-wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.20.1-stable.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_1.20.2-stable.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/2.9.0/api-docs/dartdocs-gen-api.zip
 
-wget -c https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.20.1-stable.zip
+wget -c https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_1.20.2-stable.zip
 wget -c https://storage.googleapis.com/dart-archive/channels/stable/release/2.9.0/api-docs/dartdocs-gen-api.zip
 ```
 get the download link from [Dart SDK archive](https://dart.dev/tools/sdk/archive)
