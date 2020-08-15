@@ -150,3 +150,10 @@ getData() async {
     print(data);
 }
 ```
+
+## ~/ operator
+
+``` dart
+5 ~/ 2 == 2;
+7 ~/ 4 == 2;
+```
