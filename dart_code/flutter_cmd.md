@@ -34,4 +34,6 @@ flutter run
 ``` dart
 Widget.build/1 function will build the UI.
 setState/1 function will rebuild the UI.
+createState/0 function will create the State.
+initState/0 function will init the State.
 ```
