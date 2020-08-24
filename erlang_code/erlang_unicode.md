@@ -80,3 +80,6 @@ jsx only support list, if the element of the list is tuple, change the tuple ele
 copy from
 [Erlang 0062] Erlang Unicode 两三事](https://www.cnblogs.com/me-sa/archive/2012/05/31/erlang-unicode.html)
 [erlang-questions Regexp Matching on Unicode](http://erlang.org/pipermail/erlang-questions/2016-December/091115.html)
+
+## jsx decode result is map type in v3.0
+But the prior version is a list.
