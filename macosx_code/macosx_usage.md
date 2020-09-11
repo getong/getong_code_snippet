@@ -106,3 +106,9 @@ brew cask upgrade
 brew cask upgrade --greedy
  brew outdated --cask --greedy
 ```
+
+## install pass
+
+``` shell
+brew install pass
+```
