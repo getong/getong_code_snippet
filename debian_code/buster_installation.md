@@ -410,7 +410,7 @@ adb shell sh /sdcard/Android/data/com.zzzmode.appopsx/opsx.sh
 ```
 
 ## disable Bluetooth support
-To disable Bluetooth support in PulseAudio, make sure that the following lines are commented out in the configuration file in use (~/.config/pulse/default.pa or /etc/pulse/default.pa): 
+To disable Bluetooth support in PulseAudio, make sure that the following lines are commented out in the configuration file in use (~/.config/pulse/default.pa or /etc/pulse/default.pa):
 ```
 ~/.config/pulse/default.pa
 
@@ -425,3 +425,9 @@ To disable Bluetooth support in PulseAudio, make sure that the following lines a
 
 ```
 copy from [Disable_Bluetooth_support](https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Disable_Bluetooth_support)
+
+## install pass
+
+``` shell
+apt-get install -y pass
+```
