@@ -102,8 +102,8 @@ brew install pandoc
 
 ``` shell
 brew upgrade
-brew cask upgrade
-brew cask upgrade --greedy
+brew upgrade --cask
+brew upgrade --cask --greedy
  brew outdated --cask --greedy
 ```
 
