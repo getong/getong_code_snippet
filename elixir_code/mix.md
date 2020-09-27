@@ -23,6 +23,8 @@ mix hex.search react
 
 mix hex.repo list
 mix hex.repo set hexpm --url https://hexpm.upyun.com
+
+mix hex.outdated
 ```
 
 ## add erl_otps
