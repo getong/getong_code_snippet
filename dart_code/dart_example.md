@@ -1,5 +1,18 @@
 # dart example
 
+## basic data types:
+
+``` dart
+Number
+String
+Boolean
+List
+Set
+Map
+Rune
+Symbol
+```
+
 ## constructor function
 
 ``` dart
