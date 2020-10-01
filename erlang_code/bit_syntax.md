@@ -78,3 +78,10 @@ object_id() ->
     N = ets:update_counter(?MODULE, oid_counter, 1),
     bson:objectid(Now, MPid, N).
 ```
+
+## bnot
+bnot just equals to :
+```
+  ¬ x | (x + 1)
+```
+copy from [Bit manipulation with Erlang's bitwise bnot operator](https://stackoverflow.com/questions/41299962/bit-manipulation-with-erlangs-bitwise-bnot-operator)
