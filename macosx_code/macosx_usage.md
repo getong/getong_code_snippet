@@ -112,3 +112,9 @@ brew upgrade --cask --greedy
 ``` shell
 brew install pass
 ```
+
+## find the package download filename
+
+``` shell
+brew cache -s package-name
+```
