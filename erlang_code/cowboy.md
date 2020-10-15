@@ -323,3 +323,158 @@ config :phoenix, SSLApp.Endpoint,
 ```
 
 copy from [Increasing security in Erlang and Elixir SSL applications](http://ezgr.net/increasing-security-erlang-ssl-cowboy/)
+
+
+## websocket
+[gun code](https://github.com/ninenines/gun/)
+
+``` erlang
+%% copy from gun_http.erl
+ws_upgrade(#http_state{version='HTTP/1.0'}, _, _, _, _, _, _) ->
+	error; %% @todo
+ws_upgrade(State=#http_state{socket=Socket, transport=Transport, owner=Owner, out=head},
+		StreamRef, Host, Port, Path, Headers0, WsOpts) ->
+	{Headers1, GunExtensions} = case maps:get(compress, WsOpts, false) of
+		true -> {[{<<"sec-websocket-extensions">>,
+				<<"permessage-deflate; client_max_window_bits; server_max_window_bits=15">>}
+			|Headers0],
+			[<<"permessage-deflate">>]};
+		false -> {Headers0, []}
+	end,
+	Headers2 = case maps:get(protocols, WsOpts, []) of
+		[] -> Headers1;
+		ProtoOpt ->
+			<< _, _, Proto/bits >> = iolist_to_binary([[<<", ">>, P] || {P, _} <- ProtoOpt]),
+			[{<<"sec-websocket-protocol">>, Proto}|Headers1]
+	end,
+	Key = cow_ws:key(),
+	Headers3 = [
+		{<<"connection">>, <<"upgrade">>},
+		{<<"upgrade">>, <<"websocket">>},
+		{<<"sec-websocket-version">>, <<"13">>},
+		{<<"sec-websocket-key">>, Key}
+		|Headers2
+	],
+	IsSecure = Transport =:= gun_tls,
+	Headers = case lists:keymember(<<"host">>, 1, Headers0) of
+		true -> Headers3;
+		false when Port =:= 80, not IsSecure -> [{<<"host">>, Host}|Headers3];
+		false when Port =:= 443, IsSecure -> [{<<"host">>, Host}|Headers3];
+		false -> [{<<"host">>, [Host, $:, integer_to_binary(Port)]}|Headers3]
+	end,
+	Transport:send(Socket, cow_http:request(<<"GET">>, Path, 'HTTP/1.1', Headers)),
+	new_stream(State#http_state{connection=keepalive, out=head},
+		{websocket, StreamRef, Key, GunExtensions, WsOpts}, Owner, <<"GET">>).
+
+%% copy from cow_ws.erl
+-spec key() -> binary().
+key() ->
+	base64:encode(crypto:strong_rand_bytes(16)).
+```
+
+[cowboy code](https://github.com/ninenines/cowboy)
+
+``` erlang
+copy from cowboy_websocket.erl
+-spec upgrade(Req, Env, module(), any())
+	-> {ok, Req, Env}
+	when Req::cowboy_req:req(), Env::cowboy_middleware:env().
+upgrade(Req, Env, Handler, HandlerState) ->
+	upgrade(Req, Env, Handler, HandlerState, #{}).
+
+-spec upgrade(Req, Env, module(), any(), opts())
+	-> {ok, Req, Env}
+	when Req::cowboy_req:req(), Env::cowboy_middleware:env().
+%% @todo Immediately crash if a response has already been sent.
+upgrade(Req0=#{version := Version}, Env, Handler, HandlerState, Opts) ->
+	FilteredReq = case maps:get(req_filter, Opts, undefined) of
+		undefined -> maps:with([method, version, scheme, host, port, path, qs, peer], Req0);
+		FilterFun -> FilterFun(Req0)
+	end,
+	Utf8State = case maps:get(validate_utf8, Opts, true) of
+		true -> 0;
+		false -> undefined
+	end,
+	State0 = #state{opts=Opts, handler=Handler, utf8_state=Utf8State, req=FilteredReq},
+	try websocket_upgrade(State0, Req0) of
+		{ok, State, Req} ->
+			websocket_handshake(State, Req, HandlerState, Env);
+		%% The status code 426 is specific to HTTP/1.1 connections.
+		{error, upgrade_required} when Version =:= 'HTTP/1.1' ->
+			{ok, cowboy_req:reply(426, #{
+				<<"connection">> => <<"upgrade">>,
+				<<"upgrade">> => <<"websocket">>
+			}, Req0), Env};
+		%% Use a generic 400 error for HTTP/2.
+		{error, upgrade_required} ->
+			{ok, cowboy_req:reply(400, Req0), Env}
+	catch _:_ ->
+		%% @todo Probably log something here?
+		%% @todo Test that we can have 2 /ws 400 status code in a row on the same connection.
+		%% @todo Does this even work?
+		{ok, cowboy_req:reply(400, Req0), Env}
+	end.
+
+websocket_upgrade(State, Req=#{version := Version}) ->
+	case is_upgrade_request(Req) of
+		false ->
+			{error, upgrade_required};
+		true when Version =:= 'HTTP/1.1' ->
+			Key = cowboy_req:header(<<"sec-websocket-key">>, Req),
+			false = Key =:= undefined,
+			websocket_version(State#state{key=Key}, Req);
+		true ->
+			websocket_version(State, Req)
+	end.
+
+-spec is_upgrade_request(cowboy_req:req()) -> boolean().
+is_upgrade_request(#{version := 'HTTP/2', method := <<"CONNECT">>, protocol := Protocol}) ->
+	<<"websocket">> =:= cowboy_bstr:to_lower(Protocol);
+is_upgrade_request(Req=#{version := 'HTTP/1.1', method := <<"GET">>}) ->
+	ConnTokens = cowboy_req:parse_header(<<"connection">>, Req, []),
+	case lists:member(<<"upgrade">>, ConnTokens) of
+		false ->
+			false;
+		true ->
+			UpgradeTokens = cowboy_req:parse_header(<<"upgrade">>, Req),
+			lists:member(<<"websocket">>, UpgradeTokens)
+	end;
+is_upgrade_request(_) ->
+	false.
+
+websocket_version(State, Req) ->
+	WsVersion = cowboy_req:parse_header(<<"sec-websocket-version">>, Req),
+	case WsVersion of
+		7 -> ok;
+		8 -> ok;
+		13 -> ok
+	end,
+	websocket_extensions(State, Req#{websocket_version => WsVersion}).
+
+-spec websocket_handshake(#state{}, Req, any(), Env)
+	-> {ok, Req, Env}
+	when Req::cowboy_req:req(), Env::cowboy_middleware:env().
+websocket_handshake(State=#state{key=Key},
+		Req=#{version := 'HTTP/1.1', pid := Pid, streamid := StreamID},
+		HandlerState, Env) ->
+	Challenge = base64:encode(crypto:hash(sha,
+		<< Key/binary, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" >>)),
+	%% @todo We don't want date and server headers.
+	Headers = cowboy_req:response_headers(#{
+		<<"connection">> => <<"Upgrade">>,
+		<<"upgrade">> => <<"websocket">>,
+		<<"sec-websocket-accept">> => Challenge
+	}, Req),
+	Pid ! {{Pid, StreamID}, {switch_protocol, Headers, ?MODULE, {State, HandlerState}}},
+	{ok, Req, Env};
+%% For HTTP/2 we do not let the process die, we instead keep it
+%% for the Websocket stream. This is because in HTTP/2 we only
+%% have a stream, it doesn't take over the whole connection.
+websocket_handshake(State, Req=#{ref := Ref, pid := Pid, streamid := StreamID},
+		HandlerState, _Env) ->
+	%% @todo We don't want date and server headers.
+	Headers = cowboy_req:response_headers(#{}, Req),
+	Pid ! {{Pid, StreamID}, {switch_protocol, Headers, ?MODULE, {State, HandlerState}}},
+	takeover(Pid, Ref, {Pid, StreamID}, undefined, undefined, <<>>,
+		{State, HandlerState}).
+```
