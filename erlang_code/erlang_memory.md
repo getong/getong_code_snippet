@@ -1,6 +1,16 @@
 # erlang memory
 We can get the memory from the `erlang:memory` function.
 
+``` erlang
+erlang:memory(Type :: memory_type()) -> integer() >= 0
+erlang:memory(TypeList :: [memory_type()]) ->
+                 [{memory_type(), integer() >= 0}]
+Types
+memory_type() =
+    total | processes | processes_used | system | atom |
+    atom_used | binary | code | ets
+```
+example
 ```
 1> erlang:memory(total).
 12716856
