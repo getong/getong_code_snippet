@@ -93,3 +93,15 @@ $ cargo doc
 ``` shell
 rustup default nightly
 ```
+
+## cargo mirror
+
+``` shell
+# ~/.cargo/config
+[source.crates-io]
+replace-with = 'tuna'
+
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+```
+copy from [Rust crates.io 索引镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index.git/)
