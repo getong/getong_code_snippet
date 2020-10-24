@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode racer flycheck-rust rust-mode))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode racer flycheck-rust rust-mode company-racer))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -91,8 +91,34 @@
 (add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
 (add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
 (add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode))
-
+;; Load rust-mode when you open `.rs` files
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+
+;; Set path to racer binary
+(setq racer-cmd "~/.cargo/bin/racer")
+;; Set path to rust src directory
+(setq racer-rust-src-path "~/.rust/src/")
+(add-hook 'rust-mode-hook
+     '(lambda ()
+     ;; Enable racer
+     (racer-activate)
+
+     ;; Hook in racer with eldoc to provide documentation
+     (racer-turn-on-eldoc)
+
+     ;; Use flycheck-rust in rust-mode
+     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+
+     ;; Use company-racer in rust mode
+     (set (make-local-variable 'company-backends) '(company-racer))
+
+     ;; Key binding to jump to method definition
+     (local-set-key (kbd "M-.") #'racer-find-definition)
+
+     ;; Key binding to auto complete and indent
+     (local-set-key (kbd "TAB") #'racer-complete-or-indent)))
+
+(setq rust-format-on-save t)
 
 (setq backup-directory-alist (quote (("." . "~/.backups"))))
 (setq version-control t)
@@ -237,8 +263,8 @@
  (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_23.0.1/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_23.0.1/lib/erlang")
+(setq erlang-root-dir "/usr/local/otp_src_23.1.1/lib/erlang")
+(setq erlang-man-root "/usr/local/otp_src_23.1.1/lib/erlang")
 
 ;; 关闭文件滑动控件
 ;;(scroll-bar-mode -1)
@@ -277,9 +303,9 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_23.0.1/lib/erlang/lib/tools-3.4/emacs"
+(setq load-path (cons "/usr/local/otp_src_23.1.1/lib/erlang/lib/tools-3.4.1/emacs"
                       load-path))
-(setq exec-path (cons "/usr/local/otp_src_23.0.1/bin" exec-path))
+(setq exec-path (cons "/usr/local/otp_src_23.1.1/bin" exec-path))
 (require 'erlang-start)
 (setq debug-on-error nil)
 
