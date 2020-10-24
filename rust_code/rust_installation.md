@@ -12,6 +12,10 @@ $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 $ echo 'export PATH=$HOME/.cargo/bin:$PATH' >> ~/.zshrc
 $ source $HOME/.cargo/env
 
+rustup toolchain add nightly
+rustup component add rls-preview rust-analysis rust-src
+cargo +nightly install racer
+
 ```
 ## rustup install the stable by default
 
