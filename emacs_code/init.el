@@ -97,26 +97,22 @@
 ;; Set path to racer binary
 (setq racer-cmd "~/.cargo/bin/racer")
 ;; Set path to rust src directory
-(setq racer-rust-src-path "~/.rust/src/")
-(add-hook 'rust-mode-hook
-     '(lambda ()
-     ;; Enable racer
-     (racer-activate)
+;; copy from https://github.com/racer-rust/emacs-racer/issues/138
+;; copy from https://stackoverflow.com/questions/5014246/how-to-capture-standard-output-of-a-shell-command-in-elisp
+(setq racer-rust-src-path
+	(substring
+		(shell-command-to-string "/bin/echo $(rustc --print sysroot)/lib/rustlib/src/rust/library")
+	0 -1))
 
-     ;; Hook in racer with eldoc to provide documentation
-     (racer-turn-on-eldoc)
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
 
-     ;; Use flycheck-rust in rust-mode
-     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+(add-hook 'racer-mode-hook #'company-mode)
 
-     ;; Use company-racer in rust mode
-     (set (make-local-variable 'company-backends) '(company-racer))
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
 
-     ;; Key binding to jump to method definition
-     (local-set-key (kbd "M-.") #'racer-find-definition)
-
-     ;; Key binding to auto complete and indent
-     (local-set-key (kbd "TAB") #'racer-complete-or-indent)))
 
 (setq rust-format-on-save t)
 
