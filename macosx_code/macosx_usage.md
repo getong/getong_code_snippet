@@ -118,3 +118,10 @@ brew install pass
 ``` shell
 brew cache -s package-name
 ```
+
+## delete ABC input method
+
+``` shell
+/usr/libexec/PlistBuddy -c "Delete :AppleEnabledInputSources:1" ~/Library/Preferences/com.apple.HIToolbox.plist
+```
+copy from [Mac 怎么设置搜狗输入法为默认第一位？](https://www.v2ex.com/amp/t/592752)
