@@ -125,3 +125,10 @@ brew cache -s package-name
 /usr/libexec/PlistBuddy -c "Delete :AppleEnabledInputSources:1" ~/Library/Preferences/com.apple.HIToolbox.plist
 ```
 copy from [Mac 怎么设置搜狗输入法为默认第一位？](https://www.v2ex.com/amp/t/592752)
+
+## install firefox
+
+``` shell
+brew cask install firefox --language=zh
+```
+copy from [language](https://github.com/Homebrew/homebrew-cask/blob/master/doc/cask_language_reference/stanzas/language.md])
