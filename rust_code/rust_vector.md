@@ -32,3 +32,10 @@ assert_eq!(v.pop(), Some(35));
 v.swap_remove(1);
 std::mem::replace(&mut v[2], 123);
 ```
+
+## get is just like [], but return Result type
+
+``` rust
+assert_eq!(v.get(0), Some(1));
+assert_eq!(v[0], 1);
+```
