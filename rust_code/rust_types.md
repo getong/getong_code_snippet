@@ -74,3 +74,6 @@ let b = Box::new(t);
 *mut T
 *const T
 ```
+
+## ?Sized, Sized, Unsize
+?Sized includes Sized and Unsize
