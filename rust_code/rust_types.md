@@ -77,3 +77,16 @@ let b = Box::new(t);
 
 ## ?Sized, Sized, Unsize
 ?Sized includes Sized and Unsize
+
+## test Copy trait
+
+``` rust
+fn test_copy<T: Copy>(i: T) {
+    println!("copy trait")
+}
+
+fn main() {
+    let a = "String".to_string();
+    test_copy(a);
+}
+```
