@@ -126,3 +126,16 @@ svn update --set-depth empty
 svn update --set-depth infinity
 ```
 copy from [svn错误：更新源码出现校验和不匹配问题](https://blog.csdn.net/yyqasg/article/details/78788011)
+
+## svn checkout version
+
+``` shell
+查看指定文件的历史版本
+
+svn log filename -v -l 8 //查看指定文件最近8个版本详细信息
+
+恢复指定文件到指定版本
+
+svn up -r r5657 filename //恢复指定文件到版本 r5657
+```
+copy from [SVN恢复某个文件到特定版本](https://my.oschina.net/HeAlvin/blog/1522776)
