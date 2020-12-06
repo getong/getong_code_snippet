@@ -90,3 +90,21 @@ fn main() {
     test_copy(a);
 }
 ```
+
+## clone trait
+
+``` rust
+struct MyStruct;
+impl Copy for MyStruct { }
+impl Clone for MyStruct {
+fn clone(&self) -> Mystruct {
+    *self
+    }
+}
+```
+or
+
+``` rust
+#derive(Copy, Clone)]
+struct MyStruct;
+```
