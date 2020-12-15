@@ -14,3 +14,11 @@ struct S<'a> {
 ```
 ## coercion
 强制隐式转换，是Rust中仅有的类型隐式转换。
+
+## cow
+
+``` rust
+use std::borrow::Cow;
+
+let mut lst = Cow::from(&[1,2,3]);
+```
