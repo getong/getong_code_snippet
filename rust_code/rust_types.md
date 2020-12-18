@@ -286,3 +286,24 @@ pub fn main() {
 }
 ```
 copy from [200行代码讲透RUST FUTURES](https://stevenbai.top/rust/futures_explained_in_200_lines_of_rust/)
+
+
+## get the variable type
+
+``` rust
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
+fn main() {
+    let s = "Hello";
+    let i = 42;
+
+    print_type_of(&s); // &str
+    print_type_of(&i); // i32
+    print_type_of(&main); // playground::main
+    print_type_of(&print_type_of::<i32>); // playground::print_type_of<i32>
+    print_type_of(&{ || "Hi!" }); // playground::main::{{closure}}
+}
+```
+copy from [How do I print the type of a variable in Rust?](https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable-in-rust)
