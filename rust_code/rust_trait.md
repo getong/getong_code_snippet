@@ -11,3 +11,12 @@
 
 为了普适的情况，Rust 的编译器就选择了PartialOrd 和PartialEq来作为其默认的比较符号的trait。
 ```
+
+## Iterator
+
+```
+iter()	返回一个只读可重入迭代器，迭代器元素的类型为 &T
+into_iter()	返回一个只读不可重入迭代器，迭代器元素的类型为 T
+iter_mut()	返回一个可修改可重入迭代器，迭代器元素的类型为 &mut T
+```
+copy from [Rust 迭代器 Iterator](https://www.twle.cn/c/yufei/rust/rust-basic-iterator.html)
