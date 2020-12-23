@@ -50,3 +50,14 @@ copy from [Hello Tokio](https://tokio.rs/tokio/tutorial/hello-tokio)
 
 [深入浅出Rust异步编程之Tokio](https://zhuanlan.zhihu.com/p/107820568)
 [Rust 的异步函数与 Tokio.rs](https://zhuanlan.zhihu.com/p/244047486)
+
+
+## rust Future trait
+
+``` rust
+pub trait Future {
+    type Item;
+    type Error;
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error>;
+}
+```
