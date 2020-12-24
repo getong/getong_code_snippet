@@ -25,3 +25,30 @@ let handler = builder.spawn(|| {
 handler.join().unwrap();
 ```
 copy from [Struct std::thread::Builder](https://doc.rust-lang.org/std/thread/struct.Builder.html)
+
+
+## current thread name
+
+``` rust
+use std::thread;
+use std::time;
+
+fn main() {
+    let tid = thread::current();
+    println!("{:?}", tid);
+    thread::spawn(move || {
+        thread::sleep(time::Duration::from_secs(1));
+        println!("hello");
+        tid.unpark(); // wake up
+    });
+    thread::park(); // sleep
+    println!("world");
+}
+```
+output:
+
+``` shell
+Thread { id: ThreadId(1), name: Some("main") }
+hello
+world
+```
