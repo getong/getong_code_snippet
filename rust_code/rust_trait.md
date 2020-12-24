@@ -20,3 +20,30 @@ into_iter()	返回一个只读不可重入迭代器，迭代器元素的类型�
 iter_mut()	返回一个可修改可重入迭代器，迭代器元素的类型为 &mut T
 ```
 copy from [Rust 迭代器 Iterator](https://www.twle.cn/c/yufei/rust/rust-basic-iterator.html)
+
+## Fn, FnMut, FnOnce
+
+``` rust
+#[lang = "fn_once"]
+pub trait FnOnce<Args> {
+    type Output;
+    extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
+}
+
+#[lang = "fn_mut"]
+pub trait FnMut<Args>: FnOnce<Args> {
+    extern "rust-call" fn call_mut(&mut self, args: Args) -> Self::Output;
+}
+
+#[lang = "fn"]
+pub trait Fn<Args>: FnMut<Args> {
+    extern "rust-call" fn call(&self, args: Args) -> Self::Output;
+}
+```
+
+```
+FnOnce, 参数类型是 self，所以，这种类型的闭包会获取变量的所有权，生命周期只能是当前作用域，之后就会被释放了。
+FnMut, 参数类型是 &mut self，所以，这种类型的闭包是可变借用，会改变变量，但不会释放该变量。所以可以运行多次。
+Fn, 参数类型是 &self，所以，这种类型的闭包是不可变借用，不会改变变量，也不会释放该变量。所以可以运行多次。
+```
+copy from [谈一谈Fn, FnMut, FnOnce的区别](https://www.dazhuanlan.com/2019/12/09/5dee50f786c92/)
