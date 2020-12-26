@@ -77,6 +77,10 @@ cargo bench
 cargo test
 carge install
 cargo install clippy
+
+cd project_name
+cargo add async-std
+cargo add tokio
 ```
 
 ## rust src path
