@@ -6,6 +6,13 @@
 let mut v = Vec::with_capacity(2);
 assert_eq!(v.len(), 0);
 assert_eq!(v.capacity(), 2);
+
+// initialize the four elements
+let v1 = vec![1,2,3,4];
+// initialize 10 elements, each element is 0
+let v2 = vec![0;10];
+println!("{}", v1);
+println!("{}", v2);
 ```
 
 ## insert
