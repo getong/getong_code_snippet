@@ -210,6 +210,47 @@ fn main() {
 ```
 copy from [200行代码讲透RUST FUTURES](https://stevenbai.top/rust/futures_explained_in_200_lines_of_rust/)
 
+``` rust
+fn some_fn(param1: i32, param2: i32) -> Box<dyn View> {
+    if param1 > param2 {
+        // do something...
+        return &Button {};
+    } else {
+        // do something...
+        return &TextView {};
+    }
+}
+```
+or
+
+``` rust
+trait Foo {
+    fn default_impl(&self) {
+        println!("correct impl!");
+    }
+}
+
+impl Foo {
+    fn trait_object() {
+        println!("trait object impl");
+    }
+}
+
+struct Bar {}
+
+impl Foo for Bar {}
+
+fn main() {
+    let b = Bar{};
+    b.default_impl();
+    // b.trait_object();
+    Foo::trait_object();
+}
+```
+copy from [捋捋 Rust 中的 impl Trait 和 dyn Trait](https://zhuanlan.zhihu.com/p/109990547)
+
+
+
 ## simple link list example
 
 ``` rust
