@@ -4,3 +4,5 @@
 [rust by example](https://rustbyexample.com)
 [rust-by-example](https://github.com/rust-lang/rust-by-example)
 [rust-by-example-cn](https://github.com/rust-lang-cn/rust-by-example-cn)
+
+[Go, Rust cheatsheet](https://programming-idioms.org/cheatsheet/Go/Rust)
