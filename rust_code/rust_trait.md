@@ -47,3 +47,53 @@ FnMut, 参数类型是 &mut self，所以，这种类型的闭包是可变借用
 Fn, 参数类型是 &self，所以，这种类型的闭包是不可变借用，不会改变变量，也不会释放该变量。所以可以运行多次。
 ```
 copy from [谈一谈Fn, FnMut, FnOnce的区别](https://www.dazhuanlan.com/2019/12/09/5dee50f786c92/)
+
+## From, Into trait
+
+From trait
+``` rust
+use std::convert::From;
+
+#[derive(Debug)]
+struct Number {
+    value: i32,
+}
+
+impl From<i32> for Number {
+    fn from(item: i32) -> Self {
+        Number { value: item }
+    }
+}
+
+fn main() {
+    let num = Number::from(30);
+    println!("My number is {:?}", num);
+}
+
+```
+Into trait
+
+``` rust
+use std::convert::From;
+
+#[derive(Debug)]
+struct Number {
+    value: i32,
+}
+
+impl From<i32> for Number {
+    fn from(item: i32) -> Self {
+        Number { value: item }
+    }
+}
+
+fn main() {
+    let int = 5;
+    let num: Number = int.into();
+    println!("My number is {:?}", num);
+}
+```
+如果你为你的类型实现了 From，那么同时你也就免费获得了 Into。
+
+使用 Into trait 通常要求指明要转换到的类型，因为编译器大多数时候不能推断它。
+copy from [From 和 Into](https://rustwiki.org/zh-CN/rust-by-example/conversion/from_into.html)
