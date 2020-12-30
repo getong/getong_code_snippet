@@ -1,0 +1,32 @@
+# rustler
+
+## github repo address
+[rustler](https://github.com/rusterlium/rustler)
+
+## ErlNifTermType
+
+``` rust
+/// See [ErlNifTermType](http://www.erlang.org/doc/man/erl_nif.html#ErlNifTermType) in the Erlang docs.
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub enum ErlNifTermType {
+    // from https://github.com/erlang/otp/blob/6618ce7b6a621e92db72ea4f01f7d38553c8818c/erts/emulator/beam/erl_nif.h#L291
+    ERL_NIF_TERM_TYPE_ATOM = 1,
+    ERL_NIF_TERM_TYPE_BITSTRING = 2,
+    ERL_NIF_TERM_TYPE_FLOAT = 3,
+    ERL_NIF_TERM_TYPE_FUN = 4,
+    ERL_NIF_TERM_TYPE_INTEGER = 5,
+    ERL_NIF_TERM_TYPE_LIST = 6,
+    ERL_NIF_TERM_TYPE_MAP = 7,
+    ERL_NIF_TERM_TYPE_PID = 8,
+    ERL_NIF_TERM_TYPE_PORT = 9,
+    ERL_NIF_TERM_TYPE_REFERENCE = 10,
+    ERL_NIF_TERM_TYPE_TUPLE = 11,
+
+    /* This is a dummy value intended to coax the compiler into warning about
+     * unhandled values in a switch even if all the above values have been
+     * handled. We can add new entries at any time so the user must always
+     * have a default case. */
+    ERL_NIF_TERM_TYPE__MISSING_DEFAULT_CASE__READ_THE_MANUAL = -1,
+}
+```
