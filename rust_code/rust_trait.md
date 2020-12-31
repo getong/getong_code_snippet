@@ -134,3 +134,15 @@ Dropping HasTwoDrops!
 Dropping HasDrop!
 Dropping HasDrop!
 ```
+
+function:
+
+``` rust
+fn drop(&mut self)
+```
+
+```
+Copy and Drop are exclusive
+You cannot implement both Copy and Drop on the same type. Types that are Copy get implicitly duplicated by the compiler, making it very hard to predict when, and how often destructors will be executed. As such, these types cannot have destructors.
+```
+copy from [Trait std::ops::Drop](https://doc.rust-lang.org/std/ops/trait.Drop.html)
