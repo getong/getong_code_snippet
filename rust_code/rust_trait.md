@@ -97,3 +97,40 @@ fn main() {
 
 使用 Into trait 通常要求指明要转换到的类型，因为编译器大多数时候不能推断它。
 copy from [From 和 Into](https://rustwiki.org/zh-CN/rust-by-example/conversion/from_into.html)
+
+
+## Drop trait
+
+``` rust
+struct HasDrop;
+
+impl Drop for HasDrop {
+    fn drop(&mut self) {
+        println!("Dropping HasDrop!");
+    }
+}
+
+struct HasTwoDrops {
+    one: HasDrop,
+    two: HasDrop,
+}
+
+impl Drop for HasTwoDrops {
+    fn drop(&mut self) {
+        println!("Dropping HasTwoDrops!");
+    }
+}
+
+fn main() {
+    let _x = HasTwoDrops { one: HasDrop, two: HasDrop };
+    println!("Running!");
+}
+```
+output
+
+```
+Running!
+Dropping HasTwoDrops!
+Dropping HasDrop!
+Dropping HasDrop!
+```
