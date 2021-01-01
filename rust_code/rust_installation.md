@@ -81,6 +81,7 @@ cargo install clippy
 cd project_name
 cargo add async-std
 cargo add tokio
+cargo clippy
 ```
 
 ## rust src path
