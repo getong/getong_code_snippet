@@ -114,3 +114,27 @@ log data: 4
 ```
 
 copy from [理解 Rust 引用和借用](https://zhuanlan.zhihu.com/p/59998584)
+
+
+## for reference
+
+``` rust
+for (i, item) in bytes.iter().enumerate() {
+    if *item == b' ' {
+        return i;
+    }
+}
+
+for (i, &item) in bytes.iter().enumerate() {
+    if item == b' ' {
+        return i;
+    }
+}
+
+for (i, item) in bytes.iter().enumerate() {
+    if item == &b' ' {
+        return i;
+    }
+}
+```
+The three styles code are the same.
