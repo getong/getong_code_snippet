@@ -348,3 +348,23 @@ fn main() {
 }
 ```
 copy from [How do I print the type of a variable in Rust?](https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable-in-rust)
+
+## String, &str
+
+``` rust
+// &str to String
+let a: String = "hello rust".into();
+let b: String = "hello rust".to_string();
+let c: String = String::from("hello rust");
+let d: String = "hello rust".to_owned();
+
+
+// String to &str
+let e = &String::from("hello rust");
+let f_tmp = String::from("hello rust");
+let f = f_tmp.as_str();
+
+let g = &f_tmp[1..3];
+```
+copy from [Rust学习笔记 - 测试与字符串](https://hijiangtao.github.io/2019/05/30/Rust-learning-notes-with-Rustlings-3/)
+copy from [Rust中的&str和String有什么区别](https://blog.ykyi.net/2019/10/rust%E4%B8%AD%E7%9A%84str%E5%92%8Cstring%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/)
