@@ -280,6 +280,13 @@ fn main() {
     third.borrow_mut().head = Some(Rc::downgrade(&first));
 }
 ```
+Rc<T> implements Clone. Every call to base.clone() increments an internal counter.
+Every Drop decrements that counter. When the internal counter reaches zero, the
+original instance is freed.
+Rc<T> does not allow mutation. To permit that, we need to wrap our
+wrapper. Rc<RefCell<T>> is a type that can be used to perform interior mutability. An
+object that has interior mutability presents an immutable façade, while internal values
+are being modified.
 
 ## Pin
 
