@@ -375,3 +375,36 @@ let g = &f_tmp[1..3];
 ```
 copy from [Rust学习笔记 - 测试与字符串](https://hijiangtao.github.io/2019/05/30/Rust-learning-notes-with-Rustlings-3/)
 copy from [Rust中的&str和String有什么区别](https://blog.ykyi.net/2019/10/rust%E4%B8%AD%E7%9A%84str%E5%92%8Cstring%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/)
+
+## transmute
+
+``` rust
+    let a_: u128 = 42;
+    let a: u128 = unsafe { std::mem::transmute(a_) };
+    println!("a: {:0128b}", a);
+
+    let b_: u64 = 42;
+    let b: u64 = unsafe { std::mem::transmute(b_) };
+    println!("b: {:064b}", b);
+
+    let c_: u32 = 42;
+    let c: u32 = unsafe { std::mem::transmute(c_) };
+    println!("c: {:032b}", c);
+
+    let d_: u16 = 42;
+    let d: u16 = unsafe { std::mem::transmute(d_) };
+    println!("d: {:016b}", d);
+
+    let e_: u8 = 42;
+    let e: u8 = unsafe { std::mem::transmute(e_) };
+    println!("e: {:08b}", e);
+```
+output :
+
+```
+a: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000101010
+b: 0000000000000000000000000000000000000000000000000000000000101010
+c: 00000000000000000000000000101010
+d: 0000000000101010
+e: 00101010
+```
