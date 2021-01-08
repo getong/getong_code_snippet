@@ -125,3 +125,5 @@ rustup component add rust-src
 cargo install evcxr_repl
 evcxr
 ```
+see [Evcxr REPL](https://github.com/google/evcxr/blob/master/evcxr_repl/README.md)
+see [Implement a Rust REPL #1120](https://github.com/rust-lang/rust/issues/1120)
