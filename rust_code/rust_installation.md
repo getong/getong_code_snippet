@@ -82,6 +82,7 @@ cd project_name
 cargo add async-std
 cargo add tokio
 cargo install cargo-edit
+
 cargo clippy
 ```
 
@@ -115,3 +116,12 @@ replace-with = 'tuna'
 registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
 ```
 copy from [Rust crates.io 索引镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index.git/)
+
+
+## install evcxr
+
+``` shell
+rustup component add rust-src
+cargo install evcxr_repl
+evcxr
+```
