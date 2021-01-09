@@ -66,7 +66,7 @@ println!("raw points at {}", points_at);
 &T
 &mut T
 
-// Boxes
+// Boxes, also known as pointer
 let t = 12;
 let b = Box::new(t);
 
