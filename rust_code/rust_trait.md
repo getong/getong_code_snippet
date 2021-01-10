@@ -146,3 +146,17 @@ Copy and Drop are exclusive
 You cannot implement both Copy and Drop on the same type. Types that are Copy get implicitly duplicated by the compiler, making it very hard to predict when, and how often destructors will be executed. As such, these types cannot have destructors.
 ```
 copy from [Trait std::ops::Drop](https://doc.rust-lang.org/std/ops/trait.Drop.html)
+
+```
+Types that implement Drop trait, have a drop() method, but explicitly calling it is illegal within user code.
+
+`use std::mem::drop` brings the function drop into local scope, and free the variable's memory.
+
+```
+
+``` rust
+use std::mem::drop;
+
+let a:i32 = Box::new(1);
+drop(a);
+```
