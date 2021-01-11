@@ -31,7 +31,7 @@ fn not_use_question_mark() {
 
 
 fn use_question_mark<'a >() -> Result<i32, &'a str> {                          // 这里必须要返回Result
-    let a = 10;
+    let a = 9;
     let half = halves_if_even(a)?;                                             // 因为?要求其所在的函数必须要返回Result
     assert_eq!(half, 5);
     Ok(half)
@@ -40,7 +40,8 @@ fn use_question_mark<'a >() -> Result<i32, &'a str> {                          /
 
 fn main() {
     not_use_question_mark();
-    let _ = use_question_mark();
+    let result = use_question_mark();
+    println!("result : {:?}", [result]);
 }
 
 ```
