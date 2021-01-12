@@ -10,3 +10,8 @@ fn main() {
     println!("{:?}", hello.display());
 }
 ```
+output :
+
+```
+"/"
+```
