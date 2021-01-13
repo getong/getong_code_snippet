@@ -160,3 +160,17 @@ use std::mem::drop;
 let a:i32 = Box::new(1);
 drop(a);
 ```
+
+
+## Index trait
+
+``` rust
+pub trait Index<Idx>
+where
+    Idx: ?Sized,
+{
+    type Output: ?Sized;
+    fn index(&self, index: Idx) -> &Self::Output;
+}
+```
+Accessing list["key"] is syntatic sugar for list.index("key")
