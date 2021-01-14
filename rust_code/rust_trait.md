@@ -174,3 +174,12 @@ where
 }
 ```
 Accessing list["key"] is syntatic sugar for list.index("key")
+
+## trait object
+
+```
+Trait objects have three forms of syntax: &dyn Trait, &Trait, and Box<Trait>.
+• &dyn Trait
+• &Trait
+• Box<Trait>
+```
