@@ -183,3 +183,14 @@ Trait objects have three forms of syntax: &dyn Trait, &Trait, and Box<Trait>.
 • &Trait
 • Box<Trait>
 ```
+
+```
+Common use cases for trait objects:
+• creating collections of of heterogeneous objects
+• as a return value, they can enable functions to returning multiple concrete types
+• supporting dynamic dispatch, whereby the function that is called is determined at
+run-time, rather than compile time
+Trait objects are not objects in the sense that an object-oriented programmer would
+understand. They’re perhaps closer to a mixin class. Trait objects don’t exist on their
+own. They’re agents of some other type.
+```
