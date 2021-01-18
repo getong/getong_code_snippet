@@ -194,3 +194,29 @@ Trait objects are not objects in the sense that an object-oriented programmer wo
 understand. They’re perhaps closer to a mixin class. Trait objects don’t exist on their
 own. They’re agents of some other type.
 ```
+
+## str::parse
+
+``` rust
+pub fn parse<F>(&self) -> Result<F, <F as FromStr>::Err>
+where
+    F: FromStr,
+
+Parses this string slice into another type.
+
+Because parse is so general, it can cause problems with type inference. As such, parse is one of the few times you'll see the syntax affectionately known as the 'turbofish': ::<>. This helps the inference algorithm understand specifically which type you're trying to parse into.
+
+parse can parse any type that implements the FromStr trait.
+
+Errors
+Will return Err if it's not possible to parse this string slice into the desired type.
+```
+usage:
+
+``` rust
+let four: u32 = "4".parse().unwrap();
+assert_eq!(4, four);
+
+let four = "4".parse::<u32>();
+assert_eq!(Ok(4), four);
+```
