@@ -181,7 +181,7 @@ Accessing list["key"] is syntatic sugar for list.index("key")
 Trait objects have three forms of syntax: &dyn Trait, &Trait, and Box<Trait>.
 • &dyn Trait
 • &Trait
-• Box<Trait>
+• Box<dyn Trait>
 ```
 
 ```
