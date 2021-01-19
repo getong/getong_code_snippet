@@ -669,3 +669,14 @@ sudo apt-get install --download-only pppoe
 sudo apt-get upgrade --download-only
 ```
 copy from [How to download package not install it with apt-get command?](https://unix.stackexchange.com/questions/408346/how-to-download-package-not-install-it-with-apt-get-command)
+
+## ip usage
+
+``` shell
+sudo ip tuntap add mode tap name tap-net user $USER
+ip tuntap list
+sudo ip link set tap-net up
+sudo ip addr add 192.168.42.100/24 dev tap-net
+sudo iptables -t nat -A POSTROUTING -s 192.168.42.0/24 -j MASQUERADE
+sudo sysctl net.ipv4.ip_forward=1
+```
