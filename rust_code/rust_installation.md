@@ -77,11 +77,16 @@ cargo bench
 cargo test
 carge install
 cargo install clippy
+cargo install cargo-edit
 
 cd project_name
 cargo add async-std
+## tokio library
 cargo add tokio
-cargo install cargo-edit
+## command option
+cargo add clap
+## time operation library
+cargo add chrono
 
 cargo clippy
 ```
