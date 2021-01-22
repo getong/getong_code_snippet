@@ -52,3 +52,20 @@ Thread { id: ThreadId(1), name: Some("main") }
 hello
 world
 ```
+
+## thread start cost time
+
+``` rust
+use std::{thread, time};
+fn main() {
+    let start = time::Instant::now();
+    let handler = thread::spawn(move || {
+    let pause = time::Duration::from_millis(300);
+    thread::sleep(pause.clone());
+    });
+    handler.join().unwrap();
+    let finish = time::Instant::now();
+    println!("{:02?}", finish.duration_since(start));
+}
+```
+It is almost 300ms
