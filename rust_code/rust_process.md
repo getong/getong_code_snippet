@@ -174,3 +174,11 @@ do_some_work();
 bg_work.join()?;
 ```
 copy from [Function std::hint::spin_loop](https://doc.rust-lang.org/std/hint/fn.spin_loop.html)
+
+## get the current process id
+
+``` rust
+use std::process;
+
+let pid = process::id();
+```
