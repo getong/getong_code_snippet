@@ -755,3 +755,7 @@ ToString::to_string("string_word")
 ```
 All four of these method calls do exactly the same thing.
 The last form, with the angle brackets, specifies both: a fully qualified method call.
+
+## function and closure
+Funtions are implemented as function pointers.
+Closures are plain structs.
