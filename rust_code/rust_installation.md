@@ -136,7 +136,11 @@ see [Implement a Rust REPL #1120](https://github.com/rust-lang/rust/issues/1120)
 ## install rustlings
 
 ``` shell
+cd
 curl -L https://git.io/rustlings | bash
 # Or if you want it to be installed to a different path:
 curl -L https://git.io/rustlings | bash -s mypath/
+
+cd rustlings
+rustlings watch
 ```
