@@ -138,3 +138,26 @@ for (i, item) in bytes.iter().enumerate() {
 }
 ```
 The three styles code are the same.
+
+
+## subtype
+
+```
+F<T> is covariant over T if T being a subtype of U implies that F<T> is a subtype of F<U> (subtyping "passes through")
+F<T> is contravariant over T if T being a subtype of U implies that F<U> is a subtype of F<T>
+F<T> is invariant over T otherwise (no subtyping relation can be derived)
+Variance of types is automatically determined as follows
+
+Type	               Variance in 'a	    Variance in T
+&'a T	               covariant    	    covariant
+&'a mut T	           covariant	        invariant
+*const T		                            covariant
+*mut T		                                invariant
+[T] and [T; n]		                        covariant
+fn() -> T		                            covariant
+fn(T) -> ()		                            contravariant
+std::cell::UnsafeCell<T>	                invariant
+std::marker::PhantomData<T>	                covariant
+dyn Trait<T> + 'a      covariant	        invariant
+```
+copy from [Variance](https://doc.rust-lang.org/reference/subtyping.html#variance)
