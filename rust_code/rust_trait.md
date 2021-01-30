@@ -220,3 +220,20 @@ assert_eq!(4, four);
 let four = "4".parse::<u32>();
 assert_eq!(Ok(4), four);
 ```
+
+## std::slice::IterMut
+example:
+``` rust
+// First, we declare a type which has `iter_mut` method to get the `IterMut`
+// struct (&[usize here]):
+let mut slice = &mut [1, 2, 3];
+
+// Then, we iterate over it and increment each element value:
+for element in slice.iter_mut() {
+    *element += 1;
+}
+
+// We now have "[2, 3, 4]":
+println!("{:?}", slice);
+```
+copy from [Struct std::slice::IterMut](https://doc.rust-lang.org/std/slice/struct.IterMut.html)
