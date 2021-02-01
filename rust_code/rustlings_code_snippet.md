@@ -37,7 +37,7 @@ use std::thread;
 fn main() {
     let numbers: Vec<_> = (0..100u32).collect();
     let shared_numbers = Arc::new(numbers);
-    let mut joinhandles = Vec::new();
+    let mut joinhandles = Vec::<thread::JoinHandle<()>>::new();
 
     for offset in 0..8 {
         let child_numbers = shared_numbers.clone();
