@@ -195,3 +195,17 @@ Heap address: 0x5602cc488b40
 ```
 
 copy from [查看变量在内存中的存储结构 - Rust](https://zhuanlan.zhihu.com/p/102591451)
+
+
+## more mem example
+
+``` rust
+// 64bit架构
+fn main() {
+    std::mem::size_of::<*mut u8>(); // 8B，裸指针
+    std::mem::size_of::<*mut [u8]>(); // 16B，胖指针，还有8B的⻓度
+    std::mem::size_of::<*mut [u8; 4]>(); // 8B，裸指针（⻓度就是4）
+    std::mem::size_of::<*mut str>(); // 16B，胖指针，额外8B的⻓度
+    std::mem::size_of::<*mut dyn Drop>(); // 16B，胖指针，额外8B的vtable指针
+}
+```
