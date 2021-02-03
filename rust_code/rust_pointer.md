@@ -209,3 +209,37 @@ fn main() {
     std::mem::size_of::<*mut dyn Drop>(); // 16B，胖指针，额外8B的vtable指针
 }
 ```
+
+## std::mem:size_of<T>() -> usize
+
+```
+Returns the size of a type in bytes.
+
+More specifically, this is the offset in bytes between successive elements in an array with that item type including alignment padding. Thus, for any type T and length n, [T; n] has a size of n * size_of::<T>().
+
+In general, the size of a type is not stable across compilations, but specific types such as primitives are.
+
+The following table gives the size for primitives.
+
+Type	size_of::<Type>()
+()	0
+bool	1
+u8	1
+u16	2
+u32	4
+u64	8
+u128	16
+i8	1
+i16	2
+i32	4
+i64	8
+i128	16
+f32	4
+f64	8
+char	4
+Furthermore, usize and isize have the same size.
+
+The types *const T, &T, Box<T>, Option<&T>, and Option<Box<T>> all have the same size. If T is Sized, all of those types have the same size as usize.
+
+The mutability of a pointer does not change its size. As such, &T and &mut T have the same size. Likewise for *const T and *mut T.
+```
