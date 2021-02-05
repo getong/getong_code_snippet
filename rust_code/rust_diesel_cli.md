@@ -3,8 +3,12 @@
 ## installation
 
 ``` shell
+## debian
 sudo apt-get install libsqlite3-dev postgresql-server-dev-11 postgresql-server-dev-all default-libmysqlclient-dev
 cargo install diesel_cli
+
+## MacOS
+brew install postgresql mysql
 ```
 
 
