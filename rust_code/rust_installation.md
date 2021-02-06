@@ -69,6 +69,7 @@ rustup docs
 ``` shell
 cargo install rustfmt
 cargo install racer
+cargo install cargo-generate
 cargo new project_name --bin
 cargo build --release
 cargo run
