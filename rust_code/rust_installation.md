@@ -145,3 +145,9 @@ curl -L https://git.io/rustlings | bash -s mypath/
 cd rustlings
 rustlings watch
 ```
+
+## log, env_logger, openssl
+
+``` shell
+cargo add log env_logger openssl
+```
