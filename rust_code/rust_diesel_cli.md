@@ -35,4 +35,6 @@ cargo build
 echo DATABASE_URL=postgres://postgres:mypassword@localhost:15432/diesel_demo > .env
 diesel setup
 diesel migration run
+diesel migration redo
+diesel migration revert
 ```
