@@ -78,7 +78,7 @@ cargo bench
 cargo test
 carge install
 cargo install clippy
-cargo install cargo-edit
+cargo install cargo-edit cargo-outdated
 
 cd project_name
 cargo add async-std
