@@ -57,6 +57,8 @@ rustup self update
 rustup install stable
 rustup install nightly
 rustup update nightly
+rustup override set nightly
+rustup override set stable
 rustup component add rls --toolchain nightly
 rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
