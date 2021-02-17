@@ -237,3 +237,13 @@ for element in slice.iter_mut() {
 println!("{:?}", slice);
 ```
 copy from [Struct std::slice::IterMut](https://doc.rust-lang.org/std/slice/struct.IterMut.html)
+
+## trait types
+
+```
+simple trait
+generic trait
+marker trait
+associated type trait
+inherited trait
+```
