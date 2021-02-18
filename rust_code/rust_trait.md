@@ -247,3 +247,25 @@ marker trait
 associated type trait
 inherited trait
 ```
+
+## trait bound
+
+``` rust
+use std::fmt::Display;
+
+struct Foo<T: Display> {
+    bar : T
+}
+
+struct Bar<F> where F: Display {
+    inner: F
+}
+
+fn show_me(val: impl Display) {
+    println!("{}", val);
+}
+
+fn main() {
+    show_me("test string");
+}
+```
