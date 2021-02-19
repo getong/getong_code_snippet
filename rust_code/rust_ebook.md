@@ -6,3 +6,4 @@
 [rust-by-example-cn](https://github.com/rust-lang-cn/rust-by-example-cn)
 
 [Go, Rust cheatsheet](https://programming-idioms.org/cheatsheet/Go/Rust)
+[Rust Language Cheat Sheet](https://cheats.rs/)
