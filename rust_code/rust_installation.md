@@ -125,6 +125,16 @@ registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
 ```
 copy from [Rust crates.io 索引镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index.git/)
 
+or use ustc
+
+``` shell
+[source.crates-io]
+replace-with = 'ustc'
+
+[source.ustc]
+registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+```
+copy from [Rust Crates 源使用帮助](https://mirrors.ustc.edu.cn/help/crates.io-index.html)
 
 ## install evcxr
 
@@ -152,4 +162,14 @@ rustlings watch
 
 ``` shell
 cargo add log env_logger openssl
+```
+
+## update installed crates
+
+``` shell
+cargo install cargo-update
+cargo install-update -a
+cargo install-update crate1 crate2 ...
+## self update
+cargo-update
 ```
