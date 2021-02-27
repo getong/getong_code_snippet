@@ -15,3 +15,12 @@ let res: Vec<char> = (b'a' ..= b'z').map(|x| x as char).fold(Vec::new(), |mut ac
 
 let res: String = (b'a' ..= b'z').map(|x| x as char).fold(String::new(), |mut acc, ch| { acc.push(ch); acc});
 ```
+
+## trait Iterator next method
+
+``` rust
+pub trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+}
+```
