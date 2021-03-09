@@ -64,6 +64,7 @@ rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
 rustup component add rust-docs
 rustup docs
+rustup show
 ```
 
 ## cargo usage
