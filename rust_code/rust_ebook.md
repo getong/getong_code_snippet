@@ -7,3 +7,4 @@
 
 [Go, Rust cheatsheet](https://programming-idioms.org/cheatsheet/Go/Rust)
 [Rust Language Cheat Sheet](https://cheats.rs/)
+[easy_rust_chs](https://github.com/kumakichi/easy_rust_chs)
