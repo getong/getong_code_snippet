@@ -82,6 +82,7 @@ cargo test
 carge install
 cargo install clippy
 cargo install cargo-edit cargo-outdated
+cargo install cargo-web
 
 cd project_name
 cargo add async-std
