@@ -21,3 +21,29 @@ The hello() handler is an async function that returns something
 that implements a Responder trait. A Responder is something that can be
 converted into an HTTP response. It’s implemented on common types like
 &str, String, and u8 arrays.
+
+## example
+
+``` rust
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    env_logger::init();
+
+    let pool = setup_database();
+
+    HttpServer::new(move || {
+        App::new()
+            .wrap(Logger::default())
+            .data(pool.clone())
+            .configure(api_config)
+            .service(
+                Files::new("/", "static")
+                    .show_files_listing(),
+            )
+    })
+    .bind_openssl("127.0.0.1:8080", builder)?
+    .run()
+    .await
+}
+```
+The `data` method is about the sql connection, and the `configure` method is about the web service , like route the path to the the function handler.
