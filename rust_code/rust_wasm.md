@@ -14,3 +14,6 @@ cd $project
 ## build wasm
 wasm-pack build
 ```
+
+## book
+[Rust and WebAssembly](https://rustwasm.github.io/docs/book/)
