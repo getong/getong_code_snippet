@@ -176,3 +176,16 @@ cargo install-update crate1 crate2 ...
 ## self update
 cargo-update
 ```
+
+## wasi
+
+``` shell
+cargo install cargo-wasi
+curl https://wasmtime.dev/install.sh -sSf | bash
+
+cargo wasi build
+cargo wasi build --release
+cargo wasi run
+cargo wasi test
+cargo wasi bench
+```
