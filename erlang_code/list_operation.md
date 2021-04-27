@@ -221,3 +221,10 @@ A = <<"130,161,98,1,161,97,1">>.
 lists:map(fun(E) -> binary_to_integer(E) end, binary:split(A, <<",">>, [global])).
 %% [130,161,98,1,161,97,1]
 ```
+
+## list and undefined
+
+``` erlang
+[] ++ undefined == undefined.
+[1] ++ undefined == [1|undefined].
+```
