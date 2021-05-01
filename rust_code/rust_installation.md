@@ -76,10 +76,13 @@ cargo install cargo-generate
 cargo new project_name --bin
 cargo build --release
 cargo run
+cargo run --quiet
 cargo update
 cargo bench
 cargo test
 carge install
+cargo check
+cargo clean
 cargo install clippy
 cargo install cargo-edit cargo-outdated
 cargo install cargo-web
