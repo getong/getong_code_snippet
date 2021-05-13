@@ -52,11 +52,6 @@ use with as and unsafe
 
 ``` rust
 let x = 5;
-let raw = &x as *const i32;
-
-let points_at = unsafe { *raw };
-
-println!("raw points at {}", points_at);
 ```
 
 ## Three pointer types: references, boxes and unsafe poointers.
@@ -339,7 +334,7 @@ copy from [200行代码讲透RUST FUTURES](https://stevenbai.top/rust/futures_ex
 ## get the variable type
 
 ``` rust
-fn print_type_of<T>(_: &T) {
+fn print_type_of<T>(_: T) {
     println!("{}", std::any::type_name::<T>())
 }
 
