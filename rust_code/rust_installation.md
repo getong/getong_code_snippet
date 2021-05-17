@@ -113,10 +113,14 @@ $ rustdoc main.rs
 $ cargo doc
 ```
 
-## set nightly as default
+## switch stable and nightly
 
 ``` shell
-rustup default nightly
+rustup override set nightly
+rustup show
+
+rustup override set stable
+rustup show
 ```
 
 ## cargo mirror
