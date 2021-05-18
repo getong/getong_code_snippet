@@ -196,3 +196,9 @@ cargo wasi run
 cargo wasi test
 cargo wasi bench
 ```
+
+## install wasm-pack error in debian with openssl not found
+
+``` shell
+sudo apt install libssl-dev pkg-config
+```
