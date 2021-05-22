@@ -124,3 +124,12 @@ let nf = f.inspect(|&x| println!("will resolve as {}", x)); //nf = 1
 ```
 
 copy from [Rust语言的异步编程模型和协程支持](https://skyscribe.github.io/post/2019/12/07/rust-asynchronous-model-and-features/)
+
+## async_std::task::yield_now
+
+```
+while computation_not_done() {
+... do one medium-sized step of computation ...
+async_std::task::yield_now().await;
+}
+```
