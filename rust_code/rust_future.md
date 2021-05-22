@@ -133,3 +133,13 @@ while computation_not_done() {
 async_std::task::yield_now().await;
 }
 ```
+
+## async_std::task::spawn_blocking
+
+```
+This function takes a closure, starts it running on its own thread, and returns a future of its return
+value. Asynchronous code can await that future, yielding its thread to other
+tasks until the computation is ready. By putting the hard work on a separate
+thread, you can let the operating system take care of making it share the
+processor nicely
+```
