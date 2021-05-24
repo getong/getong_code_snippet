@@ -210,3 +210,9 @@ cargo install cargo-cache
 echo "export CARGO_HOME=$HOME/.cargo" >> ~/.zshrc
 source ~/.zshrc
 ```
+
+## offline mode
+
+``` shell
+cargo build --offline
+```
