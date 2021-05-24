@@ -202,3 +202,11 @@ cargo wasi bench
 ``` shell
 sudo apt install libssl-dev pkg-config
 ```
+
+## cargo cache
+
+``` shell
+cargo install cargo-cache
+echo "export CARGO_HOME=$HOME/.cargo" >> ~/.zshrc
+source ~/.zshrc
+```
