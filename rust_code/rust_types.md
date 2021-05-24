@@ -410,3 +410,26 @@ e: 00101010
 use std::ffi::CStr;
 use std::os::raw::c_char;
 ```
+
+## convert string to bytes
+
+``` rust
+str::as_bytes("中文")
+[228, 184, 173, 230, 150, 135]
+
+let a = String::from("中文");
+String::as_bytes(&a);
+[228, 184, 173, 230, 150, 135]
+a.as_bytes()
+[228, 184, 173, 230, 150, 135]
+```
+
+## convert bytes to string
+
+``` rust
+String::from_utf8_lossy(&[228, 184, 173, 230, 150, 135])
+"中文"
+
+std::str::from_utf8(&[228, 184, 173, 230, 150, 135])
+Ok("中文")
+```
