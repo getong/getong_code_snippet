@@ -17,3 +17,12 @@ fn main() {
 ```
 
 copy from [&str的类型](https://kumakichi.github.io/easy_rust_chs/Chapter_39.html)
+
+## char len_utf8() method
+
+``` rust
+>> '中'.len_utf8()
+3
+>> 'a'.len_utf8()
+1
+```
