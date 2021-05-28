@@ -216,3 +216,10 @@ source ~/.zshrc
 ``` shell
 cargo build --offline
 ```
+
+## rustdoc
+
+``` shell
+rustup doc --reference
+rustup doc --std
+```
