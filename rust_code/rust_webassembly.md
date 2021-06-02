@@ -38,6 +38,7 @@ cd $project
 
 ## build wasm
 wasm-pack build
+wasm-pack build --target web --out-name wasm --out-dir ./static
 ```
 
 ## book
