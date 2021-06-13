@@ -269,3 +269,11 @@ fn main() {
     show_me("test string");
 }
 ```
+
+## trait object
+
+```
+There are two ways of using traits to write polymorphic code in Rust: trait objects and generics.
+
+A reference to a trait type, like writer, is called a trait object.
+```
