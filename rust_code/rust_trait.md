@@ -277,3 +277,14 @@ There are two ways of using traits to write polymorphic code in Rust: trait obje
 
 A reference to a trait type, like writer, is called a trait object.
 ```
+code :
+
+``` rust
+// plain function
+fn say_hello(out: &mut dyn Write)
+
+// generic function
+fn say_hello<W: Write>(out: &mut W)
+```
+The choice of whether to use trait objects or generic code is subtle.
+Since both features are based on traits, they have a lot in common.
