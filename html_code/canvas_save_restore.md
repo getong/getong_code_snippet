@@ -1,5 +1,6 @@
 # canvas save and restore
 
+## html code
 ``` html
 <!DOCTYPE html>
 <html lang="en">
@@ -148,3 +149,24 @@
 </html>
 ```
 copy from [Canvas 状态保存(save())，状态回滚(restore())](https://blog.csdn.net/houyanhua1/article/details/79948718)
+
+## js code
+
+``` javascript
+var document = window.document;
+var canvas = document.createElement("canvas");
+document.body.appendChild(canvas);
+
+const ctx = canvas.getContext('2d');
+
+// Save the default state
+ctx.save();
+
+ctx.fillStyle = 'green';
+ctx.fillRect(10, 10, 100, 100);
+
+// Restore the default state
+ctx.restore();
+
+ctx.fillRect(150, 40, 100, 100);
+```
