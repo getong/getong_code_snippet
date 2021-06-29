@@ -8,3 +8,5 @@
 [Go, Rust cheatsheet](https://programming-idioms.org/cheatsheet/Go/Rust)
 [Rust Language Cheat Sheet](https://cheats.rs/)
 [easy_rust_chs](https://github.com/kumakichi/easy_rust_chs)
+[Roguelike Tutorial - In Rust](https://bfnightly.bracketproductions.com/)
+[Roguelike Tutorial - In Rust source](https://github.com/amethyst/rustrogueliketutorial)
