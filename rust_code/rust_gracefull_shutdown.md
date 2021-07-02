@@ -109,3 +109,43 @@ pub async fn run(listener: TcpListener, shutdown: impl Future) -> crate::Result<
 }
 
 ```
+
+## use ctrlc
+
+copy from [Shutting down actix with more than one system running](https://stackoverflow.com/questions/54569843/shutting-down-actix-with-more-than-one-system-running)
+
+``` rust
+use ctrlc;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use std::thread;
+
+fn main() {
+    let running = Arc::new(AtomicBool::new(true));
+    let running2 = running.clone();
+    let r = running.clone();
+
+    let thandle = thread::spawn(move || {
+        while running2.load(Ordering::Relaxed) {
+            //Do your logic here
+        }
+        println!("Thread1 stopped.")
+    });
+
+    let thandle2 = thread::spawn(move || {
+        while running.load(Ordering::Relaxed) {
+            //Do your different logic here
+        }
+        println!("Thread2 stopped.")
+    });
+
+    ctrlc::set_handler(move || {
+        r.store(false, Ordering::Relaxed);
+    })
+    .expect("Error setting Ctrl-C handler");
+
+    println!("Waiting for Ctrl-C...");
+    let _ = thandle.join();
+    let _ = thandle2.join();
+}
+```
