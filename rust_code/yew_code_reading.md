@@ -86,3 +86,72 @@ The `RefCell::replace` method is defined as, and the return result will be the c
         mem::replace(&mut *self.borrow_mut(), t)
     }
 ```
+
+## scheduler
+
+``` rust
+thread_local! {
+    /// This is a global scheduler suitable to schedule and run any tasks.
+    ///
+    /// Exclusivity of mutable access is controlled by only accessing it through a set of public
+    /// functions.
+    static SCHEDULER: RefCell<Scheduler> = Default::default();
+}
+
+/// A routine which could be run.
+pub(crate) trait Runnable {
+    /// Runs a routine with a context instance.
+    fn run(self: Box<Self>);
+}
+
+/// This is a global scheduler suitable to schedule and run any tasks.
+#[derive(Default)]
+struct Scheduler {
+    // Main queue
+    main: VecDeque<Box<dyn Runnable>>,
+
+    // Component queues
+    destroy: VecDeque<Box<dyn Runnable>>,
+    create: VecDeque<Box<dyn Runnable>>,
+    update: VecDeque<Box<dyn Runnable>>,
+    render: VecDeque<Box<dyn Runnable>>,
+
+    // Stack
+    rendered: Vec<Box<dyn Runnable>>,
+}
+
+impl Scheduler {
+    /// Pop next Runnable to be executed according to Runnable type execution priority
+    fn next_runnable(&mut self) -> Option<Box<dyn Runnable>> {
+        self.destroy
+            .pop_front()
+            .or_else(|| self.create.pop_front())
+            .or_else(|| self.update.pop_front())
+            .or_else(|| self.render.pop_front())
+            .or_else(|| self.rendered.pop())
+            .or_else(|| self.main.pop_front())
+    }
+}
+```
+The `Scheduler` is run by sequence, order by `destroy`, `create`, `update`, `render`, `rendered`, `main` property.
+The element inside the `Scheduler` is `Runnable`, and the trait has its method, `run`.
+
+The `SCHEDULER` variable is thread-local, it might just because the web is single thread.
+
+The append the `Runnalble` element:
+
+``` rust
+/// Execute closure with a mutable reference to the scheduler
+#[inline]
+fn with(f: impl FnOnce(&mut Scheduler)) {
+    SCHEDULER.with(|s| f(&mut *s.borrow_mut()));
+}
+
+/// Push a generic Runnable to be executed
+#[inline]
+pub(crate) fn push(runnable: Box<dyn Runnable>) {
+    with(|s| s.main.push_back(runnable));
+}
+
+```
+Just get the `SCHEDULER` variable and `push_back` the element to the queue.
