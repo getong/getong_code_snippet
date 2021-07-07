@@ -277,8 +277,8 @@ There are two ways of using traits to write polymorphic code in Rust: trait obje
 
 A reference to a trait type, like writer, is called a trait object.
 
-&dyn Trait, &mut dyn Trait, Box<dyn Trait>, impl dyn Trait
-impl dyn Trait is implemented through static dispatch.
+&dyn Trait, &mut dyn Trait, Box<dyn Trait>, impl Trait
+impl Trait is implemented through static dispatch.
 dyn Trait is dynamic dispatch.
 ```
 code :
