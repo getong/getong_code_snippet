@@ -155,3 +155,17 @@ pub(crate) fn push(runnable: Box<dyn Runnable>) {
 
 ```
 Just get the `SCHEDULER` variable and `push_back` the element to the queue.
+
+
+## yew architecture
+
+```
+To understand how this example works, you first need to understand
+the Elm architecture26, which influences Yew. The Elm architecture
+consists of three core concepts:
+• Model: The state of the application.
+• View: A way to turn the state into the UI (HTML).
+• Update: A way to update the state based on the
+message (Msg) triggered by user interaction on the UI.
+```
+see example: [practical-rust-web-projects](https://github.com/Apress/practical-rust-web-projects)
