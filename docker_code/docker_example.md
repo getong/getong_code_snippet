@@ -221,3 +221,11 @@ The solution is reboot the debian system, and then reinstall the docker.
 ``` shell
 docker run -ti -d --privileged=true ubuntu:16.04  "/sbin/init"
 ```
+
+## udp
+
+``` shell
+docker run -p 53160:53160 \
+    -p 53160:53160/udp -p 58846:58846 \
+    -p 8112:8112 -t -i image start.sh
+```
