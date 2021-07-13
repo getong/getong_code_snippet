@@ -33,7 +33,7 @@ psql connection:
 $ mix local.hex --force
 
 ## install phoenix framework
-$ mix archive.install hex phx_new 1.5.4 --force
+$ mix archive.install hex phx_new 1.5.9 --force
 
 ## phoenix hello project, when installing dependencies choose yes
 $ mix phx.new hello
@@ -44,10 +44,11 @@ $ mix phx.new hello --no-ecto
 ## If in the last step, you choose no, you can do this manually
 $ cd hello
 $ mix deps.get
-$ cd assets && npm install && node node_modules/webpack/bin/webpack.js --mode development
+$ cd assets && yarn && node node_modules/webpack/bin/webpack.js --mode development
 
 ## cd hello
-$ cd hello
+$ cd ..
+$ mix phx.server
 ```
 edit the config/dev.exs like below:
 
