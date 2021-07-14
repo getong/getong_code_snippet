@@ -759,3 +759,19 @@ The last form, with the angle brackets, specifies both: a fully qualified method
 ## function and closure
 Funtions are implemented as function pointers.
 Closures are plain structs.
+
+## receiver is iterable
+
+``` rust
+while let Ok(text) = receiver.recv() {
+    do_something_with(text);
+}
+```
+Or like this:
+
+``` rust
+for text in receiver {
+    do_something_with(text);
+}
+```
+They are the same.
