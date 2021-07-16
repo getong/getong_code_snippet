@@ -223,3 +223,9 @@ cargo build --offline
 rustup doc --reference
 rustup doc --std
 ```
+
+## rust-script
+
+``` shell
+cargo install rust-script
+```
