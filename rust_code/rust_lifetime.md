@@ -72,3 +72,16 @@ drop in another thread 52.518µs
 drop in this thread 548.50784ms
 ```
 copy from [Rust: Dropping heavy things in another thread can make your code 10000 times faster](https://abramov.io/rust-dropping-things-in-another-thread/)
+
+## const
+The compiler cam embed the result of that computation as a compile-time constant. This is similar to C++ constexpr.
+``` rust
+const fn mono_to_rgba(level: u8) -> Color {
+    Color {
+    red: level,
+    green: level,
+    blue: level,
+    alpha: 0xFF
+    }
+}
+```
