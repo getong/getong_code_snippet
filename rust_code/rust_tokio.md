@@ -96,3 +96,12 @@ sync	syncSynchronization primitives for use in asynchronous contexts.
 task	Asynchronous green-threads.
 time	timeUtilities for tracking time.
 ```
+
+## UdpSocket
+
+``` rust
+let addr = SocketAddrV4::New(Ipv4Addr:new(0,0,0,0), port);
+UdpSocket::bind(addr).await;
+
+socket.send_to(b"hello world", &packet.dest()).await;
+```
