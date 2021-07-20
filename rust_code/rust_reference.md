@@ -161,3 +161,17 @@ std::marker::PhantomData<T>	                covariant
 dyn Trait<T> + 'a      covariant	        invariant
 ```
 copy from [Variance](https://doc.rust-lang.org/reference/subtyping.html#variance)
+
+## mutable reference does not implement Copy trait
+
+```
+  --> src/main.rs:10:20
+
+8       let mystr = input;
+            ----- move occurs because `mystr` has type `&mut String`, which does not implement the `Copy` trait
+9       let _otherstr = mystr;
+                        ----- value moved here
+10      println!("{}", mystr);
+                       ^^^^^ value borrowed here after move
+
+```
