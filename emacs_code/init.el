@@ -99,10 +99,14 @@
 ;; Set path to rust src directory
 ;; copy from https://github.com/racer-rust/emacs-racer/issues/138
 ;; copy from https://stackoverflow.com/questions/5014246/how-to-capture-standard-output-of-a-shell-command-in-elisp
+;;(setq racer-rust-src-path
+;;	(substring
+;;		(shell-command-to-string "/bin/echo $(rustc --print sysroot)/lib/rustlib/src/rust/library")
+;;	0 -1))
 (setq racer-rust-src-path
-	(substring
-		(shell-command-to-string "/bin/echo $(rustc --print sysroot)/lib/rustlib/src/rust/library")
-	0 -1))
+      (concat (string-trim
+               (shell-command-to-string "rustc --print sysroot"))
+              "/lib/rustlib/src/rust/library"))
 
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)
