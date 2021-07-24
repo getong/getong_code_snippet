@@ -243,3 +243,16 @@ The types *const T, &T, Box<T>, Option<&T>, and Option<Box<T>> all have the same
 
 The mutability of a pointer does not change its size. As such, &T and &mut T have the same size. Likewise for *const T and *mut T.
 ```
+
+## pointer type
+
+```
+Box
+Cell
+RefCell
+Rc
+Arc
+RwLock
+Mutex
+```
+copy from [Smart Pointers in Rust: What, why and how?](https://dev.to/rogertorres/smart-pointers-in-rust-what-why-and-how-oma)
