@@ -13,3 +13,4 @@
 [global-data-in-rust](https://github.com/paulkernfeld/global-data-in-rust)
 [tokio-internals](https://github.com/tony612/tokio-internals)
 [The Little Book of Rust Macros](https://github.com/veykril/tlborm)
+[Everything about async](https://fasterthanli.me/tags/async)
