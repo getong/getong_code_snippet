@@ -97,6 +97,8 @@ cargo add clap
 ## time operation library
 cargo add chrono
 
+cargo add tokio@1.9.0 --features full
+
 cargo clippy
 ```
 
