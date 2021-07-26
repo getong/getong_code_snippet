@@ -11,3 +11,5 @@
 [Roguelike Tutorial - In Rust](https://bfnightly.bracketproductions.com/)
 [Roguelike Tutorial - In Rust source](https://github.com/amethyst/rustrogueliketutorial)
 [global-data-in-rust](https://github.com/paulkernfeld/global-data-in-rust)
+[tokio-internals](https://github.com/tony612/tokio-internals)
+[The Little Book of Rust Macros](https://github.com/veykril/tlborm)
