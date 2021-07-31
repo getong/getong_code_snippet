@@ -8,6 +8,12 @@ pub struct Arc<T: ?Sized> {
     phantom: PhantomData<ArcInner<T>>,
 }
 
+pub struct NonNull<T: ?Sized> {
+    pointer: *const T,
+}
+
+pub struct PhantomData<T: ?Sized>;
+
 // This is repr(C) to future-proof against possible field-reordering, which
 // would interfere with otherwise safe [into|from]_raw() of transmutable
 // inner types.
@@ -45,4 +51,20 @@ impl<T: ?Sized> Arc<T> {
     }
 }
 
+```
+
+## rc definition
+
+``` rust
+pub struct Rc<T: ?Sized> {
+    ptr: NonNull<RcBox<T>>,
+    phantom: PhantomData<RcBox<T>>,
+}
+
+#[repr(C)]
+struct RcBox<T: ?Sized> {
+    strong: Cell<usize>,
+    weak: Cell<usize>,
+    value: T,
+}
 ```
