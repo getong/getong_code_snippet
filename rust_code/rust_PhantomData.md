@@ -36,6 +36,7 @@ struct Vec<T> {
     _marker: marker::PhantomData<T>,
 }
 ```
+释放指针和指针对应的数据。
 让裸指针拥有数据是一个很普遍的设计，以至于标准库为它自己创造了一个叫 Unique<T> 的组件，它可以：
 
 封装一个 *const T 处理变性
