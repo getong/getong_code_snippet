@@ -433,3 +433,27 @@ String::from_utf8_lossy(&[228, 184, 173, 230, 150, 135])
 std::str::from_utf8(&[228, 184, 173, 230, 150, 135])
 Ok("中文")
 ```
+
+## slicie types
+
+``` rust
+A slice is a dynamically sized type representing a 'view' into a sequence of elements of type T. The slice type is written as [T].
+
+To use a slice type it generally has to be used behind a pointer for example as:
+
+&[T], a 'shared slice', often just called a 'slice', it doesn't own the data it points to, it borrows it.
+&mut [T], a 'mutable slice', mutably borrows the data it points to.
+Box<[T]>, a 'boxed slice'
+
+```
+Examples:
+
+``` rust
+// A heap-allocated array, coerced to a slice
+let boxed_array: Box<[i32]> = Box::new([1, 2, 3]);
+
+// A (shared) slice into an array
+let slice: &[i32] = &boxed_array[..];
+```
+All elements of slices are always initialized, and access to a slice is always bounds-checked in safe methods and operators.
+copy from [Slice types](https://doc.rust-lang.org/reference/types/slice.html)
