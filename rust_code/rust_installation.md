@@ -98,6 +98,7 @@ cargo add clap
 cargo add chrono
 
 cargo add tokio@1.9.0 --features full
+cargo add mio --features "os-poll os-ext net"
 
 cargo clippy
 ```
