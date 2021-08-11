@@ -101,6 +101,8 @@ cargo add tokio@1.9.0 --features full
 cargo add mio --features "os-poll os-ext net"
 
 cargo clippy
+// get the build detail report
+cargo +nightly build -Z timings
 ```
 
 ## rust src path
