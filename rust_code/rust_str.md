@@ -124,3 +124,23 @@ fn main() {
     }
 }
 ```
+
+
+## String and str
+
+``` rust
+String
+&str
+std::ffi::CString
+std::ffi::CStr
+std::ffi::OsString
+std::ffi::OsStr
+std::path::Path
+std::path::PathBuf
+&[u8]
+&[u8;N]
+Vec<u8>
+&u8
+&' static str
+```
+copy from [Rust中的String,&str和str都是什么？](https://zhuanlan.zhihu.com/p/384496181)
