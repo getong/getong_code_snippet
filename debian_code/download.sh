@@ -36,6 +36,8 @@ wget -c https://cdimage.debian.org/debian-cd/11.0.0/amd64/jigdo-dvd/debian-11.0.
 wget -c https://cdimage.debian.org/debian-cd/11.0.0/amd64/jigdo-dvd/debian-11.0.0-amd64-DVD-18.template
 
 
+## 由于下载的iso流量很大，aliyun会对个人ip进行拒绝访问，出现403错误。
+## 这个时候就要更换/etc/apt/sources.list里面的源，aliyun、ustc，163的源都是可以使用的。
 jigdo-lite --noask https://cdimage.debian.org/debian-cd/11.0.0/amd64/jigdo-dvd/debian-11.0.0-amd64-DVD-2.jigdo
 jigdo-lite --noask https://cdimage.debian.org/debian-cd/11.0.0/amd64/jigdo-dvd/debian-11.0.0-amd64-DVD-3.jigdo
 jigdo-lite --noask https://cdimage.debian.org/debian-cd/11.0.0/amd64/jigdo-dvd/debian-11.0.0-amd64-DVD-4.jigdo
