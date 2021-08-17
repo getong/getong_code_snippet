@@ -144,3 +144,10 @@ Vec<u8>
 &' static str
 ```
 copy from [Rust中的String,&str和str都是什么？](https://zhuanlan.zhihu.com/p/384496181)
+
+## as_bytes() method
+
+``` rust
+b"world" == "world".as_bytes()
+[1,2,3i32].to_vec()
+```
