@@ -75,3 +75,6 @@ wget -c https://cdimage.debian.org/debian-cd/11.0.0/source/iso-dvd/debian-11.0.0
 wget -c https://cdimage.debian.org/debian-cd/11.0.0/source/iso-dvd/debian-11.0.0-source-DVD-17.iso
 
 wget -c https://cdimage.debian.org/debian-cd/11.0.0/source/iso-dvd/SHA256SUMS -O debian-source-sha256sum.txt
+
+wget -c https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/11.0.0+nonfree/amd64/iso-dvd/firmware-11.0.0-amd64-DVD-1.iso
+wget -c https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/11.0.0+nonfree/amd64/iso-dvd/SHA256SUMS -O debian-11-nonfree-iso-sha256sums.txt
