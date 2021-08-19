@@ -64,3 +64,36 @@ copy from [ZADD key](https://redis.io/commands/zadd)
  方式二 14 ~ 19位，那么等级最大数据就只能是 919999，超过这个数就会溢出。可以把时间戳降低到秒级别，可以支持更大数字
 ```
 copy from [Redis 排行榜 相同分数根据时间优先排行](https://www.cnblogs.com/cci8go/p/5964485.html)
+
+## redis connection string
+
+``` shell
+redis://arbitrary_usrname:password@ipaddress:6379/0
+```
+copy from [How to create a redis cloud connection url with an auth password](https://stackoverflow.com/questions/44344628/how-to-create-a-redis-cloud-connection-url-with-an-auth-password)
+
+## redis username and password
+
+redis.conf
+```
+user bert allcommands allkeys on >abc123
+requirepass foobar
+```
+The 'user' command adds the user, and the requirepass command just sets the password for user 'default'.
+redis-cli code:
+
+``` shell
+Redis# redis-cli -a foobar
+Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
+127.0.0.1:6379> ACL LIST
+1) "user bert on #6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090 ~* &* +@all"
+2) "user default on #c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2 ~* &* +@all"
+```
+
+or
+
+``` shell
+redis-cli --user bert --pass abc123
+```
+required redis 6.0 or above.
+copy from [Does Redis use a username for authentication?](https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication)
