@@ -36,3 +36,9 @@ and then compile and install the kernel
 # make install
 # /sbin/shutdown -h now
 ```
+
+## install wx
+
+``` shell
+apt-get install libwxgtk3.0-gtk3-de libwxgtk-webview3.0-gtk3-dev
+```
