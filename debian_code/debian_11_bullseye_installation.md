@@ -40,5 +40,5 @@ and then compile and install the kernel
 ## install wx
 
 ``` shell
-apt-get install libwxgtk3.0-gtk3-de libwxgtk-webview3.0-gtk3-dev
+apt-get install libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev
 ```
