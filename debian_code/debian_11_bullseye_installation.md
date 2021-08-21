@@ -42,3 +42,26 @@ and then compile and install the kernel
 ``` shell
 apt-get install libwxgtk3.0-gtk3-dev libwxgtk-webview3.0-gtk3-dev
 ```
+
+
+## update from buster to bullseye
+change the `/etc/apt/source.list` to be:
+
+```
+deb http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye main non-free contrib
+deb http://mirrors.aliyun.com/debian-security bullseye/updates main
+deb-src http://mirrors.aliyun.com/debian-security bullseye/updates main
+deb http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye-updates main non-free contrib
+deb http://mirrors.aliyun.com/debian/ bullseye-backports main non-free contrib
+deb-src http://mirrors.aliyun.com/debian/ bullseye-backports main non-free contrib
+```
+and the run the commands:
+
+``` shell
+apt update
+apt full-upgrade
+```
+Some packages need to manual comfirm the install option, for example, the sudoer, sshd_config, these files might be confirmed as we edit the files before.
+copy from [Manually upgrade Debian from Buster to Bullseye](https://doc.akito.ooo/link/31#bkmrk-page-title)
