@@ -99,6 +99,7 @@ cargo add chrono
 
 cargo add tokio@1.9.0 --features full
 cargo add mio --features "os-poll os-ext net"
+cargo add tokio_stream --features "sync"
 
 cargo clippy
 // get the build detail report
