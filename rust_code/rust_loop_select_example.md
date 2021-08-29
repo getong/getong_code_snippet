@@ -1,6 +1,6 @@
 # rust loop select example
 
-## quilkin
+## object-orientd loop
 code copy from quilkin
 
 ``` rust
@@ -173,4 +173,38 @@ pub async fn run_with_config(
         Ok(())
     }
 }
+```
+
+## normal loop
+
+``` rust
+    fn spawn_updater(
+        log: Logger,
+        filter_manager: SharedFilterManager,
+        mut filter_chain_updates_rx: mpsc::Receiver<Arc<FilterChain>>,
+        mut shutdown_rx: watch::Receiver<()>,
+    ) {
+        tokio::spawn(async move {
+            loop {
+                tokio::select! {
+                    update = filter_chain_updates_rx.recv() => {
+                        match update {
+                            Some(filter_chain) => {
+                                debug!(log, "Received a filter chain update.");
+                                filter_manager.write().update(filter_chain);
+                            }
+                            None => {
+                                warn!(log, "Exiting filter chain update receive loop because the sender dropped the channel.");
+                                return;
+                            }
+                        }
+                    }
+                    _ = shutdown_rx.changed() => {
+                        debug!(log, "Exiting filter chain update receive loop because a shutdown signal was received.");
+                        return;
+                    },
+                }
+            }
+        });
+    }
 ```
