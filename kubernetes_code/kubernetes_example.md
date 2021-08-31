@@ -82,3 +82,9 @@ a handy example: [使用kubeadm创建一个K8s 1.10的Cluster](https://zhuanlan.
 ``` shell
 kubeadm init --pod-network-cidr=10.0.2.15/24
 ```
+
+## reset
+
+``` shell
+kubeadm reset
+```
