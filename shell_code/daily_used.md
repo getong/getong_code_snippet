@@ -690,3 +690,10 @@ $ nc –u –l 9999
 # start udp client:
 $ nc -u 192.168.1.102 9999
 ```
+
+## update grub2
+
+``` shell
+view /boot/grub/grub.cfg
+sudo grub-set-default 'Debian GNU/Linux, with Linux 5.10.0-8-amd64'
+```
