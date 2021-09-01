@@ -208,3 +208,53 @@ pub async fn run_with_config(
         });
     }
 ```
+
+
+## session_manager
+copy from session_manager.rs
+``` rust
+// Tracks current sessions by their [`SessionKey`]
+type SessionsMap = HashMap<SessionKey, Session>;
+type Sessions = Arc<RwLock<SessionsMap>>;
+pub struct SessionManager(Sessions);
+
+impl SessionManager {
+    pub fn new(log: Logger, shutdown_rx: watch::Receiver<()>) -> Self {
+        let poll_interval = Duration::from_secs(SESSION_EXPIRY_POLL_INTERVAL);
+        let sessions: Sessions = Arc::new(RwLock::new(HashMap::new()));
+
+        Self::run_prune_sessions(log.clone(), sessions.clone(), poll_interval, shutdown_rx);
+
+        Self(sessions)
+    }
+
+    /// run_prune_sessions starts the timer for pruning sessions and runs prune_sessions every
+    /// SESSION_TIMEOUT_SECONDS, via a tokio::spawn, i.e. it's non-blocking.
+    /// Pruning will occur ~ every interval period. So the timeout expiration may sometimes
+    /// exceed the expected, but we don't have to write lock the Sessions map as often to clean up.
+    fn run_prune_sessions(
+        log: Logger,
+        mut sessions: Sessions,
+        poll_interval: Duration,
+        mut shutdown_rx: watch::Receiver<()>,
+    ) {
+        let mut interval = tokio::time::interval(poll_interval);
+
+        tokio::spawn(async move {
+            loop {
+                tokio::select! {
+                    _ = shutdown_rx.changed() => {
+                        debug!(log, "Exiting Prune Sessions due to shutdown signal.");
+                        break;
+                    }
+                    _ = interval.tick() => {
+                        debug!(log, "Attempting to Prune Sessions");
+                        Self::prune_sessions(&log, &mut sessions).await;
+
+                    }
+                }
+            }
+        });
+    }
+}
+```
