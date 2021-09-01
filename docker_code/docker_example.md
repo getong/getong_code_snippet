@@ -229,3 +229,17 @@ docker run -p 53160:53160 \
     -p 53160:53160/udp -p 58846:58846 \
     -p 8112:8112 -t -i image start.sh
 ```
+
+## network commands
+
+``` shell
+$ docker network ls
+
+$ docker network ls --filter name=bridge --format "{{.ID}}"
+
+$ docker network create mybridge
+
+$ docker network prune
+
+$ docker network rm testing_bridge
+```
