@@ -258,3 +258,128 @@ impl SessionManager {
     }
 }
 ```
+
+
+## session
+
+``` rust
+/// Session encapsulates a UDP stream session
+pub struct Session {
+    log: Logger,
+    metrics: Metrics,
+    filter_manager: SharedFilterManager,
+    /// created_at is time at which the session was created
+    created_at: Instant,
+    socket: Arc<UdpSocket>,
+    /// dest is where to send data to
+    dest: Endpoint,
+    /// from is the original sender
+    from: SocketAddr,
+    /// The time at which the session is considered expired and can be removed.
+    expiration: Arc<AtomicU64>,
+    /// a channel to broadcast on if we are shutting down this Session
+    shutdown_tx: watch::Sender<()>,
+}
+
+
+/ A (source, destination) address pair that uniquely identifies a session.
+#[derive(Clone, Eq, Hash, PartialEq, Debug, PartialOrd, Ord)]
+pub struct SessionKey {
+    pub source: SocketAddr,
+    pub destination: SocketAddr,
+}
+
+impl Session {
+    /// new creates a new Session, and starts the process of receiving udp sockets
+    /// from its ephemeral port from endpoint(s)
+    pub async fn new(
+        base: &Logger,
+        metrics: Metrics,
+        filter_manager: SharedFilterManager,
+        from: SocketAddr,
+        dest: Endpoint,
+        sender: mpsc::Sender<Packet>,
+        ttl: Duration,
+    ) -> Result<Self> {
+        let log = base
+            .new(o!("source" => "proxy::Session", "from" => from, "dest_address" => dest.address));
+        let addr = SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), 0);
+        let socket = Arc::new(UdpSocket::bind(addr).await.map_err(Error::BindUdpSocket)?);
+        let (shutdown_tx, shutdown_rx) = watch::channel::<()>(());
+
+        let expiration = Arc::new(AtomicU64::new(0));
+        Self::do_update_expiration(&expiration, ttl)?;
+
+        let s = Session {
+            metrics,
+            log,
+            filter_manager,
+            socket: socket.clone(),
+            from,
+            dest,
+            created_at: Instant::now(),
+            expiration,
+            shutdown_tx,
+        };
+        debug!(s.log, "Session created");
+
+        s.metrics.sessions_total.inc();
+        s.metrics.active_sessions.inc();
+        s.run(ttl, socket, sender, shutdown_rx);
+        Ok(s)
+    }
+
+    /// run starts processing received udp packets on its UdpSocket
+    fn run(
+        &self,
+        ttl: Duration,
+        socket: Arc<UdpSocket>,
+        mut sender: mpsc::Sender<Packet>,
+        mut shutdown_rx: watch::Receiver<()>,
+    ) {
+        let log = self.log.clone();
+        let from = self.from;
+        let expiration = self.expiration.clone();
+        let filter_manager = self.filter_manager.clone();
+        let endpoint = self.dest.clone();
+        let metrics = self.metrics.clone();
+        tokio::spawn(async move {
+            let mut buf: Vec<u8> = vec![0; 65535];
+            loop {
+                debug!(log, "Awaiting incoming packet");
+                select! {
+                    received = socket.recv_from(&mut buf) => {
+                        match received {
+                            Err(err) => {
+                                metrics.rx_errors_total.inc();
+                                error!(log, "Error receiving packet"; "error" => %err);
+                            },
+                            Ok((size, recv_addr)) => {
+                                metrics.rx_bytes_total.inc_by(size as u64);
+                                metrics.rx_packets_total.inc();
+                                Session::process_recv_packet(
+                                    &log,
+                                    &metrics,
+                                    &mut sender,
+                                    &expiration,
+                                    ttl,
+                                    ReceivedPacketContext {
+                                        filter_manager: filter_manager.clone(),
+                                        packet: &buf[..size],
+                                        endpoint: &endpoint,
+                                        from: recv_addr,
+                                        to: from,
+                                    }).await
+                            }
+                        };
+                    }
+                    _ = shutdown_rx.changed() => {
+                        debug!(log, "Closing Session");
+                        return;
+                    }
+                };
+            }
+        });
+    }
+}
+```
