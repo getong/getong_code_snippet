@@ -1,4 +1,4 @@
-# docker example
+# docker cmd
 
 ``` shell
 # list all images
