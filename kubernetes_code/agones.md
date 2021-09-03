@@ -44,3 +44,10 @@ $ kubectl apply -f gamesever.yaml
 $ kubectl describe gameserver my-game-server
 
 ```
+
+## releated docs
+[Installing Agones on OVHcloud Managed Kubernetes](https://docs.ovh.com/ie/en/kubernetes/installing-agones/)
+
+[使用 Game Servers 部署 Xonotic](https://cloud.google.com/architecture/deploying-xonotic-game-servers?hl=zh-cn)
+
+[Running gaming platforms at scale in Kubernetes](https://kasna.com.au/running-gaming-platforms-at-scale-in-kubernetes/)
