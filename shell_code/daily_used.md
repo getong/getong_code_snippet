@@ -697,3 +697,11 @@ $ nc -u 192.168.1.102 9999
 view /boot/grub/grub.cfg
 sudo grub-set-default 'Debian GNU/Linux, with Linux 5.10.0-8-amd64'
 ```
+
+## How to Test Port [TCP/UDP] Connectivity from a Linux Server
+
+``` shell
+# nc -z -v -u 192.168.10.12 123
+Connection to 192.118.20.95 123 port [udp/ntp] succeeded!
+```
+copy from [How to Test Port [TCP/UDP] Connectivity from a Linux Server](https://www.thegeekdiary.com/how-to-test-porttcp-udp-connectivity-from-a-linux-server/)
