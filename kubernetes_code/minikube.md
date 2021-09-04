@@ -218,3 +218,11 @@ minikube stop
 ``` shell
 minikube delete
 ```
+
+## image
+
+``` shell
+minikube image load image_name
+
+minikube image list
+```
