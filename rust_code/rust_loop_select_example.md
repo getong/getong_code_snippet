@@ -383,3 +383,40 @@ impl Session {
     }
 }
 ```
+
+## ClusterManager
+
+``` rust
+    /// Spawns a task to run a loop that receives cluster updates
+    /// and updates the ClusterManager's state in turn.
+    fn spawn_updater(
+        log: Logger,
+        metrics: Metrics,
+        cluster_manager: Arc<RwLock<ClusterManager>>,
+        mut cluster_updates_rx: mpsc::Receiver<ClusterUpdate>,
+        mut shutdown_rx: watch::Receiver<()>,
+    ) {
+        tokio::spawn(async move {
+            loop {
+                tokio::select! {
+                    update = cluster_updates_rx.recv() => {
+                        match update {
+                            Some(update) => {
+                                debug!(log, "Received a cluster update.");
+                                cluster_manager.write().update(Self::process_cluster_update(&metrics, update));
+                            }
+                            None => {
+                                warn!(log, "Exiting cluster update receive loop because the sender dropped the channel.");
+                                return;
+                            }
+                        }
+                    }
+                    _ = shutdown_rx.changed() => {
+                        debug!(log, "Exiting cluster update receive loop because a shutdown signal was received.");
+                        return;
+                    },
+                }
+            }
+        });
+    }
+```
