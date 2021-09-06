@@ -48,7 +48,134 @@ copy from [Hello Tokio](https://tokio.rs/tokio/tutorial/hello-tokio)
 
 ## code reading
 
-[深入浅出Rust异步编程之Tokio](https://zhuanlan.zhihu.com/p/107820568)
+The code is copy from [深入浅出Rust异步编程之Tokio](https://zhuanlan.zhihu.com/p/107820568)
+
+``` rust
+pub trait Future {
+
+    type Item;
+
+    type Error;
+
+
+    fn poll(&mut self) -> Poll<Self::Item, Self::Error>;
+}
+```
+假设一个future要做这样的功能，从TCP数据流读取数据并计算自己读了多少个字节并进行回调。那用代码表示：
+
+``` rust
+struct MyTcpStream {
+    socket: TcpStream,
+    nread: u64,
+}
+
+impl Future for MyTcpStream {
+    type Item =u64;
+    type Error = io::Error;
+
+   fn poll(&mut self) -> Poll<Item, io::Error> {
+        let mut buf = [0;10];
+        loop {
+            match self.socket.read(&mut buf) {
+                Async::Ready(0) => return Async::Ready(self.nread),
+                Async::Ready(n) => self.nread += n,
+                Async::NotReady => return Async::NotReady,
+            }
+        }
+    }
+}
+```
+每次调用poll方法，MyTcpStream都会调用socket的read方法(这里的TcpStream本身也是一个future，read内部也是调用poll方法)，当read返回为Async::NotReady的时候，调度器会将当前的Task休眠，如果返回Async::Read(n)表示读到了数据，则给计数器加对应的数，如果返回Async::Ready(0)，则表示TcpStream里有的数据已经读完，就将计数器返回。
+
+为了方便大家使用，future库包提供了很多组合子，以AndThen组合子为例：
+
+``` rust
+enum AndThen<A,F> {
+    First(A, F),
+}
+
+fn poll(&mut self) -> Async<Item> {
+   match fut_a.poll() {
+        Async::Ready(v) => Async::Ready(f(v)),
+        Async::NotReady => Async::NotReady,
+    }
+}
+```
+这里AndThen枚举，First有两个值，其中A是一个future，F是一个闭包，AndThen实现的poll方法，就是假如调用future_a的poll方法有返回值，那么就调用闭包，并将其返回值包装为Async::Ready返回，如果poll的返回值是Async::NotReady则同样返回Async::NotReady。有了这个AndThen方法，通过组合子函数（比如and_then实际上是将上一个future和闭包传入生成一个AndThen future），我们就可以实现一些复杂逻辑：
+
+``` rust
+let f=MyTcpStream::connect(&remote_addr)
+  .and_then(|num| {println!("already read %d",num);
+  return num;}).and_then(|num| {
+    process(num)
+  });
+
+tokio::spawn(f);
+```
+上面的代码就是建立Tcp连接，然后每次读数据，都通过第一个and_then打印日志，然后再通过第二个and_then做其他处理，tokio::spawn用于执行最终的future.
+如果将MyTcpStream的poll实现改为：
+
+``` rust
+fn poll(&mut self) -> Poll<Item, io::Error> {
+        let mut buf = [0;1024];
+        let mut bytes = bytesMut::new();
+        loop {
+            match self.socket.read(&mut buf) {
+                Async::Ready(0) => return Async::Ready(bytes.to_vec()),
+                Async::Ready(n) => bytes.put(buf[0..n]),
+                Async::NotReady => return Async::NotReady,
+            }
+        }
+    }
+```
+
+这段代码主要是将socket中数据读出，然后包装为Async::Ready或者Async::NotReady供下一个future使用，我们就可以实现更复杂的逻辑，比如：
+
+``` rust
+MyTcpStream::connect(&remote_addr)
+  .and_then(|sock| io::write(sock, handshake)) //这里发送handshake
+  .and_then(|sock| io::read_exact(sock, 10)) // 这里读handshake的响应，假设handeshake很短
+  .and_then(|(sock, handshake)| {  // 这个future做验证并发送请求
+    validate(handshake);
+    io::write(sock, request)
+  })
+  .and_then(|sock| io::read_exact(sock, 10))// 这里读取响应
+  .and_then(|(sock, response)| { // 这里处理响应
+    process(response)
+  })
+```
+用taokio启动一个服务器，代码如下：
+
+``` rust
+let listener = TcpListener::bind(&addr).unwrap();
+
+let server = listener.incoming().for_each(move |socket| {
+    tokio::spawn(process(socket));
+    Ok(())
+}).map_err(|err| {
+        println!("accept error = {:?}", err);
+});
+
+tokio::run(server);
+```
+
+上面的代码首先生成一个TcpListener，listener的incomming和foreach会将连进来的tcp连接生成TcpStream（即代码中的socket），针对每一个连接启动一个用户态线程处理。
+
+Tokio本身是基于Mio和future库来实现的，其主要包含两个主要的大功能部分（本文不是对源码进行分析，Tokio不同版本之间的差异也较大，只是进行原理说明），reactor和scheduler。
+
+scheduler负责对task进行调度，上文所展示的task调度部分功能就是由scheduler负责，reactor部分主要是负责事件触发，比如网络事件，文件系统事件，定时器等等。
+
+``` rust
+#[tokio::main]
+pub async fn main() -> Result<(), Box<dyn Error>> {
+    let mut stream = TcpStream::connect("127.0.0.1:6142").await?;
+    println!("created stream");
+    let result = stream.write(b"hello world\n").await;
+    println!("wrote to stream; success={:?}", result.is_ok());
+    Ok(())
+}
+```
+
 [Rust 的异步函数与 Tokio.rs](https://zhuanlan.zhihu.com/p/244047486)
 
 
