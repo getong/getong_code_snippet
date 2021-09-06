@@ -65,3 +65,15 @@ apt full-upgrade
 ```
 Some packages need to manual comfirm the install option, for example, the sudoer, sshd_config, these files might be confirmed as we edit the files before.
 copy from [Manually upgrade Debian from Buster to Bullseye](https://doc.akito.ooo/link/31#bkmrk-page-title)
+
+## install kube-apiserver
+
+``` shell
+sudo apt update
+sudo apt install snapd
+sudo snap install core
+
+sudo snap install kube-apiserver
+```
+
+copy from [Enable snaps on Debian and install kube-apiserver](https://snapcraft.io/install/kube-apiserver/debian)
