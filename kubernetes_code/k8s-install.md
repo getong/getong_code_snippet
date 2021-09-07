@@ -165,3 +165,6 @@ mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
 systemctl restart docker
 ```
+
+## install docs
+see [用 kubeadm 在 Debian 或 Ubuntu 中创建 k8s 集群](https://segmentfault.com/a/1190000040053517)
