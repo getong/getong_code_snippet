@@ -113,3 +113,14 @@ kubectl exec -it pod_name -n namespace -- /bin/sh
 kubectl exec (POD | TYPE/NAME) [-c CONTAINER] [flags] -- COMMAND [args...]
 ```
 copy from [获取正在运行容器的 Shell](https://kubernetes.io/zh/docs/tasks/debug-application-cluster/get-shell-running-container/)
+
+## kubeadm init
+192.168.2.1 is localhost ip, 172.17.0.1/16 is docker interface broadcast subnetwork, 10.244.0.0/16 is flannel subnetwork.
+The command is executed as root.
+``` shell
+# kubeadm init \
+  --apiserver-advertise-address=192.168.2.1 \
+  --service-cidr=172.17.0.1/16 \
+  --pod-network-cidr=10.244.0.0/16 \
+  --image-repository='registry.cn-hangzhou.aliyuncs.com/google_containers'
+```
