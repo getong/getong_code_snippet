@@ -99,3 +99,13 @@ see [对 kubeadm 进行故障排查](https://kubernetes.io/zh/docs/setup/product
 如果你正在使用 VirtualBox (直接使用或者通过 Vagrant 使用)，你需要 确保 hostname -i 返回一个可路由的 IP 地址。默认情况下，第一个接口连接不能路由的仅主机网络。 解决方法是修改 /etc/hosts，请参考示例 Vagrantfile。
 
 ```
+
+## exec command
+
+``` shell
+## get pods
+kubectl get pods -A -o wide
+
+kubectl exec -it pod_name -n namespace -- /bin/sh
+```
+copy from [获取正在运行容器的 Shell](https://kubernetes.io/zh/docs/tasks/debug-application-cluster/get-shell-running-container/)
