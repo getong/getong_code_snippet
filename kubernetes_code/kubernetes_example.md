@@ -107,5 +107,9 @@ see [对 kubeadm 进行故障排查](https://kubernetes.io/zh/docs/setup/product
 kubectl get pods -A -o wide
 
 kubectl exec -it pod_name -n namespace -- /bin/sh
+
+## if a pod has many containers:
+## copy from [exec](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#exec)
+kubectl exec (POD | TYPE/NAME) [-c CONTAINER] [flags] -- COMMAND [args...]
 ```
 copy from [获取正在运行容器的 Shell](https://kubernetes.io/zh/docs/tasks/debug-application-cluster/get-shell-running-container/)
