@@ -124,3 +124,11 @@ The command is executed as root.
   --pod-network-cidr=10.244.0.0/16 \
   --image-repository='registry.cn-hangzhou.aliyuncs.com/google_containers'
 ```
+
+## patch service external ip
+
+``` shell
+## node's IPs
+kubectl patch svc <svc-name> -n <namespace> -p '{"spec": {"type": "LoadBalancer", "externalIPs":["172.31.71.218"]}}'
+```
+copy from [Kubernetes service external ip pending](https://stackoverflow.com/questions/44110876/kubernetes-service-external-ip-pending)
