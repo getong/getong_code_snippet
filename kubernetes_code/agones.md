@@ -51,3 +51,13 @@ $ kubectl describe gameserver my-game-server
 [使用 Game Servers 部署 Xonotic](https://cloud.google.com/architecture/deploying-xonotic-game-servers?hl=zh-cn)
 
 [Running gaming platforms at scale in Kubernetes](https://kasna.com.au/running-gaming-platforms-at-scale-in-kubernetes/)
+
+## Gameserver Ingress Controller
+see [Gameserver Ingress Controller](https://github.com/Octops/gameserver-ingress-controller)
+
+## ingress ip
+
+``` shell
+EXTERNAL_IP=$(kubectl get services agones-allocator -n agones-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+```
+copy from [Allocator Service](https://agones.dev/site/docs/advanced/allocator-service/)

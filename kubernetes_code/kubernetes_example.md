@@ -132,3 +132,23 @@ The command is executed as root.
 kubectl patch svc <svc-name> -n <namespace> -p '{"spec": {"type": "LoadBalancer", "externalIPs":["172.31.71.218"]}}'
 ```
 copy from [Kubernetes service external ip pending](https://stackoverflow.com/questions/44110876/kubernetes-service-external-ip-pending)
+
+## debug kubernetes service
+see [调试 Service](https://kubernetes.io/zh/docs/tasks/debug-application-cluster/debug-service/)
+see [Service](https://kubernetes.io/docs/concepts/services-networking/service)
+see [Kubernetes集群中访问LoadBalancer暴露出去的SLB地址不通](https://help.aliyun.com/document_detail/171437.html)
+see [服务发现与负载均衡](https://jimmysong.io/kubernetes-handbook/practice/service-discovery-and-loadbalancing.html)
+
+## external ip
+see [公开外部 IP 地址以访问集群中应用程序](https://kubernetes.io/zh/docs/tutorials/stateless-application/expose-external-ip-address/)
+
+## install ingress-nginx
+
+``` shell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.0/deploy/static/provider/baremetal/deploy.yaml
+```
+
+copy from [Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal)
+
+## ingress
+see [Nginx-ingress 控制器到底怎样实现的，这篇文章教你看明白了](https://zhuanlan.zhihu.com/p/406571145)
