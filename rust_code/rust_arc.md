@@ -68,3 +68,18 @@ struct RcBox<T: ?Sized> {
     value: T,
 }
 ```
+
+## Arc and Mutex code and enhancement
+
+``` rust
+type Db = Arc<Mutex<HashMap<String, Bytes>>>;
+```
+enhancement:
+
+``` rust
+type ShardedDb = Arc<Vec<Mutex<HashMap<String, Vec<u8>>>>>;
+
+let shard = db[hash(key) % db.len()].lock().unwrap();
+shard.insert(key, value);
+```
+copy from [Shared state](https://tokio.rs/tokio/tutorial/shared-state)
