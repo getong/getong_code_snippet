@@ -152,3 +152,6 @@ copy from [Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy
 
 ## ingress
 see [Nginx-ingress 控制器到底怎样实现的，这篇文章教你看明白了](https://zhuanlan.zhihu.com/p/406571145)
+see [K8s之Ingress-nginx原理及配置](https://blog.51cto.com/u_14306186/2523096)
+see [07-kubernetes Ingress 原理 和 Ingress-nginx 案例](https://www.huaweicloud.com/articles/9a81660c21bf6693469a8960342fc881.html)
+see [通过 NGINX Ingress Controller 访问 Kubernetes 集群中的 EMQ X](https://www.emqx.com/zh/blog/access-emqx-in-kubernetes-cluster-through-nginx-ingress-controller)
