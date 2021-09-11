@@ -83,3 +83,112 @@ let shard = db[hash(key) % db.len()].lock().unwrap();
 shard.insert(key, value);
 ```
 copy from [Shared state](https://tokio.rs/tokio/tutorial/shared-state)
+
+## Arc and RwLock example from quilkin
+
+``` rust
+// Tracks current sessions by their [`SessionKey`]
+type SessionsMap = HashMap<SessionKey, Session>;
+type Sessions = Arc<RwLock<SessionsMap>>;
+
+#[derive(Clone)]
+pub struct SessionManager(Sessions);
+
+/// Contains arguments to process a received downstream packet, through the
+/// filter chain and session pipeline.
+struct ProcessDownstreamReceiveConfig {
+    log: Logger,
+    proxy_metrics: ProxyMetrics,
+    session_metrics: SessionMetrics,
+    cluster_manager: SharedClusterManager,
+    filter_manager: SharedFilterManager,
+    session_manager: SessionManager,
+    session_ttl: Duration,
+    send_packets: mpsc::Sender<Packet>,
+}
+
+    /// Send a packet received from `recv_addr` to an endpoint.
+    async fn session_send_packet(
+        packet: &[u8],
+        recv_addr: SocketAddr,
+        endpoint: &Endpoint,
+        args: &ProcessDownstreamReceiveConfig,
+    ) {
+        let session_key = SessionKey {
+            source: recv_addr,
+            destination: endpoint.address,
+        };
+
+        // Grab a read lock and find the session.
+        let guard = args.session_manager.get_sessions().await;
+        if let Some(session) = guard.get(&session_key) {
+            // If it exists then send the packet, we're done.
+            Self::session_send_packet_helper(&args.log, session, packet, args.session_ttl).await
+        } else {
+            // If it does not exist, grab a write lock so that we can create it.
+            //
+            // NOTE: We must drop the lock guard to release the lock before
+            // trying to acquire a write lock since these lock aren't reentrant,
+            // otherwise we will deadlock with our self.
+            drop(guard);
+
+            // Grab a write lock.
+            let mut guard = args.session_manager.get_sessions_mut().await;
+
+            // Although we have the write lock now, check whether some other thread
+            // managed to create the session in-between our dropping the read
+            // lock and grabbing the write lock.
+            if let Some(session) = guard.get(&session_key) {
+                // If the session now exists then we have less work to do,
+                // simply send the packet.
+                Self::session_send_packet_helper(&args.log, session, packet, args.session_ttl)
+                    .await;
+            } else {
+                // Otherwise, create the session and insert into the map.
+                match Session::new(
+                    &args.log,
+                    args.session_metrics.clone(),
+                    args.filter_manager.clone(),
+                    session_key.source,
+                    endpoint.clone(),
+                    args.send_packets.clone(),
+                    args.session_ttl,
+                )
+                .await
+                {
+                    Ok(session) => {
+                        // Insert the session into the map and release the write lock
+                        // immediately since we don't want to block other threads while we send
+                        // the packet. Instead, re-acquire a read lock and send the packet.
+                        guard.insert(session.key(), session);
+
+                        // Release the write lock.
+                        drop(guard);
+
+                        // Grab a read lock to send the packet.
+                        let guard = args.session_manager.get_sessions().await;
+                        if let Some(session) = guard.get(&session_key) {
+                            Self::session_send_packet_helper(
+                                &args.log,
+                                session,
+                                packet,
+                                args.session_ttl,
+                            )
+                            .await;
+                        } else {
+                            warn!(
+                                args.log,
+                                "Could not find session";
+                                "key" => format!("({}:{})", session_key.source.to_string(), session_key.destination.to_string())
+                            )
+                        }
+                    }
+                    Err(err) => {
+                        error!(args.log, "Failed to ensure session exists"; "error" => %err);
+                    }
+                }
+            }
+        }
+    }
+```
+Take more care with the `drop` function.
