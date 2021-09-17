@@ -132,3 +132,13 @@ copy from [Mac 怎么设置搜狗输入法为默认第一位？](https://www.v2e
 brew cask install firefox --language=zh
 ```
 copy from [language](https://github.com/Homebrew/homebrew-cask/blob/master/doc/cask_language_reference/stanzas/language.md])
+
+## homebrew usage
+
+``` shell
+## Edit this formula
+brew edit git
+
+## Print this formula
+brew cat git
+```
