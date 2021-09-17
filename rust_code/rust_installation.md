@@ -242,4 +242,6 @@ The doc will be generated in the target/doc.
 The project doc homepage will be target/doc/{project_name}/index.html .
 ``` shell
 cargo doc
+
+cargo doc --open
 ```
