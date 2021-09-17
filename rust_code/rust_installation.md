@@ -235,3 +235,11 @@ rustup doc --std
 ``` shell
 cargo install rust-script
 ```
+
+## cargo doc
+
+The doc will be generated in the target/doc.
+The project doc homepage will be target/doc/{project_name}/index.html .
+``` shell
+cargo doc
+```
