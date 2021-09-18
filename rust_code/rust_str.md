@@ -151,3 +151,67 @@ copy from [Rust中的String,&str和str都是什么？](https://zhuanlan.zhihu.co
 b"world" == "world".as_bytes()
 [1,2,3i32].to_vec()
 ```
+
+## split
+
+``` rust
+use std::str::FromStr;
+
+#[derive(Debug)]
+struct Person {
+    name: String,
+    age: usize,
+}
+
+impl FromStr for Person {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s.len() == 0 {
+            Err("invalid length".to_string())
+        } else {
+            let v: Vec<&str> = s.split(',').collect();
+            let name = v[0];
+            if name.len() == 0 {
+                return Err("no name found".to_string());
+            }
+            let age = v[1].parse::<usize>();
+            if let Ok(age) = age {
+                return Ok(Person {
+                    name: String::from(name),
+                    age: age,
+                });
+            }
+
+            Err("invalid age".to_string())
+        }
+    }
+}
+```
+
+## splitn
+
+``` rust
+impl FromStr for Person {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s.len() == 0 {
+            Err("invalid length".to_string())
+        } else {
+            let mut split = s.splitn(2, ',');
+            let name = split.next().unwrap();
+            if name.len() == 0 {
+                return Err("name not found".to_string());
+            }
+            if let Some(age_str) = split.next() {
+                if let Ok(age) = age_str.parse() {
+                    return Ok(Person {
+                        name: name.to_string(),
+                        age,
+                    });
+                }
+            }
+            Err("name not found".to_string())
+        }
+    }
+}
+```
