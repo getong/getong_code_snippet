@@ -46,3 +46,17 @@ std::mem::replace(&mut v[2], 123);
 assert_eq!(v.get(0), Some(1));
 assert_eq!(v[0], 1);
 ```
+
+## slice.to_vec() method
+
+``` rust
+fn fill_vec(vec: &Vec<i32>) -> Vec<i32> {
+    let mut vec: Vec<i32> = vec.to_vec();
+
+    vec.push(22);
+    vec.push(44);
+    vec.push(66);
+
+    vec
+
+```
