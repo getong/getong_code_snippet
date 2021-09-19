@@ -81,3 +81,18 @@ fn c_string(bytes: &[u8]) -> Option<&str> {
     std::str::from_utf8(bytes_without_null).ok()
 }
 ```
+## iterator favor
+do
+
+``` rust
+let slice = &[1,2,3,4];
+for i in slice {
+}
+```
+do not
+
+``` rust
+for slice = &[1,2,3,4];
+for i in 0 .. slice.len() {
+}
+```
