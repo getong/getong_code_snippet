@@ -279,11 +279,18 @@ let mut y = 5;
 match x {
 	ref r => println!("Got a reference to {}", r),
 }
+// x can be still used here
+println!("x is {}", x);
+
 
 match y {
 	ref mut mr => println!("got a mutable reference to {}", mr ),
 }
+
+// y can be sill used here
+println!("y is {}", y);
 ```
+
 
 ## 重载运算符
 type Output = A 必须要有，输出结果
