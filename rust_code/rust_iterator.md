@@ -96,3 +96,7 @@ for slice = &[1,2,3,4];
 for i in 0 .. slice.len() {
 }
 ```
+
+## count() method
+Use .count(). len() is only for iterators which know their exact size without needing to be consumed, count() consumes the iterator.
+copy from [How do I split a string in Rust?](https://stackoverflow.com/questions/26643688/how-do-i-split-a-string-in-rust)
