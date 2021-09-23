@@ -36,3 +36,25 @@ fn main() {
 }
 ```
 copy from [How do I create a HashMap literal?](https://stackoverflow.com/questions/27582739/how-do-i-create-a-hashmap-literal)
+
+## get() method doc
+
+``` rust
+pub fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
+where
+    K: Borrow<Q>,
+    Q: Hash + Eq,
+```
+Returns a reference to the value corresponding to the key.
+
+The key may be any borrowed form of the map’s key type, but Hash and Eq on the borrowed form must match those for the key type.
+
+example
+``` rust
+use std::collections::HashMap;
+
+let mut map = HashMap::new();
+map.insert(1, "a");
+assert_eq!(map.get(&1), Some(&"a"));
+assert_eq!(map.get(&2), None);
+```
