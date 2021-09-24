@@ -245,3 +245,19 @@ cargo doc
 
 cargo doc --open
 ```
+
+## cargo-edit 0.8.0 bug in linux
+the bug info:
+
+```
+cargo upgrade
+    Updating 'https://github.com/rust-lang/crates.io-index' index
+Command failed due to unhandled error: invalid version 0 on git_proxy_options; class=Invalid (3)
+```
+solved by:
+
+``` shell
+cargo install cargo-edit --features "vendored-libgit2"
+```
+
+copy from [cargo upgrade gives "unhandled error: invalid version 0 on git_proxy_options"](https://github.com/killercup/cargo-edit/issues/510)
