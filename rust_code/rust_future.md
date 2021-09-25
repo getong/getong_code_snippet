@@ -143,3 +143,11 @@ tasks until the computation is ready. By putting the hard work on a separate
 thread, you can let the operating system take care of making it share the
 processor nicely
 ```
+
+## Unpin trait
+
+``` rust
+trait Unpin {}
+```
+almost all types in Rust automatically implement Unpin, using special support in the compiler.
+Asynchronous function and block futres are the exceptions to this rule.
