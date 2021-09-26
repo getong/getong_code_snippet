@@ -41,3 +41,8 @@ async fn increment_and_do_stuff(mutex: &Mutex<i32>) {
     do_something_async().await;
 }
 ```
+
+## spinlock
+see [进击的Rust多线程--混合自旋锁](https://zhuanlan.zhihu.com/p/413659832)
+
+see [透过 Rust 探索系统的本原：并发原语](https://zhuanlan.zhihu.com/p/365905573)
