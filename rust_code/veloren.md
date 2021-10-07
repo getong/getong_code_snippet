@@ -21,3 +21,6 @@ pub struct Server {
 }
 ```
 data  persistence, setting, metrics, ban words.
+
+
+## server-cli has the main.rs file
