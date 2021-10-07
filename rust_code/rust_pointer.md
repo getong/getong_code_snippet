@@ -256,3 +256,11 @@ RwLock
 Mutex
 ```
 copy from [Smart Pointers in Rust: What, why and how?](https://dev.to/rogertorres/smart-pointers-in-rust-what-why-and-how-oma)
+
+## convert integer to pointer
+
+``` rust
+pub const fn null<T>() -> *const T {
+    0 as *const T
+}
+```
