@@ -24,3 +24,6 @@ data  persistence, setting, metrics, ban words.
 
 
 ## server-cli has the main.rs file
+
+## veloren book
+[Veloren: An Owner's Manual](https://book.veloren.net/introduction/index.html)
