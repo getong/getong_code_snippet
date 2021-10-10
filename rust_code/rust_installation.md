@@ -261,3 +261,16 @@ cargo install cargo-edit --features "vendored-libgit2"
 ```
 
 copy from [cargo upgrade gives "unhandled error: invalid version 0 on git_proxy_options"](https://github.com/killercup/cargo-edit/issues/510)
+
+## rust-toolchain
+under the root of the root crate project, a file named `rust-toolchain` use the rust version.
+Like this:
+
+``` shell
+nightly
+```
+or:
+
+``` shell
+nightly-2021-09-24
+```
