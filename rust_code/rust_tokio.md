@@ -239,3 +239,4 @@ socket.send_to(b"hello world", &packet.dest()).await;
 [深入了解 Rust 异步开发模式](https://zhuanlan.zhihu.com/p/104098627)
 [tokio-internals](https://github.com/tony612/tokio-internals)
 [tokio-reuseport](https://github.com/fujita/tokio-reuseport)
+[Scalable server design in Rust with Tokio](https://medium.com/@fujita.tomonori/scalable-server-design-in-rust-with-tokio-4c81a5f350a3)
