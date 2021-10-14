@@ -134,3 +134,18 @@ veloren uses `specs` to handle the client data.
     }
 ```
 copy from server/src/lib.rs
+
+
+## thread_pool
+
+``` rust
+let thread_pool = Arc::new(
+            ThreadPoolBuilder::new()
+                .num_threads(num_cpus::get().max(common::consts::MIN_RECOMMENDED_RAYON_THREADS))
+                .thread_name(move |i| format!("rayon-{}-{}", thread_name_infix, i))
+                .build()
+                .unwrap(),
+        );
+```
+
+##
