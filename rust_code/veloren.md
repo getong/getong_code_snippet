@@ -149,3 +149,91 @@ let thread_pool = Arc::new(
 ```
 
 ##
+
+
+## handle new client
+
+``` rust
+    async fn init_participant(
+        participant: Participant,
+        client_sender: Sender<IncomingClient>,
+        info_requester_sender: Sender<Sender<ServerInfoPacket>>,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        debug!("New Participant connected to the server");
+        let (sender, receiver) = bounded(1);
+        info_requester_sender.send(sender)?;
+
+        let reliable = Promises::ORDERED | Promises::CONSISTENCY;
+        let reliablec = reliable | Promises::COMPRESSED;
+
+        let general_stream = participant.open(3, reliablec, 500).await?;
+        let ping_stream = participant.open(2, reliable, 500).await?;
+        let mut register_stream = participant.open(3, reliablec, 500).await?;
+        let character_screen_stream = participant.open(3, reliablec, 500).await?;
+        let in_game_stream = participant.open(3, reliablec, 100_000).await?;
+        let terrain_stream = participant.open(4, reliable, 20_000).await?;
+
+        let server_data = receiver.recv()?;
+
+        register_stream.send(server_data.info)?;
+
+        const TIMEOUT: Duration = Duration::from_secs(5);
+        let client_type = match select!(
+            _ = tokio::time::sleep(TIMEOUT).fuse() => None,
+            t = register_stream.recv::<ClientType>().fuse() => Some(t),
+        ) {
+            None => {
+                debug!("Timeout for incoming client elapsed, aborting connection");
+                return Ok(());
+            },
+            Some(client_type) => client_type?,
+        };
+
+        let client = Client::new(
+            client_type,
+            participant,
+            server_data.time,
+            general_stream,
+            ping_stream,
+            register_stream,
+            character_screen_stream,
+            in_game_stream,
+            terrain_stream,
+        );
+
+        client_sender.send(client)?;
+        Ok(())
+    }
+```
+copy from server/src/connection_handler.rs
+
+the recv:
+
+``` rust
+    /// Handle new client connections.
+    fn handle_new_connections(&mut self, frontend_events: &mut Vec<Event>) {
+        while let Ok(sender) = self.connection_handler.info_requester_receiver.try_recv() {
+            // can fail, e.g. due to timeout or network prob.
+            trace!("sending info to connection_handler");
+            let _ = sender.send(crate::connection_handler::ServerInfoPacket {
+                info: self.get_server_info(),
+                time: self.state.get_time(),
+            });
+        }
+
+        while let Ok(incoming) = self.connection_handler.client_receiver.try_recv() {
+            match self.initialize_client(incoming) {
+                Ok(None) => (),
+                Ok(Some(entity)) => {
+                    frontend_events.push(Event::ClientConnected { entity });
+                    debug!("Done initial sync with client.");
+                },
+                Err(e) => {
+                    debug!(?e, "failed initializing a new client");
+                },
+            }
+        }
+    }
+```
+
+copy from server/src/lib.rs
