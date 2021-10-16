@@ -240,3 +240,5 @@ copy from server/src/lib.rs
 
 ## common_state::State;
 State is just a basic usage of [specs](https://github.com/amethyst/specs)
+
+## common_systems crate is the same basic usage of specs
