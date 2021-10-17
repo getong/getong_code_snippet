@@ -245,3 +245,26 @@ State is just a basic usage of [specs](https://github.com/amethyst/specs)
 
 ## veloren use sqlite to store data.
 The rusqlite crate is used to handle the connection.
+
+
+## data migration
+
+``` rust
+/// Runs any pending database migrations. This is executed during server startup
+pub fn run_migrations(settings: &DatabaseSettings) {
+    let mut conn = establish_connection(settings, ConnectionMode::ReadWrite);
+
+    diesel_to_rusqlite::migrate_from_diesel(&mut conn)
+        .expect("One-time migration from Diesel to Refinery failed");
+
+    // If migrations fail to run, the server cannot start since the database will
+    // not be in the required state.
+    let report: Report = embedded::migrations::runner()
+        .set_abort_divergent(false)
+        .run(&mut conn.connection)
+        .expect("Database migrations failed, server startup aborted");
+
+    let applied_migrations = report.applied_migrations().len();
+    info!("Applied {} database migrations", applied_migrations);
+}
+```
