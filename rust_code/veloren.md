@@ -242,3 +242,6 @@ copy from server/src/lib.rs
 State is just a basic usage of [specs](https://github.com/amethyst/specs)
 
 ## common_systems crate is the same basic usage of specs
+
+## veloren use sqlite to store data.
+The rusqlite crate is used to handle the connection.
