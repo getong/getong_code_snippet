@@ -274,3 +274,14 @@ or:
 ``` shell
 nightly-2021-09-24
 ```
+
+## install specific nightly version
+
+``` shell
+rustup toolchain install nightly-2021-09-24
+# or
+rustup install nightly-2021-09-24
+
+```
+copy from [Change nightly Rust version?](https://stackoverflow.com/questions/67024062/change-nightly-rust-version)
+[Is it possible to download previous nightly builds?](https://stackoverflow.com/questions/27758387/is-it-possible-to-download-previous-nightly-builds)
