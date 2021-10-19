@@ -281,7 +281,14 @@ nightly-2021-09-24
 rustup toolchain install nightly-2021-09-24
 # or
 rustup install nightly-2021-09-24
-
 ```
 copy from [Change nightly Rust version?](https://stackoverflow.com/questions/67024062/change-nightly-rust-version)
 [Is it possible to download previous nightly builds?](https://stackoverflow.com/questions/27758387/is-it-possible-to-download-previous-nightly-builds)
+
+install component:
+
+``` shell
+rustup toolchain install nightly-2021-09-24 --component rust-src
+rustup toolchain install nightly --component rust-docs
+```
+copy from [Components](https://rust-lang.github.io/rustup/concepts/components.html)
