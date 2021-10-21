@@ -241,7 +241,11 @@ copy from server/src/lib.rs
 ## common_state::State;
 State is just a basic usage of [specs](https://github.com/amethyst/specs)
 
+## comp is the Component of the ECS
+comm::comp crate holds the definition of all the components of the veloren.
+
 ## common_systems crate is the same basic usage of specs
+common_systems crate holds the definition of all the System methods of the veloren.
 
 ## veloren use sqlite to store data.
 The rusqlite crate is used to handle the connection.
