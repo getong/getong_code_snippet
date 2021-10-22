@@ -6,5 +6,6 @@
 [rust-crdt](https://github.com/rust-crdt/rust-crdt)
 [databend](https://github.com/datafuselabs/databend)
 [rust-libp2p](https://github.com/libp2p/rust-libp2p)
+[Vector](https://github.com/vectordotdev/vector)
 
 ## use with kubernetes
