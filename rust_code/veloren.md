@@ -272,3 +272,8 @@ pub fn run_migrations(settings: &DatabaseSettings) {
     info!("Applied {} database migrations", applied_migrations);
 }
 ```
+
+
+## veloren uses specs crate
+see [Chapter 2 - Entities and Components](https://bfnightly.bracketproductions.com/chapter_2.html)
+The examples are very the same with veloren.
