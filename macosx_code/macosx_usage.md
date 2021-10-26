@@ -142,3 +142,10 @@ brew edit git
 ## Print this formula
 brew cat git
 ```
+
+## brew cleanup
+
+``` shell
+alias brewski='brew update && brew upgrade && brew cleanup; brew doctor'
+```
+copy from [别忘了定期执行 brew cleanup 哦](https://www.jianshu.com/p/403140306cb6)
