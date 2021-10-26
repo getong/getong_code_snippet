@@ -312,5 +312,42 @@ Rc
 Arc
 String
 Vec
+Cow
+
 ```
 copy from [Rust入坑指南：智能指针](https://juejin.cn/post/6844904086718906381)
+
+```
+Cow: 写时复制，即 Copy On Write,是指如果需要对某个变量进行复制时，系统并不会直接复制，而是使用相同的内存空间，在只读的时候，读取相同的空间，而如果发生了数据的写入时，才会进行复制操作。原因就是如果变量内存很大时，直接复制会占用很大的时间，而如果复制完后并不发生写入，则会浪费资源,多用于读多写少的操作。而 Rust 中的 Cow 是一个枚举类型，包含 Borrow(T) 及 Owned(T)。使用 Cow::from(xx) 来创建一个 Cow 时，如果 xx 是引用，对 cow 做任何操作都不会影响到 xx，而 xx 是值，则 xx 会被 move,对其操作，其实就是更改 xx.通俗点说，Cow 就是某个数据的克隆体，不过什么时候克隆，需要调用相关方法的时候，才会被决定。
+```
+copy from [后端 智能指针](https://www.dazhuanlan.com/sail2011/topics/1666072)
+code example:
+
+``` rust
+use std::borrow::Cow;
+
+fn abs_all(input: &mut Cow<[i32]>) {
+    for i in 0..input.len() {
+        let v = input[i];
+        if v < 0 {
+            // Clones into a vector if not already owned.
+            input.to_mut()[i] = -v;
+        }
+    }
+}
+
+// No clone occurs because `input` doesn't need to be mutated.
+let slice = [0, 1, 2];
+let mut input = Cow::from(&slice[..]);
+abs_all(&mut input);
+
+// Clone occurs because `input` needs to be mutated.
+let slice = [-1, 0, 1];
+let mut input = Cow::from(&slice[..]);
+abs_all(&mut input);
+
+// No clone occurs because `input` is already owned.
+let mut input = Cow::from(vec![-1, 0, 1]);
+abs_all(&mut input);
+```
+copy from [Enum std::borrow::Cow](https://doc.rust-lang.org/std/borrow/enum.Cow.html)
