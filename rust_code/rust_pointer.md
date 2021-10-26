@@ -264,3 +264,53 @@ pub const fn null<T>() -> *const T {
     0 as *const T
 }
 ```
+
+## smart pointer
+
+```
+智能指针是Rust中一种特殊的数据结构。它与普通指针的本质区别在于普通指针是对值的借用，而智能指针通常拥有对数据的所有权。
+它与普通数据结构的区别在于智能指针实现了Deref和Drop这两个traits。实现Deref可以使智能指针能够解引用，而实现Drop则使智能指针具有自动析构的能力。
+Deref有一个特性是强制隐式转换：如果一个类型T实现了Deref<Target=U>，则该类型T的引用在应用的时候会被自动转换为类型U。
+Deref使得智能指针在使用时被自动解引用，像是不存在一样。
+DerefMut和Deref类似，只不过它是返回可变引用的。
+```
+code example
+
+``` rust
+use std::rc::Rc;
+fn main() {
+    let x = Rc::new("hello");
+    println!("{:?}", x.chars());
+}
+```
+
+```
+Drop对于智能指针非常重要，它是在智能指针被丢弃时自动执行一些清理工作，这里所说的清理工作并不仅限于释放堆内存，还包括一些释放文件和网络连接等工作。
+```
+
+```
+Cell<T>和RefCell<T>, 它们本质上不属于智能指针，而是可以提供内部可变性的容器。内部可变性实际上是一种设计模式，它的内部是通过一些unsafe代码来实现的。
+```
+code example:
+
+``` rust
+use std::cell::RefCell;
+fn main() {
+    let x = RefCell::new(vec![1, 2, 3]);
+    println!("{:?}", x.borrow());
+    x.borrow_mut().push(5);
+    println!("{:?}", x.borrow());
+}
+
+```
+
+smart pointer lists:
+
+``` rust
+Box
+Rc
+Arc
+String
+Vec
+```
+copy from [Rust入坑指南：智能指针](https://juejin.cn/post/6844904086718906381)
