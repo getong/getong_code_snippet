@@ -277,3 +277,61 @@ pub fn run_migrations(settings: &DatabaseSettings) {
 ## veloren uses specs crate
 see [Chapter 2 - Entities and Components](https://bfnightly.bracketproductions.com/chapter_2.html)
 The examples are very the same with veloren.
+
+
+## create character
+
+``` rust
+    pub fn create_character(
+        &mut self,
+        entity: Entity,
+        requesting_player_uuid: String,
+        alias: String,
+        persisted_components: PersistedComponents,
+    ) {
+        if let Err(e) =
+            self.update_tx
+                .as_ref()
+                .unwrap()
+                .send(CharacterUpdaterEvent::CreateCharacter {
+                    entity,
+                    player_uuid: requesting_player_uuid,
+                    character_alias: alias,
+                    persisted_components,
+                })
+        {
+            error!(?e, "Could not send character creation request");
+        }
+    }
+
+
+```
+## delete character
+
+``` rust
+    pub fn delete_character(
+        &mut self,
+        entity: Entity,
+        requesting_player_uuid: String,
+        character_id: CharacterId,
+    ) {
+        if let Err(e) =
+            self.update_tx
+                .as_ref()
+                .unwrap()
+                .send(CharacterUpdaterEvent::DeleteCharacter {
+                    entity,
+                    requesting_player_uuid,
+                    character_id,
+                })
+        {
+            error!(?e, "Could not send character deletion request");
+        } else {
+            // Once a delete request has been sent to the channel we must remove any pending
+            // updates for the character in the event that it has recently logged out.
+            // Since the user has actively chosen to delete the character there is no value
+            // in the pending update data anyway.
+            self.pending_logout_updates.remove(&character_id);
+        }
+    }
+```
