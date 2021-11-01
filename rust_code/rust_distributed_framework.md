@@ -7,6 +7,6 @@
 [databend](https://github.com/datafuselabs/databend)
 [rust-libp2p](https://github.com/libp2p/rust-libp2p)
 [Vector](https://github.com/vectordotdev/vector)
-[bifrost](https://github.com/ShisoftResearch/bifrost)
+[delicate](https://github.com/BinChengZhao/delicate)
 
 ## use with kubernetes
