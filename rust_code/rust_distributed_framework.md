@@ -8,5 +8,6 @@
 [rust-libp2p](https://github.com/libp2p/rust-libp2p)
 [Vector](https://github.com/vectordotdev/vector)
 [delicate](https://github.com/BinChengZhao/delicate)
+[zenoh](https://github.com/eclipse-zenoh/zenoh)
 
 ## use with kubernetes
