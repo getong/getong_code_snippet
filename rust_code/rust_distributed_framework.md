@@ -9,5 +9,6 @@
 [Vector](https://github.com/vectordotdev/vector)
 [delicate](https://github.com/BinChengZhao/delicate)
 [zenoh](https://github.com/eclipse-zenoh/zenoh)
+[tensorbase](https://github.com/tensorbase/tensorbase)
 
 ## use with kubernetes
