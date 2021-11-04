@@ -1,0 +1,46 @@
+# rand ThreadRng does not implement send
+
+## How to generate random numbers in async rust?
+see [How to generate random numbers in async rust?](https://stackoverflow.com/questions/67443847/how-to-generate-random-numbers-in-async-rust)
+
+## code can not write like below:
+
+``` rust
+    let (tx1, mut rx1) = mpsc::channel(32);
+
+    tokio::spawn(async move {
+        let mut i = 0;
+        let mut rng = rand::thread_rng();
+        tokio::pin!(rng);
+
+        loop {
+            let rand_sec = rng.gen_range(1u64..3u64);
+            let _ = sleep(Duration::from_secs(rand_sec)).await;
+            tx1.send(i).await.unwrap();
+            i += 1;
+        }
+    });
+```
+
+
+## code change like this
+
+``` rust
+async fn random_number() -> u64 {
+    let mut rng = rand::thread_rng();
+    rng.gen_range(1u64..3u64)
+}
+
+    let (tx1, mut rx1) = mpsc::channel(32);
+
+    tokio::spawn(async move {
+        let mut i = 0;
+
+        loop {
+            let rand_sec = random_number().await;
+            let _ = sleep(Duration::from_secs(rand_sec)).await;
+            tx1.send(i).await.unwrap();
+            i += 1;
+        }
+    });
+```
