@@ -313,7 +313,7 @@ Arc
 String
 Vec
 Cow
-
+Pin
 ```
 copy from [Rust入坑指南：智能指针](https://juejin.cn/post/6844904086718906381)
 
