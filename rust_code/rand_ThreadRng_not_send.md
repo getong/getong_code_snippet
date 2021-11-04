@@ -44,3 +44,6 @@ async fn random_number() -> u64 {
         }
     });
 ```
+
+## use getrandom crate
+see [How can I get secure random bytes in a actix route, for password hashing?](https://users.rust-lang.org/t/how-can-i-get-secure-random-bytes-in-a-actix-route-for-password-hashing/50076)
