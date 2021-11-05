@@ -123,3 +123,10 @@ sysctl --system
 https://github.com/91yun/serverspeeder
 https://github.com/shadowsocks/shadowsocks-libev
 ```
+
+## switch to shadowsocks-rust
+[shadowsocks-rust](https://github.com/shadowsocks/shadowsocks-rust)
+
+``` shell
+cargo install shadowsocks-rust
+```
