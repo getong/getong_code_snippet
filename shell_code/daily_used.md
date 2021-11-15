@@ -705,3 +705,9 @@ sudo grub-set-default 'Debian GNU/Linux, with Linux 5.10.0-8-amd64'
 Connection to 192.118.20.95 123 port [udp/ntp] succeeded!
 ```
 copy from [How to Test Port [TCP/UDP] Connectivity from a Linux Server](https://www.thegeekdiary.com/how-to-test-porttcp-udp-connectivity-from-a-linux-server/)
+
+## random uuid
+
+``` shell
+cat /proc/sys/kernel/random/uuid
+```
