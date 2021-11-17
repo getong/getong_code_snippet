@@ -335,3 +335,9 @@ The examples are very the same with veloren.
         }
     }
 ```
+
+## sleep
+
+``` rust
+spin_sleep::sleep(Duration::from_secs(5));
+```
