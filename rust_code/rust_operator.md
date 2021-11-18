@@ -46,3 +46,13 @@ fn main() {
 
 ```
 copy from [rust--问号操作符](https://www.jianshu.com/p/46872e6bffce)
+
+## ? operator
+expr? is equal to :
+
+``` rust
+match expr {
+    Ok(v) => v,
+    Err(e) => return Err(e.into()),
+}
+```
