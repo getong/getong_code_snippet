@@ -149,3 +149,7 @@ fn main() {
     let _ = thandle2.join();
 }
 ```
+
+## releated crates:
+[elegant-departure](https://github.com/Dav1dde/elegant-departure)
+[tokio-graceful-shutdown](https://github.com/Finomnis/tokio-graceful-shutdown)
