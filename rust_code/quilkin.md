@@ -1,5 +1,63 @@
 # quilkin
 
+## compile
+
+``` shell
+
+git clone https://github.com/googleforgames/quilkin
+
+cd quilkin
+
+git submodule update --init --recursive
+
+cargo build --release
+```
+
+./target/release/quilkin is the binary executable file.
+
+
+## configure file
+let's say proxy.yaml
+```
+version: v1alpha1
+proxy:
+  id: my-proxy # An identifier for the proxy instance.
+  port: 6667 # the port to receive traffic to locally
+static: # Provide static configuration of endpoints
+  endpoints: # array of potential endpoints to send on traffic to
+    - address: 127.0.0.1:9001
+```
+quilkin will use udp protocol, listen to localhost 6667 port, and send the data to 127.0.0.1:9001.
+
+We can also use multi port.
+
+```
+version: v1alpha1
+proxy:
+  id: my-proxy # An identifier for the proxy instance.
+  port: 7001 # the port to receive traffic to locally
+static: # Provide static configuration of endpoints
+  endpoints: # array of potential endpoints to send on traffic to
+    - address: 127.0.0.1:26000
+      metadata: # Metadata associated with the endpoint
+        quilkin.dev:
+          tokens:
+            - MXg3aWp5Ng== # the connection byte array to route to, encoded as base64 (string value: 1x7ijy6)
+            - OGdqM3YyaQ== # (string value: 8gj3v2i)
+    - address: 127.0.0.1:26001
+      metadata: # Metadata associated with the endpoint
+        quilkin.dev:
+          tokens:
+            - bmt1eTcweA== # (string value: nkuy70x)
+```
+You can also see the examples in the quilkin/examples directory.
+
+## run command:
+
+``` shell
+./target/release/quilkin -c proxy.yaml
+```
+
 ## session send packet
 
 ``` rust
@@ -46,3 +104,291 @@
 ```
 
 copy from session.rs file
+
+## quilkin code reading
+The program entry is the `src/main.rs`
+``` rust
+#[tokio::main]
+async fn main() -> quilkin::Result<()> {
+    let log = quilkin::logger();
+    let version: std::borrow::Cow<'static, str> = if cfg!(debug_assertions) {
+        format!("{}+debug", VERSION).into()
+    } else {
+        VERSION.into()
+    };
+
+    slog::info!(log, "Starting Quilkin"; "version" => &*version);
+
+    let matches = clap::App::new(clap::crate_name!())
+        .version(&*version)
+        .about(clap::crate_description!())
+        .arg(
+            clap::Arg::with_name("config")
+                .short("c")
+                .long("config")
+                .value_name("CONFIG")
+                .help("The YAML configuration file")
+                .takes_value(true),
+        )
+        .get_matches();
+
+    let config = quilkin::config::Config::find(&log, matches.value_of("config")).map(Arc::new)?;
+
+    quilkin::run_with_config(log, config, vec![]).await
+}
+```
+The code use tokio as the async runtime, it reads the configure file and loads to memory.
+
+run_with_config() method is in src/runner.rs module:
+
+``` rust
+/// Start and run a proxy. Any passed in [`FilterFactory`]s are included
+/// alongside the default filter factories.
+pub async fn run_with_config(
+    base_log: slog::Logger,
+    config: Arc<Config>,
+    filter_factories: impl IntoIterator<Item = DynFilterFactory>,
+) -> Result<(), Error> {
+    let log = base_log.new(o!("source" => "run"));
+    let server = Builder::from(config)
+        .with_log(base_log)
+        .with_filter_registry(FilterRegistry::new(FilterSet::default_with(
+            &log,
+            filter_factories.into_iter(),
+        )))
+        .validate()?
+        .build();
+
+    let (shutdown_tx, shutdown_rx) = watch::channel::<()>(());
+    tokio::spawn(async move {
+        // Don't unwrap in order to ensure that we execute
+        // any subsequent shutdown tasks.
+        signal::ctrl_c().await.ok();
+        shutdown_tx.send(()).ok();
+    });
+
+    if let Err(err) = server.run(shutdown_rx).await {
+        info!(log, "Shutting down with error"; "error" => %err);
+        Err(Error::from(err))
+    } else {
+        info!(log, "Shutting down");
+        Ok(())
+    }
+}
+```
+It uses `tokio::spawn()` method to generate a process, the process is used to handle the interupt signal to the quilkin program, and through the `server.run()` method to handle the shutdown of the quilkin, with this code, the quilkin will shutdown gracefully.
+
+The `server` variable here is an instance of the `Builder` object, which is generate by the method `proxy::Builder::from(config)`. `server.run()` method will listen to the port, and send the traffic.
+
+``` rust
+impl Server {
+    /// start the async processing of incoming UDP packets. Will block until an
+    /// event is sent through the stop Receiver.
+    pub async fn run(self, mut shutdown_rx: watch::Receiver<()>) -> Result<()> {
+        self.log_config();
+
+        if let Some(admin) = &self.admin {
+            admin.run(shutdown_rx.clone());
+        }
+
+        let socket = Arc::new(Server::bind(self.config.proxy.port).await?);
+        let session_manager = SessionManager::new(self.log.clone(), shutdown_rx.clone());
+        let (send_packets, receive_packets) = mpsc::channel::<Packet>(1024);
+
+        let session_ttl = Duration::from_secs(SESSION_TIMEOUT_SECONDS);
+
+        let (cluster_manager, filter_manager) =
+            self.create_resource_managers(shutdown_rx.clone()).await?;
+        self.run_receive_packet(socket.clone(), receive_packets);
+        let recv_loop = self.run_recv_from(RunRecvFromArgs {
+            cluster_manager,
+            filter_manager,
+            socket,
+            session_manager,
+            session_ttl,
+            send_packets,
+            shutdown_rx: shutdown_rx.clone(),
+        });
+
+        tokio::select! {
+            join_result = recv_loop => {
+                join_result
+                    .map_err(|join_err| Error::RecvLoop(format!("{}", join_err)))
+                    .and_then(|inner| inner.map_err(Error::RecvLoop))
+            }
+            _ = shutdown_rx.changed() => {
+                Ok(())
+            }
+        }
+    }
+}
+```
+The `run()` method will call the `run_recv_from()` method,  and `run_recv_from()` method will give back an instance of `JoinHandle` object, named `recv_loop`. The `run()` method will finally listen to the `recv_loop` variable, and the `shutdown_rx` variable above. The `shutdown_rx` variable is the operating system's interupt signal.
+``` rust
+    /// Spawns a background task that sits in a loop, receiving packets from the passed in socket.
+    /// Each received packet is placed on a queue to be processed by a worker task.
+    /// This function also spawns the set of worker tasks responsible for consuming packets
+    /// off the aforementioned queue and processing them through the filter chain and session
+    /// pipeline.
+    fn run_recv_from(&self, args: RunRecvFromArgs) -> JoinHandle<StdResult<(), String>> {
+        let session_manager = args.session_manager;
+        let log = self.log.clone();
+        let proxy_metrics = self.proxy_metrics.clone();
+        let session_metrics = self.session_metrics.clone();
+
+        // The number of worker tasks to spawn. Each task gets a dedicated queue to
+        // consume packets off.
+        let num_workers = num_cpus::get();
+
+        // Contains channel Senders for each worker task.
+        let mut packet_txs = vec![];
+        // Contains config for each worker task.
+        let mut worker_configs = vec![];
+        for worker_id in 0..num_workers {
+            let (packet_tx, packet_rx) = mpsc::channel(num_workers);
+            packet_txs.push(packet_tx);
+            worker_configs.push(DownstreamReceiveWorkerConfig {
+                worker_id,
+                packet_rx,
+                shutdown_rx: args.shutdown_rx.clone(),
+                receive_config: ProcessDownstreamReceiveConfig {
+                    log: log.clone(),
+                    proxy_metrics: proxy_metrics.clone(),
+                    session_metrics: session_metrics.clone(),
+                    cluster_manager: args.cluster_manager.clone(),
+                    filter_manager: args.filter_manager.clone(),
+                    session_manager: session_manager.clone(),
+                    session_ttl: args.session_ttl,
+                    send_packets: args.send_packets.clone(),
+                },
+            })
+        }
+
+        // Start the worker tasks that pick up received packets from their queue
+        // and processes them.
+        Self::spawn_downstream_receive_workers(log.clone(), worker_configs);
+
+        // Start the background task to receive downstream packets from the socket
+        // and place them onto the worker tasks' queue for processing.
+        let socket = args.socket;
+        tokio::spawn(async move {
+            // Index to round-robin over workers to process packets.
+            let mut next_worker = 0;
+            let num_workers = num_workers;
+
+            // Initialize a buffer for the UDP packet. We use the maximum size of a UDP
+            // packet, which is the maximum value of 16 a bit integer.
+            let mut buf = vec![0; 1 << 16];
+            loop {
+                match socket.recv_from(&mut buf).await {
+                    Ok((size, recv_addr)) => {
+                        let packet_tx = &mut packet_txs[next_worker % num_workers];
+                        next_worker += 1;
+
+                        if packet_tx
+                            .send((recv_addr, (&buf[..size]).to_vec()))
+                            .await
+                            .is_err()
+                        {
+                            // We cannot recover from this error since
+                            // it implies that the receiver has been dropped.
+                            let reason =
+                                "Failed to send received packet over channel to worker".into();
+                            error!(log, "{}", reason);
+                            return Err(reason);
+                        }
+                    }
+                    err => {
+                        // Socket error, we cannot recover from this so return an error instead.
+                        error!(log, "Error processing receive socket"; "error" => #?err);
+                        return Err(format!("error processing receive socket: {:?}", err));
+                    }
+                }
+            }
+        })
+    }
+```
+The `run_recv_from()` method will check how many cpu core in the operating system, and generate the same number of the channel. Let's say, there are 4 cores in the operating system, it will generate 4 channel. These channel information will be gethered into the `worker_configs` list.
+
+In the `run_recv_from()` method, there is a variable named `next_worker`. The variable is used to record how many udp connections it received, and will increase all the time. It will call `socket.recv_from()` method infinitely, the method  will listen all the udp traffic,and use the `next_worker % num_workers` to load balance, and send the specific udp connection and the udp traffic binary data to a specific channel, and the releated process will get the data from the channel, and operate the message.
+
+The udp connection and received binary data will be operated in the `spawn_downstream_receive_workers()` method.
+
+``` rust
+    // For each worker config provided, spawn a background task that sits in a
+    // loop, receiving packets from a queue and processing them through
+    // the filter chain.
+    fn spawn_downstream_receive_workers(
+        log: Logger,
+        worker_configs: Vec<DownstreamReceiveWorkerConfig>,
+    ) {
+        for DownstreamReceiveWorkerConfig {
+            worker_id,
+            mut packet_rx,
+            mut shutdown_rx,
+            receive_config,
+        } in worker_configs
+        {
+            let log = log.clone();
+
+            tokio::spawn(async move {
+                loop {
+                    tokio::select! {
+                      packet = packet_rx.recv() => {
+                        match packet {
+                          Some((recv_addr, packet)) => Self::process_downstream_received_packet((recv_addr, packet), &receive_config).await,
+                          None => {
+                            debug!(log, "Worker-{} exiting: work sender channel was closed.", worker_id);
+                            return;
+                          }
+                        }
+                      }
+                      _ = shutdown_rx.changed() => {
+                        debug!(log, "Worker-{} exiting: received shutdown signal.", worker_id);
+                        return;
+                      }
+                    }
+                }
+            });
+        }
+    }
+```
+
+The `process_downstream_received_packet()` is defined as below, and it will use some filter operatation, and finally call the `session_send_packet()` method and generate a session process.
+
+``` rust
+    /// Processes a packet by running it through the filter chain.
+    async fn process_downstream_received_packet(
+        packet: (SocketAddr, Vec<u8>),
+        args: &ProcessDownstreamReceiveConfig,
+    ) {
+        let (recv_addr, packet) = packet;
+
+        trace!(
+            args.log,
+            "Packet Received";
+            "from" => recv_addr,
+            "contents" => debug::bytes_to_string(&packet),
+        );
+
+        let endpoints = match args.cluster_manager.read().get_all_endpoints() {
+            Some(endpoints) => endpoints,
+            None => {
+                args.proxy_metrics.packets_dropped_no_endpoints.inc();
+                return;
+            }
+        };
+
+        let filter_chain = {
+            let filter_manager_guard = args.filter_manager.read();
+            filter_manager_guard.get_filter_chain()
+        };
+        let result = filter_chain.read(ReadContext::new(endpoints, recv_addr, packet));
+
+        if let Some(response) = result {
+            for endpoint in response.endpoints.iter() {
+                Self::session_send_packet(&response.contents, recv_addr, endpoint, args).await;
+            }
+        }
+    }
+```
