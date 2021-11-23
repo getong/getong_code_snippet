@@ -85,3 +85,11 @@ const fn mono_to_rgba(level: u8) -> Color {
     }
 }
 ```
+
+## temparary variable lifetime
+
+``` rust
+le s = String::from("hello world");
+s.clear(); // mutable temparary variable lifetime ends here
+s.clear(); // mutable temparary variable lifetime ends here
+```
