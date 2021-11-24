@@ -392,3 +392,195 @@ The `process_downstream_received_packet()` is defined as below, and it will use 
         }
     }
 ```
+
+session_send_packet() function is defined as below, each udp connection will have an individual session process, and has their own data.
+``` rust
+    /// Send a packet received from `recv_addr` to an endpoint.
+    async fn session_send_packet(
+        packet: &[u8],
+        recv_addr: SocketAddr,
+        endpoint: &Endpoint,
+        args: &ProcessDownstreamReceiveConfig,
+    ) {
+        let session_key = SessionKey {
+            source: recv_addr,
+            destination: endpoint.address,
+        };
+
+        // Grab a read lock and find the session.
+        let guard = args.session_manager.get_sessions().await;
+        if let Some(session) = guard.get(&session_key) {
+            // If it exists then send the packet, we're done.
+            Self::session_send_packet_helper(&args.log, session, packet, args.session_ttl).await
+        } else {
+            // If it does not exist, grab a write lock so that we can create it.
+            //
+            // NOTE: We must drop the lock guard to release the lock before
+            // trying to acquire a write lock since these lock aren't reentrant,
+            // otherwise we will deadlock with our self.
+            drop(guard);
+
+            // Grab a write lock.
+            let mut guard = args.session_manager.get_sessions_mut().await;
+
+            // Although we have the write lock now, check whether some other thread
+            // managed to create the session in-between our dropping the read
+            // lock and grabbing the write lock.
+            if let Some(session) = guard.get(&session_key) {
+                // If the session now exists then we have less work to do,
+                // simply send the packet.
+                Self::session_send_packet_helper(&args.log, session, packet, args.session_ttl)
+                    .await;
+            } else {
+                // Otherwise, create the session and insert into the map.
+                match Session::new(
+                    &args.log,
+                    args.session_metrics.clone(),
+                    args.filter_manager.clone(),
+                    session_key.source,
+                    endpoint.clone(),
+                    args.send_packets.clone(),
+                    args.session_ttl,
+                )
+                .await
+                {
+                    Ok(session) => {
+                        // Insert the session into the map and release the write lock
+                        // immediately since we don't want to block other threads while we send
+                        // the packet. Instead, re-acquire a read lock and send the packet.
+                        guard.insert(session.key(), session);
+
+                        // Release the write lock.
+                        drop(guard);
+
+                        // Grab a read lock to send the packet.
+                        let guard = args.session_manager.get_sessions().await;
+                        if let Some(session) = guard.get(&session_key) {
+                            Self::session_send_packet_helper(
+                                &args.log,
+                                session,
+                                packet,
+                                args.session_ttl,
+                            )
+                            .await;
+                        } else {
+                            warn!(
+                                args.log,
+                                "Could not find session";
+                                "key" => format!("({}:{})", session_key.source.to_string(), session_key.destination.to_string())
+                            )
+                        }
+                    }
+                    Err(err) => {
+                        error!(args.log, "Failed to ensure session exists"; "error" => %err);
+                    }
+                }
+            }
+        }
+    }
+```
+
+The `Server` instance take a response of the whole quilkin exit logic, the `run_recv_from()` method will take a response of the udp listen. The `Session` instance will resend the udp traffic one by one.
+
+In the src/proxy/sessions/session.rs module, the `run()` method will handle the received message:
+
+``` rust
+    /// run starts processing received udp packets on its UdpSocket
+    fn run(
+        &self,
+        ttl: Duration,
+        socket: Arc<UdpSocket>,
+        mut sender: mpsc::Sender<Packet>,
+        mut shutdown_rx: watch::Receiver<()>,
+    ) {
+        let log = self.log.clone();
+        let from = self.from;
+        let expiration = self.expiration.clone();
+        let filter_manager = self.filter_manager.clone();
+        let endpoint = self.dest.clone();
+        let metrics = self.metrics.clone();
+        tokio::spawn(async move {
+            let mut buf: Vec<u8> = vec![0; 65535];
+            loop {
+                debug!(log, "Awaiting incoming packet");
+                select! {
+                    received = socket.recv_from(&mut buf) => {
+                        match received {
+                            Err(err) => {
+                                metrics.rx_errors_total.inc();
+                                error!(log, "Error receiving packet"; "error" => %err);
+                            },
+                            Ok((size, recv_addr)) => {
+                                metrics.rx_bytes_total.inc_by(size as u64);
+                                metrics.rx_packets_total.inc();
+                                Session::process_recv_packet(
+                                    &log,
+                                    &metrics,
+                                    &mut sender,
+                                    &expiration,
+                                    ttl,
+                                    ReceivedPacketContext {
+                                        filter_manager: filter_manager.clone(),
+                                        packet: &buf[..size],
+                                        endpoint: &endpoint,
+                                        from: recv_addr,
+                                        to: from,
+                                    }).await
+                            }
+                        };
+                    }
+                    _ = shutdown_rx.changed() => {
+                        debug!(log, "Closing Session");
+                        return;
+                    }
+                };
+            }
+        });
+    }
+```
+
+It is mainly use the `socket.recv_from()` method to receive the binary data, and the `process_recv_packet()` function will handle the packet data.
+``` rust
+    /// process_recv_packet processes a packet that is received by this session.
+    async fn process_recv_packet(
+        log: &Logger,
+        metrics: &Metrics,
+        sender: &mut mpsc::Sender<Packet>,
+        expiration: &Arc<AtomicU64>,
+        ttl: Duration,
+        packet_ctx: ReceivedPacketContext<'_>,
+    ) {
+        let ReceivedPacketContext {
+            packet,
+            filter_manager,
+            endpoint,
+            from,
+            to,
+        } = packet_ctx;
+
+        trace!(log, "Received packet"; "from" => from,
+            "endpoint_addr" => &endpoint.address,
+            "contents" => debug::bytes_to_string(packet));
+
+        if let Err(err) = Session::do_update_expiration(expiration, ttl) {
+            warn!(log, "Error updating session expiration"; "error" => %err)
+        }
+
+        let filter_chain = {
+            let filter_manager_guard = filter_manager.read();
+            filter_manager_guard.get_filter_chain()
+        };
+        if let Some(response) =
+            filter_chain.write(WriteContext::new(endpoint, from, to, packet.to_vec()))
+        {
+            if let Err(err) = sender.send(Packet::new(to, response.contents)).await {
+                metrics.rx_errors_total.inc();
+                error!(log, "Error sending packet to channel"; "error" => %err);
+            }
+        } else {
+            metrics.packets_dropped_total.inc();
+        }
+    }
+```
+The `packet` variable here is the fragment udp data, and the `sender.send()` method will send the udp data to the other part of the network.
+It is how the proxy works.
