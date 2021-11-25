@@ -53,3 +53,20 @@ read from [Run MySQL & phpMyAdmin locally in 3 steps using Docker](https://mediu
 ``` shell
 docker run --privileged --restart=always --name other_phpmyadmin -d -e PMA_HOST=remote_host_or_ip -e PMA_PORT=remote_port -e MYSQL_USER=remote_user -e MYSQL_PASSWORD=remote_password  -p 8888:80 phpmyadmin/phpmyadmin:5.0.2
 ```
+
+## mount conf directory
+
+``` shell
+docker run -p 3306:3306 --name mysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8.0
+
+```
+The meaning is:
+
+```
+-p 3306:3306：将容器的 3306 端口映射到主机的 3306 端口。
+-v -v $PWD/conf:/etc/mysql/conf.d：将主机当前目录下的 conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf。
+-v $PWD/logs:/logs：将主机当前目录下的 logs 目录挂载到容器的 /logs。
+-v $PWD/data:/var/lib/mysql ：将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 。
+-e MYSQL_ROOT_PASSWORD=123456：初始化 root 用户的密码。
+```
+copy from [docker安装mysql，并修改my.cnf文件](https://blog.csdn.net/qq_29907885/article/details/107692317)
