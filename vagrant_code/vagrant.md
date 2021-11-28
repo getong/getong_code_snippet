@@ -20,3 +20,62 @@ vagrant plugin install vagrant-vbguest
 vagrant reload
 ```
 copy from [Vagrant was unable to mount VirtualBox shared folders](https://mecromace.com/articles/2019/11/vagrant-was-unable-mount-virtualbox-shared-folders)
+
+## vagrant mount usb device
+
+see [USB device is not visible inside Vagrant](https://stackoverflow.com/questions/38956127/usb-device-is-not-visible-inside-vagrant)
+see [Connect a Usb device through Vagrant](https://code-chronicle.blogspot.com/2014/08/connect-usb-device-through-vagrant.html)
+see [VirtualBox USB passthrough](https://softwaretester.info/category/development/virtualization/)
+
+commands:
+
+``` shell
+$ VBoxManage list usbhost
+UUID:               e007f0f3-c498-495a-ac02-d88a92831bfb
+VendorId:           0x0930 (0930)
+ProductId:          0x1407 (1407)
+Revision:           16.117 (16117)
+Port:               3
+USB version/speed:  0/Super
+Manufacturer:       TOSHIBA
+Product:            TransMemory-Ex2
+SerialNumber:       60A44CB464581F40A35A00BB
+Address:            p=0x1407;v=0x0930;s=0x0000003b7c753fcd;l=0x01133000
+Current State:      Busy
+
+```
+Change the following to the `Vagrantfile` file:
+``` shell
+  config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #  vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+    vb.customize ["modifyvm", :id, "--usb", "on"]
+    vb.customize ["modifyvm", :id, "--usbxhci", "on"]
+    vb.customize ["usbfilter", "add", "0",
+                  "--target", :id,
+                  "--manufacturer", "TOSHIBA",
+                  "--name", "toshiba",
+                  "--product", "TransMemory-Ex2"]
+  end
+```
+
+Then run the virtualbox virtual machine:
+
+``` shell
+$ vagrant up
+```
+Run into the virtual machine:
+
+``` shell
+$ vagrant ssh
+$ sudo -i
+# mkdir -p /media/vagrant
+# fdisk -l
+# mount /dev/sdb1 /media/vagrant
+# cp * /vagrant
+# cd
+# umount /media/vagrant
+```
