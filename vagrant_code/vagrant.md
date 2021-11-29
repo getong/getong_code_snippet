@@ -79,3 +79,10 @@ $ sudo -i
 # cd
 # umount /media/vagrant
 ```
+
+## virtualbox add vram
+
+``` shell
+VBoxManage modifyvm "name_of_vm" --vram 256
+```
+The max vram is 256m.
