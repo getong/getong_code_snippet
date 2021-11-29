@@ -711,3 +711,10 @@ copy from [How to Test Port [TCP/UDP] Connectivity from a Linux Server](https://
 ``` shell
 cat /proc/sys/kernel/random/uuid
 ```
+
+## get the gateway
+
+``` shell
+ip route show
+route -n
+```
