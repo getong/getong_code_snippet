@@ -45,3 +45,16 @@ docker build -t abc -f dockerfile . --build-arg project_id=abc
 ```
 
 copy from [Run an Elixir Phoenix app in containers using Google Kubernetes Engine](https://cloud.google.com/community/tutorials/elixir-phoenix-on-kubernetes-google-container-engine)
+
+## workdir
+like linux command:
+
+``` shell
+cd /usr/local/otp_src_21.2 && erl
+```
+in the dockerfile :
+
+``` shell
+WORKDIR /usr/local/otp_src_21
+CMD ["erl"];
+```
