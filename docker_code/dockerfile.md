@@ -54,7 +54,18 @@ cd /usr/local/otp_src_21.2 && erl
 ```
 in the dockerfile :
 
-``` shell
+``` dockerfile
 WORKDIR /usr/local/otp_src_21
 CMD ["erl"];
 ```
+## Multiple commands in Docker CMD directive
+
+``` dockerfile
+CMD ["/etc/init.d/nullmailer", "start", ";", "/usr/sbin/php5-fpm"]
+```
+but it does not work, commands below works:
+
+``` dockerfile
+CMD ["sh", "-c", "/etc/init.d/nullmailer start ; /usr/sbin/php5-fpm"]
+```
+copy from [Multiple commands in Docker CMD directive](https://serverfault.com/questions/685697/multiple-commands-in-docker-cmd-directive)
