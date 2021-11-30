@@ -77,3 +77,14 @@ sudo snap install kube-apiserver
 ```
 
 copy from [Enable snaps on Debian and install kube-apiserver](https://snapcraft.io/install/kube-apiserver/debian)
+
+## enable nonfree repo
+
+``` shell
+sudo apt-add-repository non-free
+sudo apt-add-repository contrib
+
+wget http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multimedia-keyring_2016.8.1_all.deb
+echo "deb http://www.deb-multimedia.org stable main non-free"| sudo tee /etc/apt/sources.list.d/deb-multimedia.list
+```
+copy from [Installing Multimedia Codecs on Debian 10](https://linuxhint.com/install_multimedia_codecs_debian_10/)
