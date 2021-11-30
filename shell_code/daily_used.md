@@ -718,3 +718,9 @@ cat /proc/sys/kernel/random/uuid
 ip route show
 route -n
 ```
+
+## e2label the usb stick
+
+``` shell
+sudo e2label /dev/sdb1 stick_name
+```
