@@ -88,3 +88,12 @@ wget http://www.deb-multimedia.org/pool/main/d/deb-multimedia-keyring/deb-multim
 echo "deb http://www.deb-multimedia.org stable main non-free"| sudo tee /etc/apt/sources.list.d/deb-multimedia.list
 ```
 copy from [Installing Multimedia Codecs on Debian 10](https://linuxhint.com/install_multimedia_codecs_debian_10/)
+
+## pavucontrol
+
+``` shell
+sudo apt-get install pavucontrol
+pavucontrol
+```
+`配置` -> `内置音频` -> `模拟立体声双工`
+`输出设备` -> `内置音频 模拟立体声` -> Port: Line Out
