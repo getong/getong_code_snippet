@@ -97,3 +97,18 @@ pavucontrol
 ```
 `配置` -> `内置音频` -> `模拟立体声双工`
 `输出设备` -> `内置音频 模拟立体声` -> Port: Line Out
+
+copy from [ubuntu18.04主机后置耳机没声音](https://forum.ubuntu.org.cn/viewtopic.php?t=487752)
+
+## debian bullseye source mirror
+
+``` shell
+deb http://mirrors.163.com/debian/ bullseye main non-free contrib
+deb http://mirrors.163.com/debian/ bullseye-updates main non-free contrib
+deb http://mirrors.163.com/debian/ bullseye-backports main non-free contrib
+deb-src http://mirrors.163.com/debian/ bullseye main non-free contrib
+deb-src http://mirrors.163.com/debian/ bullseye-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ bullseye-backports main non-free contrib
+deb http://mirrors.163.com/debian-security/ bullseye-security main non-free contrib
+deb-src http://mirrors.163.com/debian-security/ bullseye-security main non-free contrib
+```
