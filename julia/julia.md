@@ -61,3 +61,18 @@ pkg > registry add https://mirrors.ustc.edu.cn/julia/registries/General.git
 pkg > Pkg.add("JuMP")
 pkg > Pkg.add("GLPK")
 ```
+
+## julia pkg server
+
+``` shell
+echo "export JULIA_PKG_SERVER="https://mirrors.ustc.edu.cn/julia" >> ~/.zshrc
+```
+
+Get the fastest pkg server:
+
+``` julia
+julia> using PkgServerClient
+julia> PkgServerClient.registry
+julia> PkgServerClient.registry_response_time()
+julia> PkgServerClient.set_mirror("USTC")
+```
