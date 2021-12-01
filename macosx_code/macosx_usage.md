@@ -149,3 +149,19 @@ brew cat git
 alias brewski='brew update && brew upgrade && brew cleanup; brew doctor'
 ```
 copy from [别忘了定期执行 brew cleanup 哦](https://www.jianshu.com/p/403140306cb6)
+
+## not mount disk
+
+``` shell
+$ sudo diskutil list | grep "Volume UUID"
+$ sudo echo "UUID=3B87FF76-C6DA-49BF-B911-61DE2331E9F5 none ext4 noauto 0 0" >> /etc/fstab
+
+```
+The `3B87FF76-C6DA-49BF-B911-61DE2331E9F5` is the disk you don't want to mount automatically.
+copy from [MacOS下禁止开机自动挂载分区 [/etc/fstab]](https://blog.csdn.net/qq_38202733/article/details/109631753)
+
+or
+``` shell
+echo "UUID=791E37B4-82A3-37E7-9F15-3C39359126B4   none  hfs  rw,noauto" >> /etc/fstab
+```
+copy from [How to Disable USB Auto-mount](https://apple.stackexchange.com/questions/120782/how-to-disable-usb-auto-mount)
