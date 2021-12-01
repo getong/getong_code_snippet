@@ -76,3 +76,4 @@ julia> PkgServerClient.registry
 julia> PkgServerClient.registry_response_time()
 julia> PkgServerClient.set_mirror("USTC")
 ```
+copy from [Julia PkgServer 镜像服务及镜像站索引](https://discourse.juliacn.com/t/topic/2969)
