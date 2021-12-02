@@ -165,3 +165,15 @@ The cargo command:
  cargo run --release --verbose --jobs 1
  cargo build --jobs 1
 ```
+
+## v2ray
+
+``` shell
+sudo apt-get install v2ray
+sudo systemctl status v2ray.service
+sudo systemctl start v2ray.service
+sudo systemctl stop v2ray.service
+sudo systemctl restart v2ray.service
+```
+edit `/etc/v2ray/config.json` .
+copy from [linux使用v2ray作为客户端](https://lionng.github.io/post/linux-v2ray-client/)
