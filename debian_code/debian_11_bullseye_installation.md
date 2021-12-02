@@ -127,3 +127,9 @@ $ parted /dev/vdb
 ```
 Not (MBR) msdos.
 copy from [Linux下使用gpt给磁盘分区、格式化、挂载](https://blog.51cto.com/wangqh/2089129)
+
+## btrfs
+
+``` shell
+sudo apt-get install btrfs-progs
+```
