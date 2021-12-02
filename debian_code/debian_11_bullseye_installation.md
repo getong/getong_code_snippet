@@ -133,3 +133,35 @@ copy from [Linux下使用gpt给磁盘分区、格式化、挂载](https://blog.5
 ``` shell
 sudo apt-get install btrfs-progs
 ```
+
+## 32G swapfile
+LLVM nees 27G memory, but many machines does have the amount of memory.
+It can be solved by add swapfile:
+
+
+``` shell
+sudo dd if=/dev/zero of=/swapfile bs=1024 count=32768k
+sudo mkswap /swapfile
+sudo swapon /swapfile
+sudo echo "/swapfile     swap    swap      defaults     0  0" >> /etc/fstab
+sudo mount -a
+```
+
+copy from [创建交换文件（swapfile）-linux](https://blog.51cto.com/joket/1140156)
+
+Also see [collect2: ld terminated with signal 9 错误解决办法](https://blog.csdn.net/longkg/article/details/12839173)
+
+Also see [collect2: fatal error: ld terminated with signal 9 [Killed]](https://stackoverflow.com/questions/46259776/collect2-fatal-error-ld-terminated-with-signal-9-killed)
+
+```
+Increase SWAP disk (8 GB working with me).
+Increase Memory (I was on virtual machine, 8 GB).
+You need 27 GB (LLVM 6.0.0) free disk space (check with df -h in Terminal).
+```
+
+The cargo command:
+
+``` shell
+ cargo run --release --verbose --jobs 1
+ cargo build --jobs 1
+```
