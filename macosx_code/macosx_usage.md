@@ -153,7 +153,8 @@ copy from [别忘了定期执行 brew cleanup 哦](https://www.jianshu.com/p/403
 ## not mount disk
 
 ``` shell
-$ sudo diskutil list | grep "Volume UUID"
+$ sudo diskutil list
+$ sudo diskutil info --all | grep "Volume UUID"
 $ sudo echo "UUID=3B87FF76-C6DA-49BF-B911-61DE2331E9F5 none ext4 noauto 0 0" >> /etc/fstab
 
 ```
@@ -165,3 +166,10 @@ or
 echo "UUID=791E37B4-82A3-37E7-9F15-3C39359126B4   none  hfs  rw,noauto" >> /etc/fstab
 ```
 copy from [How to Disable USB Auto-mount](https://apple.stackexchange.com/questions/120782/how-to-disable-usb-auto-mount)
+
+use with virtualbox:
+
+``` shell
+VBoxManage list usbhost
+```
+copy from [How to get the UUID of a USB device on a Mac?](https://stackoverflow.com/questions/8305419/how-to-get-the-uuid-of-a-usb-device-on-a-mac/37170840)
