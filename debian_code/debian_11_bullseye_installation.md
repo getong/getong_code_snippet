@@ -112,3 +112,18 @@ deb-src http://mirrors.163.com/debian/ bullseye-backports main non-free contrib
 deb http://mirrors.163.com/debian-security/ bullseye-security main non-free contrib
 deb-src http://mirrors.163.com/debian-security/ bullseye-security main non-free contrib
 ```
+
+## gpt disk partition
+
+``` shell
+$ parted /dev/vdb
+(parted) mktable gpt
+(parted) print
+(parted) mkpart
+[ext2]? xfs
+起始点？ 1
+结束点？ 3TB
+(parted) print
+```
+Not (MBR) msdos.
+copy from [Linux下使用gpt给磁盘分区、格式化、挂载](https://blog.51cto.com/wangqh/2089129)
