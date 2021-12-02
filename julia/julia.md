@@ -77,3 +77,19 @@ julia> PkgServerClient.registry_response_time()
 julia> PkgServerClient.set_mirror("USTC")
 ```
 copy from [Julia PkgServer 镜像服务及镜像站索引](https://discourse.juliacn.com/t/topic/2969)
+
+## Setting up Julia to use multiple cores
+
+``` shell
+julia --banner=no -p 2
+julia> using Distributed
+
+julia> nworkers()
+
+```
+or use `auto`
+
+``` shell
+julia --banner=no -p auto
+```
+copy from [Setting up Julia to use multiple cores](https://subscription.packtpub.com/book/application-development/9781788998369/1/ch01lvl1sec18/setting-up-julia-to-use-multiple-cores)
