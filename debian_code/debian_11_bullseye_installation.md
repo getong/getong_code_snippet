@@ -187,3 +187,195 @@ active profile: <output:analog-stereo+input:analog-stereo>
 $ sudo echo "set-card-profile 1 output:analog-stereo+input:analog-stereo" >> /etc/pulse/default.pa
 ```
 copy from [PulseAudio, Pavucontrol not saving settings after reboot on Ubuntu and Ubuntu based distributions](https://www.mycomputertips.co.uk/213)
+
+Or work as [PulseAudio: Enable 2 output ports by default [solved]](https://bbs.archlinux.org/viewtopic.php?id=263701)
+``` shell
+$ pacmd list-sinks
+1 sink(s) available.
+  * index: 2
+	name: <alsa_output.pci-0000_00_1f.3.analog-stereo>
+	driver: <module-alsa-card.c>
+	flags: HARDWARE HW_MUTE_CTRL HW_VOLUME_CTRL DECIBEL_VOLUME LATENCY DYNAMIC_LATENCY
+	state: RUNNING
+	suspend cause: (none)
+	priority: 9039
+	volume: front-left: 26424 /  40% / -23.67 dB,   front-right: 26424 /  40% / -23.67 dB
+	        balance 0.00
+	base volume: 65536 / 100% / 0.00 dB
+	volume steps: 65537
+	muted: no
+	current latency: 131.82 ms
+	max request: 24 KiB
+	max rewind: 24 KiB
+	monitor source: 2
+	sample spec: s16le 2ch 44100Hz
+	channel map: front-left,front-right
+	             立体声
+	used by: 1
+	linked by: 1
+	configured latency: 140.00 ms; range is 0.50 .. 2000.00 ms
+	card: 0 <alsa_card.pci-0000_00_1f.3>
+	module: 6
+	properties:
+		alsa.resolution_bits = "16"
+		device.api = "alsa"
+		device.class = "sound"
+		alsa.class = "generic"
+		alsa.subclass = "generic-mix"
+		alsa.name = "ALCS1200A Analog"
+		alsa.id = "ALCS1200A Analog"
+		alsa.subdevice = "0"
+		alsa.subdevice_name = "subdevice #0"
+		alsa.device = "0"
+		alsa.card = "0"
+		alsa.card_name = "HDA Intel PCH"
+		alsa.long_card_name = "HDA Intel PCH at 0xb1220000 irq 140"
+		alsa.driver_name = "snd_hda_intel"
+		device.bus_path = "pci-0000:00:1f.3"
+		sysfs.path = "/devices/pci0000:00/0000:00:1f.3/sound/card0"
+		device.bus = "pci"
+		device.vendor.id = "8086"
+		device.vendor.name = "Intel Corporation"
+		device.product.id = "a3f0"
+		device.form_factor = "internal"
+		device.string = "front:0"
+		device.buffering.buffer_size = "352800"
+		device.buffering.fragment_size = "176400"
+		device.access_mode = "mmap+timer"
+		device.profile.name = "analog-stereo"
+		device.profile.description = "模拟立体声"
+		device.description = "内置音频 模拟立体声"
+		module-udev-detect.discovered = "1"
+		device.icon_name = "audio-card-pci"
+	ports:
+		analog-output-lineout: Line Out (priority 9000, latency offset 0 usec, available: no)
+			properties:
+
+		analog-output-headphones: Headphones (priority 9900, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "audio-headphones"
+	active port: <analog-output-lineout>
+
+ ```
+and then list-cards
+
+``` shell1
+$ pacmd list-cards
+
+1 card(s) available.
+    index: 0
+	name: <alsa_card.pci-0000_00_1f.3>
+	driver: <module-alsa-card.c>
+	owner module: 6
+	properties:
+		alsa.card = "0"
+		alsa.card_name = "HDA Intel PCH"
+		alsa.long_card_name = "HDA Intel PCH at 0xb1220000 irq 140"
+		alsa.driver_name = "snd_hda_intel"
+		device.bus_path = "pci-0000:00:1f.3"
+		sysfs.path = "/devices/pci0000:00/0000:00:1f.3/sound/card0"
+		device.bus = "pci"
+		device.vendor.id = "8086"
+		device.vendor.name = "Intel Corporation"
+		device.product.id = "a3f0"
+		device.form_factor = "internal"
+		device.string = "0"
+		device.description = "内置音频"
+		module-udev-detect.discovered = "1"
+		device.icon_name = "audio-card-pci"
+	profiles:
+		input:analog-stereo: 模拟立体声 输入 (priority 65, available: no)
+		output:analog-stereo: 模拟立体声 输出 (priority 6500, available: no)
+		output:analog-stereo+input:analog-stereo: 模拟立体声双工 (priority 6565, available: no)
+		output:analog-surround-21: 模拟环绕 2.1 输出 (priority 1300, available: no)
+		output:analog-surround-21+input:analog-stereo: 模拟环绕 2.1 输出 + 模拟立体声 输入 (priority 1365, available: no)
+		output:analog-surround-40: 模拟环绕 4.0 输出 (priority 1200, available: no)
+		output:analog-surround-40+input:analog-stereo: 模拟环绕 4.0 输出 + 模拟立体声 输入 (priority 1265, available: no)
+		output:analog-surround-41: 模拟环绕 4.1 输出 (priority 1300, available: no)
+		output:analog-surround-41+input:analog-stereo: 模拟环绕 4.1 输出 + 模拟立体声 输入 (priority 1365, available: no)
+		output:analog-surround-50: 模拟环绕 5.0 输出 (priority 1200, available: no)
+		output:analog-surround-50+input:analog-stereo: 模拟环绕 5.0 输出 + 模拟立体声 输入 (priority 1265, available: no)
+		output:analog-surround-51: 模拟环绕 5.1 输出 (priority 1300, available: no)
+		output:analog-surround-51+input:analog-stereo: 模拟环绕 5.1 输出 + 模拟立体声 输入 (priority 1365, available: no)
+		output:iec958-stereo: 数字立体声(IEC958) 输出 (priority 5500, available: unknown)
+		output:iec958-stereo+input:analog-stereo: 数字立体声(IEC958) 输出 + 模拟立体声 输入 (priority 5565, available: no)
+		output:iec958-ac3-surround-51: 数字环绕 5.1(IEC958/AC3) 输出 (priority 300, available: unknown)
+		output:iec958-ac3-surround-51+input:analog-stereo: 数字环绕 5.1(IEC958/AC3) 输出 + 模拟立体声 输入 (priority 365, available: no)
+		output:hdmi-stereo: Digital Stereo (HDMI) 输出 (priority 5900, available: no)
+		output:hdmi-stereo+input:analog-stereo: Digital Stereo (HDMI) 输出 + 模拟立体声 输入 (priority 5965, available: no)
+		output:hdmi-surround: Digital Surround 5.1 (HDMI) 输出 (priority 800, available: no)
+		output:hdmi-surround+input:analog-stereo: Digital Surround 5.1 (HDMI) 输出 + 模拟立体声 输入 (priority 865, available: no)
+		output:hdmi-surround71: Digital Surround 7.1 (HDMI) 输出 (priority 800, available: no)
+		output:hdmi-surround71+input:analog-stereo: Digital Surround 7.1 (HDMI) 输出 + 模拟立体声 输入 (priority 865, available: no)
+		output:hdmi-stereo-extra1: Digital Stereo (HDMI 2) 输出 (priority 5700, available: no)
+		output:hdmi-stereo-extra1+input:analog-stereo: Digital Stereo (HDMI 2) 输出 + 模拟立体声 输入 (priority 5765, available: no)
+		output:hdmi-surround-extra1: Digital Surround 5.1 (HDMI 2) 输出 (priority 600, available: no)
+		output:hdmi-surround-extra1+input:analog-stereo: Digital Surround 5.1 (HDMI 2) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-surround71-extra1: Digital Surround 7.1 (HDMI 2) 输出 (priority 600, available: no)
+		output:hdmi-surround71-extra1+input:analog-stereo: Digital Surround 7.1 (HDMI 2) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-stereo-extra2: Digital Stereo (HDMI 3) 输出 (priority 5700, available: no)
+		output:hdmi-stereo-extra2+input:analog-stereo: Digital Stereo (HDMI 3) 输出 + 模拟立体声 输入 (priority 5765, available: no)
+		output:hdmi-surround-extra2: Digital Surround 5.1 (HDMI 3) 输出 (priority 600, available: no)
+		output:hdmi-surround-extra2+input:analog-stereo: Digital Surround 5.1 (HDMI 3) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-surround71-extra2: Digital Surround 7.1 (HDMI 3) 输出 (priority 600, available: no)
+		output:hdmi-surround71-extra2+input:analog-stereo: Digital Surround 7.1 (HDMI 3) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-stereo-extra3: Digital Stereo (HDMI 4) 输出 (priority 5700, available: no)
+		output:hdmi-stereo-extra3+input:analog-stereo: Digital Stereo (HDMI 4) 输出 + 模拟立体声 输入 (priority 5765, available: no)
+		output:hdmi-surround-extra3: Digital Surround 5.1 (HDMI 4) 输出 (priority 600, available: no)
+		output:hdmi-surround-extra3+input:analog-stereo: Digital Surround 5.1 (HDMI 4) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-surround71-extra3: Digital Surround 7.1 (HDMI 4) 输出 (priority 600, available: no)
+		output:hdmi-surround71-extra3+input:analog-stereo: Digital Surround 7.1 (HDMI 4) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-stereo-extra4: Digital Stereo (HDMI 5) 输出 (priority 5700, available: no)
+		output:hdmi-stereo-extra4+input:analog-stereo: Digital Stereo (HDMI 5) 输出 + 模拟立体声 输入 (priority 5765, available: no)
+		output:hdmi-surround-extra4: Digital Surround 5.1 (HDMI 5) 输出 (priority 600, available: no)
+		output:hdmi-surround-extra4+input:analog-stereo: Digital Surround 5.1 (HDMI 5) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		output:hdmi-surround71-extra4: Digital Surround 7.1 (HDMI 5) 输出 (priority 600, available: no)
+		output:hdmi-surround71-extra4+input:analog-stereo: Digital Surround 7.1 (HDMI 5) 输出 + 模拟立体声 输入 (priority 665, available: no)
+		off: 关 (priority 0, available: unknown)
+	active profile: <output:analog-stereo+input:analog-stereo>
+	sinks:
+		alsa_output.pci-0000_00_1f.3.analog-stereo/#2: 内置音频 模拟立体声
+	sources:
+		alsa_output.pci-0000_00_1f.3.analog-stereo.monitor/#2: Monitor of 内置音频 模拟立体声
+		alsa_input.pci-0000_00_1f.3.analog-stereo/#3: 内置音频 模拟立体声
+	ports:
+		analog-input-front-mic: Front Microphone (priority 8500, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "audio-input-microphone"
+		analog-input-rear-mic: Rear Microphone (priority 8200, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "audio-input-microphone"
+		analog-input-linein: Line In (priority 8100, latency offset 0 usec, available: no)
+			properties:
+
+		analog-output-lineout: Line Out (priority 9000, latency offset 0 usec, available: no)
+			properties:
+
+		analog-output-headphones: Headphones (priority 9900, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "audio-headphones"
+		iec958-stereo-output: Digital Output (S/PDIF) (priority 0, latency offset 0 usec, available: unknown)
+			properties:
+
+		hdmi-output-0: HDMI / DisplayPort (priority 5900, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "video-display"
+		hdmi-output-1: HDMI / DisplayPort 2 (priority 5800, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "video-display"
+		hdmi-output-2: HDMI / DisplayPort 3 (priority 5700, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "video-display"
+		hdmi-output-3: HDMI / DisplayPort 4 (priority 5600, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "video-display"
+		hdmi-output-4: HDMI / DisplayPort 5 (priority 5500, latency offset 0 usec, available: no)
+			properties:
+				device.icon_name = "video-display"
+```
+Then add the following to `~/.config/pulse/default.pa`
+
+```
+set-card-profile 0 output:analog-stereo+input:analog-stereo
+set-sink-port 2 analog-output-lineout
+```
