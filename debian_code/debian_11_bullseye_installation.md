@@ -177,3 +177,13 @@ sudo systemctl restart v2ray.service
 ```
 edit `/etc/v2ray/config.json` .
 copy from [linux使用v2ray作为客户端](https://lionng.github.io/post/linux-v2ray-client/)
+
+## save pulseaudio setting
+
+``` shell
+$ pacmd list-cards | grep "active profile"
+active profile: <output:analog-stereo+input:analog-stereo>
+
+$ sudo echo "set-card-profile 1 output:analog-stereo+input:analog-stereo" >> /etc/pulse/default.pa
+```
+copy from [PulseAudio, Pavucontrol not saving settings after reboot on Ubuntu and Ubuntu based distributions](https://www.mycomputertips.co.uk/213)
