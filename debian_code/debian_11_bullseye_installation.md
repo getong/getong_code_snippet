@@ -379,3 +379,9 @@ Then add the following to `~/.config/pulse/default.pa`
 set-card-profile 0 output:analog-stereo+input:analog-stereo
 set-sink-port 2 analog-output-lineout
 ```
+
+## get disk partition uuid
+
+``` shell1
+sudo blkid
+```
