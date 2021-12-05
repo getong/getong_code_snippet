@@ -65,7 +65,7 @@ pkg > Pkg.add("GLPK")
 ## julia pkg server
 
 ``` shell
-echo "export JULIA_PKG_SERVER="https://mirrors.ustc.edu.cn/julia" >> ~/.zshrc
+echo 'export JULIA_PKG_SERVER="https://mirrors.ustc.edu.cn/julia"' >> ~/.zshrc
 ```
 
 Get the fastest pkg server:
