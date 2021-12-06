@@ -3,20 +3,35 @@
 ## install using ustc
 
 ``` shell
-$ export RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
-$ export RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
-$ wget https://sh.rustup.rs -O rustup-init.sh
-$ sh rustup-init.sh
-## or one line
-$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-$ echo 'export PATH=$HOME/.cargo/bin:$PATH' >> ~/.zshrc
-$ source $HOME/.cargo/env
+$ export RUSTUP_DIST_SERVER="https://rsproxy.cn"
+$ export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+$ export CARGO_HOME=/backup/rust_installation/cargo
+$ export RUSTUP_HOME=/backup/rust_installation/rustup
+$ curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh
+$ source $CARGO_HOME/env
+$ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/library"
+$ rustup toolchain add nightly
+$ rustup component add rls-preview rust-analysis rust-src
+$ cargo +nightly install racer
+```
 
-rustup toolchain add nightly
-rustup component add rls-preview rust-analysis rust-src
-cargo +nightly install racer
+The `cargo/env` file is just like this:
+
+``` shell
+#!/bin/sh
+# rustup shell setup
+# affix colons on either side of $PATH to simplify matching
+case ":${PATH}:" in
+    *:"/backup/rust_installation/cargo/bin":*)
+        ;;
+    *)
+        # Prepending path in case a system-installed rustc needs to be overridden
+        export PATH="/backup/rust_installation/cargo/bin:$PATH"
+        ;;
+esac
 
 ```
+
 ## rustup install the stable by default
 
 ``` shell
@@ -109,7 +124,7 @@ cargo +nightly build -Z timings
 ## rust src path
 
 ``` shell
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/library"
+
 ```
 
 ## rustdoc and cargo
@@ -207,14 +222,6 @@ cargo wasi bench
 
 ``` shell
 sudo apt install libssl-dev pkg-config
-```
-
-## cargo cache
-
-``` shell
-cargo install cargo-cache
-echo "export CARGO_HOME=$HOME/.cargo" >> ~/.zshrc
-source ~/.zshrc
 ```
 
 ## offline mode
