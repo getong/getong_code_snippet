@@ -724,3 +724,9 @@ route -n
 ``` shell
 sudo e2label /dev/sdb1 stick_name
 ```
+
+## proxy in ~/.curlrc
+
+``` shell
+proxy=http://127.0.0.1:8080
+```
