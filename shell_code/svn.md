@@ -109,7 +109,7 @@ chmod a+x diffwrap.sh
 add the diff-cmd to ~/.subversion/config
 
 ```
-diff-cmd = /usr/loca/bin/diffwrap.sh
+diff-cmd = /usr/local/bin/diffwrap.sh
 ```
 use it:
 
