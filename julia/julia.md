@@ -93,3 +93,10 @@ or use `auto`
 julia --banner=no -p auto
 ```
 copy from [Setting up Julia to use multiple cores](https://subscription.packtpub.com/book/application-development/9781788998369/1/ch01lvl1sec18/setting-up-julia-to-use-multiple-cores)
+
+## julia JULIA_DEPOT_PATH
+
+``` shell
+echo 'export JULIA_DEPOT_PATH=/backup/julia_installation' >> ~/.zshrc
+```
+copy from [Change Package directory in Julia](https://stackoverflow.com/questions/36398629/change-package-directory-in-julia)
