@@ -86,3 +86,10 @@ $ sudo -i
 VBoxManage modifyvm "name_of_vm" --vram 256
 ```
 The max vram is 256m.
+
+## VAGRANT_HOME
+
+``` shell
+export VAGRANT_HOME=/backup/vagrant_boxes
+```
+copy from [Where does Vagrant download its .box files to?](https://stackoverflow.com/questions/10155708/where-does-vagrant-download-its-box-files-to)
