@@ -730,3 +730,10 @@ sudo e2label /dev/sdb1 stick_name
 ``` shell
 proxy=http://127.0.0.1:8080
 ```
+
+## user password right but can not login gnome desktop
+
+```
+Perhaps your .profile, .bash_profile, /etc/profile, or .bashrc contains an error, and makes the shell exit?
+```
+copy from [Debian Log In Failure With Correct Password](https://unix.stackexchange.com/questions/62623/debian-log-in-failure-with-correct-password)
