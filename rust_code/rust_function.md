@@ -782,3 +782,16 @@ for text in receiver {
 }
 ```
 They are the same.
+
+## Option doc
+
+```
+is_some() checks if the option is some data or not.
+is_none() checks if the option is None or not.
+unwrap() takes out the data if there is some data. Otherwise, it raises an error: thread 'main' panicked at 'called 'Option::unwrap()' on a 'None' value'
+map(closure) transforms option data if we have “some” data by a function (closure). When option data is None, nothing happens. It is handy because there is no need to check if we have some or no data.
+filter(closure) filters option data by some condition which is a function with a single argument that returns a boolean.
+or_else(|| Some()) returns some default value if the option data is None. If the option data is something, it does nothing.
+unwrap_or_else(|| <>) is similar to or_else(). The difference is or_else() returns optional data, but unwrap_or_else(|| <>) returns the data. In other words, it unwraps or_else() the result.
+```
+copy from [3 Fundamentals of Enums in Rust](https://medium.com/codex/3-fundamentals-of-enums-in-rust-36d33bf18782)
