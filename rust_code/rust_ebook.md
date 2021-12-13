@@ -15,3 +15,4 @@
 [The Little Book of Rust Macros](https://github.com/veykril/tlborm)
 [Everything about async](https://fasterthanli.me/tags/async)
 [Guide to develop secure applications with Rust](https://github.com/ANSSI-FR/rust-guide)
+[Descriptive Statistics with NDArray](https://datacrayon.com/posts/programming/rust-notebooks/descriptive-statistics-with-ndarray/)
