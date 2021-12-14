@@ -192,3 +192,44 @@ struct ProcessDownstreamReceiveConfig {
     }
 ```
 Take more care with the `drop` function.
+
+## &*pointer meaning
+
+``` rust
+use std::sync::{Arc, Mutex, Condvar};
+use std::thread;
+
+let pair = Arc::new((Mutex::new(false), Condvar::new()));
+let pair2 = pair.clone();
+
+// Inside of our lock, spawn a new thread, and then wait for it to start.
+thread::spawn(move|| {
+    let (lock, cvar) = &*pair2;
+    let mut started = lock.lock().unwrap();
+    *started = true;
+    // We notify the condvar that the value has changed.
+    cvar.notify_one();
+});
+
+// Wait for the thread to start up.
+let (lock, cvar) = &*pair;
+let mut started = lock.lock().unwrap();
+while !*started {
+    started = cvar.wait(started).unwrap();
+}
+```
+And the meaning of the &*pair is :
+
+```
+The * operator turns the Arc<T> into T. The & operator borrows that T into &T.
+
+So when we put them together, &*pair borrows the Arc<T> into &T.
+
+Another way of writing that code would be:
+
+let (lock, cvar) = pair2.deref();
+
+Indeed, the original &*pair2 actually means &*pair2.deref() – the * forces the compiler to insert a .deref() call, and it's that method which performs the actual conversion.
+
+```
+copy from [Understanding &* to access a Rust Arc](https://stackoverflow.com/questions/62651479/understanding-to-access-a-rust-arc)
