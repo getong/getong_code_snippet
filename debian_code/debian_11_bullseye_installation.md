@@ -259,7 +259,7 @@ $ pacmd list-sinks
  ```
 and then list-cards
 
-``` shell1
+``` shell
 $ pacmd list-cards
 
 1 card(s) available.
@@ -382,6 +382,32 @@ set-sink-port 2 analog-output-lineout
 
 ## get disk partition uuid
 
-``` shell1
+``` shell
 sudo blkid
 ```
+
+## How to add a Wireless LAN adaptor static IP to Ubuntu that auto connects at startup
+
+``` shell
+sudo wpa_passphrase <Your Wifi Network SSID>  <Your Wifi WPA/WPA2 password>
+
+sudo gedit /etc/network/interfaces
+```
+add the following code to the interfaces file:
+
+``` shell
+# The wifi network interface
+auto wlan0
+iface wlan0 inet static
+    address 192.168.0.2
+    netmask 255.255.255.0
+    network 192.168.0.0
+    broadcast 192.168.0.255
+    gateway 192.168.0.1
+    dns-nameservers 192.168.0.1, 192.168.0.2, 8.8.8.8
+    wpa-ssid <Your Wifi Network SSID>
+    wpa-psk <Your HEX encoded Wifi WPA password>
+    wpa-scan-ssid 1
+```
+copy from [How to add a Wireless LAN adaptor static IP to Ubuntu that auto connects at startup](https://www.thefanclub.co.za/how-to/how-add-wireless-lan-adaptor-static-ip-ubuntu-auto-connects-startup)
+copy from [Failure to connect to hidden SSID with WPA Supplicant on Debian?](https://unix.stackexchange.com/questions/257284/failure-to-connect-to-hidden-ssid-with-wpa-supplicant-on-debian)
