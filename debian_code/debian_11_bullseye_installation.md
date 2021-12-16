@@ -411,3 +411,4 @@ iface wlan0 inet static
 ```
 copy from [How to add a Wireless LAN adaptor static IP to Ubuntu that auto connects at startup](https://www.thefanclub.co.za/how-to/how-add-wireless-lan-adaptor-static-ip-ubuntu-auto-connects-startup)
 copy from [Failure to connect to hidden SSID with WPA Supplicant on Debian?](https://unix.stackexchange.com/questions/257284/failure-to-connect-to-hidden-ssid-with-wpa-supplicant-on-debian)
+also see [Connect to Wi-Fi From Terminal on Debian 11/10 with WPA Supplicant](https://www.linuxbabe.com/debian/connect-to-wi-fi-from-terminal-on-debian-wpa-supplicant)
