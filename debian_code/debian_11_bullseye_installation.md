@@ -496,3 +496,13 @@ sudo ntpdate pool.ntp.org
 sudo hwclock -w
 ```
 In case of v2ray proxy error.
+
+## systemd-resolved.service
+
+``` shell
+sudo systemctl enable systemd-resolved.service
+sudo systemctl start systemd-resolved.service
+sudo mv /etc/resolv.conf /etc/resolv.conf.bak
+sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+```
+copy from [systemd-resolved](https://wiki.archlinux.org/title/Systemd-resolved)
