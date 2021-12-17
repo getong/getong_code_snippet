@@ -389,26 +389,110 @@ sudo blkid
 ## How to add a Wireless LAN adaptor static IP to Ubuntu that auto connects at startup
 
 ``` shell
-sudo wpa_passphrase <Your Wifi Network SSID>  <Your Wifi WPA/WPA2 password>
+wpa_passphrase your-ESSID your-wifi-passphrase | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
 
-sudo gedit /etc/network/interfaces
 ```
-add the following code to the interfaces file:
+
+add the following code to the wpa_supplicant file:
 
 ``` shell
-# The wifi network interface
-auto wlan0
-iface wlan0 inet static
-    address 192.168.0.2
-    netmask 255.255.255.0
-    network 192.168.0.0
-    broadcast 192.168.0.255
-    gateway 192.168.0.1
-    dns-nameservers 192.168.0.1, 192.168.0.2, 8.8.8.8
-    wpa-ssid <Your Wifi Network SSID>
-    wpa-psk <Your HEX encoded Wifi WPA password>
-    wpa-scan-ssid 1
+network={
+        ssid="LinuxBabe.Com Network"
+        #psk="12345qwert"
+        psk=68add4c5fee7dc3d0dac810f89b805d6d147c01e281f07f475a3e0195
+        scan_ssid=1
+}
 ```
-copy from [How to add a Wireless LAN adaptor static IP to Ubuntu that auto connects at startup](https://www.thefanclub.co.za/how-to/how-add-wireless-lan-adaptor-static-ip-ubuntu-auto-connects-startup)
-copy from [Failure to connect to hidden SSID with WPA Supplicant on Debian?](https://unix.stackexchange.com/questions/257284/failure-to-connect-to-hidden-ssid-with-wpa-supplicant-on-debian)
+vim wpa_supplicant.service:
+
+``` shell
+vim /etc/systemd/system/wpa_supplicant.service
+```
+Find the following line.
+
+``` shell
+ExecStart=/sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+```
+change to be:
+
+``` shell
+ExecStart=/sbin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlp4s0
+Restart=always
+```
+then start the service
+
+``` shell
+sudo systemctl enable wpa_supplicant.service
+sudo systemctl start wpa_supplicant.service
+```
+static the wireless card ip address:
+
+``` shell
+sudo vim /etc/systemd/network/static-wifi.network
+```
+to be :
+
+```
+[Match]
+Name=wlp4s0
+
+[Network]
+Address=192.168.1.8/24
+Gateway=192.168.1.1
+```
+and create a link file:
+
+``` shell
+sudo vim /etc/systemd/network/10-wifi.link
+```
+add the text to the file:
+
+``` shell
+[Match]
+MACAddress=a8:4b:05:2b:e8:54
+
+[Link]
+NamePolicy=
+Name=wlp4s0
+```
+
+Then restart the systemd-networkd:
+
+``` shell
+sudo systemctl restart systemd-networkd
+```
 also see [Connect to Wi-Fi From Terminal on Debian 11/10 with WPA Supplicant](https://www.linuxbabe.com/debian/connect-to-wi-fi-from-terminal-on-debian-wpa-supplicant)
+
+## enable systemd-networkd service
+create static network file
+``` shell
+sudo vim /etc/systemd/network/static-enp1s0.network
+```
+add the following text to the file:
+
+```
+[Match]
+Name=enp1s0
+[Network]
+Address=192.168.5.7/24
+Gateway=192.168.5.1
+DNS=192.168.253.254
+DNS=192.168.5.1
+```
+then enable the systemd-networkd service
+
+``` shell
+sudo systemctl stop networking
+sudo systemctl disable networking
+sudo systemctl start systemd-networkd
+sudo systemctl enable systemd-networkd
+```
+
+## ntpdate
+
+``` shell
+sudo apt-get install ntpdate
+sudo ntpdate pool.ntp.org
+sudo hwclock -w
+```
+In case of v2ray proxy error.
