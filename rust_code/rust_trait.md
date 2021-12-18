@@ -292,3 +292,16 @@ fn say_hello<W: Write>(out: &mut W)
 ```
 The choice of whether to use trait objects or generic code is subtle.
 Since both features are based on traits, they have a lot in common.
+
+## impl Trait and dyn Trait
+impl Trait 和 dyn Trait 在 Rust 分别被称为静态分发和动态分发. 在第一版的 Rust Book 这样解释分发(dispatch)
+
+When code involves polymorphism, there needs to be a mechanism to determine which specific version is actually run. This is called ‘dispatch’. There are two major forms of dispatch: static dispatch and dynamic dispatch. While Rust favors static dispatch, it also supports dynamic dispatch through a mechanism called ‘trait objects’.
+即当代码涉及多态时, 需要某种机制决定实际调用类型. 静态分发, 正如静态类型语言的"静态"一词说明的, 在编译期就确定了具体调用类型. Rust 编译器会通过单态化(Monomorphization) 将泛型函数展开.
+
+``` rust
+&mut impl Trait
+&impl Trait
+```
+copy from [捋捋 Rust 中的 impl Trait 和 dyn Trait](https://zhuanlan.zhihu.com/p/109990547)
+also see [Trait 使用及原理分析](https://liujiacai.net/blog/2021/04/27/trait-usage/)
