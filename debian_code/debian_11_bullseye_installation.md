@@ -436,9 +436,16 @@ to be :
 [Match]
 Name=wlp4s0
 
+[Route]
+Gateway=192.168.1.253
+Metric=1024
+
 [Network]
 Address=192.168.1.8/24
 Gateway=192.168.1.1
+DNS=202.96.128.86
+DNS=202.96.134.33
+DNS=192.168.1.253
 ```
 and create a link file:
 
