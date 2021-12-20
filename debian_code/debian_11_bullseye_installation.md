@@ -470,6 +470,8 @@ sudo systemctl restart systemd-networkd
 ```
 also see [Connect to Wi-Fi From Terminal on Debian 11/10 with WPA Supplicant](https://www.linuxbabe.com/debian/connect-to-wi-fi-from-terminal-on-debian-wpa-supplicant)
 
+Note that, the wireless card static IP address should be on the front of the wire card IP address.
+
 ## enable systemd-networkd service
 create static network file
 ``` shell
