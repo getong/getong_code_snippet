@@ -524,3 +524,10 @@ sudo apt-get install -y nfs-kernel-server
 
 see [MacOS自动挂载nfs服务器共享目录](https://zhuanlan.zhihu.com/p/288594630)
 see [如何在Debian 10 Buster上设置NFS服务器](https://blog.csdn.net/allway2/article/details/107546648)
+
+add to /etc/exports:
+
+```
+/nfsdata 10.0.0.0/24(rw,root_squash,no_all_squash,sync,insecure)
+```
+copy from [mac 挂载nfs_MacOS无法挂载NFS Operation not permitted错误解决办法](https://blog.csdn.net/weixin_31572321/article/details/111961316)
