@@ -515,3 +515,12 @@ sudo mv /etc/resolv.conf /etc/resolv.conf.bak
 sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 ```
 copy from [systemd-resolved](https://wiki.archlinux.org/title/Systemd-resolved)
+
+## nfs
+
+``` shell
+sudo apt-get install -y nfs-kernel-server
+```
+
+see [MacOS自动挂载nfs服务器共享目录](https://zhuanlan.zhihu.com/p/288594630)
+see [如何在Debian 10 Buster上设置NFS服务器](https://blog.csdn.net/allway2/article/details/107546648)
