@@ -531,3 +531,11 @@ add to /etc/exports:
 /nfsdata 10.0.0.0/24(rw,root_squash,no_all_squash,sync,insecure)
 ```
 copy from [mac 挂载nfs_MacOS无法挂载NFS Operation not permitted错误解决办法](https://blog.csdn.net/weixin_31572321/article/details/111961316)
+
+or just expose to one special host:
+
+``` shell
+/srv/nfsv4/vsc-docker-projects 10.116.0.109/24(rw,sync,root_squash,no_subtree_check,anonuid=1000,anongid=1000,insecure)
+```
+The share is only exposed to one another host. Hence, insecure should be fine.
+copy from [Can't mount NFS share on Mac OS Big Sur shared from Ubuntu 21.04 - rpc.statd not running](https://askubuntu.com/questions/1344687/cant-mount-nfs-share-on-mac-os-big-sur-shared-from-ubuntu-21-04-rpc-statd-not)
