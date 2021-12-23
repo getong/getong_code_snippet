@@ -539,3 +539,15 @@ or just expose to one special host:
 ```
 The share is only exposed to one another host. Hence, insecure should be fine.
 copy from [Can't mount NFS share on Mac OS Big Sur shared from Ubuntu 21.04 - rpc.statd not running](https://askubuntu.com/questions/1344687/cant-mount-nfs-share-on-mac-os-big-sur-shared-from-ubuntu-21-04-rpc-statd-not)
+
+## youtube-dl
+
+``` shell
+sudo apt-get install ffmpeg
+sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+sudo chmod a+rx /usr/local/bin/youtube-dl
+
+# 下载播放列表
+youtube-dl --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt https://www.youtube.com/playlist?list=PL2mpR0RYFQsBiCWVJSvVAO3OJ2t7DzoHA
+```
+copy from [用 youtube-dl 下载油管视频](https://zhengzexin.com/archives/yong-youtube-dl-xia-zai-you-guan-shi-pin/)
