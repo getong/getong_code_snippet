@@ -16,3 +16,4 @@
 [Everything about async](https://fasterthanli.me/tags/async)
 [Guide to develop secure applications with Rust](https://github.com/ANSSI-FR/rust-guide)
 [Descriptive Statistics with NDArray](https://datacrayon.com/posts/programming/rust-notebooks/descriptive-statistics-with-ndarray/)
+[Rust 中的异步编程](https://huangjj27.github.io/async-book/)
