@@ -78,6 +78,8 @@ rustup component add rls --toolchain nightly
 rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
 rustup component add rust-docs
+## set toolchain ngithly
+rustup default nightly
 rustup docs
 rustup show
 ```
