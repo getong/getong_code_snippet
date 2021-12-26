@@ -393,3 +393,15 @@ git subtree add --prefix=sub/libpng https://github.com/test/libpng.git master --
 ```
 
 copy from [git subtree教程](https://segmentfault.com/a/1190000012002151)
+
+## get all origin branches
+
+``` shell
+git clone --depth 1 origin_url
+cd project
+git remote set-branches origin '*'
+git fetch -v
+git checkout the-branch-i-ve-been-looking-for
+
+```
+copy from [git shallow clone (clone --depth) misses remote branches](https://stackoverflow.com/questions/23708231/git-shallow-clone-clone-depth-misses-remote-branches)
