@@ -26,3 +26,5 @@ Run UE5, and select C++, works fine
 ```
 
 copy from [UE5 on MacOS Monterey (beta 7)?](https://forums.unrealengine.com/t/ue5-on-macos-monterey-beta-7/252722)
+
+also see [Building Unreal Engine for macOS with XCode](https://medium.com/@lukebrady105/building-unreal-engine-for-macos-with-xcode-bf7f807a65)
