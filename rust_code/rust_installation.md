@@ -104,6 +104,7 @@ cargo install clippy
 cargo install cargo-edit cargo-outdated
 cargo install cargo-web
 cargo install wasm-bindgen-cli wasm-pack
+cargo install cargo-fuzz
 
 cd project_name
 cargo add async-std
