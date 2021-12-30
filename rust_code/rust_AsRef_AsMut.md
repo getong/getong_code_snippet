@@ -35,3 +35,59 @@ AsMut<T> 提供了一个方法 .as_mut()。它是 AsRef<T> 的可变（mutable�
 注：在转换的过程中，foo 会被可变（mutable）借用。
 
 copy from [AsRef 和 AsMut](https://wiki.jikexueyuan.com/project/rust-primer/intoborrow/asref.html)
+
+## explaining as_ref
+
+``` rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map(|x| &**x).unwrap_or("default string");
+}
+```
+First, as_ref() implicitly takes a reference on opt, giving an &Option<String> (because as_ref() takes &self, i.e. it receives a reference), and turns it into an Option<&String>. Then we use map to convert it to an Option<&str>. Here's what &**x does: the rightmost * (which is evaluated first) simply dereferences the &String, giving a String lvalue. Then, the leftmost * actually invokes the Deref trait, because String implements Deref<Target=str>, giving us a str lvalue. Finally, the & takes the address of the str lvalue, giving us a &str.
+
+You can simplify this a bit further by using map_or to combine map and unwrap_or in a single operation:
+
+``` rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", |x| &**x);
+}
+```
+If &**x looks too magical to you, you can write String::as_str instead:
+
+``` rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", String::as_str);
+}
+```
+or String::as_ref (from the AsRef trait, which is in the prelude):
+
+``` rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", String::as_ref);
+}
+```
+or String::deref (though you need to import the Deref trait too):
+
+``` rust
+use std::ops::Deref;
+
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", String::deref);
+}
+```
+For either of these to work, you need to keep an owner for the Option<String> as long as the Option<&str> or unwrapped &str needs to remain available. If that's too complicated, you could use Cow.
+
+``` rust
+use std::borrow::Cow::{Borrowed, Owned};
+
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.map_or(Borrowed("default string"), |x| Owned(x));
+}
+```
+copy from [Converting from Option<String> to Option<&str>](https://stackoverflow.com/questions/31233938/converting-from-optionstring-to-optionstr)
