@@ -10,5 +10,6 @@
 [delicate](https://github.com/BinChengZhao/delicate)
 [zenoh](https://github.com/eclipse-zenoh/zenoh)
 [tensorbase](https://github.com/tensorbase/tensorbase)
+[canary](https://github.com/znx3p0/canary)
 
 ## use with kubernetes
