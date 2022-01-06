@@ -15,3 +15,19 @@ sudo pacman -Syu
 vagrant init ogarcia/archlinux-x64
 vagrant up
 ```
+
+## asp compile kernel
+
+``` shell
+ $ cd ~/
+ $ mkdir build
+ $ cd build/
+ $ asp update linux
+$ asp checkout linux
+
+$ updpkgsums
+ $ makepkg -s
+```
+
+copy from [Kernel (简体中文)/Arch Build System (简体中文)](https://wiki.archlinux.org/title/Kernel_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Arch_Build_System_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+also see [Kernel/Arch Build System](https://wiki.archlinux.org/title/Kernel/Arch_Build_System)
