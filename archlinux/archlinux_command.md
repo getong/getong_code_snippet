@@ -37,3 +37,10 @@ also see [Kernel/Arch Build System](https://wiki.archlinux.org/title/Kernel/Arch
 ``` shell
 sudo pacman -S proxychains vim v2ray
 ```
+
+## archlinux-linux git repo ... FAILED (unknown public key 3B94A80E50A477C7)
+
+``` shell
+gpg --keyserver hkps://keys.openpgp.org  --recv-keys 3B94A80E50A477C7
+```
+copy from [[SOLVED] Unknown public key error while building linux kernel](https://bbs.archlinux.org/viewtopic.php?id=268750)
