@@ -87,6 +87,14 @@ pacman -S archlinuxcn-keyring
 pacman -S yay
 ```
 
+## set grub and update grub
+
+``` shell
+vim /etc/default/grub
+
+grub-mkconfig
+```
+
 ## install fbterm
 
 ``` shell
@@ -137,3 +145,12 @@ sudo pacman -S proxychains vim v2ray
 gpg --keyserver hkps://keys.openpgp.org  --recv-keys 3B94A80E50A477C7
 ```
 copy from [[SOLVED] Unknown public key error while building linux kernel](https://bbs.archlinux.org/viewtopic.php?id=268750)
+
+
+## install gnome desktop
+
+``` shell
+pacman -S xorg-server xorg-xinit gnome gnome-extra
+```
+
+copy from [ArchLinux安装GNOME图形桌面环境](https://starrycat.me/archlinux-install-gnome-desktop.html)
