@@ -14,7 +14,10 @@ mkswap /dev/sda2
 
 mount /dev/sda3 /mnt
 
-pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git bash-completion
+pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
+    bash-completion net-tools openssh gdm xorg-server xorg-xinit gnome gnome-extra \
+    gnome-tweak-tool grub efibootmgr efivar intel-ucode proxychains v2ray asp git \
+    nemo emacs julia erlang
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -41,7 +44,7 @@ vim /etc/hosts
 127.0.0.1   archlinux.localdomain archlinux   # 这里的archlinux是主机名
 
 
-pacman -S grub efibootmgr efivar networkmanager intel-ucode
+pacman -S grub efibootmgr efivar intel-ucode
 
 grub-install /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
