@@ -99,6 +99,9 @@ Name=wlp4s0
 
 systemctl enable systemd-resolved.service
 
+rmmod pcspkr
+echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
+
 
 exit
 
