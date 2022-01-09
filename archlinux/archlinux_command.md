@@ -17,7 +17,7 @@ mount /dev/sda3 /mnt
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg-server xorg-xinit gnome gnome-extra \
     gnome-tweak-tool grub efibootmgr efivar intel-ucode proxychains v2ray asp git \
-    nemo emacs julia erlang
+    nemo emacs julia erlang gnome-software-packagekit-plugin gnome-tweaks
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
