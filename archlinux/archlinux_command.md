@@ -72,7 +72,7 @@ $USER  ALL=(ALL) NOPASSWD:ALL
 systemctl enable sshd
 
 
-systemctl enable systemd-networkd
+
 
 vim /etc/systemd/network/static-enp1s0.network
 -------------------
@@ -96,9 +96,6 @@ NamePolicy=
 Name=wlp4s0
 
 
-
-systemctl enable systemd-resolved.service
-
 rmmod pcspkr
 echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
 
@@ -109,6 +106,14 @@ umount /mnt
 
 reboot
 
+```
+
+## login and enable the network
+
+``` shell
+systemctl enable systemd-networkd
+
+systemctl enable systemd-resolved.service
 ```
 
 ## add user and set group
