@@ -44,12 +44,61 @@ vim /etc/hosts
 127.0.0.1   archlinux.localdomain archlinux   # 这里的archlinux是主机名
 
 
-pacman -S grub efibootmgr efivar intel-ucode
 
 grub-install /dev/sda
+
+vim /etc/default/grub
+--------------------
+GRUB_TIMEOUT=1
+GRUB_CMDLINE_LINUX_DEFAULT="text"
+# GRUB_CMDLINE_LINUX="noapic acpi=off"
+
 grub-mkconfig -o /boot/grub/grub.cfg
 
 passwd
+
+useradd --create-home user_name
+passwd user_name
+
+usermod -aG wheel,users,storage,power,lp,adm,optical user_name
+
+
+
+vim /etc/sudoers
+## right under the %wheel ALL=(ALL) NOPASSWD: ALL
+$USER  ALL=(ALL) NOPASSWD:ALL
+
+
+systemctl enable sshd
+
+
+systemctl enable systemd-networkd
+
+vim /etc/systemd/network/static-enp1s0.network
+-------------------
+[Match]
+Name=enp1s0
+[Network]
+Address=192.168.1.81/24
+Gateway=192.168.1.253
+DNS=192.168.253.254
+DNS=192.168.1.253
+
+
+
+vim /etc/systemd/network/static-enp1s0.link
+--------------------------------
+[Match]
+MACAddress=a8:4b:05:2b:e8:54
+
+[Link]
+NamePolicy=
+Name=wlp4s0
+
+
+
+systemctl enable systemd-resolved.service
+
 
 exit
 
@@ -66,6 +115,7 @@ useradd --create-home user_name
 passwd user_name
 
 usermod -aG wheel,users,storage,power,lp,adm,optical user_name
+
 ```
 
 ## add archlinuxcn
