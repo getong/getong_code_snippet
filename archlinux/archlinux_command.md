@@ -166,3 +166,23 @@ pacman -S xorg-server xorg-xinit gnome gnome-extra
 ```
 
 copy from [ArchLinux安装GNOME图形桌面环境](https://starrycat.me/archlinux-install-gnome-desktop.html)
+
+## install via ssh remotely
+
+``` shell
+reflector --country China --age 72 --sort rate --protocol https --save /etc/pacman.d/mirrorlist
+
+pacman -Syy
+
+## add password of root user
+passwd
+
+pacman -S net-tools openssh
+
+systemctl start sshd
+
+pacman -S archinstall
+
+
+```
+copy from [通过ssh远程安装arch linux ](https://blog.51cto.com/u_3258791/2097197）
