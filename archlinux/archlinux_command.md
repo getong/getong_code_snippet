@@ -126,6 +126,18 @@ vagrant up
  $ asp update linux
  $ asp export linux
 
+ $ cd linux
+
+ ## edit PKGBUILD
+ pkgbase=linux-custom
+
+ ## change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
+ pkgname=("$pkgbase" "$pkgbase-headers")
+
+ ## edit config
+ CONFIG_SATA_PMP=n
+
+ ## then run the updpkgsums command
  $ updpkgsums
  $ makepkg -s
 ```
