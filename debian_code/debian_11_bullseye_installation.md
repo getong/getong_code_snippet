@@ -551,3 +551,19 @@ sudo chmod a+rx /usr/local/bin/youtube-dl
 youtube-dl --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt https://www.youtube.com/playlist?list=PL2mpR0RYFQsBiCWVJSvVAO3OJ2t7DzoHA
 ```
 copy from [用 youtube-dl 下载油管视频](https://zhengzexin.com/archives/yong-youtube-dl-xia-zai-you-guan-shi-pin/)
+
+## install typora
+
+``` shell
+# or use
+# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE
+wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+
+# add Typora's repository
+sudo add-apt-repository 'deb https://typora.io/linux ./'
+sudo apt-get update
+
+# install typora
+sudo apt-get install typora
+
+```
