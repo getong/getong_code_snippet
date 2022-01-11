@@ -28,3 +28,10 @@ Run UE5, and select C++, works fine
 copy from [UE5 on MacOS Monterey (beta 7)?](https://forums.unrealengine.com/t/ue5-on-macos-monterey-beta-7/252722)
 
 also see [Building Unreal Engine for macOS with XCode](https://medium.com/@lukebrady105/building-unreal-engine-for-macos-with-xcode-bf7f807a65)
+
+## clean unreal engine git repo
+
+``` shell
+git clean -d -fx -i
+```
+copy from [error building Unreal Engine 4.26 on Linux Debian 11 (Bullseye)[(https://answers.unrealengine.com/questions/1017417/view.html)
