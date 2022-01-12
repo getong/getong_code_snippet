@@ -242,3 +242,11 @@ pacman -S archinstall
 
 ```
 copy from [通过ssh远程安装arch linux ](https://blog.51cto.com/u_3258791/2097197）
+
+
+## blame
+
+``` shell
+systemd-analyze blame
+```
+copy from [Manjaro booting is very slow (40sec)](https://forum.manjaro.org/t/manjaro-booting-is-very-slow-40sec/32489)
