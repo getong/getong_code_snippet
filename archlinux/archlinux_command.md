@@ -244,7 +244,7 @@ pacman -S archinstall
 copy from [通过ssh远程安装arch linux ](https://blog.51cto.com/u_3258791/2097197）
 
 
-## blame
+## systemd-analyze
 
 ``` shell
 systemd-analyze blame
@@ -254,3 +254,17 @@ systemd-analyze plot > plot.svg
 see [Improving performance/Boot process](https://wiki.archlinux.org/title/Improving_performance/Boot_process)
 
 also see [Manjaro booting is very slow (40sec)](https://forum.manjaro.org/t/manjaro-booting-is-very-slow-40sec/32489)
+
+## yay usage
+
+``` shell
+# Instalk dkms :
+sudo - Sy dkms
+
+# Install Yay :
+sudo pacman -Sy yay
+
+# and run as USER:
+yay -S nvidia-390xx-dkms
+```
+copy from [Unable to find `nvidia-390xx` anymore](https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/)
