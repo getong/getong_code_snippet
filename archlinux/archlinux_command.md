@@ -208,13 +208,21 @@ build() {
 }
 
 
+
+
+ ## then run the updpkgsums command
+ $ mv config config.origin
+
+
+ $ zcat /proc/config.gz > config
+
  ## edit `config` file
  ------------------
  CONFIG_SATA_PMP=n
 
- ## then run the updpkgsums command
  $ updpkgsums
- $ makepkg -s
+ ## network might be broken, use proxy
+ $ proxychains makepkg -s
 ```
 
 copy from [Kernel (简体中文)/Arch Build System (简体中文)](https://wiki.archlinux.org/title/Kernel_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Arch_Build_System_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
