@@ -19,7 +19,8 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell chrome-gnome-shell \
     grub efibootmgr efivar intel-ucode proxychains v2ray asp git \
-    nemo emacs julia erlang gnome-software-packagekit-plugin gnome-tweaks
+    nemo emacs julia erlang gnome-software-packagekit-plugin gnome-tweaks \
+    pacman-contrib
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -184,13 +185,31 @@ vagrant up
 
  $ cd linux
 
- ## edit PKGBUILD
+ ## edit `PKGBUILD` file
+ ------------------
  pkgbase=linux-custom
 
  ## change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
  pkgname=("$pkgbase" "$pkgbase-headers")
 
- ## edit config
+------------------
+change  the build() function
+build() {
+  cd $_srcname
+  make all
+  make htmldocs
+}
+
+to be :
+build() {
+  cd $_srcname
+  make all -j$(nproc)
+  make htmldocs
+}
+
+
+ ## edit `config` file
+ ------------------
  CONFIG_SATA_PMP=n
 
  ## then run the updpkgsums command
@@ -200,6 +219,7 @@ vagrant up
 
 copy from [Kernel (简体中文)/Arch Build System (简体中文)](https://wiki.archlinux.org/title/Kernel_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Arch_Build_System_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
 also see [Kernel/Arch Build System](https://wiki.archlinux.org/title/Kernel/Arch_Build_System)
+also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/article/1791129)
 
 ## install software
 
