@@ -293,12 +293,14 @@ also see [Manjaro booting is very slow (40sec)](https://forum.manjaro.org/t/manj
 
 ``` shell
 # Instalk dkms :
-sudo - Sy dkms
+sudo pacman -Sy dkms
 
 # Install Yay :
 sudo pacman -Sy yay
 
 # and run as USER:
 yay -S nvidia-390xx-dkms
+yay -S nvidia-340xx-dkms
 ```
 copy from [Unable to find `nvidia-390xx` anymore](https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/)
+also see [Unsupported_drivers](https://wiki.archlinux.org/title/NVIDIA#Unsupported_drivers)
