@@ -140,6 +140,13 @@ pacman -S archlinuxcn-keyring
 ## install yay
 
 ``` shell
+sudo vim /etc/pacman.conf
+-------------------------
+[archlinuxcn]
+SigLevel = Optional TrustAll
+Server = http://mirrors.163.com/archlinux-cn/$arch
+
+
 pacman -S yay
 ```
 
