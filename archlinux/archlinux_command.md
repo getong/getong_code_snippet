@@ -19,7 +19,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
     intel-ucode proxychains v2ray asp git nemo emacs julia erlang \
-    gnome-software-packagekit-plugin gnome-tweaks pacman-contrib
+    gnome-software-packagekit-plugin gnome-tweaks pacman-contrib typora
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
