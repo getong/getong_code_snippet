@@ -198,6 +198,11 @@ vagrant up
  ## change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
  pkgname=("$pkgbase" "$pkgbase-headers")
 
+ ## change https://github.com/archlinux/linux to be https://gitee.com/mirrors_Archlinux/linux
+url="https://gitee.com/mirrors_Archlinux/linux/commits/$_srctag"
+  "$_srcname::git+https://gitee.com/mirrors_Archlinux/linux?signed#tag=$_srctag"
+
+
 ------------------
 change  the build() function
 build() {
