@@ -182,6 +182,45 @@ vagrant up
 
 ## asp compile kernel
 
+change the asp git remote url:
+
+``` shell
+$ cat ~/.cache/asp/.git/config
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "packages"]
+        url = https://github.com/archlinux/svntogit-packages.git
+        fetch = +refs/heads/*:refs/remotes/packages/*
+[remote "community"]
+        url = https://github.com/archlinux/svntogit-community.git
+        fetch = +refs/heads/*:refs/remotes/community/*
+```
+Change the packages url to be `https://gitee.com/mirrors_Archlinux/svntogit-packages`
+change the community url to be `https://gitee.com/mirrors_Archlinux/svntogit-community`
+The new file should be like this:
+
+``` shell
+$ cat ~/.cache/asp/.git/config
+
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "packages"]
+        url = https://gitee.com/mirrors_Archlinux/svntogit-packages
+        fetch = +refs/heads/*:refs/remotes/packages/*
+[remote "community"]
+        url = https://gitee.com/mirrors_Archlinux/svntogit-community
+        fetch = +refs/heads/*:refs/remotes/community/*
+
+```
+see [FS#67359 - [asp] remotes of existing ASPROOT are not automatically set to GitHub](https://bugs.archlinux.org/task/67359)
+
+
 ``` shell
  $ cd ~/
  $ mkdir build
