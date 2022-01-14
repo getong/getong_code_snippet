@@ -262,7 +262,7 @@ build() {
 ``` shell
 mkdir src/
 
-git clone https://gitee.com/mirrors_ArchLinux/linux src/archlinux_linux
+git clone https://gitee.com/mirrors_ArchLinux/linux src/archlinux-linux
 ```
 
  ## then run the updpkgsums command
