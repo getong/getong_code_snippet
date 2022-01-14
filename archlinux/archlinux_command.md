@@ -257,12 +257,16 @@ build() {
   make htmldocs
 }
 
+## git clone the linux source file into the src directory
 
+``` shell
+mkdir src/
 
+git clone https://gitee.com/mirrors_ArchLinux/linux src/archlinux_linux
+```
 
  ## then run the updpkgsums command
  $ mv config config.origin
-
 
  $ zcat /proc/config.gz > config
 
