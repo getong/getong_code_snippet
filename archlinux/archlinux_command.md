@@ -283,6 +283,18 @@ copy from [Kernel (简体中文)/Arch Build System (简体中文)](https://wiki.
 also see [Kernel/Arch Build System](https://wiki.archlinux.org/title/Kernel/Arch_Build_System)
 also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/article/1791129)
 
+## git clone source and makepkg
+
+``` shell
+
+ $ asp update linux
+ $ asp export linux
+ $ cd linux
+ $ git clone https://gitee.com/mirrors_Archlinux/linux archlinux-linux
+ $ makepkg --holdver
+```
+copy from [How to modify a PKGBUILD which uses git sources to pull only a shallow clone?](https://unix.stackexchange.com/questions/154919/how-to-modify-a-pkgbuild-which-uses-git-sources-to-pull-only-a-shallow-clone)
+
 ## install software
 
 ``` shell
