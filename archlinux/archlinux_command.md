@@ -19,7 +19,8 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
     intel-ucode proxychains v2ray asp git nemo emacs julia erlang \
-    gnome-software-packagekit-plugin gnome-tweaks pacman-contrib typora
+    gnome-software-packagekit-plugin gnome-tweaks pacman-contrib typora \
+    util-linux
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -91,6 +92,8 @@ Name=enp1s0
 
 rmmod pcspkr
 echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
+
+sed -i 's/\#NAutoVTs=6/NAutoVTs=6' /etc/systemd/logind.conf
 
 exit
 
