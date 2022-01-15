@@ -386,3 +386,15 @@ sudo systemctl stop packagekit.service
 ``` shell
 sudo pacmn -S texlive-core texlive-latexextra
 ```
+
+## install nfs-utils
+``` shell
+sudo pacman -S nfs-utils
+```
+
+## stop packagekit.service
+
+``` shell
+sudo systemctl stop packagekit.service
+```
+copy from [Gnome software store stopped working](https://bbs.archlinux.org/viewtopic.php?pid=1975599#p1975599)
