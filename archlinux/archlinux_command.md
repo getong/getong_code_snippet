@@ -20,7 +20,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
     intel-ucode proxychains v2ray asp git nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
-    util-linux
+    util-linux vagrant w3m wget
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -93,7 +93,7 @@ Name=enp1s0
 rmmod pcspkr
 echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
 
-sed -i 's/\#NAutoVTs=6/NAutoVTs=6' /etc/systemd/logind.conf
+sed -i 's/\#NAutoVTs=6/NAutoVTs=6/' /etc/systemd/logind.conf
 
 exit
 
@@ -131,7 +131,8 @@ vim /etc/pacman.conf
 --------------------------------------
 
 [archlinuxcn]
-Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+SigLevel = Optional TrustAll
+Server = http://mirrors.163.com/archlinux-cn/$arch
 ```
 
 ## install archlinuxcn-keyring
@@ -143,13 +144,6 @@ pacman -S archlinuxcn-keyring
 ## install yay
 
 ``` shell
-sudo vim /etc/pacman.conf
--------------------------
-[archlinuxcn]
-SigLevel = Optional TrustAll
-Server = http://mirrors.163.com/archlinux-cn/$arch
-
-
 pacman -S yay
 ```
 
