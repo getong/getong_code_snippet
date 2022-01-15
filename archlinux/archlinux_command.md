@@ -373,3 +373,10 @@ sudo pacman -S typora
 ``` shell
 pacman -S virtualbox virtualbox-ext-oracle
 ```
+
+## chinese font
+
+``` shell
+sudo pacman -S wqy-zenhei
+sudo systemctl stop packagekit.service
+```
