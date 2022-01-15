@@ -20,7 +20,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
     intel-ucode proxychains v2ray asp git nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
-    util-linux vagrant w3m wget
+    util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -366,4 +366,10 @@ also see [Unsupported_drivers](https://wiki.archlinux.org/title/NVIDIA#Unsupport
 
 ``` shell
 sudo pacman -S typora
+```
+
+## install virtualbox
+
+``` shell
+pacman -S virtualbox virtualbox-ext-oracle
 ```
