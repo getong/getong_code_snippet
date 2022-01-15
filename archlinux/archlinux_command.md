@@ -380,3 +380,9 @@ pacman -S virtualbox virtualbox-ext-oracle
 sudo pacman -S wqy-zenhei
 sudo systemctl stop packagekit.service
 ```
+
+## texlive
+
+``` shell
+sudo pacmn -S texlive-core texlive-latexextra
+```
