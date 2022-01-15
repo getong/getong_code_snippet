@@ -398,3 +398,9 @@ sudo pacman -S nfs-utils
 sudo systemctl stop packagekit.service
 ```
 copy from [Gnome software store stopped working](https://bbs.archlinux.org/viewtopic.php?pid=1975599#p1975599)
+
+## install google-chrome browser
+
+``` shell
+yay -S google-chrome
+```
