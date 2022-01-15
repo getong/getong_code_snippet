@@ -404,3 +404,10 @@ copy from [Gnome software store stopped working](https://bbs.archlinux.org/viewt
 ``` shell
 yay -S google-chrome
 ```
+
+## fcitx
+
+``` shell
+sudo pacman -S fcitx-im fcitx fcitx-configtool fcitx-cloudpinyin
+```
+copy from [Arch安装和Gnome配置教程](https://hanielxx.com/Linux/2019-07-20-archLinux-gnome-install.html)
