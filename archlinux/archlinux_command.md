@@ -421,3 +421,9 @@ pacman-key --init
 pacman-key --populate archlinux
 pacman -Syyu
 ```
+
+## kde
+
+``` shell
+sudo pacman -S plasma kde-applications
+```
