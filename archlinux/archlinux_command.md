@@ -451,3 +451,9 @@ copy from [ pam fails to find unit dbus-org.freedesktop.home1.service](https://b
 sudo pacman -S mpv
 ```
 copy from [VLC - process remains active after closing it](https://www.reddit.com/r/archlinux/comments/blo3zs/vlc_process_remains_active_after_closing_it/)
+
+## wireless card
+
+``` shell
+yay -S rtl88xxau-aircrack-dkms-git
+```
