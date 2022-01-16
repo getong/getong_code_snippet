@@ -457,3 +457,4 @@ copy from [VLC - process remains active after closing it](https://www.reddit.com
 ``` shell
 yay -S rtl88xxau-aircrack-dkms-git
 ```
+copy from [Package Details: rtl88xxau-aircrack-dkms-git r1174.3a6402e-1](https://aur.archlinux.org/packages/rtl88xxau-aircrack-dkms-git)
