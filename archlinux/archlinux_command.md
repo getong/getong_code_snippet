@@ -371,8 +371,11 @@ sudo pacman -S typora
 ## install virtualbox
 
 ``` shell
-pacman -S virtualbox virtualbox-ext-oracle
+pacman -S virtualbox virtualbox-host-dkms
+
+sudo vboxreload
 ```
+copy from [Arch Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝](https://cxybb.com/article/weixin_34280237/91997886)
 
 ## chinese font
 
