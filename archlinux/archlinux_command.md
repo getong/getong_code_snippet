@@ -458,3 +458,29 @@ copy from [VLC - process remains active after closing it](https://www.reddit.com
 yay -S rtl88xxau-aircrack-dkms-git
 ```
 copy from [Package Details: rtl88xxau-aircrack-dkms-git r1174.3a6402e-1](https://aur.archlinux.org/packages/rtl88xxau-aircrack-dkms-git)
+
+## some useful command:
+
+``` shell
+lspci -k // 检查驱动状态
+ip link
+iw dev // 以上三种方法都能列出网卡接口名称，如果未列出，说明驱动有问题。
+
+dmesg | grep firmware
+dmesg | grep iwlwifi // 这两种方法是在驱动有问题时，可以用来检查和寻找问题。
+
+iw dev wlp3s0 link // 用来检查网卡是否连接，其中 wlp3s0 是网卡接口名称
+
+ip link set dev wlp3s0 up // 用来将无线网卡接口启用
+
+iw dev wlp3s0 scan // 用来扫描周围的无线热点
+
+iw dev wlp3s0 connect "your_essid" // 此命令可以直接连接没有加密的热点
+iw dev wlp3s0 connect "your_essid" key 0:your_key // 用来连接WEP加密的热点
+
+wpa_supplicant -D nl80211,wext -B -i wlp3s0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+// 这是 wpa_supplicant 连接WPA/WPA2的命令格式
+
+dhcpcd wlp3s0 // 给无线网卡分配动态IP
+```
+copy from [archlinux 系统安装无线网卡](https://wangbinweb.github.io/htm/18-archlinux-install-wireless-network-card.htm)
