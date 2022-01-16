@@ -427,3 +427,17 @@ pacman -Syyu
 ``` shell
 sudo pacman -S plasma kde-applications
 ```
+
+## pam fails to find unit dbus-org.freedesktop.home1.service
+
+add this to /etc/pacman.conf
+``` shell
+NoExtract=usr/lib/security/pam_systemd_home.so
+```
+then reinstall systemd
+
+``` shell
+sudo pacman -S systemd
+```
+
+copy from [ pam fails to find unit dbus-org.freedesktop.home1.service](https://bbs.archlinux.org/viewtopic.php?pid=1927195#p1927195)
