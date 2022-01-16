@@ -411,3 +411,13 @@ yay -S google-chrome
 sudo pacman -S fcitx-im fcitx fcitx-configtool fcitx-cloudpinyin
 ```
 copy from [Arch安装和Gnome配置教程](https://hanielxx.com/Linux/2019-07-20-archLinux-gnome-install.html)
+
+## pacman-key
+
+``` shell
+mv /etc/pacman.d/gnupg /etc/pacman.d/gnupg.bak
+
+pacman-key --init
+pacman-key --populate archlinux
+pacman -Syyu
+```
