@@ -441,3 +441,10 @@ sudo pacman -S systemd
 ```
 
 copy from [ pam fails to find unit dbus-org.freedesktop.home1.service](https://bbs.archlinux.org/viewtopic.php?pid=1927195#p1927195)
+
+## mpv player
+
+``` shell
+sudo pacman -S mpv
+```
+copy from [VLC - process remains active after closing it](https://www.reddit.com/r/archlinux/comments/blo3zs/vlc_process_remains_active_after_closing_it/)
