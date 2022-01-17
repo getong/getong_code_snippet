@@ -195,3 +195,19 @@ add this to my.cnf
 set sql_mode="NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
 ```
 copy from [mysql给text设置一个默认值(干货)](https://juejin.im/post/5d64c3615188256bf6119a86)
+
+## bigint can only be 64 bit number
+
+```
+The range for the signed MySQL BIGINT type is between -9223372036854775808 and 9223372036854775807
+
+For unsigned BIGINT type, the value ranges from 0 to 18446744073709551615.
+```
+copy from [MySQL BIGINT Number Ranges](https://linuxhint.com/mysql-bigint-number-ranges/)
+
+The higher value can use varchar:
+
+```
+If for some reason you believe you'd need a value greater than this, store it in a VARCHAR as a combination of digits and characters instead... e.g. 00-09, then 0a-0Z (really crude and won't actually be a good idea in this exact form but you get the point) etc going up systematically like that for as long as you like, that way if you need more space you can just increase the size of the field
+```
+copy from [Does a 64-bit Integer PRACTICALLY have a limit?](https://stackoverflow.com/questions/52830878/does-a-64-bit-integer-practically-have-a-limit)
