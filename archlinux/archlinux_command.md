@@ -5,7 +5,12 @@ see [Archlinux 安装教程超详细（2021.11.15）](https://zhuanlan.zhihu.com
 see [How to Install Arch Linux in 2022 {Easy Step-by-Step Guide}](https://www.securedyou.com/how-to-install-arch-linux-step-by-step-tutorial/)
 see [Archlinux 2022安装配置之Gnome40](https://www.cnblogs.com/LzsCxb/p/15669736.html)
 ``` shell
-reflector --country China --age 72 --sort rate --protocol https --save /etc/pacman.d/mirrorlist
+# reflector --country China --age 72 --sort rate --protocol https --save /etc/pacman.d/mirrorlist
+
+vim /etc/pacman.d/mirrorlist
+-------------------------------
+## delete all other mirrors
+Server = http://mirrors.163.com/archlinux/$repo/os/i686
 
 timedatectl set-ntp true
 
@@ -20,7 +25,8 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
     intel-ucode proxychains v2ray asp git nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
-    util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl
+    util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
+    wqy-zenhei
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -36,7 +42,7 @@ zh_CN.UTF-8 UTF-8
 locale-gen
 
 
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=zh_CN.UTF-8" > /etc/locale.conf
 echo archlinux > /etc/hostname
 
 
@@ -94,6 +100,10 @@ rmmod pcspkr
 echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
 
 sed -i 's/\#NAutoVTs=6/NAutoVTs=6/' /etc/systemd/logind.conf
+
+systemctl enable systemd-networkd
+
+systemctl enable systemd-resolved.service
 
 exit
 
