@@ -551,12 +551,12 @@ sudo vim /etc/samba/smb.conf
 
 [public]
     guest ok = Yes
-    path = /home/test/public
+    path = /home/test/shares
     read only = No
 
 
 [private]
-    path = /home/test/private
+    path = /home/test/privates
     read only = No
     write list = @test
 
