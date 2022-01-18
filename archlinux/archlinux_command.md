@@ -536,10 +536,64 @@ also see [Archlinux安装xfce4桌面及美化流程](https://blog.csdn.net/kingo
 ## samba
 
 ``` shell
+sudo useradd test
+
+sudo passwd test
+
+vim /etc/ssh/sshd_config
+------------------------
+AllowUsers  test@192.168.1.1
+
+sudo usermod --shell /usr/bin/nologin --lock test
+
 sudo pacman -S samba
+
+groupadd smbgroup
+
+useradd -g smbgroup test
+
+smbpasswd -a test
+
+sudo vim /etc/samba/smb.conf　　添加以下内容
+
+[global]
+    dns proxy = No
+    map to guest = Bad User
+    netbios name = ARCH LINUX
+    security = USER
+    server string = Samba Server %v
+    idmap config * : backend = tdb
+
+
+[public]
+    guest ok = Yes
+    path = /home/test/public
+    read only = No
+
+
+[private]
+    path = /home/test/private
+    read only = No
+    write list = @test
+
+
+sudo mkdir /home/test
+sudo mkdir /home/test/shares
+
+sudo mkdir /home/test/privates
+
+sudo chmod 777 /home/test/shares
+
+sudo chmod 777 /home/test/privates
+
+
 sudo systemctl start smb
 sudo systemctl enable smb
+
 ```
+
+
+
 see [Arch Linux下配置Samba](https://www.cnblogs.com/chenyucong/p/8452770.html)
 see [Samba (简体中文)](https://wiki.archlinux.org/title/Samba_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
 see [Linux – 限制ssh的登录用户和登录ip](https://www.xiebruce.top/1089.html)
