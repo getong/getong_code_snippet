@@ -510,3 +510,16 @@ setxkbmap -option ctrl:swapcaps
 ```
 copy from [Remapping Caps Lock to Esc on Arch Linux](https://n1ghtmare.github.io/2021-05-19/remapping-caps-lock-to-esc-on-arch-linux/)
 also see [Linux – How to map the Caps Lock key to Escape key in Arch Linux](https://itectec.com/superuser/how-to-map-the-caps-lock-key-to-escape-key-in-arch-linux/)
+
+
+## install i3 desktop
+
+``` shell
+sudo pacman -S i3-gaps i3blocks i3lock i3status
+
+sudo pacman -S lightdm lightdm-gtk-greeter
+sudo systemctl enable lightdm
+
+sudo pacman -S alacritty
+```
+copy from [Arch Linux - 安装X Window和i3](https://zhuanlan.zhihu.com/p/384715418)
