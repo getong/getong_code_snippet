@@ -173,3 +173,10 @@ use with virtualbox:
 VBoxManage list usbhost
 ```
 copy from [How to get the UUID of a USB device on a Mac?](https://stackoverflow.com/questions/8305419/how-to-get-the-uuid-of-a-usb-device-on-a-mac/37170840)
+
+## access samba
+Finder－>Go（前往）->Connete to Server...（连接服务器）(Command+K)
+smb://ip/share
+
+copy from [Mac OS X 访问连接SAMBA共享磁盘](https://www.jianshu.com/p/4f785ae6c29c)
+also see [Macos 建立Samba服务器](https://blog.csdn.net/qq_38375620/article/details/101699465)
