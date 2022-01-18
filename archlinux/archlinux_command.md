@@ -532,3 +532,14 @@ sudo pacman -S xfce4 xfce4-goodies
 copy from [Install XFCE Desktop on Arch Linux](https://linoxide.com/install-xfce-desktop-on-arch-linux/)
 
 also see [Archlinux安装xfce4桌面及美化流程](https://blog.csdn.net/kingolie/article/details/76723448)
+
+## samba
+
+``` shell
+sudo pacman -S samba
+sudo systemctl start smb
+sudo systemctl enable smb
+```
+see [Arch Linux下配置Samba](https://www.cnblogs.com/chenyucong/p/8452770.html)
+see [Samba (简体中文)](https://wiki.archlinux.org/title/Samba_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+see [Linux – 限制ssh的登录用户和登录ip](https://www.xiebruce.top/1089.html)
