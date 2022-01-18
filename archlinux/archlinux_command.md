@@ -494,3 +494,19 @@ wpa_supplicant -D nl80211,wext -B -i wlp3s0 -c /etc/wpa_supplicant/wpa_supplican
 dhcpcd wlp3s0 // 给无线网卡分配动态IP
 ```
 copy from [archlinux 系统安装无线网卡](https://wangbinweb.github.io/htm/18-archlinux-install-wireless-network-card.htm)
+
+## ctrl swap caps
+
+Get the option:
+
+``` shell
+grep "caps" /usr/share/X11/xkb/rules/xorg.lst
+```
+
+add following line to ~/.xinitrc or ~/.xsession, before the exec gnome-session (or similar) line .
+
+``` shell
+setxkbmap -option ctrl:swapcaps
+```
+copy from [Remapping Caps Lock to Esc on Arch Linux](https://n1ghtmare.github.io/2021-05-19/remapping-caps-lock-to-esc-on-arch-linux/)
+also see [Linux – How to map the Caps Lock key to Escape key in Arch Linux](https://itectec.com/superuser/how-to-map-the-caps-lock-key-to-escape-key-in-arch-linux/)
