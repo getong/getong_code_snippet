@@ -12,6 +12,9 @@ $ source $CARGO_HOME/env
 $ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/library"
 $ rustup toolchain add nightly
 $ rustup component add rls-preview rust-analysis rust-src
+
+$ rustup toolchain install nightly
+$ rustup component add rustc-dev --toolchain=nightly
 $ cargo +nightly install racer
 ```
 
