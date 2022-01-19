@@ -580,7 +580,7 @@ sudo smbpasswd -a test
 
 sudo vim /etc/ssh/sshd_config
 ------------------------
-AllowUsers  test@192.168.1.1
+AllowUsers  root@192.168.1.1 valid_user  # no test user here, test user is not allowed to login
 
 sudo usermod --shell /usr/bin/nologin --lock test
 
