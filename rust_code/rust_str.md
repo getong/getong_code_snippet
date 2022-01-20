@@ -215,3 +215,12 @@ impl FromStr for Person {
     }
 }
 ```
+
+## reading reference
+[Rust 中的生命周期 —— 从 StrSplit 实例说开去](https://zhuanlan.zhihu.com/p/442574694)
+
+```
+str —— [T]，表示为一串字符序列（a sequence of characters），编译期无法确定其长度（dynamically sized）；
+&str —— &[T]，表示为一个胖指针（fat pointer），ptr 指向切片首地址、length 表示切片长度，编译期可以确定其长度为 16 字节；
+String —— Vec<T>，表示为一个胖指针（fat pointer），ptr 指向字符串堆内存的首地址、length 表示字符串当前长度、capacity 表示分配的堆内存的总容量。堆内存支持动态扩展和收缩。编译期可以确定其长度为 24 字节。
+```

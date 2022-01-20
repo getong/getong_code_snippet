@@ -175,3 +175,28 @@ copy from [Variance](https://doc.rust-lang.org/reference/subtyping.html#variance
                        ^^^^^ value borrowed here after move
 
 ```
+
+## reading reference
+[Rust 中的迭代器](https://zhuanlan.zhihu.com/p/458806498)
+
+```
+一个类型（Type）实现 Deref / DerefMut trait，编译器会在三种情况下执行解引用：
+
+1、*x —— 显式解引用，根据 x 所在的上下文（mutable contexts / immutable contexts），等价于执行 *(std::ops::Deref::deref(&x)) / *(std::ops::DerefMut::deref_mut(&mut x))，* 解引用操作符；
+
+2、x.method(call-params) —— 方法调用时执行隐式解引用，可能调用的候选方法包括：
+
+associated methods on specific traits
+statically dispatching to a method if the exact self-type of the left-hand-side is known
+dynamically dispatching if the left-hand-side expression is an indirect trait object
+因此，查找方法名时需获取得到所有的候选类型（a list of candidate receiver types） —— 通过对 x 执行多次解引用获取得到所有的候选类型。
+
+3、类型转换（Type coercions），一个简单的例子，代码 2，type-coercions，
+
+
+Rust 编译器执行 Deref coercion 时会区分可变和不可变，The Book - How Deref Coercion Interacts with Mutability：
+
+From &T to &U when T: Deref<Target=U>
+From &mut T to &mut U when T: DerefMut<Target=U>
+From &mut T to &U when T: Deref<Target=U> 一个可变借用（可变借用是排他的，只能有一个）可以解引用为不可变借用，满足 Rust 的借用规则；反过来不行，将一个不可变借用（不可变借用可以有多个）解引用为可变借用会破坏 Rust 的借用规则。
+```
