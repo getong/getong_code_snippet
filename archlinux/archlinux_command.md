@@ -593,3 +593,16 @@ sudo systemctl restart sshd
 see [Arch Linux下配置Samba](https://www.cnblogs.com/chenyucong/p/8452770.html)
 see [Samba (简体中文)](https://wiki.archlinux.org/title/Samba_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
 see [Linux – 限制ssh的登录用户和登录ip](https://www.xiebruce.top/1089.html)
+
+## mount external disk drivers
+in the `/etc/fstab`
+
+``` shell
+UUID=177ce77f-6e06-47a6-b1e9-6c3a6b43fb8d /run/media/sinux/sinux3       ext4    noatime,x-systemd.automount,x-systemd.device-timeout=10,x-systemd.idle-timeout=1min 0 2
+```
+A couple things:
+
+1 You are missing a 2 at the end of the line for sinux3
+2 You should use systemd-automounts to mount external drives. That way it doesn’t matter if they are connected or not.
+It won’t impact your boot and you won’t have manually mount them later.
+copy from [Dependency failed for File System Check External Drives](https://forum.endeavouros.com/t/dependency-failed-for-file-system-check-external-drives/16249)
