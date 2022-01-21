@@ -58,7 +58,7 @@ vim /etc/default/grub
 --------------------
 GRUB_TIMEOUT=1
 GRUB_CMDLINE_LINUX_DEFAULT="text"
-# GRUB_CMDLINE_LINUX="noapic acpi=off"
+GRUB_CMDLINE_LINUX="noapic"
 
 grub-mkconfig -o /boot/grub/grub.cfg
 
@@ -606,3 +606,16 @@ A couple things:
 2 You should use systemd-automounts to mount external drives. That way it doesn’t matter if they are connected or not.
 It won’t impact your boot and you won’t have manually mount them later.
 copy from [Dependency failed for File System Check External Drives](https://forum.endeavouros.com/t/dependency-failed-for-file-system-check-external-drives/16249)
+
+## grub acpi
+Do not use `acpi=off`
+use
+
+``` shell
+nolapic
+```
+or rather:
+``` shell
+ noapic pci=assign-busses apicmaintimer idle=poll reboot=cold,hard
+```
+copy from [Keyboard an mouse not working after fresh install](https://bbs.archlinux.org/viewtopic.php?id=194084)
