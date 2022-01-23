@@ -281,6 +281,29 @@ git clone https://gitee.com/mirrors_ArchLinux/linux src/archlinux-linux
  ------------------
  CONFIG_SATA_PMP=n
 
+ ## edit `PKGBUILD` file
+ ------------------
+ pkgbase=linux-custom
+
+ ## change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
+ pkgname=("$pkgbase" "$pkgbase-headers")
+
+ ## ------------------
+## change  the build() function
+build() {
+  cd $_srcname
+  make all
+  make htmldocs
+}
+
+to be :
+build() {
+  cd $_srcname
+  make all -j$(nproc)
+  make htmldocs
+}
+
+
  $ updpkgsums
  ## network might be broken, use proxy
  $ proxychains makepkg -s
@@ -298,6 +321,16 @@ also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/ar
  $ asp export linux
  $ cd linux
  $ git clone https://gitee.com/mirrors_Archlinux/linux archlinux-linux
+
+ $ mv config config.origin
+
+ $ zcat /proc/config.gz > config
+
+ ## edit `config` file
+ ------------------
+ CONFIG_SATA_PMP=n
+
+ $ updpkgsums
  $ makepkg --holdver
 ```
 copy from [How to modify a PKGBUILD which uses git sources to pull only a shallow clone?](https://unix.stackexchange.com/questions/154919/how-to-modify-a-pkgbuild-which-uses-git-sources-to-pull-only-a-shallow-clone)
