@@ -598,7 +598,7 @@ see [Linux – 限制ssh的登录用户和登录ip](https://www.xiebruce.top/108
 in the `/etc/fstab`
 
 ``` shell
-UUID=177ce77f-6e06-47a6-b1e9-6c3a6b43fb8d /run/media/sinux/sinux3       ext4    noatime,x-systemd.automount,x-systemd.device-timeout=10,x-systemd.idle-timeout=1min 0 2
+UUID=177ce77f-6e06-47a6-b1e9-6c3a6b43fb8d /run/media/sinux/sinux3       ext4    noatime,x-systemd.mount-timeout=5min,x-systemd.automount,x-systemd.device-timeout=10,x-systemd.idle-timeout=1min 0 2
 ```
 A couple things:
 
@@ -619,3 +619,15 @@ or rather:
  noapic pci=assign-busses apicmaintimer idle=poll reboot=cold,hard
 ```
 copy from [Keyboard an mouse not working after fresh install](https://bbs.archlinux.org/viewtopic.php?id=194084)
+
+## ntp
+
+``` shell
+sudo pacman -S ntp
+
+sudo ntpdate pool.ntp.org
+sudo hwclock -w
+
+sudo timedatectl set-ntp true
+```
+also see [systemd-timesyncd (简体中文)](https://wiki.archlinux.org/title/Systemd-timesyncd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
