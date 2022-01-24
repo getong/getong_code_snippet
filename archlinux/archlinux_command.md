@@ -332,6 +332,8 @@ also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/ar
 
  $ updpkgsums
  $ makepkg --holdver
+ $ sudo pacman -U <kernel-headers_package>
+ $ sudo pacman -U <kernel_package>
 ```
 copy from [How to modify a PKGBUILD which uses git sources to pull only a shallow clone?](https://unix.stackexchange.com/questions/154919/how-to-modify-a-pkgbuild-which-uses-git-sources-to-pull-only-a-shallow-clone)
 
