@@ -399,8 +399,14 @@ copy from [git subtree教程](https://segmentfault.com/a/1190000012002151)
 ``` shell
 git clone --depth 1 origin_url
 cd project
+
+git remote update --prune
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 git remote set-branches origin '*'
+
 git fetch -v
+git pull --all
+
 git checkout the-branch-i-ve-been-looking-for
 
 ```
