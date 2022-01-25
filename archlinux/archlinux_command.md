@@ -667,3 +667,15 @@ sudo hwclock -w
 sudo timedatectl set-ntp true
 ```
 also see [systemd-timesyncd (简体中文)](https://wiki.archlinux.org/title/Systemd-timesyncd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+
+## Disable the grub sub-menu
+edit the file `/etc/default/grub`
+``` shell
+GRUB_DEFAULT=saved
+GRUB_SAVEDEFAULT=true
+GRUB_DISABLE_SUBMENU=y
+```
+Then run the command:
+``` shell
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
