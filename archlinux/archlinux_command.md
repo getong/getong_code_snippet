@@ -344,6 +344,7 @@ also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/ar
  // uninstall custom linux kernel
  $ sudo pacman -R linux-custom-headers
  $ sudo pacman -R linux-custom
+ $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 copy from [How to modify a PKGBUILD which uses git sources to pull only a shallow clone?](https://unix.stackexchange.com/questions/154919/how-to-modify-a-pkgbuild-which-uses-git-sources-to-pull-only-a-shallow-clone)
 
