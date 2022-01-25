@@ -728,3 +728,84 @@ sudo pacman -Ss linux
 sudo pacman -Rs linux
 ```
 copy from [Can I get rid off unused linux kernels?](https://www.reddit.com/r/archlinux/comments/mnbv18/can_i_get_rid_off_unused_linux_kernels/)
+
+## Set default kernel in GRUB using grub-set-default command line
+
+``` shell
+grep menuentry /boot/grub/grub.cfg
+```
+You'll see each kernel listed with the name that is shown in the GRUB boot menu. The first one is 0, the second is 1, and so on.
+
+``` shell
+sudo grub-set-default X
+```
+where X is the number of the kernel you want to boot into.
+
+Also set the X in the `/etc/default/grub` file
+
+``` shell
+GRUB_DEFAULT=X
+```
+and then running
+
+``` shell
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+// in some distribution
+sudo update-grubas
+```
+copy from [Set default kernel in GRUB](https://unix.stackexchange.com/questions/198003/set-default-kernel-in-grub)
+
+## Set default kernel in GRUB manually
+
+1) Find the $menuentry_id_option for the submenu:
+``` shell
+$ grep submenu /boot/grub/grub.cfg
+submenu 'Advanced options for Debian GNU/Linux' $menuentry_id_option 'gnulinux-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+```
+
+2) Find the $menuentry_id_option for the menu entry for the kernel you want to use:
+
+``` shell
+$ grep gnulinux /boot/grub/grub.cfg
+menuentry 'Debian GNU/Linux' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+submenu 'Advanced options for Debian GNU/Linux' $menuentry_id_option 'gnulinux-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.18.0-0.bpo.1-rt-amd64' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.18.0-0.bpo.1-rt-amd64-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.18.0-0.bpo.1-rt-amd64 (recovery mode)' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.18.0-0.bpo.1-rt-amd64-recovery-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.18.0-0.bpo.1-amd64' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.18.0-0.bpo.1-amd64-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.18.0-0.bpo.1-amd64 (recovery mode)' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.18.0-0.bpo.1-amd64-recovery-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.17.0-0.bpo.1-amd64' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.17.0-0.bpo.1-amd64-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.17.0-0.bpo.1-amd64 (recovery mode)' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.17.0-0.bpo.1-amd64-recovery-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.9.0-8-amd64' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.9.0-8-amd64-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+    menuentry 'Debian GNU/Linux, with Linux 4.9.0-8-amd64 (recovery mode)' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-4.9.0-8-amd64-recovery-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc' {
+```
+
+3) Comment out your current default grub in /etc/default/grub and replace it with the sub-menu's $menuentry_id_option from step one, and the selected kernel's $menuentry_id_option from step two separated by >.
+
+In my case the modified GRUB_DEFAULT is:
+
+``` shell
+#GRUB_DEFAULT=0
+
+GRUB_DEFAULT="gnulinux-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc>gnulinux-4.18.0-0.bpo.1-amd64-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc"
+```
+
+4) Update grub to make the changes. For Debian this is done like so:
+
+``` shell
+$ sudo update-grub
+
+$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+5) Changing this back to the most recent kernel is as simple as commenting out the new line and uncommenting #GRUB_DEFAULT=0:
+
+``` shell
+GRUB_DEFAULT=0
+
+#GRUB_DEFAULT="gnulinux-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc>gnulinux-4.18.0-0.bpo.1-amd64-advanced-38ea4a12-6cfe-4ed9-a8b5-036295e62ffc"
+```
+then rerunning update-grub.
+
+
+copy from [Set default kernel in GRUB](https://unix.stackexchange.com/questions/198003/set-default-kernel-in-grub)
+also see [How To Set Default Grub / kernel / boot option on Ubuntu GNU/Linux 14.04](http://www.humans-enabled.com/2014/08/how-to-set-default-grub-kernel-boot.html)
