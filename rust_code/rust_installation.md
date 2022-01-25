@@ -35,6 +35,26 @@ esac
 
 ```
 
+## cargo config file
+
+``` shell
+emacs $CARGO_HOME/config
+
+---------------
+[source.crates-io]
+replace-with = 'rsproxy'
+
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
+```
+
+
 ## rustup install the stable by default
 
 ``` shell
