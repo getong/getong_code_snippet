@@ -683,3 +683,40 @@ Then run the command:
 ``` shell
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
+
+## clean archlinux
+
+``` shell
+// Clean package cache
+sudo pacman -Sc
+sudo pacman -Scc
+sudo pacman -S pacman-contrib
+
+sudo vim /etc/systemd/system/paccache.timer
+-----------------------------
+[Unit]
+Description=Clean-up old pacman pkg
+
+[Timer]
+OnCalendar=monthly
+Persistent=true
+
+[Install]
+WantedBy=multi-user.target
+-----------------------------
+
+sudo systemctl enable paccache.timer
+sudo systemctl start paccache.timer
+
+
+//  Remove unused packages (orphans)
+sudo pacman -Qtdq
+sudo pacman -Rns $(pacman -Qtdq)
+
+
+// Remove duplicates, empty files, empty directories and broken symlinks
+sudo pacman -S rmlint
+rmlint /home/alu
+
+```
+copy from [How to clean Arch Linux](https://averagelinuxuser.com/clean-arch-linux/)
