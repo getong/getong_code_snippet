@@ -720,3 +720,11 @@ rmlint /home/alu
 
 ```
 copy from [How to clean Arch Linux](https://averagelinuxuser.com/clean-arch-linux/)
+
+## delete linux kernel
+The -s flag will remove unused linux dependencies as well.
+``` shell
+sudo pacman -Ss linux
+sudo pacman -Rs linux
+```
+copy from [Can I get rid off unused linux kernels?](https://www.reddit.com/r/archlinux/comments/mnbv18/can_i_get_rid_off_unused_linux_kernels/)
