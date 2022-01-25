@@ -237,14 +237,16 @@ see [FS#67359 - [asp] remotes of existing ASPROOT are not automatically set to G
 
  $ cd linux
 
- ## edit `PKGBUILD` file
+ // edit `PKGBUILD` file
  ------------------
  pkgbase=linux-custom
 
- ## change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
+ // change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
+ ------------------------------------------------------------------
  pkgname=("$pkgbase" "$pkgbase-headers")
 
- ## change https://github.com/archlinux/linux to be https://gitee.com/mirrors_Archlinux/linux
+ // change https://github.com/archlinux/linux to be https://gitee.com/mirrors_Archlinux/linux
+ ----------------------------------------------------------------------
 url="https://gitee.com/mirrors_Archlinux/linux/commits/$_srctag"
   "$_srcname::git+https://gitee.com/mirrors_Archlinux/linux?signed#tag=$_srctag"
 
@@ -272,7 +274,10 @@ mkdir src/
 git clone https://gitee.com/mirrors_ArchLinux/linux src/archlinux-linux
 ```
 
- ## then run the updpkgsums command
+## then run the updpkgsums command
+
+``` shell
+
  $ mv config config.origin
 
  $ zcat /proc/config.gz > config
@@ -305,7 +310,7 @@ build() {
 
 
  $ updpkgsums
- ## network might be broken, use proxy
+ # network might be broken, use proxy
  $ proxychains makepkg -s
 ```
 
@@ -375,7 +380,6 @@ pacman -S net-tools openssh
 systemctl start sshd
 
 pacman -S archinstall
-
 
 ```
 copy from [通过ssh远程安装arch linux ](https://blog.51cto.com/u_3258791/2097197）
