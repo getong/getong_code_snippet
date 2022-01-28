@@ -480,11 +480,6 @@ pacman-key --populate archlinux
 pacman -Syyu
 ```
 
-## kde
-
-``` shell
-sudo pacman -S plasma kde-applications
-```
 
 ## pam fails to find unit dbus-org.freedesktop.home1.service
 
@@ -557,26 +552,7 @@ copy from [Remapping Caps Lock to Esc on Arch Linux](https://n1ghtmare.github.io
 also see [Linux – How to map the Caps Lock key to Escape key in Arch Linux](https://itectec.com/superuser/how-to-map-the-caps-lock-key-to-escape-key-in-arch-linux/)
 
 
-## install i3 desktop
 
-``` shell
-sudo pacman -S i3-gaps i3blocks i3lock i3status
-
-sudo pacman -S lightdm lightdm-gtk-greeter
-sudo systemctl enable lightdm
-
-sudo pacman -S alacritty
-```
-copy from [Arch Linux - 安装X Window和i3](https://zhuanlan.zhihu.com/p/384715418)
-
-## xfce
-
-``` shell
-sudo pacman -S xfce4 xfce4-goodies
-```
-copy from [Install XFCE Desktop on Arch Linux](https://linoxide.com/install-xfce-desktop-on-arch-linux/)
-
-also see [Archlinux安装xfce4桌面及美化流程](https://blog.csdn.net/kingolie/article/details/76723448)
 
 ## samba
 
@@ -814,3 +790,32 @@ then rerunning update-grub.
 
 copy from [Set default kernel in GRUB](https://unix.stackexchange.com/questions/198003/set-default-kernel-in-grub)
 also see [How To Set Default Grub / kernel / boot option on Ubuntu GNU/Linux 14.04](http://www.humans-enabled.com/2014/08/how-to-set-default-grub-kernel-boot.html)
+
+
+## kde
+
+``` shell
+sudo pacman -S plasma kde-applications
+```
+
+## install i3 desktop
+
+``` shell
+sudo pacman -S i3-gaps i3blocks i3lock i3status
+
+sudo pacman -S lightdm lightdm-gtk-greeter
+sudo systemctl enable lightdm
+
+sudo pacman -S alacritty
+```
+copy from [Arch Linux - 安装X Window和i3](https://zhuanlan.zhihu.com/p/384715418)
+
+
+## xfce
+
+``` shell
+sudo pacman -S xfce4 xfce4-goodies
+```
+copy from [Install XFCE Desktop on Arch Linux](https://linoxide.com/install-xfce-desktop-on-arch-linux/)
+
+also see [Archlinux安装xfce4桌面及美化流程](https://blog.csdn.net/kingolie/article/details/76723448)
