@@ -534,6 +534,7 @@ wpa_supplicant -D nl80211,wext -B -i wlp3s0 -c /etc/wpa_supplicant/wpa_supplican
 dhcpcd wlp3s0 // 给无线网卡分配动态IP
 ```
 copy from [archlinux 系统安装无线网卡](https://wangbinweb.github.io/htm/18-archlinux-install-wireless-network-card.htm)
+also see [Network configuration (简体中文)/Wireless (简体中文)](https://wiki.archlinux.org/title/Network_configuration_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Wireless_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
 
 ## ctrl swap caps
 
