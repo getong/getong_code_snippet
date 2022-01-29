@@ -168,7 +168,9 @@ grub-mkconfig
 ## install fbterm
 
 ``` shell
-yay -S fbterm
+yay -S fbterm fbv
+
+sudo chmod u+s /usr/bin/fbterm
 ```
 
 ## set the mirror and update
