@@ -7,5 +7,6 @@
 // get rust advice for your code.
 cargo clippy
 
+// get nameing conventions advice
 cargo check
 ```
