@@ -93,3 +93,24 @@ The max vram is 256m.
 export VAGRANT_HOME=/backup/vagrant_boxes
 ```
 copy from [Where does Vagrant download its .box files to?](https://stackoverflow.com/questions/10155708/where-does-vagrant-download-its-box-files-to)
+
+## transfer virtualbox image into vagrant box image
+
+``` shell
+vagrant package --base [machine name as it shows in virtual box] --output /Users/myuser/Documents/Workspace/my.box
+
+// copy the box to your remote
+
+vagrant init [machine name as it shows in virtual box] /Users/myuser/Documents/Workspace/my.box
+
+vagrant up
+```
+copy from [How to export a Vagrant virtual machine to transfer it](https://stackoverflow.com/questions/20679054/how-to-export-a-vagrant-virtual-machine-to-transfer-it)
+
+
+## package vagrant instance into box
+
+``` shell
+// cd vagrant instance directory
+vagrant package
+```
