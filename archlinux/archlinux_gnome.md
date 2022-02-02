@@ -1,5 +1,7 @@
 # archlinux gnome
 
+also see [GNOME/Tips and tricks](https://wiki.archlinux.org/title/GNOME/Tips_and_tricks)
+
 ## clock with seconds
 
 ``` shell
