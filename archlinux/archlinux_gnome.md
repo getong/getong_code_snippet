@@ -13,3 +13,13 @@ copy from [Ubuntu 18.04 gnome-shell high CPU usage](https://askubuntu.com/questi
 ``` shell
 sudo pacman -S gst-libav
 ```
+
+## haveged
+
+``` shell
+sudo pacman -S haveged
+sudo systemctl start haveged
+sudo systemctl enable haveged
+```
+
+copy from [gdm takes a very long time to load](https://bbs.archlinux.org/viewtopic.php?id=250490)
