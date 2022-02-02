@@ -741,5 +741,5 @@ copy from [Debian Log In Failure With Correct Password](https://unix.stackexchan
 ## copy the content of the folder use either rsync
 
 ``` shell
-rsync -vuar src/ dst/
+rsync -Pvuar src/ dst/
 ```
