@@ -172,8 +172,10 @@ yay -S fbterm fbv fcitx-fbterm-git v86d
 
 sudo gpasswd -a $USER video
 
-// or
+sudo setcap 'cap_sys_tty_config+op' /usr/bin/fbterm
+
 sudo chmod u+s /usr/bin/fbterm
+
 ```
 
 ## set the mirror and update
