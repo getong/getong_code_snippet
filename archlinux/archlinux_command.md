@@ -827,3 +827,9 @@ sudo pacman -S xfce4 xfce4-goodies
 copy from [Install XFCE Desktop on Arch Linux](https://linoxide.com/install-xfce-desktop-on-arch-linux/)
 
 also see [Archlinux安装xfce4桌面及美化流程](https://blog.csdn.net/kingolie/article/details/76723448)
+
+## install firefox, google-chrome, tmux
+``` shell
+sudo pacman -S firefox tmux
+yay -S google-chrome
+```
