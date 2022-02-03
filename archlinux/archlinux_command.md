@@ -833,3 +833,8 @@ also see [Archlinux安装xfce4桌面及美化流程](https://blog.csdn.net/kingo
 sudo pacman -S firefox tmux
 yay -S google-chrome
 ```
+
+## linux-lts
+```` shell
+sudo pacman -S linux-lts-headers linux-lts linux-lts-docs
+```
