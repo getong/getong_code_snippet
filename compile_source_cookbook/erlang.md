@@ -205,3 +205,9 @@ compile erlang using compiled openssl
 ``` shell
 ./configure --with-ssl=/usr/local/openssl-1.0.2l
 ```
+
+## compile on archlinux
+``` shell
+sudo pacman -S fop git glu java-environment libxslt lksctp-tools mesa perl unixodbc wxgtk3
+./configure --with-wx-config=/usr/bin/wx-config-gtk3
+```
