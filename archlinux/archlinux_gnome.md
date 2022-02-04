@@ -52,3 +52,8 @@ also see [Driver Nvidia legacy no Debian Buster](https://linuxdicasesuporte.blog
     You must also set IgnoreABI option with Xorg version >= 21.1.1.
     Minimal config example provided in /usr/share/nvidia-340xx/20-nvidia.conf
     which you should manually place in /etc/X11/xorg.conf.d/
+
+## wps
+``` shell
+yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime-cn wps-office-mui-zh-cn
+```
