@@ -57,3 +57,8 @@ also see [Driver Nvidia legacy no Debian Buster](https://linuxdicasesuporte.blog
 ``` shell
 yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime-cn wps-office-mui-zh-cn
 ```
+
+## swap ctrl and caps
+``` shell
+gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
+```
