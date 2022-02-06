@@ -62,3 +62,24 @@ yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime
 ``` shell
 gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
 ```
+
+## install fcitx
+
+``` shell
+sudo pacman -S fcitx-configtool fcitx fcitx-gtk3
+
+sed -i 's/TriggerKey.*$/TriggerKey=CTRL_SHIFT_LCTRL CTRL_SHIFT_LSHIFT/g' ~/.config/fcitx/config
+```
+
+## sound card driver
+
+``` shell
+sudo gpasswd -a username video
+
+```
+Then add the following to `~/.config/pulse/default.pa`
+
+```
+set-card-profile 0 output:analog-stereo+input:analog-stereo
+set-sink-port 2 analog-output-lineout
+```
