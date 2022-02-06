@@ -843,6 +843,28 @@ sudo pacman -S linux-lts-headers linux-lts linux-lts-docs
 
 ``` shell
 
+parted /dev/nvme0n1
+   mklabel gpt
+   mkpart primary 2048s 512M
+   mkpart primary 512   -1
+   set 1 boot on
+   q
+
+mkfs.vfat -F32 /dev/nvme0n1p1
+mkfs.btrfs -f /dev/nvme0n1p2
+
+
+parted /dev/sda
+   mklabel gpt
+   mkpart primary 2048s 128G
+   mkpart primary 128G -1
+   q
+
+mkswap /dev/sda1
+swapon /dev/sda1
+
+mkfs.btrfs -f /dev/sda2
+
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=arch_grub --recheck
 
 mkdir /boot/EFI/boot
