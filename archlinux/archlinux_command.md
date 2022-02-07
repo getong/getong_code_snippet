@@ -433,9 +433,20 @@ sudo pacman -S typora
 ## install virtualbox
 
 ``` shell
-pacman -S virtualbox virtualbox-host-dkms
+pacman -S virtualbox virtualbox-host-dkms virtualbox-guest-iso \
+    virtualbox-ext-oracle
+
+sudo gpasswd -a $USER vboxusers
+
+sudo systemctl enable bvboxweb.service
+
+sudo systemctl start bvboxweb.service
+
 
 sudo vboxreload
+
+// or setup
+sudo /sbin/rcvboxdrv setup
 ```
 copy from [Arch Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝](https://cxybb.com/article/weixin_34280237/91997886)
 
