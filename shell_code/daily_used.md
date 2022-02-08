@@ -743,3 +743,12 @@ copy from [Debian Log In Failure With Correct Password](https://unix.stackexchan
 ``` shell
 rsync -Pvuar src/ dst/
 ```
+
+## ln
+
+``` shell
+for i in `ls /usr/local/otp-22.3.4.24/bin/`
+do
+sudo ln -s /usr/local/otp-22.3.4.24/bin/$i /usr/local/bin
+done
+```
