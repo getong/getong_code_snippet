@@ -69,7 +69,27 @@ gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
 sudo pacman -S fcitx-configtool fcitx fcitx-gtk3
 
 sed -i 's/TriggerKey.*$/TriggerKey=CTRL_SHIFT_LCTRL CTRL_SHIFT_LSHIFT/g' ~/.config/fcitx/config
+
+gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"
 ```
+add following to `~/.xprofile` file:
+
+``` shell
+export INPUT_METHOD="fcitx"
+export XMODIFIERS="@im=fcitx"
+export GTK_IM_MODULE="fcitx"
+export QT_IM_MODULE="fcitx"
+export QT4_IM_MODULE="fcitx"
+```
+then run `fcitx-configtool` to configure fcitx:
+``` shell
+$ fcitx-configtool
+# 在input method那里点加号, 添加Pinyin
+# 在global-config进行全局配置
+# 在Apperance进行字体大小调整和状态显示
+# Addon进行插件管理, 双击插件进行设置
+```
+
 
 ## sound card driver
 
