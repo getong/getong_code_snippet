@@ -99,6 +99,15 @@ $ fcitx-configtool
 # Addon进行插件管理, 双击插件进行设置
 ```
 
+## debug fcitx
+
+``` shell
+fcitx-diagnose
+
+gtk-query-immodules-2.0 | sudo tee -a /etc/gtk-2.0/gtk.immodules
+```
+copy from [firefox和chrome无法调出fcitx输入中文](https://groups.google.com/g/archlinux-cn/c/nQUuGCDwL64)
+
 
 ## sound card driver
 
