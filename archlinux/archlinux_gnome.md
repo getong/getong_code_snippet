@@ -90,6 +90,11 @@ set-sink-port 2 analog-output-lineout
 gsettings set org.gnome.settings-daemon.plugins.power power-button-action nothing
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type nothing
 gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type nothing
+
+// lock screen after 300 seconds idle
+gsettings set org.gnome.desktop.screensaver lock-enabled true
+gsettings set org.gnome.desktop.screensaver lock-dalay 0
+org.gnome.desktop.session idle-delay uint32 300
 ```
 
 see [How to alter Ubuntu desktop configuration using terminal](https://sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/)
