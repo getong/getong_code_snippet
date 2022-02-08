@@ -83,3 +83,13 @@ Then add the following to `~/.config/pulse/default.pa`
 set-card-profile 0 output:analog-stereo+input:analog-stereo
 set-sink-port 2 analog-output-lineout
 ```
+
+## gnome power setting
+
+``` shell
+gsettings set org.gnome.settings-daemon.plugins.power power-button-action nothing
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type nothing
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type nothing
+```
+
+see [How to alter Ubuntu desktop configuration using terminal](https://sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/)
