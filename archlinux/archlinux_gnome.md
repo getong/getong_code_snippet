@@ -165,6 +165,7 @@ config the display effect:
 ``` shell
 WINEPREFIX=~/.deepinwine/Deepin-WeChat deepin-wine6-stable winecfg
 
+// http://39.99.136.201:8088/share/xHYZb0Z5
 wget -c http://39.99.136.201:8088/api/public/dl/xHYZb0Z5
 
 sudo tar xzf lib32.tgz -C /opt/apps/com.qq.weixin.work.deepin/files
