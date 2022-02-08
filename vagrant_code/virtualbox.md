@@ -40,3 +40,20 @@ sudo kextload -b org.virtualbox.kext.VBoxUSB
 ```
 copy from [Running Vagrant via “vagrant up” on macOS Monterey (12.0.1) fails](https://apple.stackexchange.com/questions/429609/running-vagrant-via-vagrant-up-on-macos-monterey-12-0-1-fails)
 copy from [Cant run virtualbox after updating mac to 12.0.1 monterey - error with host only adapter](https://stackoverflow.com/questions/69839697/cant-run-virtualbox-after-updating-mac-to-12-0-1-monterey-error-with-host-only)
+
+## start virtualbox machine
+
+``` shell
+$ VBoxManage list vms
+
+$ VBoxManage startvm XP --type gui
+
+$ VBoxManage list runningvms # 列出运行中的虚拟机
+$ VBoxManage controlvm XP acpipowerbutton # 关闭虚拟机，等价于点击系统关闭按钮，正常关机
+$ VBoxManage controlvm XP poweroff # 关闭虚拟机，等价于直接关闭电源，非正常关机
+$ VBoxManage controlvm XP pause # 暂停虚拟机的运行
+$ VBoxManage controlvm XP resume # 恢复暂停的虚拟机
+$ VBoxManage controlvm XP savestate # 保存当前虚拟机的运行状态
+$ VBoxManage controlvm XP reset # a cold reboot of the virtual machine
+```
+copy from [使用命令行启动 VirtualBox 虚拟机](https://kodango.com/use-cli-to-start-vm)
