@@ -63,36 +63,30 @@ yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime
 gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
 ```
 
-## install fcitx
+## install fcitx5
 
 ``` shell
-sudo pacman -S fcitx-configtool fcitx fcitx-gtk3
+sudo pacman -S fcitx5-configtool fcitx5 fcitx5-gtk
 
 sed -i 's/TriggerKey.*$/TriggerKey=CTRL_SHIFT_LCTRL CTRL_SHIFT_LSHIFT/g' ~/.config/fcitx/config
 
 gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"
 ```
-add following to `~/.xprofile` file:
 
-``` shell
-export INPUT_METHOD="fcitx"
-export XMODIFIERS="@im=fcitx"
-export GTK_IM_MODULE="fcitx"
-export QT_IM_MODULE="fcitx"
-export QT4_IM_MODULE="fcitx"
-```
 or add the adove into `/etc/environment` file:
 
 ``` shell
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS="@im=fcitx5"
+export INPUT_METHOD="fcitx5"
+export QT4_IM_MODULE="fcitx5"
 ```
 see [ArchLinux下fcitx ctrl+space无法调出输入法](https://its201.com/article/r8l8q8/73431256)
 
-then run `fcitx-configtool` to configure fcitx:
+then run `fcitx-configtool` to configure fcitx5:
 ``` shell
-$ fcitx-configtool
+$ fcitx5-configtool
 # 在input method那里点加号, 添加Pinyin
 # 在global-config进行全局配置
 # 在Apperance进行字体大小调整和状态显示
@@ -102,7 +96,7 @@ $ fcitx-configtool
 ## debug fcitx
 
 ``` shell
-fcitx-diagnose
+fcitx5-diagnose
 
 gtk-query-immodules-2.0 | sudo tee -a /etc/gtk-2.0/gtk.immodules
 ```

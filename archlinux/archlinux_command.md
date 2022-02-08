@@ -168,7 +168,7 @@ grub-mkconfig
 ## install fbterm
 
 ``` shell
-yay -S fbterm fbv fcitx-fbterm-git v86d
+yay -S fbterm fbv fcitx5-fbterm-git v86d
 
 sudo gpasswd -a $USER video
 
