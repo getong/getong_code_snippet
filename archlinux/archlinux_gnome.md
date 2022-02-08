@@ -81,6 +81,15 @@ export GTK_IM_MODULE="fcitx"
 export QT_IM_MODULE="fcitx"
 export QT4_IM_MODULE="fcitx"
 ```
+or add the adove into `/etc/environment` file:
+
+``` shell
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+```
+see [ArchLinux下fcitx ctrl+space无法调出输入法](https://its201.com/article/r8l8q8/73431256)
+
 then run `fcitx-configtool` to configure fcitx:
 ``` shell
 $ fcitx-configtool
