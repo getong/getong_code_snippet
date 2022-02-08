@@ -94,7 +94,34 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-typ
 // lock screen after 300 seconds idle
 gsettings set org.gnome.desktop.screensaver lock-enabled true
 gsettings set org.gnome.desktop.screensaver lock-dalay 0
-org.gnome.desktop.session idle-delay uint32 300
+gsettings set org.gnome.desktop.session idle-delay uint32 300
+
+// List available schemas and look for ones related to the power subsystem.
+gsettings list-schemas | grep power
+
+// Alternatively, list schemas, keys, and values to look for power-related ones.
+gsettings list-recursively | grep "\\.power"
+
+// List keys in a specific schema.
+gsettings list-keys org.gnome.settings-daemon.plugins.power
+
+// List keys and values in a specific schema.
+gsettings list-recursively org.gnome.settings-daemon.plugins.power
+
+// Get a description of a specific key.
+gsettings describe org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+
+// Get the possible values for a specific key.
+gsettings range org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+
+// Check if a specific key is writable.
+gsettings writable org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+
+// Alter the value of a specific key.
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
+
+// Read the value of a specific key.
+gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
 ```
 
 see [How to alter Ubuntu desktop configuration using terminal](https://sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/)
