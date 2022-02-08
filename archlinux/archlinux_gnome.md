@@ -164,7 +164,14 @@ config the display effect:
 
 ``` shell
 WINEPREFIX=~/.deepinwine/Deepin-WeChat deepin-wine6-stable winecfg
+
+wget -c http://39.99.136.201:8088/api/public/dl/xHYZb0Z5
+
+sudo tar xzf lib32.tgz -C /opt/apps/com.qq.weixin.work.deepin/files
+// 修改run.sh   26行左右   添加 export LD_LIBRARY_PATH=/opt/apps/$DEB_PACKAGE_NAME/files/lib32
 ```
+copy from [Archlinux有没有办法安装企业微信](https://bbs.archlinuxcn.org/viewtopic.php?id=12056)
+
 
 ## install fonts
 
