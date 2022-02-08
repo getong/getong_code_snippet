@@ -125,3 +125,41 @@ gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
 ```
 
 see [How to alter Ubuntu desktop configuration using terminal](https://sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/)
+
+## weixin
+enable multilib first
+``` shell
+yay -S com.qq.weixin.deepin com.qq.weixin.work.deepin
+```
+config the display effect:
+
+``` shell
+WINEPREFIX=~/.deepinwine/Deepin-WeChat deepin-wine6-stable winecfg
+```
+
+## install fonts
+
+``` shell
+git clone https://github.com/gasharper/linux-fonts
+cd linux-fonts
+sudo sh install.sh
+```
+the code in `install.sh` :
+
+``` shell
+#!/bin/sh
+sudo mkdir /usr/share/fonts/linux_fonts
+sudo cp ./*.ttf /usr/share/fonts/linux_fonts
+sudo cp ./*.ttc /usr/share/fonts/linux_fonts
+cd /usr/share/fonts/linux_fonts
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache
+sudo chmod 644 /usr/share/fonts/linux_fonts/*
+```
+
+check the font:
+
+``` shell
+fc-list :lang=zh-cn | sort
+```
