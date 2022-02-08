@@ -52,6 +52,7 @@ vim /etc/hosts
 ::1         localhost
 127.0.0.1   archlinux.localdomain archlinux   # 这里的archlinux是主机名
 
+// grub-install --recheck /dev/<目标磁盘>
 grub-install /dev/sda
 
 vim /etc/default/grub
@@ -869,6 +870,7 @@ swapon /dev/sda1
 
 mkfs.btrfs -f /dev/sda2
 
+// grub-install --target=x86_64-efi --efi-directory=<EFI 分区挂载点> --bootloader-id=arch_grub --recheck
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=arch_grub --recheck
 
 mkdir /boot/EFI/boot
