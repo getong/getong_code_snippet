@@ -917,3 +917,27 @@ cat PKGBUILD
 proxychains wget -c https://raw.githubusercontent.com/denisandroid/uPD72020x-Firmware/master/UPDATE.mem
 proxychains wget -c https://raw.githubusercontent.com/denisandroid/uPD72020x-Firmware/master/License.rtf
 ```
+
+## enable multilib
+
+``` shell
+sudo vim /etc/pacman.conf
+```
+add the following into the file:
+
+``` shell
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+```
+
+Upgrade your system:
+
+``` shell
+sudo pacman -Syyu
+```
+Show 32-bit packages in the multilib repository:
+
+``` shell
+pacman -Sl | grep -i lib32
+```
+copy from [Arch Linux How to Enable Multilib](https://low-orbit.net/arch-linux-how-to-enable-multilib)
