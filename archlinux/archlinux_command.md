@@ -884,3 +884,36 @@ grub-mkconfig -o /boot/grub/grub.cfg
 ```
 copy from [安装archlinux 后，在grub没报错情况下，重启没有grub启动项目](https://bbs.archlinuxcn.org/viewtopic.php?id=2895)
 also see [Installation guide](https://wiki.archlinux.org/title/Installation_guide#GRUB_2)
+
+## fix fireware warning
+firmware warning
+```
+==> WARNING: Possibly missing firmware for module: aic94xx
+==> WARNING: Possibly missing firmware for module: bfa
+==> WARNING: Possibly missing firmware for module: qed
+==> WARNING: Possibly missing firmware for module: qla1280
+==> WARNING: Possibly missing firmware for module: qla2xxx
+==> WARNING: Possibly missing firmware for module: wd719x
+==> WARNING: Possibly missing firmware for module: xhci_pci
+
+```
+just run the following command:
+
+``` shell
+yay -S wd719x-firmware aic94xx-firmware upd72020x-fw linux-firmware-qlogic
+sudo mkinitcpio -p linux
+```
+see [Arch Linux 更新出现模块固件缺失的警告](https://zhuanlan.zhihu.com/p/340918736)
+see [Warning about missing “new” firmware modules](https://forum.endeavouros.com/t/warning-about-missing-new-firmware-modules/23052)
+
+If install some firmware with network error, say upd72020x-fw, you can solve by this:
+
+``` shell
+cd ~/.cache/yay/upd72020x-fw
+// see the download link
+cat PKGBUILD
+
+// for example, wget the pkg
+proxychains wget -c https://raw.githubusercontent.com/denisandroid/uPD72020x-Firmware/master/UPDATE.mem
+proxychains wget -c https://raw.githubusercontent.com/denisandroid/uPD72020x-Firmware/master/License.rtf
+```
