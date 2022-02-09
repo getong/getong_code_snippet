@@ -66,7 +66,7 @@ gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
 ## install fcitx5
 
 ``` shell
-sudo pacman -S fcitx5-configtool fcitx5 fcitx5-gtk fcitx5-pinyin-zhwiki
+sudo pacman -S fcitx5-configtool fcitx5 fcitx5-gtk fcitx5-pinyin-zhwiki fcitx5-chinese-addons
 
 sed -i 's/TriggerKey.*$/TriggerKey=CTRL_SHIFT_LCTRL CTRL_SHIFT_LSHIFT/g' ~/.config/fcitx/config
 
