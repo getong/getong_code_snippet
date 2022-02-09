@@ -246,3 +246,43 @@ Switch back to fcitx.
 ``` shell
 yay -S cinnamon-translations
 ```
+
+## install vulkan
+check the video card brand:
+
+``` shell
+lspci -vnn | grep VGA -A 12
+
+// or use this:
+sudo lshw -C display
+
+// check the video card driver:
+sudo lshw -c video | grep configuration
+
+// get driver info
+modinfo i915
+
+// get the hardware speedup
+glxinfo | grep OpenGL
+```
+copy from [Linux中如何查看显卡硬件信息](https://www.ancii.com/aqmpx33bj/)
+
+## install vulkan
+
+Intel:
+
+``` shell
+sudo pacman -S vulkan-intel vulkan-icd-loader
+```
+
+NVIDIA:
+
+``` shell
+sudo pacman -S nvidia-utils vulkan-icd-loader
+```
+
+AMD:
+``` shell
+sudo pacman -S amdvlk vulkan-icd-loader
+```
+copy from [Vulkan](https://wiki.archlinux.org/title/Vulkan)
