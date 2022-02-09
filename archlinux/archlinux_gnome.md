@@ -203,3 +203,7 @@ check the font:
 ``` shell
 fc-list :lang=zh-cn | sort
 ```
+
+## fcitx5 can not handle ctrl swapcaps
+With fcitx5 chinese input method,  ctrl and caps both act as caps.
+Switch back to fcitx.
