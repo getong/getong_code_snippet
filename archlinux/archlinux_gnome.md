@@ -63,6 +63,19 @@ yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime
 gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
 ```
 
+use with localectl:
+
+``` shell
+localectl set-x11-keymap "" "" "" ctrl:swapcaps
+```
+revert the change:
+
+``` shell
+ localectl set-x11-keymap "" "" "" ""
+```
+
+
+
 ## install fcitx
 
 ``` shell
