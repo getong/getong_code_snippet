@@ -61,17 +61,37 @@ yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime
 ## swap ctrl and caps
 ``` shell
 gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
+
+```
+revert the change:
+
+``` shell
+gsettings set org.gnome.desktop.input-sources xkb-options "[]"
 ```
 
 use with localectl:
 
 ``` shell
 localectl set-x11-keymap "" "" "" ctrl:swapcaps
+
+// or
+localectl --no-convert set-x11-keymap us pc105 "" ctrl:swapcaps
 ```
 revert the change:
 
 ``` shell
  localectl set-x11-keymap "" "" "" ""
+```
+
+check the settings:
+
+``` shell
+$ localectl status
+   System Locale: LANG=zh_CN.UTF-8
+       VC Keymap: n/a
+      X11 Layout: n/a
+     X11 Options: ctrl:swapcaps
+
 ```
 
 
