@@ -4,6 +4,12 @@
 ``` shell
 git clone https://github.com/EpicGames/UnrealEngine.git
 
+// or download the tar file from github, for example
+// https://github.com/EpicGames/UnrealEngine/archive/refs/tags/4.27.2-release.tar.gz
+// tar xzf UnrealEngine-4.27.2-release.tar.gz
+// cd UnrealEngine-4.27.2-release
+
+
 cd UnrealEngine
 ./Setup.sh
 ./GenerateProjectFiles.sh
