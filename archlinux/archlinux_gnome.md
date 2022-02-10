@@ -286,3 +286,9 @@ AMD:
 sudo pacman -S amdvlk vulkan-icd-loader
 ```
 copy from [Vulkan](https://wiki.archlinux.org/title/Vulkan)
+
+## instant message software
+yay use http_proxy and https_proxy environment variable
+``` shell
+yay -S slack-desktop zulip-desktop-bin skypeforlinux-stable-bin
+```
