@@ -18,3 +18,4 @@
 [Descriptive Statistics with NDArray](https://datacrayon.com/posts/programming/rust-notebooks/descriptive-statistics-with-ndarray/)
 [Rust 中的异步编程](https://huangjj27.github.io/async-book/)
 [Implementing OpenDataStructures in Rust](https://vmm.dev/en/rust/ods.md#How_to_Read_the_ODS_book)
+[FUTURES CONCURRENCY III](https://blog.yoshuawuyts.com/futures-concurrency-3/)
