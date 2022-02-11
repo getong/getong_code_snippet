@@ -292,3 +292,9 @@ yay use http_proxy and https_proxy environment variable
 ``` shell
 yay -S slack-desktop zulip-desktop-bin skypeforlinux-stable-bin
 ```
+
+## pdf reader
+
+``` shell
+yay -S foxitreader
+```
