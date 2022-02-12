@@ -142,13 +142,13 @@ vim /etc/pacman.conf
 --------------------------------------
 
 [archlinuxcn]
-SigLevel = Optional TrustAll
-Server = http://mirrors.163.com/archlinux-cn/$arch
+Server = https://mirrors.163.com/archlinux-cn/$arch
 ```
 
 ## install archlinuxcn-keyring
 
 ``` shell
+pacman -Syyu
 pacman -S archlinuxcn-keyring
 ```
 
