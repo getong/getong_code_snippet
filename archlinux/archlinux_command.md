@@ -23,7 +23,7 @@ mount /dev/sda3 /mnt
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
-    intel-ucode proxychains v2ray asp git nemo emacs julia erlang \
+    intel-ucode proxychains v2ray asp nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
     wqy-zenhei cmake
@@ -851,7 +851,7 @@ sudo pacman -S linux-lts-headers linux-lts linux-lts-docs
 parted /dev/nvme0n1
    mklabel gpt
    mkpart primary 2048s 512M
-   mkpart primary 512   -1
+   mkpart primary 512M   -1
    set 1 boot on
    q
 
