@@ -880,6 +880,17 @@ grub-mkconfig -o /boot/grub/grub.cfg
 copy from [安装archlinux 后，在grub没报错情况下，重启没有grub启动项目](https://bbs.archlinuxcn.org/viewtopic.php?id=2895)
 also see [Installation guide](https://wiki.archlinux.org/title/Installation_guide#GRUB_2)
 
+## normal disk partition
+
+``` shell
+parted /dev/sda
+set 1 boot off
+set 1 bios_grub on
+q
+```
+copy from [grub2-install: "this GPT partition label contains no BIOS Boot Partition"](https://superuser.com/questions/903112/grub2-install-this-gpt-partition-label-contains-no-bios-boot-partition)
+
+
 ## fix fireware warning
 firmware warning
 ```
