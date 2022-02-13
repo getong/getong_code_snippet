@@ -518,10 +518,13 @@ sudo pacman -S mpv
 ```
 copy from [VLC - process remains active after closing it](https://www.reddit.com/r/archlinux/comments/blo3zs/vlc_process_remains_active_after_closing_it/)
 
-## wireless card
+## ugrren ac1300 wireless card
 
 ``` shell
-yay -S rtl88xxau-aircrack-dkms-git
+git clone https://github.com/morrownr/8812au-20210629
+cd 8812au-20210629
+sudo ./install-driver.sh
+sudo reboot
 ```
 copy from [Package Details: rtl88xxau-aircrack-dkms-git r1174.3a6402e-1](https://aur.archlinux.org/packages/rtl88xxau-aircrack-dkms-git)
 
