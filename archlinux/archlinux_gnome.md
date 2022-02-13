@@ -159,7 +159,7 @@ gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-typ
 // lock screen after 300 seconds idle
 gsettings set org.gnome.desktop.screensaver lock-enabled true
 gsettings set org.gnome.desktop.screensaver lock-dalay 0
-gsettings set org.gnome.desktop.session idle-delay uint32 300
+gsettings set org.gnome.desktop.session idle-delay 300
 
 // List available schemas and look for ones related to the power subsystem.
 gsettings list-schemas | grep power
