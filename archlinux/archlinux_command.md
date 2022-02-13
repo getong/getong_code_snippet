@@ -955,7 +955,8 @@ copy from [Arch Linux How to Enable Multilib](https://low-orbit.net/arch-linux-h
 ## swap ctrl and caps
 
 ``` shell
-cp /usr/share/kbd/keymaps/i386/qwertz/de-latin1.map.gz /usr/local/share/kbd/keymaps
+sudo mkdir  /usr/local/share/kbd
+sudo cp /usr/share/kbd/keymaps/i386/qwertz/de-latin1.map.gz /usr/local/share/kbd/keymaps
 ```
 
 Change every occurency of Escape to Caps_Lock and every occurency of Caps_Lock to Escape in the copied file and rename it to something like de-latin1-custom.map.gz
@@ -963,7 +964,7 @@ Change every occurency of Escape to Caps_Lock and every occurency of Caps_Lock t
 set the config:
 
 ``` shell
-vim  /etc/vconsole.conf
+sudo vim  /etc/vconsole.conf
 ------------------------------------------
 KEYMAP="/usr/local/share/kbd/keymaps/de-latin1-custom.map.gz"
 ```
