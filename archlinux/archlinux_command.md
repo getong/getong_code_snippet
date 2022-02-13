@@ -1009,3 +1009,9 @@ get the keyboard map:
 dumpkeys > map
 ```
 copy from [终端模式下交换caps和ctrl键](https://cxymm.net/article/sheismylife/51069348)
+
+## docker
+
+``` shell
+sudo pacman -S docker
+```
