@@ -951,3 +951,23 @@ Show 32-bit packages in the multilib repository:
 pacman -Sl | grep -i lib32
 ```
 copy from [Arch Linux How to Enable Multilib](https://low-orbit.net/arch-linux-how-to-enable-multilib)
+
+## swap ctrl and caps
+
+``` shell
+cp /usr/share/kbd/keymaps/i386/qwertz/de-latin1.map.gz /usr/local/share/kbd/keymaps
+```
+
+Change every occurency of Escape to Caps_Lock and every occurency of Caps_Lock to Escape in the copied file and rename it to something like de-latin1-custom.map.gz
+
+set the config:
+
+``` shell
+vim  /etc/vconsole.conf
+------------------------------------------
+KEYMAP="/usr/local/share/kbd/keymaps/de-latin1-custom.map.gz"
+```
+
+reboot
+
+copy from [Step by step solution](https://unix.stackexchange.com/questions/616290/how-to-swap-escape-and-caps-lock-for-tty-and-x11)
