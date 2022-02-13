@@ -99,7 +99,7 @@ $ localectl status
 ## install fcitx
 
 ``` shell
-sudo pacman -S fcitx-configtool fcitx fcitx-gtk3
+sudo pacman -S fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin
 
 sed -i 's/TriggerKey.*$/TriggerKey=CTRL_SHIFT_LCTRL CTRL_SHIFT_LSHIFT/g' ~/.config/fcitx/config
 
