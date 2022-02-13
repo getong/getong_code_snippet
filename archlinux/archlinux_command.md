@@ -962,8 +962,8 @@ sudo cp /usr/share/kbd/keymaps/i386/qwerty/us.map.gz /usr/local/share/kbd/keymap
 Change every occurency of Escape to Caps_Lock and every occurency of Caps_Lock to Escape in the copied file and rename it to something like us.map.gz
 
 ``` shell
-keycode  58 = Caps_Lock
-keycode  97 = Control
+keycode  29 = Caps_Lock
+keycode  58 = Control
 
 ```
 
@@ -972,9 +972,40 @@ set the config:
 ``` shell
 sudo vim  /etc/vconsole.conf
 ------------------------------------------
-KEYMAP="/usr/local/share/kbd/keymaps/"
+KEYMAP="/usr/local/share/kbd/keymaps/modified.us.map.gz"
 ```
 
 reboot
 
 copy from [Step by step solution](https://unix.stackexchange.com/questions/616290/how-to-swap-escape-and-caps-lock-for-tty-and-x11)
+
+## using loadkeys swap ctrl and caps
+
+swap-caps-ctrl.map
+``` shell
+keymaps 0-255
+keycode 58 = Control #This makes Caps act as Ctrl
+keycode 29 = Caps_Lock #This makes Ctrl act as Caps
+alt_is_meta #This fixes the Alt key
+
+
+
+# Then run loadkeys on that file:
+# $ sudo loadkeys swap-caps-ctrl.map
+# To revert, run:
+# $ sudo loadkeys -d #load default keymap file
+
+```
+
+run it :
+
+``` shell
+sudo loadkeys swap-caps-ctrl.map
+```
+
+get the keyboard map:
+
+``` shell
+dumpkeys > map
+```
+copy from [终端模式下交换caps和ctrl键](https://cxymm.net/article/sheismylife/51069348)
