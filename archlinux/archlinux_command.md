@@ -366,6 +366,10 @@ sudo pacman -S proxychains vim v2ray
 
 ``` shell
 gpg --keyserver hkps://keys.openpgp.org  --recv-keys 3B94A80E50A477C7
+
+// or
+wget -c https://keys.openpgp.org/vks/v1/by-fingerprint/A2FF3A36AAA56654109064AB19802F8B0D70FC30
+pgp --import A2FF3A36AAA56654109064AB19802F8B0D70FC30
 ```
 copy from [[SOLVED] Unknown public key error while building linux kernel](https://bbs.archlinux.org/viewtopic.php?id=268750)
 
