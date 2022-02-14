@@ -202,6 +202,7 @@ sudo systemctl restart systemd-networkd
 sudo ethtool enp2s0f0 | grep Speed
 	Speed: 1000Mb/s
 ```
+copy from [Set network interface speed with systemd-networkd](https://major.io/2021/08/20/set-network-interface-speed-systemd-networkd/)
 
 ## Debugging networkd
 
