@@ -202,3 +202,54 @@ sudo systemctl restart systemd-networkd
 sudo ethtool enp2s0f0 | grep Speed
 	Speed: 1000Mb/s
 ```
+
+## Debugging networkd
+
+
+
+``` shell
+mkdir -p /etc/systemd/system/systemd-networkd.service.d/
+
+vim  /etc/systemd/system/systemd-networkd.service.d/10-debug.conf
+------------------------------------
+[Service]
+Environment=SYSTEMD_LOG_LEVEL=debug
+```
+
+And restart systemd-networkd service:
+
+``` shell
+systemctl daemon-reload
+systemctl restart systemd-networkd
+journalctl -b -u systemd-networkd
+```
+
+copy from [Network configuration with networkd](https://www.flatcar.org/docs/latest/setup/customization/network-config-with-networkd/)
+
+## Configure static routes
+Specify static routes in a systemd network unit’s [Route] section. In this example, we create a unit file, 10-static.network, and define in it a static route to the 172.16.0.0/24 subnet:
+
+``` shell
+10-static.network:
+---------------------
+[Route]
+Gateway=192.168.122.1
+Destination=172.16.0.0/24
+```
+
+
+## Configure multiple IP addresses
+
+``` shell
+[Match]
+Name=eth0
+
+[Network]
+DNS=8.8.8.8
+Address=10.0.0.101/24
+Gateway=10.0.0.1
+Address=10.0.1.101/24
+Gateway=10.0.1.1
+```
+
+copy from [Network configuration with networkd](https://www.flatcar.org/docs/latest/setup/customization/network-config-with-networkd/)
