@@ -174,3 +174,31 @@ Metric=100
 ```
 The `Metric` number is smaller, the priority is higher.
 copy from [使用 systemd 配置网络](https://getiot.tech/imx8/systemd-network-configuration.html)
+
+## Manually set the link speed
+
+``` shell
+$ sudo pacman -S ethtool
+$ sudo ethtool enp1s0 | grep Speed
+	Speed: 100Mb/s
+```
+
+set the speed of the link:
+
+``` shell
+# /etc/systemd/networkd/internet.link
+[Match]
+MACAddress=a0:36:9f:6e:52:26
+
+[Link]
+BitsPerSecond=1G
+Duplex=full
+```
+
+restart the systemd-networkd:
+
+``` shell
+sudo systemctl restart systemd-networkd
+sudo ethtool enp2s0f0 | grep Speed
+	Speed: 1000Mb/s
+```
