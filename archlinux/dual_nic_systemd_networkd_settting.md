@@ -91,3 +91,5 @@ Table=222
 Priority=200
 From=222.222.222.222
 ```
+
+copy from [Linux 上使用 systemd-networkd 服务配置策略路由](https://blog.systemctl.top/2017/2017-12-23_policy-routing-with-systemd-networkd/)
