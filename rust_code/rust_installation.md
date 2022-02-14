@@ -35,6 +35,17 @@ esac
 
 ```
 
+## abscissa
+
+``` shell
+cargo install abscissa
+
+abscissa new my_app
+
+cd my_app
+cargo build
+```
+
 ## cargo config file
 
 ``` shell
