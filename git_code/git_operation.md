@@ -411,3 +411,22 @@ git checkout the-branch-i-ve-been-looking-for
 
 ```
 copy from [git shallow clone (clone --depth) misses remote branches](https://stackoverflow.com/questions/23708231/git-shallow-clone-clone-depth-misses-remote-branches)
+
+## fix unexpected disconnect while reading sideband packet fatal
+
+``` shell
+export GIT_TRACE_PACKET=1
+export GIT_TRACE=1
+export GIT_CURL_VERBOSE=1
+```
+Then Try this command
+
+``` shell
+git config --global core.compression 0
+git clone --depth 1 <repo_URI>
+# cd to your newly created directory
+git fetch --unshallow
+git pull --all
+```
+
+copy from [unexpected disconnect while reading sideband packet fatal: the remote end hung up unexpectedly](https://exerror.com/unexpected-disconnect-while-reading-sideband-packet-fatal-the-remote-end-hung-up-unexpectedly/)
