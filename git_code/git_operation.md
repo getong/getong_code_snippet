@@ -430,3 +430,21 @@ git pull --all
 ```
 
 copy from [unexpected disconnect while reading sideband packet fatal: the remote end hung up unexpectedly](https://exerror.com/unexpected-disconnect-while-reading-sideband-packet-fatal-the-remote-end-hung-up-unexpectedly/)
+
+## for loop to get linux kernel
+
+``` shell
+git clone --depth 1 https://gitee.com/mirrors_ArchLinux/linux archlinux-linux
+cd archlinux-linux
+
+git remote update --prune
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+git remote set-branches origin '*'
+
+for i in {10..1072990..10}
+do
+    git fetch --depth=$i
+done
+
+```
+Loop to fetch 10 commits each time.
