@@ -446,5 +446,11 @@ do
     git fetch --depth=$i
 done
 
+git fetch origin --tags
+
+git reset --hard origin/master
+
+git gc
+
 ```
 Loop to fetch 10 commits each time.
