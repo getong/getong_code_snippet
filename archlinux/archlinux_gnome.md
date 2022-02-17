@@ -298,3 +298,8 @@ yay -S slack-desktop zulip-desktop-bin skypeforlinux-stable-bin
 ``` shell
 yay -S foxitreader
 ```
+## calibre
+
+``` shell
+sudo pacman -S calibre
+```
