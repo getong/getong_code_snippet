@@ -19,3 +19,5 @@
 [Rust 中的异步编程](https://huangjj27.github.io/async-book/)
 [Implementing OpenDataStructures in Rust](https://vmm.dev/en/rust/ods.md#How_to_Read_the_ODS_book)
 [FUTURES CONCURRENCY III](https://blog.yoshuawuyts.com/futures-concurrency-3/)
+[A book about Rust Data Structures and Algorithms](https://github.com/QMHTMY/RustBook)
+[A book about Rust Data Structures and Algorithms](https://gitee.com/QMHTMY/RustBook)
