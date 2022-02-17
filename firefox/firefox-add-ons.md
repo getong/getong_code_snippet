@@ -8,3 +8,4 @@
 ## Video Download helper
 
 ## chrome does have the same plugins as well
+[google translate plugin](https://chrome.google.com/webstore/detail/google-translate/aapbdbdomjkkjkaonfhkkikfgjllcleb)
