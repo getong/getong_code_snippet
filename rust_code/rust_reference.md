@@ -200,3 +200,6 @@ From &T to &U when T: Deref<Target=U>
 From &mut T to &mut U when T: DerefMut<Target=U>
 From &mut T to &U when T: Deref<Target=U> 一个可变借用（可变借用是排他的，只能有一个）可以解引用为不可变借用，满足 Rust 的借用规则；反过来不行，将一个不可变借用（不可变借用可以有多个）解引用为可变借用会破坏 Rust 的借用规则。
 ```
+
+## doc reading
+[Rust's as_ref vs as_deref](https://www.fpcomplete.com/blog/rust-asref-asderef/)
