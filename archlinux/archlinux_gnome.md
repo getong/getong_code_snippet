@@ -303,3 +303,9 @@ yay -S foxitreader
 ``` shell
 sudo pacman -S calibre
 ```
+
+## aliyunpan
+
+``` shell
+yay -S pyinstaller aliyunpan-cli-bin
+```
