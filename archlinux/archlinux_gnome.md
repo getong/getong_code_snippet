@@ -293,6 +293,25 @@ yay use http_proxy and https_proxy environment variable
 yay -S slack-desktop zulip-desktop-bin skypeforlinux-stable-bin
 ```
 
+
+## stop skype auto start
+
+
+``` shell
+cat ~/.config/autostart/skypeforlinux.desktop
+[Desktop Entry]
+Name=Skype for Linux
+Comment=Skype Internet Telephony
+Exec=/usr/bin/skypeforlinux
+Icon=skypeforlinux
+Terminal=false
+Type=Application
+StartupNotify=false
+X-GNOME-Autostart-enabled=true%
+
+mv ~/.config/autostart/skypeforlinux.desktop ~/.config/autostart/skypeforlinux.desktop.bak
+```
+
 ## pdf reader
 
 ``` shell
