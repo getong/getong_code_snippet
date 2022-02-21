@@ -328,3 +328,17 @@ sudo pacman -S calibre
 ``` shell
 yay -S pyinstaller aliyunpan-cli-bin
 ```
+
+## arc dark theme
+
+``` shell
+sudo pacman -S arc-gtk-theme
+```
+copy from [Install Arc And Arc Darker Theme](https://www.addictivetips.com/ubuntu-linux-tips/install-the-arc-and-arc-darker-theme-linux/)
+
+activate the arc theme:
+
+```
+GNOME: GNOME Tweak Tool -> Appearance -> choose “Arc” or other flavors.
+```
+copy from [Install Arc GTK Theme on Ubuntu](https://linuxhint.com/install_arc_gtk_theme_ubuntu/)
