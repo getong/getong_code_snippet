@@ -1018,3 +1018,7 @@ copy from [终端模式下交换caps和ctrl键](https://cxymm.net/article/sheism
 ``` shell
 sudo pacman -S docker
 ```
+
+## system-timer and service
+see [使用Systemd配置定时任务](https://www.jianshu.com/p/4d457985b831)
+alas see [Systemd 定时器教程](http://www.ruanyifeng.com/blog/2018/03/systemd-timer.html)
