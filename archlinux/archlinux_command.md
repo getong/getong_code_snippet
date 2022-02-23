@@ -1022,3 +1022,16 @@ sudo pacman -S docker
 ## system-timer and service
 see [使用Systemd配置定时任务](https://www.jianshu.com/p/4d457985b831)
 alas see [Systemd 定时器教程](http://www.ruanyifeng.com/blog/2018/03/systemd-timer.html)
+
+## cannot shutdown customized kernel
+
+``` shell
+cat /proc/sys/kernel/printk
+
+echo "7 4 7 4" > /proc/sys/kernel/printk
+
+awk -F: '/:/{print $1}' /proc/net/dev | xargs -i ip link set dev '{}' down
+```
+see [工作问题案例：设备关机变重启](https://blog.csdn.net/Longyu_wlz/article/details/112122328)
+It might because while shutdowning the linux, the network devices are still working.
+So set the network device down before shutdowning the computer.
