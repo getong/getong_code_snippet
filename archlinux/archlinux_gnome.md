@@ -342,3 +342,44 @@ activate the arc theme:
 GNOME: GNOME Tweak Tool -> Appearance -> choose “Arc” or other flavors.
 ```
 copy from [Install Arc GTK Theme on Ubuntu](https://linuxhint.com/install_arc_gtk_theme_ubuntu/)
+
+## switch to iwd
+see [wpa_supplicant shutdown job never ends, need force power down](https://bbs.archlinux.org/viewtopic.php?id=246942)
+>>>
+While the original issue was not solved, I marked this thread as solved:
+I switched from wpa_supplicant to iwd and the problem is gone now.
+My laptop shuts down almost immediately now and my Wifi is working very good all the time!
+
+connect to wifi device:
+``` shell
+iwctl --passphrase passphrase station device connect SSID
+// or
+iwctl --passphrase <passphrase> station <device> connect-hidden <ssid>
+```
+
+static the ip address:
+
+``` shell
+/var/lib/iwd/spaceship.psk
+[IPv4]
+ip=192.168.1.10
+netmask=255.255.255.0
+gateway=192.168.1.1
+broadcast=192.168.1.255
+dns=192.168.1.1
+```
+
+use systemd-resolved
+
+``` shell
+/etc/iwd/main.conf
+[Network]
+NameResolvingService=systemd
+
+[General]
+use_default_interface=true
+```
+
+see [Connecting to a hidden Wi-Fi network Arch Linux](https://unix.stackexchange.com/questions/664646/connecting-to-a-hidden-wi-fi-network-arch-linux)
+also see [simple wifi setup with iwd and networkd](https://insanity.industries/post/simple-wifi/)
+also see [iwd (简体中文)](https://wiki.archlinux.org/title/Iwd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
