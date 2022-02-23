@@ -369,11 +369,13 @@ static the ip address:
 ``` shell
 /var/lib/iwd/spaceship.psk
 [IPv4]
-ip=192.168.1.10
+ip=192.168.1.80
 netmask=255.255.255.0
 gateway=192.168.1.1
 broadcast=192.168.1.255
-dns=192.168.1.1
+dns=192.168.1.253
+dns=202.96.128.86
+dns=202.96.134.33
 ```
 
 use systemd-resolved
@@ -385,6 +387,9 @@ NameResolvingService=systemd
 
 [General]
 use_default_interface=true
+
+[Scan]
+DisablePeriodicScan=true
 ```
 
 see [Connecting to a hidden Wi-Fi network Arch Linux](https://unix.stackexchange.com/questions/664646/connecting-to-a-hidden-wi-fi-network-arch-linux)
