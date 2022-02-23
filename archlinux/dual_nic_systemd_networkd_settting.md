@@ -254,3 +254,5 @@ Gateway=10.0.1.1
 ```
 
 copy from [Network configuration with networkd](https://www.flatcar.org/docs/latest/setup/customization/network-config-with-networkd/)
+
+also see [使用ip link set eth0 up 命令启用网卡后，网络不通的问题的解决](https://blog.51cto.com/newpower/1349853)
