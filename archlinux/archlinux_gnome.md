@@ -352,7 +352,14 @@ My laptop shuts down almost immediately now and my Wifi is working very good all
 
 connect to wifi device:
 ``` shell
-iwctl --passphrase passphrase station device connect SSID
+sudo pacman -S iwd
+sudo systemctl enable iwd
+sudo systemctl start iwd
+
+iwctl adapter list
+ iwctl device list
+
+iwctl --passphrase passphrase station <device> connect SSID
 // or
 iwctl --passphrase <passphrase> station <device> connect-hidden <ssid>
 ```
