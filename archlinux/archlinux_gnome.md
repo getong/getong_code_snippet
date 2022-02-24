@@ -417,3 +417,9 @@ also see [iwd (简体中文)](https://wiki.archlinux.org/title/Iwd_(%E7%AE%80%E4
 also see [How to manage wireless connections using iwd on Linux](https://linuxconfig.org/how-to-manage-wireless-connections-using-iwd-on-linux)
 also see [Switching from netctl to networkd with iwd](https://www.rdeeson.com/weblog/180/switching-from-netctl-to-networkd-with-iwd)
 also see [iwd](https://wiki.archlinux.org/title/Iwd)
+
+## gthumb
+
+``` shell
+sudo pacman -S gthumb
+```
