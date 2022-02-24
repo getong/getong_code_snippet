@@ -353,11 +353,25 @@ My laptop shuts down almost immediately now and my Wifi is working very good all
 connect to wifi device:
 ``` shell
 sudo pacman -S iwd
-sudo systemctl enable iwd
+sudo systemctl enable --now iwd
 sudo systemctl start iwd
 
 iwctl adapter list
- iwctl device list
+iwctl device list
+
+// get the list of the available connections
+iwctl station wlan0 get-networks
+// To verify the connection is now active
+iwctl station wlan0 show
+
+// disconnecting from a network
+iwctl station wlan0 disconnect
+
+// Obtaining a list of the known connections
+iwctl known-networks list
+
+// To make the service forget about the “arda” network
+iwctl known-networks arda forget
 
 iwctl --passphrase passphrase station <device> connect SSID
 // or
@@ -369,24 +383,29 @@ static the ip address:
 ``` shell
 /var/lib/iwd/spaceship.psk
 [IPv4]
-ip=192.168.1.80
-netmask=255.255.255.0
-gateway=192.168.1.1
-broadcast=192.168.1.255
-dns=192.168.1.253
-dns=202.96.128.86
-dns=202.96.134.33
+Address=192.168.1.80
+Netmask=255.255.255.0
+Gateway=192.168.1.1
+Broadcast=192.168.1.255
+DNS=192.168.1.253
+
+[Settings]
+AutoConnect=true
 ```
 
 use systemd-resolved
 
 ``` shell
-/etc/iwd/main.conf
+sudo vim /etc/iwd/main.conf
+-------------------------------
 [Network]
 NameResolvingService=systemd
+EnableIPv6=true
 
 [General]
 use_default_interface=true
+EnableNetworkConfiguration=true
+route_priority_offset=100
 
 [Scan]
 DisablePeriodicScan=true
@@ -395,3 +414,6 @@ DisablePeriodicScan=true
 see [Connecting to a hidden Wi-Fi network Arch Linux](https://unix.stackexchange.com/questions/664646/connecting-to-a-hidden-wi-fi-network-arch-linux)
 also see [simple wifi setup with iwd and networkd](https://insanity.industries/post/simple-wifi/)
 also see [iwd (简体中文)](https://wiki.archlinux.org/title/Iwd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+also see [How to manage wireless connections using iwd on Linux](https://linuxconfig.org/how-to-manage-wireless-connections-using-iwd-on-linux)
+also see [Switching from netctl to networkd with iwd](https://www.rdeeson.com/weblog/180/switching-from-netctl-to-networkd-with-iwd)
+also see [iwd](https://wiki.archlinux.org/title/Iwd)
