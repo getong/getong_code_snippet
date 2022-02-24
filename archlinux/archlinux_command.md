@@ -320,6 +320,10 @@ build() {
  $ updpkgsums
  # network might be broken, use proxy
  $ proxychains makepkg -s
+
+// clean up
+$ cd ~/build/linux/src/archlinux
+$ git branch --delete --force --verbose 5.16.11-arch1-1
 ```
 
 copy from [Kernel (简体中文)/Arch Build System (简体中文)](https://wiki.archlinux.org/title/Kernel_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Arch_Build_System_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
