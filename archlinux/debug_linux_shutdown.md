@@ -9,3 +9,15 @@ This could cause a delay to the shutdown process as your system will wait for th
 journalctl -rb -1
 ```
 copy from [Investigate and Fix Long Shutdown Time in Linux](https://itsfoss.com/long-shutdown-linux/)
+
+##
+
+``` shell
+who -b
+
+journalctl --list-boots
+
+journalctl -b -1 -n
+```
+
+copy from [How to Find Linux Reboot Reason?](https://geekflare.com/check-linux-reboot-reason/)
