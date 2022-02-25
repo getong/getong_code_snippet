@@ -476,6 +476,8 @@ git fetch origin --tags
 
 git reset --hard origin/release
 
+git branch --set-upstream-to=origin/release  release
+
 git gc
 ```
 see ["Git detached head" is a weird error message to receive...](https://www.cloudbees.com/blog/git-detached-head)
