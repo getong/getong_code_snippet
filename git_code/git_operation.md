@@ -454,3 +454,28 @@ git gc
 
 ```
 Loop to fetch 10 commits each time.
+
+## detached head mode
+
+``` shell
+// get the detached head source code
+git clone --depth=1 --branch=4.26.2-release https://github.com/EpicGames/UnrealEngine
+
+cd UnrealEngine
+git branch release
+git checkout release
+
+for i in {10..244099..10}
+do
+    git fetch --depth=$i
+done
+
+git fetch -v
+
+git fetch origin --tags
+
+git reset --hard origin/release
+
+git gc
+```
+see ["Git detached head" is a weird error message to receive...](https://www.cloudbees.com/blog/git-detached-head)
