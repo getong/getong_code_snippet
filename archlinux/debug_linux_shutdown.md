@@ -21,3 +21,7 @@ journalctl -b -1 -n
 ```
 
 copy from [How to Find Linux Reboot Reason?](https://geekflare.com/check-linux-reboot-reason/)
+
+## halt
+You can do (sudo) `halt` instead of `poweroff`
+copy from [Kernel 5.9.11 Shutdown](https://bbs.archlinux.org/viewtopic.php?id=261086)
