@@ -396,7 +396,7 @@ pacman -Syy
 ## add password of root user
 passwd
 
-pacman -S net-tools openssh
+pacman -S net-tools openssh glibc
 
 systemctl start sshd
 
