@@ -26,7 +26,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     intel-ucode proxychains v2ray asp nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
-    wqy-zenhei cmake reflector iwd bc
+    wqy-zenhei cmake reflector iwd bc nano
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -149,13 +149,13 @@ Server = https://mirrors.163.com/archlinux-cn/$arch
 
 ``` shell
 pacman -Syyu
-pacman -S archlinuxcn-keyring
+pacman -S --noconfirm archlinuxcn-keyring
 ```
 
 ## install yay
 
 ``` shell
-pacman -S yay
+pacman -S  --noconfirm yay
 ```
 
 ## set grub and update grub
@@ -169,11 +169,11 @@ grub-mkconfig
 ## install fbterm
 
 ``` shell
-yay -S fbterm fbv fcitx-fbterm-git v86d
+yay -S --noconfirm fbterm fbv fcitx-fbterm-git v86d
 
 sudo gpasswd -a $USER video
 
-sudo setcap 'cap_sys_tty_config+op' /usr/bin/fbterm
+sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 
 sudo chmod u+s /usr/bin/fbterm
 
@@ -185,7 +185,7 @@ sudo chmod u+s /usr/bin/fbterm
 cd /etc/pacman.d/
 sudo mv mirrorlist  mirrorlist.bak
 echo "Server = http://mirrors.163.com/archlinux/$repo/os/$arch" | sudo tee  mirrorlist
-sudo pacman -Syu
+sudo pacman -Syyu
 ```
 
 ## vagrant box
@@ -373,7 +373,7 @@ gpg --keyserver hkps://keys.openpgp.org  --recv-keys 3B94A80E50A477C7
 
 // or
 wget -c https://keys.openpgp.org/vks/v1/by-fingerprint/A2FF3A36AAA56654109064AB19802F8B0D70FC30
-pgp --import A2FF3A36AAA56654109064AB19802F8B0D70FC30
+gpg --import A2FF3A36AAA56654109064AB19802F8B0D70FC30
 ```
 copy from [[SOLVED] Unknown public key error while building linux kernel](https://bbs.archlinux.org/viewtopic.php?id=268750)
 
@@ -429,6 +429,8 @@ sudo pacman -Sy yay
 # and run as USER:
 yay -S nvidia-390xx-dkms
 yay -S nvidia-340xx-dkms
+
+sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
 ```
 copy from [Unable to find `nvidia-390xx` anymore](https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/)
 also see [Unsupported_drivers](https://wiki.archlinux.org/title/NVIDIA#Unsupported_drivers)
@@ -447,9 +449,8 @@ pacman -S virtualbox virtualbox-host-dkms virtualbox-guest-iso \
 
 sudo gpasswd -a $USER vboxusers
 
-sudo systemctl enable bvboxweb.service
+sudo systemctl enable --now vboxweb.service
 
-sudo systemctl start bvboxweb.service
 
 
 sudo vboxreload
@@ -463,13 +464,12 @@ copy from [Arch Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝](http
 
 ``` shell
 sudo pacman -S wqy-zenhei
-sudo systemctl stop packagekit.service
 ```
 
 ## texlive
 
 ``` shell
-sudo pacmn -S texlive-core texlive-latexextra
+sudo pacman -S texlive-core texlive-latexextra
 ```
 
 ## install nfs-utils
