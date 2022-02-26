@@ -962,7 +962,7 @@ copy from [Arch Linux How to Enable Multilib](https://low-orbit.net/arch-linux-h
 ## swap ctrl and caps
 
 ``` shell
-sudo mkdir  /usr/local/share/kbd/keymaps
+sudo mkdir -p /usr/local/share/kbd/keymaps
 sudo cp /usr/share/kbd/keymaps/i386/qwerty/us.map.gz /usr/local/share/kbd/keymaps/modified.us.map.gz
 ```
 
