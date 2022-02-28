@@ -26,7 +26,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     intel-ucode proxychains v2ray asp nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
-    wqy-zenhei cmake reflector iwd bc nano zsh trash-cli vlc
+    wqy-zenhei cmake reflector iwd bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
