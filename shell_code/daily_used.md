@@ -752,3 +752,10 @@ do
 sudo ln -s /usr/local/otp-22.3.4.24/bin/$i /usr/local/bin
 done
 ```
+
+## VBoxManage usage
+
+``` shell
+alias start_linux='VBoxManage startvm linux-host-name --type gui'
+alias stop_linux='VBoxManage controlvm linux-host-name savestate'
+```
