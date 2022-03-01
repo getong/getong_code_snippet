@@ -347,6 +347,10 @@ also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/ar
  ------------------
  CONFIG_SATA_PMP=n
 
+
+ // checkout a tag like 5.16.11-arch1
+|$ git checkout tags/v5.16.11-arch1 -b 5.16.11-arch1
+
  $ updpkgsums
  $ makepkg --holdver
  $ sudo pacman -U <kernel-headers_package>
@@ -372,8 +376,9 @@ sudo pacman -S proxychains vim v2ray
 gpg --keyserver hkps://keys.openpgp.org  --recv-keys 3B94A80E50A477C7
 
 // or
-wget -c https://keys.openpgp.org/vks/v1/by-fingerprint/A2FF3A36AAA56654109064AB19802F8B0D70FC30
+wget -c https://keys.openpgp.org/vks/v1/by-fingerprint/A2FF3A36AAA56654109064AB19802F8B0D70FC30 https://keys.openpgp.org/vks/v1/by-fingerprint/C7E7849466FE2358343588377258734B41C31549
 gpg --import A2FF3A36AAA56654109064AB19802F8B0D70FC30
+gpg --import C7E7849466FE2358343588377258734B41C31549
 ```
 copy from [[SOLVED] Unknown public key error while building linux kernel](https://bbs.archlinux.org/viewtopic.php?id=268750)
 
