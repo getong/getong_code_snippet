@@ -29,7 +29,7 @@ copy from [gdm takes a very long time to load](https://bbs.archlinux.org/viewtop
 ## gstreamer0.10-plugins
 
 ``` shell
-sudo pacman -S a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 xvidcore gstreamer0.10-plugins
+sudo pacman -S a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 xvidcore gstreamer0.10-base-plugins
 ```
 copy from [7 Essential Things To Do After Installing Arch Linux](https://itsfoss.com/things-to-do-after-installing-arch-linux/)
 
@@ -423,3 +423,11 @@ also see [iwd](https://wiki.archlinux.org/title/Iwd)
 ``` shell
 sudo pacman -S gthumb
 ```
+
+## bluetooth
+
+``` shell
+sudo pacman -S bluez bluez-utils
+sudo systemctl enable --now bluetooth.service
+```
+copy from [bluetooth](https://wiki.archlinux.org/title/bluetooth)
