@@ -1088,3 +1088,16 @@ $ journalctl --user -u dbus
 # journalctl --file /var/log/journal/*/system.journal -f
 ```
 copy from [Systemd](https://wiki.archlinux.org/title/Systemd/Journal#Filtering_output)
+
+
+## update system gpg
+
+``` shell
+sudo rm -fr /etc/pacman.d/gnupg
+sudo pacman-key --init
+sudo pacman-key --populate archlinux
+sudo pacman -S archlinux-keyring
+sudo pacman-key --refresh-keys
+sudo pacman -Syyu
+```
+copy from [upgrade FAILS for one missing key](https://archived.forum.manjaro.org/t/upgrade-fails-for-one-missing-key/154988)
