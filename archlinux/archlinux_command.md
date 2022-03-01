@@ -1115,3 +1115,20 @@ sudo timeshift --snapshot-device /dev/sdb4
 sudo timeshift --restore --snapshot '2019-07-16_16-35-42' --skip-grub
 ```
 copy from [Archlinux 优化之一](https://blog.tiantian.cool/arch-1/)
+
+## makepkg optimization
+
+``` shell
+vim ~/.makepkg.conf
+# -------------------------------------------
+CFLAGS="-march=native -O2 -pipe -fno-plt"
+CXXFLAGS="-march=native -O2 -pipe -fno-plt"
+
+MAKEFLAGS="-j$(nproc)"
+
+BUILDENV=(!distcc color ccache !check !sign)
+BUILDDIR=/tmp/makepkg
+
+COMPRESSXZ=(xz -c -z - --threads=0)
+```
+copy from [Archlinux 优化之一](https://blog.tiantian.cool/arch-1/)
