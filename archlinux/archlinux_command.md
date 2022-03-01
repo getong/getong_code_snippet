@@ -349,7 +349,10 @@ also see [使用ABS编译ArchLinux内核](https://cloud.tencent.com/developer/ar
 
 
  // checkout a tag like 5.16.11-arch1
-|$ git checkout tags/v5.16.11-arch1 -b 5.16.11-arch1
+ $ git branch --delete --force --verbose 5.16.11-arch1
+ $ git checkout tags/v5.16.11-arch1 -b 5.16.11-arch1
+
+ $ rm -rf pkg src  ## there might be old building directory
 
  $ updpkgsums
  $ makepkg --holdver
