@@ -1104,3 +1104,14 @@ sudo pacman-key --refresh-keys
 sudo pacman -Syyu
 ```
 copy from [upgrade FAILS for one missing key](https://archived.forum.manjaro.org/t/upgrade-fails-for-one-missing-key/154988)
+
+## timeshift
+
+``` shell
+sudo pacman -S timeshift
+
+sudo timeshift --list
+sudo timeshift --snapshot-device /dev/sdb4
+sudo timeshift --restore --snapshot '2019-07-16_16-35-42' --skip-grub
+```
+copy from [Archlinux 优化之一](https://blog.tiantian.cool/arch-1/)
