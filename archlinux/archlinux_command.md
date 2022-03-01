@@ -1044,3 +1044,47 @@ awk -F: '/:/{print $1}' /proc/net/dev | xargs -i ip link set dev '{}' down
 see [工作问题案例：设备关机变重启](https://blog.csdn.net/Longyu_wlz/article/details/112122328)
 It might because while shutdowning the linux, the network devices are still working.
 So set the network device down before shutdowning the computer.
+
+## Systemd Filtering output
+
+``` shell
+// Show all messages from this boot:
+# journalctl -b
+
+// Include explanations of log messages from the message catalog where available
+# journalctl -x
+
+// Show all messages from date (and optional time)
+# journalctl --since="2012-10-30 18:17:16"
+
+// Show all messages since 20 minutes ago
+# journalctl --since "20 min ago"
+
+// Follow new messages
+# journalctl -f
+
+// Show all messages by a specific executable:
+# journalctl /usr/lib/systemd/systemd
+
+// Show all messages by a specific process
+# journalctl _PID=1
+
+// Show all messages by a specific unit
+# journalctl -u man-db.service
+
+// Show all messages from user services by a specific unit
+$ journalctl --user -u dbus
+
+// Show kernel ring buffer
+# journalctl -k
+
+// Show only error, critical and alert priority messages
+# journalctl -p err..alert
+
+// Show auth.log equivalent by filtering on syslog facility
+# journalctl SYSLOG_FACILITY=10
+
+// It can be sped up significantly by using --file option to force journalctl to look only into most recent journal
+# journalctl --file /var/log/journal/*/system.journal -f
+```
+copy from [Systemd](https://wiki.archlinux.org/title/Systemd/Journal#Filtering_output)
