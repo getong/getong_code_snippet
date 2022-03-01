@@ -1113,6 +1113,17 @@ sudo pacman -S timeshift
 sudo timeshift --list
 sudo timeshift --snapshot-device /dev/sdb4
 sudo timeshift --restore --snapshot '2019-07-16_16-35-42' --skip-grub
+
+// --tags D stands for Daily Backup
+// --tags W stands for Weekly Backup
+// --tags M stands for Monthly Backup
+// --tags O stands for On-demand Backup
+sudo timeshift --create --comments "A new backup" --tags D
+
+sudo timeshift --restore
+
+// more usage on timeshift
+timeshift --help
 ```
 copy from [Archlinux 优化之一](https://blog.tiantian.cool/arch-1/)
 
