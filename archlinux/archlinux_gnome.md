@@ -427,7 +427,19 @@ sudo pacman -S gthumb
 ## bluetooth
 
 ``` shell
-sudo pacman -S bluez bluez-utils
+sudo pacman -S bluez bluez-utils bluez-tools
 sudo systemctl enable --now bluetooth.service
+
+bluetoothctl
+> help
+> power on
+> devices
+> scan on
+> pair $MAC
+> connect $MAC
+
+vim /etc/bluetooth/main.conf
+AutoEnable=true
 ```
+
 copy from [bluetooth](https://wiki.archlinux.org/title/bluetooth)
