@@ -1143,3 +1143,13 @@ BUILDDIR=/tmp/makepkg
 COMPRESSXZ=(xz -c -z - --threads=0)
 ```
 copy from [Archlinux 优化之一](https://blog.tiantian.cool/arch-1/)
+
+## podman
+
+``` shell
+sudo pacman -S podman
+echo "$USER:110000:65536" | sudo tee -a  /etc/subuid
+echo "$USER:110000:65536" | sudo tee -a  /etc/subgid
+podman system migrate
+```
+podman usage is just the same with docker.
