@@ -459,7 +459,7 @@ sudo gpasswd -a $USER vboxusers
 
 sudo systemctl enable --now vboxweb.service
 
-
+echo -e "vboxdrv\nvboxnetflt\nvboxnetadp\nvboxpci" | sudo tee -a /etc/modules-load.d/virtualbox.conf
 
 sudo vboxreload
 
@@ -1156,4 +1156,10 @@ docker is no more needed.
 
 ``` shell
 sudo pacman -S libvoikko
+```
+
+## genymotion -- android emulator
+
+``` shell
+sudo pacman -S genymotion
 ```
