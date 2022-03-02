@@ -1169,3 +1169,11 @@ sudo pacman -S genymotion
 ``` shell
 yay -S xdroid-bin
 ```
+
+## libpam-google-authenticator
+
+``` shell
+sudo pacman -S libpam-google-authenticator
+```
+
+copy from [为Linux系统开启多因素认证](http://blog.lujun9972.win/blog/2020/08/15/%E4%B8%BAlinux%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%90%AF%E5%A4%9A%E5%9B%A0%E7%B4%A0%E8%AE%A4%E8%AF%81/index.html)
