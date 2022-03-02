@@ -1156,3 +1156,9 @@ mkdir -p $HOME/.config/containers/
 echo -e "[registries.search]\nregistries = ['docker.io']" | tee $HOME/.config/containers/registries.conf
 ```
 podman usage is just the same with docker.
+
+## libvoikko
+
+``` shell
+sudo pacman -S libvoikko
+```
