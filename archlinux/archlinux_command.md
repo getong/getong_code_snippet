@@ -1163,3 +1163,9 @@ sudo pacman -S libvoikko
 ``` shell
 sudo pacman -S genymotion
 ```
+
+## xdroid-bin -- android emulator
+
+``` shell
+yay -S xdroid-bin
+```
