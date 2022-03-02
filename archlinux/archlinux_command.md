@@ -1151,5 +1151,8 @@ sudo pacman -S podman
 echo "$USER:110000:65536" | sudo tee -a  /etc/subuid
 echo "$USER:110000:65536" | sudo tee -a  /etc/subgid
 podman system migrate
+
+mkdir -p $HOME/.config/containers/
+echo -e "[registries.search]\nregistries = ['docker.io']" | tee $HOME/.config/containers/registries.conf
 ```
 podman usage is just the same with docker.
