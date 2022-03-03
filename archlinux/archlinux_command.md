@@ -661,17 +661,18 @@ It won’t impact your boot and you won’t have manually mount them later.
 copy from [Dependency failed for File System Check External Drives](https://forum.endeavouros.com/t/dependency-failed-for-file-system-check-external-drives/16249)
 
 ## grub acpi
-Do not use `acpi=off`
-use
+``` shell
+GRUB_CMDLINE_LINUX="noapic acpi=off i8042.nomux=1 i8042.reset"
 
-``` shell
-nolapic
+// or
+GRUB_CMDLINE_LINUX="noapic acpi=off i8042.nomux=1"
+
+// or
+GRUB_CMDLINE_LINUX="noapic acpi=off i8042.reset i8042.nomux i8042.nopnp i8042.noloop"
 ```
-or rather:
-``` shell
- noapic pci=assign-busses apicmaintimer idle=poll reboot=cold,hard
-```
-copy from [Keyboard an mouse not working after fresh install](https://bbs.archlinux.org/viewtopic.php?id=194084)
+see [What does the 'i8042.nomux=1' kernel option do during booting of Ubuntu?](https://unix.stackexchange.com/questions/28736/what-does-the-i8042-nomux-1-kernel-option-do-during-booting-of-ubuntu)
+also see [Keyboard issue on Asus UM425UAZ](https://forums.linuxmint.com/viewtopic.php?t=356420)
+also see [Can't pass the acpi=off problem](https://askubuntu.com/questions/929904/cant-pass-the-acpi-off-problem)
 
 ## ntp
 
