@@ -430,6 +430,9 @@ sudo pacman -S gthumb
 sudo pacman -S bluez bluez-utils bluez-tools
 sudo systemctl enable --now bluetooth.service
 
+rfkill block bluetooth
+rfkill unblock bluetooth
+
 bluetoothctl
 > help
 > power on
