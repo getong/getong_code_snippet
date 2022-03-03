@@ -1217,3 +1217,12 @@ libata.force=norst
 ```
 
 copy from [CONFIG_SATA_PMP=n, HW bug, Live Arch Debian Mint does not work.](https://www.linuxquestions.org/questions/linux-newbie-8/config_sata_pmp%3Dn-hw-bug-live-arch-debian-mint-does-not-work-4175549085/)
+
+## GDM ignores Wayland and uses X.Org by default
+
+``` shell
+/etc/mkinitcpio.conf
+MODULES=(nvidia)
+```
+copy from [GDM ignores Wayland and uses X.Org by default](https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default)
+also see [Kernel mode setting](https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start)
