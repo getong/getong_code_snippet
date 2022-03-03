@@ -178,6 +178,35 @@ sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 sudo chmod u+s /usr/bin/fbterm
 
 ```
+fbterm usage:
+
+``` shell
+       keyboard:
+         CTRL_ALT_E:    exit from FbTerm
+         CTRL_ALT_C:    create a new window
+         CTRL_ALT_D:    destroy current window
+         CTRL_ALT_1:    switch to window 1
+         CTRL_ALT_2:    switch to window 2
+         CTRL_ALT_3:    switch to window 3
+         CTRL_ALT_4:    switch to window 4
+         CTRL_ALT_5:    switch to window 5
+         CTRL_ALT_6:    switch to window 6
+         CTRL_ALT_7:    switch to window 7
+         CTRL_ALT_8:    switch to window 8
+         CTRL_ALT_9:    switch to window 9
+         CTRL_ALT_0:    switch to window 10
+         SHIFT_LEFT:    switch to previous window
+         SHIFT_RIGHT:   switch to next window
+         SHIFT_PAGEUP:    history scroll up
+         SHIFT_PAGEDOWN:  history scroll down
+         CTRL_ALT_F1:                 switch to encoding of current locale
+         CTRL_ALT_F2 to CTRL_ALT_F6:  switch to additional encodings
+         CTRL_SPACE:    toggle input method
+         CTRL_ALT_K:    kill input method server
+```
+copy from [fbterm](http://manpages.ubuntu.com/manpages/bionic/man1/fbterm.1.html)
+
+
 
 ## set the mirror and update
 
@@ -662,13 +691,14 @@ copy from [Dependency failed for File System Check External Drives](https://foru
 
 ## grub acpi
 ``` shell
-GRUB_CMDLINE_LINUX="noapic acpi=off i8042.nomux=1 i8042.reset"
+GRUB_CMDLINE_LINUX="noapic acpi=off"
+GRUB_CMDLINE_LINUX_DEFAULT="i8042.nomux=1 i8042.reset"
 
 // or
-GRUB_CMDLINE_LINUX="noapic acpi=off i8042.nomux=1"
+GRUB_CMDLINE_LINUX_DEFAULT="i8042.nomux=1"
 
 // or
-GRUB_CMDLINE_LINUX="noapic acpi=off i8042.reset i8042.nomux i8042.nopnp i8042.noloop"
+GRUB_CMDLINE_LINUX_DEFAULT="i8042.reset i8042.nomux i8042.nopnp i8042.noloop"
 ```
 see [What does the 'i8042.nomux=1' kernel option do during booting of Ubuntu?](https://unix.stackexchange.com/questions/28736/what-does-the-i8042-nomux-1-kernel-option-do-during-booting-of-ubuntu)
 also see [Keyboard issue on Asus UM425UAZ](https://forums.linuxmint.com/viewtopic.php?t=356420)
