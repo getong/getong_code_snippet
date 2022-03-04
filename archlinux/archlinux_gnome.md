@@ -109,11 +109,11 @@ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMMod
 or add the adove into `/etc/environment` file:
 
 ``` shell
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-export INPUT_METHOD="fcitx"
-export QT4_IM_MODULE="fcitx"
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS="@im=fcitx"
+INPUT_METHOD="fcitx"
+QT4_IM_MODULE="fcitx"
 ```
 see [ArchLinux下fcitx ctrl+space无法调出输入法](https://its201.com/article/r8l8q8/73431256)
 
