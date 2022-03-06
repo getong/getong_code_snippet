@@ -1226,3 +1226,6 @@ MODULES=(nvidia)
 ```
 copy from [GDM ignores Wayland and uses X.Org by default](https://wiki.archlinux.org/title/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default)
 also see [Kernel mode setting](https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start)
+
+## sysrq
+see [linux下的SysRq键](http://blog.lujun9972.win/blog/2018/08/22/linux%E4%B8%8B%E7%9A%84sysrq%E9%94%AE/index.html)
