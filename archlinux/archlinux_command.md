@@ -1229,3 +1229,11 @@ also see [Kernel mode setting](https://wiki.archlinux.org/title/Kernel_mode_sett
 
 ## sysrq
 see [linux下的SysRq键](http://blog.lujun9972.win/blog/2018/08/22/linux%E4%B8%8B%E7%9A%84sysrq%E9%94%AE/index.html)
+
+## get syslog
+
+``` shell
+dmesg --level=alert,crit,err
+journalctl | grep -i "error\|warn\|fail\|acpi"
+journalctl -b 1
+```
