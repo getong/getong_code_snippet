@@ -69,3 +69,18 @@ but it does not work, commands below works:
 CMD ["sh", "-c", "/etc/init.d/nullmailer start ; /usr/sbin/php5-fpm"]
 ```
 copy from [Multiple commands in Docker CMD directive](https://serverfault.com/questions/685697/multiple-commands-in-docker-cmd-directive)
+
+## copy directory
+
+``` dockerfile
+ADD go /usr/local/
+```
+will copy the contents of your local go directory in the /usr/local/ directory of your docker image.
+
+To copy the go directory itself in /usr/local/ use:
+``` dockerfile
+ADD go /usr/local/go
+// or
+COPY go /usr/local/go
+```
+copy from [Copy directory to another directory using ADD command](https://stackoverflow.com/questions/26504846/copy-directory-to-another-directory-using-add-command)
