@@ -1237,3 +1237,10 @@ dmesg --level=alert,crit,err
 journalctl | grep -i "error\|warn\|fail\|acpi"
 journalctl -b 1
 ```
+
+## perl-rename
+
+``` shell
+sudo pacman -S perl-file-rename
+echo 'alias rename=perl-rename' | tee -a ~/.zshrc
+```
