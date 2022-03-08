@@ -453,3 +453,9 @@ copy from [bluetooth](https://wiki.archlinux.org/title/bluetooth)
 sudo pacman -S netease-cloud-music moc
 yay -S qqmusic-bin
 ```
+
+## baidunetdisk-electron
+
+``` shell
+yay -S baidunetdisk-electron
+```
