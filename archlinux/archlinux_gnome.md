@@ -194,7 +194,7 @@ see [How to alter Ubuntu desktop configuration using terminal](https://sleepless
 ## weixin
 enable multilib first
 ``` shell
-yay -S com.qq.weixin.deepin com.qq.weixin.work.deepin com.qq.im.deepin
+yay -S deepin-wine-wechat com.qq.weixin.work.deepin deepin-wine-qq
 ```
 config the display effect:
 
