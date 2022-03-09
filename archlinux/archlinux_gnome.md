@@ -211,8 +211,9 @@ copy from [Archlinux有没有办法安装企业微信](https://bbs.archlinuxcn.o
 
 
 ## install fonts
-
+install ttf-dejavu and ttf-droid
 ``` shell
+sudo pacman -S ttf-dejavu ttf-droid
 git clone https://github.com/gasharper/linux-fonts
 cd linux-fonts
 sudo sh install.sh
