@@ -759,3 +759,9 @@ done
 alias start_linux='VBoxManage startvm linux-host-name --type gui'
 alias stop_linux='VBoxManage controlvm linux-host-name savestate'
 ```
+
+## sed change a whole line
+
+``` shell
+ sed '/^match_string/c new_string a.txt
+```
