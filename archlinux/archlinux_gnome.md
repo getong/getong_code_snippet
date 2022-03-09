@@ -460,3 +460,10 @@ yay -S qqmusic-bin
 ``` shell
 yay -S baidunetdisk-electron
 ```
+
+## disable sound
+
+``` shell
+sudo -u gdm dbus-launch gsettings set org.gnome.desktop.sound event-sounds 'false'
+```
+copy from [GDM](https://wiki.archlinux.org/title/GDM)
