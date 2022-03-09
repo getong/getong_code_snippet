@@ -1248,3 +1248,9 @@ journalctl -b 1
 sudo pacman -S perl-file-rename
 echo 'alias rename=perl-rename' | tee -a ~/.zshrc
 ```
+
+## telnet
+
+``` shell
+pacman -S inetutils xinetd
+```
