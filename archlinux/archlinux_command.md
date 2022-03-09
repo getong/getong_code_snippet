@@ -176,7 +176,7 @@ sudo gpasswd -a $USER video
 sudo setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 
 sudo chmod u+s /usr/bin/fbterm
-
+sudo pacman -S fbgrab
 ```
 fbterm usage:
 
