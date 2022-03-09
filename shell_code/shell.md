@@ -18,9 +18,9 @@ if [[ $(tty) == \/dev\/tty[1-6]* ]]; then
     # eval `dbus-launch --auto-syntax`
     fcitx > /dev/null 2>&1
     if [ -z `ps aux | grep -i tmux | grep -v grep` ]; then
-        fbterm -i fcitx-fbterm -- tmux new-session -s "getong"
+        fbterm -s 40 -i fcitx-fbterm -- tmux new-session -s "getong"
     else
-        fbterm -i fcitx-fbterm -- tmux attach
+        fbterm -s 40 -i fcitx-fbterm -- tmux attach
     fi
 elif which tmux 2>&1 >/dev/null; then
     test -z "$TMUX" && (tmux attach || tmux_init)

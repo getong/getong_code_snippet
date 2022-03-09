@@ -206,7 +206,11 @@ fbterm usage:
 ```
 copy from [fbterm](http://manpages.ubuntu.com/manpages/bionic/man1/fbterm.1.html)
 
+fbterm start with font size:
 
+``` shell
+fbterm -s 40
+```
 
 ## set the mirror and update
 
