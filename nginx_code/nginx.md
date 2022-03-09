@@ -37,3 +37,6 @@ sudo systemctl resetart nginx
 ```
 
 copy from [How to Force Download File in NGINX](https://fedingo.com/how-to-force-download-file-in-nginx/)
+
+## nginx unit
+see [Bottle](https://unit.nginx.org/howto/bottle/)
