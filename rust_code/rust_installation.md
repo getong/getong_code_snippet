@@ -16,6 +16,7 @@ $ rustup component add rls-preview rust-analysis rust-src
 $ rustup toolchain install nightly
 $ rustup component add rustc-dev --toolchain=nightly
 $ cargo +nightly install racer
+$ cargo install tokio-console
 ```
 
 The `cargo/env` file is just like this:
