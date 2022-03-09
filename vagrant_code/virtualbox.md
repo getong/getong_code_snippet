@@ -1,4 +1,4 @@
-# virtualbox
+># virtualbox
 
 ## Fixing your virtualbox shared folder symlink error
 windows install virtualbox, and linux guest host has this problem.
@@ -57,3 +57,8 @@ $ VBoxManage controlvm XP savestate # 保存当前虚拟机的运行状态
 $ VBoxManage controlvm XP reset # a cold reboot of the virtual machine
 ```
 copy from [使用命令行启动 VirtualBox 虚拟机](https://kodango.com/use-cli-to-start-vm)
+
+## fix install driver error code 2
+Install 6.1.26 iso.
+It can be download from https://download.virtualbox.org/virtualbox/6.1.26/VBoxGuestAdditions_6.1.26.iso .
+copy from [Error al instalar las Guest Additions en Virtualbox : Exit code 2](https://linuxmanr4.com/2022/02/17/error-al-instalar-las-guest-additions-en-virtualbox-exit-code-2/)
