@@ -12,6 +12,7 @@
 [Roguelike Tutorial - In Rust source](https://github.com/amethyst/rustrogueliketutorial)
 [global-data-in-rust](https://github.com/paulkernfeld/global-data-in-rust)
 [tokio-internals](https://github.com/tony612/tokio-internals)
+[理解tokio核心](https://rust-book.junmajinlong.com/ch100/01_understand_tokio_runtime.html)
 [The Little Book of Rust Macros](https://github.com/veykril/tlborm)
 [Everything about async](https://fasterthanli.me/tags/async)
 [Guide to develop secure applications with Rust](https://github.com/ANSSI-FR/rust-guide)
