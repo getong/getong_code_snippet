@@ -217,7 +217,7 @@ fbterm -s 40
 ``` shell
 cd /etc/pacman.d/
 sudo mv mirrorlist  mirrorlist.bak
-echo "Server = http://mirrors.163.com/archlinux/$repo/os/$arch" | sudo tee  mirrorlist
+echo 'Server = http://mirrors.163.com/archlinux/$repo/os/$arch' | sudo tee  mirrorlist
 sudo pacman -Syyu
 ```
 
