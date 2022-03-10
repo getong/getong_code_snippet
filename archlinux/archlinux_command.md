@@ -1254,3 +1254,10 @@ echo 'alias rename=perl-rename' | tee -a ~/.zshrc
 ``` shell
 pacman -S inetutils xinetd
 ```
+
+## tigervnc
+
+``` shell
+sudo pacman -S tigervnc
+```
+copy from [TigerVNC](https://wiki.archlinux.org/title/TigerVNC)
