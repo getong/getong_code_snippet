@@ -504,7 +504,7 @@ copy from [Arch Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝](http
 ## chinese font
 
 ``` shell
-sudo pacman -S wqy-zenhei
+sudo pacman -S wqy-zenhei adobe-source-han-serif-cn-fonts
 ```
 
 ## texlive
