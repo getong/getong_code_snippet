@@ -1258,6 +1258,21 @@ pacman -S inetutils xinetd
 ## tigervnc
 
 ``` shell
-sudo pacman -S tigervnc
+$ sudo pacman -S tigervnc
+
+$ sudo vim /etc/tigervnc/vncserver.users
+------------------
+:1={USER_NAME}  ## replace your user name here
+
+$ vncpasswd
+
+$ cat ~/.vnc/config
+session=gnome
+geometry=1920x1080
+localhost
+alwaysshared
+
+$ sudo systemctl start vncserver@:1.service
+$ sudo systemctl enable vncserver@:1.service
 ```
 copy from [TigerVNC](https://wiki.archlinux.org/title/TigerVNC)
