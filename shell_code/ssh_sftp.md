@@ -80,3 +80,37 @@ ClientAliveCountMax 720
 # and then restart sshd
 systemctl restart sshd
 ```
+
+## ssh Forwarding other ports
+
+Local forwarding is accomplished by means of the -L switch and it is accompanying forwarding specification in the form of <tunnel port>:<destination address>:<destination port>.
+
+``` shell
+ssh -L 1000:mail.google.com:25 192.168.0.100
+```
+will use SSH to login to and open a shell on 192.168.0.100, and will also create a tunnel from the local machine's TCP port 1000 to mail.google.com on port 25.
+Once established, connections to localhost:1000 will connect to the Gmail SMTP port. To Google,
+it will appear that any such connection (though not necessarily the data conveyed over the connection) originated from 192.168.0.100,
+and such data will be secure between the local machine and 192.168.0.100, but not between 192.168.0.100 and Google, unless other measures are taken.
+
+copy from [Forwarding_other_ports](https://wiki.archlinux.org/title/OpenSSH#Forwarding_other_ports)
+also see [转发其他端口](https://wiki.archlinux.org/title/OpenSSH_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+
+
+the `~/.ssh/config` :
+
+``` shell
+Host example
+    HostName ip_address
+    User host_name
+    LocalForward 7474 127.0.0.1:7474
+    LocalForward 7777 127.0.0.1:7777
+```
+then run the command:
+
+``` shell
+ssh example
+```
+copy from [SSH 配置端口转发文件~/.ssh/config](https://www.codeleading.com/article/61621764082/)
+
+also see [彻底搞懂SSH端口转发命令](https://zhuanlan.zhihu.com/p/148825449)
