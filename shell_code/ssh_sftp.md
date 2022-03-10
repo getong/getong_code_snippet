@@ -114,3 +114,36 @@ ssh example
 copy from [SSH 配置端口转发文件~/.ssh/config](https://www.codeleading.com/article/61621764082/)
 
 also see [彻底搞懂SSH端口转发命令](https://zhuanlan.zhihu.com/p/148825449)
+
+## remote ssh port forwarding
+
+``` shell
+sudo vim /etc/ssh/sshd_config
+-----------------------------------
+GatewayPorts yes
+
+sudo systemctl restart sshd
+```
+
+Example One:
+
+``` shell
+// A host:
+ssh -R 22122:10.0.2.16:22 laptop_user@192.168.1.233
+
+// B host:
+sftp -P 22122 virtual_user@localhost
+```
+copy from [彻底搞懂SSH端口转发命令](https://zhuanlan.zhihu.com/p/148825449)
+
+Example Two:
+
+``` shell
+// host3
+ssh -R 2121:host2:21 host1
+
+// host1
+ftp localhost:2121
+```
+让host1监听它自己的2121端口，然后将所有数据经由host3，转发到host2的21端口。
+copy from [SSH原理与运用（二）：远程操作与端口转发](https://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html)
