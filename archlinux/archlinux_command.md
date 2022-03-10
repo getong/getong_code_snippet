@@ -1276,3 +1276,4 @@ $ sudo systemctl start vncserver@:1.service
 $ sudo systemctl enable vncserver@:1.service
 ```
 copy from [TigerVNC](https://wiki.archlinux.org/title/TigerVNC)
+also see [archlinux安装配置vnc+openbox](https://cxybb.com/article/lxyoucan/116780297)
