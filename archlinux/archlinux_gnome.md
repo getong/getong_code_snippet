@@ -467,3 +467,9 @@ yay -S baidunetdisk-electron
 sudo -u gdm dbus-launch gsettings set org.gnome.desktop.sound event-sounds 'false'
 ```
 copy from [GDM](https://wiki.archlinux.org/title/GDM)
+
+## authy
+
+``` shell
+sudo pacman -S authy
+```
