@@ -191,6 +191,26 @@ gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
 
 see [How to alter Ubuntu desktop configuration using terminal](https://sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/)
 
+also set by command:
+
+``` shell
+sudo -u gdm dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+```
+also
+``` shell
+You can disable (or configure) auto-suspend system-wide by creating a file /etc/dconf/db/local.d/00-autosuspend with this or similar contents:
+
+[org/gnome/settings-daemon/plugins/power]
+# Do not autosuspend
+sleep-inactive-ac-type='nothing'
+sleep-inactive-battery-type='nothing'
+
+and running:
+
+sudo dconf update
+```
+copy from [Auto-suspending despite of settings to the contrary after update](https://bbs.archlinux.org/viewtopic.php?id=236180)
+
 ## weixin
 enable multilib first
 ``` shell
