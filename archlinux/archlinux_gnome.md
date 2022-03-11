@@ -211,6 +211,13 @@ sudo dconf update
 ```
 copy from [Auto-suspending despite of settings to the contrary after update](https://bbs.archlinux.org/viewtopic.php?id=236180)
 
+or:
+
+``` shell
+$ IFS=$'\n'; for x in $(sudo -u YOUR_USER gsettings list-recursively org.gnome.settings-daemon.plugins.power); do eval "sudo -u gdm dbus-launch gsettings set $x"; done; unset IFS
+```
+copy from [Computer suspends when not logged in](https://superuser.com/questions/1309219/computer-suspends-when-not-logged-in)
+
 ## weixin
 enable multilib first
 ``` shell
