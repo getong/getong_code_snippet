@@ -1275,6 +1275,27 @@ alwaysshared
 $ sudo systemctl start vncserver@:1.service
 $ sudo systemctl enable vncserver@:1.service
 ```
+then use ssh:
+
+``` shell
+vim ~/.ssh/config
+
+Host archlinux
+    HostName 10.0.0.1 # use your ip here
+    User gerald
+    LocalForward 5901 localhost:5901
+```
+
+then run the command:
+
+``` shell
+// type your password and login
+ssh archlinux
+
+// use the vncviewer command
+vncviewer localhost:5901
+```
+
 copy from [TigerVNC](https://wiki.archlinux.org/title/TigerVNC)
 also see [archlinux安装配置vnc+openbox](https://cxybb.com/article/lxyoucan/116780297)
 also see [How to Install TightVNC to Access Remote Desktops in Linux](https://www.tecmint.com/install-tightvnc-access-remote-desktop-in-linux/)
