@@ -1299,3 +1299,10 @@ vncviewer localhost:5901
 copy from [TigerVNC](https://wiki.archlinux.org/title/TigerVNC)
 also see [archlinux安装配置vnc+openbox](https://cxybb.com/article/lxyoucan/116780297)
 also see [How to Install TightVNC to Access Remote Desktops in Linux](https://www.tecmint.com/install-tightvnc-access-remote-desktop-in-linux/)
+
+## disable sleep
+
+``` shell
+sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+```
+copy from [禁止ubuntu 20.04自动休眠](https://zhuanlan.zhihu.com/p/415661679)
