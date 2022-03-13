@@ -17,6 +17,7 @@ $ rustup toolchain install nightly
 $ rustup component add rustc-dev --toolchain=nightly
 $ cargo +nightly install racer
 $ cargo install tokio-console
+$ cargo install savage
 ```
 
 The `cargo/env` file is just like this:
