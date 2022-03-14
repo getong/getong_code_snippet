@@ -506,3 +506,28 @@ sudo pacman -S authy
 ``` shell
 sudo pacman -S vdhcoapp
 ```
+
+## fix Authentication is required to create a color managed device
+
+``` shell
+sudo groupadd vnc
+sudo usermod -aG vnc $USER
+
+sudo vim /etc/polkit-1/rules.d/gnome-vnc.rules
+---------------------------
+   polkit.addRule(function(action, subject) {
+      if ((action.id == "org.freedesktop.color-manager.create-device" ||
+           action.id == "org.freedesktop.color-manager.create-profile" ||
+           action.id == "org.freedesktop.color-manager.delete-device" ||
+           action.id == "org.freedesktop.color-manager.delete-profile" ||
+           action.id == "org.freedesktop.color-manager.modify-device" ||
+           action.id == "org.freedesktop.color-manager.modify-profile") &&
+          subject.isInGroup("vnc")) {
+         return polkit.Result.YES;
+      }
+   });
+
+
+sudo systemctl restart vncserver@:1.service
+```
+copy from [启动 GNOME 3 时显示 "Authentication is required to create a color managed device" 对话框](https://wiki.archlinux.org/title/TigerVNC_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
