@@ -500,3 +500,9 @@ copy from [GDM](https://wiki.archlinux.org/title/GDM)
 ``` shell
 sudo pacman -S authy
 ```
+
+## video download helper
+
+``` shell
+sudo pacman -S vdhcoapp
+```
