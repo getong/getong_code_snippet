@@ -181,3 +181,12 @@ curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
 
 ```
 copy from [centos 7.9 yum重装](https://blog.jairmir.com/index.php/2021/04/21/centos7-9-yum%E9%87%8D%E8%A3%85/)
+
+## yum Peer's Certificate issuer is not recognized.
+
+``` shell
+sudo vim /etc/yum.conf
+------------------------
+sslverify=false
+```
+copy from [curl: (60) Peer's Certificate issuer is not recognized.](https://stackoverflow.com/questions/47676980/curl-60-peers-certificate-issuer-is-not-recognized)
