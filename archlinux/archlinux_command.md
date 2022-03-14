@@ -1316,3 +1316,10 @@ copy from [禁止ubuntu 20.04自动休眠](https://zhuanlan.zhihu.com/p/41566167
  #define PATH_MAX        4096    /* # chars in a path name including nul */
 ```
 copy from [Filename length limits on linux?](https://serverfault.com/questions/9546/filename-length-limits-on-linux)
+
+## disable gnome-keyring ssh integration
+
+``` shell
+(cat /etc/xdg/autostart/gnome-keyring-ssh.desktop; echo Hidden=true) > ~/.config/autostart/gnome-keyring-ssh.desktop
+```
+copy from [How do I disable gnome-keyring ssh integration?](https://askubuntu.com/questions/545172/how-do-i-disable-gnome-keyring-ssh-integration)
