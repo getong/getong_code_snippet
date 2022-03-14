@@ -1306,3 +1306,13 @@ also see [How to Install TightVNC to Access Remote Desktops in Linux](https://ww
 sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 ```
 copy from [禁止ubuntu 20.04自动休眠](https://zhuanlan.zhihu.com/p/415661679)
+
+## filename higher than 255 characters
+
+``` shell
+/usr/src/linux-headers-2.6.38-10/include/linux/limits.h
+
+ #define NAME_MAX         255    /* # chars in a file name */
+ #define PATH_MAX        4096    /* # chars in a path name including nul */
+```
+copy from [Filename length limits on linux?](https://serverfault.com/questions/9546/filename-length-limits-on-linux)
