@@ -161,7 +161,16 @@ See [Install EPEL, IUS, and Remi repositories on CentOS and Red Hat](https://sup
 install the wxdiget from elpa
 
 ``` shell
-$ sudo yum install wxGTK3 wxGTK-gl wxGTK-devel
+$ sudo yum install wxGTK3 wxGTK3-devel
+$ sudo yum install centos-release-scl devtoolset-7 -y
+$ wget -c https://github.com/erlang/otp/archive/refs/tags/OTP-24.3.tar.gz
+$ tar xzf OTP-24.3.tar.gz
+
+$ cd otp-OTP-24.3
+
+$ scl enable devtoolset-7 bash
+$ ./configure --prefix=/usr/local/otp-24.3 --enable-jit --with-wx-config=/usr/bin/wx-config-3.0
+$ make && sudo make install
 ```
 > wx* packages have never been part of CentOS base/updates. They are in EPEL.
 See [wxBase/wxGTK/wxGTK-gl packages in centos 7 repos?](https://www.centos.org/forums/viewtopic.php?t=50620)
