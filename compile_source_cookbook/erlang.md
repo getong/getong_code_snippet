@@ -161,12 +161,12 @@ See [Install EPEL, IUS, and Remi repositories on CentOS and Red Hat](https://sup
 install the wxdiget from elpa
 
 ``` shell
-$ sudo yum install wxGTK-gl wxGTK-devel
+$ sudo yum install wxGTK3 wxGTK-gl wxGTK-devel
 ```
 > wx* packages have never been part of CentOS base/updates. They are in EPEL.
 See [wxBase/wxGTK/wxGTK-gl packages in centos 7 repos?](https://www.centos.org/forums/viewtopic.php?t=50620)
 
-
+also see [wxGTK3](https://centos.pkgs.org/7/epel-x86_64/wxGTK3-3.0.4-1.el7.x86_64.rpm.html)
 
 ## erlang centos china mirror
 See [使用国内源安装erlang](http://www.jianshu.com/p/27197d58e94c)
