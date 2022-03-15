@@ -233,6 +233,15 @@ UdpSocket::bind(addr).await;
 socket.send_to(b"hello world", &packet.dest()).await;
 ```
 
+## send and recv method return a Future instance
+
+``` rust
+let (tx, mut rx) = mpsc::channel(32);
+
+tx.send("sending from first handle").await;
+let Some(message) = rx.recv().await;
+```
+
 
 ## tokio reference or book
 [tokio](https://tokio.rs/)
