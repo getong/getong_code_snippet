@@ -135,9 +135,7 @@ centos
 
 ``` shell
 yum groupinstall -y “Development Tools”
-yum install m4 openssl openssl-devel  unixODBC unixODBC-devel \
-	make gcc gcc-c++ kernel-devel ncurses-devel libxslt \
-	fop java-1.8.0-openjdk-devel wxGTK-gl wxGTK-devel tk
+yum install -y openssl-devel unixODBC-devel ncurses-devel libxslt fop java-1.8.0-openjdk-devel tk
 ```
 
 ## erlang-rpm project
@@ -155,6 +153,12 @@ Something releated:
 Enable EPEL repo in CentOS 7
 ``` shell
 $ sudo yum install epel-release
+$ sudo sed -e 's!^metalink=!#metalink=!g' \
+    -e 's!^#baseurl=!baseurl=!g' \
+    -e 's!//download\.fedoraproject\.org/pub!//mirrors.tuna.tsinghua.edu.cn!g' \
+    -e 's!//download\.example/pub!//mirrors.tuna.tsinghua.edu.cn!g' \
+    -e 's!http://mirrors!https://mirrors!g' \
+    -i /etc/yum.repos.d/epel*.repo
 ```
 See [Install EPEL, IUS, and Remi repositories on CentOS and Red Hat](https://support.rackspace.com/how-to/install-epel-and-additional-repositories-on-centos-and-red-hat/)
 
@@ -162,7 +166,8 @@ install the wxdiget from elpa
 
 ``` shell
 $ sudo yum install wxGTK3 wxGTK3-devel
-$ sudo yum install centos-release-scl devtoolset-7 -y
+$ sudo yum install -y centos-release-scl
+$ sudo yum install -y devtoolset-7
 $ wget -c https://github.com/erlang/otp/archive/refs/tags/OTP-24.3.tar.gz
 $ tar xzf OTP-24.3.tar.gz
 
