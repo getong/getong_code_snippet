@@ -685,6 +685,8 @@ in the `/etc/fstab`
 
 ``` shell
 UUID=177ce77f-6e06-47a6-b1e9-6c3a6b43fb8d /run/media/sinux/sinux3       ext4    noatime,x-systemd.mount-timeout=5min,x-systemd.automount,x-systemd.device-timeout=10,x-systemd.idle-timeout=1min 0 2
+// or
+UUID=XXXXXXXXXXXXXXX  /myfs btrfs defaults,auto,nofail,x-systemd.device-timeout=30,x-systemd.mount-timeout=30 0 0
 ```
 A couple things:
 
@@ -692,6 +694,7 @@ A couple things:
 2 You should use systemd-automounts to mount external drives. That way it doesn’t matter if they are connected or not.
 It won’t impact your boot and you won’t have manually mount them later.
 copy from [Dependency failed for File System Check External Drives](https://forum.endeavouros.com/t/dependency-failed-for-file-system-check-external-drives/16249)
+copy from [Mount an external drive at boot time only if it is plugged in](https://askubuntu.com/questions/14365/mount-an-external-drive-at-boot-time-only-if-it-is-plugged-in)
 
 ## grub acpi
 ``` shell
