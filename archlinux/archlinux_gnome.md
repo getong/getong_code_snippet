@@ -531,3 +531,18 @@ sudo vim /etc/polkit-1/rules.d/gnome-vnc.rules
 sudo systemctl restart vncserver@:1.service
 ```
 copy from [启动 GNOME 3 时显示 "Authentication is required to create a color managed device" 对话框](https://wiki.archlinux.org/title/TigerVNC_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+
+## launch application in remote desktop via ssh
+
+``` shell
+export DISPLAY=:0
+gedit
+```
+copy from [Start Gnome-Application from SSH-Shell](https://stackoverflow.com/questions/3664112/start-gnome-application-from-ssh-shell)
+
+The vnc desktop is :1 , so the command can be changed to:
+
+``` shell
+export DISPLAY=:1
+gedit
+```
