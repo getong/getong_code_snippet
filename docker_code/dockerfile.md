@@ -87,8 +87,13 @@ copy from [Copy directory to another directory using ADD command](https://stacko
 
 ## docker stop gracefully
 see [你的 docker stop，它优雅吗？](https://segmentfault.com/a/1190000022971054)
+the pid 1 form:
 
 ``` dockerfile
+ENTRYPOINT ["./entrypoint.sh"]
+```
+and the /entrypoint.sh might include `trap`, `wait` command, like below:
+``` shell
 #!/bin/sh
 echo 'Do something'
 
