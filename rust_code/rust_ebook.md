@@ -22,3 +22,4 @@
 [FUTURES CONCURRENCY III](https://blog.yoshuawuyts.com/futures-concurrency-3/)
 [A book about Rust Data Structures and Algorithms](https://github.com/QMHTMY/RustBook)
 [A book about Rust Data Structures and Algorithms](https://gitee.com/QMHTMY/RustBook)
+[Mutable References on Vectors vs. Structs: Some less known techniques.](https://applied-math-coding.medium.com/mutable-references-on-vectors-vs-structs-some-less-known-techniques-87098e2e2ba2)
