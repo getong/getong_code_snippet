@@ -84,3 +84,24 @@ ADD go /usr/local/go
 COPY go /usr/local/go
 ```
 copy from [Copy directory to another directory using ADD command](https://stackoverflow.com/questions/26504846/copy-directory-to-another-directory-using-add-command)
+
+## docker stop gracefully
+see [你的 docker stop，它优雅吗？](https://segmentfault.com/a/1190000022971054)
+
+``` dockerfile
+#!/bin/sh
+echo 'Do something'
+
+kill_jar() {
+  echo 'Received TERM'
+  kill "$(ps -ef | grep java | grep app | awk '{print $1}')"
+  wait $! #<1>
+  echo 'Process finished'
+}
+
+trap 'kill_jar' TERM INT
+
+java -jar app.jar &
+
+wait $!
+```
