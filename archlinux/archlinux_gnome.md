@@ -546,3 +546,9 @@ The vnc desktop is :1 , so the command can be changed to:
 export DISPLAY=:1
 gedit
 ```
+
+## feishu
+
+``` shell
+sudo pacman -S feishu-bin
+```
