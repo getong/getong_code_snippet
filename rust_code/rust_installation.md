@@ -18,6 +18,7 @@ $ rustup component add rustc-dev --toolchain=nightly
 $ cargo +nightly install racer
 $ cargo install tokio-console
 $ cargo install savage
+$ cargo install cargo-expand
 ```
 
 The `cargo/env` file is just like this:
@@ -338,3 +339,11 @@ rustup toolchain install nightly-2021-09-24 --component rust-src
 rustup toolchain install nightly --component rust-docs
 ```
 copy from [Components](https://rust-lang.github.io/rustup/concepts/components.html)
+
+
+## expand the code macro
+
+``` shell
+cd project_root_dir
+cargo expand
+```
