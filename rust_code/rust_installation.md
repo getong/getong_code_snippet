@@ -137,7 +137,8 @@ cargo test
 carge install
 cargo check
 cargo clean
-cargo install clippy
+# cargo install clippy
+rustup component add clippy-preview
 cargo install cargo-edit cargo-outdated
 cargo install cargo-web
 cargo install wasm-bindgen-cli wasm-pack
