@@ -110,9 +110,9 @@ sudo usermod -aG docker $USER
 
 ``` shell
 sudo apt-get install trash-cli
-sudo rm -rf /[partition mount]/.Trash-`id -u user_name`
-sudo mkdir /[partition mount]/.Trash-`id -u user_name`
-sudo chown user_name:user_group /[partition mount]/.Trash-`id -u user_name`
+sudo rm -rf /[partition mount]/.Trash-`id -u $USER`
+sudo mkdir /[partition mount]/.Trash-`id -u $USER`
+sudo chown $USER /[partition mount]/.Trash-`id -u $USER`
 ```
 
 ## fcitx installation
