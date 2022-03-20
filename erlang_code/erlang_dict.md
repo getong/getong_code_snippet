@@ -29,3 +29,254 @@
 
 ## code reading
 [erlang的dict源码解析](https://codeleading.com/article/89602511237/)
+
+## code reading
+
+``` erlang
+-module(test_dict).
+
+-export([test/0,
+         new/0,
+         is_key/2,
+         store/3,
+         erase/2
+        ]).
+
+-define(seg_size, 16).
+-define(max_seg, 32).
+-define(expand_load, 5).
+-define(contract_load, 3).
+-define(exp_size, (?seg_size * ?expand_load)).
+-define(con_size, (?seg_size * ?contract_load)).
+
+-record(di,
+	{size=0,                % 元素的总量
+	 n=?seg_size,	        % 已经激活的 槽 数量
+	 maxn=?seg_size,      	% 槽 的最大数量
+	 bso=?seg_size div 2,  	% 桶 的偏移量
+	 exp_size=?exp_size,   	% 扩张的最大值 初始值 =
+	 con_size=?con_size,   	% 收缩的最大值 初始值 =
+	 empty,	      		% Empty segment
+	 segs	      	      	% 容器 { 桶1{槽1, 槽2, ..... , 槽16}, 桶2{ ... }, ... }
+	}).
+
+-define(kv(K,V), [K|V]).
+
+test() ->
+    D = new(),
+    ND = store(1,1,D),
+    ND.
+
+new() ->
+    Empty = {[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]},
+    #di{empty = Empty, segs = {Empty}}.
+
+is_key(Key, Di) ->
+    %% 取得 key 所在槽的下标集
+    Slot = get_slot(Di, Key),
+    %% 把 key 所在的桶给找出来
+    Bkt = get_bucket(Di, Slot),
+    %% 从桶中把 key 取出来
+    find_key(Key, Bkt).
+
+get_slot(Di, Key) ->
+    H = erlang:phash(Key, Di#di.maxn), %% 某 hash 算法
+    if
+        H > Di#di.n ->
+            H - Di#di.bso;
+        true ->
+            H
+    end.
+
+get_bucket(Di, Slot) ->
+    get_bucket_s(Di#di.segs, Slot).
+
+get_bucket_s(Segs, Slot) ->
+    %% 取得 槽  所在桶的下标
+    SegI = ((Slot-1) div ?seg_size) + 1,
+    %% 取得 key 所在槽的下标
+    BktI = ((Slot-1) rem ?seg_size) + 1,
+    element(BktI, element(SegI, Segs)).
+
+put_bucket_s(Segs, Slot, Bkt) ->
+    SegI = ((Slot-1) div ?seg_size) + 1,
+    BktI = ((Slot-1) rem ?seg_size) + 1,
+    Seg = setelement(BktI, element(SegI, Segs), Bkt),
+    setelement(SegI, Segs, Seg).
+
+find_key(K, [?kv(K,_Val)|_]) -> true;
+find_key(K, [_|Bkt]) -> find_key(K, Bkt);
+find_key(_, []) -> false.
+
+store(Key, Val, D0) ->
+    Slot = get_slot(D0, Key),
+    %% D1 是处理 key 后的新数据, Ic = 0更新原有数据, Ic = 1存入新的数据
+    {D1,Ic} = on_bucket(fun (B0) -> store_bkt_val(Key, Val, B0) end,
+			D0, Slot),
+    %% 以下函数实现动态扩张
+    maybe_expand(D1, Ic).
+
+on_bucket(F, T, Slot) ->
+    SegI = ((Slot-1) div ?seg_size) + 1,
+    BktI = ((Slot-1) rem ?seg_size) + 1,
+    Segs = T#di.segs,
+    Seg = element(SegI, Segs),
+    B0 = element(BktI, Seg),
+    {B1,Res} = F(B0),
+    {T#di{segs=setelement(SegI, Segs, setelement(BktI, Seg, B1))},Res}.
+
+store_bkt_val(Key, New, [?kv(Key,_Old)|Bkt]) ->
+    {[?kv(Key,New)|Bkt],0};
+store_bkt_val(Key, New, [Other|Bkt0]) ->
+    {Bkt1,Ic} = store_bkt_val(Key, New, Bkt0),
+    {[Other|Bkt1],Ic};
+store_bkt_val(Key, New, []) -> {[?kv(Key,New)],1}.
+
+%% 动态扩张, 并且均衡
+maybe_expand(T, 0) -> maybe_expand_aux(T, 0);
+maybe_expand(T, 1) -> maybe_expand_aux(T, 1).
+
+maybe_expand_aux(T0, Ic)
+  %% 当超出了最大值
+  when T0#di.size + Ic > T0#di.exp_size ->
+    %% 维护大字典
+    T = maybe_expand_segs(T0),
+    %% 增加 1个 激活槽
+    N = T#di.n + 1,
+    %% 取出容器
+    Segs0 = T#di.segs,
+    Slot1 = N - T#di.bso,
+    %% n=16,         -> 16  -> 32 -> 64
+    %% N=               17  -> 33 -> 65
+    %% maxn=16,　    -> 32  -> 64 -> 128
+    %% bso=8,        -> 16  -> 32 -> 64
+    %% Slot1的变化区间 [1, 16] -> [1, 32] -> [1, 64], ...
+    %% 桶数区间 [1,1] -> [1,2] -> [1,4] -> ...
+    %% 目标桶下标 = (Slot1 - 1) div 16 + 1
+    %% 目标槽下标 = (Slot1 - 1) rem 16 + 1
+    %% 均衡数据方案：每次均衡都把排前的某个槽(有规律可循)取数据
+    B = get_bucket_s(Segs0, Slot1),
+    Slot2 = N,
+    %% 将 B槽 中的数据重新 hash, 重新分配到 B1 B2 中
+    [B1|B2] = rehash(B, Slot1, Slot2, T#di.maxn),
+    %% B1槽数据覆盖 Slot1位置的槽
+    Segs1 = put_bucket_s(Segs0, Slot1, B1),
+    %% B2槽数据覆盖 Slot2位置的槽
+    Segs2 = put_bucket_s(Segs1, Slot2, B2),
+    T#di{
+      size=T#di.size + Ic,
+      n=N,
+      %% 最大容量 80 -> 85 -> 90 -> 95 -> ...
+      exp_size=N * ?expand_load,
+      %% 最小容量 48 -> 51 -> 54 -> 57 -> ...
+      con_size=N * ?contract_load,
+      segs=Segs2
+     };
+maybe_expand_aux(T, Ic) ->
+    T#di{size=T#di.size + Ic}.
+
+maybe_expand_segs(T)
+  when T#di.n =:= T#di.maxn ->
+    T#di{
+      %% 记录每次新加的槽数量: 16 -> 32 -> 64 -> 128 -> ...
+      maxn=2 * T#di.maxn,
+      %% 记录偏移量 8 -> 16 -> 32 -> 64 -> ...
+      bso=2 * T#di.bso,
+      %% 总的桶数  1 -> 2 -> 4 -> 8 + ...
+      segs=expand_segs(T#di.segs, T#di.empty)
+     };
+maybe_expand_segs(T) ->
+    T.
+
+rehash([?kv(Key,_Bag)=KeyBag|T], Slot1, Slot2, MaxN) ->
+    [L1|L2] = rehash(T, Slot1, Slot2, MaxN),
+    %% 将数据重新 hash 分配
+    case erlang:phash(Key, MaxN) of
+	Slot1 -> [[KeyBag|L1]|L2];
+	Slot2 -> [L1|[KeyBag|L2]]
+    end;
+rehash([], _Slot1, _Slot2, _MaxN) -> [[]|[]].
+
+%% 每次将槽量扩大 1 倍
+expand_segs({B1}, Empty) ->
+    {B1,Empty};
+expand_segs({B1,B2}, Empty) ->
+    {B1,B2,Empty,Empty};
+expand_segs({B1,B2,B3,B4}, Empty) ->
+    {B1,B2,B3,B4,Empty,Empty,Empty,Empty};
+expand_segs({B1,B2,B3,B4,B5,B6,B7,B8}, Empty) ->
+    {B1,B2,B3,B4,B5,B6,B7,B8,
+     Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty};
+expand_segs({B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15,B16}, Empty) ->
+    {B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15,B16,
+     Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty,
+     Empty,Empty,Empty,Empty,Empty,Empty,Empty,Empty};
+expand_segs(Segs, Empty) ->
+    list_to_tuple(tuple_to_list(Segs)
+    ++ lists:duplicate(tuple_size(Segs), Empty)).
+
+erase(Key, D0) ->
+    Slot = get_slot(D0, Key),
+    {D1,Dc} = on_bucket(fun (B0) -> erase_key(Key, B0) end,
+			D0, Slot),
+    maybe_contract(D1, Dc).
+
+erase_key(Key, [?kv(Key,_Val)|Bkt]) -> {Bkt,1};
+erase_key(Key, [E|Bkt0]) ->
+    {Bkt1,Dc} = erase_key(Key, Bkt0),
+    {[E|Bkt1],Dc};
+erase_key(_, []) -> {[],0}.
+
+maybe_contract(T, Dc) when T#di.size - Dc < T#di.con_size,
+			   T#di.n > ?seg_size ->
+    N = T#di.n,
+    Slot1 = N - T#di.bso,
+    Segs0 = T#di.segs,
+    B1 = get_bucket_s(Segs0, Slot1),
+    Slot2 = N,
+    B2 = get_bucket_s(Segs0, Slot2),
+    %% 将桶 B2 中的数据转移 B1
+    Segs1 = put_bucket_s(Segs0, Slot1, B1 ++ B2),
+    Segs2 = put_bucket_s(Segs1, Slot2, []),
+    N1 = N - 1,
+    %% 腾出一个空桶
+    maybe_contract_segs(T#di{size=T#di.size - Dc,
+                             n=N1,
+                             exp_size=N1 * ?expand_load,
+                             con_size=N1 * ?contract_load,
+                             segs=Segs2});
+maybe_contract(T, Dc) ->
+    T#di{size=T#di.size - Dc}.
+
+maybe_contract_segs(T)
+  %% 当腾出一定数量的空桶后, 容器收缩
+  when T#di.n =:= T#di.bso ->
+    T#di{
+      maxn=T#di.maxn div 2,
+      bso=T#di.bso div 2,
+      segs=contract_segs(T#di.segs)
+     };
+maybe_contract_segs(T) ->
+    T.
+%% 每次收缩一半
+contract_segs({B1,_}) ->
+    {B1};
+contract_segs({B1,B2,_,_}) ->
+    {B1,B2};
+contract_segs({B1,B2,B3,B4,_,_,_,_}) ->
+    {B1,B2,B3,B4};
+contract_segs({B1,B2,B3,B4,B5,B6,B7,B8,_,_,_,_,_,_,_,_}) ->
+    {B1,B2,B3,B4,B5,B6,B7,B8};
+contract_segs({B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15,B16,
+	       _,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_}) ->
+    {B1,B2,B3,B4,B5,B6,B7,B8,B9,B10,B11,B12,B13,B14,B15,B16};
+contract_segs(Segs) ->
+    Ss = tuple_size(Segs) div 2,
+    list_to_tuple(lists:sublist(tuple_to_list(Segs), 1, Ss)).
+
+```
+copy from [erlang dict源码解析](https://www.twblogs.net/a/5b8d00f52b7177188338fe6a/?lang=zh-cn)
+
+``` erlang
+also see [[Erlang 0068] Erlang dict ](https://www.cnblogs.com/me-sa/archive/2012/06/24/erlang-dict.html)
+```
