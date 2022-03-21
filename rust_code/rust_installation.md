@@ -348,3 +348,12 @@ copy from [Components](https://rust-lang.github.io/rustup/concepts/components.ht
 cd project_root_dir
 cargo expand
 ```
+
+## install rust-analyzer
+
+``` shell
+git clone https://github.com/rust-analyzer/rust-analyzer
+cd rust-analyzer
+git checkout tags/2022-03-21 -b 2022-03-21
+cargo xtask install --server
+```
