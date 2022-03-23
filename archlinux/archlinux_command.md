@@ -1326,3 +1326,10 @@ copy from [Filename length limits on linux?](https://serverfault.com/questions/9
 (cat /etc/xdg/autostart/gnome-keyring-ssh.desktop; echo Hidden=true) > ~/.config/autostart/gnome-keyring-ssh.desktop
 ```
 copy from [How do I disable gnome-keyring ssh integration?](https://askubuntu.com/questions/545172/how-do-i-disable-gnome-keyring-ssh-integration)
+
+## pandoc
+
+``` shell
+sudo pacman -S pandoc texlive-fontsextra texlive-langchinese
+pandoc readme.md -o readme.pdf
+```
