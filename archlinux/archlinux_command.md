@@ -1331,5 +1331,7 @@ copy from [How do I disable gnome-keyring ssh integration?](https://askubuntu.co
 
 ``` shell
 sudo pacman -S pandoc texlive-fontsextra texlive-langchinese
-pandoc readme.md -o readme.pdf
+yay -S ttf-sarasa-ui-sc
+pandoc README.md -o README.pdf --pdf-engine=xelatex -V CJKmainfont='Sarasa UI SC'
+pandoc README.md -o README.docx
 ```
