@@ -552,3 +552,9 @@ gedit
 ``` shell
 sudo pacman -S feishu-bin
 ```
+
+## nixnote2
+
+``` shell
+sudo pacman -S nixnote2
+```
