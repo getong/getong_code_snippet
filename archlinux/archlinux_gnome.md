@@ -558,3 +558,4 @@ sudo pacman -S feishu-bin
 ``` shell
 sudo pacman -S nixnote2
 ```
+copy from [Archlinux安装印象笔记](https://www.cnblogs.com/mc-r/p/13762982.html)
