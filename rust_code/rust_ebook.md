@@ -26,3 +26,4 @@
 [What Can Coerce, and Where, in Rust](https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust)
 [Rust 中的隐式类型转换](https://juejin.cn/post/6999829181680844831)
 [Pin and suffering](https://fasterthanli.me/articles/pin-and-suffering)
+[High Assurance Rust](https://highassurance.rs/)
