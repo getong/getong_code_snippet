@@ -7,3 +7,38 @@
 ## related crate
 [pin-utils](https://crates.io/crates/pin-utils)
 [pin-project](https://crates.io/crates/pin-project)
+
+## pin get element as mut
+
+``` shell
+struct SlowRead<R> {
+    //       👇 now optional!
+    reader: Option<R>,
+    sleep: Sleep,
+}
+
+impl<R> SlowRead<R>
+where
+    R: Unpin,
+{
+    // 👇 now takes pinned mutable reference to Self, and returns an option
+    fn take_inner(self: Pin<&mut Self>) -> Option<R> {
+        self.reader.take()
+    }
+}
+```
+It does not compile.
+
+``` rust
+impl<R> SlowRead<R>
+where
+    R: Unpin,
+{
+    // 👇 now takes pinned mutable reference to Self, and returns an option
+    fn take_inner(self: Pin<&mut Self>) -> Option<R> {
+        unsafe { self.get_unchecked_mut().reader.take() }
+    }
+}
+
+```
+copy from [Pin and suffering](https://fasterthanli.me/articles/pin-and-suffering)
