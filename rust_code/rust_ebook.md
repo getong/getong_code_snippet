@@ -26,3 +26,5 @@
 [What Can Coerce, and Where, in Rust](https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust)
 [Rust 中的隐式类型转换](https://juejin.cn/post/6999829181680844831)
 [High Assurance Rust](https://highassurance.rs/)
+[Futures Explained in 200 Lines of Rust](https://cfsamson.github.io/books-futures-explained/introduction.html)
+[Asynchronous Programming in Rust](https://rust-lang.github.io/async-book/)
