@@ -7,6 +7,7 @@
 [005 Rust 异步编程，Pin 介绍(a very basic example, but very helpful)](https://learnku.com/articles/46094)
 [Pinning](http://www.tutzip.com/tut/rust-async-cn/04_pinning/01_chapter.zh.html)
 [Pin and suffering](https://fasterthanli.me/articles/pin-and-suffering)
+[Rust中的Pin详解](https://cloud.tencent.com/developer/article/1628311)
 
 ## related crate
 [pin-utils](https://crates.io/crates/pin-utils)
