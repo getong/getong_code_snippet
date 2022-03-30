@@ -25,5 +25,4 @@
 [Mutable References on Vectors vs. Structs: Some less known techniques.](https://applied-math-coding.medium.com/mutable-references-on-vectors-vs-structs-some-less-known-techniques-87098e2e2ba2)
 [What Can Coerce, and Where, in Rust](https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust)
 [Rust 中的隐式类型转换](https://juejin.cn/post/6999829181680844831)
-[Pin and suffering](https://fasterthanli.me/articles/pin-and-suffering)
 [High Assurance Rust](https://highassurance.rs/)
