@@ -67,3 +67,24 @@ copy from [Pin and suffering](https://fasterthanli.me/articles/pin-and-suffering
 |unsafe map_unchecked_mut(func: F)     | Constructs a new pin by mapping the interior value.|
 
 copy from [Rust Pin 进阶](https://folyd.com/blog/rust-pin-advanced/)
+
+## mutable pinned
+
+``` rust
+struct SlowRead{
+    reader: Option<R>,
+}
+
+let self : Pin<&mut SlowRead<R>> = ...
+let this = unsafe{self.get_unchecked_mut()};
+reader = &mut this.reader;
+
+match reader{
+    Some(reader) => {
+        let reader = unsafe {Pin::new_unchecked(reader)};
+        reader.poll_read(cx, buf)
+        }
+    None => {}
+}
+```
+copy from [Pin and suffering](https://fasterthanli.me/articles/pin-and-suffering)
