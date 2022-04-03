@@ -18,7 +18,13 @@ cfdisk /dev/sda
 
 mkswap /dev/sda2
 
+// none efi
 mount /dev/sda3 /mnt
+
+// efi option
+mount /dev/nvme0n1p2 /mnt
+mkdir /mnt/boot
+mount /dev/nvme0n1p1 /mnt/boot
 
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
@@ -29,6 +35,8 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     wqy-zenhei cmake reflector iwd bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme
 
 genfstab -U /mnt >> /mnt/etc/fstab
+// after genfstab , if `/mnt/boot` is mounted, check the `/mnt/etc/fstab`
+// if the `/mnt/etc/fstab` file  does not contain `/mnt/boot`, it must be installed error.
 
 arch-chroot /mnt
 
@@ -52,8 +60,14 @@ vim /etc/hosts
 ::1         localhost
 127.0.0.1   archlinux.localdomain archlinux   # 这里的archlinux是主机名
 
+// optional, check the /boot is installed
+mkinitcpio -P
+
 // grub-install --recheck /dev/<目标磁盘>
 grub-install /dev/sda
+
+// checkout the menuentry
+grep menuentry /boot/grub/grub.cfg
 
 vim /etc/default/grub
 --------------------
