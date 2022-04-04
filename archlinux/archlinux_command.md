@@ -1353,3 +1353,11 @@ yay -S ttf-sarasa-ui-sc
 pandoc README.md -o README.pdf --pdf-engine=xelatex -V CJKmainfont='Sarasa UI SC'
 pandoc README.md -o README.docx
 ```
+
+## mount disk in /etc/fstab
+
+```
+#UUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   none      	swap deafults 0 0
+#/dev/sda1   none      	swap      	defaults  	0 0
+PARTUUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   none      	swap      	defaults  	0 0
+```
