@@ -26,6 +26,10 @@ mount /dev/nvme0n1p2 /mnt
 mkdir /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
 
+// mount other part disk
+mkdir /mnt/backup
+mount /dev/sda2 /mnt/backup
+
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
