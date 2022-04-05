@@ -2,8 +2,11 @@
 
 ## intallation
 see [Archlinux 安装教程超详细（2021.11.15）](https://zhuanlan.zhihu.com/p/433920079)
+
 see [How to Install Arch Linux in 2022 {Easy Step-by-Step Guide}](https://www.securedyou.com/how-to-install-arch-linux-step-by-step-tutorial/)
+
 see [Archlinux 2022安装配置之Gnome40](https://www.cnblogs.com/LzsCxb/p/15669736.html)
+
 ``` shell
 # reflector --country China --age 72 --sort rate --protocol https --save /etc/pacman.d/mirrorlist
 
@@ -57,7 +60,6 @@ locale-gen
 echo "LANG=zh_CN.UTF-8" > /etc/locale.conf
 echo archlinux > /etc/hostname
 
-
 vim /etc/hosts
 --------------------
 127.0.0.1   localhost
@@ -67,8 +69,16 @@ vim /etc/hosts
 // optional, check the /boot is installed
 mkinitcpio -P
 
-// grub-install --recheck /dev/<目标磁盘>
+// no efi, grub-install --recheck /dev/<目标磁盘>
 grub-install /dev/sda
+
+// efi option
+// grub-install --target=x86_64-efi --efi-directory=<EFI 分区挂载点> --bootloader-id=arch_grub --recheck
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=arch_grub --recheck
+
+mkdir /boot/EFI/boot
+cp /boot/EFI/arch_grub/grubx64.efi  /boot/EFI/boot/bootx64.efi
+grub-mkconfig -o /boot/grub/grub.cfg
 
 // checkout the menuentry
 grep menuentry /boot/grub/grub.cfg
@@ -95,6 +105,7 @@ $USER  ALL=(ALL) NOPASSWD:ALL
 
 systemctl enable sshd
 
+// static ip
 vim /etc/systemd/network/static-enp1s0.network
 -------------------
 [Match]
@@ -114,6 +125,14 @@ MACAddress=a8:4b:05:2b:e8:54
 [Link]
 NamePolicy=
 Name=enp1s0
+
+// dhcp
+vim /etc/systemd/network/dhcp-enp1s0.network
+-------------------
+[Match]
+Name=enp1s0
+[Network]
+DHCP=ipv4
 
 rmmod pcspkr
 echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
@@ -146,10 +165,10 @@ systemctl enable gdm.service
 ## add user and set group
 
 ``` shell
-useradd --create-home user_name
-passwd user_name
+useradd --create-home gerald
+passwd gerald
 
-usermod -aG wheel,users,storage,power,lp,adm,optical user_name
+usermod -aG wheel,users,storage,power,lp,adm,optical gerald
 
 ```
 
