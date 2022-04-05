@@ -523,6 +523,8 @@ copy from [Arch Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝](http
 
 ``` shell
 sudo pacman -S wqy-zenhei adobe-source-han-serif-cn-fonts
+
+sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts  ttf-sarasa-gothic
 ```
 
 ## texlive
