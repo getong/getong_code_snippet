@@ -561,3 +561,12 @@ copy from [Archlinux安装印象笔记](https://www.cnblogs.com/mc-r/p/13762982.
 ``` shell
 yay -S ynote-desktop-bin
 ```
+
+
+## enable or disable gnome desktop
+
+``` shell
+sudo systemctl enable gdm
+
+sudo systemctl disable gdm
+```
