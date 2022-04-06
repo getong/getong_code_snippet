@@ -62,3 +62,17 @@ copy from [使用命令行启动 VirtualBox 虚拟机](https://kodango.com/use-c
 Install 6.1.26 iso.
 It can be download from https://download.virtualbox.org/virtualbox/6.1.26/VBoxGuestAdditions_6.1.26.iso .
 copy from [Error al instalar las Guest Additions en Virtualbox : Exit code 2](https://linuxmanr4.com/2022/02/17/error-al-instalar-las-guest-additions-en-virtualbox-exit-code-2/)
+
+## modifymedium
+
+``` shell
+VBoxManage modifymedium imageFile --resize  newSizeMb
+
+// for example, 100Gb disk
+// VBoxManage modifymedium win7.vdi --resize  102400
+
+// or clone it, and modify it
+VBoxManage clonemedium centos7-4G.vmdk centos7-4G.vdi --format VDI
+VBoxManage modifymedium centos7-4G.vdi --resize 10000
+```
+copy from [VirturalBox 调整虚拟磁盘大小](https://zangchuantao.com/tech-zh/2021/virturalbox-adjust-storage-size/)
