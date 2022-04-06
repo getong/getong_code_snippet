@@ -59,8 +59,18 @@
 (global-hl-line-mode t)
 ;;(set-face-background 'hl-line "blue")
 ;;(set-face-foreground 'highlight nil)
-(set-face-background 'hl-line "#BEBEBE")
-(set-face-foreground 'hl-line "#0000000")
+;;(set-face-background 'hl-line "#BEBEBE")
+;;(set-face-foreground 'hl-line "#0000000")
+;; copy from [hl-line-mode hide background, how to avoid this?](https://emacs.stackexchange.com/questions/10445/hl-line-mode-hide-background-how-to-avoid-this)
+(defun my-hl-line-range-function ()
+  (cons (line-end-position) (line-beginning-position 2)))
+(setq hl-line-range-function #'my-hl-line-range-function)
+
+(when window-system
+  (require 'hl-line)
+  (set-face-attribute 'hl-line nil :inherit nil :background "light yellow")
+  (setq global-hl-line-sticky-flag t)
+  (global-hl-line-mode 1))
 
 (blink-cursor-mode 0)
 (setq blink-cursor-blinks 0)
