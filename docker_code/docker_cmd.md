@@ -243,3 +243,9 @@ $ docker network prune
 
 $ docker network rm testing_bridge
 ```
+
+## rm docker0 interface
+
+``` shell
+sudo ip link delete docker0
+```
