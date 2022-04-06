@@ -765,3 +765,15 @@ alias stop_linux='VBoxManage controlvm linux-host-name savestate'
 ``` shell
  sed '/^match_string/c new_string a.txt
 ```
+
+## get gateway
+
+``` shell
+route -n
+```
+
+## get dns
+
+``` shell
+cat /etc/resolv.conf
+```
