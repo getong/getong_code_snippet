@@ -18,6 +18,11 @@ $ rustup component add rustc-dev --toolchain=nightly
 $ cargo install tokio-console
 $ cargo install savage
 $ cargo install cargo-expand
+
+$ git clone https://github.com/rust-analyzer/rust-analyzer
+$ cd rust-analyzer
+$ git checkout tags/2022-04-04 -b 2022-04-04
+$ cargo xtask install --server
 ```
 
 The `cargo/env` file is just like this:
