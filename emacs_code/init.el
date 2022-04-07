@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode racer flycheck-rust rust-mode company-racer))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode ))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -104,8 +104,6 @@
 ;; Load rust-mode when you open `.rs` files
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
-;; Set path to racer binary
-(setq racer-cmd "~/.cargo/bin/racer")
 ;; Set path to rust src directory
 ;; copy from https://github.com/racer-rust/emacs-racer/issues/138
 ;; copy from https://stackoverflow.com/questions/5014246/how-to-capture-standard-output-of-a-shell-command-in-elisp
@@ -113,15 +111,6 @@
 ;;	(substring
 ;;		(shell-command-to-string "/bin/echo $(rustc --print sysroot)/lib/rustlib/src/rust/library")
 ;;	0 -1))
-(setq racer-rust-src-path
-      (concat (string-trim
-               (shell-command-to-string "rustc --print sysroot"))
-              "/lib/rustlib/src/rust/library"))
-
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'eldoc-mode)
-
-(add-hook 'racer-mode-hook #'company-mode)
 
 (require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)

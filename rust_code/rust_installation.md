@@ -15,7 +15,6 @@ $ rustup component add rls-preview rust-analysis rust-src
 
 $ rustup toolchain install nightly
 $ rustup component add rustc-dev --toolchain=nightly
-$ cargo +nightly install racer
 $ cargo install tokio-console
 $ cargo install savage
 $ cargo install cargo-expand
