@@ -1382,3 +1382,16 @@ pandoc README.md -o README.docx
 #/dev/sda1   none      	swap      	defaults  	0 0
 PARTUUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   none      	swap      	defaults  	0 0
 ```
+
+## change nic interface name
+
+``` shell
+cat /sys/class/net/enp0s4/addres
+
+sudo vim /etc/udev/rules.d/10-network.rules
+--------------------------------------------
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:bb:cc:dd:ee:ff", NAME="net1"
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="ff:ee:dd:cc:bb:aa", NAME="net0"
+
+```
+copy from [Change interface name](https://wiki.archlinux.org/title/Network_configuration#Change_interface_name)
