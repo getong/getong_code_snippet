@@ -522,7 +522,7 @@ sudo pacman -S typora
 ## install virtualbox
 
 ``` shell
-pacman -S virtualbox virtualbox-host-dkms virtualbox-guest-iso \
+sudo pacman -S virtualbox virtualbox-host-dkms virtualbox-guest-iso \
     virtualbox-ext-oracle
 
 sudo gpasswd -a $USER vboxusers

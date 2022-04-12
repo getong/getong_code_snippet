@@ -770,7 +770,13 @@ alias stop_linux='VBoxManage controlvm linux-host-name savestate'
 
 ``` shell
 route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.2.1     0.0.0.0         UG    1024   0        0 enp4s0
+192.168.2.0     0.0.0.0         255.255.255.0   U     1024   0        0 enp4s0
+192.168.2.1     0.0.0.0         255.255.255.255 UH    1024   0        0 enp4s0
 ```
+The `192.168.2.1` is the gateway.
 
 ## get dns
 

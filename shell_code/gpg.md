@@ -45,6 +45,7 @@ copy from [How to import secret gpg key (copied from one machine to another)?](h
 ## gpg Inappropriate ioctl for device
 
 ``` shell
+mkdir -p ~/.gnupg/
 echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
 echo "use-agent
 pinentry-mode loopback" >> ~/.gnupg/gpg.conf
