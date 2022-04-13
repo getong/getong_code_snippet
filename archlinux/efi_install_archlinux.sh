@@ -35,7 +35,7 @@ mount /dev/sda2 /mnt/backup
 
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
-    gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
+    gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr \
     intel-ucode proxychains v2ray asp nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
@@ -47,7 +47,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     gst-libav a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 \
     libtheora libvorbis libxv wavpack x264 xvidcore gstreamer0.10-base-plugins \
     fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin calibre gthumb \
-    netease-cloud-music moc authy vdhcoapp feishu-bin
+    netease-cloud-music moc authy vdhcoapp feishu-bin firefox firefox-i18n-zh-cn
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
