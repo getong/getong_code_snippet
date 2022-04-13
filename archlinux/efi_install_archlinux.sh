@@ -51,4 +51,12 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt
+# arch-chroot /mnt
+
+## copy from [Arch install scripts](https://gist.github.com/jiulongw/d04399cbd3c06f35e66fd5afec40857f)
+# curl https://raw.githubusercontent.com/jiulongw/arch-init/master/arch-post.sh > /mnt/root/arch-post.sh
+arch-chroot /mnt "/bin/bash" "/root/arch-post.sh"
+
+umount /mnt
+
+echo All Done. Type "reboot" to enjoy!

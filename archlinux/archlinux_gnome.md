@@ -80,7 +80,7 @@ localectl --no-convert set-x11-keymap us pc105 "" ctrl:swapcaps
 revert the change:
 
 ``` shell
- localectl set-x11-keymap "" "" "" ""
+localectl set-x11-keymap "" "" "" ""
 ```
 
 check the settings:
