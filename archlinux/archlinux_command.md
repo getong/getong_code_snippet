@@ -1395,3 +1395,19 @@ SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="ff:ee:dd:cc:bb:aa", NAME="net0"
 
 ```
 copy from [Change interface name](https://wiki.archlinux.org/title/Network_configuration#Change_interface_name)
+
+
+## android filesystem support
+
+``` shell
+sudo pacman -S mtpfs
+yay -S jmtpfs
+
+sudo chmod 777 /mnt                      //this is very import
+
+jmtpfs /mnt                             //to mount android to /mnt
+
+fusermount -u /mnt                      //umount mnt
+
+```
+copy from [How to Transfer Files from Arch Linux to Android](https://www.jianshu.com/p/e90f9e45fe62)
