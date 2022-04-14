@@ -94,8 +94,6 @@ $ localectl status
 
 ```
 
-
-
 ## install fcitx
 
 ``` shell
@@ -232,35 +230,6 @@ sudo cp -rf /opt/apps/com.qq.weixin.deepin/files/lib32 /opt/apps/com.qq.weixin.w
 ```
 copy from [Archlinux有没有办法安装企业微信](https://bbs.archlinuxcn.org/viewtopic.php?id=12056)
 
-
-## install fonts
-install ttf-dejavu and ttf-droid
-``` shell
-sudo pacman -S ttf-dejavu ttf-droid
-git clone https://github.com/gasharper/linux-fonts
-cd linux-fonts
-sudo sh install.sh
-```
-the code in `install.sh` :
-
-``` shell
-#!/bin/sh
-sudo mkdir /usr/share/fonts/linux_fonts
-sudo cp ./*.ttf /usr/share/fonts/linux_fonts
-sudo cp ./*.ttc /usr/share/fonts/linux_fonts
-cd /usr/share/fonts/linux_fonts
-sudo mkfontscale
-sudo mkfontdir
-sudo fc-cache
-sudo chmod 644 /usr/share/fonts/linux_fonts/*
-```
-
-check the font:
-
-``` shell
-fc-list :lang=zh-cn | sort
-```
-
 ## fcitx5 can not handle ctrl swapcaps
 With fcitx5 chinese input method,  ctrl and caps both act as caps.
 Switch back to fcitx.
@@ -317,9 +286,7 @@ yay use http_proxy and https_proxy environment variable
 yay -S slack-desktop zulip-desktop-bin skypeforlinux-stable-bin
 ```
 
-
 ## stop skype auto start
-
 
 ``` shell
 cat ~/.config/autostart/skypeforlinux.desktop
@@ -548,7 +515,6 @@ copy from [Archlinux安装印象笔记](https://www.cnblogs.com/mc-r/p/13762982.
 yay -S ynote-desktop-bin
 ```
 
-
 ## enable or disable gnome desktop
 
 ``` shell
@@ -567,3 +533,38 @@ sudo pacman -Rscn totem
 sudo pacman -S gnome-mplayer wqy-microhei adobe-source-code-pro-fonts
 ```
 copy from [Arch安装参考](https://codeantenna.com/a/am4Pu4orQP)
+
+## font
+
+``` shell
+sudo pacman -S ttf-inconsolata nerd-fonts-droid-sans-mono
+yay -S fonts-droid-fallback ttf-symbola ttf-tahoma
+```
+
+## install fonts
+install ttf-dejavu and ttf-droid
+``` shell
+sudo pacman -S ttf-dejavu ttf-droid
+git clone https://github.com/gasharper/linux-fonts
+cd linux-fonts
+sudo sh install.sh
+```
+the code in `install.sh` :
+
+``` shell
+#!/bin/sh
+sudo mkdir /usr/share/fonts/linux_fonts
+sudo cp ./*.ttf /usr/share/fonts/linux_fonts
+sudo cp ./*.ttc /usr/share/fonts/linux_fonts
+cd /usr/share/fonts/linux_fonts
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache
+sudo chmod 644 /usr/share/fonts/linux_fonts/*
+```
+
+check the font:
+
+``` shell
+fc-list :lang=zh-cn | sort
+```
