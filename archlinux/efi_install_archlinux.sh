@@ -8,9 +8,9 @@ timedatectl set-ntp true
 
 ## parted ssd disk
 parted /dev/nvme0n1 – mklabel gpt
-parted /dev/nvme0n1 - mklabel gpt
+## EFI system partition
 parted /dev/nvme0n1 - mkpart primary 2M 512M
-parted /dev/nvme0n1 - pmkpart primary 512M   -1
+parted /dev/nvme0n1 - mkpart primary 512M   -1
 parted /dev/nvme0n1 - set 1 boot on
 
 mkfs.vfat -F32 /dev/nvme0n1p1

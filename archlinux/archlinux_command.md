@@ -24,7 +24,7 @@ mkswap /dev/sda2
 // none efi
 mount /dev/sda3 /mnt
 
-// efi option
+// efi option, EFI system partition
 mount /dev/nvme0n1p2 /mnt
 mkdir /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
@@ -947,7 +947,7 @@ sudo pacman -S linux-lts-headers linux-lts linux-lts-docs
 parted /dev/nvme0n1
    mklabel gpt
    mkpart primary 4096s 512M
-   pmkpart primary 512M   -1
+   mkpart primary 512M   -1
    set 1 boot on
    q
 
