@@ -556,3 +556,14 @@ sudo systemctl enable gdm
 
 sudo systemctl disable gdm
 ```
+
+## remove extra game
+
+``` shell
+// remove game
+sudo  pacman -Rscn gnome-mahjongg gnome-sudoku lightsoff tali swell-foop gnome-nibbles four-in-a-row gnome-tetravex five-or-more gnome-klotski iagno gnome-chess quadrapassel gnome-mines gnome-robots aisleriot
+// remove totem
+sudo pacman -Rscn totem
+sudo pacman -S gnome-mplayer wqy-microhei adobe-source-code-pro-fonts
+```
+copy from [寒假折腾Archlinux的一些经验](https://blog.csdn.net/u011152627/article/details/18925121)
