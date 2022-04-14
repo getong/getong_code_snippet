@@ -566,4 +566,4 @@ sudo  pacman -Rscn gnome-mahjongg gnome-sudoku lightsoff tali swell-foop gnome-n
 sudo pacman -Rscn totem
 sudo pacman -S gnome-mplayer wqy-microhei adobe-source-code-pro-fonts
 ```
-copy from [寒假折腾Archlinux的一些经验](https://blog.csdn.net/u011152627/article/details/18925121)
+copy from [Arch安装参考](https://codeantenna.com/a/am4Pu4orQP)
