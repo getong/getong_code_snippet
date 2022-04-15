@@ -1424,5 +1424,7 @@ command_to_be_run
 END
 
 atq
+// get the run command with the job id number, 3 is in the output list of the atq
+at -c 3
 atrm 1
 ```
