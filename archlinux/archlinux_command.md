@@ -1411,3 +1411,18 @@ fusermount -u /mnt                      //umount mnt
 
 ```
 copy from [How to Transfer Files from Arch Linux to Android](https://www.jianshu.com/p/e90f9e45fe62)
+
+## at batch command line
+
+``` shell
+sudo pacman -S at
+sudo systemctl enable --now atd
+at 09:00 -f /home/linuxize/script.sh
+
+at 09:00 <<END
+command_to_be_run
+END
+
+atq
+atrm 1
+```
