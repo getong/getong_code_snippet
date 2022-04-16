@@ -47,3 +47,7 @@ async fn main() -> std::io::Result<()> {
 }
 ```
 The `data` method is about the sql connection, and the `configure` method is about the web service , like route the path to the the function handler.
+
+
+## rust web benchmark
+see [tyrone-biggums](https://github.com/ThePrimeagen/tyrone-biggums)
