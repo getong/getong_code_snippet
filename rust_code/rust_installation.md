@@ -19,9 +19,9 @@ $ cargo install tokio-console
 $ cargo install savage
 $ cargo install cargo-expand
 
-$ git clone https://github.com/rust-analyzer/rust-analyzer
+$ git clone https://github.com/rust-lang/rust-analyzer
 $ cd rust-analyzer
-$ git checkout tags/2022-04-04 -b 2022-04-04
+$ git checkout tags/2022-04-11 -b 2022-04-11
 $ cargo xtask install --server
 ```
 
