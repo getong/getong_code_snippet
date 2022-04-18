@@ -568,3 +568,10 @@ check the font:
 ``` shell
 fc-list :lang=zh-cn | sort
 ```
+
+## scrot
+
+``` shell
+sudo pacman -S scrot
+```
+copy from [Taking a screenshot (简体中文)](https://wiki.archlinux.org/title/Taking_a_screenshot_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
