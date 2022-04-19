@@ -1428,3 +1428,24 @@ atq
 at -c 3
 atrm 1
 ```
+
+## lldb-mi
+
+``` shell
+yay -S lldb-mi-git
+```
+
+## texlive-full
+
+``` shell
+vim /etc/pacman.conf
+-----------------
+[Clansty]
+SigLevel = Never
+Server = https://repo.lwqwq.com/archlinux/$arch
+Server = https://pacman.ltd/archlinux/$arch
+Server = https://repo.clansty.com/archlinux/$arch
+
+sidp pacman -S texlive-full
+```
+copy from [ArchLinux 安装 TeXLive](https://zhuanlan.zhihu.com/p/417566961)
