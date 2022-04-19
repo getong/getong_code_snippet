@@ -124,6 +124,14 @@ $ fcitx-configtool
 # Addon进行插件管理, 双击插件进行设置
 ```
 
+auto start fcitx
+
+``` shell
+mkdir -p ~/.config/autostart
+ln -s /usr/share/applications/fcitx.desktop ~/.config/autostart/fcitx.desktop
+```
+copy from [ArchLinux 安装笔记](https://kodango.com/install-archlinux-notes)
+
 ## debug fcitx
 
 ``` shell
@@ -537,7 +545,8 @@ copy from [Arch安装参考](https://codeantenna.com/a/am4Pu4orQP)
 ## font
 
 ``` shell
-sudo pacman -S ttf-inconsolata nerd-fonts-droid-sans-mono
+// terminus-font terminal font
+sudo pacman -S ttf-inconsolata nerd-fonts-droid-sans-mono terminus-font
 yay -S fonts-droid-fallback ttf-symbola ttf-tahoma
 ```
 
