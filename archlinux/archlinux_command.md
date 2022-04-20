@@ -546,11 +546,7 @@ sudo pacman -S wqy-zenhei adobe-source-han-serif-cn-fonts
 sudo pacman -S noto-fonts-cjk noto-fonts-emoji noto-fonts-extra adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts  ttf-sarasa-gothic
 ```
 
-## texlive
 
-``` shell
-sudo pacman -S texlive-core texlive-latexextra
-```
 
 ## install nfs-utils
 ``` shell
@@ -1366,14 +1362,7 @@ copy from [Filename length limits on linux?](https://serverfault.com/questions/9
 ```
 copy from [How do I disable gnome-keyring ssh integration?](https://askubuntu.com/questions/545172/how-do-i-disable-gnome-keyring-ssh-integration)
 
-## pandoc
 
-``` shell
-sudo pacman -S pandoc texlive-fontsextra texlive-langchinese
-yay -S ttf-sarasa-ui-sc
-pandoc README.md -o README.pdf --pdf-engine=xelatex -V CJKmainfont='Sarasa UI SC'
-pandoc README.md -o README.docx
-```
 
 ## mount disk in /etc/fstab
 
@@ -1435,18 +1424,29 @@ atrm 1
 yay -S lldb-mi-git
 ```
 
-## texlive-full
+## texlive-full and pandoc
 
 ``` shell
-sudo vim /etc/pacman.conf
------------------
-[Clansty]
-SigLevel = Never
-Server = https://repo.lwqwq.com/archlinux/$arch
-Server = https://pacman.ltd/archlinux/$arch
-Server = https://repo.clansty.com/archlinux/$arch
+// sudo pacman -S texlive-core texlive-latexextra
+// sudo pacman -S pandoc texlive-fontsextra texlive-langchinese
 
-sudo pacman -Suw texlive-full
+// sudo vim /etc/pacman.conf
+-----------------
+// [Clansty]
+// SigLevel = Never
+// Server = https://repo.lwqwq.com/archlinux/$arch
+// Server = https://pacman.ltd/archlinux/$arch
+// Server = https://repo.clansty.com/archlinux/$arch
+
+// sudo pacman -Suw texlive-full
 // sudo pacman -S texlive-full
+
+wget -c https://pacman.ltd/archlinux/pool/texlive-full-20220220-1-x86_64.pkg.tar.zst
+sudo pacman -U texlive-full-20220220-1-x86_64.pkg.tar.zst
+
+yay -S ttf-sarasa-ui-sc
+pandoc README.md -o README.pdf --pdf-engine=xelatex -V CJKmainfont='Sarasa UI SC'
+pandoc README.md -o README.docx
+
 ```
 copy from [ArchLinux 安装 TeXLive](https://zhuanlan.zhihu.com/p/417566961)
