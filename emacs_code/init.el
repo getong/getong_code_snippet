@@ -544,7 +544,7 @@
            ;; :lldbmipath "path/to/lldb-mi"
            ))))
 
-copy from [Playing nicely with linum](https://www.emacswiki.org/emacs/UndoTree)
+;; copy from [Playing nicely with linum](https://www.emacswiki.org/emacs/UndoTree)
 (defun undo-tree-visualizer-update-linum (&rest args)
     (linum-update undo-tree-visualizer-parent-buffer))
 (advice-add 'undo-tree-visualize-undo :after #'undo-tree-visualizer-update-linum)
