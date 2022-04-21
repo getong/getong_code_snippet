@@ -1448,3 +1448,9 @@ pandoc README.md -o README.docx
 
 ```
 copy from [ArchLinux 安装 TeXLive](https://zhuanlan.zhihu.com/p/417566961)
+
+## appflowy
+
+``` shell
+yay -S appflowy-bin
+```
