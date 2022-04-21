@@ -1424,12 +1424,9 @@ atrm 1
 yay -S lldb-mi-git
 ```
 
-## texlive-full and pandoc
+## texlive and pandoc
 
 ``` shell
-// sudo pacman -S texlive-core texlive-latexextra
-// sudo pacman -S pandoc texlive-fontsextra texlive-langchinese
-
 // sudo vim /etc/pacman.conf
 -----------------
 // [Clansty]
@@ -1441,9 +1438,10 @@ yay -S lldb-mi-git
 // sudo pacman -Suw texlive-full
 // sudo pacman -S texlive-full
 
-wget -c https://pacman.ltd/archlinux/pool/texlive-full-20220220-1-x86_64.pkg.tar.zst
-sudo pacman -U texlive-full-20220220-1-x86_64.pkg.tar.zst
+// wget -c https://pacman.ltd/archlinux/pool/texlive-full-20220220-1-x86_64.pkg.tar.zst
+// sudo pacman -U texlive-full-20220220-1-x86_64.pkg.tar.zst
 
+sudo pacman -S pandoc texlive-core texlive-latexextra texlive-fontsextra texlive-langchinese
 yay -S ttf-sarasa-ui-sc
 pandoc README.md -o README.pdf --pdf-engine=xelatex -V CJKmainfont='Sarasa UI SC'
 pandoc README.md -o README.docx
