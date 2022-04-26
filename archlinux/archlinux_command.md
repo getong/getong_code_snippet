@@ -154,12 +154,14 @@ reboot
 ## login and enable the network
 
 ``` shell
-systemctl enable systemd-networkd
+sudo systemctl enable systemd-networkd
 
-systemctl enable systemd-resolved.service
+sudo systemctl enable systemd-resolved.service
 
-systemctl start gdm.service
-systemctl enable gdm.service
+sudo systemctl start gdm.service
+// systemctl enable gdm.service
+
+sudo systemctl set-default graphical
 ```
 
 ## add user and set group
