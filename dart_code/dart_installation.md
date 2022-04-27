@@ -36,3 +36,13 @@ pub global active package_names
 
 ## dart packages
 [dart packages](https://pub.flutter-io.cn/)
+
+
+## install flutter in archlinux
+
+``` shell
+sudo pacman -S flutter android-tools kotlin dart android-studio android-emulator android-sdk
+sudo gpasswd -a $USER flutterusers
+newgrp flutterusers
+```
+copy from [Start Flutter 2 in Arch Linux](https://dev.to/nabbisen/start-flutter-2-in-arch-linux-4ab6)
