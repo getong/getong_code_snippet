@@ -82,3 +82,19 @@ The meaning is:
 -e MYSQL_ROOT_PASSWORD=123456：初始化 root 用户的密码。
 ```
 copy from [docker安装mysql，并修改my.cnf文件](https://blog.csdn.net/qq_29907885/article/details/107692317)
+
+
+## mysql
+
+``` shell
+podman run -d \
+--name mysql-8 \
+-p 3306:3306 \
+-v ~/mysql_data:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD='MyStr0ngP@ssw0rd' \
+-e MYSQL_USER=dbuser1 \
+-e MYSQL_PASSWORD='dbuser1password' \
+-e MYSQL_DATABASE=testdb \
+mysql:8
+```
+copy from [How To Run MySQL Database in Docker Container](https://techviewleo.com/run-mysql-database-in-docker-container/)
