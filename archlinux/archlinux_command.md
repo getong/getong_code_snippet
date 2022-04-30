@@ -1462,3 +1462,9 @@ yay -S appflowy-bin
 ``` shell
 sudo pacman -S wireshark-cli
 ```
+
+## minio
+
+``` shell
+sudo pacman -S minio minio-client
+```
