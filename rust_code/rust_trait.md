@@ -305,3 +305,122 @@ When code involves polymorphism, there needs to be a mechanism to determine whic
 ```
 copy from [捋捋 Rust 中的 impl Trait 和 dyn Trait](https://zhuanlan.zhihu.com/p/109990547)
 also see [Trait 使用及原理分析](https://liujiacai.net/blog/2021/04/27/trait-usage/)
+
+## Index, IndexMut trait
+
+``` rust
+
+pub trait Index<Idx>
+where
+    Idx: ?Sized,
+{
+    type Output: ?Sized;
+    fn index(&self, index: Idx) -> &Self::Output;
+}
+
+pub trait IndexMut<Idx>: Index<Idx>
+where
+    Idx: ?Sized,
+{
+    fn index_mut(&mut self, index: Idx) -> &mut Self::Output;
+}
+```
+
+example:
+
+``` rust
+use std::ops::Index;
+
+enum Nucleotide {
+    A,
+    C,
+    G,
+    T,
+}
+
+struct NucleotideCount {
+    a: usize,
+    c: usize,
+    g: usize,
+    t: usize,
+}
+
+impl Index<Nucleotide> for NucleotideCount {
+    type Output = usize;
+
+    fn index(&self, nucleotide: Nucleotide) -> &Self::Output {
+        match nucleotide {
+            Nucleotide::A => &self.a,
+            Nucleotide::C => &self.c,
+            Nucleotide::G => &self.g,
+            Nucleotide::T => &self.t,
+        }
+    }
+}
+
+let nucleotide_count = NucleotideCount {a: 14, c: 9, g: 10, t: 12};
+assert_eq!(nucleotide_count[Nucleotide::A], 14);
+assert_eq!(nucleotide_count[Nucleotide::C], 9);
+assert_eq!(nucleotide_count[Nucleotide::G], 10);
+assert_eq!(nucleotide_count[Nucleotide::T], 12);
+```
+
+IndexMut:
+
+``` rust
+use std::ops::{Index, IndexMut};
+
+#[derive(Debug)]
+enum Side {
+    Left,
+    Right,
+}
+
+#[derive(Debug, PartialEq)]
+enum Weight {
+    Kilogram(f32),
+    Pound(f32),
+}
+
+struct Balance {
+    pub left: Weight,
+    pub right: Weight,
+}
+
+impl Index<Side> for Balance {
+    type Output = Weight;
+
+    fn index(&self, index: Side) -> &Self::Output {
+        println!("Accessing {:?}-side of balance immutably", index);
+        match index {
+            Side::Left => &self.left,
+            Side::Right => &self.right,
+        }
+    }
+}
+
+impl IndexMut<Side> for Balance {
+    fn index_mut(&mut self, index: Side) -> &mut Self::Output {
+        println!("Accessing {:?}-side of balance mutably", index);
+        match index {
+            Side::Left => &mut self.left,
+            Side::Right => &mut self.right,
+        }
+    }
+}
+
+let mut balance = Balance {
+    right: Weight::Kilogram(2.5),
+    left: Weight::Pound(1.5),
+};
+
+// In this case, `balance[Side::Right]` is sugar for
+// `*balance.index(Side::Right)`, since we are only *reading*
+// `balance[Side::Right]`, not writing it.
+assert_eq!(balance[Side::Right], Weight::Kilogram(2.5));
+
+// However, in this case `balance[Side::Left]` is sugar for
+// `*balance.index_mut(Side::Left)`, since we are writing
+// `balance[Side::Left]`.
+balance[Side::Left] = Weight::Kilogram(3.0);
+```
