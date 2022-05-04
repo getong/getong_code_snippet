@@ -28,3 +28,4 @@
 [High Assurance Rust](https://highassurance.rs/)
 [Futures Explained in 200 Lines of Rust](https://cfsamson.github.io/books-futures-explained/introduction.html)
 [Asynchronous Programming in Rust](https://rust-lang.github.io/async-book/)
+[Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md)
