@@ -22,3 +22,22 @@ copy from [Case Conversion Commands](https://www.gnu.org/software/emacs/manual/h
 C-M-n,C-M-p
 ```
 copy from [请问emacs中如何跳转到和光标所在括号配对的括号处？](https://bbs.csdn.net/topics/70029649)
+
+## coding system
+
+``` emacs-lisp
+m-x revert-buffer-with-coding-system
+utf-8
+```
+change the coding headline of the file:
+
+```
+%% -*- coding: utf-8 -*-
+```
+
+add the following into the ~/.emacs.d/init.el
+
+``` emacs-lisp
+(set-default-coding-systems 'utf-8)
+```
+copy from [Working with Coding Systems and Unicode in Emacs](https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs)
