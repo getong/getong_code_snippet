@@ -180,3 +180,11 @@ smb://ip/share
 
 copy from [Mac OS X 访问连接SAMBA共享磁盘](https://www.jianshu.com/p/4f785ae6c29c)
 also see [Macos 建立Samba服务器](https://blog.csdn.net/qq_38375620/article/details/101699465)
+
+## disable brew auto update
+
+``` shell
+echo "export HOMEBREW_NO_INSTALL_UPGRADE=1" >> ~/.zshrc
+source ~/.zshrc
+```
+copy from [HOMEBREW_NO_AUTO_UPDATE=1 environment variable does not work](https://github.com/Homebrew/brew/issues/12114)
