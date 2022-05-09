@@ -459,7 +459,7 @@ Loop to fetch 10 commits each time.
 
 ``` shell
 // get the detached head source code
-git clone --depth=1 --branch=4.26.2-release https://github.com/EpicGames/UnrealEngine
+git clone --depth=1 --branch=5.0.1-release https://github.com/EpicGames/UnrealEngine
 
 cd UnrealEngine
 git branch release
