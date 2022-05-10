@@ -21,3 +21,20 @@
 
 copy from [Getting started with MongoDB and Redis in Rust](https://romankudryashov.com/blog/2021/06/mongodb-redis-rust/)
 also see [MongoDB + Redis demo](https://github.com/rkudryashov/exploring-rust-ecosystem/tree/master/mongodb-redis)
+
+## culster mode
+
+``` rust
+use redis::cluster::ClusterClient;
+use redis::Commands;
+
+fn fetch_an_integer() -> String {
+    // connect to redis
+    let nodes = vec!["redis://127.0.0.1/"];
+    let client = ClusterClient::open(nodes).unwrap();
+    let mut connection = client.get_connection().unwrap();
+    let _: () = connection.set("test", "test_data").unwrap();
+    let rv: String = connection.get("test").unwrap();
+    return rv;
+}
+```
