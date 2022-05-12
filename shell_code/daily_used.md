@@ -783,3 +783,21 @@ The `192.168.2.1` is the gateway.
 ``` shell
 cat /etc/resolv.conf
 ```
+
+## mount usb stick by uuid
+
+``` shell
+mount /dev/disk/by-uuid/695b1163-3774-4805-b5e4-76512c67cf7b temp
+```
+copy from [Mounting usb automatically & having usb's label as mountpoint](https://unix.stackexchange.com/questions/119973/mounting-usb-automatically-having-usbs-label-as-mountpoint)
+
+``` shell
+#!/bin/sh
+export mount_point="/media/$1"
+current_device=$(awk '$2 == ENVIRON["mount_point"] {print $1; exit}' </proc/mounts)
+if [ -n "$current_device" ]; then
+  echo 1>&2 "$current_device already mounted on $mount_point"
+  exit 1
+fi
+mount "/dev/disk/by-label/$1" "$mount_point"
+```
