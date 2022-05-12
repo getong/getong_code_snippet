@@ -1468,3 +1468,9 @@ sudo pacman -S wireshark-cli
 ``` shell
 sudo pacman -S minio minio-client
 ```
+
+## wine
+
+``` shell
+sudo pacman -S wine-mono wine
+```
