@@ -1474,3 +1474,11 @@ sudo pacman -S minio minio-client
 ``` shell
 sudo pacman -S wine-mono wine
 ```
+
+## cronie
+
+``` shell
+sudo pacman -S cronie
+sudo systemctl enable --now cronie.service
+EDITOR="emacs -nw" crontab -e
+```
