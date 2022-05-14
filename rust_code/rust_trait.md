@@ -424,3 +424,9 @@ assert_eq!(balance[Side::Right], Weight::Kilogram(2.5));
 // `balance[Side::Left]`.
 balance[Side::Left] = Weight::Kilogram(3.0);
 ```
+
+## trait object
+>>>
+在 Rust 中使用 trait 实现多态有两种方式，静态分发或者动态分发。静态分发使用 trait bound 或者 impl trait 方式实现编译期单态化，根据类型参数生成对应的结构或者函数。动态分发使用 trait object 的方式实现，而由于 trait object 是动态大小类型，无法在编译期确定类型大小，所以一般会使用指向 trait object 的引用或者指针来操作 trait object。而指向 trait object 的引用或者指针本质上是一个胖指针，其中包含了指向擦除了具体类型的对象指针与虚函数表。所以每次调用 trait object 的方法时，需要解引用该胖指针，所以部分观点认为动态分发比静态分发开销更大，而相反的观点认为使用静态分发会导致编译时间变长，编译后二进制文件膨胀以及增加缓存失效概率等问题，所以具体使用哪种方式就见仁见智了。
+
+copy from [Trait Object 还是 Virtual Method Table](https://juejin.cn/post/7011317906969460766)
