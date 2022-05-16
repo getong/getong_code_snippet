@@ -351,3 +351,29 @@ let mut input = Cow::from(vec![-1, 0, 1]);
 abs_all(&mut input);
 ```
 copy from [Enum std::borrow::Cow](https://doc.rust-lang.org/std/borrow/enum.Cow.html)
+
+## tram
+
+``` rust
+if mem::size_of::<T>() == 0 {
+    // purposefully don't use 'ptr.offset' because for
+    // vectors with 0-size elements this would return the
+    // same pointer.
+    self.ptr = transmute(self.ptr as uint + 1);
+
+    // Use a non-null pointer value
+    Some(transmute(1u))
+} else {
+    let old = self.ptr;
+    self.ptr = self.ptr.offset(1);
+
+    Some(transmute(old))
+}
+```
+>>>
+To understand what’s going on, you need to know three things:
+
+The function std::mem::size_of returns the number of bytes a type takes up in memory. For example, std::mem::size_of::<u8>() returns 1 and std::mem::size_of::<i32>() returns 4.
+Certain types in Rust take up zero bytes. These types include (), the unit type and any unit structs, which are structs with no fields (such a struct is declared by struct Foo;).
+The transmute function above is std::mem::transmute. Its signature is pub fn transmute<T, U>(T) -> U. As far as I understand, it doesn’t change anything about the value being transmuted, all it does is change its type. For example, one way to print out the memory address of a variable x in Rust is to transmute a &x to a uint and just print out the uint. As you might imagine, this operation is HIGHLY DANGEROUS.There’s nothing to stop you from transmuting 0 into a borrow, &T and then trying to dereference it. Voila, null pointer dereferencing in Rust!
+copy from [A Rust curiosity: pointers to zero-sized types](https://web.archive.org/web/20160327061400/http://www.wabbo.org/blog/2014/03aug_09aug.html)
