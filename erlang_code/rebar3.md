@@ -116,3 +116,10 @@ Or run command like this:
 ``` shell
 HEX_MIRROR=https://hexpm.upyun.com rebar3 compile
 ```
+
+## rebar3 umbrella project
+
+``` shell
+rebar3 new umbrella game
+```
+copy from [Multi-App Projects](https://adoptingerlang.org/docs/development/umbrella_projects/)
