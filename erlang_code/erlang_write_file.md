@@ -71,3 +71,13 @@ For a specified error returned by any function in this module, this function ret
 Given the error returned by any function in this module, this function returns a descriptive string of the error in English. For file errors, function format_error/1 in module file is called.
 ```
 They are almost the same.
+
+## symlink
+
+``` erlang
+-include_lib("kernel/include/file.hrl").
+is_symlink(Filename) ->
+    {ok, Info} = file:read_link_info(FileName),
+    Info#file_info.type == symlink.
+```
+copy from [Way to check if directory is a symlink via erlang](https://stackoverflow.com/questions/39002380/way-to-check-if-directory-is-a-symlink-via-erlang)
