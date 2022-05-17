@@ -584,3 +584,25 @@ It is mainly use the `socket.recv_from()` method to receive the binary data, and
 ```
 The `packet` variable here is the fragment udp data, and the `sender.send()` method will send the udp data to the other part of the network.
 It is how the proxy works.
+
+## register method
+
+``` rust
+static REGISTRY: Lazy<ArcSwap<FilterSet>> =
+    Lazy::new(|| ArcSwap::new(std::sync::Arc::new(FilterSet::default())));
+
+#[derive(Debug)]
+pub struct FilterRegistry;
+
+impl FilterRegistry {
+    /// Loads the provided [`FilterSet`] into the registry of available filters.
+    pub fn register(factories: impl IntoIterator<Item = DynFilterFactory>) {
+        let mut registry = FilterSet::clone(&REGISTRY.load_full());
+        for factory in factories {
+            registry.insert(factory);
+        }
+
+        REGISTRY.store(std::sync::Arc::from(registry));
+    }
+}
+```
