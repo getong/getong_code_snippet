@@ -801,3 +801,10 @@ if [ -n "$current_device" ]; then
 fi
 mount "/dev/disk/by-label/$1" "$mount_point"
 ```
+
+## find file follow symbolic links
+
+``` shell
+find -L /data -name "*.jpg"
+```
+copy from [Linux / UNIX find files with symbolic links](https://www.cyberciti.biz/faq/linux-unix-find-files-with-symbolic-links/)
