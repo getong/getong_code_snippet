@@ -211,3 +211,34 @@ The higher value can use varchar:
 If for some reason you believe you'd need a value greater than this, store it in a VARCHAR as a combination of digits and characters instead... e.g. 00-09, then 0a-0Z (really crude and won't actually be a good idea in this exact form but you get the point) etc going up systematically like that for as long as you like, that way if you need more space you can just increase the size of the field
 ```
 copy from [Does a 64-bit Integer PRACTICALLY have a limit?](https://stackoverflow.com/questions/52830878/does-a-64-bit-integer-practically-have-a-limit)
+
+## copy table definition
+
+``` sql
+CREATE TABLE new_table LIKE old_table;
+
+CREATE TABLE bigger_orders (
+  another_orderkey bigint,
+  LIKE orders,
+  another_orderdate date
+) COMMENT 'A table to keep track of orders.';
+```
+copy from [CREATE TABLE#](https://prestodb.io/docs/current/sql/create-table.html)
+
+## AUTO_INCREMENT values
+
+``` sql
+mysql> create table new_table like old_table;
+
+mysql> select @my_auto_increment:=auto_increment from information_schema.tables where table_name='old_table';
+
+mysql> set @query = CONCAT("alter table new_table auto_increment = ", @my_auto_increment);
+
+mysql> prepare stmt from @query;
+
+mysql> execute stmt;
+
+mysql> deallocate prepare stmt;
+```
+
+copy from [CREATE TABLE new_table_name LIKE old_table_name with old_table_name's AUTO_INCREMENT values](https://stackoverflow.com/questions/2361982/create-table-new-table-name-like-old-table-name-with-old-table-names-auto-incre)
