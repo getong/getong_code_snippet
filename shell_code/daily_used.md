@@ -808,3 +808,10 @@ mount "/dev/disk/by-label/$1" "$mount_point"
 find -L /data -name "*.jpg"
 ```
 copy from [Linux / UNIX find files with symbolic links](https://www.cyberciti.biz/faq/linux-unix-find-files-with-symbolic-links/)
+
+## dereference-recursive grep
+
+``` shell
+grep -R linuxize.com /etc
+```
+copy from [Grep Command in Linux (Find Text in Files)](https://linuxize.com/post/how-to-use-grep-command-to-search-files-in-linux/)
