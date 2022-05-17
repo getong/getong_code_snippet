@@ -606,3 +606,16 @@ impl FilterRegistry {
     }
 }
 ```
+
+usage:
+
+``` rust
+pub async fn run(
+    config: Config,
+    filter_factories: impl IntoIterator<Item = DynFilterFactory>,
+) -> Result<()> {
+
+    FilterRegistry::register(filter_factories);
+
+}
+```
