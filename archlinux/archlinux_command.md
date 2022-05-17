@@ -653,9 +653,6 @@ setxkbmap -option ctrl:swapcaps
 copy from [Remapping Caps Lock to Esc on Arch Linux](https://n1ghtmare.github.io/2021-05-19/remapping-caps-lock-to-esc-on-arch-linux/)
 also see [Linux – How to map the Caps Lock key to Escape key in Arch Linux](https://itectec.com/superuser/how-to-map-the-caps-lock-key-to-escape-key-in-arch-linux/)
 
-
-
-
 ## samba
 
 ``` shell
