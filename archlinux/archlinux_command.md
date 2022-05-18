@@ -1479,3 +1479,10 @@ sudo pacman -S cronie
 sudo systemctl enable --now cronie.service
 EDITOR="emacs -nw" crontab -e
 ```
+
+## alsamixer
+
+``` shell
+sudo pacman -S alsa-utils
+alsamixer
+```
