@@ -1214,8 +1214,8 @@ copy from [Archlinux 优化之一](https://blog.tiantian.cool/arch-1/)
 
 ``` shell
 sudo pacman -S podman
-echo "$USER:110000:65536" | sudo tee -a  /etc/subuid
-echo "$USER:110000:65536" | sudo tee -a  /etc/subgid
+echo -e "$USER:1:999\n$USER:1001:64535" | sudo tee -a /etc/subuid
+echo -e "$USER:1:999\n$USER:1001:64535" | sudo tee -a /etc/subgid
 podman system migrate
 
 mkdir -p $HOME/.config/containers/
