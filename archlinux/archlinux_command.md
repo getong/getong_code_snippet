@@ -1488,3 +1488,20 @@ EDITOR="emacs -nw" crontab -e
 sudo pacman -S alsa-utils
 alsamixer
 ```
+
+## podman start error
+
+``` shell
+$ podman run -it --rm --entrypoint=/bin/bash --privileged --ulimit nofile=262144:262144 -v $PWD:/work -p 9000:9000 -p 18123:8123 yandex/clickhouse-server:21.3.20.1
+Error: crun: error stat'ing file `/dev/vboxusb/001/007`: Permission denied: OCI permission denied
+```
+it might be error to be fixed by：
+[Privileged containers cannot be restarted if host devices changed](https://github.com/containers/podman/issues/13899)
+
+## docker
+
+``` shell
+sudo pacman -S docker
+sudo usermod -aG docker $USER
+sudo systemctl enable --now docker
+```
