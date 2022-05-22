@@ -188,3 +188,14 @@ echo "export HOMEBREW_NO_INSTALL_UPGRADE=1" >> ~/.zshrc
 source ~/.zshrc
 ```
 copy from [HOMEBREW_NO_AUTO_UPDATE=1 environment variable does not work](https://github.com/Homebrew/brew/issues/12114)
+
+## podman
+
+``` shell
+brew install podman
+podman machine init
+podman machine start
+export DOCKER_HOST='unix:///Users/gerald/.local/share/containers/podman/machine/podman-machine-default/podman.sock'
+podman pull yandex/clickhouse-server:21.3.20.1
+podman run -d --name some-clickhouse-server --ulimit nofile=262144:262144 yandex/clickhouse-server:21.3.20.1
+```
