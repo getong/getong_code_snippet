@@ -562,3 +562,7 @@
 
 ;; copy from [Emacs and symbolic links](https://stackoverflow.com/questions/15390178/emacs-and-symbolic-links)
 (setq vc-follow-symlinks t)
+
+;; copy from [How to configure dired to update instantly when files/folders change?](https://www.reddit.com/r/emacs/comments/1acg6q/how_to_configure_dired_to_update_instantly_when/)
+(setq global-auto-revert-non-file-buffers t)
+(global-auto-revert-mode)
