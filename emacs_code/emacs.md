@@ -41,3 +41,10 @@ add the following into the ~/.emacs.d/init.el
 (set-default-coding-systems 'utf-8)
 ```
 copy from [Working with Coding Systems and Unicode in Emacs](https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs)
+
+## ansi-term mode
+
+>>>
+You may want to simply switch between character mode and line mode while using the terminal. C-c C-j will run term-line-mode, which treats the terminal buffer more like a normal text-buffer in which you can move the cursor and yank text. You can switch back to character mode by running term-char-mode with C-c C-k.
+
+copy from [Copy/Paste in emacs ansi-term shell](https://stackoverflow.com/questions/2886184/copy-paste-in-emacs-ansi-term-shell)
