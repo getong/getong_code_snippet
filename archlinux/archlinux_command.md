@@ -1505,3 +1505,10 @@ sudo pacman -S docker
 sudo usermod -aG docker $USER
 sudo systemctl enable --now docker
 ```
+
+## lld
+
+``` shell
+sudo pacman -S lld
+```
+copy from [Cargo build failed with = note: collect2: fatal error: cannot find 'ld'](https://stackoverflow.com/questions/70272393/cargo-build-failed-with-note-collect2-fatal-error-cannot-find-ld)
