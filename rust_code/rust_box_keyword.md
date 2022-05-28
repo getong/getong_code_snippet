@@ -25,3 +25,27 @@ exchange_malloc to allocate the memory.
 exchange_free to free the previously allocated memory.
 ```
 copy from [What does the box keyword do?](https://stackoverflow.com/questions/30352802/what-does-the-box-keyword-do)
+
+## Box::leak() function
+a variable with static lifetime with runtime size.
+
+``` rust
+let boxed = Box::new(String::from("Crab"));
+let raw_ptr = unsafe { Box::into_raw(boxed) };
+let _ = unsafe { Box::from_raw(raw_ptr) }; // will be freed
+```
+
+``` rust
+
+// Excerpt from the standard library documentation
+use std::alloc::{dealloc, Layout};
+use std::ptr;
+
+let x = Box::new(String::from("Hello"));
+let p = Box::into_raw(x);
+unsafe {
+    ptr::drop_in_place(p);
+    dealloc(p as *mut u8, Layout::new::<String>());
+}
+```
+copy from [Memory management](https://anssi-fr.github.io/rust-guide/05_memory.html)
