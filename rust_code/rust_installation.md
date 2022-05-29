@@ -18,6 +18,7 @@ $ rustup component add rustc-dev --toolchain=nightly
 $ cargo install tokio-console
 $ cargo install savage
 $ cargo install cargo-expand
+$ cargo install sea-orm-cli
 
 $ git clone https://github.com/rust-lang/rust-analyzer
 $ cd rust-analyzer
