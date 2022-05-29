@@ -1487,6 +1487,8 @@ EDITOR="emacs -nw" crontab -e
 ``` shell
 sudo pacman -S alsa-utils
 alsamixer
+// save the setting
+sudo alsactl store
 ```
 
 ## podman start error
