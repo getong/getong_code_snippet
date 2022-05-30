@@ -19,7 +19,6 @@ timedatectl set-ntp true
 
 cfdisk /dev/sda
 
-mkswap /dev/sda2
 
 // none efi
 mount /dev/sda3 /mnt

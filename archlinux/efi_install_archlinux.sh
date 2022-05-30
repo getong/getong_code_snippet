@@ -21,7 +21,6 @@ parted /dev/sda - mklabel gpt
 parted /dev/sda - mkpart primary 2M 128G
 parted /dev/sda - mkpart primary 128G -1
 
-mkswap /dev/sda1
 mkfs.btrfs -f /dev/sda2
 
 ## mount disk
