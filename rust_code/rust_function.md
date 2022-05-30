@@ -795,3 +795,6 @@ or_else(|| Some()) returns some default value if the option data is None. If the
 unwrap_or_else(|| <>) is similar to or_else(). The difference is or_else() returns optional data, but unwrap_or_else(|| <>) returns the data. In other words, it unwraps or_else() the result.
 ```
 copy from [3 Fundamentals of Enums in Rust](https://medium.com/codex/3-fundamentals-of-enums-in-rust-36d33bf18782)
+
+## variadic callback
+see [“变长参数”函数与回调](https://zjp-cn.github.io/rust-note/dcl/variadic.html)
