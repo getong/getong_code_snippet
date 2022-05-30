@@ -1517,7 +1517,7 @@ copy from [Cargo build failed with = note: collect2: fatal error: cannot find 'l
 ``` shell
 sudo pacman -S zram-generator
 
-echo " [zram0]
+echo "[zram0]
 zram-size = ram / 2" | sudo tee -a /etc/systemd/zram-generator.conf
 
 sudo systemctl daemon-reload
@@ -1528,3 +1528,6 @@ zramctl
 ```
 swap is no more needed.
 copy from [systemctl start /dev/zram0](https://github.com/systemd/zram-generator)
+The reason why choose zram:
+1, the kubernetes dislike swap
+2. the zram is much more high performance.
