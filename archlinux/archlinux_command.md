@@ -952,12 +952,9 @@ mkfs.btrfs -f /dev/nvme0n1p2
 
 parted /dev/sda
    mklabel gpt
-   mkpart primary 4096s 128G
-   mkpart primary 128G -1
+   mkpart primary 4096s -1
    q
 
-mkswap /dev/sda1
-swapon /dev/sda1
 
 mkfs.btrfs -f /dev/sda2
 
@@ -1368,9 +1365,9 @@ copy from [How do I disable gnome-keyring ssh integration?](https://askubuntu.co
 ## mount disk in /etc/fstab
 
 ```
-#UUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   none      	swap deafults 0 0
-#/dev/sda1   none      	swap      	defaults  	0 0
-PARTUUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   none      	swap      	defaults  	0 0
+#UUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   /      	btrfs deafults 0 0
+#/dev/sda1   /      	btrfs      	defaults  	0 0
+PARTUUID=ebb41841-85fd-4d22-9f33-c88348ff18c4   /      	btrfs      	defaults  	0 0
 ```
 
 ## change nic interface name
@@ -1514,3 +1511,20 @@ sudo systemctl enable --now docker
 sudo pacman -S lld
 ```
 copy from [Cargo build failed with = note: collect2: fatal error: cannot find 'ld'](https://stackoverflow.com/questions/70272393/cargo-build-failed-with-note-collect2-fatal-error-cannot-find-ld)
+
+## zram-generator
+
+``` shell
+sudo pacman -S zram-generator
+
+echo " [zram0]
+zram-size = ram / 2" | sudo tee -a /etc/systemd/zram-generator.conf
+
+sudo systemctl daemon-reload
+
+sudo systemctl start /dev/zram0
+
+zramctl
+```
+swap is no more needed.
+copy from [systemctl start /dev/zram0](https://github.com/systemd/zram-generator)
