@@ -38,3 +38,47 @@ vis A visibility specifier: pub, pub(crate), pub(in module::submodule) Anything
 
 tt A token tree (see text): ;, >=, {}, [0 1 (+ 0 1)] Anything
 ```
+
+## proc_macro example
+
+``` rust
+use proc_macro::TokenStream;
+use quote::{format_ident, quote};
+use syn::{
+   parse::{Parse, ParseStream},
+   parse_macro_input, Ident, LitInt, Result,
+};
+
+#[proc_macro]
+pub fn all_tuples(input: TokenStream) -> TokenStream {
+    let Input { name, start, end, ident } = parse_macro_input!(input);
+    let id = |s: u8, e: u8| (s..e).map(|n| format_ident!("{ident}{n}"));
+    let items = (start..=end).map(|n| {
+                                 let ids = id(start, n + 1);
+                                 quote!( #name!{#(#ids),*} )
+                             });
+    quote!(#(#items)*).into()
+}
+
+struct Input {
+    name:  Ident,
+    start: u8,
+    end:   u8,
+    ident: Ident,
+}
+
+impl Parse for Input {
+    fn parse(input: ParseStream) -> Result<Self> {
+        use syn::token::Comma;
+        let name     = input.parse()?;
+        let _: Comma = input.parse()?;
+        let start    = input.parse::<LitInt>()?.base10_parse()?;
+        let _: Comma = input.parse()?;
+        let end:     = input.parse::<LitInt>()?.base10_parse()?;
+        let _: Comma = input.parse()?;
+        let ident    = input.parse()?;
+        Ok(Input { name, start, end, ident })
+    }
+}
+```
+copy from [“变长参数”函数与回调](https://zjp-cn.github.io/rust-note/dcl/variadic.html)
