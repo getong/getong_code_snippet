@@ -151,3 +151,39 @@ trait Unpin {}
 ```
 almost all types in Rust automatically implement Unpin, using special support in the compiler.
 Asynchronous function and block futres are the exceptions to this rule.
+
+
+## cancel task
+
+``` rust
+async fn handle_connection(socket: TcpStream, channel: Channel) {
+    let reader = Arc::new(socket);
+    let writer = reader.clone();
+
+    let read_task = task::spawn(async move {
+        while let Some(line_in) in parse_line(&reader).await? {
+            broadcast_line(line_in)?;
+        }
+
+        Ok(())
+    });
+
+    loop {
+        // `channel` and JoinHandle are both "channel-like" types.
+        select! {
+            _ = read_task.join() => {
+                // The connection closed or we encountered an error,
+                // exit the loop
+                break;
+            }
+            line_out = channel.recv() => {
+                if write_line(&writer, line_out).await.is_err() {
+                    read_task.cancel();
+                    read_task.join();
+                }
+            }
+        }
+    }
+}
+```
+copy from [EXPLORING WAYS TO MAKE ASYNC RUST EASIER](https://carllerche.com/2021/06/17/six-ways-to-make-async-rust-easier/)
