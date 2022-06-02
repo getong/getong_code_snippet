@@ -30,6 +30,9 @@ svn mergeinfo svn://svn_server/repo/trunk --show-revs eligible
 
 ```
 svn -r 99:120 merge svn://svn_server/repo/trunk
+
+// restore the N version file.txt into local svn directory, and commit into remote svn server.
+svn merge -rHEAD:N file.ext
 ```
 回滚代码, 反向合并
 
