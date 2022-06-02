@@ -1530,3 +1530,12 @@ copy from [systemctl start /dev/zram0](https://github.com/systemd/zram-generator
 The reason why choose zram:
 1, the kubernetes dislike swap
 2. the zram is much more high performance.
+
+Or change the zram-generator.conf:
+
+```
+[zram0]
+zram-fraction = 1
+max-zram-size=none
+```
+copy from [Dynamically Increase SWAP (ZRAM) Size in Linux](https://medium.com/nerd-for-tech/dynamically-adjust-swap-zram-size-in-fedora-linux-78cd712808f2)
