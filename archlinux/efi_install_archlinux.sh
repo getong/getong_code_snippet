@@ -7,19 +7,17 @@ reflector --country China --age 72 --sort rate --protocol https --save /etc/pacm
 timedatectl set-ntp true
 
 ## parted ssd disk
-parted /dev/nvme0n1 – mklabel gpt
+parted /dev/nvme0n1 mklabel gpt
 ## EFI system partition
-parted /dev/nvme0n1 - mkpart primary 2M 512M
-parted /dev/nvme0n1 - mkpart primary 512M   -1
-parted /dev/nvme0n1 - set 1 boot on
+parted /dev/nvme0n1 mkpart primary 4097s 100%
+parted /dev/nvme0n1 set 1 boot on
 
 mkfs.vfat -F32 /dev/nvme0n1p1
 mkfs.btrfs -f /dev/nvme0n1p2
 
 ## parted normal disk
-parted /dev/sda - mklabel gpt
-parted /dev/sda - mkpart primary 2M 128G
-parted /dev/sda - mkpart primary 128G -1
+parted /dev/sda mklabel gpt
+parted /dev/sda mkpart primary 4097s 100%
 
 mkfs.btrfs -f /dev/sda2
 

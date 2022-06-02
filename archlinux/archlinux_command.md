@@ -940,8 +940,8 @@ sudo pacman -S linux-lts-headers linux-lts linux-lts-docs
 
 parted /dev/nvme0n1
    mklabel gpt
-   mkpart primary 4096s 512M
-   mkpart primary 512M   -1
+   mkpart primary 4097s 512M
+   mkpart primary 512M  100%
    set 1 boot on
    q
 
@@ -951,7 +951,7 @@ mkfs.btrfs -f /dev/nvme0n1p2
 
 parted /dev/sda
    mklabel gpt
-   mkpart primary 4096s -1
+   mkpart primary 4097s 100%
    q
 
 
