@@ -566,3 +566,17 @@
 ;; copy from [How to configure dired to update instantly when files/folders change?](https://www.reddit.com/r/emacs/comments/1acg6q/how_to_configure_dired_to_update_instantly_when/)
 (setq global-auto-revert-non-file-buffers t)
 (global-auto-revert-mode)
+
+;; copy from https://christiantietze.de/posts/2021/06/emacs-trash-file-macos/
+(setq delete-by-moving-to-trash t)
+(setq trash-directory "/backup/.Trash-1000/files")  ;; fallback for `move-file-to-trash'
+(when (memq window-system '(mac ns))
+  (defun system-move-file-to-trash (path)
+    "Moves file at PATH to the macOS Trash according to `move-file-to-trash' convention.
+
+Relies on the command-line utility 'trash' to be installed.
+Get it from:  <http://hasseg.org/trash/>"
+    (shell-command (concat "trash -vF \"" path "\""
+                           "| sed -e 's/^/Trashed: /'")
+                   nil ;; Name of output buffer
+                   "*Trash Error Buffer*")))
