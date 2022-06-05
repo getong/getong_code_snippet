@@ -233,3 +233,123 @@ Indeed, the original &*pair2 actually means &*pair2.deref() – the * forces the
 
 ```
 copy from [Understanding &* to access a Rust Arc](https://stackoverflow.com/questions/62651479/understanding-to-access-a-rust-arc)
+
+## arc mutex dashmap channel example
+
+``` rust
+use tokio::sync::mpsc::{Sender, Receiver};
+
+pub struct Server {
+  clients: Arc<DashMap<String, Sender<String>>>,
+}
+
+impl Server {
+
+  pub fn new(clients: Arc<DashMap<String, Sender<String>>>) -> Server {
+    return Server{clients};
+  }
+}
+```
+copy from [multiread](https://github.com/bww/multiread)
+
+## arc dashmap struct example
+the value in the dashmap might be `Arc<T>`
+``` rust
+// raft_node.rs
+#[derive(Clone)]
+pub struct Peer {
+    addr: String,
+    client: Arc<RwLock<Option<RaftGrpcClient>>>,
+    grpc_fails: Arc<AtomicU64>,
+    grpc_fail_time: Arc<AtomicI64>,
+}
+
+impl Peer {
+    pub fn new(addr: String) -> Peer {
+        debug!("connecting to node at {}...", addr);
+        Peer {
+            addr,
+            client: Arc::new(RwLock::new(None)),
+            grpc_fails: Arc::new(AtomicU64::new(0)),
+            grpc_fail_time: Arc::new(AtomicI64::new(0))
+        }
+    }
+}
+
+
+/// A mailbox to send messages to a ruung raft node.
+#[derive(Clone)]
+pub struct Mailbox {
+    peers: Arc<DashMap<(u64, String), Peer>>,
+    sender: mpsc::Sender<Message>,
+}
+
+
+```
+copy from [rmqtt-raft](https://github.com/rmqtt/rmqtt-raft)
+
+## arc dashmap box trait example
+the value in the dashmap might be `Pin<Box<dyn Trait>>`
+``` rust
+struct DataSender {
+    req: Request<Body>,
+    res_body_streams_sender: mpsc::UnboundedSender<
+        Pin<Box<dyn Stream<Item = Result<Bytes, std::convert::Infallible>> + Send>>,
+    >,
+}
+
+struct DataReceiver {
+    res_sender: oneshot::Sender<Response<Body>>,
+}
+
+pub struct PipingServer {
+    path_to_sender: Arc<dashmap::DashMap<String, DataSender>>,
+    path_to_receiver: Arc<dashmap::DashMap<String, DataReceiver>>,
+}
+
+impl Clone for PipingServer {
+    fn clone(&self) -> Self {
+        PipingServer {
+            path_to_sender: Arc::clone(&self.path_to_sender),
+            path_to_receiver: Arc::clone(&self.path_to_receiver),
+        }
+    }
+}
+
+impl PipingServer {
+    pub fn new() -> Self {
+        PipingServer {
+            path_to_sender: Arc::new(dashmap::DashMap::new()),
+            path_to_receiver: Arc::new(dashmap::DashMap::new()),
+        }
+    }
+
+
+```
+copy from [piping-server-rust](https://github.com/nwtgck/piping-server-rust)
+
+or:
+
+``` rust
+// Output to a raw file and a parsed file.
+#[derive(Clone)]
+struct Output(Arc<Mutex<Box<dyn std::io::Write + Send>>>);
+
+let splitted_files: Arc<DashMap<String, Output>> = Arc::new(DashMap::new());
+let entry = splitted_files
+                    .entry(output_file_name.clone())
+                    .or_insert_with(move || {
+                        let buf_writer = {
+                            std::fs::create_dir_all(output_dir.as_path()).unwrap();
+                            let f_out = std::fs::OpenOptions::new()
+                                .create(true)
+                                .write(true)
+                                .truncate(true)
+                                .open(Path::new(output_dir.as_path()).join(output_file_name))
+                                .unwrap();
+                            std::io::BufWriter::new(GzEncoder::new(f_out, Compression::default()))
+                        };
+                        Output(Arc::new(Mutex::new(Box::new(buf_writer))))
+                    });
+```
+copy from [crypto-cli-tools](https://github.com/crypto-crawler/crypto-cli-tools)
