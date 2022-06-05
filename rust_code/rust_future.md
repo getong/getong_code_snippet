@@ -178,7 +178,7 @@ async fn handle_connection(socket: TcpStream, channel: Channel) {
             }
             line_out = channel.recv() => {
                 if write_line(&writer, line_out).await.is_err() {
-                    read_task.cancel();
+                    read_task.abort();
                     read_task.join();
                 }
             }
@@ -222,7 +222,7 @@ async fn handle_connection(socket: TcpStream, channel: Channel) {
             }
             line_out = channel.recv() => {
                 if write_line(&writer, line_out).await.is_err() {
-                    read_task.cancel();
+                    read_task.abort();
                     read_task.join();
                 }
             }
@@ -233,9 +233,9 @@ async fn handle_connection(socket: TcpStream, channel: Channel) {
 
 ```
 
-or
+Or
 
-``` rust
+``` Rust
 #[abort_safe]
 async fn read_line(&mut self) -> io::Result<Option<String>> {
     loop {
