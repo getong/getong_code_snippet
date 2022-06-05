@@ -353,3 +353,5 @@ let entry = splitted_files
                     });
 ```
 copy from [crypto-cli-tools](https://github.com/crypto-crawler/crypto-cli-tools)
+
+The value in the dashmap should be Arc<Box<T>>, or, Pin<Box<T>>.
