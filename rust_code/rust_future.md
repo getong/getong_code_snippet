@@ -187,3 +187,89 @@ async fn handle_connection(socket: TcpStream, channel: Channel) {
 }
 ```
 copy from [EXPLORING WAYS TO MAKE ASYNC RUST EASIER](https://carllerche.com/2021/06/17/six-ways-to-make-async-rust-easier/)
+
+## tcpstream and future
+
+``` rust
+async fn parse_line(socket: &TcpStream) -> Result<String, Error> {
+    let len = socket.read_u32().await?;
+    let mut line = vec![0; len];
+    socket.read_exact(&mut line).await?;
+    let line = str::from_utf8(line)?;
+    Ok(line)
+}
+
+
+async fn handle_connection(socket: TcpStream, channel: Channel) {
+    let reader = Arc::new(socket);
+    let writer = reader.clone();
+
+    let read_task = task::spawn(async move {
+        while let Some(line_in) in parse_line(&reader).await? {
+            broadcast_line(line_in)?;
+        }
+
+        Ok(())
+    });
+
+    loop {
+        // `channel` and JoinHandle are both "channel-like" types.
+        select! {
+            _ = read_task.join() => {
+                // The connection closed or we encountered an error,
+                // exit the loop
+                break;
+            }
+            line_out = channel.recv() => {
+                if write_line(&writer, line_out).await.is_err() {
+                    read_task.cancel();
+                    read_task.join();
+                }
+            }
+        }
+    }
+}
+
+
+```
+
+or
+
+``` rust
+#[abort_safe]
+async fn read_line(&mut self) -> io::Result<Option<String>> {
+    loop {
+        // Consume a full line from the buffer
+        if let Some(line) = self.parse_line()? {
+            return Ok(line);
+        }
+
+        // Not enough data has been buffered to parse a full line
+        if 0 == self.socket.read_buf(&mut self.buffer)? {
+            // The remote closed the connection.
+            if self.buffer.is_empty() {
+                return Ok(None);
+            } else {
+                return Err("connection reset by peer".into());
+            }
+        }
+    }
+}
+
+loop {
+    select! {
+        line_in = connection.read_line()? => {
+            if let Some(line_in) = line_in {
+                broadcast_line(line_in);
+            } else {
+                // connection closed, exit loop
+                break;
+            }
+        }
+        line_out = channel.recv() => {
+            connection.write_line(line_out)?;
+        }
+    }
+}
+```
+copy from [EXPLORING WAYS TO MAKE ASYNC RUST EASIER](https://carllerche.com/2021/06/17/six-ways-to-make-async-rust-easier/)
