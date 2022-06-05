@@ -171,3 +171,18 @@ before_install:
   - nvm install 5 # for Node v5
   - node --version
 ```
+
+## shell shortcut
+
+```
+in zsh, Alt+w clears all characters before the cursor.
+Ctrl-a Move cursor to beginning of line
+Ctrl-e Move cursor to end of line
+Ctrl-b Move cursor back one word
+Ctrl-f Move cursor forward one word
+Ctrl-w Cut the last word
+Ctrl-k Cut everything after the cursor
+Ctrl-y Paste the last thing to be cut
+Ctrl-_ Undo
+```
+copy from [On bash command-line, how to delete all letters before cursor](https://stackoverflow.com/questions/12334526/on-bash-command-line-how-to-delete-all-letters-before-cursor)
