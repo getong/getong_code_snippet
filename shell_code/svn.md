@@ -59,7 +59,8 @@ svn rm svn://svn_server/repo/tags/tag-2017-01-13
 
 ```
 $ svn add --force _build
-$ svn commit -m 'update new dep' _build
+## this can force to use the commit files, which will not cause commiting all the changed files in current directory
+$ svn ci <files_separated_by_space> -m "Commit message
 ```
 
 ## svn 设置文件可执行权限
