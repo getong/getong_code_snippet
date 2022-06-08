@@ -6,3 +6,4 @@
 [The curse of strong typing](https://fasterthanli.me/articles/the-curse-of-strong-typing)
 [Trivia About Rust Types: An (Authorized) Transcription of Jon Gjengset’s Twitter Thread](https://www.thecodedmessage.com/posts/trivia-rust-types/)
 [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md)
+[why async fn in traits are hard](https://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/)
