@@ -7,3 +7,5 @@
 [Trivia About Rust Types: An (Authorized) Transcription of Jon Gjengset’s Twitter Thread](https://www.thecodedmessage.com/posts/trivia-rust-types/)
 [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md)
 [why async fn in traits are hard](https://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/)
+[ASYNC CANCELLATION 1](https://blog.yoshuawuyts.com/async-cancellation-1/)
+[Transactional Operations in Rust](https://fy.blackhats.net.au/blog/html/2021/11/14/transactional_operations_in_rust.html)
