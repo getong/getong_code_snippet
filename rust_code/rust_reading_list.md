@@ -9,3 +9,4 @@
 [why async fn in traits are hard](https://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/)
 [ASYNC CANCELLATION 1](https://blog.yoshuawuyts.com/async-cancellation-1/)
 [Transactional Operations in Rust](https://fy.blackhats.net.au/blog/html/2021/11/14/transactional_operations_in_rust.html)
+[The curse of strong typing](https://fasterthanli.me/articles/the-curse-of-strong-typing)
