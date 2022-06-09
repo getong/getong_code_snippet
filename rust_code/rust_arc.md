@@ -355,3 +355,14 @@ let entry = splitted_files
 copy from [crypto-cli-tools](https://github.com/crypto-crawler/crypto-cli-tools)
 
 The value in the dashmap should be Arc<Box<T>>, or, Pin<Box<T>>.
+
+## arc str
+
+```
+	Text (UTF-8)	Bytes
+Immutable reference / slice	&str	&[u8]
+Owned, can grow	String	Vec<u8>
+Owned, fixed len	Box<str>	Box<[u8]>
+Shared ownership (atomic)	Arc<str>	Arc<[u8]>
+```
+copy from [The curse of strong typing](https://fasterthanli.me/articles/the-curse-of-strong-typing)
