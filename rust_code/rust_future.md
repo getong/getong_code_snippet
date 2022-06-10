@@ -273,3 +273,67 @@ loop {
 }
 ```
 copy from [EXPLORING WAYS TO MAKE ASYNC RUST EASIER](https://carllerche.com/2021/06/17/six-ways-to-make-async-rust-easier/)
+
+## LocalExecutor example
+
+``` Rust
+// This is spawned as a task in a `LocalExecutor`. `BattleManager` outlives
+// the executor, so I can just send it in by reference 🤯
+pub async fn battle(stream: Async<TcpStream>, manager: &BattleManager) {
+    // `!Sync` read and write halves of WebSocket using a modified Soketto
+    let server = UnsyncServer::new(stream);
+    let (mut sender, mut receiver) = server.split();
+
+    // `!Sync` read and write halves of a quasi-ring buffer.
+    let (writer, mut reader) = new_shared();
+
+    // We find a battle to put this socket into, and do just that.
+    // Each battle instance is wrapped in `Rc<RefCell<_>>`.
+    let battle = manager.matchmake();
+    let cid = battle.borrow_mut().join(writer);
+
+    // Loop handling outgoing messages turned into a simple future
+    let outgoing = async move {
+        while let Some(mut buf) = reader.read().await {
+            if let Err(err) = sender.send(&mut buf[..]).await {
+                log::error!("Connection error: {err:?}");
+                break;
+            }
+            // `buf` is dropped here, which safely advances read head
+        }
+
+        let _ = sender.close().await;
+    };
+
+    // Loop handling incoming messages turned into a simple future
+    let incoming = async move {
+        let mut data = Vec::new();
+
+        loop {
+            data.clear();
+
+            if receiver.receive_data(&mut data).await.is_err() {
+                battle.borrow_mut().leave(cid);
+                break;
+            }
+
+            let mut battle = battle.borrow_mut();
+
+            // Process incoming messages
+            for client_message in core::Decoder::new(&data) {
+                battle.handle_message(cid, client_message);
+            }
+
+            // Broadcast all outgoing messages buffered for all clients
+            battle.flush();
+        }
+    };
+
+    // Zip (join) the two futures together so the two loops can run
+    // concurrently. Yes sometimes I double-poll one, who cares.
+    zip(incoming, outgoing).await;
+
+    log::info!("Connection closed");
+}
+```
+copy from [Local Async Executors and Why They Should be the Default](https://maciej.codes/2022-06-09-local-async.html)
