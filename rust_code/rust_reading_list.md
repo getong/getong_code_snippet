@@ -10,3 +10,4 @@
 [ASYNC CANCELLATION 1](https://blog.yoshuawuyts.com/async-cancellation-1/)
 [Transactional Operations in Rust](https://fy.blackhats.net.au/blog/html/2021/11/14/transactional_operations_in_rust.html)
 [The curse of strong typing](https://fasterthanli.me/articles/the-curse-of-strong-typing)
+[ASYNC CANCELLATION II: TIME AND SIGNALS](https://blog.yoshuawuyts.com/async-cancellation-2/)
