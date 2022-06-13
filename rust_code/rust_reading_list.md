@@ -12,3 +12,4 @@
 [The curse of strong typing](https://fasterthanli.me/articles/the-curse-of-strong-typing)
 [ASYNC CANCELLATION II: TIME AND SIGNALS](https://blog.yoshuawuyts.com/async-cancellation-2/)
 [Obscure Rust: early- and late-bound generics in functions](https://haibane-tenshi.github.io/rust-early-and-late-bound-generics/)
+[Decentralized cluster membership in Rust](https://quickwit.io/blog/chitchat/)
