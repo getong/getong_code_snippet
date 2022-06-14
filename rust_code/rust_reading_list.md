@@ -13,3 +13,4 @@
 [ASYNC CANCELLATION II: TIME AND SIGNALS](https://blog.yoshuawuyts.com/async-cancellation-2/)
 [Obscure Rust: early- and late-bound generics in functions](https://haibane-tenshi.github.io/rust-early-and-late-bound-generics/)
 [Decentralized cluster membership in Rust](https://quickwit.io/blog/chitchat/)
+[Async cancellation: a case study of pub-sub in mini-redis](https://smallcultfollowing.com/babysteps/blog/2022/06/13/async-cancellation-a-case-study-of-pub-sub-in-mini-redis/)
