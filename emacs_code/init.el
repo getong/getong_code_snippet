@@ -104,14 +104,6 @@
 ;; Load rust-mode when you open `.rs` files
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
-;; Set path to rust src directory
-;; copy from https://github.com/racer-rust/emacs-racer/issues/138
-;; copy from https://stackoverflow.com/questions/5014246/how-to-capture-standard-output-of-a-shell-command-in-elisp
-;;(setq racer-rust-src-path
-;;	(substring
-;;		(shell-command-to-string "/bin/echo $(rustc --print sysroot)/lib/rustlib/src/rust/library")
-;;	0 -1))
-
 (require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
