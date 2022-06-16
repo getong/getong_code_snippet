@@ -9,7 +9,9 @@ timedatectl set-ntp true
 ## parted ssd disk
 parted /dev/nvme0n1 mklabel gpt
 ## EFI system partition
-parted /dev/nvme0n1 mkpart primary 4096s 100%
+parted /dev/nvme0n1 mkpart primary 4096s 512M
+parted /dev/nvme0n1 mkpart primary 512M 100%
+
 parted /dev/nvme0n1 set 1 boot on
 
 mkfs.vfat -F32 /dev/nvme0n1p1
@@ -37,14 +39,16 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
     wqy-zenhei cmake reflector bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme \
-    virtualbox virtualbox-host-dkms virtualbox-guest-iso virtualbox-ext-oracle \
+    virtualbox virtualbox-host-dkms virtualbox-guest-iso \
     adobe-source-han-serif-cn-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
     adobe-source-han-sans-cn-fonts ttf-sarasa-gothic texlive-core texlive-latexextra \
     nfs-utils mpv wpa_supplicant samba pandoc texlive-fontsextra texlive-langchinese \
     gst-libav a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 \
-    libtheora libvorbis libxv wavpack x264 xvidcore gstreamer0.10-base-plugins \
+    libtheora libvorbis libxv wavpack x264 xvidcore \
     fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin calibre gthumb \
-    netease-cloud-music moc authy vdhcoapp feishu-bin firefox firefox-i18n-zh-cn
+    moc firefox firefox-i18n-zh-cn
+
+## virtualbox-ext-oracle gstreamer0.10-base-plugins netease-cloud-music authy vdhcoapp feishu-bin
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
