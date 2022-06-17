@@ -83,3 +83,12 @@ copy from
 
 ## jsx decode result is map type in v3.0
 But the prior version is a list.
+
+
+## unicode
+
+>>>
+<<"abcdef">> as a binary string, which is shorthand for <<$a, $b, $c, $d, $e, $f>>. This is an old standard list of Latin1 integers transformed as a binary. By default this literal format does not support Unicode encodings, and if you put a value that is too large in there (such as 16#1f914) by declaring a binary like <<"🤔">> in your source file, you will instead find yourself with an overflow, and the final binary <<20>>. This is implemented with an Erlang binary (what is essentially an immutable byte array), and is meant to handle any kind of binary data content, even if it’s not text.
+<<"abcdef"/utf8>> as a binary Unicode string that is encoded as UTF-8. This one would work to support emojis. It is still implemented as an Erlang binary, but the /utf8 constructor ensures proper Unicode encoding. <<"🤔"/utf8>> returns <<240,159,164,148>>, which is the proper sequence to represent the thinking emoji in UTF-8.
+
+copy from [Hard Things to Get Right](https://adoptingerlang.org/docs/development/hard_to_get_right/)
