@@ -1222,6 +1222,15 @@ echo -e "[registries.search]\nregistries = ['docker.io']" | tee $HOME/.config/co
 podman usage is just the same with docker.
 docker is no more needed.
 
+## fuse-overlayfs
+
+``` shell
+sudo pacman -S fuse-overlayfs
+
+podman --storage-opt mount_program=/usr/bin/fuse-overlayfs --storage-opt ignore_chown_errors=true run [...]
+```
+copy from [Error: kernel does not support overlay fs: 'overlay' is not supported over extfs](https://unix.stackexchange.com/questions/689181/error-kernel-does-not-support-overlay-fs-overlay-is-not-supported-over-extfs)
+
 ## libvoikko
 
 ``` shell
