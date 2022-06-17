@@ -32,6 +32,15 @@ mount /dev/nvme0n1p1 /mnt/boot
 mkdir /mnt/backup
 mount /dev/sda2 /mnt/backup
 
+
+cat >>/etc/pacman.conf <<EOF
+[archlinuxcn]
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
+EOF
+
+pacman -Syyu
+pacman -S --noconfirm archlinuxcn-keyring
+
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr \

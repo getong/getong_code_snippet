@@ -53,5 +53,6 @@ echo setting up system...
 
 gtk-query-immodules-3.0 | tee -a /etc/gtk-3.0/gtk.immodules
 
+## not work
 ## copy from [How does bash deal with nested quotes?](https://stackoverflow.com/questions/25941394/how-does-bash-deal-with-nested-quotes)
-runuser -l $username -c $'gsettings set org.gnome.desktop.input-sources xkb-options "[\'ctrl:swapcaps\']"'
+## runuser -l $username -c $'gsettings set org.gnome.desktop.input-sources xkb-options "[\'ctrl:swapcaps\']"'
