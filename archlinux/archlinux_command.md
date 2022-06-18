@@ -514,6 +514,17 @@ sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
 copy from [Unable to find `nvidia-390xx` anymore](https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/)
 also see [Unsupported_drivers](https://wiki.archlinux.org/title/NVIDIA#Unsupported_drivers)
 
+## nvidia
+
+``` shell
+sudo pacman -S viadia
+```
+For the Maxwell (NV110/GMXXX) series and newer, install the nvidia package
+copy from [NVIDIA](https://wiki.archlinux.org/title/NVIDIA)
+
+GeForce 930起、10系至20系、 Quadro/Tesla/Tegra K-系列以及更新的显卡（NV110以及更新的显卡家族），安装 nvidia （用于linux） 或者 nvidia-lts （用于linux-lts）。
+copy from [NVIDIA (简体中文)](https://wiki.archlinux.org/title/NVIDIA_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))
+
 ## install typora
 
 ``` shell
