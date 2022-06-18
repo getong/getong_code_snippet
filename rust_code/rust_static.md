@@ -1,0 +1,27 @@
+# rust static
+
+## one
+&'static T 是具有 'static 生存期的引用，或者说无限生存期。
+
+T: 'static 是约束，表示 T 的生存期应当不短于 'static。此时有两种情况：
+
+    T 包含外部引用，那么其中所有引用都要是 'static 生存期。例如 &'static T 和 Cow<'static, T>T 不包含引用，或只可能包含自引用，那么它自动具有 'static 生存期。例如 String 和一部分匿名 future 类型。
+
+T: 'static 要求 T 与上下文没有关联，在难以静态决定生存期的并发环境下很有用。
+
+
+## two
+搞清楚符号的意义，可以让理解更持久。
+
+&'static 是指一个引用有static的生命周期，而static的生命周期是指跟程序的生命周期一样，类似c/c++的static变量。static可能也因此得名。
+
+而T: 'static是指类型T outlive static生命周期。这里的冒号表示outlive的意思。
+
+类型T如果含引用，那么这个引用必须是static的生命周期。
+
+类型T如果没有引用，那么它想活多久就可以活多久，所以也是可以认为outlive static生命周期。
+
+举个例子u8: 'static
+
+
+copy from [如何理解Rust语言中的 'static 生命周期?](https://www.zhihu.com/question/515953625)
