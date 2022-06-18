@@ -1559,3 +1559,9 @@ zram-fraction = 1
 max-zram-size=none
 ```
 copy from [Dynamically Increase SWAP (ZRAM) Size in Linux](https://medium.com/nerd-for-tech/dynamically-adjust-swap-zram-size-in-fedora-linux-78cd712808f2)
+
+## visual-studio-code-bin
+for unreal engine
+``` shell
+yay -S visual-studio-code-bin
+```
