@@ -52,3 +52,15 @@ export SSL_CERT_DIR=/dev/null
 ./Engine/Build/BatchFiles/RunUAT.sh BuildGraph -target="Make Installed Build Linux" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=false -set:HostPlatformOnly=true
 ```
 copy from [Can't generate project files for UE5 on Linux](https://stackoverflow.com/questions/72539119/cant-generate-project-files-for-ue5-on-linux)
+or
+
+``` shell
+sudo pacman -S libssl
+
+sudo mkdir /usr/local/ssl
+sudo ln -s /etc/ssl/certs /usr/local/ssl
+
+sudo mkdir /usr/lib/ssl
+sudo ln -s /etc/ssl/certs /usr/lib/ssl
+```
+copy from [Error Compiling Unreal Engine on Arch Linux](https://forums.unrealengine.com/t/error-compiling-unreal-engine-on-arch-linux/549637)
