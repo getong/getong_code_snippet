@@ -43,3 +43,12 @@ also see [Building Unreal Engine for macOS with XCode](https://medium.com/@lukeb
 git clean -d -fx -i
 ```
 copy from [error building Unreal Engine 4.26 on Linux Debian 11 (Bullseye)[(https://answers.unrealengine.com/questions/1017417/view.html)
+
+## ssl error
+``` shell
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+
+export SSL_CERT_DIR=/dev/null
+./Engine/Build/BatchFiles/RunUAT.sh BuildGraph -target="Make Installed Build Linux" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=false -set:HostPlatformOnly=true
+```
+copy from [Can't generate project files for UE5 on Linux](https://stackoverflow.com/questions/72539119/cant-generate-project-files-for-ue5-on-linux)
