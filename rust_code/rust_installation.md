@@ -24,6 +24,9 @@ $ git clone https://github.com/rust-lang/rust-analyzer
 $ cd rust-analyzer
 $ git checkout tags/2022-04-11 -b 2022-04-11
 $ cargo xtask install --server
+
+## ensure rustfmt
+echo 'edition = "2021"\n' >> ~/.rustfmt.toml
 ```
 
 The `cargo/env` file is just like this:
