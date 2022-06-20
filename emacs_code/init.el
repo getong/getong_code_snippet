@@ -657,6 +657,9 @@ Get it from:  <http://hasseg.org/trash/>"
     (shell-command command))
   (dired default-directory)
   (revert-buffer))
+;; copy from [How to configure dired to update instantly when files/folders change?](https://www.reddit.com/r/emacs/comments/1acg6q/how_to_configure_dired_to_update_instantly_when/)
+(setq global-auto-revert-non-file-buffers t)
+(global-auto-revert-mode)
 
 
 ;; copy from https://emacs-lsp.github.io/lsp-mode/page/installation/
