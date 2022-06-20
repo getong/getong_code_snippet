@@ -25,6 +25,7 @@ $ cd rust-analyzer
 $ git checkout tags/2022-04-11 -b 2022-04-11
 $ cargo xtask install --server
 
+// copy from https://github.com/rust-lang/rustfmt/issues/4454
 ## ensure rustfmt
 echo 'edition = "2021"\n' >> ~/.rustfmt.toml
 ```
