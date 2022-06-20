@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode use-package))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode lsp-mode which-key use-package))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -265,6 +265,7 @@
 
 ;;文本解码设置默认为 UTF-8
 (set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
 
 ;; Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
@@ -656,3 +657,32 @@ Get it from:  <http://hasseg.org/trash/>"
     (shell-command command))
   (dired default-directory)
   (revert-buffer))
+
+
+;; copy from https://emacs-lsp.github.io/lsp-mode/page/installation/
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (XXX-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+;; if you are helm user
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+;; optional if you want which-key integration
+(use-package which-key
+    :config
+    (which-key-mode))
