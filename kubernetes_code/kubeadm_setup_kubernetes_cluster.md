@@ -113,3 +113,33 @@ kube-scheduler-promote            1/1     Running             1          6h25m
 ```
 
 copy from [kubernetes安装（国内环境）](https://zhuanlan.zhihu.com/p/46341911)
+
+## archlinux and btrfs
+
+``` shell
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+```
+
+## join the cluster
+
+``` shell
+## in the master node
+kubeadm token list
+
+## get the hash
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+fee9f23599349bc403d7fc54650bab5ebf6e7c6f51b83eda728c43926343a92b
+
+## in the worker node
+kubeadm join 192.168.1.190:6443 --token ujds42.ufzzpjuqapdjyfbi --discovery-token-ca-cert-hash sha256:fee9f23599349bc403d7fc54650bab5ebf6e7c6f51b83eda728c43926343a92b
+```
+copy from [ArchLinux下Kubernetes初体验--使用 kubeadm 创建一个单主集群](https://blog.firerain.me/article/22)
