@@ -1,5 +1,14 @@
 # kubeadm setup kubernetes cluster
 
+## install docker kubernetes
+
+``` shell
+sudo pacman -S docker kubeadm kubelet fuse-overlayfs
+sudo systemctl enable --now docker
+sudo systemctl enable --now containerd
+sudo systemctl enable --now kubelet
+```
+
 ## get images list
 
 ``` shell
@@ -22,10 +31,30 @@ for imageName in ${images[@]} ; do
 done
 ```
 
+## docker config
+
+``` shell
+sudo mkdir -p /etc/docker
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "registry-mirrors": ["https://gekysrd8.mirror.aliyuncs.com"]
+}
+EOF
+
+systemctl daemon-reload
+systemctl restart docker
+```
+
 ## init
 
 ``` shell
-kubeadm init # 这一步注意，如果需要特定的网络插件，需要额外加参数，具体看网络插件的介绍
+kubeadm init --image-repository registry.aliyuncs.com/google_containers  # 这一步注意，如果需要特定的网络插件，需要额外加参数，具体看网络插件的介绍
 ```
 
 ## auth
