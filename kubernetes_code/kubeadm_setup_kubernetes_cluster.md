@@ -20,7 +20,7 @@ images=(  # 下面的镜像应该去除"k8s.gcr.io/"的前缀，版本换成上�
     kube-scheduler:v1.24.2
     kube-proxy:v1.24.2
     pause:3.7
-    etcd:3.3.5.3-0
+    etcd:3.5.3-0
     coredns:v1.8.6
 )
 
