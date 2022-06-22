@@ -199,3 +199,11 @@ export DOCKER_HOST='unix:///Users/gerald/.local/share/containers/podman/machine/
 podman pull yandex/clickhouse-server:21.3.20.1
 podman run -d --name some-clickhouse-server --ulimit nofile=262144:262144 yandex/clickhouse-server:21.3.20.1
 ```
+
+## Warning: Bottle missing, falling back to the default domain
+
+``` shell
+echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles/bottles' >> ~/.zshrc
+
+source ~/.zshrc
+```
