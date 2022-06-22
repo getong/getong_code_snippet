@@ -9,7 +9,7 @@ sudo systemctl status kubelet
 ## view the log
 
 ```
-journalctl -u kubelet --no-pager
+sudo journalctl -u kubelet --no-pager
 ```
 
 ## fail-swap-on=false
@@ -22,7 +22,7 @@ then
 
 ``` shell
 sudo systemctl daemon-reload
-systemctl restart kubelet
+sudo systemctl restart kubelet
 ```
 
 copy from [debug kubelet not starting](https://serverfault.com/questions/877136/debug-kubelet-not-starting)
