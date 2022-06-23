@@ -46,7 +46,7 @@ pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     gst-libav a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 \
     libtheora libvorbis libxv wavpack x264 xvidcore \
     fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin calibre gthumb \
-    moc firefox firefox-i18n-zh-cn p7zip
+    moc firefox firefox-i18n-zh-cn p7zip tmux
 
 genfstab -U /mnt >> /mnt/etc/fstab
 // after genfstab , if `/mnt/boot` is mounted, check the `/mnt/etc/fstab`
