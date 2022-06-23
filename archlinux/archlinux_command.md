@@ -33,12 +33,20 @@ mkdir /mnt/backup
 mount /dev/sda2 /mnt/backup
 
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
-    bash-completion net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
-    gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr efivar \
+    net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
+    gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr \
     intel-ucode proxychains v2ray asp nemo emacs julia erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
-    wqy-zenhei cmake reflector iwd bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme
+    wqy-zenhei cmake reflector bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme \
+    virtualbox virtualbox-host-dkms virtualbox-guest-iso \
+    adobe-source-han-serif-cn-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
+    adobe-source-han-sans-cn-fonts ttf-sarasa-gothic texlive-core texlive-latexextra \
+    nfs-utils mpv wpa_supplicant samba pandoc texlive-fontsextra texlive-langchinese \
+    gst-libav a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 \
+    libtheora libvorbis libxv wavpack x264 xvidcore \
+    fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin calibre gthumb \
+    moc firefox firefox-i18n-zh-cn
 
 genfstab -U /mnt >> /mnt/etc/fstab
 // after genfstab , if `/mnt/boot` is mounted, check the `/mnt/etc/fstab`
@@ -46,24 +54,34 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt
 
+cat >>/etc/pacman.conf <<EOF
+[archlinuxcn]
+Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
+EOF
+
+pacman -Syyu
+pacman -S --noconfirm archlinuxcn-keyring
+
+pacman -S --noconfirm virtualbox-ext-oracle gstreamer0.10-base-plugins netease-cloud-music authy vdhcoapp feishu-bin
+
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
 
-vim /etc/locale.gen
-en_US.UTF-8 UTF-8
-zh_CN.UTF-8 UTF-8
-
+# locale
+sed --in-place=.bak 's/^#en_US\.UTF-8/en_US\.UTF-8/' /etc/locale.gen
+sed --in-place=.bak2 's/^#zh_CN\.UTF-8/zh_CN\.UTF-8/' /etc/locale.gen
 locale-gen
 
 
 echo "LANG=zh_CN.UTF-8" > /etc/locale.conf
 echo archlinux > /etc/hostname
 
-vim /etc/hosts
+echo >> /etc/hosts <<EOF
 --------------------
 127.0.0.1   localhost
 ::1         localhost
 127.0.0.1   archlinux.localdomain archlinux   # 这里的archlinux是主机名
+EOF
 
 // optional, check the /boot is installed
 mkinitcpio -P
