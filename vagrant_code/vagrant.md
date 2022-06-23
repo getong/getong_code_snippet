@@ -114,3 +114,20 @@ copy from [How to export a Vagrant virtual machine to transfer it](https://stack
 // cd vagrant instance directory
 vagrant package
 ```
+
+## get the vagrant box download url link
+
+for example get the image sakhan/ubuntu1404-contrail-devstack1:
+``` shell
+curl -i -L https://vagrantcloud.com/sakhan/ubuntu1404-contrail-devstack1
+{"description":"Vagrant box having Opencontail + Devstack environment","short_description":"Vagrant box having Opencontail + Devstack environment","name":"sakhan/ubuntu1404-contrail-devstack1","versions":[{"version":"0.0.2","status":"active","description_html":"<p>Vagrant box with opencontrail_devstack version 0.0.2</p>\n","description_markdown":"Vagrant box with opencontrail_devstack version 0.0.2","providers":[{"name":"virtualbox","url":"https://vagrantcloud.com/sakhan/boxes/ubuntu1404-contrail-devstack1/versions/0.0.2/providers/virtualbox.box"}]}]}
+
+```
+or use the --debug option:
+
+``` shell
+vagrant box add --debug hashicorp/precise32
+https://atlas.hashicorp.com/hashicorp/boxes/precise32/versions/1.0.0/providers/virtualbox.box
+```
+
+copy from [What is the URL to be used in the vagrant box add command?](https://stackoverflow.com/questions/28004649/what-is-the-url-to-be-used-in-the-vagrant-box-add-command)
