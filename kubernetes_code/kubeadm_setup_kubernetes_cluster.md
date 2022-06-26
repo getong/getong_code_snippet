@@ -43,7 +43,8 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
     "max-size": "100m"
   },
   "storage-driver": "overlay2",
-  "registry-mirrors": ["https://gekysrd8.mirror.aliyuncs.com"]
+  "registry-mirrors": ["https://gekysrd8.mirror.aliyuncs.com"],
+  "data-root": "/backup/backup/docker_images"
 }
 EOF
 
@@ -142,21 +143,6 @@ kube-scheduler-promote            1/1     Running             1          6h25m
 ```
 
 copy from [kubernetes安装（国内环境）](https://zhuanlan.zhihu.com/p/46341911)
-
-## archlinux and btrfs
-
-``` shell
-cat > /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
-  },
-  "storage-driver": "overlay2"
-}
-EOF
-```
 
 ## join the cluster
 
