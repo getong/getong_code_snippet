@@ -1586,3 +1586,11 @@ for unreal engine
 ``` shell
 yay -S visual-studio-code-bin
 ```
+
+
+## install flutter
+
+``` shell
+sudo pacman -S flutter
+sudo usermod -aG flutterusers $USER
+```
