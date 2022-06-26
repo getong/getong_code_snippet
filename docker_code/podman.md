@@ -32,8 +32,12 @@ mkdir -p ~/.config/containers/
 cp /etc/containers/storage.conf ~/.config/containers/storage.conf
 vim ~/.config/containers/storage.conf
 --------------
-rootless_storage_path = "/backup/backup/podman_images"
+[storage]
 
+driver = "overlay"
+runroot = "/backup/backup/podman_images"
+graphroot = "/backup/backup/podman_images"
+rootless_storage_path = "/backup/backup/podman_images"
 
 ```
 copy from [set podman image storage location](https://github.com/containers/podman/issues/1916)
