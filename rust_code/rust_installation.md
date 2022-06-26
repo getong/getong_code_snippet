@@ -22,7 +22,7 @@ $ cargo install sea-orm-cli
 
 $ git clone https://github.com/rust-lang/rust-analyzer
 $ cd rust-analyzer
-$ git checkout tags/2022-04-11 -b 2022-04-11
+$ git checkout tags/2022-06-20 -b 2022-06-20
 $ cargo xtask install --server
 
 // copy from https://github.com/rust-lang/rustfmt/issues/4454
