@@ -28,7 +28,8 @@ copy from [Podman can now ease the transition to Kubernetes and CRI-O](https://d
 ``` shell
 sudo mkdir /backup/backup/podman_images
 sudo chown $USER:$USER /backup/backup/podman_images
-cp /etc/containers/storage.conf ~/.config/containers
+mkdir -p ~/.config/containers/
+cp /etc/containers/storage.conf ~/.config/containers/storage.conf
 vim ~/.config/containers/storage.conf
 --------------
 rootless_storage_path = "/backup/backup/podman_images"
