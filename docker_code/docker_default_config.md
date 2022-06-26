@@ -69,3 +69,24 @@ then
 sudo systemctl restart docker
 ```
 copy from [docker设置国内镜像源](https://blog.csdn.net/whatday/article/details/86770609)
+
+## data-root
+
+``` shell
+sudo systemctl stop docker
+
+sudo /etc/docker/daemon.json
+-----------------------------
+{
+  "data-root": "/path/to/your/docker"
+}
+
+sudo rsync -aP /var/lib/docker/ /path/to/your/docker
+
+sudo mv /var/lib/docker /var/lib/docker.old
+
+sudo systemctl restart docker
+
+sudo rm -rf /var/lib/docker.old
+```
+copy from [HOW TO MOVE DOCKER DATA DIRECTORY TO ANOTHER LOCATION ON UBUNTU](https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/)
