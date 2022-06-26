@@ -11,6 +11,9 @@ docker pull elasticsearch:8.2.3
 ```
 docker network create somenetwork
 docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.2.3
+
+## use podman
+podman run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.2.3
 ```
 
 ## elasticsearch and kibana
