@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustcic))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -689,3 +689,56 @@ Get it from:  <http://hasseg.org/trash/>"
 (use-package which-key
     :config
     (which-key-mode))
+
+;; copy from https://zenn.dev/yukit/articles/25a88b33a35633
+(add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
+(eval-after-load "rust-mode"
+  '(setq-default rust-format-on-save t))
+(setq lsp-rust-server 'rust-analyzer)
+(add-hook 'rust-mode-hook (lambda ()
+                            (flycheck-rust-setup)
+                            (lsp)
+                            (flycheck-mode)
+			    (yas-minor-mode)
+                            ))
+
+;; copy from [Rust development environment for Emacs](https://rustrepo.com/repo/brotzeit-rustic-rust-ides)
+(custom-set-faces
+  '(rustic-compilation-column ((t (:inherit compilation-column-number))))
+  '(rustic-compilation-line ((t (:foreground "LimeGreen")))))
+(defun rustic-mode-auto-save-hook ()
+  "Enable auto-saving in rustic-mode buffers."
+  (when buffer-file-name
+    (setq-local compilation-ask-about-save nil)))
+(add-hook 'rustic-mode-hook 'rustic-mode-auto-save-hook)
+(setq rustic-lsp-server 'rls)
+(setq lsp-rust-analyzer-server-command '("~/.cargo/bin/rust-analyzer"))
+(setq rustic-lsp-client 'lsp-mode)
+(with-eval-after-load "lsp-rust"
+ (lsp-register-client
+  (make-lsp-client
+   :new-connection (lsp-stdio-connection
+                    (lambda ()
+                      `(,(or (executable-find
+                              (cl-first lsp-rust-analyzer-server-command))
+                             (lsp-package-path 'rust-analyzer)
+                             "rust-analyzer")
+                        ,@(cl-rest lsp-rust-analyzer-server-args))))
+   :remote? t
+   :major-modes '(rust-mode rustic-mode)
+   :initialization-options 'lsp-rust-analyzer--make-init-options
+   :notification-handlers (ht<-alist lsp-rust-notification-handlers)
+   :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+   :library-folders-fn (lambda (_workspace) lsp-rust-library-directories)
+   :after-open-fn (lambda ()
+                    (when lsp-rust-analyzer-server-display-inlay-hints
+                      (lsp-rust-analyzer-inlay-hints-mode)))
+   :ignore-messages nil
+   :server-id 'rust-analyzer-remote)))
+(defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
+  "Start a program in a subprocess.  Return the process object for it. Similar to `start-process-shell-command', but calls `start-file-process'."
+  ;; On remote hosts, the local `shell-file-name' might be useless.
+  (let ((command (mapconcat 'identity args " ")))
+    (funcall start-file-process-shell-command name buffer command)))
+(advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around)
+(push 'rustic-clippy flycheck-checkers)
