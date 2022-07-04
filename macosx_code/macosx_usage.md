@@ -207,3 +207,10 @@ echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 
 source ~/.zshrc
 ```
+
+## reinstall
+
+``` shell
+brew reinstall --cask sogouinput
+```
+copy from [Homebrew - Error: Not upgrading 1 `installer manual` cask](https://www.reddit.com/r/Windscribe/comments/soe5hn/homebrew_error_not_upgrading_1_installer_manual/)
