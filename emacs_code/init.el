@@ -104,6 +104,17 @@
 ;; Load rust-mode when you open `.rs` files
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
+(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
+(eval-after-load "rust-mode"
+  '(setq-default rust-format-on-save t))
+(setq lsp-rust-server 'rust-analyzer)
+(add-hook 'rust-mode-hook (lambda ()
+                            (flycheck-rust-setup)
+                            (lsp)
+                            (flycheck-mode)
+			    (yas-minor-mode)
+                            ))
+
 (require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
