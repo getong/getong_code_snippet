@@ -33,3 +33,4 @@
 [Understanding Rust futures by going way too deep](https://fasterthanli.me/articles/understanding-rust-futures-by-going-way-too-deep)
 [Rust Runtime 设计与实现-科普篇](https://www.ihcblog.com/rust-runtime-design-1/)
 [Rust异步浅谈](https://leaxoy.github.io/2020/03/rust-async-runtime/)
+[Rust异步之自己实现block_on](http://www.4k8k.xyz/article/s_lisheng/113737065)
