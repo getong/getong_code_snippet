@@ -31,3 +31,5 @@
 [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md)
 [Asynchronous programming internals](https://yehohanan7.medium.com/asynchronous-programming-8aaae83cd9f3)
 [Understanding Rust futures by going way too deep](https://fasterthanli.me/articles/understanding-rust-futures-by-going-way-too-deep)
+[Rust Runtime 设计与实现-科普篇](https://www.ihcblog.com/rust-runtime-design-1/)
+[Rust异步浅谈](https://leaxoy.github.io/2020/03/rust-async-runtime/)
