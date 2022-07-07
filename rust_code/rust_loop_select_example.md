@@ -420,3 +420,23 @@ impl Session {
         });
     }
 ```
+
+## reactor
+
+``` rust
+loop {
+    poll.poll(&events, timeout);
+    for event in events.iter() {
+        if (event.is_readable()) {
+            for waker in event.readers.wakers {
+                waker.wake();
+            }
+        }
+        if (event.is_writeable()) {
+            for waker in event.writers.wakers {
+                waker.wake();
+            }
+        }
+    }
+}
+```
