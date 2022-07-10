@@ -105,6 +105,7 @@
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
 (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
+(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin"))
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
 (setq lsp-rust-server 'rust-analyzer)
@@ -702,7 +703,7 @@ Get it from:  <http://hasseg.org/trash/>"
     (which-key-mode))
 
 ;; copy from https://zenn.dev/yukit/articles/25a88b33a35633
-(add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
+(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
 (setq lsp-rust-server 'rust-analyzer)
@@ -723,7 +724,7 @@ Get it from:  <http://hasseg.org/trash/>"
     (setq-local compilation-ask-about-save nil)))
 (add-hook 'rustic-mode-hook 'rustic-mode-auto-save-hook)
 (setq rustic-lsp-server 'rls)
-(setq lsp-rust-analyzer-server-command '("~/.cargo/bin/rust-analyzer"))
+(setq lsp-rust-analyzer-server-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
 (setq rustic-lsp-client 'lsp-mode)
 (with-eval-after-load "lsp-rust"
  (lsp-register-client
