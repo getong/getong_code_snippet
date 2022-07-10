@@ -364,3 +364,8 @@ cd rust-analyzer
 git checkout tags/2022-03-21 -b 2022-03-21
 cargo xtask install --server
 ```
+or install with rustup
+
+``` shell
+rustup +nightly component add rust-analyzer-preview
+```
