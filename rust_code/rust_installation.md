@@ -367,5 +367,8 @@ cargo xtask install --server
 or install with rustup
 
 ``` shell
-rustup +nightly component add rust-analyzer-preview
+rustup component add rust-analyzer-preview
 ```
+the install path is `~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer`
+
+copy from [分享一种安装/更新/切换rust-analyzer版本的方法](https://rustcc.cn/article?id=52912db2-85cb-4da8-afeb-020ae41871dd)
