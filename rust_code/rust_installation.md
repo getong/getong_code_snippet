@@ -361,6 +361,8 @@ or install with rustup
 
 ``` shell
 rustup +nightly component add rust-analyzer-preview
+
+rustup +nightly which rust-analyzer
 ```
 the install path is `~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer`
 
