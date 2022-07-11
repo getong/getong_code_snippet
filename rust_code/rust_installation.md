@@ -18,6 +18,7 @@ $ rustup component add rustc-dev --toolchain=nightly
 $ cargo install tokio-console savage cargo-expand sea-orm-cli abscissa cargo-generate cargo-edit cargo-outdated cargo-web wasm-bindgen-cli wasm-pack cargo-fuzz evcxr_repl cargo-wasi rust-script
 $ rustup component add clippy-preview
 $ rustup +nightly component add rust-analyzer-preview
+$ rustup target add wasm32-wasi wasm32-unknown-emscripten wasm32-unknown-unknown
 
 $ git clone https://github.com/rust-lang/rust-analyzer
 $ cd rust-analyzer
