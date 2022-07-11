@@ -15,10 +15,9 @@ $ rustup component add rls-preview rust-analysis rust-src
 
 $ rustup toolchain install nightly
 $ rustup component add rustc-dev --toolchain=nightly
-$ cargo install tokio-console
-$ cargo install savage
-$ cargo install cargo-expand
-$ cargo install sea-orm-cli
+$ cargo install tokio-console savage cargo-expand sea-orm-cli abscissa cargo-generate cargo-edit cargo-outdated cargo-web wasm-bindgen-cli wasm-pack cargo-fuzz evcxr_repl cargo-wasi rust-script
+$ rustup component add clippy-preview
+$ rustup +nightly component add rust-analyzer-preview
 
 $ git clone https://github.com/rust-lang/rust-analyzer
 $ cd rust-analyzer
@@ -30,7 +29,7 @@ $ cargo xtask install --server
 echo 'edition = "2021"\n' >> ~/.rustfmt.toml
 ```
 
-The `cargo/env` file is just like this:
+qThe `cargo/env` file is just like this:
 
 ``` shell
 #!/bin/sh
@@ -50,8 +49,6 @@ esac
 ## abscissa
 
 ``` shell
-cargo install abscissa
-
 abscissa new my_app
 
 cd my_app
@@ -133,7 +130,6 @@ rustup show
 ## cargo usage
 
 ``` shell
-cargo install cargo-generate
 cargo new project_name --bin
 cargo build --release
 cargo run
@@ -146,10 +142,6 @@ cargo check
 cargo clean
 # cargo install clippy
 rustup component add clippy-preview
-cargo install cargo-edit cargo-outdated
-cargo install cargo-web
-cargo install wasm-bindgen-cli wasm-pack
-cargo install cargo-fuzz
 
 cd project_name
 cargo add async-std
@@ -367,7 +359,7 @@ cargo xtask install --server
 or install with rustup
 
 ``` shell
-rustup component add rust-analyzer-preview
+rustup +nightly component add rust-analyzer-preview
 ```
 the install path is `~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer`
 
