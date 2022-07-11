@@ -74,3 +74,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 :highlight ExtraWhitespace ctermbg=red guibg=red
 :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 au VimEnter * if &diff | execute 'windo set wrap' | endif
+
+if &diff
+    set diffopt+=iwhite
+endif
