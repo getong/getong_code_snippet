@@ -1594,3 +1594,11 @@ yay -S visual-studio-code-bin
 sudo pacman -S flutter
 sudo usermod -aG flutterusers $USER
 ```
+
+## /usr/bin/dkms: line 1033: sha512: command not found
+
+``` shell
+sudo ln -s /usr/bin/sha512sum /usr/bin/sha512
+```
+copy from [/usr/sbin/dkms: line 1033: sha512: command not found.](https://bbs.archlinux.org/viewtopic.php?id=277700)
+also see [https://bbs.archlinux.org/viewtopic.php?id=277700](https://github.com/dell/dkms/issues/229)
