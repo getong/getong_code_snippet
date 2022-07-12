@@ -367,3 +367,12 @@ rustup +nightly which rust-analyzer
 the install path is `~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer`
 
 copy from [分享一种安装/更新/切换rust-analyzer版本的方法](https://rustcc.cn/article?id=52912db2-85cb-4da8-afeb-020ae41871dd)
+
+
+## linux cpu temperature
+
+``` shell
+cargo build --jobs 1
+```
+
+copy from [Compiling large projects with over-heating CPUs causes weird crashes](https://github.com/rust-lang/rust/issues/88902)
