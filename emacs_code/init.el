@@ -723,7 +723,9 @@ Get it from:  <http://hasseg.org/trash/>"
   (when buffer-file-name
     (setq-local compilation-ask-about-save nil)))
 (add-hook 'rustic-mode-hook 'rustic-mode-auto-save-hook)
-(setq rustic-lsp-server 'rls)
+;; (setq rustic-lsp-server 'rls)
+(setq rustic-lsp-server 'rust-analyzer)
+(setq rustic-analyzer-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
 (setq lsp-rust-analyzer-server-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
 (setq rustic-lsp-client 'lsp-mode)
 (with-eval-after-load "lsp-rust"
