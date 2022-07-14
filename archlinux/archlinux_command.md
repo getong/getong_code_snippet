@@ -1602,3 +1602,19 @@ sudo ln -s /usr/bin/sha512sum /usr/bin/sha512
 ```
 copy from [/usr/sbin/dkms: line 1033: sha512: command not found.](https://bbs.archlinux.org/viewtopic.php?id=277700)
 also see [https://bbs.archlinux.org/viewtopic.php?id=277700](https://github.com/dell/dkms/issues/229)
+
+
+## cpupower
+
+``` shell
+sudo pacman -S cpupower
+
+cpupower frequency-info
+
+cat /etc/default/cpupower
+min_freq="1.20GHz"
+max_freq="2.40GHz"
+
+sudo systemctl restart cpupower
+sudo systemctl start cpupower
+```
