@@ -34,3 +34,5 @@
 [Rust Runtime 设计与实现-科普篇](https://www.ihcblog.com/rust-runtime-design-1/)
 [Rust异步浅谈](https://leaxoy.github.io/2020/03/rust-async-runtime/)
 [Rust异步之自己实现block_on](http://www.4k8k.xyz/article/s_lisheng/113737065)
+[Basic Reactor and Executor for non-blocking IO in Rust](https://www.zupzup.org/rust-reactor-executor/)
+[rust-reactor-executor-example](https://github.com/zupzup/rust-reactor-executor-example)
