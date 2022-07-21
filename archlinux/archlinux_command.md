@@ -1618,3 +1618,13 @@ max_freq="2.40GHz"
 sudo systemctl restart cpupower
 sudo systemctl start cpupower
 ```
+
+## systemd-networkd-wait-online.service fail
+
+``` shell
+[Service]
+ExecStart=
+ExecStart=/usr/lib/systemd/systemd-networkd-wait-online --ignore=enp0s31f6
+```
+
+copy from [systemd-networkd-wait-online failure](https://unix.stackexchange.com/questions/381448/systemd-networkd-wait-online-failure)
