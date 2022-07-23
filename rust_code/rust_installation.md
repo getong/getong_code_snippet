@@ -20,11 +20,9 @@ $ cargo install tokio-console savage cargo-expand sea-orm-cli abscissa cargo-gen
 $ rustup component add clippy-preview
 $ rustup +nightly component add rust-analyzer-preview
 $ rustup target add wasm32-wasi wasm32-unknown-emscripten wasm32-unknown-unknown
+$ cargo install cargo-make
+$ cargo update -p wasm-bindgen
 
-$ git clone https://github.com/rust-lang/rust-analyzer
-$ cd rust-analyzer
-$ git checkout tags/2022-06-27 -b 2022-06-27
-$ cargo xtask install --server
 
 // copy from https://github.com/rust-lang/rustfmt/issues/4454
 ## ensure rustfmt
