@@ -1628,3 +1628,12 @@ ExecStart=/usr/lib/systemd/systemd-networkd-wait-online --ignore=enp0s31f6
 ```
 
 copy from [systemd-networkd-wait-online failure](https://unix.stackexchange.com/questions/381448/systemd-networkd-wait-online-failure)
+
+## qemu
+
+``` shell
+sudo pacman -Syu libvirt qemu ebtables dnsmasq
+sudo systemctl enable libvirtd.service --now
+sudo systemctl enable virtlogd.service --now
+```
+copy from [Kubernetes on your local Manjaro/Arch](https://medium.com/@morgan_42683/kubernetes-on-your-local-manjaro-arch-7890904c8984)
