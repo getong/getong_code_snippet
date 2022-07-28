@@ -375,3 +375,21 @@ cargo build --jobs 1
 ```
 
 copy from [Compiling large projects with over-heating CPUs causes weird crashes](https://github.com/rust-lang/rust/issues/88902)
+
+## Minimizing Rust Binary Size
+
+``` shell
+1 Use Rust 1.32.0 or newer (which doesn't include jemalloc by default)
+2 Add the following to Cargo.toml:
+[profile.release]
+opt-level = 'z'     # Optimize for size.
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations.
+panic = 'abort'     # Abort on panic
+strip = true        # Strip symbols from binary*
+*strip = true requires Rust 1.59+. On older Rust versions, run strip manually on the resulting binary.
+
+3 Build in release mode using cargo build --release
+```
+copy from [Why are Rust executables so huge?](https://stackoverflow.com/questions/29008127/why-are-rust-executables-so-huge/54842093#54842093)
+also see [Minimizing Rust Binary Size](https://github.com/johnthagen/min-sized-rust)
