@@ -36,3 +36,4 @@
 [Rust异步之自己实现block_on](http://www.4k8k.xyz/article/s_lisheng/113737065)
 [Basic Reactor and Executor for non-blocking IO in Rust](https://www.zupzup.org/rust-reactor-executor/)
 [rust-reactor-executor-example](https://github.com/zupzup/rust-reactor-executor-example)
+[Uncovering a Blocking Syscall](https://chrissardegna.com/blog/uncovering-a-blocking-syscall/)
