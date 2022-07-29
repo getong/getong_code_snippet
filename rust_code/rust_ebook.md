@@ -39,3 +39,4 @@
 [Uncovering a Blocking Syscall](https://chrissardegna.com/blog/uncovering-a-blocking-syscall/)
 [Elegant and performant recursion in Rust](https://recursion.wtf/posts/rust_schemes/)
 [Fully generic recursion in Rust](https://recursion.wtf/posts/rust_schemes_2/)
+[context-switch](https://github.com/jimblandy/context-switch)
