@@ -40,3 +40,4 @@
 [Elegant and performant recursion in Rust](https://recursion.wtf/posts/rust_schemes/)
 [Fully generic recursion in Rust](https://recursion.wtf/posts/rust_schemes_2/)
 [context-switch](https://github.com/jimblandy/context-switch)
+[DB2: Tokio Mini Redis — Server (Part 1)](https://medium.com/sys-base/rust-day-9-tokio-mini-redis-part-1-c8f5812ae4b)
