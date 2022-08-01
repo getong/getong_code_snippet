@@ -337,3 +337,165 @@ pub async fn battle(stream: Async<TcpStream>, manager: &BattleManager) {
 }
 ```
 copy from [Local Async Executors and Why They Should be the Default](https://maciej.codes/2022-06-09-local-async.html)
+
+## rust runtime example
+
+``` Rust
+use std::{
+    future::Future,
+    mem::forget,
+    sync::Arc,
+    task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
+    thread,
+    time::Duration,
+};
+
+
+pub struct Runtime;
+
+impl Runtime {
+    pub fn run<F: Future>(&self, f: F) {
+        // create context
+        let data = Arc::new(Resource);
+
+        let waker = RawWaker::new(
+            Arc::into_raw(data) as *const (),
+            &RawWakerVTable::new(clone_rw, wake_rw, wake_by_ref_rw, drop_rw),
+        );
+        let waker = unsafe { Waker::from_raw(waker) };
+        let mut cx = Context::from_waker(&waker);
+
+        // pin to heap
+        let mut f = Box::pin(f);
+
+        // start executor
+        loop {
+            let res = f.as_mut().poll(&mut cx);
+            if let Poll::Ready(v) = res {
+                break;
+            }
+            println!("top future pending, poll next");
+            thread::sleep(Duration::from_secs(1));
+        }
+    }
+}
+struct Resource;
+
+fn clone_rw(p: *const ()) -> RawWaker {
+    let data: Arc<Resource> = unsafe { Arc::from_raw(p as *const Resource) };
+
+    // make sure increment reference count of the underlying source
+    // clone increment ref count, into_raw consume the cloned and escape drop
+    let p = Arc::into_raw(data.clone());
+    // do not decrement ref count
+    forget(data);
+
+    // new RawWaker with data pointer to same resource
+    RawWaker::new(
+        p as *const (),
+        // the `RawWakerVTable::new` is a magic `const` function can create a object with 'static lifetime
+        &RawWakerVTable::new(clone_rw, wake_rw, wake_by_ref_rw, drop_rw),
+    )
+}
+
+fn wake_rw(p: *const ()) {
+    let data: Arc<Resource> = unsafe { Arc::from_raw(p as *const Resource) };
+    // todo wakeup, and clean resource
+}
+
+fn wake_by_ref_rw(p: *const ()) {
+    let data: Arc<Resource> = unsafe { Arc::from_raw(p as *const Resource) };
+    // todo wakeup
+    forget(data);
+}
+
+fn drop_rw(p: *const ()) {
+    unsafe { Arc::from_raw(p as *const Resource) };
+    // decrement reference count by auto drop
+}
+
+pub mod net;
+```
+
+the call method:
+
+``` Rust
+use async_runtime::Runtime;
+use async_runtime::net::AsyncTcpStream;
+fn main() {
+    let rt = Runtime;
+    rt.run(async {
+        println!("top future start");
+        let mut stream = AsyncTcpStream::connect("127.0.0.1:8080");
+        let mut buf = vec![0;100];
+        let n = stream.read(&mut buf).await;
+        println!("{:?}", String::from_utf8(buf[0..n].into()));
+        stream.close();
+        println!("top future end");
+
+    });
+}
+```
+the net:
+
+``` Rust
+use std::{
+    future::Future,
+    io::{self, Read, Write},
+    net::{Shutdown, TcpStream},
+    pin::Pin,
+    task::{Context, Poll},
+};
+/// just to wrap a TcpStream in order to implement  different interfaces
+/// User can use this type like below
+/// ```
+/// async {
+///     let mut stream = AsyncTcpStream::connect();
+///     let mut buf = vec![0:1000];
+///     let num_bytes = stream.read(&buf).await;
+///     stream.close();
+/// }
+/// ```
+pub struct AsyncTcpStream {
+    stream: TcpStream,
+}
+
+impl AsyncTcpStream {
+    pub fn connect(addr: &str) -> Self {
+        let stream = TcpStream::connect(addr).unwrap();
+        // set to nonblocking so that we can control based on return status
+        stream.set_nonblocking(true).unwrap();
+        Self { stream }
+    }
+    pub fn close(&self) {
+        // shutdown connection properly
+        self.stream.shutdown(Shutdown::Both).unwrap();
+    }
+    /// return a future for polling
+    pub fn read<'a, 'b>(&'a mut self, buf: &'b mut [u8]) -> ReadFuture<'a, 'b> {
+        ReadFuture {
+            stream: &self.stream,
+            buf,
+        }
+    }
+}
+
+pub struct ReadFuture<'a, 'b> {
+    stream: &'a TcpStream,
+    buf: &'b mut [u8],
+}
+
+impl<'a, 'b> Future for ReadFuture<'a, 'b> {
+    type Output = usize;
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let f = self.get_mut();
+        match f.stream.read(&mut f.buf) {
+            Ok(n_bytes) => Poll::Ready(n_bytes),
+            Err(err) if err.kind() == io::ErrorKind::WouldBlock => Poll::Pending,
+            Err(e) => panic!("Future read error! {e:?}"),
+        }
+    }
+}
+```
+
+copy from [Basic concept of Async I/O and Executor](https://medium.com/@gftea/basic-concept-of-async-i-o-and-executor-623f3242a102)
