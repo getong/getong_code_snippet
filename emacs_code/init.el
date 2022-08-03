@@ -108,7 +108,6 @@
 (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin"))
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
-(setq lsp-rust-server 'rust-analyzer)
 (add-hook 'rust-mode-hook (lambda ()
                             (flycheck-rust-setup)
                             (lsp)
@@ -706,7 +705,6 @@ Get it from:  <http://hasseg.org/trash/>"
 (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
-(setq lsp-rust-server 'rust-analyzer)
 (add-hook 'rust-mode-hook (lambda ()
                             (flycheck-rust-setup)
                             (lsp)
