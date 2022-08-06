@@ -1637,3 +1637,28 @@ sudo systemctl enable libvirtd.service --now
 sudo systemctl enable virtlogd.service --now
 ```
 copy from [Kubernetes on your local Manjaro/Arch](https://medium.com/@morgan_42683/kubernetes-on-your-local-manjaro-arch-7890904c8984)
+
+## wpa_supplicant
+
+wpa_supplicant.service:
+
+``` shell
+sudo vim /lib/systemd/system/wpa_supplicant.service
+```
+Find the following line.
+
+``` shell
+ExecStart=/sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+```
+change to be:
+
+``` shell
+ExecStart=/sbin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlp0s20u9
+Restart=always
+```
+then start the service
+
+``` shell
+sudo systemctl enable wpa_supplicant.service
+sudo systemctl start wpa_supplicant.service
+```
