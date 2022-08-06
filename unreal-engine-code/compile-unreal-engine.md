@@ -10,7 +10,7 @@ git clone https://github.com/EpicGames/UnrealEngine.git
 // cd UnrealEngine-4.27.2-release
 
 ## on archlinux, copy from https://aur.archlinux.org/packages/unreal-engine
-yay -S libicu50
+yay -S libicu53
 
 cd UnrealEngine
 ./Setup.sh
