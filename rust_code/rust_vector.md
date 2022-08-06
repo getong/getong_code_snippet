@@ -60,3 +60,23 @@ fn fill_vec(vec: &Vec<i32>) -> Vec<i32> {
     vec
 
 ```
+
+## multi dimansion vector
+
+``` rust
+let mut x = [[[23; 4]; 8]; 15];
+x[14][7][3] = 56;
+print!("{}, {}", x[0][0][0], x[14][7][3]);
+```
+Actually, only the usize type is allowed as an index of an array.
+
+## as char
+
+``` rust
+for n in 32..127 {
+println!("{}: [{}]", n, n as u8 as char);
+}
+for n in 160..256 {
+println!("{}: [{}]", n, n as u8 as char);
+}
+```
