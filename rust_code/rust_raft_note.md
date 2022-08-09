@@ -75,3 +75,20 @@ where
 ```
 
 copy from [Getting Started](https://datafuselabs.github.io/openraft/getting-started.html)
+
+## Raft
+
+``` rust
+pub fn new(
+    id: NodeId,
+    config: Arc<Config>,
+    network: Arc<N>,
+    storage: Arc<S>
+) -> Self
+
+pub async fn vote(&self, rpc: VoteRequest) -> Result<VoteResponse, RaftError>
+
+pub async fn current_leader(&self) -> Option<NodeId>
+
+```
+copy from [Struct openraft::raft::Raft](https://docs.rs/openraft/latest/openraft/raft/struct.Raft.html)
