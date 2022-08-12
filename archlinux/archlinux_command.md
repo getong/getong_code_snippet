@@ -1662,3 +1662,9 @@ then start the service
 sudo systemctl enable wpa_supplicant.service
 sudo systemctl start wpa_supplicant.service
 ```
+
+## mysql
+
+``` shell
+sudo pacman -S libmysqlclient
+```
