@@ -1668,3 +1668,11 @@ sudo systemctl start wpa_supplicant.service
 ``` shell
 sudo pacman -S libmysqlclient
 ```
+
+## pacman update ignore package
+
+```
+sudo vim /etc/pacman.conf
+
+IgnorePkg   = wpa_supplicant
+```
