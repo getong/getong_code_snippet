@@ -1676,3 +1676,18 @@ sudo vim /etc/pacman.conf
 
 IgnorePkg   = wpa_supplicant
 ```
+
+## install nvm
+
+``` shell
+sudo pacman -S nvm
+echo 'source /usr/share/nvm/init-nvm.sh' >> ~/.zshrc
+source ~/.zshrc
+nvm install v14.2.0
+
+## change directory
+# cd project_dir
+nvm use
+npm install
+npm run start
+```
