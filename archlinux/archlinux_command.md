@@ -1691,3 +1691,11 @@ nvm use
 npm install
 npm run start
 ```
+
+## yt-dlp
+
+``` shell
+sudo pacman -S yt-dlp
+
+yt-dlp --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt https://www.youtube.com/watch\?v\=69h1zhIdCN0
+```
