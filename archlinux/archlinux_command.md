@@ -700,12 +700,12 @@ sudo vim /etc/samba/smb.conf
 [public]
     guest ok = Yes
     path = /home/test/shares
-    read only = No
+    read only = Yes
 
 
 [private]
     path = /home/test/privates
-    read only = No
+    read only = Yes
     write list = @test
 
 #--------------------------------
