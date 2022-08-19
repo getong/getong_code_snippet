@@ -12,5 +12,6 @@
 [tensorbase](https://github.com/tensorbase/tensorbase)
 [canary](https://github.com/znx3p0/canary)
 [arrow-ballista](https://github.com/apache/arrow-ballista)
+[quickwit](https://github.com/quickwit-oss/quickwit)
 
 ## use with kubernetes
