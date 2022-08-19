@@ -13,5 +13,6 @@
 [canary](https://github.com/znx3p0/canary)
 [arrow-ballista](https://github.com/apache/arrow-ballista)
 [quickwit](https://github.com/quickwit-oss/quickwit)
+[sccache](https://github.com/mozilla/sccache)
 
 ## use with kubernetes
