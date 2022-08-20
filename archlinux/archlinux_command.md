@@ -1698,4 +1698,6 @@ npm run start
 sudo pacman -S yt-dlp
 
 yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --write-description --write-info-json --write-annotations --write-thumbnail --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt https://www.youtube.com/watch\?v\=69h1zhIdCN0
+
+yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --write-description --write-info-json --write-annotations --write-thumbnail --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt -a youtube-download-file.txt
 ```
