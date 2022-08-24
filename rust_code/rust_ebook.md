@@ -42,3 +42,4 @@
 [context-switch](https://github.com/jimblandy/context-switch)
 [DB2: Tokio Mini Redis — Server (Part 1)](https://medium.com/sys-base/rust-day-9-tokio-mini-redis-part-1-c8f5812ae4b)
 [Building a runtime reflection system for Rust Part 3: dyn Method](https://www.osohq.com/post/runtime-reflection-pt-3)
+[Rust for Elixir developers: GenServer.](https://medium.com/@codematters/rust-for-elixir-developers-genserver-762ff590f017)
