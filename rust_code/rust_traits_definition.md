@@ -973,3 +973,33 @@ pub trait Any: 'static {
   }
 }
 ```
+
+## Fn trait for dyn Method
+
+``` rust
+macro_rules! tuple_impls {
+    ( $( $name:ident )* ) => {
+        impl<Fun, Res, Receiver, $($name),*> Method<Receiver, ($($name,)*)> for Fun
+        where
+            Fun: Fn(&Receiver, $($name),*) -> Res + Send + Sync + 'static,
+        {
+            type Result = Res;
+
+            fn invoke(&self, receiver: &Receiver, args: ($($name,)*)) -> Self::Result {
+                #[allow(non_snake_case)]
+                let ($($name,)*) = args;
+                (self)(receiver, $($name,)*)
+            }
+        }
+    };
+}
+
+tuple_impls! {}
+tuple_impls! { A }
+tuple_impls! { A B }
+tuple_impls! { A B C }
+// .. more macro invocations follow
+// we support method arities up to 16
+tuple_impls! { A B C D E F G H I J K L M N O P }
+```
+copy from [Part 3: dyn Method](https://www.osohq.com/post/runtime-reflection-pt-3)
