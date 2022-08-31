@@ -35,7 +35,7 @@ mount /dev/sda2 /mnt/backup
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr \
-    intel-ucode proxychains v2ray asp nemo emacs julia erlang \
+    intel-ucode proxychains v2ray asp nemo emacs erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
     wqy-zenhei cmake reflector bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme \
@@ -1700,4 +1700,10 @@ sudo pacman -S yt-dlp
 yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --write-description --write-info-json --write-annotations --write-thumbnail --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt https://www.youtube.com/watch\?v\=69h1zhIdCN0
 
 yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --write-description --write-info-json --write-annotations --write-thumbnail --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt -a youtube-download-file.txt
+```
+
+## julia-bin
+
+``` shell
+yay -S julia-bin
 ```

@@ -44,7 +44,7 @@ pacman -S --noconfirm archlinuxcn-keyring
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
     gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr \
-    intel-ucode proxychains v2ray asp nemo emacs julia erlang \
+    intel-ucode proxychains v2ray asp nemo emacs erlang \
     gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
     util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
     wqy-zenhei cmake reflector bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme \
