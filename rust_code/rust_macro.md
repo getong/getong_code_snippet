@@ -82,3 +82,8 @@ impl Parse for Input {
 }
 ```
 copy from [“变长参数”函数与回调](https://zjp-cn.github.io/rust-note/dcl/variadic.html)
+
+## library
+[syn](https://github.com/dtolnay/syn)
+[quote](https://github.com/dtolnay/quote)
+[proc-macro2](https://github.com/dtolnay/proc-macro2)
