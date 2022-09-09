@@ -1707,3 +1707,11 @@ yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+best
 ``` shell
 yay -S community/julia
 ```
+
+## install pdftk
+
+``` shell
+sudo pacman -S pdftk
+
+pdftk input.pdf cat 1 output 1.pdf
+```
