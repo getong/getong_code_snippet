@@ -393,3 +393,12 @@ strip = true        # Strip symbols from binary*
 ```
 copy from [Why are Rust executables so huge?](https://stackoverflow.com/questions/29008127/why-are-rust-executables-so-huge/54842093#54842093)
 also see [Minimizing Rust Binary Size](https://github.com/johnthagen/min-sized-rust)
+
+## compile fast
+
+copy from [Speeding up incremental Rust compilation with dynamic libraries](https://robert.kra.hn/posts/2022-09-09-speeding-up-incremental-rust-compilation-with-dylibs/)
+``` shell
+cargo install cargo-add-dynamic
+cargo add-dynamic polars --features csv-file,lazy,list,describe,rows,fmt,strings,temporal
+cargo build
+```
