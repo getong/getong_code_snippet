@@ -87,3 +87,50 @@ copy from [“变长参数”函数与回调](https://zjp-cn.github.io/rust-note
 [syn](https://github.com/dtolnay/syn)
 [quote](https://github.com/dtolnay/quote)
 [proc-macro2](https://github.com/dtolnay/proc-macro2)
+
+## 反复
+>>>
+matcher 可以有反复捕获 (repetition)，这使得匹配一连串标记 (token) 成为可能。反复捕获的一般形式为 $ ( ... ) sep rep。
+
+$ 是字面上的美元符号标记
+( ... ) 是被反复匹配的模式，由小括号包围。
+sep 是可选的分隔标记。它不能是括号或者反复操作符 rep。常用例子有 , 和 ; 。
+rep 是必须的重复操作符。当前可以是：
+?：表示最多一次重复，所以此时不能前跟分隔标记。
+*：表示零次或多次重复。
++：表示一次或多次重复。
+
+``` rust
+macro_rules! vec_strs {
+    (
+        // 开始反复捕获
+        $(
+            // 每个反复必须包含一个表达式
+            $element:expr
+        )
+        // 由逗号分隔
+        ,
+        // 0 或多次
+        *
+    ) => {
+        // 在这个块内用大括号括起来，然后在里面写多条语句
+        {
+            let mut v = Vec::new();
+
+            // 开始反复捕获
+            $(
+                // 每个反复会展开成下面表达式，其中 $element 被换成相应被捕获的表达式
+                v.push(format!("{}", $element));
+            )*
+
+            v
+        }
+    };
+}
+
+fn main() {
+    let s = vec_strs![1, "a", true, 3.14159f32];
+    assert_eq!(s, &["1", "a", "true", "3.14159"]);
+}
+
+```
