@@ -262,3 +262,5 @@ pub fn tick<E, F>(&mut self, e: &E, f: &mut F) -> (Status, f64)
 copy from [bonsai](https://github.com/Sollimann/bonsai)
 
 *cursor is Box::new(State), **cursor is State.
+
+cursor's data type is &mut Box::new(State).
