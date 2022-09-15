@@ -203,3 +203,62 @@ From &mut T to &U when T: Deref<Target=U> 一个可变借用（可变借用是�
 
 ## doc reading
 [Rust's as_ref vs as_deref](https://www.fpcomplete.com/blog/rust-asref-asderef/)
+
+## ref mut variable example
+
+``` rust
+/// Keeps track of a behavior.
+#[derive(Clone, Debug, serde::Deserialize, serde::Serialize, PartialEq)]
+pub enum State<A> {
+    /// Executes an action.
+    ActionState(A),
+    /// Converts `Success` into `Failure` and vice versa.
+    InvertState(Box<State<A>>),
+    /// Ignores failures and always return `Success`.
+    AlwaysSucceedState(Box<State<A>>),
+    /// Keeps track of waiting for a period of time before continuing.
+    ///
+    /// f64: Total time in seconds to wait
+    ///
+    /// f64: Time elapsed in seconds
+    WaitState(f64, f64),
+    /// Waits forever.
+    WaitForeverState,
+    /// Keeps track of an `If` behavior.
+    /// If status is `Running`, then it evaluates the condition.
+    /// If status is `Success`, then it evaluates the success behavior.
+    /// If status is `Failure`, then it evaluates the failure behavior.
+    IfState(Box<Behavior<A>>, Box<Behavior<A>>, Status, Box<State<A>>),
+    /// Keeps track of a `Select` behavior.
+    SelectState(Vec<Behavior<A>>, usize, Box<State<A>>),
+    /// Keeps track of an `Sequence` behavior.
+    SequenceState(Vec<Behavior<A>>, usize, Box<State<A>>),
+    /// Keeps track of a `While` behavior.
+    WhileState(Box<State<A>>, Vec<Behavior<A>>, usize, Box<State<A>>),
+    /// Keeps track of a `WhenAll` behavior.
+    WhenAllState(Vec<Option<State<A>>>),
+    /// Keeps track of a `WhenAny` behavior.
+    WhenAnyState(Vec<Option<State<A>>>),
+    /// Keeps track of an `After` behavior.
+    AfterState(usize, Vec<State<A>>),
+}
+
+
+impl<A: Clone> State<A> {
+pub fn tick<E, F>(&mut self, e: &E, f: &mut F) -> (Status, f64)
+    where
+        E: UpdateEvent,
+        F: FnMut(ActionArgs<E, A>) -> (Status, f64),
+        A: Debug,
+    {
+    match (upd, self) {
+         (_, &mut WhileState(ref mut ev_cursor, ref rep, ref mut i, ref mut cursor)) => {
+         **cursor = State::new(rep[*i].clone());
+         }
+    }
+}
+}
+```
+copy from [bonsai](https://github.com/Sollimann/bonsai)
+
+*cursor is Box::new(State), **cursor is State.
