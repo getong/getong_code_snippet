@@ -457,3 +457,41 @@ let slice: &[i32] = &boxed_array[..];
 ```
 All elements of slices are always initialized, and access to a slice is always bounds-checked in safe methods and operators.
 copy from [Slice types](https://doc.rust-lang.org/reference/types/slice.html)
+
+## tuple
+
+``` rust
+if let Ok(response1) = func1() {
+  if let Ok(response2) = func2() {
+    if let Ok(response3) = func3() {
+      handleResponse(response1, response2, response3)
+   } else if let Err(e) {
+      handleError(e)
+    }
+  } else if let Err(e) {
+    handleError(e)
+  }
+} else if let Err(e) {
+  handleError(e)
+}
+```
+
+change as:
+
+``` rust
+match (func1(), func2(), func3()) {
+    (Ok(r1), Ok(r2), Ok(r3)) => handleResponse(r1, r2, r3),
+    (Err(e), _, _) |
+    (_, Err(e), _) |
+    (_, _, Err(e) => handleError(e)
+}
+```
+and finally:
+
+``` rust
+match (func1(), func2(), func3()) {
+  (Ok(r1), Ok(r2), Ok(r3)) => handleResponse(r1, r2, r3),
+  _ => handleError()
+  }
+```
+copy from [Rust tuple pattern matching trick](https://nathanael-morris-bennett.medium.com/rust-tuple-pattern-matching-trick-c0f6bcdb4460)
