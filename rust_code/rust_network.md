@@ -10,3 +10,62 @@ let listener = TcpListener::bind("[::]:0");
 ```
 `[::]:0` is bind any port in the os, the `[::]:80` is listen on 80 port on all interfaces in the os.
 copy from [How to listen on all interfaces with TCPListener? [solved]](https://users.rust-lang.org/t/how-to-listen-on-all-interfaces-with-tcplistener-solved/12269)
+
+
+## SO_REUSEPORT option
+
+``` rust
+fn new_udp_reuseport(addr: SocketAddr) -> UdpSocket {
+    let udp_sock = socket2::Socket::new(
+        if addr.is_ipv4() {
+            socket2::Domain::IPV4
+        } else {
+            socket2::Domain::IPV6
+        },
+        socket2::Type::DGRAM,
+        None,
+    )
+    .unwrap();
+    udp_sock.set_reuse_port(true).unwrap();
+    // from tokio-rs/mio/blob/master/src/sys/unix/net.rs
+    udp_sock.set_cloexec(true).unwrap();
+    udp_sock.set_nonblocking(true).unwrap();
+    udp_sock.bind(&socket2::SockAddr::from(addr)).unwrap();
+    let udp_sock: std::net::UdpSocket = udp_sock.into();
+    udp_sock.try_into().unwrap()
+}
+```
+
+copy from [phantun](https://github.com/dndx/phantun)
+
+``` rust
+   /// Set value for the `SO_REUSEPORT` option on this socket.
+    ///
+    /// This indicates that further calls to `bind` may allow reuse of local
+    /// addresses. For IPv4 sockets this means that a socket may bind even when
+    /// there's a socket already listening on this port.
+    #[cfg(all(
+        feature = "all",
+        not(any(target_os = "solaris", target_os = "illumos"))
+    ))]
+    #[cfg_attr(
+        docsrs,
+        doc(cfg(all(
+            feature = "all",
+            unix,
+            not(any(target_os = "solaris", target_os = "illumos"))
+        )))
+    )]
+    pub fn set_reuse_port(&self, reuse: bool) -> io::Result<()> {
+        unsafe {
+            setsockopt(
+                self.as_raw(),
+                libc::SOL_SOCKET,
+                libc::SO_REUSEPORT,
+                reuse as c_int,
+            )
+        }
+    }
+```
+
+copy from [socket2](https://github.com/rust-lang/socket2)
