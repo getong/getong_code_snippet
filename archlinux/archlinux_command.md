@@ -1715,3 +1715,9 @@ sudo pacman -S pdftk
 
 pdftk input.pdf cat 1 output 1.pdf
 ```
+
+## nushell starship zellij
+
+``` shell
+sudo pacman -S nushell starship zellij
+```
