@@ -441,3 +441,9 @@ loop {
 }
 ```
 copy from [Rust异步浅谈](https://leaxoy.github.io/2020/03/rust-async-runtime/)
+
+
+## loop example
+see [Is it possible to take ownership of data back from a for loop once the loop completes](https://users.rust-lang.org/t/is-it-possible-to-take-ownership-of-data-back-from-a-for-loop-once-the-loop-completes/3363)
+see [Rust borrowing rules in `for...in` loop](https://stackoverflow.com/questions/60461475/rust-borrowing-rules-in-for-in-loop)
+see [Rust: Looping on a member variable without mutably borrowing self](http://blog.ssokolow.com/archives/2017/06/23/rust-looping-on-a-member-variable-without-mutably-borrowing-self/)

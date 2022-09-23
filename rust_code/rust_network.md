@@ -69,3 +69,7 @@ copy from [phantun](https://github.com/dndx/phantun)
 ```
 
 copy from [socket2](https://github.com/rust-lang/socket2)
+
+## multicast
+see [Multicasting in Rust](https://bluejekyll.github.io/blog/posts/multicasting-in-rust/)
+see [multicast-example](https://github.com/bluejekyll/multicast-example)
