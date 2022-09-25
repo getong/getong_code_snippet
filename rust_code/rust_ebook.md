@@ -48,3 +48,5 @@
 [Async Programming in Rust — Part 3: Futures and Async / Await](https://medium.com/@KevinBGreene/async-programming-in-rust-part-3-futures-and-async-await-b508f7e44abc)
 [Rust 宏小册](https://zjp-cn.github.io/tlborm/)
 [Distributed tracing in Rust](https://rlebran.com/distributed-tracing-in-rust-b8eb2af3aff4)
+[Learn Rust With Entirely Too Many Linked Lists](https://rust-unofficial.github.io/too-many-lists/)
+[手把手实现 Rust 链表](https://github.com/sunface/too-many-lists)
