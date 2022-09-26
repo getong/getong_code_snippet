@@ -14,5 +14,6 @@
 [arrow-ballista](https://github.com/apache/arrow-ballista)
 [quickwit](https://github.com/quickwit-oss/quickwit)
 [sccache](https://github.com/mozilla/sccache)
+[holochain](https://github.com/holochain/holochain)
 
 ## use with kubernetes
