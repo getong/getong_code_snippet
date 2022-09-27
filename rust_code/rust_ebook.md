@@ -41,6 +41,8 @@
 [Fully generic recursion in Rust](https://recursion.wtf/posts/rust_schemes_2/)
 [context-switch](https://github.com/jimblandy/context-switch)
 [DB2: Tokio Mini Redis — Server (Part 1)](https://medium.com/sys-base/rust-day-9-tokio-mini-redis-part-1-c8f5812ae4b)
+[Part 1: dyn Class](https://www.osohq.com/post/rust-reflection-pt-1)
+[Part 2: dyn Attribute](https://www.osohq.com/post/runtime-reflection-pt-2)
 [Building a runtime reflection system for Rust Part 3: dyn Method](https://www.osohq.com/post/runtime-reflection-pt-3)
 [Rust for Elixir developers: GenServer.](https://medium.com/@codematters/rust-for-elixir-developers-genserver-762ff590f017)
 [Rust: Pushdown Automata](https://medium.com/swlh/rust-pushdown-automata-d37c2b1ae0c6)
