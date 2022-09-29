@@ -66,3 +66,7 @@ class SecondScreen extends StatelessWidget {
 ```
 
 copy from [导航到新页面并返回](https://flutterchina.club/cookbook/navigation/navigation-basics/)
+
+
+## flutter and rust
+see [Flutter and Rust combined. Creating a plugin to support various operating systems](https://blog.argonauths.eu/2022/09/26/flutter-and-rust-combined-creating-a-plugin-to-support-various-operating-systems/)
