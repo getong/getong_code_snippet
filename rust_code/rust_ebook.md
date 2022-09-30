@@ -53,3 +53,4 @@
 [Learn Rust With Entirely Too Many Linked Lists](https://rust-unofficial.github.io/too-many-lists/)
 [手把手实现 Rust 链表](https://github.com/sunface/too-many-lists)
 [Rust Quiz](https://github.com/dtolnay/rust-quiz)
+[A collection of notable Rust blog posts](https://gist.github.com/brson/a324c83a6af6a8a78dfaa9d33eb9b48e)
