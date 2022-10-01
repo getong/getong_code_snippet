@@ -54,3 +54,4 @@
 [手把手实现 Rust 链表](https://github.com/sunface/too-many-lists)
 [Rust Quiz](https://github.com/dtolnay/rust-quiz)
 [A collection of notable Rust blog posts](https://gist.github.com/brson/a324c83a6af6a8a78dfaa9d33eb9b48e)
+[Learn Rust the Dangerous Way](https://cliffle.com/p/dangerust/)
