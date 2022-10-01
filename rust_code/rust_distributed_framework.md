@@ -15,5 +15,7 @@
 [quickwit](https://github.com/quickwit-oss/quickwit)
 [sccache](https://github.com/mozilla/sccache)
 [holochain](https://github.com/holochain/holochain)
+[stateright](https://github.com/stateright/stateright)
+[chitchat](https://github.com/quickwit-oss/chitchat)
 
 ## use with kubernetes
