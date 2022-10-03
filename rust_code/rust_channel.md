@@ -38,3 +38,9 @@ impl<TSocket: DatagramSocket, TConnection: Connection> ConnectionManager<TSocket
 }
 ```
 copy from laminar/src/net/connection_manager.rs
+
+## mpmc
+[flume](https://github.com/zesterer/flume)
+[crossbeam-channel](https://crates.io/crates/crossbeam-channel)
+
+flume might be better.
