@@ -55,3 +55,6 @@
 [Rust Quiz](https://github.com/dtolnay/rust-quiz)
 [A collection of notable Rust blog posts](https://gist.github.com/brson/a324c83a6af6a8a78dfaa9d33eb9b48e)
 [Learn Rust the Dangerous Way](https://cliffle.com/p/dangerust/)
+[Asynchronous Programming Under Linux](https://unixism.net/loti/async_intro.html)
+[Async/Await](https://os.phil-opp.com/async-await/)
+[Why asynchronous Rust doesn't work](https://eta.st/2021/03/08/async-rust-2.html)
