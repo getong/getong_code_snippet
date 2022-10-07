@@ -58,3 +58,4 @@
 [Asynchronous Programming Under Linux](https://unixism.net/loti/async_intro.html)
 [Async/Await](https://os.phil-opp.com/async-await/)
 [Why asynchronous Rust doesn't work](https://eta.st/2021/03/08/async-rust-2.html)
+[Actors with Tokio](https://ryhl.io/blog/actors-with-tokio/)
