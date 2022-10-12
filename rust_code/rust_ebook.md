@@ -59,3 +59,6 @@
 [Async/Await](https://os.phil-opp.com/async-await/)
 [Why asynchronous Rust doesn't work](https://eta.st/2021/03/08/async-rust-2.html)
 [Actors with Tokio](https://ryhl.io/blog/actors-with-tokio/)
+[more than 100 examples to learn concurrency programming via rust](https://github.com/smallnest/concurrency-programming-via-rust)
+[Mandelbrot rendering with Rust](https://www.github.com/jakobdannel/mandelbrot)
+[A raytracer written in Rust](https://github.com/wafelack/raytracer)
