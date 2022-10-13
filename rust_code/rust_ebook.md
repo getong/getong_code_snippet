@@ -62,3 +62,4 @@
 [more than 100 examples to learn concurrency programming via rust](https://github.com/smallnest/concurrency-programming-via-rust)
 [Mandelbrot rendering with Rust](https://www.github.com/jakobdannel/mandelbrot)
 [A raytracer written in Rust](https://github.com/wafelack/raytracer)
+[How to Build a Machine Learning Model in Rust](https://www.freecodecamp.org/news/how-to-build-a-machine-learning-model-in-rust/)
