@@ -228,7 +228,21 @@ copy from [Computer suspends when not logged in](https://superuser.com/questions
 enable multilib first
 ``` shell
 yay -S deepin-wine-wechat com.qq.weixin.work.deepin deepin-wine-qq
+
 ```
+set fcitx input method:
+
+``` shell
+ sudo vim /opt/apps/com.qq.im.deepin/files/run.sh
+
+env locale=zh_CN
+export XIM="fcitx"
+export XMODIFIERS="@im=fcitx"
+export GTK_IM_MODULE="fcitx"
+export QT_IM_MODULE="fcitx"
+```
+copy from https://github.com/vufa/deepin-wine-wechat-arch/issues/12
+
 config the display effect:
 
 ``` shell
