@@ -450,3 +450,25 @@ fn call_on_ref_zero<F>(f: F) where F: for<'a> Fn(&'a i32) {
 }
 ```
 copy from [Higher-ranked trait bounds](https://dev-doc.rust-lang.org/beta/reference/trait-bounds.html#higher-ranked-trait-bounds)
+
+## dyn trait usage
+
+``` rust
+trait Foo {
+    fn do_stuff(&self);
+}
+
+// Run-time polymorphism (dynamic dispatch).
+// Here `Foo` acts like an Java interface or a abstract base class.
+fn runtime(obj: &dyn Foo) {
+    obj.do_stuff();
+}
+
+// Compile-time polymorphism (generics).
+// Here `Foo` acts as a constraint on what types can be passed to the function
+// (what C++ calls a "concept").
+fn compile_time<T: Foo>(obj: &T) {
+    obj.do_stuff();
+}
+```
+copy from [Why Rust?](https://www.rerun.io/blog/why-rust)
