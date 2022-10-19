@@ -34,3 +34,57 @@ pub fn get_player(id: i32) {
     }
 }
 ```
+
+## static mut example
+
+``` rust
+static mut DB: Option<PgPool> = None;
+
+static GUARD: Mutex<i8> = Mutex::new(0);
+
+pub async fn connection() -> &'static PgPool {
+    unsafe {
+        let profile = std::env::var("app.profile").unwrap_or("default".to_owned());
+        let _ = GUARD.lock().expect("Failed to lock for DB.");
+        if profile == "test" {
+            DB = Some(init_db().await);
+            DB.as_ref().unwrap()
+        } else {
+            if let Some(db) = &DB {
+                db
+            } else {
+                DB = Some(init_db().await);
+                DB.as_ref().unwrap()
+            }
+        }
+    }
+}
+
+async fn init_db() -> PgPool {
+    let user = get_env_or_default("DB_USER", "postgres");
+    let password = get_env_or_default("DB_PASSWORD", "");
+    let host = get_env_or_default("DB_HOST", "localhost");
+    let port = get_env_or_default("DB_PORT", "5432");
+    let name = get_env_or_default("DB_NAME", "postgres");
+    let connection_url = if password.is_empty() {
+        format!("postgresql://{}@{}:{}/{}", user, host, port, name)
+    } else {
+        format!(
+            "postgresql://{}:{}@{}:{}/{}",
+            user, password, host, port, name
+        )
+    };
+    println!("Connecting to db: {}.", connection_url);
+
+    PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&connection_url)
+        .await
+        .expect("Failed to connect to DB.")
+}
+
+fn get_env_or_default(env: &str, default: &str) -> String {
+    return env::var(env).unwrap_or_else(|_| default.to_owned());
+}
+```
+copy from [Database connection creation](https://www.reddit.com/r/rust/comments/y81k35/database_connection_creation/)
