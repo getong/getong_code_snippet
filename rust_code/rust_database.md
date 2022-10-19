@@ -20,3 +20,5 @@ copy from [10 Popular Rust Libraries for Database](https://morioh.com/p/2fee088c
 [cnosdb](https://github.com/cnosdb/cnosdb)
 [engula](https://github.com/engula/engula)
 [lnx](https://github.com/lnx-search/lnx)
+[meilisearch](https://github.com/meilisearch/meilisearch)
+[quickwit](https://github.com/quickwit-oss/quickwit)
