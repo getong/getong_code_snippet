@@ -63,3 +63,4 @@
 [Mandelbrot rendering with Rust](https://www.github.com/jakobdannel/mandelbrot)
 [A raytracer written in Rust](https://github.com/wafelack/raytracer)
 [How to Build a Machine Learning Model in Rust](https://www.freecodecamp.org/news/how-to-build-a-machine-learning-model-in-rust/)
+[Nine Rules for Creating Procedural Macros in Rust](https://towardsdatascience.com/nine-rules-for-creating-procedural-macros-in-rust-595aa476a7ff)
