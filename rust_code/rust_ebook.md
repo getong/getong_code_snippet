@@ -66,3 +66,4 @@
 [Nine Rules for Creating Procedural Macros in Rust](https://towardsdatascience.com/nine-rules-for-creating-procedural-macros-in-rust-595aa476a7ff)
 [Writing a HashMap in Rust without unsafe](https://ecton.dev/writing-a-hashmap-without-unsafe/)
 [MacroKata: Rustlings Style Exercises For Learning Macros](https://github.com/tfpk/macrokata)
+[Rust Latam: procedural macros workshop](ttps://github.com/dtolnay/proc-macro-workshop)
