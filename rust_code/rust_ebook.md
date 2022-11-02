@@ -68,3 +68,4 @@
 [MacroKata: Rustlings Style Exercises For Learning Macros](https://github.com/tfpk/macrokata)
 [Rust Latam: procedural macros workshop](ttps://github.com/dtolnay/proc-macro-workshop)
 [const syntax](https://blog.yoshuawuyts.com/const-syntax/)
+[Hidden Code](https://alexeden.github.io/learning-rust/hidden_code.html)
