@@ -69,3 +69,4 @@
 [Rust Latam: procedural macros workshop](ttps://github.com/dtolnay/proc-macro-workshop)
 [const syntax](https://blog.yoshuawuyts.com/const-syntax/)
 [Hidden Code](https://alexeden.github.io/learning-rust/hidden_code.html)
+[What Can Coerce, and Where, in Rust](https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust)
