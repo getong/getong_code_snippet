@@ -1648,12 +1648,12 @@ sudo vim /lib/systemd/system/wpa_supplicant.service
 Find the following line.
 
 ``` shell
-ExecStart=/sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+ExecStart=/usr/bin/wpa_supplicant -u -s -O /run/wpa_supplicant
 ```
 change to be:
 
 ``` shell
-ExecStart=/sbin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlp0s20u9
+ExecStart=/usr/bin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlp0s20u9
 Restart=always
 ```
 then start the service
