@@ -67,4 +67,3 @@ copy from [Error Compiling Unreal Engine on Arch Linux](https://forums.unrealeng
 
 ## pre-compiled unreal engine
 see [Unreal Engine is now available to download for Linux](https://www.unrealengine.com/en-US/linux)
-see [unreal engine](https://mshoaei.ir/dl)
