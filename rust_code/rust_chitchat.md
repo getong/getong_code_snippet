@@ -311,3 +311,74 @@ impl ChitchatHandle {
     }
 }
 ```
+
+## digest
+
+``` rust
+impl Chitchat {
+    /// Computes digest.
+    ///
+    /// This method also increments the heartbeat, to force the presence
+    /// of at least one update, and have the node liveliness propagated
+    /// through the cluster.
+    fn compute_digest(&mut self) -> Digest {
+        // Ensure for every reply from this node, at least the heartbeat is changed.
+        let dead_nodes: HashSet<_> = self.dead_nodes().collect();
+        self.cluster_state.compute_digest(dead_nodes)
+    }
+}
+
+impl ClusterState {
+    pub fn compute_digest(&self, dead_nodes: HashSet<&NodeId>) -> Digest {
+        Digest {
+            node_max_version: self
+                .node_states
+                .iter()
+                .filter(|(node_id, _)| !dead_nodes.contains(node_id))
+                .map(|(node_id, node_state)| (node_id.clone(), node_state.max_version))
+                .collect(),
+        }
+    }
+}
+
+
+/// A digest represents is a piece of information summarizing
+/// the staleness of one peer's data.
+///
+/// It is equivalent to a map
+/// peer -> max version.
+#[derive(Debug, Default, PartialEq)]
+pub struct Digest {
+    pub(crate) node_max_version: BTreeMap<NodeId, Version>,
+}
+
+impl Serializable for Digest {
+    fn serialize(&self, buf: &mut Vec<u8>) {
+        (self.node_max_version.len() as u16).serialize(buf);
+        for (node_id, version) in &self.node_max_version {
+            node_id.serialize(buf);
+            version.serialize(buf);
+        }
+    }
+
+    fn deserialize(buf: &mut &[u8]) -> anyhow::Result<Self> {
+        let num_nodes = u16::deserialize(buf)?;
+        let mut node_max_version: BTreeMap<NodeId, Version> = Default::default();
+        for _ in 0..num_nodes {
+            let node_id = NodeId::deserialize(buf)?;
+            let version = u64::deserialize(buf)?;
+            node_max_version.insert(node_id, version);
+        }
+        Ok(Digest { node_max_version })
+    }
+
+    fn serialized_len(&self) -> usize {
+        let mut len = (self.node_max_version.len() as u16).serialized_len();
+        for (node_id, version) in &self.node_max_version {
+            len += node_id.serialized_len();
+            len += version.serialized_len();
+        }
+        len
+    }
+}
+```
