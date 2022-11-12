@@ -267,3 +267,47 @@ impl Server {
     }
 }
 ```
+
+## ChitchatHandle
+
+``` rust
+/// UDP Chitchat server handler.
+///
+/// It is necessary to hold (and not drop) the handler
+/// for the server to keep running.
+pub struct ChitchatHandle {
+    node_id: NodeId,
+    command_tx: UnboundedSender<Command>,
+    chitchat: Arc<Mutex<Chitchat>>,
+    join_handle: JoinHandle<Result<(), anyhow::Error>>,
+}
+
+impl ChitchatHandle {
+    pub fn node_id(&self) -> &NodeId {
+        &self.node_id
+    }
+
+    pub fn chitchat(&self) -> Arc<Mutex<Chitchat>> {
+        self.chitchat.clone()
+    }
+
+    /// Call a function with mutable access to the [`Chitchat`].
+    pub async fn with_chitchat<F, T>(&self, mut fun: F) -> T
+    where F: FnMut(&mut Chitchat) -> T {
+        let mut chitchat = self.chitchat.lock().await;
+        fun(&mut chitchat)
+    }
+
+    /// Shut the server down.
+    pub async fn shutdown(self) -> Result<(), anyhow::Error> {
+        let _ = self.command_tx.send(Command::Shutdown);
+        self.join_handle.await?
+    }
+
+    /// Perform a Chitchat "handshake" with another UDP server.
+    pub fn gossip(&self, addr: SocketAddr) -> Result<(), anyhow::Error> {
+        self.command_tx.send(Command::Gossip(addr))?;
+        Ok(())
+    }
+}
+```
