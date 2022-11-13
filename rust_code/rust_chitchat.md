@@ -402,3 +402,73 @@ pub trait Serializable: Sized {
     fn serialized_len(&self) -> usize;
 }
 ```
+
+## transport
+
+``` rust
+#[async_trait]
+pub trait Socket: Send + Sync + 'static {
+    // Only returns an error if the transport is broken and may not emit message
+    // in the future.
+    async fn send(&mut self, to: SocketAddr, msg: ChitchatMessage) -> anyhow::Result<()>;
+    // Only returns an error if the transport is broken and may not receive message
+    // in the future.
+    async fn recv(&mut self) -> anyhow::Result<(SocketAddr, ChitchatMessage)>;
+}
+
+
+struct UdpSocket {
+    buf_send: Vec<u8>,
+    buf_recv: Box<[u8; MTU]>,
+    socket: tokio::net::UdpSocket,
+}
+
+#[async_trait]
+impl Socket for UdpSocket {
+    async fn send(&mut self, to_addr: SocketAddr, message: ChitchatMessage) -> anyhow::Result<()> {
+        self.buf_send.clear();
+        message.serialize(&mut self.buf_send);
+        self.send_bytes(to_addr, &self.buf_send).await?;
+        Ok(())
+    }
+
+    /// Recv needs to be cancellable.
+    async fn recv(&mut self) -> anyhow::Result<(SocketAddr, ChitchatMessage)> {
+        loop {
+            if let Some(message) = self.receive_one().await? {
+                return Ok(message);
+            }
+        }
+    }
+}
+
+impl UdpSocket {
+    async fn receive_one(&mut self) -> anyhow::Result<Option<(SocketAddr, ChitchatMessage)>> {
+        let (len, from_addr) = self
+            .socket
+            .recv_from(&mut self.buf_recv[..])
+            .await
+            .context("Error while receiving UDP message")?;
+        let mut buf = &self.buf_recv[..len];
+        match ChitchatMessage::deserialize(&mut buf) {
+            Ok(msg) => Ok(Some((from_addr, msg))),
+            Err(err) => {
+                warn!(payload_len=len, from=%from_addr, err=%err, "invalid-chitchat-payload");
+                Ok(None)
+            }
+        }
+    }
+
+    pub(crate) async fn send_bytes(
+        &self,
+        to_addr: SocketAddr,
+        payload: &[u8],
+    ) -> anyhow::Result<()> {
+        self.socket
+            .send_to(payload, to_addr)
+            .await
+            .context("Failed to send chitchat message to target")?;
+        Ok(())
+    }
+}
+```
