@@ -382,3 +382,23 @@ impl Serializable for Digest {
     }
 }
 ```
+
+## Serializable
+
+``` rust
+/// Trait to serialize messages.
+///
+/// Chitchat uses a custom binary serialization format.
+/// The point of this format is to make it possible
+/// to truncate the delta payload to a given mtu.
+pub trait Serializable: Sized {
+    fn serialize(&self, buf: &mut Vec<u8>);
+    fn serialize_to_vec(&self) -> Vec<u8> {
+        let mut buf = Vec::new();
+        self.serialize(&mut buf);
+        buf
+    }
+    fn deserialize(buf: &mut &[u8]) -> anyhow::Result<Self>;
+    fn serialized_len(&self) -> usize;
+}
+```
