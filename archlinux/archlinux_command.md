@@ -1587,6 +1587,13 @@ for unreal engine
 yay -S visual-studio-code-bin
 ```
 
+## unreal engine
+
+``` shell
+yay -S aur/unreal-engine-bin
+## download Linux_Unreal_Engine_5.1.0.zip ~/.cache/yay/unreal-engine-bin
+yay -S aur/unreal-engine-bin
+```
 
 ## install flutter
 
