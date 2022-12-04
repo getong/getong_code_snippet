@@ -1,6 +1,6 @@
 ; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode elixir-mode alchemist tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -95,11 +95,7 @@
 (mouse-avoidance-mode 'animate) ;;光标靠近鼠标指针时，让鼠标指针自动让开，别挡住视线。
 (setq appt-issue-message t)
 
-(add-to-list 'auto-mode-alist '("\\.erl?$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("\\.hrl?$" . erlang-mode))
 
-(add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
-(add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
 (add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode))
 ;; Load rust-mode when you open `.rs` files
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
@@ -265,8 +261,6 @@
  (require 'edts-start))
 
 
-(setq erlang-root-dir "/usr/local/otp_src_23.1.1/lib/erlang")
-(setq erlang-man-root "/usr/local/otp_src_23.1.1/lib/erlang")
 
 ;; 关闭文件滑动控件
 ;;(scroll-bar-mode -1)
@@ -306,10 +300,6 @@
   "Major mode for editing GitHub Flavored Markdown files" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
-(setq load-path (cons "/usr/local/otp_src_23.1.1/lib/erlang/lib/tools-3.4.1/emacs"
-                      load-path))
-(setq exec-path (cons "/usr/local/otp_src_23.1.1/bin" exec-path))
-(require 'erlang-start)
 (setq debug-on-error nil)
 
 ;; copy from [Undo Tree](https://www.emacswiki.org/emacs/UndoTree)
@@ -343,11 +333,6 @@
 (setq switch-window-shortcut-style 'qwerty)
 (setq switch-window-qwerty-shortcuts
       '("a" "s" "d" "f" "j" "k" "l" ";" "w" "e" "i" "o"))
-
-(add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
-(add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
-(require 'elixir-mode)
-(require 'alchemist)
 
 (defun setup-tide-mode ()
   (interactive)
@@ -754,3 +739,122 @@ Get it from:  <http://hasseg.org/trash/>"
     (funcall start-file-process-shell-command name buffer command)))
 (advice-add 'start-file-process-shell-command :around #'start-file-process-shell-command@around)
 (push 'rustic-clippy flycheck-checkers)
+
+;; copy from https://immerrr.github.io/lua-mode/
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+
+
+(defun pnh-lua-completion-string-for (expr file)
+  (mapconcat 'identity
+             `("do"
+               "local clone = function(t)"
+               "  local n = {} for k,v in pairs(t) do n[k] = v end return n"
+               "end"
+               "local function cpl_for(input_parts, ctx, prefixes)"
+               "  if #input_parts == 0 and ctx ~= _G then"
+               "    return ctx"
+               "  elseif #input_parts == 1 then"
+               "    local matches = {}"
+               "    for k in pairs(ctx) do"
+               "      if k:find('^' .. input_parts[1]) then"
+               "        local parts = clone(prefixes)"
+               "        table.insert(parts, k)"
+               "        table.insert(matches, table.concat(parts, '.'))"
+               "      end"
+               "    end"
+               "    return matches"
+               "  else"
+               "    local token1 = table.remove(input_parts, 1)"
+               "    table.insert(prefixes, first_part)"
+               "    return cpl_for(input_parts, ctx[token1], prefixes)"
+               "  end"
+               "end"
+               "local i = {" ,@(mapcar (apply-partially 'format "'%s',")
+                                       (split-string expr "\\.")) "}"
+               ,(format "local f = io.open('%s', 'w')" file)
+               ;; TODO: using _G here is pretty lame! try to get local context
+               "for _,l in ipairs(cpl_for(i, _G, {})) do"
+               "  f:write(l .. string.char(10))"
+               "end"
+               "f:close()"
+               "end") "\n"))
+
+(defun pnh-lua-complete ()
+  (let* ((boe (save-excursion (search-backward-regexp "[^\.a-zA-Z0-9_]")
+                              (point)))
+         (bot (save-excursion (when (symbol-at-point)
+                                (backward-word)) (point)))
+         (expr (buffer-substring-no-properties (1+ boe) (point)))
+         (file (make-temp-file "lua-completions-")))
+    (lua-send-string (pnh-lua-completion-string-for expr file))
+    (sit-for 0.1)
+    (list bot (point) (when (file-exists-p file)
+                        (with-temp-buffer
+                          (insert-file-contents file)
+                          (delete-file file)
+                          (butlast (split-string (buffer-string) "\n")))))))
+
+(add-hook 'lua-mode-hook
+          (defun pnh-lua-mode-hook ()
+            (make-variable-buffer-local 'completion-at-point-functions)
+            (add-to-list 'completion-at-point-functions 'pnh-lua-complete)))
+;;Generated by Phil Hagelberg using scpaste at Mon Jun 6 10:41:14 2016. ICT. (original)
+
+
+;; cpp mode https://linuxhint.com/c_emacs_configuration/
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    ))
+
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+(use-package modern-cpp-font-lock :ensure t)
+(use-package magit
+  :ensure t
+  :init
+  (progn
+    (bind-key "C-x g" 'magit-status)))
+(defun code-compile ()
+  (interactive)
+  (unless (file-exists-p "Makefile")
+    (set (make-local-variable 'compile-command)
+     (let ((file (file-name-nondirectory buffer-file-name)))
+       (format "%s -o %s %s"
+           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
+           (file-name-sans-extension file)
+           file)))
+    (compile compile-command)))
+
+(global-set-key [f9] 'code-compile)
+
+
+;; copy from http://xahlee.info/emacs/emacs/emacs_set_default_font_size.html
+(defun xah-set-default-font-size ()
+  "Set default font globally.
+Note, this command change font size only for current session, not in init file.
+This command useful for making font large when you want to do video livestream.
+URL `http://xahlee.info/emacs/emacs/emacs_set_default_font_size.html'
+Version: 2021-07-26 2021-08-21 2022-08-05"
+  (interactive)
+  (let (($fSize (read-string "size:" "16" nil "16")))
+    (if (> (string-to-number $fSize) 51)
+        (user-error "Max font size allowed is 51. You gave %s " $fSize)
+      (set-frame-font
+       (cond
+        ((string-equal system-type "windows-nt")
+         (if (member "Consolas" (font-family-list)) (format "Consolas-%s" $fSize) nil))
+        ((string-equal system-type "darwin")
+         (if (member "Menlo" (font-family-list)) (format "Menlo-%s" $fSize) nil))
+        ((string-equal system-type "gnu/linux")
+         (if (member "DejaVu Sans Mono" (font-family-list)) "DejaVu Sans Mono" nil))
+        (t nil))
+       t t))))
