@@ -214,3 +214,10 @@ source ~/.zshrc
 brew reinstall --cask sogouinput
 ```
 copy from [Homebrew - Error: Not upgrading 1 `installer manual` cask](https://www.reddit.com/r/Windscribe/comments/soe5hn/homebrew_error_not_upgrading_1_installer_manual/)
+
+
+## 霞鹜文楷
+
+``` shell
+brew install  --cask font-lxgw-wenkai
+```
