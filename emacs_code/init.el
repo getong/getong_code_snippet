@@ -1,6 +1,6 @@
 ;;; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit multi-term))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit detached))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -822,11 +822,13 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
         (t nil))
        t t))))
 
-(require 'multi-term)
-(setq multi-term-program "/bin/zsh")
-
 ;; copy from https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
 ;; start the initial frame maximized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; start every frame maximized
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; copy from https://emacs.stackexchange.com/questions/57752/mac-option-key-works-as-meta-key-in-terminal-emacs-but-does-not-work-in-gui
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'meta))
+
