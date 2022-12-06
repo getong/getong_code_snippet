@@ -1,6 +1,6 @@
-; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
+;;; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -8,6 +8,13 @@
 
 ; activate all the packages (in particular autoloads)
 (package-initialize)
+
+(add-to-list 'default-frame-alist '(foreground-color . "white"))
+(add-to-list 'default-frame-alist '(background-color . "black"))
+(add-to-list 'default-frame-alist '(cursor-color . "blue"))
+(add-to-list 'default-frame-alist '(cursor-type . bar))
+(blink-cursor-mode -1)
+(setq blink-cursor-blinks -1)
 
 ; fetch the list of packages available
 (unless package-archive-contents
@@ -17,9 +24,6 @@
 (dolist (package package-list)
     (unless (package-installed-p package)
           (package-install package)))
-
-;;设定光标为短线
-(setq-default cursor-type 'bar)
 
 ;; ispell 中文问题
 ;; use apsell as ispell backend
@@ -34,33 +38,10 @@
 (setq dart-server-enable-analysis-server t)
 (add-hook 'dart-server-hook 'flycheck-mode)
 
-;;参考 http://www.aiuxian.com/article/p-823990.html
-;; Linux下emacs如何和X-Window系统共享剪贴板
-;;(setq x-select-enable-clipboard t)
-;;
-;;;; use xsel to copy/paste in emacs-nox
-;;(unless window-system
-;;  (when (getenv "DISPLAY")
-;;	(defun xsel-cut-function (text &optional push)
-;;    (with-temp-buffer
-;;		(insert text)
-;;		(call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
-;;	(defun xsel-paste-function()
-;;    (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
-;;		(unless (string= (car kill-ring) xsel-output)
-;;        xsel-output )))
-;;	(setq interprogram-cut-function 'xsel-cut-function)
-;;	(setq interprogram-paste-function 'xsel-paste-function)
-;;	))
-
-
 (global-superword-mode t)
 
 (global-hl-line-mode t)
-;;(set-face-background 'hl-line "blue")
-;;(set-face-foreground 'highlight nil)
-;;(set-face-background 'hl-line "#BEBEBE")
-;;(set-face-foreground 'hl-line "#0000000")
+
 ;; copy from [hl-line-mode hide background, how to avoid this?](https://emacs.stackexchange.com/questions/10445/hl-line-mode-hide-background-how-to-avoid-this)
 (defun my-hl-line-range-function ()
   (cons (line-end-position) (line-beginning-position 2)))
@@ -72,10 +53,6 @@
   (setq global-hl-line-sticky-flag t)
   (global-hl-line-mode 1))
 
-(blink-cursor-mode 0)
-(setq blink-cursor-blinks 0)
-(setq-default cursor-type 'bar);光标显示为一竖线
-(set-cursor-color "blue")
 (global-font-lock-mode t)
 
 (global-linum-mode 1)
@@ -95,13 +72,10 @@
 (mouse-avoidance-mode 'animate) ;;光标靠近鼠标指针时，让鼠标指针自动让开，别挡住视线。
 (setq appt-issue-message t)
 
-
 (add-to-list 'auto-mode-alist '("\\.dart\\'" . dart-mode))
 ;; Load rust-mode when you open `.rs` files
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
-(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
-(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin"))
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
 (add-hook 'rust-mode-hook (lambda ()
@@ -206,7 +180,7 @@
 
 (defun split-window-3-horizontally (&optional arg)
   "Split window into 3 while largest one is in horizon"
-                                        ;  (interactive "P")
+  ;;  (interactive "P")
   (delete-other-windows)
   (split-window-horizontally)
   (if arg (other-window 1))
@@ -254,16 +228,6 @@
   (mapc 'kill-buffer (buffer-list)))
 
 (setq x-underline-at-descent-line t)
-
-
-(add-hook 'after-init-hook 'my-after-init-hook)
-(defun my-after-init-hook ()
- (require 'edts-start))
-
-
-
-;; 关闭文件滑动控件
-;;(scroll-bar-mode -1)
 
 ;; 开启全局 Company 补全
 (global-company-mode 1)
@@ -688,6 +652,7 @@ Get it from:  <http://hasseg.org/trash/>"
 
 ;; copy from https://zenn.dev/yukit/articles/25a88b33a35633
 (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
+(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-apple-darwin/bin"))
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
 (add-hook 'rust-mode-hook (lambda ()
@@ -698,9 +663,6 @@ Get it from:  <http://hasseg.org/trash/>"
                             ))
 
 ;; copy from [Rust development environment for Emacs](https://rustrepo.com/repo/brotzeit-rustic-rust-ides)
-(custom-set-faces
-  '(rustic-compilation-column ((t (:inherit compilation-column-number))))
-  '(rustic-compilation-line ((t (:foreground "LimeGreen")))))
 (defun rustic-mode-auto-save-hook ()
   "Enable auto-saving in rustic-mode buffers."
   (when buffer-file-name
@@ -853,7 +815,7 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
         ((string-equal system-type "windows-nt")
          (if (member "Consolas" (font-family-list)) (format "Consolas-%s" $fSize) nil))
         ((string-equal system-type "darwin")
-         (if (member "Menlo" (font-family-list)) (format "Menlo-%s" $fSize) nil))
+         (if (member "LXGW WenKai Mono" (font-family-list)) "LXGW WenKai Mono" nil))
         ((string-equal system-type "gnu/linux")
          (if (member "DejaVu Sans Mono" (font-family-list)) "DejaVu Sans Mono" nil))
         (t nil))
