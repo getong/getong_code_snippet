@@ -61,3 +61,18 @@ sudo mv ediff.sh /usr/local/bin/ediff.sh
 
 sudo chmod +x /usr/local/bin/ediff.sh
 ```
+
+## font
+
+>>>
+Global Fonts, .Xresources, and Emacs Daemon
+I found that the only way to set fonts so that they remain consistent across emacs -nw, emacs23(-gtk), emacsclient -t, emacsclient -c, was to declare them in .Xresources and .emacs. But the declarations can’t conflict with each other. Otherwise, emacs --daemon complains. It doesn’t like (set-face-attribute ‘default nil :font FONT) and the like. For instance, to use Terminus, 9 pixel size across the board, I needed to insert
+
+Emacs.font: Terminus-9
+
+(set-default-font “Terminus-9”)
+
+in my ~/.Xresources and ~/.emacs, respectively.
+
+
+copy from [Set Fonts](https://www.emacswiki.org/emacs/SetFonts)
