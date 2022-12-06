@@ -1,6 +1,6 @@
 ;;; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit multi-term))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -235,6 +235,7 @@
 ;;文本解码设置默认为 UTF-8
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
 
 ;; Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
@@ -820,3 +821,12 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
          (if (member "DejaVu Sans Mono" (font-family-list)) "DejaVu Sans Mono" nil))
         (t nil))
        t t))))
+
+(require 'multi-term)
+(setq multi-term-program "/bin/zsh")
+
+;; copy from https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
+;; start the initial frame maximized
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; start every frame maximized
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
