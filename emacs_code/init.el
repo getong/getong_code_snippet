@@ -38,6 +38,25 @@
 (setq dart-server-enable-analysis-server t)
 (add-hook 'dart-server-hook 'flycheck-mode)
 
+;;参考 http://www.aiuxian.com/article/p-823990.html
+;; Linux下emacs如何和X-Window系统共享剪贴板
+;;(setq x-select-enable-clipboard t)
+;;
+;;;; use xsel to copy/paste in emacs-nox
+;;(unless window-system
+;;  (when (getenv "DISPLAY")
+;;	(defun xsel-cut-function (text &optional push)
+;;    (with-temp-buffer
+;;		(insert text)
+;;		(call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
+;;	(defun xsel-paste-function()
+;;    (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
+;;		(unless (string= (car kill-ring) xsel-output)
+;;        xsel-output )))
+;;	(setq interprogram-cut-function 'xsel-cut-function)
+;;	(setq interprogram-paste-function 'xsel-paste-function)
+;;	))
+
 (global-superword-mode t)
 
 (global-hl-line-mode t)
