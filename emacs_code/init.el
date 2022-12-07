@@ -9,8 +9,8 @@
 ; activate all the packages (in particular autoloads)
 (package-initialize)
 
-(add-to-list 'default-frame-alist '(foreground-color . "white"))
-(add-to-list 'default-frame-alist '(background-color . "black"))
+(add-to-list 'default-frame-alist '(foreground-color . "black"))
+(add-to-list 'default-frame-alist '(background-color . "white"))
 (add-to-list 'default-frame-alist '(cursor-color . "blue"))
 (add-to-list 'default-frame-alist '(cursor-type . bar))
 (blink-cursor-mode -1)
@@ -86,7 +86,7 @@
                             ))
 
 (require 'rust-mode)
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+;;(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 
 
@@ -417,17 +417,17 @@
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode))
 
-(use-package company
-  :ensure
-  :bind
-  (:map company-active-map
-              ("C-n". company-select-next)
-              ("C-p". company-select-previous)
-              ("M-<". company-select-first)
-              ("M->". company-select-last))
-  (:map company-mode-map
-        ("<tab>". tab-indent-or-complete)
-        ("TAB". tab-indent-or-complete)))
+;;(use-package company
+;;  :ensure
+;;  :bind
+;;  (:map company-active-map
+;;              ("C-n". company-select-next)
+;;              ("C-p". company-select-previous)
+;;              ("M-<". company-select-first)
+;;              ("M->". company-select-last))
+;;  (:map company-mode-map
+;;        ("<tab>". tab-indent-or-complete)
+;;        ("TAB". tab-indent-or-complete)))
 
 (defun company-yasnippet-or-completion ()
   (interactive)
@@ -832,3 +832,46 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'meta))
 
+
+;;; Terminal
+(use-package vterm
+  :when (memq window-system '(mac ns x pgtk))
+  :bind (:map vterm-mode-map
+              ("C-y" . vterm-yank)
+              ("M-y" . vterm-yank-pop)
+              ("C-k" . vterm-send-C-k-and-kill))
+  :init
+  (setq vterm-shell "zsh")
+  :config
+  (setq vterm-always-compile-module t)
+  (defun vterm-send-C-k-and-kill ()
+    "Send `C-k' to libvterm, and put content in kill-ring."
+    (interactive)
+    (kill-ring-save (point) (vterm-end-of-line))
+    (vterm-send-key "k" nil nil t)))
+
+(use-package vterm-toggle
+  :when (memq window-system '(mac ns x pgtk))
+  :bind (([f8] . vterm-toggle)
+         ([f9] . vterm-compile)
+         :map vterm-mode-map
+         ([f8] . vterm-toggle)
+         ([(control return)] . vterm-toggle-insert-cd))
+  :config
+  (setq vterm-toggle-cd-auto-create-buffer nil)
+  (defvar vterm-compile-buffer nil)
+  (defun vterm-compile ()
+    "Compile the program including the current buffer in `vterm'."
+    (interactive)
+    (setq compile-command (compilation-read-command compile-command))
+    (let ((vterm-toggle-use-dedicated-buffer t)
+          (vterm-toggle--vterm-dedicated-buffer (if (vterm-toggle--get-window)
+                                                    (vterm-toggle-hide)
+                                                  vterm-compile-buffer)))
+      (with-current-buffer (vterm-toggle-cd)
+        (setq vterm-compile-buffer (current-buffer))
+        (rename-buffer "*vterm compilation*")
+        (compilation-shell-minor-mode 1)
+        (vterm-send-M-w)
+        (vterm-send-string compile-command t)
+        (vterm-send-return)))))
