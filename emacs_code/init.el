@@ -1,6 +1,6 @@
 ;;; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit detached))
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode swift-mode lsp-mode which-key use-package rustic magit openwith vdiff-magit))
 
 ; list the repositories containing them
 (setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -9,8 +9,8 @@
 ; activate all the packages (in particular autoloads)
 (package-initialize)
 
-(add-to-list 'default-frame-alist '(foreground-color . "black"))
-(add-to-list 'default-frame-alist '(background-color . "white"))
+(add-to-list 'default-frame-alist '(foreground-color . "white"))
+(add-to-list 'default-frame-alist '(background-color . "black"))
 (add-to-list 'default-frame-alist '(cursor-color . "blue"))
 (add-to-list 'default-frame-alist '(cursor-type . bar))
 (blink-cursor-mode -1)
@@ -851,7 +851,7 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'meta))
 
-
+;; copy from https://emacs-china.org/t/vterm-zsh/20497
 ;;; Terminal
 (use-package vterm
   :when (memq window-system '(mac ns x pgtk))
@@ -894,3 +894,58 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
         (vterm-send-M-w)
         (vterm-send-string compile-command t)
         (vterm-send-return)))))
+
+;; copy from https://www.emacswiki.org/emacs/SystemTrash
+(setq delete-by-moving-to-trash t)
+(defun system-move-file-to-trash (file)
+  "Use \"trash\" to move FILE to the system trash.
+When using Homebrew, install it using \"brew install trash-cli\"."
+  (call-process (executable-find "trash-put")
+		nil 0 nil
+		file))
+
+;; copy from https://lucidmanager.org/productivity/manage-files-with-emacs/
+;; Open dired folders in same buffer
+(put 'dired-find-alternate-file 'disabled nil)
+;; Copy and move files netween dired buffers
+(setq dired-dwim-target t)
+;; Only y/n answers
+(defalias 'yes-or-no-p 'y-or-n-p)
+;; below will cause dired mode error in macos,
+;; Sort Dired buffers
+;;(setq dired-listing-switches "-agho --group-directories-first")
+
+;; copy from https://github.com/d12frosted/homebrew-emacs-plus/issues/383
+(when (eq system-type 'darwin)
+  (setq insert-directory-program "/usr/local/bin/gls"))
+(setq insert-directory-program "gls" dired-use-ls-dired t)
+(setq dired-listing-switches "-al --group-directories-first")
+
+;; copy from https://github.com/NapoleonWils0n/ubuntu-dotfiles/blob/f061fa1b05c5ccba8f6b4a2d165660ab8ab3c56b/.config/emacs/init.el#L170
+;; openwth
+(require 'mm-util)
+(add-to-list 'mm-inhibit-file-name-handlers 'openwith-file-handler)
+
+(require 'openwith)
+(setq openwith-associations
+      (list
+       (list (openwith-make-extension-regexp
+              '("mpg" "mpeg" "mp3" "mp4" "m4v"
+                "avi" "wmv" "wav" "mov" "flv"
+                "ogm" "ogg" "mkv" "webm"))
+             "VLC"
+             '(file))
+       (list (openwith-make-extension-regexp
+              '("xbm" "pbm" "pgm" "ppm" "pnm"
+                "png" "gif" "bmp" "tif" "jpeg" "jpg" "webp"))
+             "nsxiv -a"
+             '(file))
+       (list (openwith-make-extension-regexp
+              '("pdf"))
+             "zathura"
+             '(file))))
+
+(openwith-mode 1)
+
+(require 'vdiff)
+(define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
