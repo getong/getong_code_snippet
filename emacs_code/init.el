@@ -1,32 +1,181 @@
+
+
+;; list the repositories containing them
+(setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+                         ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
+
 ;;; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
-; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode
-                          swift-mode lsp-mode which-key use-package rustic magit openwith vdiff-magit corfu color-theme-sanityinc-tomorrow))
-
-; list the repositories containing them
-(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-
-; activate all the packages (in particular autoloads)
+;;; list the packages you want
+(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window
+                          protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode
+                          swift-mode lsp-mode which-key use-package rustic magit openwith vdiff-magit corfu
+                          color-theme-sanityinc-tomorrow olivetti aggressive-indent))
+;; activate all the packages (in particular autoloads)
 (package-initialize)
 
-;(add-to-list 'default-frame-alist '(foreground-color . "white"))
-;(add-to-list 'default-frame-alist '(background-color . "black"))
-(require 'color-theme-sanityinc-tomorrow)
-(color-theme-sanityinc-tomorrow--define-theme blue)
-(add-to-list 'default-frame-alist '(cursor-color . "black"))
-(add-to-list 'default-frame-alist '(cursor-type . bar))
-(blink-cursor-mode -1)
-(setq blink-cursor-blinks -1)
-
-; fetch the list of packages available
+;; fetch the list of packages available
 (unless package-archive-contents
-    (package-refresh-contents))
+  (package-refresh-contents))
 
-; install the missing packages
+;; install the missing packages
 (dolist (package package-list)
-    (unless (package-installed-p package)
-          (package-install package)))
+  (unless (package-installed-p package)
+    (package-install package)))
+
+;;(add-to-list 'default-frame-alist '(foreground-color . "white"))
+;;(add-to-list 'default-frame-alist '(background-color . "black"))
+(require 'color-theme-sanityinc-tomorrow)
+(load-theme 'sanityinc-tomorrow-blue t)
+;;(color-theme-sanityinc-tomorrow--define-theme blue)
+;;(add-to-list 'default-frame-alist '(cursor-color . "black"))
+;; (add-to-list 'default-frame-alist '(cursor-type . bar))
+;;(blink-cursor-mode -1)
+;;(setq blink-cursor-blinks -1)
+;; https://protesilaos.com/codelog/2020-07-16-emacs-focused-editing/
+(use-package olivetti
+  :ensure
+  :defer
+  :diminish
+  :config
+  (setq olivetti-body-width 0.65)
+  (setq olivetti-minimum-body-width 72)
+  (setq olivetti-recall-visual-line-mode-entry-state t)
+  (define-minor-mode prot/olivetti-mode
+    "Toggle buffer-local `olivetti-mode' with additional parameters.
+Fringes are disabled.  The modeline is hidden, except for
+`prog-mode' buffers (see `prot/hidden-mode-line-mode').  The
+default typeface is set to a proportionately-spaced family,
+except for programming modes (see `prot/variable-pitch-mode').
+The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
+    :init-value nil
+    :global nil
+    (if prot/olivetti-mode
+        (progn
+          (olivetti-mode 1)
+          (set-window-fringes (selected-window) 0 0)
+          (prot/variable-pitch-mode 1)
+          (prot/cursor-type-mode 1)
+          (unless (derived-mode-p 'prog-mode)
+            (prot/hidden-mode-line-mode 1)))
+      (olivetti-mode -1)
+      (set-window-fringes (selected-window) nil) ; Use default width
+      (prot/variable-pitch-mode -1)
+      (prot/cursor-type-mode -1)
+      (unless (derived-mode-p 'prog-mode)
+        (prot/hidden-mode-line-mode -1))))
+  :bind ("C-c o" . prot/olivetti-mode))
+
+(use-package emacs
+  :commands prot/hidden-mode-line-mode
+  :config
+  (setq mode-line-percent-position '(-3 "%p"))
+  (setq mode-line-defining-kbd-macro
+        (propertize " Macro" 'face 'mode-line-emphasis))
+  (setq-default mode-line-format
+                '("%e"
+                  mode-line-front-space
+                  mode-line-mule-info
+                  mode-line-client
+                  mode-line-modified
+                  mode-line-remote
+                  mode-line-frame-identification
+                  mode-line-buffer-identification
+                  "  "
+                  mode-line-position
+                  (vc-mode vc-mode)
+                  " "
+                  mode-line-modes
+                  " "
+                  mode-line-misc-info
+                  mode-line-end-spaces))
+  (define-minor-mode prot/hidden-mode-line-mode
+    "Toggle modeline visibility in the current buffer."
+    :init-value nil
+    :global nil
+    (if prot/hidden-mode-line-mode
+        (setq-local mode-line-format nil)
+      (kill-local-variable 'mode-line-format)
+      (force-mode-line-update))))
+
+(use-package face-remap
+  :diminish buffer-face-mode            ; the actual mode
+  :commands prot/variable-pitch-mode
+  :config
+  (define-minor-mode prot/variable-pitch-mode
+    "Toggle `variable-pitch-mode', except for `prog-mode'."
+    :init-value nil
+    :global nil
+    (if prot/variable-pitch-mode
+        (unless (derived-mode-p 'prog-mode)
+          (variable-pitch-mode 1))
+      (variable-pitch-mode -1))))
+
+(use-package emacs
+  :config
+  (setq-default scroll-preserve-screen-position t)
+  (setq-default scroll-conservatively 1) ; affects `scroll-step'
+  (setq-default scroll-margin 0)
+
+  (define-minor-mode prot/scroll-centre-cursor-mode
+    "Toggle centred cursor scrolling behaviour."
+    :init-value nil
+    :lighter " S="
+    :global nil
+    (if prot/scroll-centre-cursor-mode
+        (setq-local scroll-margin (* (frame-height) 2)
+                    scroll-conservatively 0
+                    maximum-scroll-margin 0.5)
+      (dolist (local '(scroll-preserve-screen-position
+                       scroll-conservatively
+                       maximum-scroll-margin
+                       scroll-margin))
+        (kill-local-variable `,local))))
+
+  ;; C-c l is used for `org-store-link'.  The mnemonic for this is to
+  ;; focus the Line and also works as a variant of C-l.
+  :bind ("C-c L" . prot/scroll-centre-cursor-mode))
+
+(use-package display-line-numbers
+  :defer
+  :config
+  ;; Set absolute line numbers.  A value of "relative" is also useful.
+  (setq display-line-numbers-type t)
+  (define-minor-mode prot/display-line-numbers-mode
+    "Toggle `display-line-numbers-mode' and `hl-line-mode'."
+    :init-value nil
+    :global nil
+    (if prot/display-line-numbers-mode
+        (progn
+          (display-line-numbers-mode 1)
+          (hl-line-mode 1))
+      (display-line-numbers-mode -1)
+      (hl-line-mode -1)))
+  :bind ("<f7>" . prot/display-line-numbers-mode))
+(use-package frame
+  :commands prot/cursor-type-mode
+  :config
+  (setq-default cursor-type 'bar)
+  (setq-default cursor-in-non-selected-windows '(bar . 2))
+  (setq-default blink-cursor-blinks 50)
+  (setq-default blink-cursor-interval nil) ; 0.75 would be my choice
+  (setq-default blink-cursor-delay 0.2)
+  (blink-cursor-mode -1)
+  (define-minor-mode prot/cursor-type-mode
+    "Toggle between static block and pulsing bar cursor."
+    :init-value nil
+    :global t
+    (if prot/cursor-type-mode
+        (progn
+          (setq-local blink-cursor-interval 0.75
+                      cursor-type '(bar . 2)
+                      cursor-in-non-selected-windows 'hollow)
+          (blink-cursor-mode 1))
+      (dolist (local '(blink-cursor-interval
+                       cursor-type
+                       cursor-in-non-selected-windows))
+        (kill-local-variable `,local))
+      (blink-cursor-mode -1))))
 
 ;; ispell 中文问题
 ;; use apsell as ispell backend
@@ -61,7 +210,6 @@
 ;;	))
 
 (global-superword-mode t)
-
 (global-hl-line-mode t)
 
 ;; copy from [hl-line-mode hide background, how to avoid this?](https://emacs.stackexchange.com/questions/10445/hl-line-mode-hide-background-how-to-avoid-this)
@@ -392,7 +540,6 @@
 
 ;; -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 ;; for rust-analyzer integration
-
 (use-package lsp-mode
   :ensure
   :commands lsp
@@ -522,7 +669,7 @@
 
 ;; copy from [Playing nicely with linum](https://www.emacswiki.org/emacs/UndoTree)
 (defun undo-tree-visualizer-update-linum (&rest args)
-    (linum-update undo-tree-visualizer-parent-buffer))
+  (linum-update undo-tree-visualizer-parent-buffer))
 (advice-add 'undo-tree-visualize-undo :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualize-redo :after #'undo-tree-visualizer-update-linum)
 (advice-add 'undo-tree-visualize-undo-to-x :after #'undo-tree-visualizer-update-linum)
@@ -559,35 +706,35 @@ Get it from:  <http://hasseg.org/trash/>"
 
 ;; copy from https://www.danielde.dev/blog/emacs-for-swift-development
 (defun print-swift-var-under-point()
-    (interactive)
-    (if (string-match-p (string (preceding-char)) "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_")
-        (backward-sexp)
-      nil)
-    (kill-sexp)
-    (yank)
-    (move-end-of-line nil)
-    (newline)
-    (insert "print(\"")
-    (yank)
-    (insert ": \\(")
-    (yank)
-    (insert ")\")")
-    (indent-for-tab-command))
+  (interactive)
+  (if (string-match-p (string (preceding-char)) "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_")
+      (backward-sexp)
+    nil)
+  (kill-sexp)
+  (yank)
+  (move-end-of-line nil)
+  (newline)
+  (insert "print(\"")
+  (yank)
+  (insert ": \\(")
+  (yank)
+  (insert ")\")")
+  (indent-for-tab-command))
 (use-package swift-mode
   :bind (("C-c l" . print-swift-var-under-point)))
 
 (defun xcode-build()
   (interactive)
   (shell-command-to-string
-     "osascript -e 'tell application \"Xcode\"' -e 'set targetProject to active workspace document' -e 'build targetProject' -e 'end tell'"))
+   "osascript -e 'tell application \"Xcode\"' -e 'set targetProject to active workspace document' -e 'build targetProject' -e 'end tell'"))
 (defun xcode-run()
   (interactive)
   (shell-command-to-string
-     "osascript -e 'tell application \"Xcode\"' -e 'set targetProject to active workspace document' -e 'stop targetProject' -e 'run targetProject' -e 'end tell'"))
+   "osascript -e 'tell application \"Xcode\"' -e 'set targetProject to active workspace document' -e 'stop targetProject' -e 'run targetProject' -e 'end tell'"))
 (defun xcode-test()
   (interactive)
   (shell-command-to-string
-     "osascript -e 'tell application \"Xcode\"' -e 'set targetProject to active workspace document' -e 'stop targetProject' -e 'test targetProject' -e 'end tell'"))
+   "osascript -e 'tell application \"Xcode\"' -e 'set targetProject to active workspace document' -e 'stop targetProject' -e 'test targetProject' -e 'end tell'"))
 (global-set-key (kbd "C-c p b") 'xcode-build)
 (global-set-key (kbd "C-c p r") 'xcode-run)
 (global-set-key (kbd "C-c p t") 'xcode-test)
@@ -595,10 +742,10 @@ Get it from:  <http://hasseg.org/trash/>"
 (defun xcode-open-current-file()
   (interactive)
   (shell-command-to-string
-    (concat "open -a \"/Applications/Xcode.app\" " (buffer-file-name)))
+   (concat "open -a \"/Applications/Xcode.app\" " (buffer-file-name)))
   (kill-new (car (cdr (split-string (what-line)))))
   (shell-command-to-string
-     "open keysmith://run-shortcut/796BB627-5433-48E4-BB54-1AA6C54A14E8"))
+   "open keysmith://run-shortcut/796BB627-5433-48E4-BB54-1AA6C54A14E8"))
 (global-set-key (kbd "C-c p o") 'xcode-open-current-file)
 
 (defun insert-todo-comment ()
@@ -670,8 +817,8 @@ Get it from:  <http://hasseg.org/trash/>"
 
 ;; optional if you want which-key integration
 (use-package which-key
-    :config
-    (which-key-mode))
+  :config
+  (which-key-mode))
 
 ;; copy from https://zenn.dev/yukit/articles/25a88b33a35633
 (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
@@ -697,26 +844,26 @@ Get it from:  <http://hasseg.org/trash/>"
 (setq lsp-rust-analyzer-server-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
 (setq rustic-lsp-client 'lsp-mode)
 (with-eval-after-load "lsp-rust"
- (lsp-register-client
-  (make-lsp-client
-   :new-connection (lsp-stdio-connection
-                    (lambda ()
-                      `(,(or (executable-find
-                              (cl-first lsp-rust-analyzer-server-command))
-                             (lsp-package-path 'rust-analyzer)
-                             "rust-analyzer")
-                        ,@(cl-rest lsp-rust-analyzer-server-args))))
-   :remote? t
-   :major-modes '(rust-mode rustic-mode)
-   :initialization-options 'lsp-rust-analyzer--make-init-options
-   :notification-handlers (ht<-alist lsp-rust-notification-handlers)
-   :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
-   :library-folders-fn (lambda (_workspace) lsp-rust-library-directories)
-   :after-open-fn (lambda ()
-                    (when lsp-rust-analyzer-server-display-inlay-hints
-                      (lsp-rust-analyzer-inlay-hints-mode)))
-   :ignore-messages nil
-   :server-id 'rust-analyzer-remote)))
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection
+                     (lambda ()
+                       `(,(or (executable-find
+                               (cl-first lsp-rust-analyzer-server-command))
+                              (lsp-package-path 'rust-analyzer)
+                              "rust-analyzer")
+                         ,@(cl-rest lsp-rust-analyzer-server-args))))
+    :remote? t
+    :major-modes '(rust-mode rustic-mode)
+    :initialization-options 'lsp-rust-analyzer--make-init-options
+    :notification-handlers (ht<-alist lsp-rust-notification-handlers)
+    :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+    :library-folders-fn (lambda (_workspace) lsp-rust-library-directories)
+    :after-open-fn (lambda ()
+                     (when lsp-rust-analyzer-server-display-inlay-hints
+                       (lsp-rust-analyzer-inlay-hints-mode)))
+    :ignore-messages nil
+    :server-id 'rust-analyzer-remote)))
 (defun start-file-process-shell-command@around (start-file-process-shell-command name buffer &rest args)
   "Start a program in a subprocess.  Return the process object for it. Similar to `start-process-shell-command', but calls `start-file-process'."
   ;; On remote hosts, the local `shell-file-name' might be useless.
@@ -812,11 +959,11 @@ Get it from:  <http://hasseg.org/trash/>"
   (interactive)
   (unless (file-exists-p "Makefile")
     (set (make-local-variable 'compile-command)
-     (let ((file (file-name-nondirectory buffer-file-name)))
-       (format "%s -o %s %s"
-           (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
-           (file-name-sans-extension file)
-           file)))
+         (let ((file (file-name-nondirectory buffer-file-name)))
+           (format "%s -o %s %s"
+                   (if  (equal (file-name-extension file) "cpp") "g++" "gcc" )
+                   (file-name-sans-extension file)
+                   file)))
     (compile compile-command)))
 
 (global-set-key [f9] 'code-compile)
@@ -904,8 +1051,8 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
   "Use \"trash\" to move FILE to the system trash.
 When using Homebrew, install it using \"brew install trash-cli\"."
   (call-process (executable-find "trash-put")
-		nil 0 nil
-		file))
+		        nil 0 nil
+		        file))
 
 ;; copy from https://lucidmanager.org/productivity/manage-files-with-emacs/
 ;; Open dired folders in same buffer
@@ -992,10 +1139,10 @@ When using Homebrew, install it using \"brew install trash-cli\"."
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
 
-;(add-to-list 'load-path (expand-file-name "/Users/gerald/personal_infos/vterm-capf"))
-;(setq vterm-capf-frontend 'company)
-;(add-hook 'vterm-mode-hook #'vterm-capf-mode)
-;(global-company-mode)
+;;(add-to-list 'load-path (expand-file-name "/Users/gerald/personal_infos/vterm-capf"))
+;;(setq vterm-capf-frontend 'company)
+;;(add-hook 'vterm-mode-hook #'vterm-capf-mode)
+;;(global-company-mode)
 
 ;; copy from https://emacs-china.org/t/magit-emacs-terminal-proxy/16942/2
 (defun proxy-socks-show ()
@@ -1033,3 +1180,6 @@ When using Homebrew, install it using \"brew install trash-cli\"."
   (if (bound-and-true-p socks-noproxy)
       (proxy-socks-disable)
     (proxy-socks-enable)))
+
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
