@@ -136,3 +136,33 @@ type FunTrait2 = dyn for<'a> Fn(&'a str) -> &'a str;  // expanded
 
 ```
 copy from [Lifetime elision](https://doc.rust-lang.org/reference/lifetime-elision.html)
+
+## quiche
+
+``` rust
+/// A structure holding a `ConnectionId` and all its related metadata.
+#[derive(Debug, Default)]
+pub struct ConnectionIdEntry {
+    /// The Connection ID.
+    pub cid: ConnectionId<'static>,
+
+    /// Its associated sequence number.
+    pub seq: u64,
+
+    /// Its associated reset token. Initial CIDs may not have any reset token.
+    pub reset_token: Option<u128>,
+
+    /// The path identifier using this CID, if any.
+    pub path_id: Option<usize>,
+}
+
+
+/// A QUIC connection ID.
+pub struct ConnectionId<'a>(ConnectionIdInner<'a>);
+
+enum ConnectionIdInner<'a> {
+    Vec(Vec<u8>),
+    Ref(&'a [u8]),
+}
+```
+copy from quiche.
