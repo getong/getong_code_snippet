@@ -1,5 +1,12 @@
 
 
+;; activate all the packages (in particular autoloads)
+(package-initialize)
+
+(setq inhibit-startup-screen t)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+
 ;; list the repositories containing them
 (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
@@ -10,9 +17,7 @@
 (setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window
                           protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode
                           swift-mode lsp-mode which-key use-package rustic magit openwith vdiff-magit corfu
-                          color-theme-sanityinc-tomorrow olivetti aggressive-indent))
-;; activate all the packages (in particular autoloads)
-(package-initialize)
+                          color-theme-sanityinc-tomorrow olivetti aggressive-indent dap-mode vterm multiple-cursors))
 
 ;; fetch the list of packages available
 (unless package-archive-contents
@@ -252,7 +257,7 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
                             (flycheck-rust-setup)
                             (lsp)
                             (flycheck-mode)
-			    (yas-minor-mode)
+			                (yas-minor-mode)
                             ))
 
 (require 'rust-mode)
@@ -662,7 +667,7 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
      (list :type "lldb"
            :request "launch"
            :name "LLDB::Run"
-	   :gdbpath "rust-lldb"
+	       :gdbpath "rust-lldb"
            ;; uncomment if lldb-mi is not in PATH
            ;; :lldbmipath "path/to/lldb-mi"
            ))))
@@ -696,7 +701,6 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 (when (memq window-system '(mac ns))
   (defun system-move-file-to-trash (path)
     "Moves file at PATH to the macOS Trash according to `move-file-to-trash' convention.
-
 Relies on the command-line utility 'trash' to be installed.
 Get it from:  <http://hasseg.org/trash/>"
     (shell-command (concat "trash -vF \"" path "\""
@@ -829,7 +833,7 @@ Get it from:  <http://hasseg.org/trash/>"
                             (flycheck-rust-setup)
                             (lsp)
                             (flycheck-mode)
-			    (yas-minor-mode)
+			                (yas-minor-mode)
                             ))
 
 ;; copy from [Rust development environment for Emacs](https://rustrepo.com/repo/brotzeit-rustic-rust-ides)
@@ -1012,6 +1016,8 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
   :init
   (setq vterm-shell "zsh")
   :config
+  (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
+  (setq vterm-max-scrollback 99999)
   (setq vterm-always-compile-module t)
   (defun vterm-send-C-k-and-kill ()
     "Send `C-k' to libvterm, and put content in kill-ring."
@@ -1183,3 +1189,13 @@ When using Homebrew, install it using \"brew install trash-cli\"."
 
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 
+;; copy from https://www.reddit.com/r/emacs/comments/iu0euj/getting_modern_multiple_cursors_in_emacs/
+(use-package multiple-cursors
+  :ensure   t
+  :bind (("H-SPC" . set-rectangular-region-anchor)
+         ("C-M-SPC" . set-rectangular-region-anchor)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C->" . mc/mark-all-like-this)
+         ("C-c C-SPC" . mc/edit-lines)
+         ))
