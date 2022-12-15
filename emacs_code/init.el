@@ -566,6 +566,14 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
   :config
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.rust_example\\'")
+  ;; or
+  (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.rust_example\\'"))
+(setq lsp-file-watch-threshold 2000)
+(setq lsp-enable-file-watchers nil)
+
 (use-package lsp-ui
   :ensure
   :commands lsp-ui-mode
