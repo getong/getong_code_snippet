@@ -180,7 +180,13 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
                        cursor-type
                        cursor-in-non-selected-windows))
         (kill-local-variable `,local))
-      (blink-cursor-mode -1))))
+      (blink-cursor-mode -1)))
+  ;; copy from https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
+  ;; start the initial frame maximized
+  (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+  ;; start every frame maximized
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  )
 
 ;; ispell 中文问题
 ;; use apsell as ispell backend
@@ -1003,14 +1009,11 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
         (t nil))
        t t))))
 
-;; copy from https://emacsredux.com/blog/2020/12/04/maximize-the-emacs-frame-on-startup/
-;; start the initial frame maximized
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-;; start every frame maximized
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; copy from https://emacs.stackexchange.com/questions/57752/mac-option-key-works-as-meta-key-in-terminal-emacs-but-does-not-work-in-gui
-(when (eq system-type 'darwin)
+;;(when (eq system-type 'darwin)
+(use-package term/ns-win
+  :config
   (setq mac-option-modifier 'meta))
 
 ;; copy from https://emacs-china.org/t/vterm-zsh/20497
