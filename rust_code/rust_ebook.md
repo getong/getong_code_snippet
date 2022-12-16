@@ -72,3 +72,5 @@
 [What Can Coerce, and Where, in Rust](https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust)
 [Rust: 深入理解 PhantomData](https://zhuanlan.zhihu.com/p/533695108)
 [Hard Mode Rust](https://matklad.github.io/2022/10/06/hard-mode-rust.html)
+[dyn*: can we make dyn sized?](https://smallcultfollowing.com/babysteps//blog/2022/03/29/dyn-can-we-make-dyn-sized/)
+[How Async Functions in Traits could Work in Rustc](https://blog.theincredibleholk.org/blog/2022/04/18/how-async-functions-in-traits-could-work-in-rustc/)
