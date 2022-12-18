@@ -1197,6 +1197,10 @@ When using Homebrew, install it using \"brew install trash-cli\"."
 
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 
+(use-package magit-delta
+  :ensure t
+  :hook (magit-mode . magit-delta-mode))
+
 ;; copy from https://www.reddit.com/r/emacs/comments/iu0euj/getting_modern_multiple_cursors_in_emacs/
 (use-package multiple-cursors
   :ensure   t
@@ -1207,3 +1211,7 @@ When using Homebrew, install it using \"brew install trash-cli\"."
          ("C-c C->" . mc/mark-all-like-this)
          ("C-c C-SPC" . mc/edit-lines)
          ))
+
+(use-package magit-delta
+  :ensure t
+  :hook (magit-mode . magit-delta-mode))
