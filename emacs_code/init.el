@@ -16,7 +16,7 @@
 ;;; list the packages you want
 (setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window
                           protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode
-                          swift-mode lsp-mode which-key use-package rustic magit openwith vdiff-magit corfu
+                          swift-mode lsp-mode which-key use-package rustic magit openwith corfu
                           color-theme-sanityinc-tomorrow olivetti aggressive-indent dap-mode vterm multiple-cursors))
 
 ;; fetch the list of packages available
@@ -1113,9 +1113,6 @@ When using Homebrew, install it using \"brew install trash-cli\"."
              '(file))))
 
 (openwith-mode 1)
-
-(require 'vdiff)
-(define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
 
 (use-package corfu
   ;; Optional customizations
