@@ -278,7 +278,6 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 (setq kept-old-versions 2)
 (setq kept-new-versions 5)
 (setq delete-old-versions t)
-(setq backup-directory-alist '(("." . "~/.backups")))
 (setq backup-by-copying t)
 
 (global-auto-revert-mode 1)
@@ -305,7 +304,6 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
   (open-line arg)
   (when newline-and-indent
     (indent-according-to-mode)))
-
 (global-set-key (kbd "M-o") 'open-previous-line)
 
 ;; Autoindent open-*-lines
@@ -711,7 +709,19 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 
 ;; copy from https://christiantietze.de/posts/2021/06/emacs-trash-file-macos/
 (setq delete-by-moving-to-trash t)
-(setq trash-directory "/backup/.Trash-1000/files")  ;; fallback for `move-file-to-trash'
+(cond
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn
+    (setq trash-directory "/backup/.Trash-1000/files")  ;; fallback for `move-file-to-trash'
+    ))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn
+    (setq trash-directory (expand-file-name "~/.Trash"))  ;; fallback for `move-file-to-trash'
+    ))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn
+    (setq trash-directory "/backup/.Trash-1000/files")  ;; fallback for `move-file-to-trash'
+    )))
 (when (memq window-system '(mac ns))
   (defun system-move-file-to-trash (path)
     "Moves file at PATH to the macOS Trash according to `move-file-to-trash' convention.
@@ -839,8 +849,27 @@ Get it from:  <http://hasseg.org/trash/>"
   (which-key-mode))
 
 ;; copy from https://zenn.dev/yukit/articles/25a88b33a35633
-(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
-(add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-apple-darwin/bin"))
+(cond
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn
+    (add-to-list 'exec-path (expand-file-name  "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin"))
+    (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
+    ))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn
+    (add-to-list 'exec-path (expand-file-name  "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin"))
+    (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
+    (setq rustic-analyzer-command '((expand-file-name "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin/rust-analyzer")))
+    (setq lsp-rust-analyzer-server-command '((expand-file-name "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin/rust-analyzer")))
+    ))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn
+    (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/cargo/bin"))
+    (add-to-list 'exec-path (expand-file-name "/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-apple-darwin/bin"))
+    (setq rustic-analyzer-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
+    (setq lsp-rust-analyzer-server-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
+    )))
+
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
 (add-hook 'rust-mode-hook (lambda ()
@@ -858,8 +887,6 @@ Get it from:  <http://hasseg.org/trash/>"
 (add-hook 'rustic-mode-hook 'rustic-mode-auto-save-hook)
 ;; (setq rustic-lsp-server 'rls)
 (setq rustic-lsp-server 'rust-analyzer)
-(setq rustic-analyzer-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
-(setq lsp-rust-analyzer-server-command '("/backup/backup/rust_installation/rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/rust-analyzer"))
 (setq rustic-lsp-client 'lsp-mode)
 (with-eval-after-load "lsp-rust"
   (lsp-register-client
@@ -1022,6 +1049,8 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
 ;;(setq mac-control-modifier 'control) ; make Control key do Control
 ;;(setq ns-function-modifier 'hyper)  ; make Fn key do Hyper
 
+;; copy from [Emacs on Mac OS X - To Alt or Command?](https://apple.stackexchange.com/questions/12087/emacs-on-mac-os-x-to-alt-or-command)
+;; copy from [emacs-mac-port的command key能不能改回系统默认的command功能？](https://emacs-china.org/t/emacs-mac-port-command-key-command/8845)
 ;; check OS type
 (cond
  ((string-equal system-type "windows-nt") ; Microsoft Windows
@@ -1224,7 +1253,7 @@ When using Homebrew, install it using \"brew install trash-cli\"."
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
 
-;;(add-to-list 'load-path (expand-file-name "/Users/gerald/personal_infos/vterm-capf"))
+;;(add-to-list 'load-path (expand-file-name "~/personal_infos/vterm-capf"))
 ;;(setq vterm-capf-frontend 'company)
 ;;(add-hook 'vterm-mode-hook #'vterm-capf-mode)
 ;;(global-company-mode)
@@ -1282,3 +1311,8 @@ When using Homebrew, install it using \"brew install trash-cli\"."
 (use-package magit-delta
   :ensure t
   :hook (magit-mode . magit-delta-mode))
+
+;; copy from [Error when running magit-status: run-hooks: Wrong number of arguments](https://github.com/magit/magit/issues/3837)
+(use-package transient
+  :init
+  (setq transient-history nil))
