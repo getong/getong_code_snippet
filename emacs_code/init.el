@@ -1003,18 +1003,89 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
         ((string-equal system-type "windows-nt")
          (if (member "Consolas" (font-family-list)) (format "Consolas-%s" $fSize) nil))
         ((string-equal system-type "darwin")
-         (if (member "LXGW WenKai Mono" (font-family-list)) "LXGW WenKai Mono" nil))
+         ;; (if (member "LXGW WenKai Mono" (font-family-list)) "LXGW WenKai Mono" nil))
+         (if (member "EB Garamond" (font-family-list)) (format "EB Garamond 12 Italic %s" $fSize) nil))
         ((string-equal system-type "gnu/linux")
          (if (member "DejaVu Sans Mono" (font-family-list)) "DejaVu Sans Mono" nil))
         (t nil))
        t t))))
 
-
 ;; copy from https://emacs.stackexchange.com/questions/57752/mac-option-key-works-as-meta-key-in-terminal-emacs-but-does-not-work-in-gui
 ;;(when (eq system-type 'darwin)
-(use-package term/ns-win
-  :config
-  (setq mac-option-modifier 'meta))
+;;(use-package term/ns-winµ
+;;  :config
+;;  (setq mac-option-modifier 'meta))
+
+;; set keys for Apple keyboard, for emacs in OS X
+;;(setq mac-command-modifier 'meta) ; make cmd key do Meta
+;;(setq mac-option-modifier 'meta) ; make opt key do Superµ
+;;(setq mac-control-modifier 'control) ; make Control key do Control
+;;(setq ns-function-modifier 'hyper)  ; make Fn key do Hyper
+
+;; check OS type
+(cond
+ ((string-equal system-type "windows-nt") ; Microsoft Windows
+  (progn
+    (message "Microsoft Windows")))
+ ((string-equal system-type "darwin") ; Mac OS X
+  (progn
+    (setq mac-option-modifier 'meta)
+    (setq mac-command-modifier 'super)
+    (setq ns-option-modifier 'meta)
+    (setq ns-command-modifier 'super)
+    ;; Here are some Nextstep-like bindings for command key sequences.
+    (define-key global-map [?\s-,] 'customize)
+    (define-key global-map [?\s-'] 'next-window-any-frame)
+    (define-key global-map [?\s-`] 'other-frame)
+    (define-key global-map [?\s-~] 'ns-prev-frame)
+    (define-key global-map [?\s--] 'center-line)
+    (define-key global-map [?\s-:] 'ispell)
+    (define-key global-map [?\s-?] 'info)
+    (define-key global-map [?\s-^] 'kill-some-buffers)
+    (define-key global-map [?\s-&] 'kill-current-buffer)
+    (define-key global-map [?\s-C] 'ns-popup-color-panel)
+    (define-key global-map [?\s-D] 'dired)
+    (define-key global-map [?\s-E] 'edit-abbrevs)
+    (define-key global-map [?\s-L] 'shell-command)
+    (define-key global-map [?\s-M] 'manual-entry)
+    (define-key global-map [?\s-S] 'ns-write-file-using-panel)
+    (define-key global-map [?\s-a] 'mark-whole-buffer)
+    (define-key global-map [?\s-c] 'ns-copy-including-secondary)
+    (define-key global-map [?\s-d] 'isearch-repeat-backward)
+    (define-key global-map [?\s-e] 'isearch-yank-kill)
+    (define-key global-map [?\s-f] 'isearch-forward)
+    (define-key global-map [?\s-g] 'isearch-repeat-forward)
+    (define-key global-map [?\s-h] 'ns-do-hide-emacs)
+    (define-key global-map [?\s-H] 'ns-do-hide-others)
+    (define-key global-map [?\M-\s-h] 'ns-do-hide-others)
+    (define-key global-map [?\s-j] 'exchange-point-and-mark)
+    (define-key global-map [?\s-k] 'kill-current-buffer)
+    (define-key global-map [?\s-l] 'goto-line)
+    (define-key global-map [?\s-m] 'iconify-frame)
+    (define-key global-map [?\s-n] 'make-frame)
+    (define-key global-map [?\s-o] 'ns-open-file-using-panel)
+    (define-key global-map [?\s-p] 'ns-print-buffer)
+    (define-key global-map [?\s-q] 'save-buffers-kill-emacs)
+    (define-key global-map [?\s-s] 'save-buffer)
+    (define-key global-map [?\s-t] 'ns-popup-font-panel)
+    (define-key global-map [?\s-u] 'revert-buffer)
+    (define-key global-map [?\s-v] 'yank)
+    (define-key global-map [?\s-w] 'delete-frame)
+    (define-key global-map [?\s-x] 'kill-region)
+    (define-key global-map [?\s-y] 'ns-paste-secondary)
+    (define-key global-map [?\s-z] 'undo)
+    (define-key global-map [?\s-+] 'text-scale-adjust)
+    (define-key global-map [?\s-=] 'text-scale-adjust)
+    (define-key global-map [?\s--] 'text-scale-adjust)
+    (define-key global-map [?\s-0] 'text-scale-adjust)
+    (define-key global-map [?\s-|] 'shell-command-on-region)
+    (define-key global-map [s-kp-bar] 'shell-command-on-region)
+    (define-key global-map [?\C-\s- ] 'ns-do-show-character-palette)
+    (message "Mac OS X")))
+ ((string-equal system-type "gnu/linux") ; linux
+  (progn
+    (message "Linux"))))
+
 
 ;; copy from https://emacs-china.org/t/vterm-zsh/20497
 ;;; Terminal
@@ -1196,10 +1267,6 @@ When using Homebrew, install it using \"brew install trash-cli\"."
     (proxy-socks-enable)))
 
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-
-(use-package magit-delta
-  :ensure t
-  :hook (magit-mode . magit-delta-mode))
 
 ;; copy from https://www.reddit.com/r/emacs/comments/iu0euj/getting_modern_multiple_cursors_in_emacs/
 (use-package multiple-cursors
