@@ -15,6 +15,12 @@ copy from [Installing Emacs on OS X](https://wikemacs.org/wiki/Installing_Emacs_
 brew install --cask font-cormorant
 ```
 
+## EB Garamond
+
+``` shell
+brew install --cask font-eb-garamond
+```
+
 ## menu-set-font
 
 ``` emacs-lisp
