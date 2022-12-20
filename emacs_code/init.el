@@ -270,9 +270,6 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 ;;(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
 
-
-(setq rust-format-on-save t)
-
 (setq backup-directory-alist (quote (("." . "~/.backups"))))
 (setq version-control t)
 (setq kept-old-versions 2)
@@ -859,8 +856,8 @@ Get it from:  <http://hasseg.org/trash/>"
   (progn
     (add-to-list 'exec-path (expand-file-name  "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin"))
     (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
-    (setq rustic-analyzer-command '((expand-file-name "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin/rust-analyzer")))
-    (setq lsp-rust-analyzer-server-command '((expand-file-name "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin/rust-analyzer")))
+    (setq rustic-analyzer-command '(expand-file-name "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin/rust-analyzer"))
+    (setq lsp-rust-analyzer-server-command '(expand-file-name "~/.rustup/toolchains/nightly-x86_64-apple-darwin/bin/rust-analyzer"))
     ))
  ((string-equal system-type "gnu/linux") ; linux
   (progn
@@ -885,7 +882,6 @@ Get it from:  <http://hasseg.org/trash/>"
   (when buffer-file-name
     (setq-local compilation-ask-about-save nil)))
 (add-hook 'rustic-mode-hook 'rustic-mode-auto-save-hook)
-;; (setq rustic-lsp-server 'rls)
 (setq rustic-lsp-server 'rust-analyzer)
 (setq rustic-lsp-client 'lsp-mode)
 (with-eval-after-load "lsp-rust"
@@ -921,7 +917,6 @@ Get it from:  <http://hasseg.org/trash/>"
 (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
 (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-
 
 (defun pnh-lua-completion-string-for (expr file)
   (mapconcat 'identity
@@ -988,7 +983,6 @@ Get it from:  <http://hasseg.org/trash/>"
     (ac-config-default)
     (global-auto-complete-mode t)
     ))
-
 
 (use-package flycheck
   :ensure t
@@ -1173,14 +1167,21 @@ When using Homebrew, install it using \"brew install trash-cli\"."
 
 ;; copy from https://lucidmanager.org/productivity/manage-files-with-emacs/
 ;; Open dired folders in same buffer
-(put 'dired-find-alternate-file 'disabled nil)
+;;(put 'dired-find-alternate-file 'disabled nil)
 ;; Copy and move files netween dired buffers
-(setq dired-dwim-target t)
+;;(setq dired-dwim-target t)
 ;; Only y/n answers
-(defalias 'yes-or-no-p 'y-or-n-p)
+;;(defalias 'yes-or-no-p 'y-or-n-p)
 ;; below will cause dired mode error in macos,
 ;; Sort Dired buffers
 ;;(setq dired-listing-switches "-agho --group-directories-first")
+(use-package dired
+  :config
+  (progn
+    (put 'dired-find-alternate-file 'disabled nil)
+    (setq dired-dwim-target t)
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    ))
 
 ;; copy from https://github.com/d12frosted/homebrew-emacs-plus/issues/383
 (when (eq system-type 'darwin)
