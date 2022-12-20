@@ -14,10 +14,10 @@
 
 ;;; copy from [How to automatically install Emacs packages by specifying a list of package names?](https://stackoverflow.com/questions/10092322/how-to-automatically-install-emacs-packages-by-specifying-a-list-of-package-name)
 ;;; list the packages you want
-(setq package-list '(edts company indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window
-                          protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode
-                          swift-mode lsp-mode which-key use-package rustic magit openwith corfu
-                          color-theme-sanityinc-tomorrow olivetti aggressive-indent dap-mode vterm multiple-cursors))
+(setq package-list '(indent-guide pangu-spacing spinner undo-tree highlight-thing markdown-mode switch-window
+                                  protobuf-mode tide dart-mode dart-server mix csharp-mode omnisharp lua-mode flycheck-rust rust-mode
+                                  swift-mode lsp-mode which-key use-package rustic magit openwith corfu orderless
+                                  color-theme-sanityinc-tomorrow olivetti aggressive-indent dap-mode vterm multiple-cursors))
 
 ;; fetch the list of packages available
 (unless package-archive-contents
@@ -190,9 +190,13 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 
 ;; ispell 中文问题
 ;; use apsell as ispell backend
-(setq-default ispell-program-name "aspell")
+;;(setq-default ispell-program-name "aspell")
 ;; use American English as ispell default dictionary
-(ispell-change-dictionary "american" t)
+;;(ispell-change-dictionary "american" t)
+(use-package ispell
+  :config
+  (setq-default ispell-program-name "aspell")
+  (ispell-change-dictionary "american" t))
 
 (setq-default indent-tabs-mode nil)
 (setq default-tab-width 4)
@@ -249,7 +253,7 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 (global-font-lock-mode t);语法高亮
 (show-paren-mode t) ;; 显示括号匹配
 (setq show-paren-style 'parenthesis)
-(setq mouse-yank-at-point t);;支持中键粘贴
+;;(setq mouse-yank-at-point t);;支持中键粘贴
 (mouse-avoidance-mode 'animate) ;;光标靠近鼠标指针时，让鼠标指针自动让开，别挡住视线。
 (setq appt-issue-message t)
 
@@ -268,7 +272,7 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 
 (require 'rust-mode)
 ;;(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-(setq company-tooltip-align-annotations t)
+;;(setq company-tooltip-align-annotations t)
 
 (setq backup-directory-alist (quote (("." . "~/.backups"))))
 (setq version-control t)
@@ -406,7 +410,7 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 (setq x-underline-at-descent-line t)
 
 ;; 开启全局 Company 补全
-(global-company-mode 1)
+;;(global-company-mode 1)
 
 ;;文本解码设置默认为 UTF-8
 (set-language-environment "UTF-8")
@@ -416,8 +420,8 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 ;; Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
 
-(setq company-idle-delay 0.01)
-(setq company-minimum-prefix-length 1)
+;;(setq company-idle-delay 0.01)
+;;(setq company-minimum-prefix-length 1)
 
 ;; set default tab char's display width to 4 spaces
 (setq-default tab-width 4) ; emacs 23.1, 24.2, default to 8
@@ -475,25 +479,25 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 (setq switch-window-qwerty-shortcuts
       '("a" "s" "d" "f" "j" "k" "l" ";" "w" "e" "i" "o"))
 
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  ;; company is an optional dependency. You have to
-  ;; install it separately via package-install
-  ;; `M-x package-install [ret] company`
-  (company-mode +1))
+;;(defun setup-tide-mode ()
+;;  (interactive)
+;;  (tide-setup)
+;;  (flycheck-mode +1)
+;;  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;  (eldoc-mode +1)
+;;  (tide-hl-identifier-mode +1)
+;; company is an optional dependency. You have to
+;; install it separately via package-install
+;; `M-x package-install [ret] company`
+;;(company-mode +1))
 
 ;; aligns annotation to the right hand side
-(setq company-tooltip-align-annotations t)
+;;(setq company-tooltip-align-annotations t)
 
 ;; formats the buffer before saving
 (add-hook 'before-save-hook 'tide-format-before-save)
 
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
+;;(add-hook 'typescript-mode-hook #'setup-tide-modeµ)
 
 (setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
 
@@ -612,10 +616,10 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
 ;;        ("<tab>". tab-indent-or-complete)
 ;;        ("TAB". tab-indent-or-complete)))
 
-(defun company-yasnippet-or-completion ()
-  (interactive)
-  (or (do-yas-expand)
-      (company-complete-common)))
+;;(defun company-yasnippet-or-completion ()
+;;  (interactive)
+;;  (or (do-yas-expand)
+;;      (company-complete-common)))
 
 (defun check-expansion ()
   (save-excursion
@@ -629,15 +633,15 @@ The cursor becomes a blinking bar, per `prot/cursor-type-mode'."
   (let ((yas/fallback-behavior 'return-nil))
     (yas/expand)))
 
-(defun tab-indent-or-complete ()
-  (interactive)
-  (if (minibufferp)
-      (minibuffer-complete)
-    (if (or (not yas/minor-mode)
-            (null (do-yas-expand)))
-        (if (check-expansion)
-            (company-complete-common)
-          (indent-for-tab-command)))))
+;;(defun tab-indent-or-complete ()
+;;  (interactive)
+;;  (if (minibufferp)
+;;      (minibuffer-complete)
+;;    (if (or (not yas/minor-mode)
+;;            (null (do-yas-expand)))
+;;        (if (check-expansion)
+;;            (company-complete-common)
+;;          (indent-for-tab-command)))))
 
 
 (setq tide-format-options '(:insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
@@ -1139,6 +1143,7 @@ Version: 2021-07-26 2021-08-21 2022-08-05"
          ([(control return)] . vterm-toggle-insert-cd))
   :config
   (setq vterm-toggle-cd-auto-create-buffer nil)
+  (setq vterm-toggle-fullscreen-p t)
   (defvar vterm-compile-buffer nil)
   (defun vterm-compile ()
     "Compile the program including the current buffer in `vterm'."
@@ -1236,8 +1241,50 @@ When using Homebrew, install it using \"brew install trash-cli\"."
   ;; Recommended: Enable Corfu globally.
   ;; This is recommended since Dabbrev can be used globally (M-/).
   ;; See also `corfu-excluded-modes'.
+  ;; TAB-and-Go customizations
+  :custom
+  (corfu-cycle t)             ;; Enable cycling for `corfu-next/previous'
+  (corfu-preselect-first nil) ;; Disable candidate preselection
+  (corfu-auto t)
+  (corfu-max-width 110)
+  (corfu-auto-delay 0.0)
+  (corfu-auto-prefix 1)
+  (corfu-preview-current nil)
+  (corfu-echo-documentation t)
+  ;; Use TAB for cycling, default is `corfu-complete'.
+  :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ([tab] . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ([backtab] . corfu-previous)
+        ("C-d" . corfu-info-documentation)
+        ("M-." . corfu-info-location))
   :init
+  (setq corfu-quit-at-boundary t)
   (global-corfu-mode))
+
+;; copy from https://emacs-china.org/t/corfu/19688/80
+(defun +complete ()
+  (interactive)
+  (or (yas-expand)
+      (corfu-insert)))
+(define-key corfu-map (kbd "<tab>") '+complete)
+(define-key corfu-map (kbd "TAB") '+complete)
+
+(use-package orderless
+  :demand t
+  :config
+  (setq completion-styles '(orderless partial-completion)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
+
+(defun corfu-move-to-minibuffer ()
+  (interactive)
+  (let ((completion-extra-properties corfu--extra)
+        completion-cycle-threshold completion-cycling)
+    (apply #'consult-completion-in-region completion-in-region--data)))
+(define-key corfu-map "\M-m" #'corfu-move-to-minibuffer)
 
 ;; A few more useful configurations...
 (use-package emacs
