@@ -76,3 +76,7 @@ in my ~/.Xresources and ~/.emacs, respectively.
 
 
 copy from [Set Fonts](https://www.emacswiki.org/emacs/SetFonts)
+
+## emacs and rust
+see [How to show suggestions for YASnippets when using eglot](https://stackoverflow.com/questions/72601990/how-to-show-suggestions-for-yasnippets-when-using-eglot)
+also see [emacs.d](https://github.com/granddaifuku/.emacs.d)
