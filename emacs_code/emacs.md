@@ -80,3 +80,13 @@ copy from [Set Fonts](https://www.emacswiki.org/emacs/SetFonts)
 ## emacs and rust
 see [How to show suggestions for YASnippets when using eglot](https://stackoverflow.com/questions/72601990/how-to-show-suggestions-for-yasnippets-when-using-eglot)
 also see [emacs.d](https://github.com/granddaifuku/.emacs.d)
+
+## emacs-plus
+
+``` shell
+brew tap d12frosted/emacs-plus
+brew install emacs-plus
+ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications
+```
+copy from [Vanilla Emacs with Purcell](https://www.sheerwill.live/posts/main/20220723211325-vanilla_emacs_with_purcell/)
+also see [Emacs Plus](https://github.com/d12frosted/homebrew-emacs-plus)
