@@ -43,3 +43,25 @@ copy from http://xahlee.info/emacs/emacs/elisp_convert_int_float_string.html
 (intern "some-symbol") ; => some-symbol
 ```
 copy from https://emacsredux.com/blog/2014/12/05/converting-between-symbols-and-strings/
+
+
+## use-package example
+
+``` emacs-lisp
+(global-company-mode t)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(setq company-idle-delay 0.0)
+```
+convert to be:
+
+``` emacs-lisp
+use-package company
+  :bind (:map company-active-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
+  :config
+  (setq company-idle-delay 0.3)
+  (global-company-mode t))
+```
+copy from [Configuring Emacs from Scratch — use-package](https://medium.com/helpshift-engineering/configuring-emacs-from-scratch-use-package-c30382297877)
