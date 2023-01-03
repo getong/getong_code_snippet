@@ -90,3 +90,11 @@ ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications
 ```
 copy from [Vanilla Emacs with Purcell](https://www.sheerwill.live/posts/main/20220723211325-vanilla_emacs_with_purcell/)
 also see [Emacs Plus](https://github.com/d12frosted/homebrew-emacs-plus)
+
+## emacs vterm type escape key
+
+``` emacs-lisp
+;; M-:
+(vterm-send-key "<escape>")
+```
+copy from [forward esc to vterm](https://github.com/akermu/emacs-libvterm/issues/256)

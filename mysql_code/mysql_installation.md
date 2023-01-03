@@ -124,3 +124,28 @@ mysql -uroot -pxxx
 > update mysql.user set host='%' where user='root';
 > flush privileges;
 ```
+
+or change mysql password:
+
+``` shell
+> ALTER USER 'root'@'localhost' IDENTIFIED BY 'QHRIy?ryk6oH';
+> grant all privileges on *.* to 'root'@'localhost'  with grant option;
+> flush privileges;
+```
+
+## insecure mysql password
+
+``` shell
+#!/bin/bash
+
+mysql -h "$MYSQL_HOSTNAME" -u "$MYSQL_USERNAME" "$MYSQL_DATABASE" --password="$MYSQL_PASSWORD" "$@"
+```
+to:
+
+``` shell
+#!/bin/bash
+
+MYSQL_PWD="$MYSQL_PASSWORD" mysql -h "$MYSQL_HOSTNAME" -u "$MYSQL_USERNAME" "$MYSQL_DATABASE" "$@"
+```
+
+copy from [MySQL: Using a password on the command line interface can be insecure](https://www.codingwithjesse.com/blog/mysql-using-a-password-on-the-command-line-interface-can-be-insecure/)
