@@ -98,3 +98,42 @@ also see [Emacs Plus](https://github.com/d12frosted/homebrew-emacs-plus)
 (vterm-send-key "<escape>")
 ```
 copy from [forward esc to vterm](https://github.com/akermu/emacs-libvterm/issues/256)
+
+
+## before-save-hook, after-save-hook
+
+``` emacs-lisp
+C-h v before-save-hook
+C-h v after-save-hook
+```
+
+It can also check out by undo-tree package.
+after-save-hook will do twice saving, while before-save-hook only does once saveing.
+
+## Migrating to a custom-file-less setup
+
+Answer 1: use-package emacs
+
+``` emacs-lisp
+   (use-package emacs
+      :straight (:type built-in)
+      :custom
+;; for example:
+      (backup-directory-alist '((".*" . "~/emacs/.emacs.d/temporary_files"))))
+```
+Answer 2: :custom-face
+
+``` emacs-lisp
+:custom-face
+(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "ADBO" :family "Source Code Pro"))))
+```
+The Final Piece: telling “no custom file”
+
+``` emacs-lisp
+(use-package cus-edit+
+  :defer t
+  :custom
+  (custom-file null-device "Don't store customizations"))
+```
+copy from [Migrating to a custom-file-less setup](https://tech.toryanderson.com/2020/11/13/migrating-to-a-custom-file-less-setup/)
+also see [Migrating to a custom-file-less setup](https://www.reddit.com/r/emacs/comments/js9r52/migrating_to_a_customfileless_setup/)
