@@ -53,9 +53,9 @@ server {
 ```
 install php
 ``` shell
-yum install php php-ctype php-json php-openssl php-nette-tokenizer php-pecl-zip php-pdo php-mbstring php-xml
+yum install php php-ctype php-json php-openssl php-nette-tokenizer \
+    php-pecl-zip php-pdo php-mbstring php-xml php-mysql php-fpm
 
-yum install php-fpm
 ```
 configure php files:
 ```shell
