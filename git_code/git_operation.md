@@ -481,3 +481,9 @@ git branch --set-upstream-to=origin/release  release
 git gc
 ```
 see ["Git detached head" is a weird error message to receive...](https://www.cloudbees.com/blog/git-detached-head)
+
+
+## git add proxy
+``` shell
+ git config --global http.proxy socks5://127.0.0.1:10808
+```
