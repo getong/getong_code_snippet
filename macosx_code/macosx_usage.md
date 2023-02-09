@@ -221,3 +221,9 @@ copy from [Homebrew - Error: Not upgrading 1 `installer manual` cask](https://ww
 ``` shell
 brew install  --cask font-lxgw-wenkai
 ```
+
+## delete .DS_store
+``` shell
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
+```
+copy from [MacOS禁止.DS_store生成](https://www.jianshu.com/p/3f8008fb3985)
