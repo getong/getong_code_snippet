@@ -137,3 +137,10 @@ The Final Piece: telling “no custom file”
 ```
 copy from [Migrating to a custom-file-less setup](https://tech.toryanderson.com/2020/11/13/migrating-to-a-custom-file-less-setup/)
 also see [Migrating to a custom-file-less setup](https://www.reddit.com/r/emacs/comments/js9r52/migrating_to_a_customfileless_setup/)
+
+## projectile
+使用projectile管理工程的方法很简单，只需要在工程的根目录下创建一个空白的.projectile文件即可。
+```shell
+touch .projectile
+```
+copy from [Emacs-209-使用projectile管理工程](https://blog.51cto.com/greyzhang/3006231)
