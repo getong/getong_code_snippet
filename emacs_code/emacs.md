@@ -144,3 +144,15 @@ also see [Migrating to a custom-file-less setup](https://www.reddit.com/r/emacs/
 touch .projectile
 ```
 copy from [Emacs-209-使用projectile管理工程](https://blog.51cto.com/greyzhang/3006231)
+
+## emacs, how to paste text in the search minibuffer
+M-y key short, which will paste the text in the search minibuffer
+```
+This seems a bit idiosincratic, in emacs the way to paste (yank) text in the search minibuffer is doing M-y not C-y (that is Meta-y not Control-y, as is the default way for all other matters)
+It’s funny that I didn’t realize something so basic until now. I don’t know what the reason might be, but this is still the way at least in emacs 23.1.91
+(R. Stallman answered the same question in 2005 here at http://www.mail-archive.com/emacs-pretest-bug@gnu.org/msg03693.html)
+
+UPDATE: maybe worth pointing that when editing a search (M-E) you need to use the canonical C-y to yank instead of M-y as it is the case in the search
+
+```
+copy from [emacs, how to paste text in the search minibuffer](https://ignaciopp.wordpress.com/2010/12/02/emacs-how-to-paste-text-in-the-search-minibuffer/)
