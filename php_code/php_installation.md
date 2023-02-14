@@ -66,8 +66,9 @@ vim /etc/php-fpm.d/www.conf
 user = nginx
 group = nginx
 
-user = nginx
-group = nginx
+listen.owner = nginx
+listen.group = nginx
+listen.mode = 0666
 listen = /var/run/php-fpm/php-fpm.sock
 
 systemctl enable php-fpm
