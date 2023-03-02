@@ -5,6 +5,17 @@
 ``` shell
 $ timedatectl list-timezones
 $ sudo timedatectl set-timezone Asia/Shanghai
+$ date
+# 2023年 02月 24日 星期五 02:32:16 UTC
+
+$ sudo timedatectl set-timezone America/Los_Angeles
+
+$date
+2023年 02月 23日 星期四 18:51:29 PST
+
+## php code
+// date_default_timezone_set('UTC');
+date_default_timezone_set('America/Los_Angeles');
 ```
 
 ## install fastestmirror
