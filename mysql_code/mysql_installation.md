@@ -120,7 +120,7 @@ Change the mysql password:
 
 ``` shell
 mysql -uroot -pxxx
-> alter user 'root'@'localhost' identified by 'yyyyyy'; ## change your password here
+> alter user 'root'@'localhost' identified by '123456'; ## change your password here
 > update mysql.user set host='%' where user='root';
 > flush privileges;
 ```
@@ -149,3 +149,21 @@ MYSQL_PWD="$MYSQL_PASSWORD" mysql -h "$MYSQL_HOSTNAME" -u "$MYSQL_USERNAME" "$MY
 ```
 
 copy from [MySQL: Using a password on the command line interface can be insecure](https://www.codingwithjesse.com/blog/mysql-using-a-password-on-the-command-line-interface-can-be-insecure/)
+
+## windows 5.7 mysql
+```
+cd mysqld_bin_directory
+# run as administrator
+mysqld --remove
+mysqld --install
+mysqld --initialize
+net start mysql
+# C:\Program Files\MySQL\MySQL Server <version number>\data\<computer name>.err
+# or local directory <computer name>.err
+# win10.err
+# 2023-03-08T07:03:18.458800Z 1 [Note] A temporary password is generated for root@localhost: *Y3Io7s_fkxv
+mysql -u root -p*Y3Io7s_fkxv
+> alter user 'root'@'localhost' identified by '123456';
+> update mysql.user set host='%' where user='root';
+> flush privileges;
+```
