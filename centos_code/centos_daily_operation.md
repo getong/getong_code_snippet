@@ -13,6 +13,9 @@ $ sudo timedatectl set-timezone America/Los_Angeles
 $date
 2023年 02月 23日 星期四 18:51:29 PST
 
+# dst mode, one hour earlier than America/Los_Angeles
+$ sudo timedatectl set-timezone America/Phoenix
+
 ## php code
 // date_default_timezone_set('UTC');
 date_default_timezone_set('America/Los_Angeles');
