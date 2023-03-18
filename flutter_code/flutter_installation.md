@@ -115,3 +115,4 @@ Changed 3 dependencies!
 6adfb183a4a2c94a2f92dab5ade762a47889a5a1
 ```
 copy from [Flutterメモ-30 (dart の REPL)(interactive)](https://devlights.hatenablog.com/entry/2022/11/04/073000)
+also see [REPL (interactive shell) for Dart, supporting 3rd party packages, hot reload, and full grammar](https://flutterawesome.com/repl-interactive-shell-for-dart-supporting-3rd-party-packages-hot-reload-and-full-grammar/)
