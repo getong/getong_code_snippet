@@ -13,7 +13,7 @@ see [[https://zhuanlan.zhihu.com/p/110120429][Flutter的数据传递与管理方
 创建两个页面。
 调用Navigator.push导航到第二个页面。
 调用Navigator.pop返回第一个页面。
-#+begin_src
+#+begin_src dart
 import 'package:flutter/material.dart';
 
 void main() {
