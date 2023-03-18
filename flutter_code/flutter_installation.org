@@ -1,8 +1,8 @@
-# flutter installation
+* flutter installation
 
-## macos set java sdk
+** macos set java sdk
 If already have android studio installed simply run:
-```shell
+#+begin_src
 # add this into ~/.zshrc file
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
@@ -15,11 +15,11 @@ flutter config --android-sdk "/Users/$USER/Library/Android/sdk" & flutter doctor
 
 ## check result
 flutter doctor
-```
-copy from https://stackoverflow.com/questions/68236007/i-am-getting-error-cmdline-tools-component-is-missing-after-installing-flutter
+#+end_src
+copy from [[https://stackoverflow.com/questions/68236007/i-am-getting-error-cmdline-tools-component-is-missing-after-installing-flutter][cmdline-tools component is missing]]
 
-## archlinux install flutter
-``` shell
+** archlinux install flutter
+#+begin_src
 pacman -S --needed git base-devel
 git clone https://aur.archlinux.org/yay.git
 cd yay
@@ -64,24 +64,26 @@ flutter doctor --android-licenses
 flutter create new_app
 cd new_app
 flutter run --debug
-```
-copy from https://gist.github.com/joaquinicolas/b7d0a0869485bca5156d0d4be87820f4
-also see [Configure Flutter development environment on Manjaro/Arch linux.](https://dev.to/awais/configure-flutter-development-environment-on-manjaro-arch-linux-4a0a)
-also see [How to Get Flutter and Android Working on Arch Linux](https://www.rockyourcode.com/how-to-get-flutter-and-android-working-on-arch-linux/)
+#+end_src
+copy from [[https://gist.github.com/joaquinicolas/b7d0a0869485bca5156d0d4be87820f4]]
+
+see also [[https://dev.to/awais/configure-flutter-development-environment-on-manjaro-arch-linux-4a0a][Configure Flutter development environment on Manjaro/Arch linux.]]
+
+see also [[https://www.rockyourcode.com/how-to-get-flutter-and-android-working-on-arch-linux/][How to Get Flutter and Android Working on Arch Linux]]
 
 
-## dart repl package
-``` shell
+** dart repl package
+#+begin_src
 $ dart pub global activate interactive
 
 $ echo 'export PATH="$HOME/.pub-cache/bin":"$PATH"' >> ~/.zshrc
 $ source ~/.zshrc
 
 $ interactive
-```
+#+end_src
 
 interactive usage
-``` dart
+#+begin_src
 >>> class A {
 ...     late int val;
 ... }
@@ -113,6 +115,7 @@ Changed 3 dependencies!
 >>> d = sha1.convert(b);
 >>> d
 6adfb183a4a2c94a2f92dab5ade762a47889a5a1
-```
-copy from [Flutterメモ-30 (dart の REPL)(interactive)](https://devlights.hatenablog.com/entry/2022/11/04/073000)
-also see [REPL (interactive shell) for Dart, supporting 3rd party packages, hot reload, and full grammar](https://flutterawesome.com/repl-interactive-shell-for-dart-supporting-3rd-party-packages-hot-reload-and-full-grammar/)
+#+end_src
+copy from [[https://devlights.hatenablog.com/entry/2022/11/04/073000][Flutterメモ-30 (dart の REPL)(interactive)]]
+
+see also [[https://flutterawesome.com/repl-interactive-shell-for-dart-supporting-3rd-party-packages-hot-reload-and-full-grammar/][REPL (interactive shell) for Dart, supporting 3rd party packages, hot reload, and full grammar]]
