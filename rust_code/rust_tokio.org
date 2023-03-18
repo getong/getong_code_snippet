@@ -1,21 +1,23 @@
-# rust tokio
+* rust tokio
 
-## tutorial
-``` shell
+** tutorial
+#+begin_src sh
 cargo install mini-redis
 cargo new my-redis
 cd my-redis
-```
+#+end_src
+
 Add dependencies to `Cargo.toml`
 
-```
+#+begin_src rust
 tokio = { version = "0.3", features = ["full"] }
 mini-redis = "0.3"
-```
+#+end_src
+
 
 Write the code
 
-``` rust
+#+begin_src rust
 use mini_redis::{client, Result};
 
 #[tokio::main]
@@ -33,24 +35,25 @@ pub async fn main() -> Result<()> {
 
     Ok(())
 }
-```
+#+end_src
 
 run the mini-redis-server
 
-``` shell
+#+begin_src sh
 mini-redis-server
-```
+#+end_src
 
-``` shell
+#+begin_src shell
 cargo run
-```
-copy from [Hello Tokio](https://tokio.rs/tokio/tutorial/hello-tokio)
+#+end_src
 
-## code reading
+copy from [[https://tokio.rs/tokio/tutorial/hello-tokio][Hello Tokio]]
 
-The code is copy from [深入浅出Rust异步编程之Tokio](https://zhuanlan.zhihu.com/p/107820568)
+** code reading
 
-``` rust
+The code is copy from [[https://zhuanlan.zhihu.com/p/107820568][深入浅出Rust异步编程之Tokio]]
+
+#+begin_src rust
 pub trait Future {
 
     type Item;
@@ -60,10 +63,11 @@ pub trait Future {
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error>;
 }
-```
+#+end_src
+
 假设一个future要做这样的功能，从TCP数据流读取数据并计算自己读了多少个字节并进行回调。那用代码表示：
 
-``` rust
+#+begin_src rust
 struct MyTcpStream {
     socket: TcpStream,
     nread: u64,
@@ -84,12 +88,13 @@ impl Future for MyTcpStream {
         }
     }
 }
-```
+#+end_src
+
 每次调用poll方法，MyTcpStream都会调用socket的read方法(这里的TcpStream本身也是一个future，read内部也是调用poll方法)，当read返回为Async::NotReady的时候，调度器会将当前的Task休眠，如果返回Async::Read(n)表示读到了数据，则给计数器加对应的数，如果返回Async::Ready(0)，则表示TcpStream里有的数据已经读完，就将计数器返回。
 
 为了方便大家使用，future库包提供了很多组合子，以AndThen组合子为例：
 
-``` rust
+#+begin_src rust
 enum AndThen<A,F> {
     First(A, F),
 }
@@ -100,10 +105,11 @@ fn poll(&mut self) -> Async<Item> {
         Async::NotReady => Async::NotReady,
     }
 }
-```
+#+end_src
+
 这里AndThen枚举，First有两个值，其中A是一个future，F是一个闭包，AndThen实现的poll方法，就是假如调用future_a的poll方法有返回值，那么就调用闭包，并将其返回值包装为Async::Ready返回，如果poll的返回值是Async::NotReady则同样返回Async::NotReady。有了这个AndThen方法，通过组合子函数（比如and_then实际上是将上一个future和闭包传入生成一个AndThen future），我们就可以实现一些复杂逻辑：
 
-``` rust
+#+begin_src rust
 let f=MyTcpStream::connect(&remote_addr)
   .and_then(|num| {println!("already read %d",num);
   return num;}).and_then(|num| {
@@ -111,11 +117,12 @@ let f=MyTcpStream::connect(&remote_addr)
   });
 
 tokio::spawn(f);
-```
+#+end_src
+
 上面的代码就是建立Tcp连接，然后每次读数据，都通过第一个and_then打印日志，然后再通过第二个and_then做其他处理，tokio::spawn用于执行最终的future.
 如果将MyTcpStream的poll实现改为：
 
-``` rust
+#+begin_src rust
 fn poll(&mut self) -> Poll<Item, io::Error> {
         let mut buf = [0;1024];
         let mut bytes = bytesMut::new();
@@ -127,11 +134,12 @@ fn poll(&mut self) -> Poll<Item, io::Error> {
             }
         }
     }
-```
+#+end_src
+
 
 这段代码主要是将socket中数据读出，然后包装为Async::Ready或者Async::NotReady供下一个future使用，我们就可以实现更复杂的逻辑，比如：
 
-``` rust
+#+begin_src rust
 MyTcpStream::connect(&remote_addr)
   .and_then(|sock| io::write(sock, handshake)) //这里发送handshake
   .and_then(|sock| io::read_exact(sock, 10)) // 这里读handshake的响应，假设handeshake很短
@@ -143,10 +151,11 @@ MyTcpStream::connect(&remote_addr)
   .and_then(|(sock, response)| { // 这里处理响应
     process(response)
   })
-```
+#+end_src
+
 用taokio启动一个服务器，代码如下：
 
-``` rust
+#+begin_src rust
 let listener = TcpListener::bind(&addr).unwrap();
 
 let server = listener.incoming().for_each(move |socket| {
@@ -157,7 +166,8 @@ let server = listener.incoming().for_each(move |socket| {
 });
 
 tokio::run(server);
-```
+#+end_src
+
 
 上面的代码首先生成一个TcpListener，listener的incomming和foreach会将连进来的tcp连接生成TcpStream（即代码中的socket），针对每一个连接启动一个用户态线程处理。
 
@@ -165,7 +175,7 @@ Tokio本身是基于Mio和future库来实现的，其主要包含两个主要的
 
 scheduler负责对task进行调度，上文所展示的task调度部分功能就是由scheduler负责，reactor部分主要是负责事件触发，比如网络事件，文件系统事件，定时器等等。
 
-``` rust
+#+begin_src rust
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn Error>> {
     let mut stream = TcpStream::connect("127.0.0.1:6142").await?;
@@ -174,25 +184,26 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
     println!("wrote to stream; success={:?}", result.is_ok());
     Ok(())
 }
-```
-
-[Rust 的异步函数与 Tokio.rs](https://zhuanlan.zhihu.com/p/244047486)
+#+end_src
 
 
-## rust Future trait
+[[https://zhuanlan.zhihu.com/p/244047486][Rust 的异步函数与 Tokio.rs]]
 
-``` rust
+
+** rust Future trait
+
+#+begin_src rust
 pub trait Future {
     type Item;
     type Error;
     fn poll(&mut self) -> Poll<Self::Item, Self::Error>;
 }
-```
+#+end_src
 
 
-## Feature flags
+** Feature flags
 
-```
+#+begin_src rust
 full: Enables all Tokio public API features listed below except test-util.
 rt: Enables tokio::spawn, the basic (current thread) scheduler, and non-scheduler utilities.
 rt-multi-thread: Enables the heavier, multi-threaded, work-stealing scheduler.
@@ -207,11 +218,12 @@ signal: Enables all tokio::signal types.
 fs: Enables tokio::fs types.
 test-util: Enables testing based infrastructure for the Tokio runtime.
 Note: AsyncRead and AsyncWrite traits do not require any features and are always available.
-```
+#+end_src
 
-## Modules
 
-```
+** Modules
+
+#+begin_src rust
 fs	fsAsynchronous file and standard stream adaptation.
 io	Traits, helpers, and type definitions for asynchronous I/O functionality.
 net	TCP/UDP/Unix bindings for tokio.
@@ -222,30 +234,34 @@ stream	Due to the Stream trait’s inclusion in std landing later than Tokio’s
 sync	syncSynchronization primitives for use in asynchronous contexts.
 task	Asynchronous green-threads.
 time	timeUtilities for tracking time.
-```
+#+end_src
 
-## UdpSocket
+** UdpSocket
 
-``` rust
+#+begin_src rust
 let addr = SocketAddrV4::New(Ipv4Addr:new(0,0,0,0), port);
 UdpSocket::bind(addr).await;
 
 socket.send_to(b"hello world", &packet.dest()).await;
-```
+#+end_src
 
-## send and recv method return a Future instance
+** send and recv method return a Future instance
 
-``` rust
+#+begin_src rust
 let (tx, mut rx) = mpsc::channel(32);
 
 tx.send("sending from first handle").await;
 let Some(message) = rx.recv().await;
-```
+#+end_src
 
 
-## tokio reference or book
-[tokio](https://tokio.rs/)
-[深入了解 Rust 异步开发模式](https://zhuanlan.zhihu.com/p/104098627)
-[tokio-internals](https://github.com/tony612/tokio-internals)
-[tokio-reuseport](https://github.com/fujita/tokio-reuseport)
-[Scalable server design in Rust with Tokio](https://medium.com/@fujita.tomonori/scalable-server-design-in-rust-with-tokio-4c81a5f350a3)
+** tokio reference or book
+[[https://tokio.rs/][tokio]]
+
+[[https://zhuanlan.zhihu.com/p/104098627][深入了解 Rust 异步开发模式]]
+
+[[https://github.com/tony612/tokio-internals][tokio-internals]]
+
+[[https://github.com/fujita/tokio-reuseport][tokio-reuseport]]
+
+[[https://medium.com/@fujita.tomonori/scalable-server-design-in-rust-with-tokio-4c81a5f350a3][Scalable server design in Rust with Tokio]]
