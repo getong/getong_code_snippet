@@ -1,19 +1,19 @@
-# flutter doc
+* flutter widget doc
 
-## flutter state
-[Flutter 深入理解 State](https://hongruqi.github.io/2019/01/26/Flutter%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20State/)
-
-
-## share data among widgets
-[Flutter的数据传递与管理方案](https://zhuanlan.zhihu.com/p/110120429)
+** flutter state
+see [[https://hongruqi.github.io/2019/01/26/Flutter%20%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%20State/][Flutter 深入理解 State]]
 
 
-## Navigator
+** share data among widgets
+see [[https://zhuanlan.zhihu.com/p/110120429][Flutter的数据传递与管理方案]]
+
+
+** Navigator
 在Android中，页面对应的是Activity，在iOS中是ViewController。而在Flutter中，页面只是一个widget！
 创建两个页面。
 调用Navigator.push导航到第二个页面。
 调用Navigator.pop返回第一个页面。
-``` dart
+#+begin_src
 import 'package:flutter/material.dart';
 
 void main() {
@@ -63,10 +63,11 @@ class SecondScreen extends StatelessWidget {
     );
   }
 }
-```
-
-copy from [导航到新页面并返回](https://flutterchina.club/cookbook/navigation/navigation-basics/)
+#+end_src
 
 
-## flutter and rust
-see [Flutter and Rust combined. Creating a plugin to support various operating systems](https://blog.argonauths.eu/2022/09/26/flutter-and-rust-combined-creating-a-plugin-to-support-various-operating-systems/)
+copy from [[https://flutterchina.club/cookbook/navigation/navigation-basics/][导航到新页面并返回]]
+
+
+** flutter and rust
+see [[https://blog.argonauths.eu/2022/09/26/flutter-and-rust-combined-creating-a-plugin-to-support-various-operating-systems/][Flutter and Rust combined. Creating a plugin to support various operating systems]]
