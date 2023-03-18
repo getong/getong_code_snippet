@@ -1,8 +1,8 @@
-# dart example
+* dart example
 
-## basic data types:
+** basic data types:
 
-``` dart
+#+begin_src
 Number
 String
 Boolean
@@ -11,27 +11,30 @@ Set
 Map
 Rune
 Symbol
-```
+#+end_src
 
-## constructor function
 
-``` dart
+** constructor function
+
+#+begin_src
 class ClassName {
     int a;
     int b;
     ClassName(this.a, this.b);
 }
-```
+#+end_src
 
-## fat arrow function
 
-``` dart
+** fat arrow function
+
+#+begin_src
 int funcName() => 42;
-```
+#+end_src
 
-## get and set function
 
-``` dart
+** get and set function
+
+#+begin_src
 class myClass {
   String name;
   String get getName => name;
@@ -41,64 +44,66 @@ class myClass {
 var myObject = myClass();
 myObject.setName = "Sanjib";
 print(myObject.getName);
-```
+#+end_src
 
-## override
+
+** override
 @override is not a must tag, with it can enhances the code reading.
 
-``` dart
+#+begin_src
 @override
 void hello() {
     return "world";
 }
-```
+#+end_src
 
-## mixin
+** mixin
 
-``` dart
+#+begin_src
 class A extends B with C
 // Use A class all methods and the methods that B class does not cover
 class T = A with B;
-```
+#+end_src
+
 A can inheritance B class and use C class functions.
 
-## null check
+** null check
 
-``` dart
+#+begin_src
 x ??= 3;
-```
+#+end_src
 
-## Cascades
 
-``` dart
+** Cascades
+
+#+begin_src
 "String".length.toString(); // 6
 "String"..length.toString(); // "String"
-```
+#+end_src
 
+** type
 
-## type
-
-``` dart
+#+begin_src
 var type_string = <String> ['a', 'b', 'c'];
 print(type_string);
 print("hello" + "world");
 print("hello" * 2);
-```
+#+end_src
 
-## Set, StringBuffer data type
 
-``` dart
+** Set, StringBuffer data type
+
+#+begin_src
 Set mySet = {1, 2, 3};
 mySet.lookup(2);
 
 StringBuffer stringBuffer = StringBuffer('test string');
 stringBuffer.write(' append string');
-```
+#+end_src
 
+** Future class
 
-## Future class
-
-``` dart
+#+begin_src
 import 'dart:async';
 
 void main(){
@@ -114,45 +119,49 @@ void main(){
   print("The main UI thread ends.");
 
 }
+#+end_src
 
-```
 the output:
 
-```
+#+begin_src
 The main UI thread is starting on here.
 The main UI thread ends.
 Displaying news headlines here: Instance of 'Future<String>', the displayString : The latest headlines are displayed here after 1 second.
-```
+#+end_src
+
 It is noted that, the Future object still runs after the end of the main function.
 Some methods:
 
-``` dart
+#+begin_src
 catchError(Function onError, {bool test(Object error)}) → Future<T>
 then<R>(FutureOr<R> onValue(T value), {Function onError}) → Future<R>
 timeout(Duration timeLimit, {FutureOr<T> onTimeout()}) → Future<T>
 whenComplete(FutureOr action()) → Future<T>
-```
+#+end_src
 
-## runZonedGuarded function
 
-``` dart
+** runZonedGuarded function
+
+#+begin_src
 // 这样就可以处理所有未处理的异常了。
 void main() async {
   runZonedGuarded(() => runApp(const App()));
  }
-```
-copy from [Flutter runZonedGuarded捕捉不到未处理错误问题的原因](https://segmentfault.com/a/1190000022892971)
+#+end_src
 
-## Isolate
+copy from [[https://segmentfault.com/a/1190000022892971][Flutter runZonedGuarded捕捉不到未处理错误问题的原因]]
 
-``` dart
+** Isolate
+
+#+begin_src
 Isolate.spawn<T>(void entryPoint(T message), T message, {bool paused: false, bool errorsAreFatal, SendPort onExit, SendPort onError, String debugName}) → Future<Isolate>
 Isolate.kill({int priority: beforeNextEvent}) → void
-```
+#+end_src
 
-## async, await
 
-``` dart
+** async, await
+
+#+begin_src
 main() {
     getData();
     print("continue...");
@@ -162,11 +171,11 @@ getData() async {
     var data = await "data string";
     print(data);
 }
-```
+#+end_src
 
-## ~/ operator
+** ~/ operator
 
-``` dart
+#+begin_src
 5 ~/ 2 == 2;
 7 ~/ 4 == 2;
-```
+#+end_src
