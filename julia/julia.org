@@ -1,0 +1,126 @@
+* julia
+
+** zero() and one
+
+#+begin_src julia
+zero(Int8)
+one(Int8)
+#+end_src
+
+** map
+
+#+begin_src julia
+map(round, [1.2, 3.5, 1.7])
+#+end_src
+
+** keywords
+
+#+begin_src julia
+类型声明： abstract, primitive, type, struct, function, macro, new
+权限标识： global, local, mutable, const, outer
+模块操作： module, baremodule, using, import, export
+逻辑结构： where, for, while, break, continue, if, elseif, else, in
+语句块：   begin, quote, let, end, do
+混合编程： ccall
+#+end_src
+
+** random function
+
+#+begin_src julia
+## 均匀分布的随机数
+rand()
+## 整态分布的随机数
+randn()
+
+## 100个Float64元素列表
+rand(100)
+## 100个Float32元素列表
+rand(Float32, 100)
+
+## 100个float64元素列表
+randn(100)
+## 100个Float32元素列表
+randn(Float32, 100)
+
+## randexp
+using Random
+randexp()
+#+end_src
+
+** do syntax
+
+#+begin_src julia
+map([1,2,3]) do x
+2x
+end
+#+end_src
+
+
+** install package
+
+#+begin_src julia
+julia> # Type "]" to enter Pkg REPL-mode.
+pkg > registry add https://mirrors.ustc.edu.cn/julia/registries/General.git
+pkg > Pkg.add("JuMP")
+pkg > Pkg.add("GLPK")
+#+end_src
+
+
+** julia pkg server
+
+#+begin_src julia
+echo 'export JULIA_PKG_SERVER="https://mirrors.ustc.edu.cn/julia"' >> ~/.zshrc
+#+end_src
+
+Get the fastest pkg server:
+
+#+begin_src julia
+julia> using PkgServerClient
+julia> PkgServerClient.registry
+julia> PkgServerClient.registry_response_time()
+julia> PkgServerClient.set_mirror("USTC")
+#+end_src
+
+copy from [[https://discourse.juliacn.com/t/topic/2969][Julia PkgServer 镜像服务及镜像站索引]]
+
+** Setting up Julia to use multiple cores
+
+#+begin_src sh
+julia --banner=no -p 2
+julia> using Distributed
+
+julia> nworkers()
+#+end_src
+
+or use `auto`
+
+#+begin_src sh
+julia --banner=no -p auto
+#+end_src
+
+copy from [[https://subscription.packtpub.com/book/application-development/9781788998369/1/ch01lvl1sec18/setting-up-julia-to-use-multiple-cores][Setting up Julia to use multiple cores]]
+
+** julia JULIA_DEPOT_PATH
+
+#+begin_src sh
+echo 'export JULIA_DEPOT_PATH=/backup/julia_installation' >> ~/.zshrc
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/36398629/change-package-directory-in-julia][Change Package directory in Julia]]
+
+** julia ebook
+
+[[https://ocw.mit.edu/courses/mathematics/18-s190-introduction-to-computational-thinking-with-julia-with-applications-to-modeling-the-covid-19-pandemic-spring-2020/course-materials/][Introduction to Computational Thinking with Julia, with Applications to Modeling the COVID-19 Pandemic ]]
+
+[[https://cheatsheets.quantecon.org/julia-cheatsheet.html][Julia cheatsheet]]
+
+[[https://juliadatascience.io/][Julia Data Science]]
+
+[[https://github.com/JuliaLang/docs.julialang.org/tree/assets][julia doc]]
+
+[[https://datascience-book.gitlab.io/][Introduction to Datascience Learn Julia Programming, Math & Datascience from Scratch]]
+
+** julia library
+#+begin_src sh
+Flux
+#+END_SRC
