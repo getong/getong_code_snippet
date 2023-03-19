@@ -1,0 +1,29 @@
+* lua docs
+
+** learn lua in x minutes
+[[https://learnxinyminutes.com/docs/lua/][Learn Lua in Y minutes]]
+
+[[https://learnxinyminutes.com/docs/zh-cn/lua-cn/][Y分钟速成Lua]]
+
+** install packages via luarocks
+
+#+begin_src sh
+brew install luarocks
+#+end_src
+
+install  lpeg
+
+#+begin_src sh
+luarocks install lpeg
+#+end_src
+
+** ob-lua example
+#+name: lua-hello-world
+#+begin_src lua :results output :exports both
+print 'Hello World!'
+print ("Hello World!")
+#+end_src
+
+#+RESULTS: lua-hello-world
+: Hello World!
+: Hello World!
