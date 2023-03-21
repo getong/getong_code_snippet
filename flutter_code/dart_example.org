@@ -188,3 +188,29 @@ getData() async {
 
 #+RESULTS:
 : null
+
+** number example
+#+begin_src dart
+void main() {
+  var i = 2;
+  print(i.runtimeType);
+  String value1 = "123";
+  int parseValue = int.parse(value1);
+  print(parseValue);
+  print(parseValue.runtimeType);
+
+  String value2 = "2.2";
+  print(value2.runtimeType);
+  double parseValue2 = double.parse(value2);
+  print(parseValue2.runtimeType);
+  print(parseValue2);
+}
+#+end_src
+
+#+RESULTS:
+: int
+: 123
+: int
+: String
+: double
+: 2.2
