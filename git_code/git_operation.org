@@ -1,21 +1,21 @@
-# git operations
+* git operations
 
-## pull
+** pull
 
-```
+#+begin_src sh
 $ git pull --rebase origin master
-```
+#+end_src
 
-## mv
+** mv
 
-```
+#+begin_src sh
 $ git mv dir other_dir
 $ git commit -a -m 'commit msg'
 $ git push
-```
+#+end_src
 
-## github合并pr， 其中master是要合并到的主干， develop是要被合并的分支
-```shell
+** github合并pr， 其中master是要合并到的主干， develop是要被合并的分支
+#+begin_src sh
 git checkout -b develop master
 git pull https://github.com/other/proj develop
 
@@ -25,34 +25,35 @@ git push origin master
 
 ## or fast forward
 git merge --ff-only develop
-```
-## can't pull new tags
+#+end_src
+
+** can't pull new tags
 Sometimes the new tag in remote repository, pull can't get the new tags. Fetch it.
 
-``` shell
+#+begin_src sh
 git fetch --tags
 git fetch upstream --tags
 git fetch origin --tags
-```
+#+end_src
 
-## push more than one repositories at one time
+
+** push more than one repositories at one time
 change the .git/config like below:
 
-``` shell
+#+begin_src sh
 [remote "origin"]
 	url = https://github.com/user/abc
 	url = https://gitlab.com/other_user/abc
-```
+#+end_src
 
-
-## change remote repo commit user and email
+** change remote repo commit user and email
 Create a fresh, bare clone of your repository:
-``` shell
+#+begin_src sh
 git clone --bare https://github.com/user/repo.git
 cd repo.git
-```
+#+end_src
 
-``` shell
+#+begin_src sh
 #!/bin/sh
 
 git filter-branch --env-filter '
@@ -70,84 +71,86 @@ then
     export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
 fi
 ' --tag-name-filter cat -- --branches --tags
+#+end_src
 
-```
 Then push it
 
-``` shell
+#+begin_src sh
 git push --force --tags origin 'refs/heads/*'
-
-```
+#+end_src
 
 view all the commit user and email
 
-``` shell
+#+begin_src sh
 git log --pretty=format:"%cn:%ce"
-```
+#+end_src
 
 Finally, delete it.
 
-``` shell
+#+begin_src sh
 cd ..
 rm -rf repo.git
-```
-Look at [Changing author info](https://help.github.com/articles/changing-author-info/) for more info.
+#+end_src
+
+Look at [[https://help.github.com/articles/changing-author-info/][Changing author info]] for more info.
 
 The old cloned repo use --rebase to fetch it.
 
-``` shell
+#+begin_src sh
 git pull --rebase
-```
+#+end_src
 
-## squash
+** squash
 
-``` shell
+#+begin_src sh
 git merge branch_name --squash
-```
+#+end_src
 
-## rebase pr
+** rebase pr
 
-``` shell
+#+begin_src sh
 git rebase -i HEAD~5
 git rebase --abort
 git rebase --continue
-```
+#+end_src
+
 rebase to a branch
 
-``` shell
+#+begin_src sh
 git rebase master
 git push -f
-```
+#+end_src
 
-## remote show
+** remote show
 
-``` shell
+#+begin_src sh
 git remote show origin
-```
+#+end_src
 
-## reflog
+** reflog
 see the local branch log
-``` shell
+#+begin_src sh
 git reflog
-```
+#+end_src
 
-## cherry-pick
+** cherry-pick
 
-``` shell
+#+begin_src sh
 git checkout master
 git cherry-pick commit_id
 git cmomit
-```
+#+end_src
 
-## show
+** show
 show the commit info
 
-``` shell
+#+begin_src sh
 git show commit_id
-```
+#+end_src
 
-## stash
-```shell
+
+** stash
+#+begin_src sh
 $ git stash save filename
 # stash all the changed files, no include the untracked files
 $ git stash save
@@ -167,113 +170,120 @@ $ git stash drop stash@{0}
 # pop
 $ git stash pop
 $ git stash pop stash@{0}
+#+end_src
 
-```
-## clean the repo
-``` shell
+** clean the repo
+#+begin_src sh
 $ git clean -d
-```
+#+end_src
 
-## git ignore
-```shell
+** git ignore
+#+begin_src sh
 $ cat .gitignore
 *.swp
 *.a
 !lib.a
-```
+#+end_src
+
 All the `.swp` files and all the `.a` file except the `lib.a` file will be ignore
 
-## detele local branch
+** detele local branch
 
-``` shell
+#+begin_src sh
 $ git branch -d <branch_name>
-```
+#+end_src
 
-## delete remote branch
+** delete remote branch
 
-``` shell
+#+begin_src sh
 $ git push origin --delete <branch_name>
-```
+#+end_src
 
-## delete added file from git cache, not commited
+** delete added file from git cache, not commited
 
-``` shell
+#+begin_src sh
 $ git rm --cached file_name
-```
+#+end_src
+
 The `file_name` is just added to git, not commited.
 
 
-## amend, change the last commit info
+** amend, change the last commit info
 
-``` shell
+#+begin_src sh
 $ git add file
 $ git commit --amend
-```
+#+end_src
+
 This will append the `add file` into the last commit info.
 amending(修正) will always change the last commit message and the commit hash value.
 
 
-## git commit with future date
+** git commit with future date
 
-``` shell
+#+begin_src sh
 $ git commit --date=2017-07-11T12:25:23
-```
+#+end_src
 
 
-## githug answer
+
+** githug answer
 githug is very suitable to master git, but with something difficult.
 The answer is below, check for help.
-[githug 游戏笔记](http://www.jianshu.com/p/e8e6358e81e0)
-[Githug通关全攻略](http://fancyoung.com/blog/githug-cheat-sheet/)
-[Githug – What is it?](https://www.tobscore.com/githug-what-is-it/)
+[[http://www.jianshu.com/p/e8e6358e81e0][githug 游戏笔记]]
+[[http://fancyoung.com/blog/githug-cheat-sheet/][Githug通关全攻略]]
+[[https://www.tobscore.com/githug-what-is-it/][Githug – What is it?]]
 
-## bisect
-see [让 Git Bisect 帮助你](https://www.oschina.net/translate/letting-git-bisect-help-you)
+** bisect
+see [[https://www.oschina.net/translate/letting-git-bisect-help-you][让 Git Bisect 帮助你]]
 
-``` shell
+#+begin_src sh
 git bisect start
 git bisect bad <commit-id>
 git bisect good <commit-id>
 git bisect reset
 git bisect visualize
-```
-see [.5 Git 工具 - 使用 Git 调试](https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E4%BD%BF%E7%94%A8-Git-%E8%B0%83%E8%AF%95)
+#+end_src
 
-## git concept
+see [[https://git-scm.com/book/zh/v1/Git-%E5%B7%A5%E5%85%B7-%E4%BD%BF%E7%94%A8-Git-%E8%B0%83%E8%AF%95][.5 Git 工具 - 使用 Git 调试]]
 
-``` shell
+** git concept
+
+#+begin_src sh
 workspace 工作区
 index/stage 暂存区
 repository 仓库区（本地仓库）
 remote 远程仓库
-```
+#+end_src
 
-## git fetch and reset to origin/master
 
-``` shell
+** git fetch and reset to origin/master
+
+#+begin_src sh
 $ git fetch origin
 $ git checkout master
 $ git reset --hard origin/master
-```
+#+end_src
 
-
-## reset
-``` shell
+** reset
+#+begin_src sh
 $ git reset ref123
 $ git reset HEAD^3
 $ git diff
 $ git add —all
 $ git diff —-staged
-```
+#+end_src
 
-## blame
+
+** blame
 view every line's commit message of a file
-```shell
+#+begin_src sh
 $ git blame filename
-```
+#+end_src
 
-## tag
-```shell
+
+** tag
+#+begin_src sh
 # new a tag with current commit
 $ git tag tag_name
 
@@ -292,50 +302,53 @@ $ git push origin :refs/tags/tag_name
 # get all the tag names
 $ git tag
 $ git push --tags
-```
+#+end_src
 
-## revert
+** revert
 git revert an old commit with a new commit, often used in the public branch.
-```shell
+#+begin_src sh
 git revert HEAD~1
-```
+#+end_src
 
-## archive
-``` shell
+** archive
+#+begin_src sh
 git archive
-```
+#+end_src
 
-## change to the last branch
+** change to the last branch
 
-``` shell
+#+begin_src sh
 git checkout -
-```
+#+end_src
 
-## set upstream branch to local branch
+** set upstream branch to local branch
 
-``` shell
+#+begin_src sh
 git branch --set-upstream-to=origin/branch_name local_branch_name
-```
+#+end_src
 
-## git reset reset
 
-``` shell
+** git reset reset
+
+#+begin_src sh
 git reset HEAD~1
 git reflog
 git reset HEAD@{1}
-```
-copy from [Undoing git reset?](https://stackoverflow.com/questions/2510276/undoing-git-reset)
+#+end_src
 
-## get the current branch name
+copy from [[https://stackoverflow.com/questions/2510276/undoing-git-reset][Undoing git reset?]]
 
-``` shell
+** get the current branch name
+
+#+begin_src sh
 $ git rev-parse --abbrev-ref HEAD
-```
-see [How to get the current branch name in Git?](https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git)
+#+end_src
 
-## submodule
+see [[https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git][How to get the current branch name in Git?]]
 
-``` shell
+** submodule
+
+#+begin_src sh
 git submodule
 git submodule add git_url git_name
 git add git_name .gitmodules
@@ -345,58 +358,62 @@ git submodule update git_name
 # or
 git submodule update --remote
 git submodule update --checkout
-```
+#+end_src
 
-## squash two non-consecutive commit
+
+** squash two non-consecutive commit
 
 use `git rebase -i` and pick the commit just below the one you want to squash.
-see [How do I squash two non-consecutive commits](https://stackoverflow.com/questions/3921708/how-do-i-squash-two-non-consecutive-commits)\[
+see [[https://stackoverflow.com/questions/3921708/how-do-i-squash-two-non-consecutive-commits][How do I squash two non-consecutive commits]]
 
-## prune tags
+** prune tags
 
-``` shell
+#+begin_src sh
 git config fetch.prune true --global
 git config fetch.pruneTags true --global
 git fetch upstream --prune --tags
 git reset upstream/master
 git push origin master --tags --prune
-```
-copy from [In git, how do I sync my tags against a remote server?](https://stackoverflow.com/questions/10491146/in-git-how-do-i-sync-my-tags-against-a-remote-server)
+#+end_src
 
-## github permanent links
-see [Getting permanent links to files on Github or Gitlab](https://makandracards.com/makandra/31613-getting-permanent-links-to-files-on-github-or-gitlab)
+copy from [[https://stackoverflow.com/questions/10491146/in-git-how-do-i-sync-my-tags-against-a-remote-server][In git, how do I sync my tags against a remote server?]]
 
-## change the commit author
+** github permanent links
+see [[https://makandracards.com/makandra/31613-getting-permanent-links-to-files-on-github-or-gitlab][Getting permanent links to files on Github or Gitlab]]
 
-``` shell
+** change the commit author
+
+#+begin_src sh
 ## xxxx is the commit hash
 git rebase -i xxxx
 git commit --amend --author='username <user_email>' --no-edit
 git rebase --continue
 git push -f
-```
+#+end_src
 
-## git subtree
 
-``` shell
+** git subtree
+
+#+begin_src sh
 git subtree add   --prefix=<prefix> <commit>
 git subtree add   --prefix=<prefix> <repository> <ref>
 git subtree pull  --prefix=<prefix> <repository> <ref>
 git subtree push  --prefix=<prefix> <repository> <ref>
 git subtree merge --prefix=<prefix> <commit>
 git subtree split --prefix=<prefix> [OPTIONS] [<commit>]
-```
+#+end_src
+
 example:
 
-``` shell
+#+begin_src sh
 git subtree add --prefix=sub/libpng https://github.com/test/libpng.git master --squash
-```
+#+end_src
 
-copy from [git subtree教程](https://segmentfault.com/a/1190000012002151)
+copy from [[https://segmentfault.com/a/1190000012002151][git subtree教程]]
 
-## get all origin branches
+** get all origin branches
 
-``` shell
+#+begin_src sh
 git clone --depth 1 origin_url
 cd project
 
@@ -408,32 +425,34 @@ git fetch -v
 git pull --all
 
 git checkout the-branch-i-ve-been-looking-for
+#+end_src
 
-```
-copy from [git shallow clone (clone --depth) misses remote branches](https://stackoverflow.com/questions/23708231/git-shallow-clone-clone-depth-misses-remote-branches)
+copy from [[https://stackoverflow.com/questions/23708231/git-shallow-clone-clone-depth-misses-remote-branches][git shallow clone (clone --depth) misses remote branches]]
 
-## fix unexpected disconnect while reading sideband packet fatal
+** fix unexpected disconnect while reading sideband packet fatal
 
-``` shell
+#+begin_src sh
 export GIT_TRACE_PACKET=1
 export GIT_TRACE=1
 export GIT_CURL_VERBOSE=1
-```
+#+end_src
+
 Then Try this command
 
-``` shell
+#+begin_src sh
 git config --global core.compression 0
 git clone --depth 1 <repo_URI>
 # cd to your newly created directory
 git fetch --unshallow
 git pull --all
-```
+#+end_src
 
-copy from [unexpected disconnect while reading sideband packet fatal: the remote end hung up unexpectedly](https://exerror.com/unexpected-disconnect-while-reading-sideband-packet-fatal-the-remote-end-hung-up-unexpectedly/)
 
-## for loop to get linux kernel
+copy from [[https://exerror.com/unexpected-disconnect-while-reading-sideband-packet-fatal-the-remote-end-hung-up-unexpectedly/][unexpected disconnect while reading sideband packet fatal: the remote end hung up unexpectedly]]
 
-``` shell
+** for loop to get linux kernel
+
+#+begin_src sh
 git clone --depth 1 https://gitee.com/mirrors_ArchLinux/linux archlinux-linux
 cd archlinux-linux
 
@@ -451,13 +470,13 @@ git fetch origin --tags
 git reset --hard origin/master
 
 git gc
+#+end_src
 
-```
 Loop to fetch 10 commits each time.
 
-## detached head mode
+** detached head mode
 
-``` shell
+#+begin_src sh
 // get the detached head source code
 git clone --depth=1 --branch=5.0.1-release https://github.com/EpicGames/UnrealEngine
 
@@ -479,11 +498,29 @@ git reset --hard origin/release
 git branch --set-upstream-to=origin/release  release
 
 git gc
-```
-see ["Git detached head" is a weird error message to receive...](https://www.cloudbees.com/blog/git-detached-head)
+#+end_src
 
+see [[https://www.cloudbees.com/blog/git-detached-head]["Git detached head" is a weird error message to receive...]]
+#+begin_export html
 
-## git add proxy
-``` shell
- git config --global http.proxy socks5://127.0.0.1:10808
-```
+#+end_export
+
+** git add proxy
+#+begin_src sh
+git config --global http.proxy socks5://127.0.0.1:10808
+#+end_src
+
+** git sparse-checkout
+#+begin_src sh
+## start sparse-checkout
+git sparse-checkout init
+
+## setup info
+git sparse-checkout set "/path/to/folder"
+
+## checkout out part of git project directory only
+git sparse-checkout list
+
+## end sparse-checkout
+git sparse-checkout disable
+#+end_src
