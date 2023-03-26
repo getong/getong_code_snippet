@@ -1,0 +1,159 @@
+* elixir types
+:PROPERTIES:
+:CUSTOM_ID: elixir-types
+:END:
+** keyword list 列表
+:PROPERTIES:
+:CUSTOM_ID: keyword-list-列表
+:END:
+#+begin_example
+$iex
+iex(1)> [ name: "Dave", city: "Dallas", likes: "Programming" ]
+[name: "Dave", city: "Dallas", likes: "Programming"]
+iex(2)> [1, fred: 1, dave: 2]
+[1, {:fred, 1}, {:dave, 2}]
+iex(3)> {1, fred: 1, dave: 2}
+{1, [fred: 1, dave: 2]}
+#+end_example
+
+** map 散列表
+:PROPERTIES:
+:CUSTOM_ID: map-散列表
+:END:
+#+begin_example
+$iex
+iex(1)> %{ "AL" => "Alabama", "WI" => "Wisconsin" }
+%{"AL" => "Alabama", "WI" => "Wisconsin"}
+iex(2)> responses = %{ { :error, :enoent } => :fatal, { :error, :busy } => :retry }
+%{{:error, :busy} => :retry, {:error, :enoent} => :fatal}
+iex(3)> colors = %{ :red => 0xff000, :green => 0x00ff00, :blue => 0x0000ff }
+%{blue: 255, green: 65280, red: 1044480}
+iex(4)> %{"one" => 1, :two => 2, {1,1,1} => 3}
+%{:two => 2, {1, 1, 1} => 3, "one" => 1}
+iex(5)> colors = %{ red: 0xff0000, green: 0x00ff00, blue: 0x0000ff}
+%{blue: 255, green: 65280, red: 16711680}
+#+end_example
+
+** get map values 访问散列表
+:PROPERTIES:
+:CUSTOM_ID: get-map-values-访问散列表
+:END:
+#+begin_example
+$iex
+iex(1)> states = %{"AL" => "Alabama", "WI" => "Wisconsin" }
+%{"AL" => "Alabama", "WI" => "Wisconsin"}
+iex(2)> states["AL"]
+"Alabama"
+iex(3)> state["TX"]
+warning: variable "state" does not exist and is being expanded to "state()", please use parentheses to remove the ambiguity or change the variable name
+iex:3
+** (CompileError) iex:3: undefined function state/0
+(stdlib) lists.erl:1354: :lists.mapfoldl/3
+iex(3)> states["TX"]
+nil
+iex(4)> response_types = %{ { :error, :enoent } => :fatal,
+    ...(4)> {:error, :busy} => :retry}
+%{{:error, :busy} => :retry, {:error, :enoent} => :fatal}
+iex(5)> response_types[{:error, :busy}]
+:retry
+iex(6)>
+nil
+iex(7)>
+nil
+iex(8)>
+nil
+iex(9)> colors = %{ red: 0xff0000, green: 0x00ff00, blue: 0x0000ff }
+%{blue: 255, green: 65280, red: 16711680}
+iex(10)> clors[:red]
+warning: variable "clors" does not exist and is being expanded to "clors()", please use parentheses to remove the ambiguity or change the variable name
+iex:10
+
+** (CompileError) iex:10: undefined function clors/0
+(stdlib) lists.erl:1354: :lists.mapfoldl/3
+iex(10)> colors[:red]
+16711680
+iex(11)> colors.green
+65280
+#+end_example
+
+** 更新散列表
+:PROPERTIES:
+:CUSTOM_ID: 更新散列表
+:END:
+#+begin_example
+new_map = %{old_map | key => value , ...}
+#+end_example
+
+example
+
+#+begin_example
+iex > m = %{ a: 1, b: 2, c: 3}
+iex > m1 = %{m | b: "two", c: "three" }
+iex > m2 = %{m1 | a: "one"}
+#+end_example
+
+** 散列表增加新元素
+:PROPERTIES:
+:CUSTOM_ID: 散列表增加新元素
+:END:
+#+begin_example
+Dict.put_new/3
+#+end_example
+
+* 字符串
+:PROPERTIES:
+:CUSTOM_ID: 字符串
+:END:
+#+begin_example
+iex> is_binary("abc")
+true
+#+end_example
+
+* 原子
+:PROPERTIES:
+:CUSTOM_ID: 原子
+:END:
+#+begin_example
+iex> is_atom(Module)
+true
+#+end_example
+
+** boolean
+:PROPERTIES:
+:CUSTOM_ID: boolean
+:END:
+true, false, nil.
+
+** binary match
+:PROPERTIES:
+:CUSTOM_ID: binary-match
+:END:
+#+begin_src elixir
+iex(1)> << sign::size(1), exp::size(11), mantissa::size(52) >> = << 3.14159::float>>
+iex(2)> ( 1 + mantissa / :math.pow(2, 52)) * :math.pow(2, exp-1023)
+#+end_src
+
+the erlang code is just like this:
+
+#+begin_src erlang
+erl
+1> << Sign:1, Exp:11, Matissa:52 >> = << 3.14159/float >>.
+2> ( 1 + Matissa / math:pow(2, 52)) * math:pow(2, Exp-1023).
+#+end_src
+
+** binary and list
+:PROPERTIES:
+:CUSTOM_ID: binary-and-list
+:END:
+list to string
+
+#+begin_src elixir
+[130, 161, 98, 1, 161, 97, 1] |> Enum.map_join(",", fn v -> to_string(v) end)
+"130,161,98,1,161,97,1"
+#+end_src
+
+string to list
+
+#+begin_src elixir
+"130,161,98,1,161,97,1" |> String.split(",") |> Enum.map(&String.to_integer/1)
+#+end_src

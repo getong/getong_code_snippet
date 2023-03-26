@@ -1,0 +1,13 @@
+* hhkb key type and install
+:PROPERTIES:
+:CUSTOM_ID: hhkb-key-type-and-install
+:END:
+** key type
+:PROPERTIES:
+:CUSTOM_ID: key-type
+:END:
+see
+[[https://www.bilibili.com/read/cv12686863][HHKB无刻键帽清洁后如何装回]]
+
+also see
+[[https://i0.hdslb.com/bfs/article/f686b3374e532d8ca5df4530e3ac4ce809d200cb.png@858w_410h_progressive.webp]]

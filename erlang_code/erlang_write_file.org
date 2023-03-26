@@ -1,0 +1,110 @@
+* erlang write file
+:PROPERTIES:
+:CUSTOM_ID: erlang-write-file
+:END:
+** write file function:
+:PROPERTIES:
+:CUSTOM_ID: write-file-function
+:END:
+#+begin_src erlang
+{messages, List} = erlang:process_info(Pid, messages).
+file:write_file("message1.txt", lists:foldl(fun(E, A) -> [io_lib:fwrite("~w~n",[E])|A]  end, io_lib:fwrite("~w~n", [hd(List)]), tl(List)), [append]).
+#+end_src
+
+Change the =~p= to =~w=, write one term in one line. The =~p= will write
+one term in many lines but pretty prints.
+
+** get the first few nubers of a line
+:PROPERTIES:
+:CUSTOM_ID: get-the-first-few-nubers-of-a-line
+:END:
+#+begin_src shell
+sed  's/\(.\{20\}\).*/\1/' msg.txt
+#+end_src
+
+Change the =20= to be the number of characters of you wanted.
+
+** send file
+:PROPERTIES:
+:CUSTOM_ID: send-file
+:END:
+tcp send file, very simple, just call the function.
+
+#+begin_src erlang
+file:sendfile(Filename, Socket)
+file:sendfile(RawFile, Socket, Offset, Bytes, Opts)
+#+end_src
+
+ssl send file, only send some bytes data, must read the file and send
+the reading result through the socket.
+
+#+begin_src erlang
+ssl:send(Socket, Data)
+#+end_src
+
+** check is file
+:PROPERTIES:
+:CUSTOM_ID: check-is-file
+:END:
+#+begin_src erlang
+is_file(Name) ->
+    case filelib:is_file(Name) of
+    true ->
+        not filelib:is_dir(Name);
+    false ->
+        false
+    end.
+#+end_src
+
+copy from pp_record.erl
+
+** datasync before close file
+:PROPERTIES:
+:CUSTOM_ID: datasync-before-close-file
+:END:
+#+begin_src erlang
+_ = file:datasync(FD),
+_ = file:close(FD),
+copy from lager_file_backend.erl```
+
+## inode
+
+``` erlang
+-include_lib("kernel/include/file.hrl").
+case file:read_file_info(Name) of
+    {ok, FInfo} ->
+        Inode = FInfo#file_info.inode,
+#+end_src
+
+copy from lager_rotator_default.erl
+
+** format_error
+:PROPERTIES:
+:CUSTOM_ID: format_error
+:END:
+There are the same =format_error= function in module =file= and =io=.
+
+#+begin_src erlang
+%% io:format_error/1
+For a specified error returned by any function in this module, this function returns a descriptive string of the error in English. For file errors, function file:format_error (Posix) is to be called.
+
+%% file:format_error/1
+Given the error returned by any function in this module, this function returns a descriptive string of the error in English. For file errors, function format_error/1 in module file is called.
+#+end_src
+
+They are almost the same.
+
+** symlink
+:PROPERTIES:
+:CUSTOM_ID: symlink
+:END:
+#+begin_src erlang
+-include_lib("kernel/include/file.hrl").
+is_symlink(Filename) ->
+    {ok, Info} = file:read_link_info(FileName),
+    Info#file_info.type == symlink.
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/39002380/way-to-check-if-directory-is-a-symlink-via-erlang][Way
+to check if directory is a symlink via erlang]]

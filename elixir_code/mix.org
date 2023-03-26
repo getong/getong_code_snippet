@@ -1,0 +1,100 @@
+* mix
+:PROPERTIES:
+:CUSTOM_ID: mix
+:END:
+** mix commands
+:PROPERTIES:
+:CUSTOM_ID: mix-commands
+:END:
+#+begin_example
+mix new project_name
+mix new —sup project_name
+mix deps.get
+mix compile
+mix format
+mix format filename
+mix release
+mix local.hex
+mix local.rebar
+mix clean
+mix deps.update --all
+mix run -e "Lib.fun()"
+## umbrella project, then cd apps and create other elixie project
+mix new --umbrella project
+# mix release
+
+## search the packages about react
+mix hex.search react
+
+mix hex.repo list
+mix hex.repo set hexpm --url https://hexpm.upyun.com
+
+mix hex.outdated
+#+end_example
+
+** add erl_otps
+:PROPERTIES:
+:CUSTOM_ID: add-erl_otps
+:END:
+#+begin_example
+def project do
+  [...,
+  erlc_options:  [:no_debug_info, {:i, 'myinclude'}],
+  ...]
+end
+#+end_example
+
+copy from [[https://github.com/elixir-lang/elixir/issues/2665][Allow mix
+to pass compiler options to erlang]] and compile like below:
+
+#+begin_src shell
+mix deps.get
+MIX_ENV=prod mix compile --no-debug-info
+MIX_ENV=prod mix release
+#+end_src
+
+** elixir 1.9, the Config module has moved to elixir.
+:PROPERTIES:
+:CUSTOM_ID: elixir-1.9-the-config-module-has-moved-to-elixir.
+:END:
+the before
+
+#+begin_src elixir
+use Mix.Config
+#+end_src
+
+and now
+
+#+begin_src elixir
+import Config
+#+end_src
+
+see [[https://hexdocs.pm/elixir/Config.html][Config]]
+
+** elixirc_options
+:PROPERTIES:
+:CUSTOM_ID: elixirc_options
+:END:
+#+begin_src elixir
+# in the mix.exs
+def project do
+[
+...
+erlc_options: [{:parse_transform, :lager_transform}, :warn_missing_spec, :warnings_as_errors],
+elixirc_options: [warnings_as_errors: true]
+...
+]
+end
+#+end_src
+
+** erlang 23 set unsafe_https
+:PROPERTIES:
+:CUSTOM_ID: erlang-23-set-unsafe_https
+:END:
+#+begin_src shell
+mix hex.config unsafe_https true
+#+end_src
+
+copy from
+[[https://elixirforum.com/t/instll-phx-new-1-5-1-and-possible-ssl-issue/31015][Instll
+phx_new 1.5.1 and possible ssl issue]]

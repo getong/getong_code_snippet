@@ -1,0 +1,7 @@
+* 输出命令到文件
+:PROPERTIES:
+:CUSTOM_ID: 输出命令到文件
+:END:
+#+begin_example
+mysql -h host -u user -p database -P port -e "sql_cmd"  > filename
+#+end_example

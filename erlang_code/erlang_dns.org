@@ -1,0 +1,21 @@
+* install the nscd service, to enable the dns services
+:PROPERTIES:
+:CUSTOM_ID: install-the-nscd-service-to-enable-the-dns-services
+:END:
+** in the centos 6.x
+:PROPERTIES:
+:CUSTOM_ID: in-the-centos-6.x
+:END:
+#+begin_example
+yum install nscd -y
+service nscd start
+chkconfig nscd on
+#+end_example
+
+** in the debian alike system
+:PROPERTIES:
+:CUSTOM_ID: in-the-debian-alike-system
+:END:
+#+begin_example
+apt-get install -y nscd
+#+end_example

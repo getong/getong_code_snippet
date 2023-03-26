@@ -1,0 +1,56 @@
+* podman
+:PROPERTIES:
+:CUSTOM_ID: podman
+:END:
+** generante kube
+:PROPERTIES:
+:CUSTOM_ID: generante-kube
+:END:
+#+begin_example
+podman generate kube
+#+end_example
+
+copy from
+[[https://acloudguru.com/hands-on-labs/exploring-podman-and-kubernetes-interoperability-on-rhel][Exploring
+Podman and Kubernetes Interoperability on RHEL]]
+
+or also
+
+#+begin_example
+sudo podman run -dt -p 8000:80 --name demo quay.io/libpod/alpine_nginx:latest
+
+sudo podman ps
+ sudo podman generate kube demo  > demo.yml
+
+ sudo kubectl create -f demo.yml
+
+ sudo kubectl get pods
+
+ sudo podman pod ps
+#+end_example
+
+copy from
+[[https://developers.redhat.com/blog/2019/01/29/podman-kubernetes-yaml#][Podman
+can now ease the transition to Kubernetes and CRI-O]]
+
+** change user storage path
+:PROPERTIES:
+:CUSTOM_ID: change-user-storage-path
+:END:
+#+begin_src shell
+sudo mkdir /backup/backup/podman_images
+sudo chown $USER:$USER /backup/backup/podman_images
+mkdir -p ~/.config/containers/
+cp /etc/containers/storage.conf ~/.config/containers/storage.conf
+vim ~/.config/containers/storage.conf
+--------------
+[storage]
+
+driver = "overlay"
+runroot = "/backup/backup/podman_images"
+graphroot = "/backup/backup/podman_images"
+rootless_storage_path = "/backup/backup/podman_images"
+#+end_src
+
+copy from [[https://github.com/containers/podman/issues/1916][set podman
+image storage location]]

@@ -1,0 +1,93 @@
+* php installation
+:PROPERTIES:
+:CUSTOM_ID: php-installation
+:END:
+** install nginx and php in centos 7
+:PROPERTIES:
+:CUSTOM_ID: install-nginx-and-php-in-centos-7
+:END:
+set nginx repo
+
+#+begin_src shell
+vim /etc/yum.repos.d/nginx.repo
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+#+end_src
+
+install nginx
+
+#+begin_src shell
+yum install nginx
+systemctl start nginx
+systemctl enable nginx
+#+end_src
+
+configure a website
+
+#+begin_src shell
+vim/etc/nginx/conf.d/www.baidu.com.conf
+
+server {
+    listen  80;
+    server_name  www.baidu.com baidu.com;
+        root    /home/baidu;
+        index index.html index.htm index.php;
+
+        location ~ .php$ {
+        try_files $uri =404;
+        root /home/baidu;
+        # fastcgi_pass 127.0.0.1:9000;
+       # 若使用file socket則改成下面这行
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+#+end_src
+
+install php
+
+#+begin_src shell
+yum install php php-ctype php-json php-openssl php-nette-tokenizer \
+    php-pecl-zip php-pdo php-mbstring php-xml php-mysql php-fpm
+#+end_src
+
+configure php files:
+
+#+begin_src shell
+vim /etc/php.ini
+cgi.fix_pathinfo=0
+
+vim /etc/php-fpm.d/www.conf
+user = nginx
+group = nginx
+
+listen.owner = nginx
+listen.group = nginx
+listen.mode = 0666
+listen = /var/run/php-fpm/php-fpm.sock
+
+systemctl enable php-fpm
+systemctl start php-fpm
+#+end_src
+
+copy from [[https://zhuanlan.zhihu.com/p/121746437][CentOS
+7上安装并配置Nginx、PHP、MySql]] also see
+[[https://ivanagyro.medium.com/%E6%96%BCcentos7%E5%AE%89%E8%A3%9D-nginx-php7-php-fpm-laravel5-6-df8631681acf][於CentOS7安裝
+Nginx + php7 + php-fpm + Laravel5.6]] also see
+[[https://www.cnblogs.com/ryanzheng/p/11263261.html][CentOS 7 配置 nginx
+php-fpm 详细教程]]

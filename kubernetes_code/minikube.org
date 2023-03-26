@@ -1,0 +1,287 @@
+* minikube
+:PROPERTIES:
+:CUSTOM_ID: minikube
+:END:
+copy from
+[[https://kubernetes.io/zh/docs/tutorials/hello-minikube/][你好，Minikube]]
+
+** 启动 Minikube 并创建一个集群：
+:PROPERTIES:
+:CUSTOM_ID: 启动-minikube-并创建一个集群
+:END:
+#+begin_src shell
+minikube start
+#+end_src
+
+** 创建 Deployment
+:PROPERTIES:
+:CUSTOM_ID: 创建-deployment
+:END:
+Kubernetes Pod 是由一个或多个 为了管理和联网而绑定在一起的容器构成的组。
+本教程中的 Pod 只有一个容器。 Kubernetes Deployment 检查 Pod
+的健康状况，并在 Pod 中的容器终止的情况下重新启动新的容器。 Deployment
+是管理 Pod 创建和扩展的推荐方法。
+
+*** 使用 kubectl create 命令创建管理 Pod 的 Deployment。该 Pod 根据提供的 Docker 镜像运行 Container。
+:PROPERTIES:
+:CUSTOM_ID: 使用-kubectl-create-命令创建管理-pod-的-deployment该-pod-根据提供的-docker-镜像运行-container
+:END:
+#+begin_src shell
+kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+#+end_src
+
+*** 查看 Deployment：
+:PROPERTIES:
+:CUSTOM_ID: 查看-deployment
+:END:
+#+begin_src shell
+$ kubectl get deployments
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+hello-node   1/1     1            1           1m
+#+end_src
+
+*** 查看 Pod：
+:PROPERTIES:
+:CUSTOM_ID: 查看-pod
+:END:
+#+begin_src shell
+$ kubectl get pods
+NAME                          READY     STATUS    RESTARTS   AGE
+hello-node-5f76cf6ccf-br9b5   1/1       Running   0          1m
+#+end_src
+
+*** 查看集群事件：
+:PROPERTIES:
+:CUSTOM_ID: 查看集群事件
+:END:
+#+begin_src shell
+kubectl get events
+#+end_src
+
+*** 查看 kubectl 配置：
+:PROPERTIES:
+:CUSTOM_ID: 查看-kubectl-配置
+:END:
+#+begin_src shell
+kubectl config view
+#+end_src
+
+*** hello-minikube发布为服务以连接到部署：
+:PROPERTIES:
+:CUSTOM_ID: hello-minikube发布为服务以连接到部署
+:END:
+#+begin_src shell
+kubectl expose deployment hello-minikube --type=NodePort --port=8080
+#+end_src
+
+*** hello-minikubePod 已经开始启动，但您需要等待 Pod 完成启动，然后才能通过已发布的 Service 进行连接。
+:PROPERTIES:
+:CUSTOM_ID: hello-minikubepod-已经开始启动但您需要等待-pod-完成启动然后才能通过已发布的-service-进行连接
+:END:
+检查 pod 是否正在运行：
+
+#+begin_src shell
+kubectl get pod
+#+end_src
+
+=STATUS= 在=ContainerCreating= 显示的情况下，Pod 仍在构建中：
+
+#+begin_example
+hello-minikube-3383150820-vctvh   0/1       ContainerCreating   0          3s
+#+end_example
+
+=STATUS= 如果Running显示 ，则 pod 已启动并正在运行：
+
+#+begin_example
+NAME                              READY     STATUS    RESTARTS   AGE
+hello-minikube-3383150820-vctvh   1/1       Running   0          13s
+#+end_example
+
+*** 获取发布的Service的URL，查看Service的详细信息：
+:PROPERTIES:
+:CUSTOM_ID: 获取发布的service的url查看service的详细信息
+:END:
+#+begin_src shell
+minikube service hello-minikube --url
+#+end_src
+
+*** hello-minikube删除服务：
+:PROPERTIES:
+:CUSTOM_ID: hello-minikube删除服务
+:END:
+#+begin_src shell
+$ kubectl delete services hello-minikube
+service "hello-minikube" deleted
+#+end_src
+
+*** hello-minikube删除部署：
+:PROPERTIES:
+:CUSTOM_ID: hello-minikube删除部署
+:END:
+#+begin_src shell
+$ kubectl delete deployment hello-minikube
+deployment.extensions "hello-minikube" deleted
+#+end_src
+
+*** 删除本地 Minikube 集群：
+:PROPERTIES:
+:CUSTOM_ID: 删除本地-minikube-集群
+:END:
+#+begin_src shell
+$ minikube delete
+Deleting "minikube" ...
+The "minikube" cluster has been deleted.
+#+end_src
+
+** 创建 Service
+:PROPERTIES:
+:CUSTOM_ID: 创建-service
+:END:
+默认情况下，Pod 只能通过 Kubernetes 集群中的内部 IP 地址访问。 要使得
+hello-node 容器可以从 Kubernetes 虚拟网络的外部访问，你必须将 Pod 暴露为
+Kubernetes Service。
+
+*** 使用 kubectl expose 命令将 Pod 暴露给公网：
+:PROPERTIES:
+:CUSTOM_ID: 使用-kubectl-expose-命令将-pod-暴露给公网
+:END:
+#+begin_src shell
+kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+#+end_src
+
+这里的 --type=LoadBalancer 参数表明你希望将你的 Service 暴露到集群外部。
+
+镜像 k8s.gcr.io/echoserver 中的应用程序代码仅监听 TCP 8080 端口。
+如果你用 kubectl expose 暴露了其它的端口，客户端将不能访问其它端口。
+
+*** 查看你创建的 Service：
+:PROPERTIES:
+:CUSTOM_ID: 查看你创建的-service
+:END:
+#+begin_src shell
+$ kubectl get services
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+hello-node   LoadBalancer   10.108.144.78   <pending>     8080:30369/TCP   21s
+kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP          23m
+#+end_src
+
+*** 运行下面的命令：
+:PROPERTIES:
+:CUSTOM_ID: 运行下面的命令
+:END:
+#+begin_src shell
+minikube service hello-node
+#+end_src
+
+** 启用插件
+:PROPERTIES:
+:CUSTOM_ID: 启用插件
+:END:
+*** 列出当前支持的插件：
+:PROPERTIES:
+:CUSTOM_ID: 列出当前支持的插件
+:END:
+#+begin_src shell
+$ minikube addons list
+|-----------------------------|----------|--------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |
+|-----------------------------|----------|--------------|
+| ambassador                  | minikube | disabled     |
+| auto-pause                  | minikube | disabled     |
+| csi-hostpath-driver         | minikube | disabled     |
+| dashboard                   | minikube | disabled     |
+| default-storageclass        | minikube | enabled ✅   |
+| efk                         | minikube | disabled     |
+| freshpod                    | minikube | disabled     |
+| gcp-auth                    | minikube | disabled     |
+| gvisor                      | minikube | disabled     |
+| helm-tiller                 | minikube | disabled     |
+| ingress                     | minikube | disabled     |
+| ingress-dns                 | minikube | disabled     |
+| istio                       | minikube | disabled     |
+| istio-provisioner           | minikube | disabled     |
+| kubevirt                    | minikube | disabled     |
+| logviewer                   | minikube | disabled     |
+| metallb                     | minikube | disabled     |
+| metrics-server              | minikube | disabled     |
+| nvidia-driver-installer     | minikube | disabled     |
+| nvidia-gpu-device-plugin    | minikube | disabled     |
+| olm                         | minikube | disabled     |
+| pod-security-policy         | minikube | disabled     |
+| registry                    | minikube | disabled     |
+| registry-aliases            | minikube | disabled     |
+| registry-creds              | minikube | disabled     |
+| storage-provisioner         | minikube | enabled ✅   |
+| storage-provisioner-gluster | minikube | disabled     |
+| volumesnapshots             | minikube | disabled     |
+|-----------------------------|----------|--------------|
+#+end_src
+
+*** 启用插件，例如 metrics-server：
+:PROPERTIES:
+:CUSTOM_ID: 启用插件例如-metrics-server
+:END:
+#+begin_src shell
+minikube addons enable metrics-server
+#+end_src
+
+*** 查看创建的 Pod 和 Service：
+:PROPERTIES:
+:CUSTOM_ID: 查看创建的-pod-和-service
+:END:
+#+begin_src shell
+$ kubectl get pod,svc -n kube-system
+NAME                                   READY   STATUS             RESTARTS   AGE
+pod/coredns-7f89b7bc75-6zrz8           0/1     Running            0          173m
+pod/etcd-minikube                      1/1     Running            0          173m
+pod/kube-apiserver-minikube            1/1     Running            0          173m
+pod/kube-controller-manager-minikube   1/1     Running            0          173m
+pod/kube-proxy-vgt6j                   0/1     CrashLoopBackOff   38         173m
+pod/kube-scheduler-minikube            1/1     Running            0          173m
+pod/storage-provisioner                0/1     CrashLoopBackOff   38         173m
+
+NAME               TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
+service/kube-dns   ClusterIP   10.96.0.10   <none>        53/UDP,53/TCP,9153/TCP   173m
+#+end_src
+
+*** 禁用 metrics-server：
+:PROPERTIES:
+:CUSTOM_ID: 禁用-metrics-server
+:END:
+#+begin_src shell
+$ minikube addons disable metrics-server
+metrics-server was successfully disabled
+#+end_src
+
+** 清理
+:PROPERTIES:
+:CUSTOM_ID: 清理
+:END:
+现在可以清理你在集群中创建的资源：
+
+#+begin_src shell
+kubectl delete service hello-node
+kubectl delete deployment hello-node
+#+end_src
+
+可选地，停止 Minikube 虚拟机（VM）：
+
+#+begin_src shell
+minikube stop
+#+end_src
+
+可选地，删除 Minikube 虚拟机（VM）：
+
+#+begin_src shell
+minikube delete
+#+end_src
+
+** image
+:PROPERTIES:
+:CUSTOM_ID: image
+:END:
+#+begin_src shell
+minikube image load image_name
+
+minikube image list
+#+end_src

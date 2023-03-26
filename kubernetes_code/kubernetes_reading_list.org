@@ -1,0 +1,12 @@
+* kubernetes reading list
+:PROPERTIES:
+:CUSTOM_ID: kubernetes-reading-list
+:END:
+[[https://www.infoq.cn/article/vpNYQNQQWVjraH6OIyuF][Airbnb 如何实现
+Kubernetes 集群动态扩展]]
+[[https://www.linkedin.com/pulse/setting-up-kubernetes-cluster-arch-linux-kaushik-gangopadhyay?trk=read_related_article-card_title][Setting
+up Kubernetes Cluster on Arch Linux]]
+[[https://devopscube.com/setup-kubernetes-cluster-kubeadm/][How To Setup
+Kubernetes Cluster Using Kubeadm]]
+[[https://github.com/scriptcamp/vagrant-kubeadm-kubernetes][vagrant-kubeadm-kubernetes]]
+[[https://github.com/alvistack/vagrant-kubernetes][vagrant-kubernetes]]

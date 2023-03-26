@@ -1,0 +1,280 @@
+* compile erlang
+:PROPERTIES:
+:CUSTOM_ID: compile-erlang
+:END:
+** kerl
+:PROPERTIES:
+:CUSTOM_ID: kerl
+:END:
+[[https://github.com/kerl/kerl][kerl]]
+
+#+begin_src shell
+export KERL_BUILD_BACKEND=git
+export OTP_GITHUB_URL=“https://github.com/erlang/otp”
+kerl update releases
+kerl list releases
+KERL_BUILD_DOCS=yes kerl build 19.3.2 19.3.2
+kerl install 19.3.2 ~/kerl/19.3.2
+source ~/kerl/19.3.2/activate
+#+end_src
+
+** in linux, compile from source
+:PROPERTIES:
+:CUSTOM_ID: in-linux-compile-from-source
+:END:
+#+begin_src shell
+export VERSION=23.0.2
+wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
+tar xzf OTP-$VERSION.tar.gz
+cd otp-OTP-$VERSION
+export ERL_TOP=$PWD
+export PATH=$ERL_TOP/bin:$PATH
+
+./otp_build autoconf
+
+./configure --prefix=/usr/local/otp_src_$VERSION
+make clean
+#using all cores of a cpu
+make -j`nproc` && make -j`nproc` tests
+
+export LANG=en
+make -j`nproc` docs
+
+sudo make install && sudo make install-docs
+#+end_src
+
+** in macosx, compile from source
+:PROPERTIES:
+:CUSTOM_ID: in-macosx-compile-from-source
+:END:
+#+begin_src shell
+brew install fop openssl unixodbc wxmac
+export VERSION=22.3.3
+wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
+tar xzf OTP-$VERSION.tar.gz
+cd otp-OTP-$VERSION
+export ERL_TOP=$PWD
+export PATH=$ERL_TOP/bin:$PATH
+
+./otp_build autoconf
+
+./configure --prefix=/usr/local/opt/otp_src_$VERSION --with-ssl=`brew --prefix openssl`
+make clean
+#using all cores of a cpu
+make -j`nproc` && make -j`nproc` tests
+
+export LANG=en
+make -j`nproc` docs
+
+make install && make install-docs
+#+end_src
+
+** in macosx, compile from source some old version
+:PROPERTIES:
+:CUSTOM_ID: in-macosx-compile-from-source-some-old-version
+:END:
+#+begin_src shell
+wget -c https://www.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz
+tar xzf openssl-1.0.2u.tar.gz
+./Configure --prefix=/usr/local/opt/openssl-1.0.2u shared -fPIC darwin64-x86_64-cc
+make
+make test
+make install
+
+export CPPFLAGS=-I/usr/local/opt/openssl-1.0.2u/include
+export LDFLAGS=-L/usr/local/opt/openssl-1.0.2u/lib
+export VERSION=18.3.4.11
+wget -c https://github.com/erlang/otp/archive/OTP-$VERSION.tar.gz
+tar xzf OTP-$VERSION.tar.gz
+cd otp-OTP-$VERSION
+export ERL_TOP=$PWD
+export PATH=$ERL_TOP/bin:$PATH
+
+./otp_build autoconf
+
+./configure --prefix=/usr/local/opt/otp_src_$VERSION --with-ssl=/usr/local/opt/openssl-1.0.2u/ --without-wx
+make clean
+#using all cores of a cpu
+make -j`nproc` && make -j`nproc` tests
+
+export LANG=en
+make -j`nproc` docs
+
+make install && make install-docs
+#+end_src
+
+** g++: internal compiler error: Killed (program cc1plus)
+:PROPERTIES:
+:CUSTOM_ID: g-internal-compiler-error-killed-program-cc1plus
+:END:
+The main reason is the memory is not enough, use the swap file to solve
+it.
+
+#+begin_src shell
+sudo dd if=/dev/zero of=/swapfile bs=64M count=16
+sudo mkswap /swapfile
+sudo swapon /swapfile
+#+end_src
+
+Then compile the erlang source, and after compiled it, stop the swap
+file.
+
+#+begin_src shell
+sudo swapoff /swapfile
+sudo rm /swapfile
+#+end_src
+
+** install the deps
+:PROPERTIES:
+:CUSTOM_ID: install-the-deps
+:END:
+debian jessie
+
+#+begin_src shell
+aptitude install autoconf libncurses-dev build-essential \
+    libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
+    libglu1-mesa-dev libpng3 default-jdk g++ libxml2-utils
+
+apt-get build-dep erlang
+#+end_src
+
+debian stretch
+
+#+begin_src shell
+sudo apt-get build-dep -y erlang
+sudo apt-get install -y autoconf libncurses5-dev build-essential \
+    libssl-dev libwxgtk3.0-dev libgl1-mesa-dev \
+    libglu1-mesa-dev libpng12-dev default-jdk g++ libxml2-utils
+#+end_src
+
+debian buster install libgail-common libcanberra-gtk-module for erlang
+observer module
+
+#+begin_src shell
+sudo apt install -y libgail-common libcanberra-gtk-module
+#+end_src
+
+centos
+
+#+begin_src shell
+yum groupinstall -y “Development Tools”
+yum install -y openssl-devel unixODBC-devel ncurses-devel libxslt fop java-1.8.0-openjdk-devel tk
+#+end_src
+
+** erlang-rpm project
+:PROPERTIES:
+:CUSTOM_ID: erlang-rpm-project
+:END:
+There is a project for to package erlang install rpm in centos, it is
+made by RabbitMQ. See
+[[https://github.com/rabbitmq/erlang-rpm][erlang-rpm]] With some patches
+in its script.
+
+Something releated: [[https://gist.github.com/RJ/2284940][Use ESL erlang
+deb, provide fake erlang-nox package so deps behave]]
+[[https://blog.eriksen.com.br/en/how-install-rabbitmq-latest-erlang-release-debian][How
+to install RabbitMQ with the latest Erlang release on Debian]]
+
+** centos 7 compile erlang
+:PROPERTIES:
+:CUSTOM_ID: centos-7-compile-erlang
+:END:
+Enable EPEL repo in CentOS 7
+
+#+begin_src shell
+$ sudo yum install epel-release
+$ sudo sed -e 's!^metalink=!#metalink=!g' \
+    -e 's!^#baseurl=!baseurl=!g' \
+    -e 's!//download\.fedoraproject\.org/pub!//mirrors.tuna.tsinghua.edu.cn!g' \
+    -e 's!//download\.example/pub!//mirrors.tuna.tsinghua.edu.cn!g' \
+    -e 's!http://mirrors!https://mirrors!g' \
+    -i /etc/yum.repos.d/epel*.repo
+#+end_src
+
+See
+[[https://support.rackspace.com/how-to/install-epel-and-additional-repositories-on-centos-and-red-hat/][Install
+EPEL, IUS, and Remi repositories on CentOS and Red Hat]]
+
+install the wxdiget from elpa
+
+#+begin_src shell
+$ sudo yum install wxGTK3 wxGTK3-devel
+$ sudo yum install -y centos-release-scl
+$ sudo yum install -y devtoolset-7
+$ wget -c https://github.com/erlang/otp/archive/refs/tags/OTP-24.3.tar.gz
+$ tar xzf OTP-24.3.tar.gz
+
+$ cd otp-OTP-24.3
+
+$ scl enable devtoolset-7 bash
+$ ./configure --prefix=/usr/local/otp-24.3 --enable-jit --with-wx-config=/usr/bin/wx-config-3.0
+$ make && sudo make install
+#+end_src
+
+#+begin_quote
+wx* packages have never been part of CentOS base/updates. They are in
+EPEL. See
+[[https://www.centos.org/forums/viewtopic.php?t=50620][wxBase/wxGTK/wxGTK-gl
+packages in centos 7 repos?]]
+
+#+end_quote
+
+also see
+[[https://centos.pkgs.org/7/epel-x86_64/wxGTK3-3.0.4-1.el7.x86_64.rpm.html][wxGTK3]]
+
+** erlang centos china mirror
+:PROPERTIES:
+:CUSTOM_ID: erlang-centos-china-mirror
+:END:
+See [[http://www.jianshu.com/p/27197d58e94c][使用国内源安装erlang]]
+
+#+begin_src shell
+# wget https://packages.erlang-solutions.com/erlang-solutions-2.0-1.noarch.rpm
+# rpm -Uvh erlang-solutions-2.0-1.noarch.rpm
+#+end_src
+
+Edit /etc/yum.repos.d/erlang_solutions.repo centos 6
+
+#+begin_src shell
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/erlang-solutions/centos/6/
+#+end_src
+
+centos 7
+
+#+begin_src shell
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/erlang-solutions/centos/7/
+#+end_src
+
+** compile erlang from source using self compiled openssl
+:PROPERTIES:
+:CUSTOM_ID: compile-erlang-from-source-using-self-compiled-openssl
+:END:
+see
+[[https://stackoverflow.com/questions/6618233/openssl-error-building-erlang-otp-from-source][OpenSSL
+error building Erlang OTP from source]]
+
+compile openssl
+
+#+begin_src shell
+$ tar xzf openssl-1.0.2l.tar.gz
+$ cd openssl-1.0.2l
+$ sh config shared -fPIC --prefix=/usr/local/openssl-1.0.2l
+$ make
+$ make test
+$ sudo make install
+#+end_src
+
+compile erlang using compiled openssl
+
+#+begin_src shell
+./configure --with-ssl=/usr/local/openssl-1.0.2l
+#+end_src
+
+** compile on archlinux
+:PROPERTIES:
+:CUSTOM_ID: compile-on-archlinux
+:END:
+#+begin_src shell
+sudo pacman -S fop git glu java-environment libxslt lksctp-tools mesa perl unixodbc wxgtk3
+./configure --with-wx-config=/usr/bin/wx-config-gtk3
+#+end_src

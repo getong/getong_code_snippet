@@ -1,0 +1,78 @@
+* mongodb concept
+:PROPERTIES:
+:CUSTOM_ID: mongodb-concept
+:END:
+** 文档是MongoDB中数据的基本单元， 非常类似于关系型数据库管理系统中的行， 但更有表现力。
+:PROPERTIES:
+:CUSTOM_ID: 文档是mongodb中数据的基本单元-非常类似于关系型数据库管理系统中的行-但更有表现力
+:END:
+** 类似地，集合(collection)可以看作是一个拥有动态模式(dynamic schema)的表。
+:PROPERTIES:
+:CUSTOM_ID: 类似地集合collection可以看作是一个拥有动态模式dynamic-schema的表
+:END:
+** MongoDB的一个实例可以拥有多个相互独立的数据库(database), 每一个数据库都拥有自己的集合。
+:PROPERTIES:
+:CUSTOM_ID: mongodb的一个实例可以拥有多个相互独立的数据库database-每一个数据库都拥有自己的集合
+:END:
+** 每一个文档都有一个特殊的键”_id”, 这个键在文档所属的集合中是唯一的。
+:PROPERTIES:
+:CUSTOM_ID: 每一个文档都有一个特殊的键_id-这个键在文档所属的集合中是唯一的
+:END:
+** 对应函数
+:PROPERTIES:
+:CUSTOM_ID: 对应函数
+:END:
+| 辅助函数         | 等价函数                |
+|------------------+-------------------------|
+| use foo          | db.getSisterDB("foo")   |
+| show dbs         | db.getMongo().getDBs()  |
+| show collections | db.getCollectionNames() |
+
+** explain
+:PROPERTIES:
+:CUSTOM_ID: explain
+:END:
+#+begin_example
+db.foo.find({"$or": [{"x : 123"}, {"y": 456}]}).explain()
+#+end_example
+
+** createUser
+:PROPERTIES:
+:CUSTOM_ID: createuser
+:END:
+管理员必须为用户创建这两个角色中的一个： userAdminAnyDatabase 或
+userAdmin
+
+#+begin_src shell
+db.createUser({user: "AdminUser", pwd: "password", roles: ["userAdminAnyDatabase"]})
+#+end_src
+
+** auth
+:PROPERTIES:
+:CUSTOM_ID: auth
+:END:
+#+begin_src shell
+use admin
+db.auth("AdminUser", "password")
+#+end_src
+
+** describe a collection
+:PROPERTIES:
+:CUSTOM_ID: describe-a-collection
+:END:
+#+begin_src shell
+var col_list= db.table.findOne();
+for (var col in col_list) { print (col) ; }
+#+end_src
+
+see
+[[https://stackoverflow.com/questions/6336973/how-do-i-describe-a-collection-in-mongo][How
+do I describe a collection in Mongo?]]
+
+** remove
+:PROPERTIES:
+:CUSTOM_ID: remove
+:END:
+#+begin_src shell
+db.test.remove({_id:{$lt:10}})
+#+end_src

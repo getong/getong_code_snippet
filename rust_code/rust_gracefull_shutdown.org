@@ -1,0 +1,166 @@
+* rust shutdown gracefully
+:PROPERTIES:
+:CUSTOM_ID: rust-shutdown-gracefully
+:END:
+** mini-redis
+:PROPERTIES:
+:CUSTOM_ID: mini-redis
+:END:
+mini-redis uses =tokio::signal= to shutdown gracefully
+
+#+begin_src rust
+// bin/server.rs
+se mini_redis::{server, DEFAULT_PORT};
+
+use structopt::StructOpt;
+use tokio::net::TcpListener;
+use tokio::signal;
+
+#[tokio::main]
+pub async fn main() -> mini_redis::Result<()> {
+    // enable logging
+    // see https://docs.rs/tracing for more info
+    tracing_subscriber::fmt::try_init()?;
+
+    let cli = Cli::from_args();
+    let port = cli.port.as_deref().unwrap_or(DEFAULT_PORT);
+
+    // Bind a TCP listener
+    let listener = TcpListener::bind(&format!("127.0.0.1:{}", port)).await?;
+
+    server::run(listener, signal::ctrl_c()).await
+}
+
+
+// server.rs
+pub async fn run(listener: TcpListener, shutdown: impl Future) -> crate::Result<()> {
+    // When the provided `shutdown` future completes, we must send a shutdown
+    // message to all active connections. We use a broadcast channel for this
+    // purpose. The call below ignores the receiver of the broadcast pair, and when
+    // a receiver is needed, the subscribe() method on the sender is used to create
+    // one.
+    let (notify_shutdown, _) = broadcast::channel(1);
+    let (shutdown_complete_tx, shutdown_complete_rx) = mpsc::channel(1);
+
+    // Initialize the listener state
+    let mut server = Listener {
+        listener,
+        db: Db::new(),
+        limit_connections: Arc::new(Semaphore::new(MAX_CONNECTIONS)),
+        notify_shutdown,
+        shutdown_complete_tx,
+        shutdown_complete_rx,
+    };
+
+    // Concurrently run the server and listen for the `shutdown` signal. The
+    // server task runs until an error is encountered, so under normal
+    // circumstances, this `select!` statement runs until the `shutdown` signal
+    // is received.
+    //
+    // `select!` statements are written in the form of:
+    //
+    // ```
+    // <result of async op> = <async op> => <step to perform with result>
+    // ```
+    //
+    // All `<async op>` statements are executed concurrently. Once the **first**
+    // op completes, its associated `<step to perform with result>` is
+    // performed.
+    //
+    // The `select! macro is a foundational building block for writing
+    // asynchronous Rust. See the API docs for more details:
+    //
+    // https://docs.rs/tokio/*/tokio/macro.select.html
+    tokio::select! {
+        res = server.run() => {
+            // If an error is received here, accepting connections from the TCP
+            // listener failed multiple times and the server is giving up and
+            // shutting down.
+            //
+            // Errors encountered when handling individual connections do not
+            // bubble up to this point.
+            if let Err(err) = res {
+                error!(cause = %err, "failed to accept");
+            }
+        }
+        _ = shutdown => {
+            // The shutdown signal has been received.
+            info!("shutting down");
+        }
+    }
+
+    // Extract the `shutdown_complete` receiver and transmitter
+    // explicitly drop `shutdown_transmitter`. This is important, as the
+    // `.await` below would otherwise never complete.
+    let Listener {
+        mut shutdown_complete_rx,
+        shutdown_complete_tx,
+        notify_shutdown,
+        ..
+    } = server;
+    // When `notify_shutdown` is dropped, all tasks which have `subscribe`d will
+    // receive the shutdown signal and can exit
+    drop(notify_shutdown);
+    // Drop final `Sender` so the `Receiver` below can complete
+    drop(shutdown_complete_tx);
+
+    // Wait for all active connections to finish processing. As the `Sender`
+    // handle held by the listener has been dropped above, the only remaining
+    // `Sender` instances are held by connection handler tasks. When those drop,
+    // the `mpsc` channel will close and `recv()` will return `None`.
+    let _ = shutdown_complete_rx.recv().await;
+
+    Ok(())
+}
+#+end_src
+
+** use ctrlc
+:PROPERTIES:
+:CUSTOM_ID: use-ctrlc
+:END:
+copy from
+[[https://stackoverflow.com/questions/54569843/shutting-down-actix-with-more-than-one-system-running][Shutting
+down actix with more than one system running]]
+
+#+begin_src rust
+use ctrlc;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use std::thread;
+
+fn main() {
+    let running = Arc::new(AtomicBool::new(true));
+    let running2 = running.clone();
+    let r = running.clone();
+
+    let thandle = thread::spawn(move || {
+        while running2.load(Ordering::Relaxed) {
+            //Do your logic here
+        }
+        println!("Thread1 stopped.")
+    });
+
+    let thandle2 = thread::spawn(move || {
+        while running.load(Ordering::Relaxed) {
+            //Do your different logic here
+        }
+        println!("Thread2 stopped.")
+    });
+
+    ctrlc::set_handler(move || {
+        r.store(false, Ordering::Relaxed);
+    })
+    .expect("Error setting Ctrl-C handler");
+
+    println!("Waiting for Ctrl-C...");
+    let _ = thandle.join();
+    let _ = thandle2.join();
+}
+#+end_src
+
+** releated crates:
+:PROPERTIES:
+:CUSTOM_ID: releated-crates
+:END:
+[[https://github.com/Dav1dde/elegant-departure][elegant-departure]]
+[[https://github.com/Finomnis/tokio-graceful-shutdown][tokio-graceful-shutdown]]

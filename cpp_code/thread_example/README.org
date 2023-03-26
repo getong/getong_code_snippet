@@ -1,0 +1,8 @@
+* cpp thread example
+:PROPERTIES:
+:CUSTOM_ID: cpp-thread-example
+:END:
+#+begin_src shell
+g++ -std=c++0x -pthread thread.cpp -o thread
+./thread
+#+end_src

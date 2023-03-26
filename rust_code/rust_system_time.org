@@ -1,0 +1,31 @@
+* rust SystemTime
+:PROPERTIES:
+:CUSTOM_ID: rust-systemtime
+:END:
+** unix time
+:PROPERTIES:
+:CUSTOM_ID: unix-time
+:END:
+#+begin_src rust
+use std::time::{SystemTime, UNIX_EPOCH};
+
+let now = SystemTime::now().duration_since(UNIX_EPOCH).expect("Time went backwards");
+println!("now :{} ", now.as_millis());
+#+end_src
+
+** get the current local time
+:PROPERTIES:
+:CUSTOM_ID: get-the-current-local-time
+:END:
+#+begin_src rust
+use chrono;
+
+fn main() {
+    println!("{:?}", chrono::offset::Local::now());
+    println!("{:?}", chrono::offset::Utc::now());
+}
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/57707966/how-to-get-timestamp-of-the-current-date-and-time-in-rust][How
+to get Timestamp of the current Date and time in Rust]]

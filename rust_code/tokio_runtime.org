@@ -1,0 +1,31 @@
+* tokio runtime
+:PROPERTIES:
+:CUSTOM_ID: tokio-runtime
+:END:
+** tokio:spawn
+:PROPERTIES:
+:CUSTOM_ID: tokiospawn
+:END:
+#+begin_src rust
+tokio::spawn(async move {
+    for port in MOST_COMMON_PORTS_100 {
+        let _ = input_tx.send(*port).await;
+    }
+});
+#+end_src
+
+like go code:
+
+#+begin_src go
+go doSomething()
+#+end_src
+
+spawn_blocking
+
+#+begin_src rust
+let is_code_valid = spawn_blocking(move || crypto::verify_password(&code, &code_hash)).await?;
+#+end_src
+
+copy from
+[[https://kerkour.com/rust-async-await-what-is-a-runtime][Async Rust:
+What is a runtime? Here is how tokio works under the hood]]

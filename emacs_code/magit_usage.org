@@ -1,0 +1,13 @@
+* magit usage
+:PROPERTIES:
+:CUSTOM_ID: magit-usage
+:END:
+** commit one file
+:PROPERTIES:
+:CUSTOM_ID: commit-one-file
+:END:
+#+begin_src lisp
+magit-file-dispatch
+s
+C
+#+end_src

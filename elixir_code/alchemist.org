@@ -1,0 +1,21 @@
+* alchemist
+:PROPERTIES:
+:CUSTOM_ID: alchemist
+:END:
+Install alchemist via package install, and also install company mode,
+which enable auto complete. when edit elixir source file, enable
+alchemist-mode by hand. add this two code in your init.el file
+
+#+begin_example
+(add-to-list 'auto-mode-alist '("\\.ex?$" . elixir-mode))
+(add-to-list 'auto-mode-alist '("\\.exs?$" . elixir-mode))
+(require 'elixir-mode)
+(require 'alchemist)
+#+end_example
+
+** configuration
+:PROPERTIES:
+:CUSTOM_ID: configuration
+:END:
+seee
+[[https://alchemist.readthedocs.io/en/latest/configuration/][configuration]]

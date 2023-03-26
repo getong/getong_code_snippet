@@ -1,0 +1,15 @@
+* ELK
+:PROPERTIES:
+:CUSTOM_ID: elk
+:END:
+** ELK 协议栈
+:PROPERTIES:
+:CUSTOM_ID: elk-协议栈
+:END:
+#+begin_example
+ELK 其实并不是一款软件，而是一整套解决方案，是三个软件产品的首字母缩写，Elasticsearch，Logstash 和 Kibana。这三款软件都是开源软件，通常是配合使用，而且又先后归于 Elastic.co 公司名下，故被简称为 ELK 协议栈.
+#+end_example
+
+copy from
+[[https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/index.html][集中式日志系统
+ELK 协议栈详解]]

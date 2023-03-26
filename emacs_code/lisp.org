@@ -1,0 +1,92 @@
+* lisp
+:PROPERTIES:
+:CUSTOM_ID: lisp
+:END:
+** learn lisp in y minutes
+:PROPERTIES:
+:CUSTOM_ID: learn-lisp-in-y-minutes
+:END:
+see [[https://learnxinyminutes.com/docs/elisp/][Learn X in Y minutes]]
+
+** type-of function
+:PROPERTIES:
+:CUSTOM_ID: type-of-function
+:END:
+#+begin_src emacs-lisp
+(type-of 1)
+#+end_src
+
+copy from
+https://stackoverflow.com/questions/10900600/how-to-determine-the-datatype-of-a-variable
+
+** cons cell
+:PROPERTIES:
+:CUSTOM_ID: cons-cell
+:END:
+#+begin_src emacs-lisp
+'(1 . 2)                                ; => (1 . 2)
+'(?a . 1)                               ; => (97 . 1)
+'(1 . "a")                              ; => (1 . "a")
+'(1 . nil)                              ; => (1)
+'(nil . nil)                            ; => (nil)
+#+end_src
+
+copy from https://smacs.github.io/elisp/05-cons-cell.html
+
+** Convert Integer to Float
+:PROPERTIES:
+:CUSTOM_ID: convert-integer-to-float
+:END:
+#+begin_src emacs-lisp
+;; int to float
+(float 3) ; 3.0
+
+(truncate 3.3) ; 3
+(floor 3.3) ; 3
+(ceiling 3.3) ; 4
+(round 3.4) ; 3
+(string-to-number "3") ; 3
+(number-to-string 3) ; "3"
+#+end_src
+
+copy from
+http://xahlee.info/emacs/emacs/elisp_convert_int_float_string.html
+
+** Converting Between Symbols and Strings
+:PROPERTIES:
+:CUSTOM_ID: converting-between-symbols-and-strings
+:END:
+#+begin_src emacs-lisp
+(symbol-name 'some-symbol) ; => "some-symbol"
+(intern "some-symbol") ; => some-symbol
+#+end_src
+
+copy from
+https://emacsredux.com/blog/2014/12/05/converting-between-symbols-and-strings/
+
+** use-package example
+:PROPERTIES:
+:CUSTOM_ID: use-package-example
+:END:
+#+begin_src emacs-lisp
+(global-company-mode t)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(setq company-idle-delay 0.0)
+#+end_src
+
+convert to be:
+
+#+begin_src emacs-lisp
+use-package company
+  :bind (:map company-active-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
+  :config
+  (setq company-idle-delay 0.3)
+  (global-company-mode t))
+#+end_src
+
+copy from
+[[https://medium.com/helpshift-engineering/configuring-emacs-from-scratch-use-package-c30382297877][Configuring
+Emacs from Scratch --- use-package]]

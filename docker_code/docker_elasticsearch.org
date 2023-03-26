@@ -1,0 +1,41 @@
+* docker elasticsearch
+:PROPERTIES:
+:CUSTOM_ID: docker-elasticsearch
+:END:
+** pull the tag
+:PROPERTIES:
+:CUSTOM_ID: pull-the-tag
+:END:
+#+begin_example
+docker pull elasticsearch:8.2.3
+#+end_example
+
+** run the elasticsearch:
+:PROPERTIES:
+:CUSTOM_ID: run-the-elasticsearch
+:END:
+#+begin_example
+docker network create somenetwork
+docker run -d --name elasticsearch --net somenetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.2.3
+
+## use podman
+podman run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.2.3
+#+end_example
+
+** elasticsearch and kibana
+:PROPERTIES:
+:CUSTOM_ID: elasticsearch-and-kibana
+:END:
+see
+[[https://github.com/jaywcjlove/docker-tutorial/blob/master/docker/elasticsearch.md][elasticsearch.md]]
+[[https://juejin.im/post/5ca0d12c518825550b35be6d][docker安装elasticsearch]]
+[[https://tecadmin.net/setup-elasticsearch-on-ubuntu/][How to Setup
+Elasticsearch on Ubuntu 18.04 & 16.04 LTS]]
+[[https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html][Install
+Elasticsearch with Debian Package]]
+
+** elasticsearch needs much more memory
+:PROPERTIES:
+:CUSTOM_ID: elasticsearch-needs-much-more-memory
+:END:
+When in development, start it as needed.

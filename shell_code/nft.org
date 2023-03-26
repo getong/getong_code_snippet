@@ -1,0 +1,16 @@
+* nft
+:PROPERTIES:
+:CUSTOM_ID: nft
+:END:
+Netfilter tables
+
+** command example
+:PROPERTIES:
+:CUSTOM_ID: command-example
+:END:
+#+begin_src shell
+nft <command>  <subcomand> <chain> <rule definition>
+#+end_src
+
+command includes add , list, insert, delete, flush subcomand includes
+table, chain, rule

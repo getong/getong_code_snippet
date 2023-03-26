@@ -1,0 +1,13 @@
+* debian stretch todo
+:PROPERTIES:
+:CUSTOM_ID: debian-stretch-todo
+:END:
+- [X] 机箱前置耳机没有声音 see
+  [[http://www.cnblogs.com/kingstrong/p/5960466.html][ubuntu16耳机没声音解决]]
+  Only works on desktop, not the tty1 console
+- [X] ignore the driver message output on the framebuffer won;t fix. It
+  is because the hardware not support the USB 3 device. see
+  [[https://github.com/raspberrypi/linux/issues/273][USB low speed
+  devices fail to enumerate on high speed hub (high speed devices are
+  OK) #273]]
+- [ ] disk installation with iso file

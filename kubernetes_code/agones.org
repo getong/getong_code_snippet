@@ -1,0 +1,90 @@
+* agones
+:PROPERTIES:
+:CUSTOM_ID: agones
+:END:
+** docs
+:PROPERTIES:
+:CUSTOM_ID: docs
+:END:
+[[https://blog.gcp.expert/introduce-agones-host-game-server-on-kubernetes-1/][Agones
+是什麼？用 Kubernetes 打造開源遊戲伺服器代管平台 (一)]]
+[[https://blog.gcp.expert/introduce-agones-host-game-server-on-kubernetes-2/][Agones
+是什麼？用 Kubernetes 打造開源遊戲伺服器代管平台 (二)]]
+
+** example code
+:PROPERTIES:
+:CUSTOM_ID: example-code
+:END:
+dockerfile
+
+#+begin_example
+// Dockerfile
+FROM debian:stretch
+RUN useradd -m server
+
+COPY ./bin/game-server /home/server/game-server
+RUN chown -R server /home/server && \
+    chmod o+x /home/server/game-server
+
+USER server
+ENTRYPOINT ["/home/server/game-server"]
+#+end_example
+
+gameserver.yaml
+
+#+begin_src yaml
+gameserver.yaml
+apiVersion: "stable.agon.io/v1alpha1"
+kind: GameServer
+metadata:
+  name: my-game-server
+spec:
+  containerPort: 7654
+  # Pod template
+  template:
+    spec:
+      containers:
+      - name: my-game-server-container
+        image: gcr.io/agon-images/my-game-server:0.1
+#+end_src
+
+run command:
+
+#+begin_src shell
+$ kubectl apply -f gamesever.yaml
+
+$ kubectl describe gameserver my-game-server
+#+end_src
+
+** releated docs
+:PROPERTIES:
+:CUSTOM_ID: releated-docs
+:END:
+[[https://docs.ovh.com/ie/en/kubernetes/installing-agones/][Installing
+Agones on OVHcloud Managed Kubernetes]]
+
+[[https://cloud.google.com/architecture/deploying-xonotic-game-servers?hl=zh-cn][使用
+Game Servers 部署 Xonotic]]
+
+[[https://kasna.com.au/running-gaming-platforms-at-scale-in-kubernetes/][Running
+gaming platforms at scale in Kubernetes]]
+
+** Gameserver Ingress Controller
+:PROPERTIES:
+:CUSTOM_ID: gameserver-ingress-controller
+:END:
+see
+[[https://github.com/Octops/gameserver-ingress-controller][Gameserver
+Ingress Controller]]
+
+** ingress ip
+:PROPERTIES:
+:CUSTOM_ID: ingress-ip
+:END:
+#+begin_src shell
+EXTERNAL_IP=$(kubectl get services agones-allocator -n agones-system -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+#+end_src
+
+copy from
+[[https://agones.dev/site/docs/advanced/allocator-service/][Allocator
+Service]]

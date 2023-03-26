@@ -1,0 +1,808 @@
+* stretch amd64 installation
+:PROPERTIES:
+:CUSTOM_ID: stretch-amd64-installation
+:END:
+** Be carefull when type a command in the console.
+:PROPERTIES:
+:CUSTOM_ID: be-carefull-when-type-a-command-in-the-console.
+:END:
+** update and upgrade system
+:PROPERTIES:
+:CUSTOM_ID: update-and-upgrade-system
+:END:
+#+begin_src shell
+# apt-get update
+# apt-get upgrade -y
+#+end_src
+
+** 安装过程不要使用网络
+:PROPERTIES:
+:CUSTOM_ID: 安装过程不要使用网络
+:END:
+1. 国内网络不好，下载镜像源会比较慢，会出现下载不了的情况，耗费大量时间不值得。
+2. 下载的更新软件里面可能会有 /linux/ ,
+   这个在安装过程中会出现安装不了的情况。
+3. 注意u盘接口是否接入，
+   如果没有显示到bios设置界面，那一定是没有挂载上。换另外接口重试。
+4. UEFI 要另外建分区挂载 /boot/efi 目录
+
+** 编译linux内核
+:PROPERTIES:
+:CUSTOM_ID: 编译linux内核
+:END:
+#+begin_src shell
+# apt-get build-dep -y linux
+# apt-get install -y firmware-amd-graphics firmware-linux-free firmware-linux-nonfree libncurses5 libncurses5-dev linux-source build-essential linux-headers-amd64 vim git subversion curl
+# cd /usr/src
+# xz -d -k linux-patch-4.9-rt.patch.xz
+# tar xaf linux-source-4.9.tar.xz
+# cd linux-source-4.9
+# patch -p1 < ../linux-patch-4.9-rt.patch
+# cp /boot/config-4.9.0-3-amd64 .config
+#+end_src
+
+修改.config文件，CONFIG_SATA_PMP=n
+
+#+begin_src shell
+make menuconfig
+#+end_src
+
+直接退出, 添加make.sh
+
+#+begin_src shell
+#!/bin/sh
+make -j`nproc` bzImage && make -j`nproc` modules && make modules_install && make headers_install && make install && shutdown -h now
+echo "compile kernel failed " >> failed.txt
+shutdown -h now
+#+end_src
+
+启动运行：
+
+#+begin_src shell
+chmod +x make.sh
+nohup ./make.sh &
+#+end_src
+
+** update grub
+:PROPERTIES:
+:CUSTOM_ID: update-grub
+:END:
+#+begin_src shell
+# cat /etc/default/grub
+# If you change this file, run 'update-grub' afterwards to update
+# /boot/grub/grub.cfg.
+# For full documentation of the options in this file, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=1
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="text"
+GRUB_CMDLINE_LINUX="noapic acpi=off"
+
+# Uncomment to enable BadRAM filtering, modify to suit your needs
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+
+# Uncomment to disable graphical terminal (grub-pc only)
+#GRUB_TERMINAL=console
+
+# The resolution used on graphical terminal
+# note that you can use only modes which your graphic card supports via VBE
+# you can see them in real GRUB with the command `vbeinfo'
+#GRUB_GFXMODE=640x480
+
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+#GRUB_DISABLE_LINUX_UUID=true
+
+# Uncomment to disable generation of recovery mode menu entries
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to get a beep at grub start
+#GRUB_INIT_TUNE="480 440 1"
+#+end_src
+
+The =grub_timeout= is =1=, and the =noapic acpi=off=.
+
+#+begin_src shell
+# update-grub
+#+end_src
+
+** install zsh
+:PROPERTIES:
+:CUSTOM_ID: install-zsh
+:END:
+#+begin_src shell
+# apt-get install -y zsh
+$ chsh
+/bin/zsh
+$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#+end_src
+
+** build emacs erlang tmux
+:PROPERTIES:
+:CUSTOM_ID: build-emacs-erlang-tmux
+:END:
+#+begin_example
+# apt-get build-dep -y emacs erlang tmux
+#+end_example
+
+compile emacs, erlang, tmux as the docs
+
+** 找回最大化最小化按钮
+:PROPERTIES:
+:CUSTOM_ID: 找回最大化最小化按钮
+:END:
+See [[https://labs.riseup.net/code/issues/11270][Bring back "minimize"
+and "maximize" buttons in titlebars by default]]
+
+#+begin_src shell
+gsettings set org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
+#+end_src
+
+** fcitx
+:PROPERTIES:
+:CUSTOM_ID: fcitx
+:END:
+#+begin_src shell
+# apt-get install fcitx-ui-classic fcitx-frontend-fbterm
+# sudo chmod u+s /usr/bin/fbterm
+#+end_src
+
+Edit ~/.fbtermrc
+
+#+begin_src shell
+input-method=fcitx-fbterm
+#+end_src
+
+** systemd multi-user target
+:PROPERTIES:
+:CUSTOM_ID: systemd-multi-user-target
+:END:
+#+begin_src shell
+systemctl set-default multi-user.target
+#+end_src
+
+Temporary enable graphics target
+
+#+begin_src shell
+systemctl isolate graphical.target
+#+end_src
+
+** install fbv
+:PROPERTIES:
+:CUSTOM_ID: install-fbv
+:END:
+#+begin_src shell
+$ sudo apt-get install libjpeg-dev
+$ git clone https://github.com/godspeed1989/fbv
+$ cd fbv
+$ ./configure
+$ make
+$ sudo make install
+#+end_src
+
+** gem source
+:PROPERTIES:
+:CUSTOM_ID: gem-source
+:END:
+#+begin_src shell
+$ sudo gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
+$ sudo gem update --system
+$ sudo gem install githug
+$ sudo gem install travis-lint
+#+end_src
+
+** swap caps and ctrl
+:PROPERTIES:
+:CUSTOM_ID: swap-caps-and-ctrl
+:END:
+Edit /etc/default/keyboard
+
+#+begin_src shell
+XKBOPTIONS="ctrl:swapcaps"
+#+end_src
+
+Then run this:
+
+#+begin_src shell
+$ sudo dpkg-reconfigure -phigh console-setup
+#+end_src
+
+** network static
+:PROPERTIES:
+:CUSTOM_ID: network-static
+:END:
+See the reference:
+[[https://wiki.debian.org/NetworkConfiguration][NetworkConfiguration]] >
+As if Stretch, the old network names like eth0, eth1 have gone away as
+the device name can change. The new names are similar to these: enp6s0,
+enp8s0, enp0s31f6, enp5s0. > To find the names of your interfaces you
+will want to look here:
+
+#+begin_src shell
+$ ls /sys/class/net/
+#+end_src
+
+Set the local network interface static, write this into
+/etc/network/interface
+
+#+begin_src shell
+auto enp0s3
+iface enp0s3 inet static
+address 192.168.1.56
+netmask 255.255.255.0
+gateway 192.168.1.1
+dns-nameservers 192.168.1.1
+#+end_src
+
++And the =/etc/resolv.conf= is missing, create it and write this into
+it.+ The resolv.conf is writen by the resolvconf program, no need to
+edit it.
+
+#+begin_src shell
+nameserver 192.168.1.1
+#+end_src
+
+Restart the network:
+
+#+begin_src shell
+# /etc/init.d/networking restart
+#+end_src
+
+** other software:
+:PROPERTIES:
+:CUSTOM_ID: other-software
+:END:
+#+begin_src shell
+# apt-get install -y proxychains trash-cli firefox-esr-l10n-zh-cn  moc w3m python-pip apt-transport-https dirmngr w3m-img moc-ffmpeg-plugin fbterm calibre xsel mercurial ntpdate dstat iftop ngrep sysstat vim resolvconf bridge-utils net-tools cmake check sphinx-rtd-theme-common sphinx-common libmozjs185-dev libcanberra-gtk-module ffmpeg
+
+# enable the cron job to begin collecting the data
+# dpkg-reconfigure sysstat
+#+end_src
+
+** libssl
+:PROPERTIES:
+:CUSTOM_ID: libssl
+:END:
+The libssl in stretch is =1.1.0f-3= and is the default package. And the
+openssl has change some API in 1.1.0, conflicts with 1.0.0 . Install
+shadowsocks:
+
+#+begin_src shell
+# pip install --upgrade shadowsocks
+# mkdir -p /etc/shadowsocks
+# cd /etc/shadowsocks
+# cat ss_client.config
+{
+        "server": "192.168.1.1",
+        "server_port": 443,
+        "local_port":1080,
+        "password": "123456",
+        "timeout":600,
+        "method": "aes-256-cfb",
+        "fast_open": true,
+        "auth": true
+}
+
+# sslocal -c ss_client.config -d start
+#+end_src
+
+The shadowsocks is use libssl 1.0.0, and the stretch is install libssl
+1.1.0, something need to be changed.
+
+#+begin_src shell
+vim /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py
+#+end_src
+
+change the line 52
+
+#+begin_src python
+libcrypto.EVP_CIPHER_CTX_cleanup.argtypes = (c_void_p,)
+#+end_src
+
+to be :
+
+#+begin_src python
+libcrypto.EVP_CIPHER_CTX_reset.argtypes = (c_void_p,)
+#+end_src
+
+And the line 111
+
+#+begin_src python
+libcrypto.EVP_CIPHER_CTX_cleanup(self._ctx)
+#+end_src
+
+to be
+
+#+begin_src python
+libcrypto.EVP_CIPHER_CTX_reset(self._ctx)
+#+end_src
+
+See the reference:
+[[https://blog.lyz810.com/article/2016/09/shadowsocks-with-openssl-greater-than-110/][解决openssl升级到1.1.0后shadowsocks服务报错问题]]
+
+** shadowsocks start with systemd
+:PROPERTIES:
+:CUSTOM_ID: shadowsocks-start-with-systemd
+:END:
+see [[../shell_code/systemd.md][system service]]
+
+** SwitchyOmega
+:PROPERTIES:
+:CUSTOM_ID: switchyomega
+:END:
+#+begin_src shell
+wget -c https://github.com/FelisCatus/SwitchyOmega/releases/download/v2.4.6/SwitchyOmega.crx
+#+end_src
+
+** ssr
+:PROPERTIES:
+:CUSTOM_ID: ssr
+:END:
+#+begin_src shell
+docker pull breakwa11/shadowsocksr
+docker run -d -p 12345:51348 --restart=always -e PASSWORD=123456 -e METHOD=aes-256-cfb -e PROTOCOL=auth_aes128_sha1 breakwa11/shadowsocksr
+#+end_src
+
+** virtualbox-5.1
+:PROPERTIES:
+:CUSTOM_ID: virtualbox-5.1
+:END:
+#+begin_src shell
+# echo "deb http://download.virtualbox.org/virtualbox/debian stretch contrib" > /etc/apt/sources.list.d/virtualbox.list
+# wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- |  apt-key add -
+# apt-get update
+# apt-get install virtualbox-5.1 dkms
+# wget -c http://download.virtualbox.org/virtualbox/5.1.22/Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+# VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+## or add replace
+# VBoxManage extpack install --replace Oracle_VM_VirtualBox_Extension_Pack-5.1.22-115126.vbox-extpack
+#+end_src
+
+** virtualbox set default VM location in command line
+:PROPERTIES:
+:CUSTOM_ID: virtualbox-set-default-vm-location-in-command-line
+:END:
+See
+[[https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line][How
+to change VirtualBox default VM location in command line]]
+
+#+begin_src shell
+$ vboxmanage setproperty machinefolder /path/to/directory/
+$ vboxmanage list systemproperties | grep folder
+#+end_src
+
+** vagrant
+:PROPERTIES:
+:CUSTOM_ID: vagrant
+:END:
+#+begin_src shell
+# wget -c https://releases.hashicorp.com/vagrant/1.9.6/vagrant_1.9.6_x86_64.deb
+# dpkg -i vagrant_1.9.6_x86_64.deb
+#+end_src
+
+** proxychains
+:PROPERTIES:
+:CUSTOM_ID: proxychains
+:END:
+Edit /etc/proxychains.conf
+
+#+begin_src shell
+quiet_mode
+socks5  127.0.0.1 1080
+#+end_src
+
+** jigdo-lite not support https url
+:PROPERTIES:
+:CUSTOM_ID: jigdo-lite-not-support-https-url
+:END:
+** install docker using aliyun
+:PROPERTIES:
+:CUSTOM_ID: install-docker-using-aliyun
+:END:
+See [[https://yq.aliyun.com/articles/110806][Docker CE 镜像源站]]
+
+#+begin_src shell
+$ sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/debian/ $(lsb_release -cs) stable"
+#+end_src
+
+** install docker in stretch
+:PROPERTIES:
+:CUSTOM_ID: install-docker-in-stretch
+:END:
+see
+[[https://docs.docker.com/engine/installation/linux/docker-ce/debian/][Get
+Docker CE for Debian]]
+
+#+begin_src shell
+
+$sudo apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+
+$ curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+$ sudo apt-get update
+
+$ sudo apt-get install docker-ce
+
+$ apt-cache madison docker-ce
+
+$ sudo usermod -aG docker $USER
+
+$ sudo systemctl enable docker
+#+end_src
+
+** install docker using ustc mirror
+:PROPERTIES:
+:CUSTOM_ID: install-docker-using-ustc-mirror
+:END:
+#+begin_src shell
+$ sudo add-apt-repository "deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/debian/ $(lsb_release -cs) stable"
+
+$ curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/debian/gpg | sudo apt-key add -
+
+$ sudo apt-get update
+
+$ sudo apt-get install docker-ce
+
+$ apt-cache madison docker-ce
+
+$ sudo usermod -aG docker $USER
+
+$ sudo systemctl enable docker
+#+end_src
+
+** change the screen print directory
+:PROPERTIES:
+:CUSTOM_ID: change-the-screen-print-directory
+:END:
+#+begin_src shell
+$ vim ~/.config/user-dirs.dirs
+#+end_src
+
+change the config to be:
+
+#+begin_src shell
+XDG_PICTURES_DIR="/media/user/other_dir"
+#+end_src
+
+See [[https://wiki.archlinux.org/index.php/XDG_user_directories][XDG
+user directories]]
+
+#+begin_src shell
+$ xdg-user-dirs-update
+$ xdg-user-dirs-update --set PICTURES /media/user/other_dir
+$ xdg-user-dir PICTURES
+#+end_src
+
+** rar
+:PROPERTIES:
+:CUSTOM_ID: rar
+:END:
+#+begin_src shell
+$ wget -c http://rarlab.com/rar/rarlinux-x64-5.4.0.tar.gz
+$ tar xzf rarlinux-x64-5.4.0.tar.gz
+$ cd rar
+$ sudo -i make
+#+end_src
+
+** rebar3
+:PROPERTIES:
+:CUSTOM_ID: rebar3
+:END:
+#+begin_src shell
+$ cd /usr/local/bin
+$ sudo wget -c https://s3.amazonaws.com/rebar3/rebar3
+$ sudo chmod +x rebar3
+#+end_src
+
+** gnome software options
+:PROPERTIES:
+:CUSTOM_ID: gnome-software-options
+:END:
+每个桌面应用的设置都在顶栏， 要右击才能列出。
+
+** mariadb
+:PROPERTIES:
+:CUSTOM_ID: mariadb
+:END:
+#+begin_src shell
+# apt-get install mariadb-client mariadb-server
+#+end_src
+
+** enable virtualbox cross os copy and paste
+:PROPERTIES:
+:CUSTOM_ID: enable-virtualbox-cross-os-copy-and-paste
+:END:
+#+begin_src shell
+systemctl restart vboxdrv.service
+#+end_src
+
+** add user to sudo group
+:PROPERTIES:
+:CUSTOM_ID: add-user-to-sudo-group
+:END:
+#+begin_src shell
+usermod -aG sudo $USER
+groups
+
+## no password, add this to /etc/sudoers, replace the $USER with the real user name
+## right under the %sudo   ALL=(ALL:ALL) ALL
+$USER  ALL=(ALL) NOPASSWD:ALL
+
+## restart
+systemctl restart sudo
+#+end_src
+
+** sublime text is a better text editor than gedit, scite on linux destop
+:PROPERTIES:
+:CUSTOM_ID: sublime-text-is-a-better-text-editor-than-gedit-scite-on-linux-destop
+:END:
+#+begin_src shell
+wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+sudo apt-get update
+sudo apt-get install sublime-text
+#+end_src
+
+see [[https://www.sublimetext.com/docs/3/linux_repositories.html][Linux
+Package Manager Repositories]] for more info.
+
+** set-ntp without ntp
+:PROPERTIES:
+:CUSTOM_ID: set-ntp-without-ntp
+:END:
+#+begin_src shell
+GNOME Automatic Date & Time doesn't use the ntp service, installable via sudo apt-get install ntp. Therefore stopping or uninstalling the service doesn't help.
+
+Systemd timedatectl is used, therefore one command to switch off
+
+timedatectl set-ntp 0
+and one command to switch on
+
+timedatectl set-ntp 1
+#+end_src
+
+see
+[[https://askubuntu.com/questions/683067/how-to-stop-automatic-time-update-via-terminal][How
+to stop automatic time update via terminal?]]
+
+** no pcspkr
+:PROPERTIES:
+:CUSTOM_ID: no-pcspkr
+:END:
+#+begin_src shell
+sudo rmmod pcspkr
+sudo echo "blacklist pcspkr" >> /etc/modprobe.d/blacklist.conf
+#+end_src
+
+** valgrind
+:PROPERTIES:
+:CUSTOM_ID: valgrind
+:END:
+#+begin_src shell
+$ apt-get install valgrind
+$  valgrind ls
+#+end_src
+
+** pulse
+:PROPERTIES:
+:CUSTOM_ID: pulse
+:END:
+
+#+begin_quote
+
+#+begin_quote
+为了防止应用程序使用ALSA的OSS模拟功能而忽略PulseAudio（从而导致其他应用程序无法播放声音），确定snd_pcm_oss模块没有在系统启动时自动加载。如果该模块已经被加载(lsmod
+| grep oss)，运行下面命令以卸载该模块： # rmmod snd_pcm_oss see
+[[https://wiki.archlinux.org/index.php/PulseAudio_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][PulseAudio
+(简体中文)]]
+
+#+end_quote
+
+#+end_quote
+
+** shutter
+:PROPERTIES:
+:CUSTOM_ID: shutter
+:END:
+screenshot
+
+#+begin_src shell
+sudo apt-get install shutter
+#+end_src
+
+** Making /etc/resolv.conf immutable
+:PROPERTIES:
+:CUSTOM_ID: making-etcresolv.conf-immutable
+:END:
+copy from [[https://wiki.debian.org/resolv.conf][resolv.conf]]
+
+#+begin_src shell
+rm -f /etc/resolv.conf
+editor /etc/resolv.conf
+chattr +i /etc/resolv.conf
+#+end_src
+
+** ssd driver
+:PROPERTIES:
+:CUSTOM_ID: ssd-driver
+:END:
+ext4 mount option add =discard= in the =/etc/fstab=
+
+#+begin_src shell
+/dev/sda1  /       ext4   defaults,noatime,discard   0  1
+#+end_src
+
+** fcitx not work with sublime
+:PROPERTIES:
+:CUSTOM_ID: fcitx-not-work-with-sublime
+:END:
+copy from
+[[https://askubuntu.com/questions/842418/fcitx-doesnt-work-with-sublime-text-3-and-rstudio/842429][fcitx
+doesn't work with Sublime Text 3 and RStudio]]
+
+#+begin_src shell
+git clone https://github.com/lyfeyaj/sublime-text-imfix.git
+cd sublime-text-imfix
+./sublime-imfix
+#+end_src
+
+** install php 7.2
+:PROPERTIES:
+:CUSTOM_ID: install-php-7.2
+:END:
+copy from
+[[https://www.chris-shaw.com/blog/installing-php-7.2-on-debian-8-jessie-and-debian-9-stretch][Installing
+Php 7.2 On Debian 8 Jessie And Debian 9 Stretch]]
+
+#+begin_src shell
+sudo apt-get install apt-transport-https lsb-release ca-certificates
+#sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+wget https://packages.sury.org/php/apt.gpg
+sudo apt-key add apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/php.list
+apt-get update
+sudo apt-get install php7.2
+sudo apt-get install php7.2-cli php7.2-common php7.2-curl php7.2-gd php7.2-json php7.2-mbstring php7.2-mysql php7.2-opcache php7.2-readline php7.2-xml
+#+end_src
+
+** netstat
+:PROPERTIES:
+:CUSTOM_ID: netstat
+:END:
+#+begin_src shell
+apt-get install net-tools
+#+end_src
+
+** privoxy
+:PROPERTIES:
+:CUSTOM_ID: privoxy
+:END:
+privoxy is http proxy, and it can convert socks5 proxy into http proxy.
+
+#+begin_src shell
+$ sudo apt-get install privoxy
+$ sudo echo "forward-socks5   /               127.0.0.1:1080 ." >>  /etc/privoxy/config
+$ sudo systemctl restart privoxy
+$ http_proxy=http://127.0.0.1:8118 w3m www.google.com
+#+end_src
+
+** apt-get download packages --download-only
+:PROPERTIES:
+:CUSTOM_ID: apt-get-download-packages-download-only
+:END:
+#+begin_src shell
+apt-get install --download-only package
+#+end_src
+
+copy from
+[[https://unix.stackexchange.com/questions/408346/how-to-download-package-not-install-it-with-apt-get-command][How
+to download package not install it with apt-get command?]]
+
+** cups
+:PROPERTIES:
+:CUSTOM_ID: cups
+:END:
+Often shutdown a computer need a lot of time, the cups is the reason.
+Stop it.
+
+#+begin_src shell
+$ sudo systemctl stop cups
+$ sudo systemctl disable cups
+#+end_src
+
+** convert CSV to XLS file on linux
+:PROPERTIES:
+:CUSTOM_ID: convert-csv-to-xls-file-on-linux
+:END:
+#+begin_src shell
+$ sudo apt-get install gnumeric
+$ ssconvert example.csv example.xlsx
+#+end_src
+
+copy from
+[[https://unix.stackexchange.com/questions/158254/convert-csv-to-xls-file-on-linux][convert
+CSV to XLS file on linux]]
+
+** tshark
+:PROPERTIES:
+:CUSTOM_ID: tshark
+:END:
+#+begin_src shell
+apt-get install tshark
+#+end_src
+
+** graphviz
+:PROPERTIES:
+:CUSTOM_ID: graphviz
+:END:
+elixir xref will generate with graphviz.
+
+#+begin_src shell
+sudo apt-get install graphviz
+#+end_src
+
+** whois
+:PROPERTIES:
+:CUSTOM_ID: whois
+:END:
+#+begin_src shell
+sudo apt-get install whois
+mkpasswd
+#+end_src
+
+** time
+:PROPERTIES:
+:CUSTOM_ID: time
+:END:
+#+begin_src shell
+sudo apt-get install time
+#+end_src
+
+** netease-cloud-music
+:PROPERTIES:
+:CUSTOM_ID: netease-cloud-music
+:END:
+#+begin_src shell
+wget -c https://d1.music.126.net/dmusic/netease-cloud-music_1.1.0_amd64_ubuntu.deb
+sudo dpkg -i netease-cloud-music_1.1.0_amd64_ubuntu.deb
+sudo apt-get install -f
+#+end_src
+
+Edit the destop file
+
+#+begin_src shell
+vim /usr/share/applications/netease-cloud-music.desktop
+#+end_src
+
+change the line
+
+#+begin_src shell
+Exec=netease-cloud-music %U
+#+end_src
+
+to be
+
+#+begin_src shell
+Exec=sh -c "unset SESSION_MANAGER && netease-cloud-music %U"
+#+end_src
+
+copied from
+[[http://tieba.baidu.com/p/5453477038][伤心，debian9安装最新的网易云音乐打不开]]
+
+** Increasing the amount of inotify watchers
+:PROPERTIES:
+:CUSTOM_ID: increasing-the-amount-of-inotify-watchers
+:END:
+#+begin_src shell
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+#+end_src
+
+copy from
+[[https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers][Increasing
+the amount of inotify watchers]]

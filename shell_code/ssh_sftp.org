@@ -1,0 +1,191 @@
+* ssh sftp终端使用
+:PROPERTIES:
+:CUSTOM_ID: ssh-sftp终端使用
+:END:
+** 确保key的权限为400
+:PROPERTIES:
+:CUSTOM_ID: 确保key的权限为400
+:END:
+#+begin_example
+chmod 400 id_rsa
+#+end_example
+
+** ssh with key
+:PROPERTIES:
+:CUSTOM_ID: ssh-with-key
+:END:
+#+begin_example
+ssh -i id_rsa user@ip
+#+end_example
+
+** sftp with key, use as ftp
+:PROPERTIES:
+:CUSTOM_ID: sftp-with-key-use-as-ftp
+:END:
+#+begin_example
+sftp -i id_rsa user@ip
+#+end_example
+
+** scp拷贝文件到远程服务器
+:PROPERTIES:
+:CUSTOM_ID: scp拷贝文件到远程服务器
+:END:
+#+begin_example
+scp -i id_rsa file user@ip:/tmp/dir
+scp -i id_rsa dir/* user@host:/var/cache/yum/x86_64/7/updates/packages/
+#+end_example
+
+** 拷贝目录到远程服务器
+:PROPERTIES:
+:CUSTOM_ID: 拷贝目录到远程服务器
+:END:
+#+begin_example
+scp -r local_folder remote_username@remote_ip:remote_folder
+#+end_example
+
+** 拷贝目录到本地
+:PROPERTIES:
+:CUSTOM_ID: 拷贝目录到本地
+:END:
+#+begin_example
+scp user@ip:/tmp/file /tmp
+#+end_example
+
+** user login via ssh in a different port other than 22
+:PROPERTIES:
+:CUSTOM_ID: user-login-via-ssh-in-a-different-port-other-than-22
+:END:
+#+begin_example
+ssh user@host -p port
+#+end_example
+
+** enable public key login
+:PROPERTIES:
+:CUSTOM_ID: enable-public-key-login
+:END:
+#+begin_src shell
+#mkdir ~/.ssh
+#chmod 755 ~/.ssh
+#ssh-keygen -t rsa  # enter the password of the key, not the user's password
+#cd ~/.ssh
+#mv id_rsa.pub authorized_keys
+#chmod 600 authorized_keys
+## delete the id_rsa file
+#rm id_rsa
+
+
+#vi /etc/ssh/sshd_config
+
+PubkeyAuthentication yes ## use key login
+AuthorizedKeysFile .ssh/authorized_keys ## key filename
+
+#service sshd restart
+#+end_src
+
+** keep SSH sessions alive and prevent the SSH timeout
+:PROPERTIES:
+:CUSTOM_ID: keep-ssh-sessions-alive-and-prevent-the-ssh-timeout
+:END:
+copy from [[https://bjornjohansen.no/ssh-timeout][SSH timeout due to
+inactivity is annoying. Here's how to keep your SSH sessions alive and
+prevent the SSH timeout]]
+
+#+begin_src shell
+# Prevent SSH timeout on the client side
+# add this in ~/.ssh/config
+ServerAliveInterval 120
+
+# Prevent SSH timeout on the server side
+# add these two in /etc/ssh/sshd_config
+ClientAliveInterval 120
+ClientAliveCountMax 720
+
+# and then restart sshd
+systemctl restart sshd
+#+end_src
+
+** ssh Forwarding other ports
+:PROPERTIES:
+:CUSTOM_ID: ssh-forwarding-other-ports
+:END:
+Local forwarding is accomplished by means of the -L switch and it is
+accompanying forwarding specification in the form of ::.
+
+#+begin_src shell
+ssh -L 1000:mail.google.com:25 192.168.0.100
+#+end_src
+
+will use SSH to login to and open a shell on 192.168.0.100, and will
+also create a tunnel from the local machine's TCP port 1000 to
+mail.google.com on port 25. Once established, connections to
+localhost:1000 will connect to the Gmail SMTP port. To Google, it will
+appear that any such connection (though not necessarily the data
+conveyed over the connection) originated from 192.168.0.100, and such
+data will be secure between the local machine and 192.168.0.100, but not
+between 192.168.0.100 and Google, unless other measures are taken.
+
+copy from
+[[https://wiki.archlinux.org/title/OpenSSH#Forwarding_other_ports][Forwarding_other_ports]]
+also see
+[[https://wiki.archlinux.org/title/OpenSSH_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][转发其他端口]]
+
+the =~/.ssh/config= :
+
+#+begin_src shell
+Host example
+    HostName ip_address
+    User host_name
+    LocalForward 7474 127.0.0.1:7474
+    LocalForward 7777 127.0.0.1:7777
+#+end_src
+
+then run the command:
+
+#+begin_src shell
+ssh example
+#+end_src
+
+copy from [[https://www.codeleading.com/article/61621764082/][SSH
+配置端口转发文件~/.ssh/config]]
+
+also see
+[[https://zhuanlan.zhihu.com/p/148825449][彻底搞懂SSH端口转发命令]]
+
+** remote ssh port forwarding
+:PROPERTIES:
+:CUSTOM_ID: remote-ssh-port-forwarding
+:END:
+#+begin_src shell
+sudo vim /etc/ssh/sshd_config
+-----------------------------------
+GatewayPorts yes
+
+sudo systemctl restart sshd
+#+end_src
+
+Example One:
+
+#+begin_src shell
+// A host:
+ssh -R 22122:10.0.2.16:22 laptop_user@192.168.1.233
+
+// B host:
+sftp -P 22122 virtual_user@localhost
+#+end_src
+
+copy from
+[[https://zhuanlan.zhihu.com/p/148825449][彻底搞懂SSH端口转发命令]]
+
+Example Two:
+
+#+begin_src shell
+// host3
+ssh -R 2121:host2:21 host1
+
+// host1
+ftp localhost:2121
+#+end_src
+
+让host1监听它自己的2121端口，然后将所有数据经由host3，转发到host2的21端口。
+copy from
+[[https://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html][SSH原理与运用（二）：远程操作与端口转发]]

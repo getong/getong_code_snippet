@@ -1,0 +1,9 @@
+* debian timezone
+:PROPERTIES:
+:CUSTOM_ID: debian-timezone
+:END:
+#+begin_example
+dpkg-reconfigure tzdata
+#+end_example
+
+choose Asia/Shanghai

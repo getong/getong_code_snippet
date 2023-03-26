@@ -1,0 +1,17 @@
+* vagrant plugin install
+:PROPERTIES:
+:CUSTOM_ID: vagrant-plugin-install
+:END:
+vagrant plugin install is very difficult, just to download the gems from
+the [[https://gems.ruby-china.org][Ruby China Gems]] See the
+[[https://lotreal.github.io/2015/12/08/install-vagrant-vbguest-in-china.html][解决中国局域网中
+vagrant plugin install vagrant-vbguest 出错的问题]]
+
+copy micromachine-2.0.0.gem vagrant-share-1.1.9.gem
+vagrant-vbguest-0.14.2.gem into ~/.vagrant.d/gems/2.3.4/cache
+
+#+begin_src shell
+$ vagrant plugin install vagrant-vbguest
+#+end_src
+
+Or just use proxychains to install it.

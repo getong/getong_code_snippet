@@ -1,0 +1,37 @@
+* elixir Enum Stream
+:PROPERTIES:
+:CUSTOM_ID: elixir-enum-stream
+:END:
+Enum模块每次运算都会产生新的数值，而Stream不会。使用Stream计算，然后使用Enum调用获取最后的结果。
+a example see
+[[https://www.poeticoding.com/processing-large-csv-files-with-elixir-streams/][Processing
+Large CSV files with Elixir Streams]]
+
+** range is a stream
+:PROPERTIES:
+:CUSTOM_ID: range-is-a-stream
+:END:
+** Stream.run
+:PROPERTIES:
+:CUSTOM_ID: stream.run
+:END:
+#+begin_src elixir
+File.stream!("/path/to/file")
+|> Stream.map(&String.replace(&1, "#", "%"))
+|> Stream.into(File.stream!("/path/to/other/file"))
+|> Stream.run()
+#+end_src
+
+** Enum.at
+:PROPERTIES:
+:CUSTOM_ID: enum.at
+:END:
+The =Enum.at= is the =lists:nth/2= in erlang.
+
+** group_by
+:PROPERTIES:
+:CUSTOM_ID: group_by
+:END:
+#+begin_src elixir
+Enum.group_by(list, fn {key, _value} -> key end, fn {_key, value} -> value end)
+#+end_src

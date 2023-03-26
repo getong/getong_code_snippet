@@ -1,0 +1,11 @@
+* erlang re
+:PROPERTIES:
+:CUSTOM_ID: erlang-re
+:END:
+** delete the beginning and the end white space
+:PROPERTIES:
+:CUSTOM_ID: delete-the-beginning-and-the-end-white-space
+:END:
+#+begin_src erlang
+re:replace(String, "(^\\s+)|(\\s+$)", "", [global, {return, list}]).
+#+end_src

@@ -1,0 +1,10 @@
+* erlang man
+:PROPERTIES:
+:CUSTOM_ID: erlang-man
+:END:
+Get the =module= man page in the command line.
+
+#+begin_example
+$ erl -man erlang
+$ erl -man lists
+#+end_example

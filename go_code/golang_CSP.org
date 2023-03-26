@@ -1,0 +1,6 @@
+* golang is a CSP model
+:PROPERTIES:
+:CUSTOM_ID: golang-is-a-csp-model
+:END:
+Communication Sequential Process(CSP) model is focused on the message
+channel, and =actor= model is focused on the process entity.

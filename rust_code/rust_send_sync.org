@@ -1,0 +1,58 @@
+* Rust Send, Sync trait
+:PROPERTIES:
+:CUSTOM_ID: rust-send-sync-trait
+:END:
+#+begin_example
+如果 T: Send，那么将 T 传到另一个线程中时（按值传送），不会导致数据竞争或其它不安全情况。
+
+Send 是对象可以安全发送到另一个执行体中；
+Send 使被发送对象可以和产生它的线程解耦，防止原线程将此资源释放后，在目标线程中使用出错（use after free）。
+如果 T: Sync，那么将 &T 传到另一个线程中时，不会导致数据竞争或其它不安全情况。
+
+Sync 是可以被同时多个执行体访问而不出错；
+Sync 防止的是竞争；
+推论：
+
+T: Sync 意味着 &T: Send；
+Sync + Copy = Send；
+当 T: Send 时，可推导出 &mut T: Send；
+当 T: Sync 时，可推导出 &mut T: Sync；
+当 &mut T: Send 时，不能推导出 T: Send；
+（注：T, &T, &mut T，Box<T> 等都是不同的类型）
+
+具体的类型：
+
+原始类型（比如： u8, f64），都是 Sync，都是 Copy，因此都是 Send；
+只包含原始类型的复合类型，都是 Sync，都是 Copy，因此都是 Send；
+当 T: Sync，Box<T>, Vec<T> 等集合类型是 Sync；
+具有内部可变性的的指针，不是 Sync 的，比如 Cell, RefCell, UnsafeCell；
+Rc 不是 Sync。因为只要一做 &Rc<T> 操作，就会克隆一个新引用，它会以非原子性的方式修改引用计数，所以是不安全的；
+被 Mutex 和 RWLock 锁住的类型 T: Send，是 Sync 的；
+原始指针（*mut, *const）既不是 Send 也不是 Sync；
+#+end_example
+
+copy from
+[[https://wiki.jikexueyuan.com/project/rust-primer/marker/sendsync.html][Send
+和 Sync]]
+
+#+begin_example
+std::marker::Sync
+如果类型T实现了Sync类型，那说明在不同的线程中使用&T访问同一个变量是安全的。
+
+std::marker::Send
+如果类型T实现了Send类型，那说明这个类型的变量在不同线程中传递所有权是安全的。
+
+如果一个类型可以安全地从一个线程 move 进入另一个线程，那它就是 Send 类型。比如说，显然的，普通的数字类型肯定是 Send。稍微复杂一点的，Vec<T>这种，只要我们能保证 T: Send，那么Vec<T>肯定也是 Send，把它 move 进其它线程是没什么问题的。那么什么样的类型是 !Send 呢？比如 Rc 类型。我们知道，Rc是引用计数指针，把Rc类型的变量move 进入另外一个线程，只是其中一个引用计数指针 move 到了其它线程，这样会导致不同的线程中的Rc变量引用同一块数据，Rc内部实现没有做任何线程同步处理，这是肯定有问题的。所以标准库中早已指定Rc是!Send。当我们试图在线程边界传递这个类型的时候，就会出现编译错误。
+
+但是相对的是， Arc 类型是符合 Send 的(当然需要T:Send)。为什么呢？因为 Arc 类型内部的引用计数用的是“原子计数”，对它进行增减操作，不会出现多线数据竞争。所以，多个线程拥有指向同一个变量的 Arc 指针是可以接受的。
+
+对应的，Sync代表的含义是，如果类型&T是线程安全的，那么我们就说T是Sync的。这句话不好理解。其实意思是，如果我们在不同线程中持有只读引用&T类型而不产生问题的话，那么T就是Sync的。它代表这个类型可以被多个线程安全共享。
+
+显然，基本数字类型肯定是Sync。假如不同线程都拥有指向同一个i32类型的只读引用&i32变量，这是没什么问题的。因为这个类型引用只能读，不能写。多个线程读同一个整数，是安全的。像Box<T>和Vec<T>这种也是Sync的，只要其中的参数T是Sync的。
+
+那什么样的类型是 !Sync 呢？所有具有“内部可变性”而又没有多线程同步考虑的类型，都不是 Sync 的。比如，Cell和RefCell就不能是 Sync 的。按照定义，如果我们多个线程中都持有指向同一个变量的 &Cell 型指针，那么在个线程中，都可以执行 Cell::set 方法来修改它里面的数据，而我们知道，这个类型在修改内部数据的时候，是没有考虑多线程同步的问题的。所以，我们必须把它标记为 !Sync。
+
+那么，当我们需要在多线程中共享，又需要内部可变性的时候，怎么办呢？我们可以使用 Mutex 或者 RwLock 这样的类型。这俩类型的使用方式其实和 RefCell 非常相似，都提供了内部可变性。区别在于，它们在内部实现中，调用了操作系统的多线程同步机制，可以保证线程安全。因此，这两个类型被标记为了 Sync。
+#+end_example
+
+copy from [[https://zhuanlan.zhihu.com/p/24142191][线程安全]]

@@ -1,0 +1,70 @@
+* erlang OS environment
+:PROPERTIES:
+:CUSTOM_ID: erlang-os-environment
+:END:
+** os:getenv/1 works in linux, windows probably not
+:PROPERTIES:
+:CUSTOM_ID: osgetenv1-works-in-linux-windows-probably-not
+:END:
+#+begin_example
+%% in linux works, windows not
+1> os:getenv("HOME").
+
+#+end_example
+
+** init:get_argument/1 works on most OS, but only a few arguments.
+:PROPERTIES:
+:CUSTOM_ID: initget_argument1-works-on-most-os-but-only-a-few-arguments.
+:END:
+#+begin_example
+1>init:get_argument(home).
+#+end_example
+
+** os signal handling
+:PROPERTIES:
+:CUSTOM_ID: os-signal-handling
+:END:
+#+begin_src erlang
+os:set_signal(Signal, Option) -> ok
+Types
+Signal =
+    sighup |
+    sigquit |
+    sigabrt |
+    sigalrm |
+    sigterm |
+    sigusr1 |
+    sigusr2 |
+    sigchld |
+    sigstop |
+    sigtstp
+Option = default | handle | ignore
+
+...
+
+handle
+This signal will notify erl_signal_server when it is received by the Erlang runtime system.
+#+end_src
+
+** erl_signal_server is gen_event, and can swap its handler
+:PROPERTIES:
+:CUSTOM_ID: erl_signal_server-is-gen_event-and-can-swap-its-handler
+:END:
+#+begin_src erlang
+handle_event(sigterm, S) ->
+    error_logger:info_msg("SIGTERM received - shutting down~n"),
+    ok = init:stop(),
+    {ok, S};
+#+end_src
+
+copy from erl_signal_handler.erl, which is from erlang/otp.
+
+#+begin_src erlang
+ ok = gen_event:swap_sup_handler(
+        erl_signal_server,
+        {erl_signal_handler, []},
+        {k8s_signal_handler, [Table, Delay, Test]}),
+#+end_src
+
+copy from
+[[https://github.com/Financial-Times/k8s_traffic_plug][k8s_traffic_plug]]

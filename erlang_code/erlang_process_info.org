@@ -1,0 +1,174 @@
+* erlang process_info
+:PROPERTIES:
+:CUSTOM_ID: erlang-process_info
+:END:
+It is how to know the =pcb= of erlang process.
+
+#+begin_example
+process_info(self()).
+[{current_function,{erl_eval,do_apply,6}},
+ {initial_call,{erlang,apply,2}},
+ {status,running},
+ {message_queue_len,0},
+ {messages,[]},
+ {links,[<0.293.0>]},
+ {dictionary,[]},
+ {trap_exit,false},
+ {error_handler,error_handler},
+ {priority,normal},
+ {group_leader,<0.292.0>},
+ {total_heap_size,752},
+ {heap_size,376},
+ {stack_size,24},
+ {reductions,5771},
+ {garbage_collection,[{max_heap_size,#{error_logger => true,
+                                       kill => true,
+                                       size => 0}},
+                      {min_bin_vheap_size,46422},
+                      {min_heap_size,233},
+                      {fullsweep_after,65535},
+                      {minor_gcs,5}]},
+ {suspending,[]}]
+#+end_example
+
+** current_function
+:PROPERTIES:
+:CUSTOM_ID: current_function
+:END:
+当前函数
+
+** initial_call
+:PROPERTIES:
+:CUSTOM_ID: initial_call
+:END:
+初始调用函数
+
+** status
+:PROPERTIES:
+:CUSTOM_ID: status
+:END:
+当前进程运行状态
+
+** message_queue_len
+:PROPERTIES:
+:CUSTOM_ID: message_queue_len
+:END:
+消息队列长度
+
+** messages
+:PROPERTIES:
+:CUSTOM_ID: messages
+:END:
+进程收到的消息
+
+** links
+:PROPERTIES:
+:CUSTOM_ID: links
+:END:
+链接进程
+
+** dictionary
+:PROPERTIES:
+:CUSTOM_ID: dictionary
+:END:
+进程字典
+
+** trap_exit
+:PROPERTIES:
+:CUSTOM_ID: trap_exit
+:END:
+捕获进程退出标志
+
+** error_handler
+:PROPERTIES:
+:CUSTOM_ID: error_handler
+:END:
+错误处理器
+
+** priority
+:PROPERTIES:
+:CUSTOM_ID: priority
+:END:
+进程优先级
+
+** group_leader
+:PROPERTIES:
+:CUSTOM_ID: group_leader
+:END:
+io输出进程
+
+** total_heap_size
+:PROPERTIES:
+:CUSTOM_ID: total_heap_size
+:END:
+总的堆的大小
+
+** heap_size
+:PROPERTIES:
+:CUSTOM_ID: heap_size
+:END:
+堆大小
+
+** stack_size
+:PROPERTIES:
+:CUSTOM_ID: stack_size
+:END:
+栈大小
+
+** garbage_collection
+:PROPERTIES:
+:CUSTOM_ID: garbage_collection
+:END:
+进程垃圾回收选项
+
+** suspending
+:PROPERTIES:
+:CUSTOM_ID: suspending
+:END:
+被其挂起的所有进程信息
+
+** erlang process current function
+:PROPERTIES:
+:CUSTOM_ID: erlang-process-current-function
+:END:
+To know what the process current function running:
+
+#+begin_src erlang
+erl>erlang:process_info(Pid, current_function).
+{current_function,{httpc,handle_answer,3}}
+
+... Time passed by
+
+erl>erlang:process_info(Pid, current_function).
+{current_function,{gen_server,loop,6}}
+#+end_src
+
+Through this method, I found out what caused our system key process
+timeout.
+
+** top 20 processes
+:PROPERTIES:
+:CUSTOM_ID: top-20-processes
+:END:
+#+begin_src shell
+rp([{-Reduc, Pid, case process_info(Pid, registered_name) of {registered_name,Name} -> Name; _ -> '_' end} ||
+    {Reduc, Pid} <- lists:sublist(
+    lists:foldl(
+        fun(Pid, L) ->
+                case process_info(Pid, reductions) of
+                    {reductions,Reduc} -> lists:keysort(1, [{-Reduc, Pid} | L]);
+                    undefined -> L
+                end
+        end, [], erlang:processes()), 20)]).
+#+end_src
+
+** fullsweep_after
+:PROPERTIES:
+:CUSTOM_ID: fullsweep_after
+:END:
+#+begin_src erlang
+{fullsweep_after, Number}
+#+end_src
+
+The =Number= means that after Number generation garbage collection, it
+operates a full garbage collection.

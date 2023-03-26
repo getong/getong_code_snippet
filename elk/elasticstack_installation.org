@@ -1,0 +1,35 @@
+* elastic stack installation
+:PROPERTIES:
+:CUSTOM_ID: elastic-stack-installation
+:END:
+** install in debian
+:PROPERTIES:
+:CUSTOM_ID: install-in-debian
+:END:
+#+begin_src shell
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+
+## or install using tsinghua mirror:
+echo "deb https://mirrors.tuna.tsinghua.edu.cn/elasticstack/7.x/apt/ stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+
+sudo apt-get update && sudo apt-get install elasticsearch
+#+end_src
+
+copy from
+[[https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html][Install
+Elasticsearch with Debian Package]]
+
+** huawei mirroro
+:PROPERTIES:
+:CUSTOM_ID: huawei-mirroro
+:END:
+[[https://mirrors.huaweicloud.com/elasticsearch/][elasticsearch]]
+
+** install elk in debian
+:PROPERTIES:
+:CUSTOM_ID: install-elk-in-debian
+:END:
+[[https://www.rosehosting.com/blog/how-to-install-the-elk-stack-on-debian-9/][How
+to Install ELK Stack on Debian 9]]

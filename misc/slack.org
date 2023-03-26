@@ -1,0 +1,17 @@
+* slack
+:PROPERTIES:
+:CUSTOM_ID: slack
+:END:
+** proxy
+:PROPERTIES:
+:CUSTOM_ID: proxy
+:END:
+#+begin_src shell
+slack --proxy-server='socks5://localhost:1080'
+
+slack --proxy-server='http://localhost:3128'
+#+end_src
+
+copy from
+[[https://askubuntu.com/questions/1093183/slack-desktop-client-with-socks-proxy][Slack
+desktop client with socks proxy]]

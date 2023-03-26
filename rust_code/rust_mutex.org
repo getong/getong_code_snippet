@@ -1,0 +1,58 @@
+* rust mutex
+:PROPERTIES:
+:CUSTOM_ID: rust-mutex
+:END:
+** scope and lock
+:PROPERTIES:
+:CUSTOM_ID: scope-and-lock
+:END:
+This not work!
+
+#+begin_src rust
+use std::sync::Mutex;
+
+async fn increment_and_do_stuff(mutex: &Mutex<i32>) {
+    let mut lock = mutex.lock().unwrap();
+    *lock += 1;
+
+    do_something_async().await;
+} // lock goes out of scope here
+#+end_src
+
+This fails too.
+
+#+begin_src rust
+use std::sync::Mutex;
+
+// This fails too.
+async fn increment_and_do_stuff(mutex: &Mutex<i32>) {
+    let mut lock = mutex.lock().unwrap();
+    *lock += 1;
+    drop(lock);
+
+    do_something_async().await;
+}
+#+end_src
+
+This works:
+
+#+begin_src rust
+async fn increment_and_do_stuff(mutex: &Mutex<i32>) {
+    {
+        let mut lock = mutex.lock().unwrap();
+        *lock += 1;
+    } // lock goes out of scope here
+
+    do_something_async().await;
+}
+#+end_src
+
+** spinlock
+:PROPERTIES:
+:CUSTOM_ID: spinlock
+:END:
+see
+[[https://zhuanlan.zhihu.com/p/413659832][进击的Rust多线程--混合自旋锁]]
+
+see [[https://zhuanlan.zhihu.com/p/365905573][透过 Rust
+探索系统的本原：并发原语]]

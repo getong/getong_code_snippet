@@ -1,0 +1,34 @@
+* compile tmux
+:PROPERTIES:
+:CUSTOM_ID: compile-tmux
+:END:
+** install the deps
+:PROPERTIES:
+:CUSTOM_ID: install-the-deps
+:END:
+CentOS
+
+#+begin_src shell
+yum install -y gcc libevent-devel ncurses-devel glibc-static automake
+#+end_src
+
+Debian
+
+#+begin_src shell
+apt-get  install -y gcc libevent-dev ncurses-dev build-essential automake
+#+end_src
+
+** compile and install
+:PROPERTIES:
+:CUSTOM_ID: compile-and-install
+:END:
+#+begin_src shell
+$ export VERSION=3.1b
+$ wget -c https://github.com/tmux/tmux/releases/download/$VERSION/tmux-$VERSION.tar.gz
+$ tar xzf tmux-$VERSION.tar.gz
+$ cd tmux-$VERSION
+$ ./autogen.sh
+$ ./configure --prefix=/usr/local/tmux-$VERSION
+$ make
+$ sudo make install
+#+end_src

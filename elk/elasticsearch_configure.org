@@ -1,0 +1,21 @@
+* elasticsearch configure
+:PROPERTIES:
+:CUSTOM_ID: elasticsearch-configure
+:END:
+** File descriptor
+:PROPERTIES:
+:CUSTOM_ID: file-descriptor
+:END:
+#+begin_src shell
+sudo echo "elasticsearch - nofile 65536" >> /etc/security/limits.conf
+#+end_src
+
+** virtual memory
+:PROPERTIES:
+:CUSTOM_ID: virtual-memory
+:END:
+#+begin_src shell
+sudo sysctl -w vm.max_map_count=262144
+sudo sysctl -p
+cat /proc/sys/vm/max_map_count
+#+end_src

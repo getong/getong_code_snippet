@@ -1,0 +1,70 @@
+* javascript
+:PROPERTIES:
+:CUSTOM_ID: javascript
+:END:
+** make http request
+:PROPERTIES:
+:CUSTOM_ID: make-http-request
+:END:
+#+begin_src javascript
+const Http = new XMLHttpRequest();
+const url='https://jsonplaceholder.typicode.com/posts';
+Http.open("GET", url);
+Http.send();
+
+Http.onreadystatechange = (e) => {
+  console.log(Http.responseText)
+}
+#+end_src
+
+more on
+[[https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/][Here
+are the most popular ways to make an HTTP request in JavaScript]]
+
+** From Callbacks, to Promises, to Async/Await
+:PROPERTIES:
+:CUSTOM_ID: from-callbacks-to-promises-to-asyncawait
+:END:
+[[https://tylermcginnis.com/async-javascript-from-callbacks-to-promises-to-async-await/][Async
+JavaScript: From Callbacks, to Promises, to Async/Await]]
+[[https://mp.weixin.qq.com/s/V6EtgI_mAFk7FAFPSVFg4Q][异步JavaScript的演化史：从回调到Promise再到Async/Await]]
+
+** MDN JavaScript page
+:PROPERTIES:
+:CUSTOM_ID: mdn-javascript-page
+:END:
+[[https://developer.mozilla.org/en-US/docs/Web/javascript][MDN
+JavaScript]]
+
+** code example
+:PROPERTIES:
+:CUSTOM_ID: code-example
+:END:
+#+begin_src javascript
+typeof(null) === 'object'
+Number("100")
+String(100)
+let a = NaN
+typeof(a) == 'number'
+100 + undefined === NaN
+
+let names = ["Hat", "Boots", "Gloves"];
+let prices = [];
+let combinedArray = [...names, ...prices];
+
+let A = function(name, value) {
+    this.name = name;
+    this.value = value;
+}
+Object.setPrototypeOf(A.prototype, B.prototype);
+A.call(this, name, value);
+A.prototype.getInfo = function() {}
+#+end_src
+
+** prettier
+:PROPERTIES:
+:CUSTOM_ID: prettier
+:END:
+#+begin_src shell
+prettier --check  --write css/* js/*
+#+end_src

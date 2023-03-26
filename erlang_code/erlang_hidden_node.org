@@ -1,0 +1,38 @@
+* erlang hidden node
+:PROPERTIES:
+:CUSTOM_ID: erlang-hidden-node
+:END:
+** erl start hidden node
+:PROPERTIES:
+:CUSTOM_ID: erl-start-hidden-node
+:END:
+#+begin_example
+erl -hidden -sname a
+#+end_example
+
+** escript start hidden node
+:PROPERTIES:
+:CUSTOM_ID: escript-start-hidden-node
+:END:
+#+begin_example
+#!/usr/bin/env escript
+%% -*- erlang -*-
+%%! -hidden
+#+end_example
+
+** net_kernel:hidden_connect_node/1, no docs, but exported.
+:PROPERTIES:
+:CUSTOM_ID: net_kernelhidden_connect_node1-no-docs-but-exported.
+:END:
+#+begin_example
+net_kernel:connect_node/1  %% connect to node, not hidden
+net_kernel:hidden_connect_node(Node) %% connect to node, hidden
+#+end_example
+
+** set_net_ticktime
+:PROPERTIES:
+:CUSTOM_ID: set_net_ticktime
+:END:
+#+begin_src erlang
+net_kernel:set_net_ticktime/1, net_kernel:set_net_ticktime/2 are used to change the node ticktime.
+#+end_src

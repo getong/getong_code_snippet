@@ -1,0 +1,6 @@
+* a* algorithm
+:PROPERTIES:
+:CUSTOM_ID: a-algorithm
+:END:
+[[https://github.com/aggelgian/erlang-algorithms][erlang-algorithms]]
+There is a erlang implemention for a* algorithm.

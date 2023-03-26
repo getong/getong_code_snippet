@@ -1,0 +1,55 @@
+* rust webassembly
+:PROPERTIES:
+:CUSTOM_ID: rust-webassembly
+:END:
+** add web_sys crate
+:PROPERTIES:
+:CUSTOM_ID: add-web_sys-crate
+:END:
+#+begin_src shell
+cargo add web_sys
+#+end_src
+
+** install webassembly environment
+:PROPERTIES:
+:CUSTOM_ID: install-webassembly-environment
+:END:
+#+begin_src shell
+rustup target list | grep wasm
+
+rustup target add wasm32-wasi
+rustup target add wasm32-unknown-emscripten
+rustup target add wasm32-unknown-unknown
+
+curl https://get.wasmer.io -sSfL | sh
+
+## wasi environment
+cargo new hello_example
+cd hello_example
+cargo build --target=wasm32-wasi
+wasmer run target/wasm32-wasi/debug/hello_example.wasm
+#+end_src
+
+** install wasm-pack
+:PROPERTIES:
+:CUSTOM_ID: install-wasm-pack
+:END:
+#+begin_example
+curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf |  sh
+
+## new a wasm pack project
+wasm cargo generate --git https://github.com/rustwasm/wasm-pack-template
+
+## change directory
+cd $project
+
+## build wasm
+wasm-pack build
+wasm-pack build --target web --out-name wasm --out-dir ./static
+#+end_example
+
+** book
+:PROPERTIES:
+:CUSTOM_ID: book
+:END:
+[[https://rustwasm.github.io/docs/book/][Rust and WebAssembly]]

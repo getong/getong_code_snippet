@@ -1,0 +1,132 @@
+* rust AsRef and AsMut
+:PROPERTIES:
+:CUSTOM_ID: rust-asref-and-asmut
+:END:
+** trait definition
+:PROPERTIES:
+:CUSTOM_ID: trait-definition
+:END:
+在Rust中实现上述两个trait， 则表明能够将一个类型转换为另一个类型的引用。
+
+#+begin_src rust
+trait AsRef<T: ?Sized> {
+    fn as_ref(&self) -> &T;
+}
+trait AsMut<T: ?Sized> {
+    fn as_mut(&mut self) -> &mut T;
+}
+#+end_src
+
+copy from [[file:Rust笔记%20-%20AsRef%20and%20AsMut%20trait][Rust笔记 -
+AsRef and AsMut trait]]
+
+std::convert 下面，还有另外两个
+Trait，AsRef/AsMut，它们功能是配合泛型，在执行引用操作的时候，进行自动类型转换。
+
+** AsRef
+:PROPERTIES:
+:CUSTOM_ID: asref
+:END:
+AsRef 提供了一个方法 .as_ref()。
+
+对于一个类型为 T 的对象 foo，如果 T 实现了 AsRef，那么，foo 可执行
+.as_ref() 操作，即 foo.as_ref()。操作的结果，我们得到了一个类型为 &U
+的新引用。
+
+注：
+
+与 Into 不同的是，AsRef 只是类型转换，foo 对象本身没有被消耗； T: AsRef
+中的 T，可以接受 资源拥有者（owned）类型，共享引用（shared
+referrence）类型 ，可变引用（mutable referrence）类型。
+
+** AsMut
+:PROPERTIES:
+:CUSTOM_ID: asmut
+:END:
+AsMut 提供了一个方法 .as_mut()。它是 AsRef 的可变（mutable）引用版本。
+
+对于一个类型为 T 的对象 foo，如果 T 实现了 AsMut，那么，foo 可执行
+.as_mut() 操作，即 foo.as_mut()。操作的结果，我们得到了一个类型为 &mut U
+的可变（mutable）引用。
+
+注：在转换的过程中，foo 会被可变（mutable）借用。
+
+copy from
+[[https://wiki.jikexueyuan.com/project/rust-primer/intoborrow/asref.html][AsRef
+和 AsMut]]
+
+** explaining as_ref
+:PROPERTIES:
+:CUSTOM_ID: explaining-as_ref
+:END:
+#+begin_src rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map(|x| &**x).unwrap_or("default string");
+}
+#+end_src
+
+First, as_ref() implicitly takes a reference on opt, giving an &Option
+(because as_ref() takes &self, i.e. it receives a reference), and turns
+it into an Option<&String>. Then we use map to convert it to an
+Option<&str>. Here's what &**x does: the rightmost * (which is evaluated
+first) simply dereferences the &String, giving a String lvalue. Then,
+the leftmost * actually invokes the Deref trait, because String
+implements Deref<Target=str>, giving us a str lvalue. Finally, the &
+takes the address of the str lvalue, giving us a &str.
+
+You can simplify this a bit further by using map_or to combine map and
+unwrap_or in a single operation:
+
+#+begin_src rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", |x| &**x);
+}
+#+end_src
+
+If &**x looks too magical to you, you can write String::as_str instead:
+
+#+begin_src rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", String::as_str);
+}
+#+end_src
+
+or String::as_ref (from the AsRef trait, which is in the prelude):
+
+#+begin_src rust
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", String::as_ref);
+}
+#+end_src
+
+or String::deref (though you need to import the Deref trait too):
+
+#+begin_src rust
+use std::ops::Deref;
+
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.as_ref().map_or("default string", String::deref);
+}
+#+end_src
+
+For either of these to work, you need to keep an owner for the Option as
+long as the Option<&str> or unwrapped &str needs to remain available. If
+that's too complicated, you could use Cow.
+
+#+begin_src rust
+use std::borrow::Cow::{Borrowed, Owned};
+
+fn main() {
+    let opt: Option<String> = Some("some value".to_owned());
+    let value = opt.map_or(Borrowed("default string"), |x| Owned(x));
+}
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/31233938/converting-from-optionstring-to-optionstr][Converting
+from Option to Option<&str>]]

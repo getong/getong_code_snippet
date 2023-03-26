@@ -1,0 +1,7 @@
+* download address
+:PROPERTIES:
+:CUSTOM_ID: download-address
+:END:
+[[http://www.google.com/chrome/eula.html?standalone=1][Google Chrome
+Offline installer]]
+[[https://www.google.cn/chrome/browser/desktop/index.html][chrome]]

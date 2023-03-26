@@ -1,0 +1,26 @@
+* distrillery
+:PROPERTIES:
+:CUSTOM_ID: distrillery
+:END:
+** installation
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
+#+begin_src elixir
+defp deps do
+  [
+    {:distillery, "~> 2.0"}
+  ]
+end
+#+end_src
+
+** release
+:PROPERTIES:
+:CUSTOM_ID: release
+:END:
+#+begin_src elixir
+mix distillery.init
+mix distillery.release
+mix distillery.release.clean
+mix distillery.gen.appup
+#+end_src

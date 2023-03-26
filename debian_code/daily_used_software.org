@@ -1,0 +1,21 @@
+* daily used softwares
+:PROPERTIES:
+:CUSTOM_ID: daily-used-softwares
+:END:
+#+begin_example
+vagrant
+virtualbox
+zsh
+emacs
+vim
+tmux
+trash-cli
+proxychains
+proxychains4
+ansible
+supervisor
+systemd
+python-pip
+nemo
+git
+#+end_example

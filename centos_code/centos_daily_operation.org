@@ -1,0 +1,253 @@
+* centos daily operations
+:PROPERTIES:
+:CUSTOM_ID: centos-daily-operations
+:END:
+** set timezone without reboot
+:PROPERTIES:
+:CUSTOM_ID: set-timezone-without-reboot
+:END:
+#+begin_src shell
+$ timedatectl list-timezones
+$ sudo timedatectl set-timezone Asia/Shanghai
+$ date
+# 2023年 02月 24日 星期五 02:32:16 UTC
+
+$ sudo timedatectl set-timezone America/Los_Angeles
+
+$date
+2023年 02月 23日 星期四 18:51:29 PST
+
+# dst mode, one hour earlier than America/Los_Angeles
+$ sudo timedatectl set-timezone America/Phoenix
+
+## php code
+// date_default_timezone_set('UTC');
+date_default_timezone_set('America/Los_Angeles');
+#+end_src
+
+** install fastestmirror
+:PROPERTIES:
+:CUSTOM_ID: install-fastestmirror
+:END:
+#+begin_src shell
+yum install yum-plugin-fastestmirror
+#+end_src
+
+Edit /etc/yum/pluginconf.d/fastestmirror.conf
+
+#+begin_src shell
+enabled=1
+exclude=.gov, facebook
+#+end_src
+
+The fetch the new packages cache
+
+#+begin_src shell
+yum clean all
+yum makecache
+
+yum check-update
+yum upgrade
+#+end_src
+
+** yumdownloader
+:PROPERTIES:
+:CUSTOM_ID: yumdownloader
+:END:
+#+begin_src shell
+# yum install yum-utils
+# yum check-update
+#+end_src
+
+Note that the package name and repos output here.
+
+#+begin_src shell
+# cd /var/cache/yum/x86_64/7/updates/packages ## the updates is the repo that download package
+# yumdownloader package_names
+#+end_src
+
+** install docker using aliyun
+:PROPERTIES:
+:CUSTOM_ID: install-docker-using-aliyun
+:END:
+see [[https://yq.aliyun.com/articles/110806][Docker CE 镜像源站]]
+
+#+begin_src shell
+$ sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+$ sudo yum makecache fast
+$ sudo yum -y install docker-ce
+#+end_src
+
+** which repository provide a particular package?
+:PROPERTIES:
+:CUSTOM_ID: which-repository-provide-a-particular-package
+:END:
+#+begin_src shell
+yum list package
+#+end_src
+
+for example, the docker-ce:
+
+#+begin_src shell
+yum list --showduplicates 'docker-ce' | grep '18.03.*el' | tail -1 | awk '{print $2}'
+#+end_src
+
+** sudo in centos
+:PROPERTIES:
+:CUSTOM_ID: sudo-in-centos
+:END:
+Unlike Debian, the sudo group doest not exist in centos, the sudo group
+name is wheel
+
+#+begin_src shell
+# add group user
+usermod -aG wheel username
+
+# use visudo to edit sudo user info
+visudo
+
+# allow sudo user not type password, uncomment this line in the sudoer file
+#%wheel ALL=(ALL)NOPASSWD:ALL
+#+end_src
+
+** stop firewall in centos 7
+:PROPERTIES:
+:CUSTOM_ID: stop-firewall-in-centos-7
+:END:
+#+begin_src shell
+systemctl stop firewalld
+systemctl disable firewalld
+#+end_src
+
+copy from
+[[https://www.liquidweb.com/kb/how-to-stop-and-disable-firewalld-on-centos-7/][How
+to Stop and Disable Firewalld on CentOS 7]]
+
+** search available package versions in rpm systems
+:PROPERTIES:
+:CUSTOM_ID: search-available-package-versions-in-rpm-systems
+:END:
+#+begin_src shell
+# Redhat based system
+yum --showduplicates list <package>
+
+# SuSE system
+yum --showduplicates list <package>
+
+# debian based system
+apt-cache policy <package>
+apt-cache madison <package>
+#+end_src
+
+copy from
+[[https://unix.stackexchange.com/questions/6263/how-to-check-available-package-versions-in-rpm-systems][How
+to check available package versions in rpm systems?]]
+
+** install the trash-cli
+:PROPERTIES:
+:CUSTOM_ID: install-the-trash-cli
+:END:
+#+begin_src shell
+sudo yum install python-setuptools
+sudo easy_install trash-cli
+#+end_src
+
+** install specific version of package
+:PROPERTIES:
+:CUSTOM_ID: install-specific-version-of-package
+:END:
+#+begin_src shell
+yum --showduplicate list firefox
+yum install [package-name]-[version].[architecture]
+yum install firefox-31.5.3-3.el7_1.x86_64
+#+end_src
+
+copy from
+[[https://www.thegeekdiary.com/centos-rhel-how-to-install-a-specific-version-of-rpm-package-using-yum/][CentOS
+/ RHEL : How to install a specific version of rpm package using YUM]]
+
+** reinstall yum
+:PROPERTIES:
+:CUSTOM_ID: reinstall-yum
+:END:
+when the yum is broken:
+
+#+begin_example
+There was a problem importing one of the Python modules
+required to run yum. The error leading to this problem was:
+
+No module named yum
+
+Please install a package which provides this module, or
+verify that the module is installed correctly.
+
+It's possible that the above module doesn't match the
+current version of Python, which is:
+2.7.5 (default, Apr 21 2021, 14:59:31
+#+end_example
+
+reinstall yum:
+
+#+begin_src shell
+// remove the old python
+rpm -qa| grep python| xargs rpm -ev --allmatches --nodeps
+
+whereis python |xargs rm -frv
+
+
+// remove the old yum
+rpm -qa|grep yum|xargs rpm -ev --allmatches --nodeps
+
+whereis yum |xargs rm -frv
+
+// download the yum file
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/libxml2-python-2.9.1-6.el7.5.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-2.7.5-89.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python2-rpm-macros-3-34.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-backports-1.0-8.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-backports-ssl_match_hostname-3.5.0.1-1.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-chardet-2.2.1-3.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-devel-2.7.5-89.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-iniparse-0.4-9.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-ipaddr-2.1.11-2.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-kitchen-1.1.1-5.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-libs-2.7.5-89.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-pycurl-7.19.0-19.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-rpm-macros-3-34.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-setuptools-0.9.8-7.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-srpm-macros-3-34.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/python-urlgrabber-3.10-10.el7.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/rpm-python-4.11.3-45.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/yum-3.4.3-168.el7.centos.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/yum-metadata-parser-1.1.4-10.el7.x86_64.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/yum-plugin-aliases-1.1.31-54.el7_8.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-54.el7_8.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/yum-plugin-protectbase-1.1.31-54.el7_8.noarch.rpm
+wget http://mirrors.ustc.edu.cn/centos/7.9.2009/os/x86_64/Packages/yum-utils-1.1.31-54.el7_8.noarch.rpm
+
+// install the yum file
+rpm -Uvh --force --nodeps --replacepkgs *.rpm
+
+// update the yum repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+
+curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+#+end_src
+
+copy from
+[[https://blog.jairmir.com/index.php/2021/04/21/centos7-9-yum%E9%87%8D%E8%A3%85/][centos
+7.9 yum重装]]
+
+** yum Peer's Certificate issuer is not recognized.
+:PROPERTIES:
+:CUSTOM_ID: yum-peers-certificate-issuer-is-not-recognized.
+:END:
+#+begin_src shell
+sudo vim /etc/yum.conf
+------------------------
+sslverify=false
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/47676980/curl-60-peers-certificate-issuer-is-not-recognized][curl:
+(60) Peer's Certificate issuer is not recognized.]]

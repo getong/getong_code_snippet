@@ -1,0 +1,8 @@
+* rust config crate
+:PROPERTIES:
+:CUSTOM_ID: rust-config-crate
+:END:
+** config crate can understand yml config file
+:PROPERTIES:
+:CUSTOM_ID: config-crate-can-understand-yml-config-file
+:END:

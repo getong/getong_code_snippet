@@ -1,0 +1,11 @@
+* webpack
+:PROPERTIES:
+:CUSTOM_ID: webpack
+:END:
+** doc
+:PROPERTIES:
+:CUSTOM_ID: doc
+:END:
+[[https://juejin.im/post/5a5f3513f265da3e5133239a][（翻译）阮一峰老师的webpack使用教程]]
+[[https://github.com/ruanyf/webpack-demos][webpack-demos]]
+[[https://segmentfault.com/a/1190000006178770][入门 Webpack]]

@@ -1,0 +1,6 @@
+* haproxy
+:PROPERTIES:
+:CUSTOM_ID: haproxy
+:END:
+- [ ] haproxy config, docker with haproxy
+- [ ] ranch haproxy

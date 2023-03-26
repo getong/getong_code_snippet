@@ -1,0 +1,36 @@
+* lager
+:PROPERTIES:
+:CUSTOM_ID: lager
+:END:
+** rotate_log
+:PROPERTIES:
+:CUSTOM_ID: rotate_log
+:END:
+#+begin_src erlang
+%% @spec () -> ok
+rotate_log() ->
+    catch lager_crash_log ! rotate,
+    lists:foreach(
+      fun({lager_file_backend, File}) ->
+              whereis(lager_event) ! {rotate, File};
+         (_) ->
+              ok
+      end, gen_event:which_handlers(lager_event)).
+#+end_src
+
+copy from =ejabberd_logger.erl=. In case of =lager_crash_log= not run,
+adds =catch=.
+
+** erlang 21 introduces logger module, which is inspired by lager partly.
+:PROPERTIES:
+:CUSTOM_ID: erlang-21-introduces-logger-module-which-is-inspired-by-lager-partly.
+:END:
+The error_logger is deprecated by default in erlang 21, and lager
+enables error_logger by default.
+
+** erlang 21 introduces logger, which can be replaced lager
+:PROPERTIES:
+:CUSTOM_ID: erlang-21-introduces-logger-which-can-be-replaced-lager
+:END:
+The [[https://github.com/emqx/emqx][emqx]] just use logger to replace
+lager.

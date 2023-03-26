@@ -1,0 +1,23 @@
+* rabbitmq
+:PROPERTIES:
+:CUSTOM_ID: rabbitmq
+:END:
+** start rabbitmq using docker
+:PROPERTIES:
+:CUSTOM_ID: start-rabbitmq-using-docker
+:END:
+#+begin_example
+ docker run --hostname rabbitmq_test --name some-rabbit -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=Anaith7x -e RABBITMQ_ERLANG_COOKIE='Chiew0irtoh9Peeg' -e RABBITMQ_DEFAULT_VHOST='abc' -d rabbitmq:3.8.2-management-alpine
+#+end_example
+
+** set user and password
+:PROPERTIES:
+:CUSTOM_ID: set-user-and-password
+:END:
+#+begin_src shell
+rabbitmqctl add_user newadmin newpassword
+
+rabbitmqctl set_user_tags newadmin administrator
+
+rabbitmqctl set_permissions -p / newadmin "." "." ".*"
+#+end_src

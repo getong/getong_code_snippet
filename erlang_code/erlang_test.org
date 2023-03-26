@@ -1,0 +1,27 @@
+* erlang test
+:PROPERTIES:
+:CUSTOM_ID: erlang-test
+:END:
+** eunit
+:PROPERTIES:
+:CUSTOM_ID: eunit
+:END:
+** comman test
+:PROPERTIES:
+:CUSTOM_ID: comman-test
+:END:
+[[https://learnyousomeerlang.com/common-test-for-uncommon-tests][Common
+Test for Uncommon Tests]]
+
+** dialyzer
+:PROPERTIES:
+:CUSTOM_ID: dialyzer
+:END:
+** elvis
+:PROPERTIES:
+:CUSTOM_ID: elvis
+:END:
+** PropEr
+:PROPERTIES:
+:CUSTOM_ID: proper
+:END:

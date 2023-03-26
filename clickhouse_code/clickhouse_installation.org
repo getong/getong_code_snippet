@@ -1,0 +1,46 @@
+* clickhouse installation
+:PROPERTIES:
+:CUSTOM_ID: clickhouse-installation
+:END:
+** debian installation
+:PROPERTIES:
+:CUSTOM_ID: debian-installation
+:END:
+#+begin_src shell
+sudo apt-get install apt-transport-https ca-certificates dirmngr
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E0C56BD4
+
+echo "deb https://repo.clickhouse.com/deb/stable/ main/" | sudo tee \
+    /etc/apt/sources.list.d/clickhouse.list
+sudo apt-get update
+
+sudo apt-get install -y clickhouse-server clickhouse-client
+
+sudo systemctl start clickhouse-server
+#+end_src
+
+** set the password of the default user
+:PROPERTIES:
+:CUSTOM_ID: set-the-password-of-the-default-user
+:END:
+#+begin_src shell
+echo -n $password | sha256sum
+#+end_src
+
+set the result to the
+=/etc/clickhouse-server/users.d/default-password.xml=
+
+#+begin_src shell
+sudo systemctl restart clickhouse-server
+#+end_src
+
+** allow remote access
+:PROPERTIES:
+:CUSTOM_ID: allow-remote-access
+:END:
+edit file =/etc/clickhouse-server/config.xml= uncomment
+=<listen_host>::</listen_host>=
+
+#+begin_src shell
+sudo systemctl restart clickhouse-server
+#+end_src

@@ -1,0 +1,15 @@
+* rust performance
+:PROPERTIES:
+:CUSTOM_ID: rust-performance
+:END:
+[[https://github.com/dwarfhack/tokio_udp_rate_test][Little benchmark for
+Rust + Tokio UDP pps performance]]
+[[https://dwarfhack.com/posts/tech/tokio_pps/][500K pps with tokio]]
+[[https://github.com/ZettaScaleLabs/rust-async-net-eval][Rust and
+networking performance]]
+[[https://zenoh.io/blog/2022-04-14-rust-async-eval/][A Performance
+Evaluation on Rust Asynchronous Frameworks]]
+[[https://medium.com/tresorit-engineering/collecting-broadcast-udp-packets-using-async-networking-in-rust-7fd93a631eac][Collecting
+broadcast UDP packets using async networking in Rust]]
+[[https://github.com/flamegraph-rs/flamegraph][flamegraph]]
+[[https://github.com/tokio-rs/tokio-uring][tokio-uring]]

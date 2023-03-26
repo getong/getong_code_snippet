@@ -1,4 +1,0 @@
-# iptables
-- [ ] iptables
-- [ ] nftables
-- [ ] ufw

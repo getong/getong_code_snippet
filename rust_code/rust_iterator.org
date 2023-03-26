@@ -1,0 +1,138 @@
+* rust iterator
+:PROPERTIES:
+:CUSTOM_ID: rust-iterator
+:END:
+** map
+:PROPERTIES:
+:CUSTOM_ID: map
+:END:
+#+begin_src rust
+let x_vec: Vec<char> = (b'a' ..= b'z').map(|x| x as char).collect();
+
+let x_str: String = (b'a' ..= b'z').map(|x| x as char).collect();
+#+end_src
+
+** fold
+:PROPERTIES:
+:CUSTOM_ID: fold
+:END:
+#+begin_src rust
+let res: Vec<char> = (b'a' ..= b'z').map(|x| x as char).fold(Vec::new(), |mut acc, ch| { acc.push(ch); acc});
+
+let res: String = (b'a' ..= b'z').map(|x| x as char).fold(String::new(), |mut acc, ch| { acc.push(ch); acc});
+#+end_src
+
+** trait Iterator next method
+:PROPERTIES:
+:CUSTOM_ID: trait-iterator-next-method
+:END:
+#+begin_src rust
+pub trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+}
+#+end_src
+
+** IntoIterator
+:PROPERTIES:
+:CUSTOM_ID: intoiterator
+:END:
+#+begin_src rust
+trait IntoIterator where Self::IntoIter: Iterator<Item=Self::Item> {
+    type Item;
+    type IntoIter: Iterator;
+    fn into_iter(self) -> Self::IntoIter;
+}
+``
+The doc:
+#+end_src
+
+Most collections actually provide several implementations of
+IntoIterator, for shared references (&T), mutable references (&mut T),
+and moves (T):
+
+#+begin_example
+Given a shared reference to the collection, into_iter returns an
+#+end_example
+
+iterator that produces shared references to its items. For example, in
+the preceding code, (&favorites).into_iter() would return an iterator
+whose Item type is &String.
+
+#+begin_example
+Given a mutable reference to the collection, into_iter returns an
+#+end_example
+
+iterator that produces mutable references to the items. For example, if
+vector is some Vec, the call (&mut vector).into_iter() returns an
+iterator whose Item type is &mut String.
+
+#+begin_example
+When passed the collection by value, into_iter returns an iterator
+#+end_example
+
+that takes ownership of the collection and returns items by value; the
+items' ownership moves from the collection to the consumer, and the
+original collection is consumed in the process. For example, the call
+favorites.into_iter() in the preceding code returns an iterator that
+produces each string by value; the consumer receives ownership of each
+string. When the iterator is dropped, any elements remaining in the
+BTreeSet are dropped too, and the set's now-empty husk is disposed of.
+
+#+begin_example
+Since a for loop applies IntoIterator::into_iter to its operand, these
+#+end_example
+
+three implementations are what create the following idioms for iterating
+over shared or mutable references to a collection, or consuming the
+collection and taking ownership of its elements:
+
+#+begin_example
+for element in &collection { ... }
+for element in &mut collection { ... }
+for element in collection { ... }
+#+end_example
+
+#+begin_example
+
+## c_string
+
+``` rust
+fn c_string(bytes: &[u8]) -> Option<&str> {
+    let bytes_without_null = match bytes.iter().position(|&b| b == 0) {
+        Some(ix) => &bytes[..ix],
+        None => bytes,
+    };
+
+    std::str::from_utf8(bytes_without_null).ok()
+}
+#+end_example
+
+** iterator favor
+:PROPERTIES:
+:CUSTOM_ID: iterator-favor
+:END:
+do
+
+#+begin_src rust
+let slice = &[1,2,3,4];
+for i in slice {
+}
+#+end_src
+
+do not
+
+#+begin_src rust
+for slice = &[1,2,3,4];
+for i in 0 .. slice.len() {
+}
+#+end_src
+
+** count() method
+:PROPERTIES:
+:CUSTOM_ID: count-method
+:END:
+Use .count(). len() is only for iterators which know their exact size
+without needing to be consumed, count() consumes the iterator. copy from
+[[https://stackoverflow.com/questions/26643688/how-do-i-split-a-string-in-rust][How
+do I split a string in Rust?]]

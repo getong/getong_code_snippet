@@ -1,0 +1,13 @@
+* paxos
+:PROPERTIES:
+:CUSTOM_ID: paxos
+:END:
+[[http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html][Paxos in 25
+Lines]]
+
+** raft
+:PROPERTIES:
+:CUSTOM_ID: raft
+:END:
+[[https://github.com/OneSizeFitsQuorum/raft-thesis-zh_cn][Raft
+博士论文的翻译]] [[https://github.com/maemual/raft-zh_cn][raft-zh_cn]]

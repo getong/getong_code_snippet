@@ -1,0 +1,35 @@
+** use when in case of many nest code
+:PROPERTIES:
+:CUSTOM_ID: use-when-in-case-of-many-nest-code
+:END:
+#+begin_example
+%% in riak_ensemble riak_ensemble_lease.erl
+check_lease({_, T}) ->
+    case ets:lookup_element(T, lease, 2) of
+        undefined ->
+            false;
+        Until ->
+            case riak_ensemble_clock:monotonic_time_ms() of
+                {ok, Time} when Time < Until ->
+                    true;
+                _ ->
+                    false
+            end
+    end.
+#+end_example
+
+the =when= is used to avoid many nest codes.
+
+** case example
+:PROPERTIES:
+:CUSTOM_ID: case-example
+:END:
+#+begin_src erlang
+case Var of
+    X when x > 0 andalso X < 10 ->
+        ok;
+    X when x > 10 andalso X < 20 ->
+        ok;
+    ...
+end
+#+end_src

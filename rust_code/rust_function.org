@@ -1,0 +1,1056 @@
+* rust function
+:PROPERTIES:
+:CUSTOM_ID: rust-function
+:END:
+** pattern match
+:PROPERTIES:
+:CUSTOM_ID: pattern-match
+:END:
+#+begin_src rust
+fn print_id((name, age): (&str, i32)) {
+println!("I'm {},age {}.", name, age);
+}
+
+fn print_age((_, age): (&str, i32)) {
+println!("My age is  {}", age);
+}
+
+fn print_name((name,_): (&str, i32)) {
+println!("I am  {}", name);
+}
+#+end_src
+
+see
+[[https://github.com/rustcc/RustPrimer/blob/master/function/arguement.md][函数参数]]
+
+** function trait
+:PROPERTIES:
+:CUSTOM_ID: function-trait
+:END:
+#+begin_src rust
+fn process<F>(n: i32, func: F) -> i32
+    where F: Fn(i32) -> i32 {
+    func(n)
+}
+#+end_src
+
+** function lifetime
+:PROPERTIES:
+:CUSTOM_ID: function-lifetime
+:END:
+#+begin_src rust
+fn foo<'a>(x :&'a str) -> &'a str {
+    x
+}
+#+end_src
+
+** devive属性
+:PROPERTIES:
+:CUSTOM_ID: devive属性
+:END:
+#+begin_src rust
+#[devive]
+struct Foo;
+
+fn main() {
+    println!!("{:?}", Foo);
+}
+#+end_src
+
+** 泛型函数
+:PROPERTIES:
+:CUSTOM_ID: 泛型函数
+:END:
+#+begin_src rust
+use std::ops::Add;
+
+fn add<T: Add<T, Output=T>>(a:T, b:T) -> T {
+    a + b
+}
+
+fn main() {
+    println!("{}", add(100i32, 1i32));
+    println!("{}", add(100.11f32, 100.22f32));
+}
+#+end_src
+
+** Copy
+:PROPERTIES:
+:CUSTOM_ID: copy
+:END:
+#+begin_src rust
+实现Copy  的基本数据类型有： i8, i16, 832, 864, usize, u8, u32, u64, f32, f64, {}, bool, char等
+结构体类型的属性类型都实现 Copy特性，那么这个类型就可以实现Copy特性。
+#+end_src
+
+** move
+:PROPERTIES:
+:CUSTOM_ID: move
+:END:
+move 关键字常用在闭包中， 强制闭包获取所有权。
+没有实现Copy特性的类型默认都是move 特性
+
+#+begin_src rust
+let mut num = 5;
+let mut plus_num = move |x: i32| num += x
+plus_num(5);
+
+let s = String::form(“hello”);
+let b = s += “ world”;  // can not use s anymore
+
+let 标识符A = 标识符B;
+#+end_src
+
+move + copy 可以获取环境变量
+
+#+begin_src rust
+fn factory() -> Box<Fn(i32) -> i32> {
+    let num = 5;
+    Box::new(move |x| x + num)
+}
+
+let f = factory();
+let anser = f(1);
+assert_eq!(6, answer);
+#+end_src
+
+** higher order function
+:PROPERTIES:
+:CUSTOM_ID: higher-order-function
+:END:
+#+begin_src rust
+fn main() {
+   let a = [1,2,3,4,5,6,7];
+   let mut b = Vec::<i32>::new();
+   for i in &a {
+       b.push(get_func(*i)(*i));
+   }
+   println!("{:?}", b);
+   assert_eq!(true_maker()(), true);
+}
+
+fn get_func(n: i32) -> fn(i32) -> i32 {
+    fn inc(n: i32) -> i32 {
+        n + 1
+    }
+    fn dec(n: i32) -> i32 {
+        n - 1
+    }
+    if n % 2 == 0 {
+        inc
+    } else {
+        dec
+    }
+}
+
+fn is_true() -> bool { true}
+fn true_maker() -> fn() -> bool { is_true }
+#+end_src
+
+The =Vec::<i32>::new()= return a vector list. The =for i in &a= and the
+=i= is need to deref, using =*i=. The function can be defined inside
+another function. The return statement can just return the function name
+as a result.
+
+** 在rust 中，当一个函数返回 () 时，可以省略。
+:PROPERTIES:
+:CUSTOM_ID: 在rust-中当一个函数返回-时可以省略
+:END:
+main函数的返回值类型是(), 它是一个特殊的元组--没有元素的元组，称为unit，
+它表示一个函数没有任何信息需要返回。
+rust函数不支持多返回值，但可以利用元组来返回多个值。 发散函数（diverging
+function）
+是rust中的一个特性，发散函数不返回，它使用感叹号！作为返回类型表示。
+
+#+begin_src rust
+fn main() {
+    println!("hello");
+    diverging();
+    //println!("world");
+}
+
+fn diverging() -> ! {
+      panic!("This function will never return ");
+  }
+#+end_src
+
+** thread
+:PROPERTIES:
+:CUSTOM_ID: thread
+:END:
+=thread::spawn= 函数需要一个函数作为参数，而且是 =FnOnce=
+类型，所以一般会有 =move= 作为开始。
+
+** derive
+:PROPERTIES:
+:CUSTOM_ID: derive
+:END:
+trait can be derived.
+
+** unwrap
+:PROPERTIES:
+:CUSTOM_ID: unwrap
+:END:
+Rust 中“unwrap”是说，"给我计算的结果，并且如果有错误，panic
+并停止程序。" see
+[[https://kaisery.gitbooks.io/rust-book-chinese/content/content/Error%20Handling%20%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86.html][错误处理]]
+
+#+begin_src rust
+impl<T> Option<T> {
+    fn unwrap(self) -> T {
+        match self {
+            Option::Some(val) => val,
+            Option::None =>
+              panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}
+#+end_src
+
+很多情况下，Rust返回结果可能会出现2种情况，1种正常情况有数值，另外一种情况为没有数值。为了应付这2种情况，Rust的返回值类型为Option，正常情况对应Some，异常情况对应None。
+unwrap函数可以获取Some里面包含的数值。
+
+** Option
+:PROPERTIES:
+:CUSTOM_ID: option
+:END:
+Option 是Rust的系统类型，用来表示值不存在的可能。
+
+#+begin_src rust
+enum Option<T> {
+    None,
+    Some(T),
+}
+#+end_src
+
+** Result
+:PROPERTIES:
+:CUSTOM_ID: result
+:END:
+#+begin_src rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+#+end_src
+
+example:
+
+#+begin_src rust
+match fun() {
+    Ok(n) => prointln!("{}", n),
+    Err(err) -> println!("{:?}", err),
+}
+#+end_src
+
+** fmt::Debug, fmt::Display
+:PROPERTIES:
+:CUSTOM_ID: fmtdebug-fmtdisplay
+:END:
+fmt::Debug 可以打印任何类型数据，但不可控制输出格式。 fmt::Display
+可以控制格式，但需要对类型数据进行impl 操作。
+
+** reverve some vector element
+:PROPERTIES:
+:CUSTOM_ID: reverve-some-vector-element
+:END:
+#+begin_src rust
+let mut v: Vec<usize> = vec![];
+v.reserve(5_000_000);
+#+end_src
+
+In rust 1.21, reverve function not make a different.
+
+** sync_channel is synchronous, channel is asynchronous
+:PROPERTIES:
+:CUSTOM_ID: sync_channel-is-synchronous-channel-is-asynchronous
+:END:
+std::sync::mpsc::sync_channel is synchronus, and has the buffer size.
+std::sync::mpsc::channel is asynchronus.
+
+** std::mem
+:PROPERTIES:
+:CUSTOM_ID: stdmem
+:END:
+#+begin_src rust
+use std::mem;
+
+let mut n = 0;
+let mut m = 1;
+mem::swap(&mut n, &mut m);
+mem::size_of_val(&mut n)
+println!("size of isize {} ", mem::size_of::<isize>());
+println!("size of i8 {} ", mem::size_of::<i8>());
+println!("size of char {} ", mem::size_of::<char>());
+println!("size of () {} ", mem::size_of::<()>());
+#+end_src
+
+The output:
+
+#+begin_example
+size of isize 8
+size of i8 1
+size of char 4
+size of () 0
+#+end_example
+
+the memory of =()= is 0, and the size of =char= is 4, much more than
+=i8=.
+
+** Box
+:PROPERTIES:
+:CUSTOM_ID: box
+:END:
+
+#+begin_quote
+
+#+begin_quote
+Box, 以及栈和堆
+
+在 Rust 中，所有值默认都由栈分配。值也可以通过创建 Box
+来装箱（boxed，分配在堆上）。装箱类型是一个智能指针，指向堆分配的 T
+类型的值。当一个装箱类型离开作用域时，它的析构器会被调用，内部的对象会被销毁，分配在堆上内存会被释放。
+
+#+end_quote
+
+#+end_quote
+
+#+begin_quote
+
+#+begin_quote
+装箱的值可以使用 * 运算符进行解引用；这会移除掉一个间接层（this removes
+one layer of indirection. ）。 Box is a reference, use with =*= to
+change the value.
+
+#+end_quote
+
+#+end_quote
+
+#+begin_src rust
+    let immutable_box = Box::new(5u32);
+
+    println!("immutable_box contains {}", immutable_box);
+
+    // 可变性错误
+    //*immutable_box = 4;
+
+    // **移动** box，改变所有权（和可变性）
+    let mut mutable_box = immutable_box;
+
+    println!("mutable_box contains {}", mutable_box);
+
+    // 修改 box 的内容
+    *mutable_box = 4;
+
+    println!("mutable_box now contains {}", mutable_box);
+#+end_src
+
+copy from
+[[https://rustwiki.org/zh-CN/rust-by-example/scope/move/mut.html][可变性]]
+
+** ref
+:PROPERTIES:
+:CUSTOM_ID: ref
+:END:
+使用ref 关键字来得到一个引用
+
+#+begin_src rust
+let x = 5;
+let mut y = 5;
+match x {
+    ref r => println!("Got a reference to {}", r),
+}
+// x can be still used here
+println!("x is {}", x);
+
+
+match y {
+    ref mut mr => println!("got a mutable reference to {}", mr ),
+}
+
+// y can be sill used here
+println!("y is {}", y);
+#+end_src
+
+** 重载运算符
+:PROPERTIES:
+:CUSTOM_ID: 重载运算符
+:END:
+type Output = A 必须要有，输出结果
+
+#+begin_src rust
+use std::ops::{Add, Sub};
+
+#[derive(Copy, Clone)]
+struct A(i32);
+
+impl Add for A {
+    type Output = A;
+    fn add(self, rhs: A) -> A {
+        A(self.0 + rhs.0)
+    }
+}
+
+impl Sub for A {
+    type Output = A;
+    fn sub(self, rhs: A) -> A{
+        A(self.0 - rhs.0)
+    }
+}
+
+fn main() {
+    let a1 = A(10i32);
+    let a2 = A(5i32);
+    let a3 = a1 + a2;
+    println!("{}", (a3).0);
+    let a4 = a1 - a2;
+    println!("{}", (a4).0);
+}
+#+end_src
+
+** use and crate
+:PROPERTIES:
+:CUSTOM_ID: use-and-crate
+:END:
+=use= bring a =trait= into package, or shorten the namespace. =use= can
+import a item of a crate, a item can be a function, a trait, a binding.
+=extern crate= import package.
+
+#+begin_src rust
+enum Status {
+    Rich,
+    Poor,
+}
+
+enum Work {
+    Civilian,
+    Soldier,
+}
+
+    // Explicitly `use` each name so they are available without
+    // manual scoping.
+    use Status::{Poor, Rich};
+    // Automatically `use` each name inside `Work`.
+    use Work::*;
+
+    // Equivalent to `Status::Poor`.
+    let status = Poor;
+    // Equivalent to `Work::Civilian`.
+    let work = Civilian;
+#+end_src
+
+** reference call
+:PROPERTIES:
+:CUSTOM_ID: reference-call
+:END:
+the =.= operator implicitly dereferences its left operand, if needed.
+
+#+begin_src rust
+struct Anime {
+    name: &'static str,
+    bechdel_pass: bool
+};
+let aria = Anime {
+    name : "Aria: The animation",
+    bechdel_pass: true
+};
+let anime_ref = &aria;
+
+assert_eq!(anime_ref.name, "Aria: The animation");
+
+assert_eq!((*anime_ref).name, "Aria: The animation");
+#+end_src
+
+The =.= operator can also implicitly borrow a reference to its left
+operand, if needed for a method call.
+
+#+begin_src rust
+let mut v = vec![1973, 1968];
+v.sort();
+(&mut v).sort(); // equivalent; much uglier
+#+end_src
+
+The =.= operator borrows and dereferences implicitly. ## fmt::Display
+and Debug display format {} the debug format {:?}
+
+tuple element can be different types, list must be the same type.
+
+** A common use for enums is to create a linked-list:
+:PROPERTIES:
+:CUSTOM_ID: a-common-use-for-enums-is-to-create-a-linked-list
+:END:
+copy from
+[[https://rustbyexample.com/custom_types/enum/testcase_linked_list.html][Testcase:
+linked-list]]
+
+#+begin_src rust
+use List::*;
+
+enum List {
+    // Cons: Tuple struct that wraps an element and a pointer to the next node
+    Cons(u32, Box<List>),
+    // Nil: A node that signifies the end of the linked list
+    Nil,
+}
+
+// Methods can be attached to an enum
+impl List {
+    // Create an empty list
+    fn new() -> List {
+        // `Nil` has type `List`
+        Nil
+    }
+
+    // Consume a list, and return the same list with a new element at its front
+    fn prepend(self, elem: u32) -> List {
+        // `Cons` also has type List
+        Cons(elem, Box::new(self))
+    }
+
+    // Return the length of the list
+    fn len(&self) -> u32 {
+        // `self` has to be matched, because the behavior of this method
+        // depends on the variant of `self`
+        // `self` has type `&List`, and `*self` has type `List`, matching on a
+        // concrete type `T` is preferred over a match on a reference `&T`
+        match *self {
+            // Can't take ownership of the tail, because `self` is borrowed;
+            // instead take a reference to the tail
+            Cons(_, ref tail) => 1 + tail.len(),
+            // Base Case: An empty list has zero length
+            Nil => 0
+        }
+    }
+
+    // Return representation of the list as a (heap allocated) string
+    fn stringify(&self) -> String {
+        match *self {
+            Cons(head, ref tail) => {
+                // `format!` is similar to `print!`, but returns a heap
+                // allocated string instead of printing to the console
+                format!("{}, {}", head, tail.stringify())
+            },
+            Nil => {
+                format!("Nil")
+            },
+        }
+    }
+}
+
+fn main() {
+    // Create an empty linked list
+    let mut list = List::new();
+
+    // Append some elements
+    list = list.prepend(1);
+    list = list.prepend(2);
+    list = list.prepend(3);
+
+    // Show the final state of the list
+    println!("linked list has length: {}", list.len());
+    println!("{}", list.stringify());
+}
+#+end_src
+
+The output is:
+
+#+begin_example
+linked list has length: 3
+3, 2, 1, Nil
+#+end_example
+
+The linked list is recursive, and I think this is not very good. Please
+note that =&self=, =*self=, =ref tail=. This is a very good example to
+understand the reference and derefernce.
+
+** pointer address
+:PROPERTIES:
+:CUSTOM_ID: pointer-address
+:END:
+{:p} will print the variable pointer address
+
+#+begin_src rust
+    let x: i32 = 100;
+    let ref y =  x;
+    println!("y={:?}, {:p}", &x, &x);
+    println!("y={:?}, {:p}", y, y);
+#+end_src
+
+** vector get() function
+:PROPERTIES:
+:CUSTOM_ID: vector-get-function
+:END:
+#+begin_src rust
+    let v = vec![1, 2, 3];
+
+    match v.get(1) {
+    // this two are the same
+        //Some(ref t) =>
+        Some(& t) =>
+            println!("{}", t),
+        _ =>
+            println!("other"),
+    }
+#+end_src
+
+** make part of struct mutable
+:PROPERTIES:
+:CUSTOM_ID: make-part-of-struct-mutable
+:END:
+All parts of a struct is immutable or mutable, like this:
+
+#+begin_src rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let a = Point {
+    x: 10,
+    y: 20,
+ };
+let mut b = Point{
+    x: 30,
+    y: 40,
+};
+#+end_src
+
+The =x=, =y= in point is all immutable, or all mutable at the same time.
+It is defined as declared.
+
+But it can be modified using =std::cell::Cell=
+
+#+begin_src rust
+use std::cell::Cell;
+
+struct Point {
+x: i32,
+y: Cell<i32>,
+}
+
+fn main() {
+    let point = Point { x: 5, y: Cell::new(6) };
+
+    point.y.set(7);
+
+    println!("y: {:?}", point.y);
+}
+#+end_src
+
+see [[http://wiki.jikexueyuan.com/project/rust/mutability.html][可变性]]
+for more info.
+
+** Comparing References
+:PROPERTIES:
+:CUSTOM_ID: comparing-references
+:END:
+Like the =.= operator, Rust's comparison operators "see through" any
+number of references, as long as as both operands have thee same type:
+
+#+begin_src rust
+let x = 10;
+let y = 10;
+
+let rx = &x;
+let ry = &y;
+
+let rrx = &rx;
+let rry = &ry;
+assert!(rx == ry);
+assert!(rrx <= rry);
+assert!(rrx == rry);
+assert!(!std::ptr::eq(rx, ry));
+#+end_src
+
+** Add trait not need dereferences
+:PROPERTIES:
+:CUSTOM_ID: add-trait-not-need-dereferences
+:END:
+#+begin_src rust
+impl<'a>Add <&'a i32>for i32.
+impl<'a>Add < i32>for i32.
+#+end_src
+
+already impplemented.
+
+** derive(Default)
+:PROPERTIES:
+:CUSTOM_ID: derivedefault
+:END:
+#+begin_src rust
+#[derive(Default, Debug)]
+struct Point3d {
+    x: i32,
+    y: i32,
+    z: i32,
+ }
+
+let origin = Point3d::default();
+println!("{:?}", origin);
+#+end_src
+
+The output result:
+
+#+begin_src rust
+Point3d { x: 0, y: 0, z: 0 }
+#+end_src
+
+** integer truncate
+:PROPERTIES:
+:CUSTOM_ID: integer-truncate
+:END:
+#+begin_src rust
+    // 1000 - 256 - 256 - 256 = 232
+    // Under the hood, the first 8 least significant bits (LSB) are kept,
+    // while the rest towards the most significant bit (MSB) get truncated.
+    println!("1000 as a u8 is : {}", 1000 as u8);
+    // -1 + 256 = 255
+    println!("  -1 as a u8 is : {}", (-1i8) as u8);
+#+end_src
+
+copy from [[https://rustbyexample.com/types/cast.html][casting]]
+
+** if let
+:PROPERTIES:
+:CUSTOM_ID: if-let
+:END:
+#+begin_src rust
+ // All have type `Option<i32>`
+    let number = Some(7);
+    let letter: Option<i32> = None;
+    let emoticon: Option<i32> = None;
+
+    // The `if let` construct reads: "if `let` destructures `number` into
+    // `Some(i)`, evaluate the block (`{}`).
+    if let Some(i) = number {
+        println!("Matched {:?}!", i);
+    }
+
+    // If you need to specify a failure, use an else:
+    if let Some(i) = letter {
+        println!("Matched {:?}!", i);
+    } else {
+        // Destructure failed. Change to the failure case.
+        println!("Didn't match a number. Let's go with a letter!");
+    };
+
+    // Provide an altered failing condition.
+    let i_like_letters = false;
+
+    if let Some(i) = emoticon {
+        println!("Matched {:?}!", i);
+    // Destructure failed. Evaluate an `else if` condition to see if the
+    // alternate failure branch should be taken:
+    } else if i_like_letters {
+        println!("Didn't match a number. Let's go with a letter!");
+    } else {
+        // The condition evaluated false. This branch is the default:
+        println!("I don't like letters. Let's go with an emoticon :)!");
+    };
+#+end_src
+
+It is more convient than match like below:
+
+#+begin_src rust
+// Make `optional` of type `Option<i32>`
+let optional = Some(7);
+
+match optional {
+    Some(i) => {
+        println!("This is a really long string and `{:?}`", i);
+        // ^ Needed 2 indentations just so we could destructure
+        // `i` from the option.
+    },
+    _ => {},
+    // ^ Required because `match` is exhaustive. Doesn't it seem
+    // like wasted space?
+};
+#+end_src
+
+copy from [[https://rustbyexample.com/flow_control/if_let.html][if let]]
+
+** cmd arguments
+:PROPERTIES:
+:CUSTOM_ID: cmd-arguments
+:END:
+#+begin_src rust
+use std::env;
+
+fn main() {
+    let args = env::args();
+    for arg in args {
+        println!("{}", arg);
+    }
+}
+#+end_src
+
+** as
+:PROPERTIES:
+:CUSTOM_ID: as
+:END:
+#+begin_src rust
+// rename crate name
+extern crate xxx as for;
+
+use for::yyy::zzz;
+
+// data casting
+1u32 as usize
+#+end_src
+
+** iterator type
+:PROPERTIES:
+:CUSTOM_ID: iterator-type
+:END:
+#+begin_src rust
+let v: Vec<_> = (1..20).collect();
+
+let v = (1..20).collect::<Vec<_>>();
+#+end_src
+
+Naturally method calls can be chained, one quirk of Rust syntax is that
+in a function call or method call, the usual syntax for generic types,
+=Vec<T>=, does not work:
+
+#+begin_src rust
+return Vec<i32>::with_capacity(1000); // error: something about chained comparisons
+let ramp = (0 .. n).collect<Vec<i32>>(); // same error
+#+end_src
+
+The problem is that in expressions, =<= is the less-than operator. The
+Rust compiler helpfully suggests writing =::<T>= instead of =<T>= in
+this case, and that solves the problem:
+
+#+begin_src rust
+return Vec::<i32>::with_capacity(1000);
+let ramp = (0 .. n).collect::<Vec<i32>>();
+#+end_src
+
+The symbol ::<<...> is affectionately known in the Rust community as the
+turbofish. Alternatively, it is often possible to drop the type
+parameters and let Rust infer them:
+
+#+begin_src rust
+return Vec::with_capacity(1000); // ok, if the fn return type is Vec<i32>
+let ramp: Vec<i32> = (0 ..n).collect(); // ok, variable's type is given
+#+end_src
+
+It's considered good style to omit the types whenever they can be
+inferred.
+
+** std::T:MAX, std::T:MIN
+:PROPERTIES:
+:CUSTOM_ID: stdtmax-stdtmin
+:END:
+#+begin_src rust
+println!("{}", std::u8::MAX);
+println!("{}", std::u16::MAX);
+println!("{}", std::u32::MAX);
+println!("{}", std::u64::MAX);
+println!("{}", std::usize::MAX);
+println!("{}", std::i8::MAX);
+println!("{}", std::i16::MAX);
+println!("{}", std::i32::MAX);
+println!("{}", std::i64::MAX);
+println!("{}", std::isize::MAX);
+println!("{}", std::u8::MIN);
+println!("{}", std::u16::MIN);
+println!("{}", std::u32::MIN);
+println!("{}", std::u64::MIN);
+println!("{}", std::usize::MIN);
+println!("{}", std::i8::MIN);
+println!("{}", std::i16::MIN);
+println!("{}", std::i32::MIN);
+println!("{}", std::i64::MIN);
+println!("{}", std::isize::MIN);
+#+end_src
+
+** enum can be cast to integer
+:PROPERTIES:
+:CUSTOM_ID: enum-can-be-cast-to-integer
+:END:
+#+begin_src rust
+// An attribute to hide warnings for unused code.
+#![allow(dead_code)]
+
+// enum with implicit discriminator (starts at 0)
+enum Number {
+    Zero,
+    One,
+    Two,
+}
+
+// enum with explicit discriminator
+enum Color {
+    Red = 0xff0000,
+    Green = 0x00ff00,
+    Blue = 0x0000ff,
+}
+
+fn main() {
+    // `enums` can be cast as integers.
+    println!("zero is {}", Number::Zero as i32);
+    println!("one is {}", Number::One as i32);
+
+    println!("roses are #{:06x}", Color::Red as i32);
+    println!("violets are #{:06x}", Color::Blue as i32);
+}
+#+end_src
+
+copy from
+[[https://rustbyexample.com/custom_types/enum/c_like.html][C-like]]
+
+* Fully Qualified Method Calls
+:PROPERTIES:
+:CUSTOM_ID: fully-qualified-method-calls
+:END:
+A methos id just a pecial kind of function. These two calls are
+equivalent:
+
+#+begin_src rust
+"string_word".to_string()
+str::to_string("string_word")
+#+end_src
+
+Since =to_string= is a method of the standard =ToString= trait, there
+are two more forms you can use:
+
+#+begin_src rust
+ToString::to_string("string_word")
+<str as ToString>::to_string("hello")
+#+end_src
+
+All four of these method calls do exactly the same thing. The last form,
+with the angle brackets, specifies both: a fully qualified method call.
+
+** function and closure
+:PROPERTIES:
+:CUSTOM_ID: function-and-closure
+:END:
+Funtions are implemented as function pointers. Closures are plain
+structs.
+
+** receiver is iterable
+:PROPERTIES:
+:CUSTOM_ID: receiver-is-iterable
+:END:
+#+begin_src rust
+while let Ok(text) = receiver.recv() {
+    do_something_with(text);
+}
+#+end_src
+
+Or like this:
+
+#+begin_src rust
+for text in receiver {
+    do_something_with(text);
+}
+#+end_src
+
+They are the same.
+
+** Option doc
+:PROPERTIES:
+:CUSTOM_ID: option-doc
+:END:
+#+begin_example
+is_some() checks if the option is some data or not.
+is_none() checks if the option is None or not.
+unwrap() takes out the data if there is some data. Otherwise, it raises an error: thread 'main' panicked at 'called 'Option::unwrap()' on a 'None' value'
+map(closure) transforms option data if we have “some” data by a function (closure). When option data is None, nothing happens. It is handy because there is no need to check if we have some or no data.
+filter(closure) filters option data by some condition which is a function with a single argument that returns a boolean.
+or_else(|| Some()) returns some default value if the option data is None. If the option data is something, it does nothing.
+unwrap_or_else(|| <>) is similar to or_else(). The difference is or_else() returns optional data, but unwrap_or_else(|| <>) returns the data. In other words, it unwraps or_else() the result.
+#+end_example
+
+copy from
+[[https://medium.com/codex/3-fundamentals-of-enums-in-rust-36d33bf18782][3
+Fundamentals of Enums in Rust]]
+
+** variadic callback
+:PROPERTIES:
+:CUSTOM_ID: variadic-callback
+:END:
+see
+[[https://zjp-cn.github.io/rust-note/dcl/variadic.html]["变长参数"函数与回调]]
+
+** recursive function
+:PROPERTIES:
+:CUSTOM_ID: recursive-function
+:END:
+#+begin_src rust
+fn setup_connection() -> Connection {
+    if let Ok(c) = Connection::insecure_open(&format!(
+        "amqp://{}:{}@{}:{}",
+        env::var("RABBITMQ_USER").unwrap(),
+        env::var("RABBITMQ_PWD").unwrap(),
+        env::var("RABBITMQ_HOST").unwrap(),
+        env::var("RABBITMQ_PORT").unwrap()
+    )) {
+        println!("Connected to rabbitmq!");
+        c
+    } else {
+        println!("Failed to connect to rabbitmq. Will retry in 2s.");
+        std::thread::sleep(std::time::Duration::from_secs(2));
+        setup_connection()
+    }
+}
+#+end_src
+
+pool recursive function
+
+#+begin_src rust
+fn setup_hanoi_queue(pool: &rayon::ThreadPool) {
+    let mut connection = setup_connection();
+    let channel = connection.open_channel(None).unwrap();
+    let queue = channel
+        .queue_declare("hanoi", QueueDeclareOptions::default())
+        .unwrap();
+    let consumer = queue.consume(ConsumerOptions::default()).unwrap();
+    for message in consumer.receiver().iter() {
+        match message {
+            ConsumerMessage::Delivery(delivery) => {
+                let body = String::from_utf8(delivery.body.clone()).unwrap();
+                let (reply_to, correlation_id) = match (
+                    delivery.properties.reply_to(),
+                    delivery.properties.correlation_id(),
+                ) {
+                    (Some(r), Some(c)) => (r.clone(), c.clone()),
+                    _ => {
+                        println!("received delivery without reply_to or correlation_id");
+                        continue;
+                    }
+                };
+
+
+                let channel_for_msg = connection.open_channel(None).unwrap();
+                pool.spawn(move || {
+                    let exchange = Exchange::direct(&channel_for_msg);
+                    exchange
+                        .publish(Publish::with_properties(
+                            json!(hanoi::hanoi(body.parse().unwrap(), 0, 2))
+                                .to_string()
+                                .as_bytes(),
+                            reply_to,
+                            AmqpProperties::default().with_correlation_id(correlation_id),
+                        ))
+                        .unwrap();
+                });
+                consumer.ack(delivery).unwrap();
+            }
+            other => {
+                println!("Consumer ended: {:?}", other);
+                println!("Will try to reset connection in 2s.");
+                std::thread::sleep(std::time::Duration::from_secs(2));
+                break;
+            }
+        }
+    }
+    setup_hanoi_queue(pool);
+}
+#+end_src
+
+copy from
+[[https://betterprogramming.pub/rust-as-part-of-a-micro-service-architecture-25d600ecde0][Rust
+as Part of a Microservice Architecture]]

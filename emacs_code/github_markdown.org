@@ -1,0 +1,20 @@
+* markdown
+:PROPERTIES:
+:CUSTOM_ID: markdown
+:END:
+** gihub markdown reference
+:PROPERTIES:
+:CUSTOM_ID: gihub-markdown-reference
+:END:
+[[https://guides.github.com/features/mastering-markdown/][Mastering
+Markdown]]
+
+** markdown online editor
+:PROPERTIES:
+:CUSTOM_ID: markdown-online-editor
+:END:
+[[https://stackedit.io/editor][StackEdit]]
+[[https://github.com/benweet/stackedit][stackedit on github]]
+[[http://dillinger.io/][Dillinger]]
+[[https://jbt.github.io/markdown-editor/][(GitHub-Flavored) Markdown
+Editor]]

@@ -1,0 +1,25 @@
+* firefox add-ons
+:PROPERTIES:
+:CUSTOM_ID: firefox-add-ons
+:END:
+** Noscript
+:PROPERTIES:
+:CUSTOM_ID: noscript
+:END:
+** Privacy Badger
+:PROPERTIES:
+:CUSTOM_ID: privacy-badger
+:END:
+** HTTPS Everywhere
+:PROPERTIES:
+:CUSTOM_ID: https-everywhere
+:END:
+~+## Certificate Patrol+~ ## Adblock Plus ## FoxyProxy Standard ## Video
+Download helper
+
+** chrome does have the same plugins as well
+:PROPERTIES:
+:CUSTOM_ID: chrome-does-have-the-same-plugins-as-well
+:END:
+[[https://chrome.google.com/webstore/detail/google-translate/aapbdbdomjkkjkaonfhkkikfgjllcleb][google
+translate plugin]]

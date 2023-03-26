@@ -1,0 +1,44 @@
+* erlang scale global module
+:PROPERTIES:
+:CUSTOM_ID: erlang-scale-global-module
+:END:
+** Issue: Connections stay up
+:PROPERTIES:
+:CUSTOM_ID: issue-connections-stay-up
+:END:
+Plan: Automatic disconnects
+
+** Issue: Too many connections
+:PROPERTIES:
+:CUSTOM_ID: issue-too-many-connections
+:END:
+Plan: Avoid fully connected network
+
+** Issue: Expensive when new nodes join
+:PROPERTIES:
+:CUSTOM_ID: issue-expensive-when-new-nodes-join
+:END:
+Plan: Make node joins cheaper
+
+** Issue: :global chats a lot
+:PROPERTIES:
+:CUSTOM_ID: issue-global-chats-a-lot
+:END:
+Plan: make :global less chatty
+
+It might be released with erlang 20, and use the Kademlia tree to
+achieve it.
+
+More info:
+[[http://www.elixirconf.eu/elixirconf2016/zandra-norman][Scaling
+Distributed Erlang]]
+[[http://s3.amazonaws.com/erlang-conferences-production/media/files/000/000/074/original/Zandra_Norman_ScalingDistributedErlang.pdf][slide]]
+[[https://youtu.be/usEs3GPnZDg][video]]
+
+** Scaling Erlang cluster to 10,000 nodes
+:PROPERTIES:
+:CUSTOM_ID: scaling-erlang-cluster-to-10000-nodes
+:END:
+see it at [[https://www.youtube.com/watch?v=FJQyv26tFZ8][Maxim Fedorov -
+Scaling Erlang cluster to 10,000 nodes | Code Mesh LDN 18]] erlang
+registry is the problem.

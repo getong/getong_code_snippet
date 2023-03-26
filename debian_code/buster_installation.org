@@ -1,0 +1,581 @@
+* buster amd64 installation
+:PROPERTIES:
+:CUSTOM_ID: buster-amd64-installation
+:END:
+** upgrade the system
+:PROPERTIES:
+:CUSTOM_ID: upgrade-the-system
+:END:
+#+begin_src shell
+# apt-get update
+# apt-get upgrade -y
+# apt-get install -y vim zsh curl nemo git moc moc-ffmpeg-plugin unzip p7zip-full w3m w3m-img proxychains
+# systemctl set-default multi-user.target
+#+end_src
+
+** add the /sbin to the root user PATH variable
+:PROPERTIES:
+:CUSTOM_ID: add-the-sbin-to-the-root-user-path-variable
+:END:
+#+begin_src shell
+export PATH=/sbin:$PATH
+#+end_src
+
+** compile the linux kernel
+:PROPERTIES:
+:CUSTOM_ID: compile-the-linux-kernel
+:END:
+#+begin_src shell
+# apt-get build-dep -y linux-source
+# apt-get install -y firmware-linux firmware-linux-nonfree firmware-linux-free firmware-realtek libncurses6 libncurses-dev linux-source build-essential linux-headers-amd64 libelf-dev libssl-dev
+# cd /usr/src
+# xz -d -k linux-patch-4.19-rt.patch.xz
+# tar xaf linux-source-4.19.tar.xz
+# cd linux-source-4.19
+# patch -p1 < ../linux-patch-4.19-rt.patch
+# cp /boot/config-4.19.0-8-amd64 .config
+#+end_src
+
+edit the .config file
+
+#+begin_example
+CONFIG_SATA_PMP=n
+#CONFIG_SYSTEM_TRUSTED_KEYS="debian/certs/debian-uefi-certs.pem"
+#+end_example
+
+and then compile and install the kernel
+
+#+begin_src shell
+# make menuconfig
+# make -j`nproc` bzImage
+# make -j`nproc` modules
+# make modules_install
+# make headers_install
+# make install
+# /sbin/shutdown -h now
+#+end_src
+
+** update-grub
+:PROPERTIES:
+:CUSTOM_ID: update-grub
+:END:
+edit the =/etc/default/grub=
+
+#+begin_example
+GRUB_TIMEOUT=1
+GRUB_CMDLINE_LINUX_DEFAULT="text"
+GRUB_CMDLINE_LINUX="noapic acpi=off"
+#+end_example
+
+and then run the command:
+
+#+begin_src shell
+# update-grub
+#+end_src
+
+** static the network
+:PROPERTIES:
+:CUSTOM_ID: static-the-network
+:END:
+check the network link name:
+
+#+begin_src shell
+$ ip a
+#+end_src
+
+edit the /etc/network/interfaces:
+
+#+begin_src shell
+auto enp2s0
+allow-hotplug enp2s0
+iface enp2s0 inet static
+broadcast 192.168.1.255
+address 192.168.1.100
+netmask 255.255.255.0
+gateway 192.168.1.1
+dns-nameservers 192.168.1.1
+#+end_src
+
+disable the NetworkManager, and enable networking
+
+#+begin_src shell
+$ sudo systemctl disable NetworkManager
+$ sudo systemctl stop NetworkManager
+$ sudo systemctl enable networking
+#+end_src
+
+** install docker
+:PROPERTIES:
+:CUSTOM_ID: install-docker
+:END:
+#+begin_src shell
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common
+sudo curl -fsSL https://get.docker.com | sudo bash -s docker --mirror Aliyun
+## or use this command
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo systemctl enable docker
+sudo systemctl start docker
+# add the current user to the docker group
+sudo usermod -aG docker $USER
+#+end_src
+
+** trash-cli setting
+:PROPERTIES:
+:CUSTOM_ID: trash-cli-setting
+:END:
+#+begin_src shell
+sudo apt-get install trash-cli
+sudo rm -rf /[partition mount]/.Trash-`id -u $USER`
+sudo mkdir /[partition mount]/.Trash-`id -u $USER`
+sudo chown $USER /[partition mount]/.Trash-`id -u $USER`
+#+end_src
+
+** fcitx installation
+:PROPERTIES:
+:CUSTOM_ID: fcitx-installation
+:END:
+#+begin_src shell
+# sudo apt-get install fcitx-ui-classic fcitx-frontend-fbterm fcitx-frontend-gtk3 im-config
+# sudo chmod u+s /usr/bin/fbterm
+# im-config
+#+end_src
+
+set the fcitx as the default input method Edit ~/.fbtermrc
+
+#+begin_src shell
+input-method=fcitx-fbterm
+#+end_src
+
+** ifup
+:PROPERTIES:
+:CUSTOM_ID: ifup
+:END:
+#+begin_src shell
+sudo ifup enp2s0
+#+end_src
+
+** check the physical cable is up and its state
+:PROPERTIES:
+:CUSTOM_ID: check-the-physical-cable-is-up-and-its-state
+:END:
+#+begin_src shell
+for i in $(ls /sys/class/net)
+do
+echo $i
+cat /sys/class/net/$i/carrier
+cat /sys/class/net/$i/operstate
+done
+#+end_src
+
+copy from
+[[https://linuxconfig.org/how-to-detect-whether-a-physical-cable-is-connected-to-network-card-slot-on-linux][How
+to detect whether a physical cable is connected to network card slot on
+Linux]]
+
+** Network Manager status
+:PROPERTIES:
+:CUSTOM_ID: network-manager-status
+:END:
+#+begin_src shell
+nmcli dev status
+#+end_src
+
+** network tool
+:PROPERTIES:
+:CUSTOM_ID: network-tool
+:END:
+#+begin_src shell
+sudo apt install net-tools lshw ethtool
+sudo lshw -class network -short
+sudo ethtool enp2s0
+sudo ethtool -i enp2s0
+ip a s enp2s0
+#+end_src
+
+** rename
+:PROPERTIES:
+:CUSTOM_ID: rename
+:END:
+#+begin_src shell
+sudo apt-get install rename inotify-tools jigdo-file calibre dkms rsync k3b
+#+end_src
+
+** ifdown and ifup
+:PROPERTIES:
+:CUSTOM_ID: ifdown-and-ifup
+:END:
+#+begin_src shell
+sudo systemctl stop ModemManager
+sudo systemctl disable ModemManager
+sudo ifdown enp2s0
+sudo ifup enp2s0
+sudo systemctl restart networking
+#+end_src
+
+** select and install
+:PROPERTIES:
+:CUSTOM_ID: select-and-install
+:END:
+#+begin_src shell
+dpkg --get-selections > selectfile
+
+dpkg --set-selections < selectfile
+apt-get dselect-upgrade
+#+end_src
+
+** gnome-tweak-tool swap caps and ctrl key
+:PROPERTIES:
+:CUSTOM_ID: gnome-tweak-tool-swap-caps-and-ctrl-key
+:END:
+#+begin_src shell
+sudo apt-get install gnome-tweak-tool
+## then in the gnome-tweak-tool - keyboard --additional setting
+# ctrl section, swap ctrl and caps
+#+end_src
+
+copy from
+[[https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys][How
+do I remap the Caps Lock and Ctrl keys?]] The gnome 3.30 is much more
+different than before.
+
+** jmtpfs mtp-tools
+:PROPERTIES:
+:CUSTOM_ID: jmtpfs-mtp-tools
+:END:
+#+begin_src shell
+sudo apt-get install jmtpfs mtp-tools
+#+end_src
+
+The mount path is =/run/user/$USER/gvfs= copy from
+[[https://askubuntu.com/questions/342319/where-are-mtp-mounted-devices-located-in-the-filesystem][Where
+are MTP mounted devices located in the filesystem?]]
+
+** VirtualBox can't enable the AMD-V extension. Please disable the KVM kernel extension, recompile your kernel and reboot (VERR_SVM_IN_USE).
+:PROPERTIES:
+:CUSTOM_ID: virtualbox-cant-enable-the-amd-v-extension.-please-disable-the-kvm-kernel-extension-recompile-your-kernel-and-reboot-verr_svm_in_use.
+:END:
+#+begin_example
+I am back to a broken minikube start command, after uninstalling KVM to get VirtualBox working again.
+#+end_example
+
+copy from
+[[https://github.com/kubernetes/minikube/issues/3706][virtualbox + AMD
+cpu's: This computer doesn't have VT-X/AMD-v enabled.]] the proper
+solution might be: [[https://www.virtualbox.org/ticket/18770][Ticket
+#18770 (new defect)]]
+[[https://www.virtualbox.org/ticket/11577#comment:15][Ticket #11577 (new
+defect)]] [[https://www.virtualbox.org/changeset/79186/vbox][Changeset
+79186 in vbox]]
+
+** pandoc
+:PROPERTIES:
+:CUSTOM_ID: pandoc
+:END:
+#+begin_src shell
+sudo apt-get install -y pandoc
+#+end_src
+
+** build-dep
+:PROPERTIES:
+:CUSTOM_ID: build-dep
+:END:
+#+begin_src shell
+sudo apt-get build-dep -y emacs erlang git julia tmux nodejs redis-server
+#+end_src
+
+** install the docker-compose
+:PROPERTIES:
+:CUSTOM_ID: install-the-docker-compose
+:END:
+#+begin_src shell
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+#+end_src
+
+copy from [[https://docs.docker.com/compose/install/][Install Docker
+Compose]]
+
+** pwgen, ffmpeg, expect
+:PROPERTIES:
+:CUSTOM_ID: pwgen-ffmpeg-expect
+:END:
+#+begin_src shell
+sudo apt-get install -y pwgen ffmpeg expect
+#+end_src
+
+** wireless driver
+:PROPERTIES:
+:CUSTOM_ID: wireless-driver
+:END:
+#+begin_src shell
+sudo apt-get install -y firmware-atheros
+#+end_src
+
+** install the nodejs
+:PROPERTIES:
+:CUSTOM_ID: install-the-nodejs
+:END:
+#+begin_src shell
+wget -c https://nodejs.org/dist/v13.11.0/node-v13.11.0-linux-x64.tar.xz
+sudo tar xaf node-v13.11.0-linux-x64.tar.xz -C /usr/local
+echo "PATH=/usr/local/node-v13.11.0-linux-x64/bin:$PATH" >> ~/.zshrc
+source ~/.zshrc
+#+end_src
+
+** install the dart
+:PROPERTIES:
+:CUSTOM_ID: install-the-dart
+:END:
+#+begin_src shell
+sudo sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+sudo apt-get update
+sudo apt-get install dart
+#+end_src
+
+** install the rar
+:PROPERTIES:
+:CUSTOM_ID: install-the-rar
+:END:
+#+begin_src shell
+$ wget -c http://rarlab.com/rar/rarlinux-x64-5.8.0.tar.gz
+$ tar xzf rarlinux-x64-5.8.0.tar.gz
+$ cd rar
+$ sudo make
+#+end_src
+
+** set nemo as the Default File Manager
+:PROPERTIES:
+:CUSTOM_ID: set-nemo-as-the-default-file-manager
+:END:
+#+begin_src shell
+xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
+gsettings set org.gnome.desktop.background show-desktop-icons false
+gsettings set org.nemo.desktop show-desktop-icons true
+#+end_src
+
+copy from [[https://itsfoss.com/install-nemo-file-manager-ubuntu/][How
+to Install and Make Nemo the Default File Manager in Ubuntu]]
+
+** dmsetup and cryptsetup
+:PROPERTIES:
+:CUSTOM_ID: dmsetup-and-cryptsetup
+:END:
+#+begin_src shell
+sudo apt-get install dmsetup cryptsetup lvm2
+#+end_src
+
+copy from
+[[https://blog.csdn.net/dj0379/article/details/50543939][linux加密文件系统]]
+also see
+[[https://linoxide.com/linux-how-to/encrypt-linux-filesystem/][How to
+Encrypt Filesystem using LUKS in Linux]]
+
+** progress, formerly known as 'cv'
+:PROPERTIES:
+:CUSTOM_ID: progress-formerly-known-as-cv
+:END:
+#+begin_src shell
+sudo apt-get install progress
+progress -w
+#+end_src
+
+** stop bluetooth
+:PROPERTIES:
+:CUSTOM_ID: stop-bluetooth
+:END:
+#+begin_src shell
+systemctl stop bluetooth
+systemctl disable bluetooth
+#+end_src
+
+** video download helper
+:PROPERTIES:
+:CUSTOM_ID: video-download-helper
+:END:
+#+begin_src shell
+wget -c https://github.com/mi-g/vdhcoapp/releases/download/v1.3.0/net.downloadhelper.coapp-1.3.0-1_amd64.deb
+sudo dpkg -i net.downloadhelper.coapp-1.3.0-1_amd64.deb
+#+end_src
+
+** fix erlang start observer warning
+:PROPERTIES:
+:CUSTOM_ID: fix-erlang-start-observer-warning
+:END:
+#+begin_src shell
+sudo apt-get install -y libcanberra-gtk-module libgail-common
+#+end_src
+
+** install nodejs in debian
+:PROPERTIES:
+:CUSTOM_ID: install-nodejs-in-debian
+:END:
+see
+[[https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-debian-9][How
+To Install Node.js on Debian 9]]
+
+#+begin_src shell
+curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+#+end_src
+
+see
+[[https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-debian-10][How
+To Install Node.js on Debian 10]]
+
+#+begin_src shell
+curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+#+end_src
+
+then install the yarn:
+
+#+begin_src shell
+curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update && sudo apt-get install yarn
+#+end_src
+
+** pinentry-tty
+:PROPERTIES:
+:CUSTOM_ID: pinentry-tty
+:END:
+#+begin_src shell
+sudo apt-get install pinentry-tty
+sudo update-alternatives --config pinentry
+#+end_src
+
+** doxygen
+:PROPERTIES:
+:CUSTOM_ID: doxygen
+:END:
+#+begin_src shell
+sudo apt-get install doxygen
+#+end_src
+
+** fun commands
+:PROPERTIES:
+:CUSTOM_ID: fun-commands
+:END:
+#+begin_src shell
+$ sudo apt-get install cmatrix sl cowsay rig
+$ cmatrix
+$ sl
+$ cowsay "hello world"
+$ rig
+#+end_src
+
+** kvm
+:PROPERTIES:
+:CUSTOM_ID: kvm
+:END:
+#+begin_src shell
+sudo apt-get install qemu-kvm virt-manager
+#+end_src
+
+** linux-perf
+:PROPERTIES:
+:CUSTOM_ID: linux-perf
+:END:
+#+begin_src shell
+sudo apt-get install -y linux-perf systemtap
+#+end_src
+
+** software-properties-common
+:PROPERTIES:
+:CUSTOM_ID: software-properties-common
+:END:
+For add-apt-repository command
+
+#+begin_src shell
+sudo apt-get install software-properties-common
+#+end_src
+
+** docbook2x, asciidoc-dblatex
+:PROPERTIES:
+:CUSTOM_ID: docbook2x-asciidoc-dblatex
+:END:
+#+begin_src shell
+sudo apt-get install docbook2x asciidoc-dblatex asciidoc
+#+end_src
+
+** install faketime
+:PROPERTIES:
+:CUSTOM_ID: install-faketime
+:END:
+#+begin_src shell
+git clone https://github.com/wolfcw/libfaketime
+cd libfaketime
+make
+sudo make install
+faketime '2018-03-27 21:04:52' date
+#+end_src
+
+copy from
+[[http://inorz.net/2018/03/26/modifies-the-system-time-for-a-single-application/][使用faketime修改单个应用程序的系统时间]]
+
+** install adb
+:PROPERTIES:
+:CUSTOM_ID: install-adb
+:END:
+adb is used for Android development.
+
+#+begin_src shell
+sudo apt-get install adb
+#+end_src
+
+** disable some permission on huawei device
+:PROPERTIES:
+:CUSTOM_ID: disable-some-permission-on-huawei-device
+:END:
+copy from
+[[https://club.huawei.com/thread-18084606-1-1.html][关闭多任务振动方法]]
+
+#+begin_src shell
+adb shell sh /sdcard/Android/data/com.zzzmode.appopsx/opsx.sh
+#+end_src
+
+** disable Bluetooth support
+:PROPERTIES:
+:CUSTOM_ID: disable-bluetooth-support
+:END:
+To disable Bluetooth support in PulseAudio, make sure that the following
+lines are commented out in the configuration file in use
+(~/.config/pulse/default.pa or /etc/pulse/default.pa):
+
+#+begin_example
+~/.config/pulse/default.pa
+
+### Automatically load driver modules for Bluetooth hardware
+#.ifexists module-bluetooth-policy.so
+#load-module module-bluetooth-policy
+#.endif
+
+#.ifexists module-bluetooth-discover.so
+#load-module module-bluetooth-discover
+#.endif
+#+end_example
+
+copy from
+[[https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Disable_Bluetooth_support][Disable_Bluetooth_support]]
+
+** install pass
+:PROPERTIES:
+:CUSTOM_ID: install-pass
+:END:
+#+begin_src shell
+apt-get install -y pass
+#+end_src

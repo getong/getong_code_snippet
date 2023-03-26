@@ -1,0 +1,56 @@
+* mysql_otp check return info
+:PROPERTIES:
+:CUSTOM_ID: mysql_otp-check-return-info
+:END:
+** update SQL always return ok
+:PROPERTIES:
+:CUSTOM_ID: update-sql-always-return-ok
+:END:
+#+begin_src erlang
+%% for example
+ok = mysql:query(Pid, "update mytable set id = 42").
+#+end_src
+
+** check the return info separately
+:PROPERTIES:
+:CUSTOM_ID: check-the-return-info-separately
+:END:
+#+begin_src erlang
+%% Separate calls to fetch more info about the last query
+LastInsertId = mysql:insert_id(Pid),
+AffectedRows = mysql:affected_rows(Pid),
+WarningCount = mysql:warning_count(Pid),
+#+end_src
+
+copy from the [[https://github.com/mysql-otp/mysql-otp][mysql-otp]]
+
+** mysql_otp start spec in sys.config
+:PROPERTIES:
+:CUSTOM_ID: mysql_otp-start-spec-in-sys.config
+:END:
+#+begin_src erlang
+[
+  {mysql_poolboy, [
+    {pool1,
+      {
+        [
+          {size, 10}, {max_overflow, 20}
+        ],
+        [
+          {host, "localhost"},
+          {port, 3306},
+          {user, "root"},
+          {password, "password"},
+          {database, "test"},
+          {keep_alive, true},
+          {prepare, [{foo, "SELECT sysdate()"}]}
+        ]
+      }
+    }
+  ]}
+].
+#+end_src
+
+copy from
+[[http://blog.maxkit.com.tw/2016/06/mysql-driver-for-erlang.html][MySQL
+driver for Erlang]] More options need to read the mysql.erl source code.

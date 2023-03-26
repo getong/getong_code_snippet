@@ -1,0 +1,5 @@
+* vagrant todo
+:PROPERTIES:
+:CUSTOM_ID: vagrant-todo
+:END:
+- [ ] build vagrant box from a iso image

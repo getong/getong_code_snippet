@@ -1,0 +1,18 @@
+* install jenkins in debian jessie
+:PROPERTIES:
+:CUSTOM_ID: install-jenkins-in-debian-jessie
+:END:
+#+begin_src shell
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+#+end_src
+
+Then add the following entry in your /etc/apt/sources.list:
+
+#+begin_src shell
+deb https://pkg.jenkins.io/debian binary/
+#+end_src
+
+#+begin_src shell
+apt-get install -t jessie-backports  openjdk-8-jre-headless ca-certificates-java
+apt-get install jenkins
+#+end_src

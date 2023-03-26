@@ -1,0 +1,14 @@
+* rust mem operation
+:PROPERTIES:
+:CUSTOM_ID: rust-mem-operation
+:END:
+** forget function
+:PROPERTIES:
+:CUSTOM_ID: forget-function
+:END:
+#+begin_src rust
+std::mem::forget<T>(t: T)
+#+end_src
+
+Takes ownership and "forgets" about the value without running its
+destructor.

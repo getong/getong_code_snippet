@@ -1,0 +1,43 @@
+* emacs font
+:PROPERTIES:
+:CUSTOM_ID: emacs-font
+:END:
+** emacs-mac
+:PROPERTIES:
+:CUSTOM_ID: emacs-mac
+:END:
+#+begin_src shell
+$ brew tap railwaycat/emacsmacport
+$ brew install emacs-mac
+ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications
+#+end_src
+
+copy from
+[[https://wikemacs.org/wiki/Installing_Emacs_on_OS_X][Installing Emacs
+on OS X]]
+
+** ormorant
+:PROPERTIES:
+:CUSTOM_ID: ormorant
+:END:
+#+begin_src shell
+brew install --cask font-cormorant
+#+end_src
+
+** EB Garamond
+:PROPERTIES:
+:CUSTOM_ID: eb-garamond
+:END:
+#+begin_src shell
+brew install --cask font-eb-garamond
+#+end_src
+
+** menu-set-font
+:PROPERTIES:
+:CUSTOM_ID: menu-set-font
+:END:
+#+begin_src emacs-lisp
+M-X menu-set-font
+#+end_src
+
+copy from [[https://www.emacswiki.org/emacs/SetFonts][SetFonts]]

@@ -1,0 +1,16 @@
+* zlib
+:PROPERTIES:
+:CUSTOM_ID: zlib
+:END:
+** general code
+:PROPERTIES:
+:CUSTOM_ID: general-code
+:END:
+#+begin_example
+Z = zlib:open(),
+zlib:deflateInit(Z, default, deflated, 31, 8, default),
+Data = zlib:deflate(Z, Data0),
+Data = zlib:deflate(Z, Data0, finish),
+zlib:deflateEnd(Z),
+zlib:close(Z),
+#+end_example

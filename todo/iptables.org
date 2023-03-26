@@ -1,0 +1,7 @@
+* iptables
+:PROPERTIES:
+:CUSTOM_ID: iptables
+:END:
+- [ ] iptables
+- [ ] nftables
+- [ ] ufw

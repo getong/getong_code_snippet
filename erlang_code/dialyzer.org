@@ -1,0 +1,75 @@
+* dialyzer
+:PROPERTIES:
+:CUSTOM_ID: dialyzer
+:END:
+** build
+:PROPERTIES:
+:CUSTOM_ID: build
+:END:
+#+begin_src shell
+dialyzer --build_plt --apps erts kernel stdlib
+#+end_src
+
+** append other applications
+:PROPERTIES:
+:CUSTOM_ID: append-other-applications
+:END:
+#+begin_src shell
+dialyzer --add_to_plt --apps crypto compiler public_key
+#+end_src
+
+** check the source code
+:PROPERTIES:
+:CUSTOM_ID: check-the-source-code
+:END:
+#+begin_src shell
+dialyzer -r src --src
+dialyzer -r src test --src
+dialyzer -r src test -I include --src
+#+end_src
+
+or use the rebar3:
+
+#+begin_src shell
+rebar3 dialyzer
+#+end_src
+
+or check the ebin
+
+#+begin_src shell
+dialyzer -r ebin
+#+end_src
+
+** typer
+:PROPERTIES:
+:CUSTOM_ID: typer
+:END:
+After dialyzer adds apps, it can use typer to generate code spec.
+
+#+begin_src shell
+typer -r src --show -I _build/default/lib/ -I include
+#+end_src
+
+** rebar3 dialyzer
+:PROPERTIES:
+:CUSTOM_ID: rebar3-dialyzer
+:END:
+see the [[https://www.rebar3.org/docs/commands#section-dialyzer][rebar3
+dialyzer]]
+
+** dialyzer ignore warning file
+:PROPERTIES:
+:CUSTOM_ID: dialyzer-ignore-warning-file
+:END:
+we can edit the file =dialyzer.ignore-warnings=, the dialyzer will
+ignore the warning.
+
+#+begin_src erlang
+lager_trunc_io.erl:283: Call to missing or unexported function erlang:is_map/1
+lager_trunc_io.erl:335: Call to missing or unexported function erlang:map_size/1
+Unknown functions:
+  lager_default_tracer:info/1
+    maps:to_list/1
+#+end_src
+
+copy from [[https://github.com/erlang-lager/lager][lager]]

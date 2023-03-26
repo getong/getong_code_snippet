@@ -1,0 +1,27 @@
+* podmon and systemd
+:PROPERTIES:
+:CUSTOM_ID: podmon-and-systemd
+:END:
+** start podmon container after system boot
+:PROPERTIES:
+:CUSTOM_ID: start-podmon-container-after-system-boot
+:END:
+#+begin_src shell
+podman run --rm --detach \
+    --name toms-mongo \
+    --volume /var/lib/mongo:/data/db:Z \
+    docker.io/library/mongo
+
+podman ps
+podman generate systemd \
+    --new --name toms-mongo \
+    | sudo tee /etc/systemd/system/toms-mongo.service
+
+
+systemctl enable --now toms-mongo
+
+systemctl status toms-mongo
+#+end_src
+
+copy from [[https://www.tutorialworks.com/podman-systemd/][How to Start
+Containers Automatically, with Podman and Systemd]]

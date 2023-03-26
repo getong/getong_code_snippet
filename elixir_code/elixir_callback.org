@@ -1,0 +1,20 @@
+* elixir callback
+:PROPERTIES:
+:CUSTOM_ID: elixir-callback
+:END:
+#+begin_src elixir
+@optional_callbacks handle_in: 3,
+                      handle_out: 3,
+                      handle_info: 2,
+                      handle_call: 3,
+                      handle_cast: 2,
+                      code_change: 3,
+                      terminate: 2
+
+@callback join(topic :: binary, payload :: map, socket :: Socket.t()) ::
+              {:ok, Socket.t()}
+              | {:ok, reply :: map, Socket.t()}
+              | {:error, reason :: map}
+#+end_src
+
+copy from phoenix/lib/phoenix/channel.ex

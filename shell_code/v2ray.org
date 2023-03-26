@@ -1,0 +1,11 @@
+* v2ray
+:PROPERTIES:
+:CUSTOM_ID: v2ray
+:END:
+** installation
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
+#+begin_src shell
+bash <(curl -s -L https://git.io/v2ray.sh)
+#+end_src

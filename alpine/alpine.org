@@ -1,0 +1,64 @@
+* alpine
+:PROPERTIES:
+:CUSTOM_ID: alpine
+:END:
+** apk
+:PROPERTIES:
+:CUSTOM_ID: apk
+:END:
+apk is alpine package manager
+
+#+begin_src shell
+apk add alpine-sdk
+#+end_src
+
+Very similar to apt-get in debian
+
+** glibc
+:PROPERTIES:
+:CUSTOM_ID: glibc
+:END:
+alpine use musl to replace glibc
+
+#+begin_src shell
+apk add musl-dev
+#+end_src
+
+** gcc, g++, git
+:PROPERTIES:
+:CUSTOM_ID: gcc-g-git
+:END:
+#+begin_src shell
+apk add ca-certificates openssl git gcc g++
+#+end_src
+
+It often add gcc and g++ in the production environment.
+
+** timezone
+:PROPERTIES:
+:CUSTOM_ID: timezone
+:END:
+copy from
+[[https://wiki.alpinelinux.org/wiki/Setting_the_timezone][Setting the
+timezone]]
+
+#+begin_src shell
+apk add tzdata && cp -r -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+apk del tzdata
+#+end_src
+
+** use the ustc mirror
+:PROPERTIES:
+:CUSTOM_ID: use-the-ustc-mirror
+:END:
+#+begin_src shell
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+#+end_src
+
+** use the aliyun mirror
+:PROPERTIES:
+:CUSTOM_ID: use-the-aliyun-mirror
+:END:
+#+begin_src shell
+sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+#+end_src

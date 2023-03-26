@@ -1,0 +1,40 @@
+* erlang database projects
+:PROPERTIES:
+:CUSTOM_ID: erlang-database-projects
+:END:
+** riak
+:PROPERTIES:
+:CUSTOM_ID: riak
+:END:
+** couchdb
+:PROPERTIES:
+:CUSTOM_ID: couchdb
+:END:
+** mnesia
+:PROPERTIES:
+:CUSTOM_ID: mnesia
+:END:
+** kvs
+:PROPERTIES:
+:CUSTOM_ID: kvs
+:END:
+** scalaris
+:PROPERTIES:
+:CUSTOM_ID: scalaris
+:END:
+** nkbase
+:PROPERTIES:
+:CUSTOM_ID: nkbase
+:END:
+** dalmatinerdb
+:PROPERTIES:
+:CUSTOM_ID: dalmatinerdb
+:END:
+** antidote
+:PROPERTIES:
+:CUSTOM_ID: antidote
+:END:
+** leveled
+:PROPERTIES:
+:CUSTOM_ID: leveled
+:END:

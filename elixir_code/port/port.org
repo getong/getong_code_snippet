@@ -1,0 +1,16 @@
+* port
+:PROPERTIES:
+:CUSTOM_ID: port
+:END:
+** the file copy from [[https://elixirschool.com/blog/til-ports/][TIL Using Erlang Ports]]
+:PROPERTIES:
+:CUSTOM_ID: the-file-copy-from-til-using-erlang-ports
+:END:
+** set the monitor files number
+:PROPERTIES:
+:CUSTOM_ID: set-the-monitor-files-number
+:END:
+#+begin_src shell
+sudo sysctl fs.inotify.max_user_watches=524288
+sudo sysctl -p
+#+end_src

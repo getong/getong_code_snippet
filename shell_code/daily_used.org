@@ -1,0 +1,1086 @@
+* 命令行使用案例
+:PROPERTIES:
+:CUSTOM_ID: 命令行使用案例
+:END:
+** 获取公网ip
+:PROPERTIES:
+:CUSTOM_ID: 获取公网ip
+:END:
+#+begin_example
+curl ifconfig.me
+#+end_example
+
+** 监控磁盘空间, 间隔1s输出内容
+:PROPERTIES:
+:CUSTOM_ID: 监控磁盘空间-间隔1s输出内容
+:END:
+#+begin_example
+watch -n 1 df
+#+end_example
+
+** 永久删除文件
+:PROPERTIES:
+:CUSTOM_ID: 永久删除文件
+:END:
+#+begin_example
+shred -zuv filename
+#+end_example
+
+** clear terminal
+:PROPERTIES:
+:CUSTOM_ID: clear-terminal
+:END:
+#+begin_example
+reset
+#+end_example
+
+** dos2unix
+:PROPERTIES:
+:CUSTOM_ID: dos2unix
+:END:
+#+begin_example
+dos2unix filename
+#+end_example
+
+** use adduser to add normal user, use useradd to add system user
+:PROPERTIES:
+:CUSTOM_ID: use-adduser-to-add-normal-user-use-useradd-to-add-system-user
+:END:
+#+begin_example
+# will create /home/user
+adduser user
+#not create /home/user2
+useradd user2
+#+end_example
+
+** 列出归属于user的用户的进程和线程
+:PROPERTIES:
+:CUSTOM_ID: 列出归属于user的用户的进程和线程
+:END:
+#+begin_example
+$ ps -LF -u user
+#+end_example
+
+** 找到网关 gateway
+:PROPERTIES:
+:CUSTOM_ID: 找到网关-gateway
+:END:
+#+begin_example
+#netstat -rn
+(以0.0.0.0开始的行的gateway是默认网关)
+#+end_example
+
+** 快速格式化u盘
+:PROPERTIES:
+:CUSTOM_ID: 快速格式化u盘
+:END:
+#+begin_example
+#mkfs.ntfs -f /dev/sdb1
+
+## 参看 /etc/mke2fs.conf
+#mkfs.ext4  -T largefile /dev/sdb1
+#+end_example
+
+** pv拷贝带进度条
+:PROPERTIES:
+:CUSTOM_ID: pv拷贝带进度条
+:END:
+#+begin_example
+pv file1 > file2
+#+end_example
+
+** get shell pid
+:PROPERTIES:
+:CUSTOM_ID: get-shell-pid
+:END:
+#+begin_example
+echo $$
+#+end_example
+
+** The nproc command shows the number of processing units available:
+:PROPERTIES:
+:CUSTOM_ID: the-nproc-command-shows-the-number-of-processing-units-available
+:END:
+#+begin_example
+$nproc
+#+end_example
+
+** lowercase filename
+:PROPERTIES:
+:CUSTOM_ID: lowercase-filename
+:END:
+To translate uppercase names to lower, you'd use
+
+#+begin_src shell
+$ rename -n 'y/A-Z/a-z/' filename
+$ rename -v 'y/A-Z/a-z/' filename
+#+end_src
+
+found it on manpage
+
+** get the kill command of zombie process
+:PROPERTIES:
+:CUSTOM_ID: get-the-kill-command-of-zombie-process
+:END:
+#+begin_src shell
+ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -9 ” $2，$3}’
+
+ps -ef | grep defunct | grep -v grep | awk ‘{print “kill -18 ” $3}’
+#+end_src
+
+** mount iso file
+:PROPERTIES:
+:CUSTOM_ID: mount-iso-file
+:END:
+#+begin_src shell
+mount -t iso9660 -o ro,loop,noauto /your/file.iso /mnt
+#+end_src
+
+** netstat get network info
+:PROPERTIES:
+:CUSTOM_ID: netstat-get-network-info
+:END:
+#+begin_src shell
+netstat -putona
+#+end_src
+
+** say yes to all command
+:PROPERTIES:
+:CUSTOM_ID: say-yes-to-all-command
+:END:
+#+begin_src shell
+yes | apt-get install vim
+yes no | command
+#+end_src
+
+** check the atime, mtime, ctime of a file
+:PROPERTIES:
+:CUSTOM_ID: check-the-atime-mtime-ctime-of-a-file
+:END:
+#+begin_src shell
+stat file
+#+end_src
+
+** number operation
+:PROPERTIES:
+:CUSTOM_ID: number-operation
+:END:
+#+begin_src shell
+#!/bin/bash
+echo "Hello World !"
+a=3
+b=5
+val=`expr $a + $b`
+echo "Total value : $val"
+
+val=`expr $a - $b`
+echo "Total value : $val"
+
+val=`expr $a \* $b`
+echo "Total value : $val"
+
+val=`expr $a / $b`
+echo "Total value : $val"
+#+end_src
+
+Note that, multiply operation should be escaped.
+
+** get host ip
+:PROPERTIES:
+:CUSTOM_ID: get-host-ip
+:END:
+#+begin_src shell
+$ ifconfig
+$ ip a
+$ hostname -I
+#+end_src
+
+** awk substr
+:PROPERTIES:
+:CUSTOM_ID: awk-substr
+:END:
+Print the Nth part(include the Nth) to the end of each line.
+
+#+begin_src shell
+awk '{print substr($0, index($0, $N))}'
+#+end_src
+
+** curl post http data
+:PROPERTIES:
+:CUSTOM_ID: curl-post-http-data
+:END:
+#+begin_src shell
+curl -d "msg=a&msg1=b" url
+curl url -X POST -H 'Content-Type: application/json' -d '{"msg": "a", "msg2": "b"}'
+curl -H "Content-Type: application/json" --cookie "key1=1;key2=2" -X GET url
+#+end_src
+
+** cat words to file
+:PROPERTIES:
+:CUSTOM_ID: cat-words-to-file
+:END:
+Sometimes, no =vim=, =nano=, you can use =cat= to write words into a
+file.
+
+#+begin_src shell
+cat > sources.list << EOF
+deb http://mirrors.163.com/debian/ jessie main non-free contrib
+deb http://mirrors.163.com/debian/ jessie-updates main non-free contrib
+deb http://mirrors.163.com/debian/ jessie-backports main non-free contrib
+deb-src http://mirrors.163.com/debian/ jessie main non-free contrib
+deb-src http://mirrors.163.com/debian/ jessie-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ jessie-backports main non-free contrib
+deb http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib
+deb-src http://mirrors.163.com/debian-security/ jessie/updates main non-free contrib
+EOF
+#+end_src
+
+** view linux capacity
+:PROPERTIES:
+:CUSTOM_ID: view-linux-capacity
+:END:
+#+begin_src shell
+capsh --print
+#+end_src
+
+In docker, this will change according to the user.
+
+** dd iso image
+:PROPERTIES:
+:CUSTOM_ID: dd-iso-image
+:END:
+#+begin_src shell
+# /dev/sdb is the ustick mount point
+sudo dd if=xxx.iso of=/dev/sdb status=progress
+#+end_src
+
+** sleep n second for copy many files, in case of lager power
+:PROPERTIES:
+:CUSTOM_ID: sleep-n-second-for-copy-many-files-in-case-of-lager-power
+:END:
+#+begin_src shell
+for i in `ls`
+do
+cp $i /tmp
+sleep 10
+done
+#+end_src
+
+** ln must use absolute path as argument
+:PROPERTIES:
+:CUSTOM_ID: ln-must-use-absolute-path-as-argument
+:END:
+ln
+硬链接文件，inode相同，指向同一个文件。符号链接实际上是一个文本文件，其中包含的有另一个文件的位置信息。
+
+#+begin_src shell
+# cd /usr/local/otp_src_20.0
+# for i in `ls`
+do
+ln -sf $PWD/$i /usr/bin
+done
+#+end_src
+
+** pip aliyun mirror
+:PROPERTIES:
+:CUSTOM_ID: pip-aliyun-mirror
+:END:
+#+begin_src shell
+vi ~/.pip/pip.conf
+#+end_src
+
+change as below:
+
+#+begin_src shell
+[global]
+trusted-host =  mirrors.aliyun.com
+index-url = https://mirrors.aliyun.com/pypi/simple
+#+end_src
+
+** getfacl
+:PROPERTIES:
+:CUSTOM_ID: getfacl
+:END:
+#+begin_src shell
+$ getfacl install.sh
+# file: install.sh
+# owner: username
+# group: groupname
+user::rwx
+group::r-x
+other::r-x
+#+end_src
+
+** setfacl
+:PROPERTIES:
+:CUSTOM_ID: setfacl
+:END:
+#+begin_src shell
+$ setfacl -m u:username:rwx filename
+#+end_src
+
+** < filename command
+:PROPERTIES:
+:CUSTOM_ID: filename-command
+:END:
+#+begin_src shell
+$ < filename cat    # like `cat filename`
+$ < filename less   # like `less filename`
+#+end_src
+
+** iftop
+:PROPERTIES:
+:CUSTOM_ID: iftop
+:END:
+view newwork activity
+
+#+begin_src shell
+iftop
+#+end_src
+
+** Linux 查看流量
+:PROPERTIES:
+:CUSTOM_ID: linux-查看流量
+:END:
+see [[https://www.zhihu.com/question/19862245][Linux
+下大家喜欢用什么命令查看流量？]]
+
+#+begin_quote
+nethogs: 按进程查看流量占用 iptraf: 按连接/端口查看流量 ifstat:
+按设备查看流量 ethtool: 诊断工具 tcpdump: 抓包工具 ss: 连接查看工具
+其他: dstat, slurm, nload, bmon atop nmon collectl vnstat sar iptraf
+监控总体带宽使用--nload、bmon、slurm、bwm-ng、cbm、speedometer和netload
+监控总体带宽使用（批量式输出）--vnstat、ifstat、dstat和collectl
+每个套接字连接的带宽使用--iftop、iptraf、tcptrack、pktstat、netwatch和trafshow
+每个进程的带宽使用--nethogs
+
+#+end_quote
+
+#+begin_src shell
+dstat -nf
+cat /proc/net/dev
+#+end_src
+
+** many seconds after now
+:PROPERTIES:
+:CUSTOM_ID: many-seconds-after-now
+:END:
+#+begin_src shell
+date -d "+1000000000 second now"
+#+end_src
+
+** shuffle text
+:PROPERTIES:
+:CUSTOM_ID: shuffle-text
+:END:
+#+begin_src shell
+shuf filename
+#+end_src
+
+** chattr
+:PROPERTIES:
+:CUSTOM_ID: chattr
+:END:
+Only the =root= can use this command. Prevent file from deleting.
+
+#+begin_src shell
+# enable
+# chattr +i filename
+# disable
+# chattr -i filename
+#+end_src
+
+** lsattr
+:PROPERTIES:
+:CUSTOM_ID: lsattr
+:END:
+All users can use it.
+
+#+begin_src shell
+$ lsattr filename
+#+end_src
+
+** brctl
+:PROPERTIES:
+:CUSTOM_ID: brctl
+:END:
+#+begin_src shell
+# brctl show
+bridge name     bridge id               STP enabled     interfaces
+docker0         8000.024210dc7fcc       no
+#+end_src
+
+** readlink to find absolute path
+:PROPERTIES:
+:CUSTOM_ID: readlink-to-find-absolute-path
+:END:
+#+begin_src shell
+$ readlink -f filename
+#+end_src
+
+** join
+:PROPERTIES:
+:CUSTOM_ID: join
+:END:
+#+begin_src shell
+$ join -o1.1 -o2.2, 2.3 file1 file2
+#+end_src
+
+** check the virtualation of the cpu
+:PROPERTIES:
+:CUSTOM_ID: check-the-virtualation-of-the-cpu
+:END:
+#+begin_src shell
+$ egrep '(vmx|svm)' /proc/cpuinfo
+#+end_src
+
+** column
+:PROPERTIES:
+:CUSTOM_ID: column
+:END:
+format the output text
+
+#+begin_src shell
+$ mount | column -t
+# cat /etc/passwd | column -t -s:
+#+end_src
+
+** route
+:PROPERTIES:
+:CUSTOM_ID: route
+:END:
+#+begin_src shell
+$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         gateway         0.0.0.0         UG    0      0        0 enp2s0
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 enp2s0
+
+$ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.1.253   0.0.0.0         UG    0      0        0 enp2s0
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 enp2s0
+
+# add a route table, all packet sent to 192.168.60.0 subnetwork via gateway 192.168.19.1
+# route add -net 192.168.60.0 netmask 255.255.255.0 gw 192.168.19.1
+
+# delete a route table
+# route del -net 192.168.60.0 netmask 255.255.255.0
+#+end_src
+
+In the =Flags=, =U= is usable, =G= is currently used gateway.
+
+** get all commands about network in current linux distribution
+:PROPERTIES:
+:CUSTOM_ID: get-all-commands-about-network-in-current-linux-distribution
+:END:
+#+begin_src shell
+$ apropos network | less
+#+end_src
+
+** get what cost so much memory
+:PROPERTIES:
+:CUSTOM_ID: get-what-cost-so-much-memory
+:END:
+#+begin_src shell
+可以使用一下命令查使用内存最多的5个进程
+ps -aux | sort -k4nr | head 5
+或者
+top （然后按下M，注意大写）
+可以使用一下命令查使用CPU最多的5个进程
+ps -aux | sort -k3nr | head 5
+或者
+top （然后按下P，注意大写）
+top -c 显示进程运行信息列表
+top -Hp pid_num 显示一个进程的线程运行信息列表
+#+end_src
+
+see
+[[http://xinkang120.blog.163.com/blog/static/19466822320136296271662/][linux
+查看 占用 内存 最多的 进程]]
+
+** linux garbage collection
+:PROPERTIES:
+:CUSTOM_ID: linux-garbage-collection
+:END:
+#+begin_src shell
+通过修改proc系统的drop_caches清理free的cache
+$echo 3 > /proc/sys/vm/drop_caches
+
+drop_caches的详细文档如下：
+Writing to this will cause the kernel to drop clean caches, dentries and inodes from memory, causing that memory to become free.
+To free pagecache:
+* echo 1 > /proc/sys/vm/drop_caches
+To free dentries and inodes:
+* echo 2 > /proc/sys/vm/drop_caches
+To free pagecache, dentries and inodes:
+* echo 3 > /proc/sys/vm/drop_caches
+As this is a non-destructive operation, and dirty objects are notfreeable, the user should run "sync" first in order to make sure allcached objects are freed.
+This tunable was added in 2.6.16.
+
+修改/etc/sysctl.conf 添加如下选项后就不会内存持续增加
+vm.dirty_ratio = 1
+vm.dirty_background_ratio=1
+vm.dirty_writeback_centisecs=2
+vm.dirty_expire_centisecs=3
+vm.drop_caches=3
+vm.swappiness =100
+vm.vfs_cache_pressure=163
+vm.overcommit_memory=2
+vm.lowmem_reserve_ratio=32 32 8
+kern.maxvnodes=3
+
+上面的设置比较粗暴，使cache的作用基本无法发挥。需要根据机器的状况进行适当的调节寻找最佳的折衷。
+#+end_src
+
+** get the process file descriptor
+:PROPERTIES:
+:CUSTOM_ID: get-the-process-file-descriptor
+:END:
+#+begin_src shell
+ls -al /proc/<PID>/fd
+#+end_src
+
+** meminfo
+:PROPERTIES:
+:CUSTOM_ID: meminfo
+:END:
+#+begin_src shell
+cat /proc/meminfo
+#+end_src
+
+** get the absolute path of a file
+:PROPERTIES:
+:CUSTOM_ID: get-the-absolute-path-of-a-file
+:END:
+#+begin_src shell
+realpath filename
+/home/user/filename
+#+end_src
+
+** find the duplicate files
+:PROPERTIES:
+:CUSTOM_ID: find-the-duplicate-files
+:END:
+#+begin_src shell
+fdupes -r .
+#+end_src
+
+** get the total tcp connection and memory cost
+:PROPERTIES:
+:CUSTOM_ID: get-the-total-tcp-connection-and-memory-cost
+:END:
+#+begin_src shell
+ss -s && free -g
+#+end_src
+
+** find the top 10 processes which cost memory or cpu most
+:PROPERTIES:
+:CUSTOM_ID: find-the-top-10-processes-which-cost-memory-or-cpu-most
+:END:
+#+begin_src shell
+# memory
+$ ps aux | sort -rnk 4 | head -n 10
+
+# cpu
+$ ps aux | sort -rnk 3 | head -n 10
+#+end_src
+
+** generate well spelled password
+:PROPERTIES:
+:CUSTOM_ID: generate-well-spelled-password
+:END:
+#+begin_src shell
+apg -a 0 -n 10
+#+end_src
+
+** flock - manage locks from shell scripts
+:PROPERTIES:
+:CUSTOM_ID: flock---manage-locks-from-shell-scripts
+:END:
+#+begin_src shell
+LOCKFILE="/home/xxq/lock_update_check_commit_sh.tmp"
+
+exec 200>$LOCKFILE
+flock -n 200 || {
+    echo "Another user is doing the same thing，please wait.."
+    flock 200
+   }
+#+end_src
+
+see [[http://blog.guoyb.com/2017/09/16/flock/][给shell脚本加锁]]
+
+** check words checksum
+:PROPERTIES:
+:CUSTOM_ID: check-words-checksum
+:END:
+#+begin_src shell
+echo -n words | md5sum | awk '{print $1}'
+echo -n words | sha1sum | awk '{print $1}'
+#+end_src
+
+** vagrant global-status
+:PROPERTIES:
+:CUSTOM_ID: vagrant-global-status
+:END:
+view all the vagrant box instance status
+
+#+begin_src shell
+vagrant global-status
+#+end_src
+
+** sed
+:PROPERTIES:
+:CUSTOM_ID: sed
+:END:
+#+begin_src shell
+i=abc
+sed -i "s/\$i/$i/g" filename
+#+end_src
+
+** Automatically add newline at end of curl response body
+:PROPERTIES:
+:CUSTOM_ID: automatically-add-newline-at-end-of-curl-response-body
+:END:
+copy from
+[[https://stackoverflow.com/questions/12849584/automatically-add-newline-at-end-of-curl-response-body/14614203#14614203][Automatically
+add newline at end of curl response body]]
+
+#+begin_src shell
+#adding the following to your ~/.curlrc file:
+
+-w "\n"
+#+end_src
+
+Or:
+
+#+begin_src shell
+curl example.com; echo
+#+end_src
+
+** apt-get
+:PROPERTIES:
+:CUSTOM_ID: apt-get
+:END:
+#+begin_src shell
+apt-get policy package_name
+#+end_src
+
+** vagrant ssh-config
+:PROPERTIES:
+:CUSTOM_ID: vagrant-ssh-config
+:END:
+#+begin_src shell
+vagrant ssh-config
+#+end_src
+
+** fuser
+:PROPERTIES:
+:CUSTOM_ID: fuser
+:END:
+#+begin_src shell
+fuser -n tcp|udp -v <port number>[,<remote addresss>[,<remote port>]
+$ fuser -n tcp -v 515
+                     用户     进程号 权限   命令
+6160/tcp:            user_name 12345 F....  beam.smp
+#+end_src
+
+** netstat
+:PROPERTIES:
+:CUSTOM_ID: netstat
+:END:
+=-a= print all ports, =-p= print process name, =-A= protocol name
+
+#+begin_src shell
+$ sudo netstat -a -p -A inet
+$ sudo netstat -a -p -A inet6
+#+end_src
+
+** hexdump
+:PROPERTIES:
+:CUSTOM_ID: hexdump
+:END:
+print the binary file
+
+#+begin_example
+hexdump -C bin_file
+#+end_example
+
+** cut video file
+:PROPERTIES:
+:CUSTOM_ID: cut-video-file
+:END:
+#+begin_src shell
+ffmpeg -ss 0:7:0 -i filename -c copy -t 1:0:0 outfilename
+#+end_src
+
+From the beginning at =0:7:0= and the total time is =1:0:0=.
+
+** echo and sudo
+:PROPERTIES:
+:CUSTOM_ID: echo-and-sudo
+:END:
+#+begin_src shell
+echo "Text I want to write" | sudo tee /path/to/file > /dev/null
+sudo sh -c 'echo "Text I want to write" > /path/to/file'
+echo "Text I want to write" | sudo tee -a /path/to/file > /dev/null
+sudo sh -c 'echo "Text I want to write" >> /path/to/file'
+#+end_src
+
+This won't work:
+
+#+begin_src shell
+sudo echo "Text I want to write" > /path/to/file
+#+end_src
+
+copy from
+[[https://blogs.oracle.com/joshis/sudo-echo-does-not-work-together-in-ubuntu-another-waste-of-time-issue]["sudo
+echo" does not work together in Ubuntu]]
+
+** disable swap
+:PROPERTIES:
+:CUSTOM_ID: disable-swap
+:END:
+#+begin_src shell
+#temporary
+sysctl -w vm.swappiness=0
+
+#permanently
+echo "vm.swappiness = 0">> /etc/sysctl.conf
+sysctl -p
+#+end_src
+
+** 137 signal
+:PROPERTIES:
+:CUSTOM_ID: signal
+:END:
+When the os process is closed by the 137 signal, the most probably
+reason is the lack of memory.
+
+** enable swappiness
+:PROPERTIES:
+:CUSTOM_ID: enable-swappiness
+:END:
+see
+[[https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-16-04][How
+To Add Swap Space on Ubuntu 16.04]]
+
+#+begin_src shell
+sudo swapon --show
+sudo fallocate -l 1G /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+sudo sysctl vm.swappiness=10
+sudo sysctl vm.vfs_cache_pressure=50
+#+end_src
+
+** ssh through proxy
+:PROPERTIES:
+:CUSTOM_ID: ssh-through-proxy
+:END:
+It might be coped with ssh_config, but still not know how to use. Just
+use proxychains with ssh.
+
+** get the disk partition and uuid
+:PROPERTIES:
+:CUSTOM_ID: get-the-disk-partition-and-uuid
+:END:
+#+begin_src shell
+lsblk -f
+#+end_src
+
+** convert ebook
+:PROPERTIES:
+:CUSTOM_ID: convert-ebook
+:END:
+#+begin_src shell
+sudo apt-get install calibre
+ebook-convert file.epub file.pdf
+ebook-convert file.pdf file.epub --enable-heuristics
+#+end_src
+
+** replace the “
+:PROPERTIES:
+:CUSTOM_ID: replace-the
+:END:
+#+begin_src shell
+sed -i 's#\“"#\"#g' filename
+# or
+sed -i 's:\“":\":g' filename
+#+end_src
+
+copy from
+[[https://blog.csdn.net/qq_35457078/article/details/85219384][Linux
+sed替换中文引号为英文引号]]
+
+** ssh-agent
+:PROPERTIES:
+:CUSTOM_ID: ssh-agent
+:END:
+#+begin_src shell
+rm ~/.ssh/.auth_socket
+ssh-agent -a ~/.ssh/.auth_socket
+# 31018 is the pid
+echo 31018 > ~/.ssh/.auth_pid
+export SSH_AGENT_PID=`cat $HOME/.ssh/.auth_pid`
+ssh-add id_rsa
+#+end_src
+
+** get ip
+:PROPERTIES:
+:CUSTOM_ID: get-ip
+:END:
+#+begin_src shell
+curl ipinfo.io
+#+end_src
+
+** get disk partition uuid
+:PROPERTIES:
+:CUSTOM_ID: get-disk-partition-uuid
+:END:
+#+begin_src shell
+blkid
+#+end_src
+
+** clean zsh env
+:PROPERTIES:
+:CUSTOM_ID: clean-zsh-env
+:END:
+#+begin_src shell
+sh -c 'env HOME=$(mktemp -d) zsh'
+#+end_src
+
+** continue broken scp (secure copy) command process with rsync
+:PROPERTIES:
+:CUSTOM_ID: continue-broken-scp-secure-copy-command-process-with-rsync
+:END:
+#+begin_src shell
+rsync -avh --remove-source-files --progress -e "ssh -i id_rsa" user@ip:src_file dest_file
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/26411225/how-to-resume-scp-with-partially-copied-files/26411449][How
+to resume scp with partially copied files? [closed]]]
+
+** delete the keyring
+:PROPERTIES:
+:CUSTOM_ID: delete-the-keyring
+:END:
+#+begin_src shell
+mv ~/.local/share/keyrings/ ~/.local/share/keyrings.bak
+#+end_src
+
+** apt just download but not install packages
+:PROPERTIES:
+:CUSTOM_ID: apt-just-download-but-not-install-packages
+:END:
+#+begin_src shell
+sudo apt-get install --download-only pppoe
+sudo apt-get upgrade --download-only
+#+end_src
+
+copy from
+[[https://unix.stackexchange.com/questions/408346/how-to-download-package-not-install-it-with-apt-get-command][How
+to download package not install it with apt-get command?]]
+
+** ip usage
+:PROPERTIES:
+:CUSTOM_ID: ip-usage
+:END:
+#+begin_src shell
+sudo ip tuntap add mode tap name tap-net user $USER
+ip tuntap list
+sudo ip link set tap-net up
+sudo ip addr add 192.168.42.100/24 dev tap-net
+sudo iptables -t nat -A POSTROUTING -s 192.168.42.0/24 -j MASQUERADE
+sudo sysctl net.ipv4.ip_forward=1
+#+end_src
+
+** Send and Receive UDP packets via Linux CLI
+:PROPERTIES:
+:CUSTOM_ID: send-and-receive-udp-packets-via-linux-cli
+:END:
+#+begin_src shell
+# Start udp Server:
+$ nc –u –l 9999
+
+# start udp client:
+$ nc -u 192.168.1.102 9999
+#+end_src
+
+** update grub2
+:PROPERTIES:
+:CUSTOM_ID: update-grub2
+:END:
+#+begin_src shell
+view /boot/grub/grub.cfg
+sudo grub-set-default 'Debian GNU/Linux, with Linux 5.10.0-8-amd64'
+#+end_src
+
+** How to Test Port [TCP/UDP] Connectivity from a Linux Server
+:PROPERTIES:
+:CUSTOM_ID: how-to-test-port-tcpudp-connectivity-from-a-linux-server
+:END:
+#+begin_src shell
+# nc -z -v -u 192.168.10.12 123
+Connection to 192.118.20.95 123 port [udp/ntp] succeeded!
+#+end_src
+
+copy from
+[[https://www.thegeekdiary.com/how-to-test-porttcp-udp-connectivity-from-a-linux-server/][How
+to Test Port [TCP/UDP] Connectivity from a Linux Server]]
+
+** random uuid
+:PROPERTIES:
+:CUSTOM_ID: random-uuid
+:END:
+#+begin_src shell
+cat /proc/sys/kernel/random/uuid
+#+end_src
+
+** get the gateway
+:PROPERTIES:
+:CUSTOM_ID: get-the-gateway
+:END:
+#+begin_src shell
+ip route show
+route -n
+#+end_src
+
+** e2label the usb stick
+:PROPERTIES:
+:CUSTOM_ID: e2label-the-usb-stick
+:END:
+#+begin_src shell
+sudo e2label /dev/sdb1 stick_name
+#+end_src
+
+** proxy in ~/.curlrc
+:PROPERTIES:
+:CUSTOM_ID: proxy-in-.curlrc
+:END:
+#+begin_src shell
+proxy=http://127.0.0.1:8080
+#+end_src
+
+** user password right but can not login gnome desktop
+:PROPERTIES:
+:CUSTOM_ID: user-password-right-but-can-not-login-gnome-desktop
+:END:
+#+begin_example
+Perhaps your .profile, .bash_profile, /etc/profile, or .bashrc contains an error, and makes the shell exit?
+#+end_example
+
+copy from
+[[https://unix.stackexchange.com/questions/62623/debian-log-in-failure-with-correct-password][Debian
+Log In Failure With Correct Password]]
+
+** copy the content of the folder use either rsync
+:PROPERTIES:
+:CUSTOM_ID: copy-the-content-of-the-folder-use-either-rsync
+:END:
+#+begin_src shell
+rsync -Pvuar src/ dst/
+#+end_src
+
+** ln
+:PROPERTIES:
+:CUSTOM_ID: ln
+:END:
+#+begin_src shell
+for i in `ls /usr/local/otp-22.3.4.24/bin/`
+do
+sudo ln -s /usr/local/otp-22.3.4.24/bin/$i /usr/local/bin
+done
+#+end_src
+
+** VBoxManage usage
+:PROPERTIES:
+:CUSTOM_ID: vboxmanage-usage
+:END:
+#+begin_src shell
+alias start_linux='VBoxManage startvm linux-host-name --type gui'
+alias stop_linux='VBoxManage controlvm linux-host-name savestate'
+#+end_src
+
+** sed change a whole line
+:PROPERTIES:
+:CUSTOM_ID: sed-change-a-whole-line
+:END:
+#+begin_src shell
+ sed '/^match_string/c new_string' a.txt
+#+end_src
+
+** get gateway
+:PROPERTIES:
+:CUSTOM_ID: get-gateway
+:END:
+#+begin_src shell
+route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.2.1     0.0.0.0         UG    1024   0        0 enp4s0
+192.168.2.0     0.0.0.0         255.255.255.0   U     1024   0        0 enp4s0
+192.168.2.1     0.0.0.0         255.255.255.255 UH    1024   0        0 enp4s0
+#+end_src
+
+The =192.168.2.1= is the gateway.
+
+** get dns
+:PROPERTIES:
+:CUSTOM_ID: get-dns
+:END:
+#+begin_src shell
+cat /etc/resolv.conf
+#+end_src
+
+** mount usb stick by uuid
+:PROPERTIES:
+:CUSTOM_ID: mount-usb-stick-by-uuid
+:END:
+#+begin_src shell
+mount /dev/disk/by-uuid/695b1163-3774-4805-b5e4-76512c67cf7b temp
+#+end_src
+
+copy from
+[[https://unix.stackexchange.com/questions/119973/mounting-usb-automatically-having-usbs-label-as-mountpoint][Mounting
+usb automatically & having usb's label as mountpoint]]
+
+#+begin_src shell
+#!/bin/sh
+export mount_point="/media/$1"
+current_device=$(awk '$2 == ENVIRON["mount_point"] {print $1; exit}' </proc/mounts)
+if [ -n "$current_device" ]; then
+  echo 1>&2 "$current_device already mounted on $mount_point"
+  exit 1
+fi
+mount "/dev/disk/by-label/$1" "$mount_point"
+#+end_src
+
+** find file follow symbolic links
+:PROPERTIES:
+:CUSTOM_ID: find-file-follow-symbolic-links
+:END:
+#+begin_src shell
+find -L /data -name "*.jpg"
+#+end_src
+
+copy from
+[[https://www.cyberciti.biz/faq/linux-unix-find-files-with-symbolic-links/][Linux
+/ UNIX find files with symbolic links]]
+
+** dereference-recursive grep
+:PROPERTIES:
+:CUSTOM_ID: dereference-recursive-grep
+:END:
+#+begin_src shell
+grep -R linuxize.com /etc
+#+end_src
+
+copy from
+[[https://linuxize.com/post/how-to-use-grep-command-to-search-files-in-linux/][Grep
+Command in Linux (Find Text in Files)]]

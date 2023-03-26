@@ -1,0 +1,27 @@
+* rust shared state
+:PROPERTIES:
+:CUSTOM_ID: rust-shared-state
+:END:
+** global shared state crate
+:PROPERTIES:
+:CUSTOM_ID: global-shared-state-crate
+:END:
+[[https://github.com/matklad/once_cell][once_cell]]
+[[https://github.com/rust-lang-nursery/lazy-static.rs][lazy-static]]
+
+once_cell might be better than lazy-static, as tokio adopts once_cell.
+
+** nightly sync::{OnceLock, LazyLock}
+:PROPERTIES:
+:CUSTOM_ID: nightly-synconcelock-lazylock
+:END:
+only in rust nightly.
+
+Note that, cell::{OnceCell, LazyCell} struct have the same api as the
+{OnceLock, LazyLock}, but they are !sync.
+
+** thread_local!
+:PROPERTIES:
+:CUSTOM_ID: thread_local
+:END:
+Macro std::thread_local is only in current thread, not global.

@@ -1,0 +1,27 @@
+* pony installation
+:PROPERTIES:
+:CUSTOM_ID: pony-installation
+:END:
+** install ponyup
+:PROPERTIES:
+:CUSTOM_ID: install-ponyup
+:END:
+#+begin_src shell
+wget -c https://raw.githubusercontent.com/ponylang/ponyup/latest-release/ponyup-init.sh
+sh ponyup-init.sh
+
+echo 'export PATH=/home/gerald/.local/share/ponyup/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+#+end_src
+
+** Install Pony
+:PROPERTIES:
+:CUSTOM_ID: install-pony
+:END:
+#+begin_src shell
+ponyup update ponyc nightly
+
+ponyup update ponyc release
+#+end_src
+
+Not work.

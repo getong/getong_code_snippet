@@ -1,0 +1,16 @@
+* regex
+:PROPERTIES:
+:CUSTOM_ID: regex
+:END:
+** PCRE Regex Cheatsheet
+:PROPERTIES:
+:CUSTOM_ID: pcre-regex-cheatsheet
+:END:
+[[https://www.debuggex.com/cheatsheet/regex/pcre][PCRE Regex
+Cheatsheet]]
+
+** 正则表达式的先行断言(lookahead)和后行断言(lookbehind)
+:PROPERTIES:
+:CUSTOM_ID: 正则表达式的先行断言lookahead和后行断言lookbehind
+:END:
+[[https://blog.51cto.com/cnn237111/749047][正则表达式的先行断言(lookahead)和后行断言(lookbehind)]]

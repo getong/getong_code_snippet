@@ -1,0 +1,25 @@
+* elixir docs
+:PROPERTIES:
+:CUSTOM_ID: elixir-docs
+:END:
+[[https://hexdocs.pm/][hexdocs]]
+[[https://github.com/seven1m/30-days-of-elixir][30-days-of-elixir]]
+[[http://314.tt/blog/how-to-get-started-with-elixir-and-phoenix/][How to
+get startedwith Elixir]]
+
+* elixir is a erlang application, and can be started in other erlang applications
+:PROPERTIES:
+:CUSTOM_ID: elixir-is-a-erlang-application-and-can-be-started-in-other-erlang-applications
+:END:
+#+begin_src erlang
+start_elixir_application() ->
+    case ejabberd_config:is_elixir_enabled() of
+    true ->
+        case application:ensure_started(elixir) of
+        ok -> ok;
+        {error, _Msg} -> ?ERROR_MSG("Elixir application not started.", [])
+        end;
+    _ ->
+        ok
+    end.
+#+end_src

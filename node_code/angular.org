@@ -1,0 +1,65 @@
+* angular
+:PROPERTIES:
+:CUSTOM_ID: angular
+:END:
+** new
+:PROPERTIES:
+:CUSTOM_ID: new
+:END:
+#+begin_src shell
+sudo yarn global add @angular/cli
+ng new my-dream-app
+ng new --style sass --commit false -g true --routing false my-dream-app
+cd my-dream-app
+ng serve
+ng build
+#+end_src
+
+copy from [[https://cli.angular.io/][Angular CLI]]
+
+** configure the package manager
+:PROPERTIES:
+:CUSTOM_ID: configure-the-package-manager
+:END:
+#+begin_src shell
+ng config -g cli.packageManager yarn
+ng config -g cli.packageManager cnpm
+ng config -g cli.packageManager npm
+#+end_src
+
+or change the ~/.angular-config.json
+
+#+begin_src json
+{
+  "version": 1,
+  "cli": {
+    "packageManager": "yarn"
+  }
+}
+#+end_src
+
+copy from
+[[https://medium.com/@beeman/using-yarn-with-angular-cli-v6-7f53a7678b93][Using
+Yarn with Angular CLI v6+]]
+
+** generate
+:PROPERTIES:
+:CUSTOM_ID: generate
+:END:
+#+begin_src shell
+ng generate component users
+ng generate service users
+ng generate module users
+ng generate directive users
+ng generate class users
+ng generate pipe users
+#+end_src
+
+** add
+:PROPERTIES:
+:CUSTOM_ID: add
+:END:
+#+begin_src shell
+ng add @ngx-translator/core
+ng add @ngx-translator/http-loader
+#+end_src

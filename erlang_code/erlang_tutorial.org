@@ -1,0 +1,6 @@
+* erlang tutorial
+:PROPERTIES:
+:CUSTOM_ID: erlang-tutorial
+:END:
+read the docs [[http://erlang.org/doc/tutorial/introduction.html][erlang
+tutorial]] They are also shiped with the docs install_dir/doc/tutorial/

@@ -1,0 +1,8 @@
+* rust sea-orm
+:PROPERTIES:
+:CUSTOM_ID: rust-sea-orm
+:END:
+** sea-orm is based on sqlx
+:PROPERTIES:
+:CUSTOM_ID: sea-orm-is-based-on-sqlx
+:END:

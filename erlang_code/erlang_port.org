@@ -1,0 +1,22 @@
+* erlang port
+:PROPERTIES:
+:CUSTOM_ID: erlang-port
+:END:
+** get all ports
+:PROPERTIES:
+:CUSTOM_ID: get-all-ports
+:END:
+#+begin_example
+erlang:ports().
+%% length of all ports
+length(erlang:ports()).
+#+end_example
+
+** is port
+:PROPERTIES:
+:CUSTOM_ID: is-port
+:END:
+#+begin_example
+[H|_] = erlang:ports(),
+erlang:is_port(H).
+#+end_example

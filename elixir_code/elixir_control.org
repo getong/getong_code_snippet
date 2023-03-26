@@ -1,0 +1,79 @@
+* elixir control flow
+:PROPERTIES:
+:CUSTOM_ID: elixir-control-flow
+:END:
+** if
+:PROPERTIES:
+:CUSTOM_ID: if
+:END:
+#+begin_example
+if 1 == 1, do: "true part", else: "false part"
+
+if 1 == 1 do
+    "true part"
+else
+    "false part"
+end
+#+end_example
+
+** unless
+:PROPERTIES:
+:CUSTOM_ID: unless
+:END:
+#+begin_example
+unless 1 == 1, do: "error", else: "OK"
+
+unless 1 == 2 do
+    "OK"
+else
+    "error"
+end
+#+end_example
+
+** cond
+:PROPERTIES:
+:CUSTOM_ID: cond
+:END:
+#+begin_example
+cond do
+    rem(current, 3) == 0 and rem(current, 5) == 0 ->
+        "FizzBuzz"
+    rem(current, 3) == 0 ->
+        "Fizz"
+    rem(current, 5) == 0 ->
+        "Buzz"
+    true ->
+        current
+end
+#+end_example
+
+** case
+:PROPERTIES:
+:CUSTOM_ID: case
+:END:
+#+begin_example
+case File.open("filename") do
+    {:ok, file} ->
+        ok
+    {:error, reason} ->
+        error
+end
+#+end_example
+
+** with can simplefy case statement
+:PROPERTIES:
+:CUSTOM_ID: with-can-simplefy-case-statement
+:END:
+The case statement will check the conditions in many lines, the =with=
+will simplify the conditions in very few statements.
+
+#+begin_example
+def extract do  
+with {:ok, thing} <- other_func() do
+thing
+end
+end
+#+end_example
+
+if the other_func() does not return the tuple with the beginning of :ok,
+it just will return the other result from the other_func().

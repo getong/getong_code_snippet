@@ -1,6 +1,0 @@
-# docker redis
-
-``` shell
-docker run --name some-redis -p 6459:6459 -d redis:5.0.7 redis-server --appendonly yes --requirepass abc123 --port 6459
-docker run -it --rm redis:5.0.7 redis-cli -h 192.168.2.1 -p 6459 -a abc123
-```

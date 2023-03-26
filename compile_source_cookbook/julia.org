@@ -1,0 +1,41 @@
+* julia compile from source
+:PROPERTIES:
+:CUSTOM_ID: julia-compile-from-source
+:END:
+#+begin_example
+sudo apt-get build-dep -y julia
+sudo apt-get install -y gfortran
+export VERSION=1.4.2
+wget -c https://github.com/JuliaLang/julia/releases/download/v$VERSION/julia-$VERSION-full.tar.gz
+tar xzf julia-$VERSION-full.tar.gz
+cd julia-$VERSION
+echo "USE_BINARYBUILDER=0\nprefix=/usr/local/julia-$VERSION" >> Make.user
+make -j `nproc`
+make -j `nproc` docs
+sudo make `nproc` install
+#+end_example
+
+check the avx cpu option
+
+#+begin_src shell
+grep avx /proc/cpuinfo
+#+end_src
+
+** change the llvm
+:PROPERTIES:
+:CUSTOM_ID: change-the-llvm
+:END:
+change the line
+
+#+begin_example
+JL_PRIVATE_LIBS-$(USE_SYSTEM_LLVM) += libLLVM libLLVM-8
+#+end_example
+
+to be
+
+#+begin_example
+JL_PRIVATE_LIBS-$(USE_SYSTEM_LLVM) += libLLVM $(basename $(shell $(LLVM_CONFIG_HOST) --libnames))
+#+end_example
+
+copy from [[https://github.com/JuliaLang/julia/pull/35063/files][make
+sure we install the suffixed LLVM library correctly]]

@@ -1,0 +1,12 @@
+* rust algorithm reference
+:PROPERTIES:
+:CUSTOM_ID: rust-algorithm-reference
+:END:
+[[https://medium.com/@michealkeines][michealkeines blog]]
+[[https://github.com/michealkeines/Rust/tree/main/Ds_Algos/Algorithms][algorithm]]
+
+[[https://github.com/TheAlgorithms/Rust][All Algorithms implemented in
+Rust]]
+[[https://medium.com/@lukeabela56/rust-for-dummies-idiots-beginners-and-everyone-else-part-4-algorithms-galore-ae55f1d8bd10][Rust
+for Dummies, Idiots, Beginners and Everyone Else! --- Part 4: Algorithms
+Galore!]]

@@ -1,0 +1,190 @@
+* svn 操作
+:PROPERTIES:
+:CUSTOM_ID: svn-操作
+:END:
+** 创建分支
+:PROPERTIES:
+:CUSTOM_ID: 创建分支
+:END:
+#+begin_example
+svn cp -m "create branch" svn://svn_server/repo/trunk svn://svn_server/repo/branches/branch_name
+#+end_example
+
+** 获得分支
+:PROPERTIES:
+:CUSTOM_ID: 获得分支
+:END:
+#+begin_example
+svn co --username=user svn://svn_server/repo/branches/branch_name
+#+end_example
+
+** 合并主干上的最新代码到分支上
+:PROPERTIES:
+:CUSTOM_ID: 合并主干上的最新代码到分支上
+:END:
+#+begin_example
+cd branch_name
+svn merge svn://svn_server/repo/trunk
+#+end_example
+
+** 如果需要预览该刷新操作，可以使用svn mergeinfo命令，如：
+:PROPERTIES:
+:CUSTOM_ID: 如果需要预览该刷新操作可以使用svn-mergeinfo命令如
+:END:
+#+begin_example
+svn mergeinfo svn://svn_server/repo/trunk --show-revs eligible
+#+end_example
+
+或使用svn merge --dry-run选项以获取更为详尽的信息。
+
+** 合并版本并将合并后的结果应用到现有的分支上
+:PROPERTIES:
+:CUSTOM_ID: 合并版本并将合并后的结果应用到现有的分支上
+:END:
+#+begin_example
+svn -r 99:120 merge svn://svn_server/repo/trunk
+
+// restore the N version file.txt into local svn directory, and commit into remote svn server.
+svn merge -rHEAD:N file.ext
+#+end_example
+
+回滚代码, 反向合并
+
+#+begin_src shell
+svn merge -r 20:10 file_or_dir
+#+end_src
+
+** 建立tags
+:PROPERTIES:
+:CUSTOM_ID: 建立tags
+:END:
+#+begin_example
+svn copy svn://svn_server/repo/trunk svn://svn_server/repo/tags/tag-2017-01-13 -m "tag 2017-01-13"
+#+end_example
+
+** 删除分支或tags
+:PROPERTIES:
+:CUSTOM_ID: 删除分支或tags
+:END:
+#+begin_example
+svn rm svn://svn_server/repo/branches/branch_name
+svn rm svn://svn_server/repo/tags/tag-2017-01-13
+#+end_example
+
+** svn add all the deps, including new added files and remove files
+:PROPERTIES:
+:CUSTOM_ID: svn-add-all-the-deps-including-new-added-files-and-remove-files
+:END:
+#+begin_example
+$ svn add --force _build
+## this can force to use the commit files, which will not cause commiting all the changed files in current directory
+$ svn ci <files_separated_by_space> -m "Commit message
+#+end_example
+
+** svn 设置文件可执行权限
+:PROPERTIES:
+:CUSTOM_ID: svn-设置文件可执行权限
+:END:
+#+begin_src shell
+$ svn propset svn:executable on filename
+$ svn commit -m 'add executable' filename
+#+end_src
+
+** 获取某个版本号对应的分支
+:PROPERTIES:
+:CUSTOM_ID: 获取某个版本号对应的分支
+:END:
+#+begin_src shell
+$ svn co svn://svn_server/repo/branches/branch_name -r version_num
+#+end_src
+
+** Undo that SVN add
+:PROPERTIES:
+:CUSTOM_ID: undo-that-svn-add
+:END:
+#+begin_src shell
+svn revert --recursive example_folder
+#+end_src
+
+see [[http://data.agaric.com/undo-svn-add][Undo that SVN add]]
+
+** force vimdiff long line wrap
+:PROPERTIES:
+:CUSTOM_ID: force-vimdiff-long-line-wrap
+:END:
+#+begin_src vim-script
+au VimEnter * if &diff | execute 'windo set wrap' | endif
+#+end_src
+
+** use vimdiff as the vim diff tool
+:PROPERTIES:
+:CUSTOM_ID: use-vimdiff-as-the-vim-diff-tool
+:END:
+add the diffwrap.sh to /usr/local/bin/
+
+#+begin_src shell
+#!/bin/sh
+
+# Configure your favorite diff program here.
+DIFF="/usr/bin/vimdiff"
+
+# Subversion provides the paths we need as the sixth and seventh
+# parameters.
+LEFT=${6}
+RIGHT=${7}
+
+# Call the diff command
+$DIFF $LEFT $RIGHT
+#+end_src
+
+then add executeable flag to it:
+
+#+begin_src shell
+chmod a+x diffwrap.sh
+#+end_src
+
+add the diff-cmd to ~/.subversion/config
+
+#+begin_example
+diff-cmd = /usr/local/bin/diffwrap.sh
+#+end_example
+
+use it:
+
+#+begin_src shell
+svn diff
+#+end_src
+
+copy from
+[[http://www.coreymaynard.com/blog/improving-svn-diff-with-the-power-of-vim/][Improving
+svn diff with the Power of Vim]]
+
+** svn checksum error
+:PROPERTIES:
+:CUSTOM_ID: svn-checksum-error
+:END:
+#+begin_src shell
+cd svn_dir
+svn update --set-depth empty
+svn update --set-depth infinity
+#+end_src
+
+copy from
+[[https://blog.csdn.net/yyqasg/article/details/78788011][svn错误：更新源码出现校验和不匹配问题]]
+
+** svn checkout version
+:PROPERTIES:
+:CUSTOM_ID: svn-checkout-version
+:END:
+#+begin_src shell
+查看指定文件的历史版本
+
+svn log filename -v -l 8 //查看指定文件最近8个版本详细信息
+
+恢复指定文件到指定版本
+
+svn up -r r5657 filename //恢复指定文件到版本 r5657
+#+end_src
+
+copy from
+[[https://my.oschina.net/HeAlvin/blog/1522776][SVN恢复某个文件到特定版本]]

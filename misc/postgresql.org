@@ -1,0 +1,12 @@
+* postgresql
+:PROPERTIES:
+:CUSTOM_ID: postgresql
+:END:
+** postgresql supports json
+:PROPERTIES:
+:CUSTOM_ID: postgresql-supports-json
+:END:
+** postadmin is a client for postgresql
+:PROPERTIES:
+:CUSTOM_ID: postadmin-is-a-client-for-postgresql
+:END:

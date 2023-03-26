@@ -1,0 +1,16 @@
+* erlang term
+:PROPERTIES:
+:CUSTOM_ID: erlang-term
+:END:
+** term to string
+:PROPERTIES:
+:CUSTOM_ID: term-to-string
+:END:
+#+begin_src erlang
+R = io_lib:format("~w",[yourtermhere]),
+lists:flatten(R)
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/9423488/convert-erlang-terms-to-string-or-decode-erlang-binary][Convert
+erlang terms to string, or decode erlang binary]]

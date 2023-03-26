@@ -1,0 +1,25 @@
+* tmux
+:PROPERTIES:
+:CUSTOM_ID: tmux
+:END:
+** prefix key
+:PROPERTIES:
+:CUSTOM_ID: prefix-key
+:END:
+#+begin_src shell
+unbind C-b
+set -g prefix `
+bind-key ` send-prefix
+#+end_src
+
+or
+
+#+begin_src shell
+unbind-key C-b
+set -g prefix 'C-\'
+bind-key 'C-\' send-prefix
+#+end_src
+
+copy from
+[[https://superuser.com/questions/74492/whats-the-least-conflicting-prefix-escape-sequence-for-screen-or-tmux][What's
+the least conflicting prefix/escape sequence for screen or tmux?]]

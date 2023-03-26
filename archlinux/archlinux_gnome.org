@@ -1,0 +1,749 @@
+* archlinux gnome
+:PROPERTIES:
+:CUSTOM_ID: archlinux-gnome
+:END:
+also see
+[[https://wiki.archlinux.org/title/GNOME/Tips_and_tricks][GNOME/Tips and
+tricks]]
+
+** clock with seconds
+:PROPERTIES:
+:CUSTOM_ID: clock-with-seconds
+:END:
+#+begin_src shell
+gsettings set org.gnome.desktop.interface clock-show-seconds false
+#+end_src
+
+copy from
+[[https://askubuntu.com/questions/1036441/ubuntu-18-04-gnome-shell-high-cpu-usage][Ubuntu
+18.04 gnome-shell high CPU usage]]
+
+** install gst-libav
+:PROPERTIES:
+:CUSTOM_ID: install-gst-libav
+:END:
+#+begin_src shell
+sudo pacman -S gst-libav
+#+end_src
+
+** haveged
+:PROPERTIES:
+:CUSTOM_ID: haveged
+:END:
+#+begin_src shell
+sudo pacman -S haveged
+sudo systemctl start haveged
+sudo systemctl enable haveged
+#+end_src
+
+copy from [[https://bbs.archlinux.org/viewtopic.php?id=250490][gdm takes
+a very long time to load]]
+
+** gstreamer0.10-plugins
+:PROPERTIES:
+:CUSTOM_ID: gstreamer0.10-plugins
+:END:
+#+begin_src shell
+sudo pacman -S a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 xvidcore gstreamer0.10-base-plugins
+#+end_src
+
+copy from
+[[https://itsfoss.com/things-to-do-after-installing-arch-linux/][7
+Essential Things To Do After Installing Arch Linux]]
+
+** very old graphical card
+:PROPERTIES:
+:CUSTOM_ID: very-old-graphical-card
+:END:
+#+begin_src shell
+lspci -k | grep -A 2 -E "(VGA|3D)"
+
+sudo pacman -S bumblebee
+
+yay -S nvidia-340xx-dkms
+sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+sudo reboot
+#+end_src
+
+see
+[[https://wiki.archlinux.org/title/NVIDIA_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][NVIDIA
+(简体中文)]]
+
+also see
+[[https://linuxdicasesuporte.blogspot.com/2020/03/driver-nvidia-legacy-no-debian-buster.html][Driver
+Nvidia legacy no Debian Buster]] >>> You must tell Xorg to use the
+nvidia driver with kernels >=5.11.0. You must also set IgnoreABI option
+with Xorg version >= 21.1.1. Minimal config example provided in
+/usr/share/nvidia-340xx/20-nvidia.conf which you should manually place
+in /etc/X11/xorg.conf.d/
+
+** wps
+:PROPERTIES:
+:CUSTOM_ID: wps
+:END:
+#+begin_src shell
+yay -S wps-office-cn ttf-wps-fonts ttf-ms-fonts wps-office-fonts wps-office-mime-cn wps-office-mui-zh-cn
+#+end_src
+
+** swap ctrl and caps
+:PROPERTIES:
+:CUSTOM_ID: swap-ctrl-and-caps
+:END:
+#+begin_src shell
+gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:swapcaps']"
+#+end_src
+
+revert the change:
+
+#+begin_src shell
+gsettings set org.gnome.desktop.input-sources xkb-options "[]"
+#+end_src
+
+use with localectl:
+
+#+begin_src shell
+localectl set-x11-keymap "" "" "" ctrl:swapcaps
+
+// or
+localectl --no-convert set-x11-keymap us pc105 "" ctrl:swapcaps
+#+end_src
+
+revert the change:
+
+#+begin_src shell
+localectl set-x11-keymap "" "" "" ""
+#+end_src
+
+check the settings:
+
+#+begin_src shell
+$ localectl status
+   System Locale: LANG=zh_CN.UTF-8
+       VC Keymap: n/a
+      X11 Layout: n/a
+     X11 Options: ctrl:swapcaps
+#+end_src
+
+** install fcitx
+:PROPERTIES:
+:CUSTOM_ID: install-fcitx
+:END:
+#+begin_src shell
+sudo pacman -S fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin
+
+sed -i 's/TriggerKey.*$/TriggerKey=CTRL_SHIFT_LCTRL CTRL_SHIFT_LSHIFT/g' ~/.config/fcitx/config
+
+gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"
+#+end_src
+
+or add the adove into =/etc/environment= file:
+
+#+begin_src shell
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS="@im=fcitx"
+INPUT_METHOD="fcitx"
+QT4_IM_MODULE="fcitx"
+#+end_src
+
+see [[https://its201.com/article/r8l8q8/73431256][ArchLinux下fcitx
+ctrl+space无法调出输入法]]
+
+then run =fcitx-configtool= to configure fcitx:
+
+#+begin_src shell
+$ fcitx-configtool
+# 在input method那里点加号, 添加Pinyin
+# 在global-config进行全局配置
+# 在Apperance进行字体大小调整和状态显示
+# Addon进行插件管理, 双击插件进行设置
+#+end_src
+
+auto start fcitx
+
+#+begin_src shell
+mkdir -p ~/.config/autostart
+ln -s /usr/share/applications/fcitx.desktop ~/.config/autostart/fcitx.desktop
+#+end_src
+
+copy from [[https://kodango.com/install-archlinux-notes][ArchLinux
+安装笔记]]
+
+** debug fcitx
+:PROPERTIES:
+:CUSTOM_ID: debug-fcitx
+:END:
+#+begin_src shell
+fcitx-diagnose
+
+gtk-query-immodules-2.0 | sudo tee -a /etc/gtk-2.0/gtk.immodules
+#+end_src
+
+copy from
+[[https://groups.google.com/g/archlinux-cn/c/nQUuGCDwL64][firefox和chrome无法调出fcitx输入中文]]
+
+** sound card driver
+:PROPERTIES:
+:CUSTOM_ID: sound-card-driver
+:END:
+#+begin_src shell
+sudo gpasswd -a username video
+#+end_src
+
+Then add the following to =~/.config/pulse/default.pa=
+
+#+begin_example
+set-card-profile 0 output:analog-stereo+input:analog-stereo
+set-sink-port 2 analog-output-lineout
+#+end_example
+
+** gnome power setting
+:PROPERTIES:
+:CUSTOM_ID: gnome-power-setting
+:END:
+#+begin_src shell
+gsettings set org.gnome.settings-daemon.plugins.power power-button-action nothing
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type nothing
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type nothing
+
+// lock screen after 300 seconds idle
+gsettings set org.gnome.desktop.screensaver lock-enabled true
+gsettings set org.gnome.desktop.screensaver lock-delay 0
+gsettings set org.gnome.desktop.session idle-delay 300
+
+// List available schemas and look for ones related to the power subsystem.
+gsettings list-schemas | grep power
+
+// Alternatively, list schemas, keys, and values to look for power-related ones.
+gsettings list-recursively | grep "\\.power"
+
+// List keys in a specific schema.
+gsettings list-keys org.gnome.settings-daemon.plugins.power
+
+// List keys and values in a specific schema.
+gsettings list-recursively org.gnome.settings-daemon.plugins.power
+
+// Get a description of a specific key.
+gsettings describe org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+
+// Get the possible values for a specific key.
+gsettings range org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+
+// Check if a specific key is writable.
+gsettings writable org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+
+// Alter the value of a specific key.
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 3600
+
+// Read the value of a specific key.
+gsettings get org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout
+#+end_src
+
+see
+[[https://sleeplessbeastie.eu/2020/08/19/how-to-alter-ubuntu-desktop-configuration-using-terminal/][How
+to alter Ubuntu desktop configuration using terminal]]
+
+also set by command:
+
+#+begin_src shell
+sudo -u gdm dbus-launch gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+#+end_src
+
+also
+
+#+begin_src shell
+You can disable (or configure) auto-suspend system-wide by creating a file /etc/dconf/db/local.d/00-autosuspend with this or similar contents:
+
+[org/gnome/settings-daemon/plugins/power]
+# Do not autosuspend
+sleep-inactive-ac-type='nothing'
+sleep-inactive-battery-type='nothing'
+
+and running:
+
+sudo dconf update
+#+end_src
+
+copy from
+[[https://bbs.archlinux.org/viewtopic.php?id=236180][Auto-suspending
+despite of settings to the contrary after update]]
+
+or:
+
+#+begin_src shell
+$ IFS=$'\n'; for x in $(sudo -u YOUR_USER gsettings list-recursively org.gnome.settings-daemon.plugins.power); do eval "sudo -u gdm dbus-launch gsettings set $x"; done; unset IFS
+#+end_src
+
+copy from
+[[https://superuser.com/questions/1309219/computer-suspends-when-not-logged-in][Computer
+suspends when not logged in]]
+
+** weixin
+:PROPERTIES:
+:CUSTOM_ID: weixin
+:END:
+enable multilib first
+
+#+begin_src shell
+yay -S deepin-wine-wechat com.qq.weixin.work.deepin deepin-wine-qq
+#+end_src
+
+set fcitx input method:
+
+#+begin_src shell
+ sudo vim /opt/apps/com.qq.im.deepin/files/run.sh
+
+env locale=zh_CN
+export XIM="fcitx"
+export XMODIFIERS="@im=fcitx"
+export GTK_IM_MODULE="fcitx"
+export QT_IM_MODULE="fcitx"
+#+end_src
+
+copy from https://github.com/vufa/deepin-wine-wechat-arch/issues/12
+
+config the display effect:
+
+#+begin_src shell
+sudo cp -rf /opt/apps/com.qq.weixin.deepin/files/lib32 /opt/apps/com.qq.weixin.work.deepin/files/
+
+// 修改run.sh   26行左右   添加 export LD_LIBRARY_PATH=/opt/apps/$DEB_PACKAGE_NAME/files/lib32
+#+end_src
+
+copy from
+[[https://bbs.archlinuxcn.org/viewtopic.php?id=12056][Archlinux有没有办法安装企业微信]]
+
+** fcitx5 can not handle ctrl swapcaps
+:PROPERTIES:
+:CUSTOM_ID: fcitx5-can-not-handle-ctrl-swapcaps
+:END:
+With fcitx5 chinese input method, ctrl and caps both act as caps. Switch
+back to fcitx.
+
+** translations for nemo
+:PROPERTIES:
+:CUSTOM_ID: translations-for-nemo
+:END:
+#+begin_src shell
+yay -S cinnamon-translations
+#+end_src
+
+** install vulkan
+:PROPERTIES:
+:CUSTOM_ID: install-vulkan
+:END:
+check the video card brand:
+
+#+begin_src shell
+lspci -vnn | grep VGA -A 12
+
+// or use this:
+sudo lshw -C display
+
+// check the video card driver:
+sudo lshw -c video | grep configuration
+
+// get driver info
+modinfo i915
+
+// get the hardware speedup
+glxinfo | grep OpenGL
+#+end_src
+
+copy from
+[[https://www.ancii.com/aqmpx33bj/][Linux中如何查看显卡硬件信息]]
+
+** install vulkan
+:PROPERTIES:
+:CUSTOM_ID: install-vulkan-1
+:END:
+Intel:
+
+#+begin_src shell
+sudo pacman -S vulkan-intel vulkan-icd-loader
+#+end_src
+
+NVIDIA:
+
+#+begin_src shell
+sudo pacman -S nvidia-utils vulkan-icd-loader
+#+end_src
+
+AMD:
+
+#+begin_src shell
+sudo pacman -S amdvlk vulkan-icd-loader
+#+end_src
+
+copy from [[https://wiki.archlinux.org/title/Vulkan][Vulkan]]
+
+** instant message software
+:PROPERTIES:
+:CUSTOM_ID: instant-message-software
+:END:
+yay use http_proxy and https_proxy environment variable
+
+#+begin_src shell
+yay -S slack-desktop zulip-desktop-bin skypeforlinux-stable-bin
+#+end_src
+
+** stop skype auto start
+:PROPERTIES:
+:CUSTOM_ID: stop-skype-auto-start
+:END:
+#+begin_src shell
+cat ~/.config/autostart/skypeforlinux.desktop
+[Desktop Entry]
+Name=Skype for Linux
+Comment=Skype Internet Telephony
+Exec=/usr/bin/skypeforlinux
+Icon=skypeforlinux
+Terminal=false
+Type=Application
+StartupNotify=false
+X-GNOME-Autostart-enabled=true%
+
+mv ~/.config/autostart/skypeforlinux.desktop ~/.config/autostart/skypeforlinux.desktop.bak
+#+end_src
+
+** pdf reader
+:PROPERTIES:
+:CUSTOM_ID: pdf-reader
+:END:
+#+begin_src shell
+yay -S foxitreader
+#+end_src
+
+** calibre
+:PROPERTIES:
+:CUSTOM_ID: calibre
+:END:
+#+begin_src shell
+sudo pacman -S calibre
+#+end_src
+
+** aliyunpan
+:PROPERTIES:
+:CUSTOM_ID: aliyunpan
+:END:
+#+begin_src shell
+yay -S pyinstaller aliyunpan-cli-bin
+#+end_src
+
+** switch to iwd
+:PROPERTIES:
+:CUSTOM_ID: switch-to-iwd
+:END:
+see [[https://bbs.archlinux.org/viewtopic.php?id=246942][wpa_supplicant
+shutdown job never ends, need force power down]] >>> While the original
+issue was not solved, I marked this thread as solved: I switched from
+wpa_supplicant to iwd and the problem is gone now. My laptop shuts down
+almost immediately now and my Wifi is working very good all the time!
+
+connect to wifi device:
+
+#+begin_src shell
+sudo pacman -S iwd
+sudo systemctl enable --now iwd
+sudo systemctl start iwd
+
+iwctl adapter list
+iwctl device list
+
+// get the list of the available connections
+iwctl station wlan0 get-networks
+// To verify the connection is now active
+iwctl station wlan0 show
+
+// disconnecting from a network
+iwctl station wlan0 disconnect
+
+// Obtaining a list of the known connections
+iwctl known-networks list
+
+// To make the service forget about the “arda” network
+iwctl known-networks arda forget
+
+iwctl --passphrase passphrase station <device> connect SSID
+// or
+iwctl --passphrase <passphrase> station <device> connect-hidden <ssid>
+#+end_src
+
+static the ip address:
+
+#+begin_src shell
+/var/lib/iwd/spaceship.psk
+[IPv4]
+Address=192.168.1.80
+Netmask=255.255.255.0
+Gateway=192.168.1.1
+Broadcast=192.168.1.255
+DNS=192.168.1.253
+
+[Settings]
+AutoConnect=true
+#+end_src
+
+use systemd-resolved
+
+#+begin_src shell
+sudo vim /etc/iwd/main.conf
+-------------------------------
+[Network]
+NameResolvingService=systemd
+EnableIPv6=true
+
+[General]
+use_default_interface=true
+EnableNetworkConfiguration=true
+route_priority_offset=100
+
+[Scan]
+DisablePeriodicScan=true
+#+end_src
+
+see
+[[https://unix.stackexchange.com/questions/664646/connecting-to-a-hidden-wi-fi-network-arch-linux][Connecting
+to a hidden Wi-Fi network Arch Linux]] also see
+[[https://insanity.industries/post/simple-wifi/][simple wifi setup with
+iwd and networkd]] also see
+[[https://wiki.archlinux.org/title/Iwd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][iwd
+(简体中文)]] also see
+[[https://linuxconfig.org/how-to-manage-wireless-connections-using-iwd-on-linux][How
+to manage wireless connections using iwd on Linux]] also see
+[[https://www.rdeeson.com/weblog/180/switching-from-netctl-to-networkd-with-iwd][Switching
+from netctl to networkd with iwd]] also see
+[[https://wiki.archlinux.org/title/Iwd][iwd]]
+
+** gthumb
+:PROPERTIES:
+:CUSTOM_ID: gthumb
+:END:
+#+begin_src shell
+sudo pacman -S gthumb
+#+end_src
+
+** bluetooth
+:PROPERTIES:
+:CUSTOM_ID: bluetooth
+:END:
+#+begin_src shell
+sudo pacman -S bluez bluez-utils bluez-tools
+sudo systemctl enable --now bluetooth.service
+
+rfkill block bluetooth
+rfkill unblock bluetooth
+
+bluetoothctl
+> help
+> power on
+> devices
+> scan on
+> pair $MAC
+> connect $MAC
+
+vim /etc/bluetooth/main.conf
+AutoEnable=true
+#+end_src
+
+copy from [[https://wiki.archlinux.org/title/bluetooth][bluetooth]]
+
+** music
+:PROPERTIES:
+:CUSTOM_ID: music
+:END:
+#+begin_src shell
+sudo pacman -S netease-cloud-music moc
+yay -S qqmusic-bin
+#+end_src
+
+** baidunetdisk-electron
+:PROPERTIES:
+:CUSTOM_ID: baidunetdisk-electron
+:END:
+#+begin_src shell
+yay -S baidunetdisk-electron
+#+end_src
+
+** disable sound
+:PROPERTIES:
+:CUSTOM_ID: disable-sound
+:END:
+#+begin_src shell
+sudo -u gdm dbus-launch gsettings set org.gnome.desktop.sound event-sounds 'false'
+#+end_src
+
+copy from [[https://wiki.archlinux.org/title/GDM][GDM]]
+
+** authy
+:PROPERTIES:
+:CUSTOM_ID: authy
+:END:
+#+begin_src shell
+sudo pacman -S authy
+#+end_src
+
+** video download helper
+:PROPERTIES:
+:CUSTOM_ID: video-download-helper
+:END:
+#+begin_src shell
+sudo pacman -S vdhcoapp
+#+end_src
+
+** fix Authentication is required to create a color managed device
+:PROPERTIES:
+:CUSTOM_ID: fix-authentication-is-required-to-create-a-color-managed-device
+:END:
+#+begin_src shell
+sudo groupadd vnc
+sudo usermod -aG vnc $USER
+
+sudo vim /etc/polkit-1/rules.d/gnome-vnc.rules
+---------------------------
+   polkit.addRule(function(action, subject) {
+      if ((action.id == "org.freedesktop.color-manager.create-device" ||
+           action.id == "org.freedesktop.color-manager.create-profile" ||
+           action.id == "org.freedesktop.color-manager.delete-device" ||
+           action.id == "org.freedesktop.color-manager.delete-profile" ||
+           action.id == "org.freedesktop.color-manager.modify-device" ||
+           action.id == "org.freedesktop.color-manager.modify-profile") &&
+          subject.isInGroup("vnc")) {
+         return polkit.Result.YES;
+      }
+   });
+
+
+sudo systemctl restart vncserver@:1.service
+#+end_src
+
+copy from
+[[https://wiki.archlinux.org/title/TigerVNC_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][启动
+GNOME 3 时显示 "Authentication is required to create a color managed
+device" 对话框]]
+
+** launch application in remote desktop via ssh
+:PROPERTIES:
+:CUSTOM_ID: launch-application-in-remote-desktop-via-ssh
+:END:
+#+begin_src shell
+export DISPLAY=:0
+gedit
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/3664112/start-gnome-application-from-ssh-shell][Start
+Gnome-Application from SSH-Shell]]
+
+The vnc desktop is :1 , so the command can be changed to:
+
+#+begin_src shell
+export DISPLAY=:1
+gedit
+#+end_src
+
+** feishu
+:PROPERTIES:
+:CUSTOM_ID: feishu
+:END:
+#+begin_src shell
+sudo pacman -S feishu-bin
+#+end_src
+
+** nixnote2
+:PROPERTIES:
+:CUSTOM_ID: nixnote2
+:END:
+#+begin_src shell
+sudo pacman -S nixnote2
+#+end_src
+
+copy from
+[[https://www.cnblogs.com/mc-r/p/13762982.html][Archlinux安装印象笔记]]
+
+** ynote-desktop-bin
+:PROPERTIES:
+:CUSTOM_ID: ynote-desktop-bin
+:END:
+#+begin_src shell
+yay -S ynote-desktop-bin
+#+end_src
+
+** enable or disable gnome desktop
+:PROPERTIES:
+:CUSTOM_ID: enable-or-disable-gnome-desktop
+:END:
+#+begin_src shell
+sudo systemctl enable gdm
+
+sudo systemctl disable gdm
+#+end_src
+
+** remove extra game
+:PROPERTIES:
+:CUSTOM_ID: remove-extra-game
+:END:
+#+begin_src shell
+// remove game
+sudo  pacman -Rscn gnome-mahjongg gnome-sudoku lightsoff tali swell-foop gnome-nibbles four-in-a-row gnome-tetravex five-or-more gnome-klotski iagno gnome-chess quadrapassel gnome-mines gnome-robots aisleriot
+// remove totem
+sudo pacman -Rscn totem
+sudo pacman -S gnome-mplayer wqy-microhei adobe-source-code-pro-fonts
+#+end_src
+
+copy from [[https://codeantenna.com/a/am4Pu4orQP][Arch安装参考]]
+
+** font
+:PROPERTIES:
+:CUSTOM_ID: font
+:END:
+#+begin_src shell
+// terminus-font terminal font
+sudo pacman -S ttf-inconsolata nerd-fonts-droid-sans-mono terminus-font
+yay -S fonts-droid-fallback ttf-symbola ttf-tahoma
+#+end_src
+
+** install fonts
+:PROPERTIES:
+:CUSTOM_ID: install-fonts
+:END:
+install ttf-dejavu and ttf-droid
+
+#+begin_src shell
+sudo pacman -S ttf-dejavu ttf-droid
+git clone https://github.com/gasharper/linux-fonts
+cd linux-fonts
+sudo sh install.sh
+#+end_src
+
+the code in =install.sh= :
+
+#+begin_src shell
+#!/bin/sh
+sudo mkdir /usr/share/fonts/linux_fonts
+sudo cp ./*.ttf /usr/share/fonts/linux_fonts
+sudo cp ./*.ttc /usr/share/fonts/linux_fonts
+cd /usr/share/fonts/linux_fonts
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache
+sudo chmod 644 /usr/share/fonts/linux_fonts/*
+#+end_src
+
+check the font:
+
+#+begin_src shell
+fc-list :lang=zh-cn | sort
+#+end_src
+
+** scrot
+:PROPERTIES:
+:CUSTOM_ID: scrot
+:END:
+#+begin_src shell
+sudo pacman -S scrot
+#+end_src
+
+copy from
+[[https://wiki.archlinux.org/title/Taking_a_screenshot_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Taking
+a screenshot (简体中文)]]

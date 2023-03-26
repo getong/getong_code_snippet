@@ -1,0 +1,26 @@
+* influxdb docs
+:PROPERTIES:
+:CUSTOM_ID: influxdb-docs
+:END:
+** InfluxDB中文文档
+:PROPERTIES:
+:CUSTOM_ID: influxdb中文文档
+:END:
+[[https://jasper-zhang1.gitbooks.io/influxdb/][InfluxDB中文文档]]
+
+** influx
+:PROPERTIES:
+:CUSTOM_ID: influx
+:END:
+#+begin_src shell
+$ docker run --rm influxdb:1.7.6 influxd config  > influxdb.conf
+$ docker run -d  -p 8087:8086 -v $PWD/influxdb.conf:/etc/influxdb/influxdb.conf:ro influxdb -config /etc/influxdb/influxdb.conf
+$ influx -port 8087
+#+end_src
+
+** erlang driver
+:PROPERTIES:
+:CUSTOM_ID: erlang-driver
+:END:
+[[https://github.com/palkan/influx_udp][influx_udp]]
+[[https://github.com/travelping/exometer_influxdb][exometer_influxdb]]

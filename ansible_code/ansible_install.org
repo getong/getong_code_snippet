@@ -1,0 +1,11 @@
+* ansible installation
+:PROPERTIES:
+:CUSTOM_ID: ansible-installation
+:END:
+** use pip to install ansible
+:PROPERTIES:
+:CUSTOM_ID: use-pip-to-install-ansible
+:END:
+#+begin_src shell
+pip install ansible --upgrade
+#+end_src

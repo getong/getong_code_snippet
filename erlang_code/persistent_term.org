@@ -1,0 +1,26 @@
+* persistent_term
+:PROPERTIES:
+:CUSTOM_ID: persistent_term
+:END:
+erlang adds persistent_term module since 21.2, and its syntax just likes
+the process dictionary, but the function just likes ets table.
+
+use persistent_term with great care. see
+[[https://speakerdeck.com/ckampfe/persistent-term][persistent-term]]
+
+#+begin_quote
+
+#+begin_quote
+Think like this! Write once, read many Instead of the generate module in
+runtime hack! Expensive put and low cost get No copying of the data on
+get
+
+#+end_quote
+
+#+end_quote
+
+#+begin_src erlang
+persistent_term:put(myapp_calls, Cref).
+Cref = persistent_term:get(myapp_calls).
+counters:get(Cref, 1).
+#+end_src

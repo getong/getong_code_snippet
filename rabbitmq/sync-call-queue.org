@@ -1,0 +1,92 @@
+* sync call queue
+:PROPERTIES:
+:CUSTOM_ID: sync-call-queue
+:END:
+#+begin_src java
+try {
+    //申明请求队列
+    channel.queueDeclare("request", true, false, false, null);
+    //申明返回队列
+    channel.queueDeclare("response", true, false, false, null);
+    //绑定
+    channel.queueBind("test", "request", "request", null);
+    channel.queueBind("test", "response", "response", null);
+
+    //下面是生产者配置代码
+    //correlationId - 每个请求独一无二的标识
+    String correlationId = UUID.randomUUID().toString();
+
+    AMQP.BasicProperties props = new AMQP.BasicProperties
+            .Builder()
+            //指明请求Id
+            .correlationId(correlationId)
+            //指明返回消息队列
+            .replyTo("response")
+            .build();
+
+    //发布request消息
+    channel.basicPublish("test", "request", props, messageBodyBytes);
+
+    //存储处理结果
+    final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
+
+    //监听返回队列拿结果
+    channel.basicConsume("response", true, new DefaultConsumer(channel) {
+        @Override
+        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+            if (properties.getCorrelationId().equals(correlationId)) {
+                response.offer(new String(body, "UTF-8"));
+            }
+        }
+    });
+
+
+    //下面是消费者配置处理消息代码（放在一起比较好说明，大家测试的时候分开就好了）
+    //设置一次处理一条消息
+    channel.basicQos(0,1,true);
+
+    System.out.println(" [x] Awaiting RPC requests");
+
+    Channel finalChannel1 = channel;
+    Consumer consumer = new DefaultConsumer(finalChannel1) {
+        @Override
+        public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+            //设置处理返回消息的属性
+            AMQP.BasicProperties replyProps = new AMQP.BasicProperties
+                .Builder()
+                .correlationId(properties.getCorrelationId())
+                .build();
+
+            String response = "success";
+            //处理结果发布到处理结果队列
+            finalChannel1.basicPublish( "test", properties.getReplyTo(), replyProps, response.getBytes("UTF-8"));
+
+            //回执处理成功
+            finalChannel1.basicAck(envelope.getDeliveryTag(), false);
+
+            // RabbitMq consumer worker thread notifies the RPC server owner thread
+            synchronized(this) {
+                this.notify();
+            }
+        }
+    };
+
+    channel.basicConsume("response", false, consumer);
+
+    // Wait and be prepared to consume the message from RPC client.
+    while (true) {
+        synchronized(consumer) {
+            try {
+                consumer.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+#+end_src
+
+copy from
+[[https://blog.csdn.net/weixin_43430036/article/details/85221732][精通RabbitMQ之RPC同步调用]]

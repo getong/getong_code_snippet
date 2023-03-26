@@ -1,0 +1,38 @@
+* polipo
+:PROPERTIES:
+:CUSTOM_ID: polipo
+:END:
+** install
+:PROPERTIES:
+:CUSTOM_ID: install
+:END:
+#+begin_src shell
+brew install polipo
+#+end_src
+
+** configure the ~/.polipo
+:PROPERTIES:
+:CUSTOM_ID: configure-the-.polipo
+:END:
+#+begin_example
+socksParentProxy = "127.0.0.1:1080"
+socksProxyType = socks5
+proxyAddress = "::0"        # both IPv4 and IPv6
+# or IPv4 only
+# proxyAddress = "0.0.0.0"
+proxyPort = 8123
+#+end_example
+
+** start polipo
+:PROPERTIES:
+:CUSTOM_ID: start-polipo
+:END:
+#+begin_src shell
+brew start polipo
+#+end_src
+
+** view the start status
+:PROPERTIES:
+:CUSTOM_ID: view-the-start-status
+:END:
+open the browser and view http://127.0.0.1:8123/polipo/config

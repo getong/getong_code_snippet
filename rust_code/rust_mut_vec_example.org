@@ -1,0 +1,144 @@
+* rust mut vec example
+:PROPERTIES:
+:CUSTOM_ID: rust-mut-vec-example
+:END:
+** intersecting lifetimes
+:PROPERTIES:
+:CUSTOM_ID: intersecting-lifetimes
+:END:
+#+begin_src rust
+let mut a = vec![];
+let b = &mut a;
+b.push(0);
+let c = &mut a;
+c.push(1);
+#+end_src
+
+** part of struct
+:PROPERTIES:
+:CUSTOM_ID: part-of-struct
+:END:
+#+begin_src rust
+struct S(u32, u32);
+let mut a = S(0, 1);
+let b = &mut a.0;
+let c = &mut a.1;
+*b = 2;
+*c = 3;
+#+end_src
+
+** mut borrow at the same time
+:PROPERTIES:
+:CUSTOM_ID: mut-borrow-at-the-same-time
+:END:
+#+begin_src rust
+let mut a = vec![0, 1];
+let v = if let [first, second] = &mut a[..] {
+  Some((first, second))
+} else {
+  None
+};
+if let Some((b, c)) = v {
+  *b = 2;
+  *c = 3;
+}
+#+end_src
+
+** split_at_mut
+:PROPERTIES:
+:CUSTOM_ID: split_at_mut
+:END:
+#+begin_src rust
+// returns two mutable references, one on the part before position 'mid', the other after it:
+vec.split_at_mut(mid)
+// like before, but the first part contains the first element only:
+vec.split_first_mut()
+// like before, but the second part contains the last element only:
+vec.split_last_mut()
+
+let mut a = vec![0, 1, 2];
+if let Some((b, rest)) = a.split_first_mut(){
+  *b = 3;
+  let c = rest.get_mut(0).unwrap();
+  *c = 4;
+}
+#+end_src
+
+** std::mem::take
+:PROPERTIES:
+:CUSTOM_ID: stdmemtake
+:END:
+#+begin_src rust
+let mut a = vec![0, 1];
+let b = std::mem::take(&mut a);
+println!("{:?}", a); // []    <--- !!!
+println!("{:?}", b); // [0,1]
+
+// like the code below:
+let mut a = vec![0, 1];
+let b = a;
+a = vec![];
+#+end_src
+
+and the function usage:
+
+#+begin_src rust
+let mut a = vec![0, 1];
+fn f(v: &mut Vec<u32>) {
+  let b = std::mem::take(v);
+  println!("{:?}", b); // [0, 1]
+}
+f(&mut a);
+println!("{:?}", a); // []
+#+end_src
+
+** std::mem::replace
+:PROPERTIES:
+:CUSTOM_ID: stdmemreplace
+:END:
+#+begin_src rust
+let mut a = vec![0, 1];
+let c = vec![3, 4];
+let b = std::mem::replace(&mut a, c);
+println!("{:?}", b); // [0, 1]
+println!("{:?}", a); // [3, 4]
+#+end_src
+
+** std::mem::replace() with mut borrow object
+:PROPERTIES:
+:CUSTOM_ID: stdmemreplace-with-mut-borrow-object
+:END:
+#+begin_src rust
+let mut a = &mut vec![0, 1];
+let mut c = vec![3, 4];
+let b = std::mem::replace(&mut a, &mut c);
+println!("{:?}", b); // [0, 1]
+println!("{:?}", a); // [3, 4]
+#+end_src
+
+** final code example
+:PROPERTIES:
+:CUSTOM_ID: final-code-example
+:END:
+#+begin_src rust
+struct A_Iter<'a> {
+    v: &'a mut [u32],
+}
+
+impl<'a> Iterator for A_Iter<'a> {
+    type Item = &'a mut u32;
+    fn next(&mut self) -> Option<Self::Item> {
+      let v_tmp = std::mem::replace(&mut self.v, &mut []);
+      return if let Some((e, rest)) = v_tmp.split_first_mut() {
+        self.v = rest;
+        Some(e)
+      } else {
+        None
+      };
+    }
+}
+#+end_src
+
+copy from
+[[https://applied-math-coding.medium.com/mutable-references-on-vectors-vs-structs-some-less-known-techniques-87098e2e2ba2][Mutable
+References on Vectors vs. Structs: Some less known techniques.]]

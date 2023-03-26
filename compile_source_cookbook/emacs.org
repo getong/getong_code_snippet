@@ -1,0 +1,77 @@
+* compile emacs
+:PROPERTIES:
+:CUSTOM_ID: compile-emacs
+:END:
+** On Debian jessie
+:PROPERTIES:
+:CUSTOM_ID: on-debian-jessie
+:END:
+#+begin_src shell
+sudo apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng12-dev libgif-dev libtiff5-dev libncurses5-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libghc-gconf-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev libwebkitgtk-dev libwebkitgtk-3.0-dev texinfo texlive texlive-metapost
+#+end_src
+
+** On Debian stretch
+:PROPERTIES:
+:CUSTOM_ID: on-debian-stretch
+:END:
+#+begin_src shell
+sudo apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng-dev libgif-dev libtiff5-dev libncurses5-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev libwebkitgtk-dev libwebkitgtk-3.0-dev texinfo texlive texlive-metapost libwebkit2gtk-4.0-dev mailutils
+#+end_src
+
+** on Debian buster
+:PROPERTIES:
+:CUSTOM_ID: on-debian-buster
+:END:
+#+begin_src shell
+sudo apt-get install -y stow build-essential libx11-dev xaw3dg-dev libjpeg-dev libpng-dev libgif-dev libtiff5-dev libncurses-dev libxft-dev librsvg2-dev libmagickcore-dev libmagick++-dev libxml2-dev libgpm-dev libotf-dev libm17n-dev libgnutls28-dev libgtk-3-dev texinfo texlive texlive-metapost libwebkit2gtk-4.0-dev mailutils gir1.2-gconf-2.0 libgconf2-dev autoconf automake libtool texinfo build-essential xorg-dev libdbus-1-dev libgif-dev libtiff-dev libm17n-dev libpng-dev librsvg2-dev libotf-dev libxml2-dev
+#+end_src
+
+** compile
+:PROPERTIES:
+:CUSTOM_ID: compile
+:END:
+#+begin_src shell
+export VERSION=27.1
+wget -c https://github.com/emacs-mirror/emacs/archive/emacs-$VERSION.tar.gz
+tar xzf emacs-emacs-$VERSION.tar.gz
+cd emacs-$VERSION
+./autogen.sh
+./configure --prefix=/usr/local/emacs-$VERSION --with-xwidgets
+make clean
+make -j`nproc`
+make -j`nproc` check
+make -j`nproc` docs
+sudo make install
+sudo make install-doc
+#+end_src
+
+** On CentOS
+:PROPERTIES:
+:CUSTOM_ID: on-centos
+:END:
+compile methods almost alike, just install the deps:
+
+#+begin_src shell
+yum install -y `yum deplist emacs | grep provider | awk -F: '{print $2}' | awk '{print $1}' | xargs`
+yum install -y libX11-devel libjpeg-turbo-devel libpng-devel libtiff-devel libXpm-devel giflib-devel openjpeg-devel gtk2-devel ncurses-devel m17n-lib-devel texinfo
+texlive texinfo-tex texlive-dvips texlive-metapost libXpm-devel openjpeg2-devel turbojpeg-devel gnutls-devel libxml2-devel GConf2-devel dbus-devel wxGTK-devel gtk3-devel webkitgtk3-devel webkitgtk-devel
+#+end_src
+
+** on macos
+:PROPERTIES:
+:CUSTOM_ID: on-macos
+:END:
+#+begin_src shell
+export LDFLAGS="-L/usr/local/opt/libxml2/lib"
+export CPPFLAGS="-I/usr/local/opt/libxml2/include"
+./autogen.sh
+./configure --with-ns
+make clean
+make -j`nproc`
+make  check -j`nproc`
+make docs -j`nproc`
+make install
+make install-doc
+
+mv nextstep/Emacs.app /Applications
+#+end_src

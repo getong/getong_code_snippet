@@ -1,0 +1,117 @@
+* Rust ebook
+:PROPERTIES:
+:CUSTOM_ID: rust-ebook
+:END:
+[[https://github.com/rustcc/RustPrimer][RustPrimer]]
+[[https://github.com/KaiserY/rust-book-chinese][rust 程序设计语言
+中文版]] [[https://rustbyexample.com][rust by example]]
+[[https://github.com/rust-lang/rust-by-example][rust-by-example]]
+[[https://github.com/rust-lang-cn/rust-by-example-cn][rust-by-example-cn]]
+
+[[https://programming-idioms.org/cheatsheet/Go/Rust][Go, Rust
+cheatsheet]] [[https://cheats.rs/][Rust Language Cheat Sheet]]
+[[https://github.com/kumakichi/easy_rust_chs][easy_rust_chs]]
+[[https://bfnightly.bracketproductions.com/][Roguelike Tutorial - In
+Rust]] [[https://github.com/amethyst/rustrogueliketutorial][Roguelike
+Tutorial - In Rust source]]
+[[https://github.com/paulkernfeld/global-data-in-rust][global-data-in-rust]]
+[[https://github.com/tony612/tokio-internals][tokio-internals]]
+[[https://rust-book.junmajinlong.com/ch100/01_understand_tokio_runtime.html][理解tokio核心]]
+[[https://github.com/veykril/tlborm][The Little Book of Rust Macros]]
+[[https://fasterthanli.me/tags/async][Everything about async]]
+[[https://github.com/ANSSI-FR/rust-guide][Guide to develop secure
+applications with Rust]]
+[[https://datacrayon.com/posts/programming/rust-notebooks/descriptive-statistics-with-ndarray/][Descriptive
+Statistics with NDArray]]
+[[https://huangjj27.github.io/async-book/][Rust 中的异步编程]]
+[[https://vmm.dev/en/rust/ods.md#How_to_Read_the_ODS_book][Implementing
+OpenDataStructures in Rust]]
+[[https://blog.yoshuawuyts.com/futures-concurrency-3/][FUTURES
+CONCURRENCY III]] [[https://github.com/QMHTMY/RustBook][A book about
+Rust Data Structures and Algorithms]]
+[[https://gitee.com/QMHTMY/RustBook][A book about Rust Data Structures
+and Algorithms]]
+[[https://applied-math-coding.medium.com/mutable-references-on-vectors-vs-structs-some-less-known-techniques-87098e2e2ba2][Mutable
+References on Vectors vs. Structs: Some less known techniques.]]
+[[https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust][What
+Can Coerce, and Where, in Rust]]
+[[https://juejin.cn/post/6999829181680844831][Rust 中的隐式类型转换]]
+[[https://highassurance.rs/][High Assurance Rust]]
+[[https://cfsamson.github.io/books-futures-explained/introduction.html][Futures
+Explained in 200 Lines of Rust]]
+[[https://rust-lang.github.io/async-book/][Asynchronous Programming in
+Rust]]
+[[https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md][Common
+Rust Lifetime Misconceptions]]
+[[https://yehohanan7.medium.com/asynchronous-programming-8aaae83cd9f3][Asynchronous
+programming internals]]
+[[https://fasterthanli.me/articles/understanding-rust-futures-by-going-way-too-deep][Understanding
+Rust futures by going way too deep]]
+[[https://www.ihcblog.com/rust-runtime-design-1/][Rust Runtime
+设计与实现-科普篇]]
+[[https://leaxoy.github.io/2020/03/rust-async-runtime/][Rust异步浅谈]]
+[[http://www.4k8k.xyz/article/s_lisheng/113737065][Rust异步之自己实现block_on]]
+[[https://www.zupzup.org/rust-reactor-executor/][Basic Reactor and
+Executor for non-blocking IO in Rust]]
+[[https://github.com/zupzup/rust-reactor-executor-example][rust-reactor-executor-example]]
+[[https://chrissardegna.com/blog/uncovering-a-blocking-syscall/][Uncovering
+a Blocking Syscall]]
+[[https://recursion.wtf/posts/rust_schemes/][Elegant and performant
+recursion in Rust]] [[https://recursion.wtf/posts/rust_schemes_2/][Fully
+generic recursion in Rust]]
+[[https://github.com/jimblandy/context-switch][context-switch]]
+[[https://medium.com/sys-base/rust-day-9-tokio-mini-redis-part-1-c8f5812ae4b][DB2:
+Tokio Mini Redis --- Server (Part 1)]]
+[[https://www.osohq.com/post/rust-reflection-pt-1][Part 1: dyn Class]]
+[[https://www.osohq.com/post/runtime-reflection-pt-2][Part 2: dyn
+Attribute]]
+[[https://www.osohq.com/post/runtime-reflection-pt-3][Building a runtime
+reflection system for Rust Part 3: dyn Method]]
+[[https://medium.com/@codematters/rust-for-elixir-developers-genserver-762ff590f017][Rust
+for Elixir developers: GenServer.]]
+[[https://medium.com/swlh/rust-pushdown-automata-d37c2b1ae0c6][Rust:
+Pushdown Automata]]
+[[https://blog.yoshuawuyts.com/state-machines-2/][State Machines II]]
+[[https://medium.com/@KevinBGreene/async-programming-in-rust-part-3-futures-and-async-await-b508f7e44abc][Async
+Programming in Rust --- Part 3: Futures and Async / Await]]
+[[https://zjp-cn.github.io/tlborm/][Rust 宏小册]]
+[[https://rlebran.com/distributed-tracing-in-rust-b8eb2af3aff4][Distributed
+tracing in Rust]]
+[[https://rust-unofficial.github.io/too-many-lists/][Learn Rust With
+Entirely Too Many Linked Lists]]
+[[https://github.com/sunface/too-many-lists][手把手实现 Rust 链表]]
+[[https://github.com/dtolnay/rust-quiz][Rust Quiz]]
+[[https://gist.github.com/brson/a324c83a6af6a8a78dfaa9d33eb9b48e][A
+collection of notable Rust blog posts]]
+[[https://cliffle.com/p/dangerust/][Learn Rust the Dangerous Way]]
+[[https://unixism.net/loti/async_intro.html][Asynchronous Programming
+Under Linux]] [[https://os.phil-opp.com/async-await/][Async/Await]]
+[[https://eta.st/2021/03/08/async-rust-2.html][Why asynchronous Rust
+doesn't work]] [[https://ryhl.io/blog/actors-with-tokio/][Actors with
+Tokio]]
+[[https://github.com/smallnest/concurrency-programming-via-rust][more
+than 100 examples to learn concurrency programming via rust]]
+[[https://www.github.com/jakobdannel/mandelbrot][Mandelbrot rendering
+with Rust]] [[https://github.com/wafelack/raytracer][A raytracer written
+in Rust]]
+[[https://www.freecodecamp.org/news/how-to-build-a-machine-learning-model-in-rust/][How
+to Build a Machine Learning Model in Rust]]
+[[https://towardsdatascience.com/nine-rules-for-creating-procedural-macros-in-rust-595aa476a7ff][Nine
+Rules for Creating Procedural Macros in Rust]]
+[[https://ecton.dev/writing-a-hashmap-without-unsafe/][Writing a HashMap
+in Rust without unsafe]] [[https://github.com/tfpk/macrokata][MacroKata:
+Rustlings Style Exercises For Learning Macros]]
+[[ttps://github.com/dtolnay/proc-macro-workshop][Rust Latam: procedural
+macros workshop]] [[https://blog.yoshuawuyts.com/const-syntax/][const
+syntax]]
+[[https://alexeden.github.io/learning-rust/hidden_code.html][Hidden
+Code]]
+[[https://www.possiblerust.com/guide/what-can-coerce-and-where-in-rust][What
+Can Coerce, and Where, in Rust]]
+[[https://zhuanlan.zhihu.com/p/533695108][Rust: 深入理解 PhantomData]]
+[[https://matklad.github.io/2022/10/06/hard-mode-rust.html][Hard Mode
+Rust]]
+[[https://smallcultfollowing.com/babysteps//blog/2022/03/29/dyn-can-we-make-dyn-sized/][dyn*:
+can we make dyn sized?]]
+[[https://blog.theincredibleholk.org/blog/2022/04/18/how-async-functions-in-traits-could-work-in-rustc/][How
+Async Functions in Traits could Work in Rustc]]

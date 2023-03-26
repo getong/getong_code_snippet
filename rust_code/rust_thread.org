@@ -1,0 +1,86 @@
+* rust thread
+:PROPERTIES:
+:CUSTOM_ID: rust-thread
+:END:
+** spawn
+:PROPERTIES:
+:CUSTOM_ID: spawn
+:END:
+#+begin_src rust
+use std::thread;
+
+thread::spawn(move || {
+    // some work here
+});
+#+end_src
+
+copy from [[https://doc.rust-lang.org/std/thread/][Module std::thread]]
+
+** Builder
+:PROPERTIES:
+:CUSTOM_ID: builder
+:END:
+#+begin_src rust
+use std::thread;
+
+let builder = thread::Builder::new();
+
+let handler = builder.spawn(|| {
+    // thread code
+}).unwrap();
+
+handler.join().unwrap();
+#+end_src
+
+copy from
+[[https://doc.rust-lang.org/std/thread/struct.Builder.html][Struct
+std::thread::Builder]]
+
+** current thread name
+:PROPERTIES:
+:CUSTOM_ID: current-thread-name
+:END:
+#+begin_src rust
+use std::thread;
+use std::time;
+
+fn main() {
+    let tid = thread::current();
+    println!("{:?}", tid);
+    thread::spawn(move || {
+        thread::sleep(time::Duration::from_secs(1));
+        println!("hello");
+        tid.unpark(); // wake up
+    });
+    thread::park(); // sleep
+    println!("world");
+}
+#+end_src
+
+output:
+
+#+begin_src shell
+Thread { id: ThreadId(1), name: Some("main") }
+hello
+world
+#+end_src
+
+** thread start cost time
+:PROPERTIES:
+:CUSTOM_ID: thread-start-cost-time
+:END:
+#+begin_src rust
+use std::{thread, time};
+fn main() {
+    let start = time::Instant::now();
+    let handler = thread::spawn(move || {
+    let pause = time::Duration::from_millis(300);
+    thread::sleep(pause.clone());
+    });
+    handler.join().unwrap();
+    let finish = time::Instant::now();
+    println!("{:02?}", finish.duration_since(start));
+}
+#+end_src
+
+It is almost 300ms

@@ -1,0 +1,19 @@
+* elixir code example
+:PROPERTIES:
+:CUSTOM_ID: elixir-code-example
+:END:
+** Enum.reduce
+:PROPERTIES:
+:CUSTOM_ID: enum.reduce
+:END:
+#+begin_example
+Enum.reduce(1..4, 0, &+/2)
+10
+#+end_example
+
+** Keyword and List module
+:PROPERTIES:
+:CUSTOM_ID: keyword-and-list-module
+:END:
+Keyword list only contains atom key, but List can contains all kinds of
+keys.

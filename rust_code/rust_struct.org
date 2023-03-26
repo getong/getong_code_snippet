@@ -1,0 +1,27 @@
+* rust strudct
+:PROPERTIES:
+:CUSTOM_ID: rust-strudct
+:END:
+** copy or move of sturct
+:PROPERTIES:
+:CUSTOM_ID: copy-or-move-of-sturct
+:END:
+
+#+begin_quote
+
+#+begin_quote
+
+#+begin_quote
+In general any struct member access x.a moves a out of the struct --
+except if you take a reference to it, explicitly (&x.a) or implicitly
+(x.a.method() where fn method(&self)), or if a's type is Copy.
+
+#+end_quote
+
+#+end_quote
+
+#+end_quote
+
+copy from
+[[https://www.reddit.com/r/rust/comments/io9udn/why_is_field_access_alone_considered_a_move_here/][Why
+is field access alone considered a move here]]

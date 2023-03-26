@@ -1,0 +1,16 @@
+* rust tips
+:PROPERTIES:
+:CUSTOM_ID: rust-tips
+:END:
+** run this commands in rust project
+:PROPERTIES:
+:CUSTOM_ID: run-this-commands-in-rust-project
+:END:
+#+begin_src shell
+
+// get rust advice for your code.
+cargo clippy
+
+// get nameing conventions advice
+cargo check
+#+end_src

@@ -1,0 +1,9 @@
+* riak_core
+:PROPERTIES:
+:CUSTOM_ID: riak_core
+:END:
+** riak_core architecture is a star architecture
+:PROPERTIES:
+:CUSTOM_ID: riak_core-architecture-is-a-star-architecture
+:END:
+The service is almost the same, or the most are the same.

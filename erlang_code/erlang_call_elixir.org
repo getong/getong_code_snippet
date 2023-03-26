@@ -1,0 +1,13 @@
+* erlang call elixir
+:PROPERTIES:
+:CUSTOM_ID: erlang-call-elixir
+:END:
+** example
+:PROPERTIES:
+:CUSTOM_ID: example
+:END:
+#+begin_src erlang
+'AModule':'call'(args);
+#+end_src
+
+AModule is an elixir module

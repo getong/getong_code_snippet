@@ -1,0 +1,176 @@
+* dockerfile
+:PROPERTIES:
+:CUSTOM_ID: dockerfile
+:END:
+** cmd
+:PROPERTIES:
+:CUSTOM_ID: cmd
+:END:
+
+#+begin_quote
+CMD在Dockerfile文件中仅可指定一次，指定多次时，会覆盖前的指令。
+另外，docker run命令也会覆盖Dockerfile中CMD命令。 如果docker
+run运行容器时，使用了Dockerfile中CMD相同的命令，就会覆盖Dockerfile中的CMD命令。
+在使用docker
+run运行容器时，我们并没有在命令结尾指定会在容器中执行的命令，这时Docker就会执行在Dockerfile的CMD中指定的命令。
+
+#+end_quote
+
+#+begin_quote
+如果不想使用CMD中指定的命令，就可以在docker
+run命令的结尾指定所要运行的命令： see
+[[https://itbilu.com/linux/docker/VyhM5wPuz.html#cmd-cmd][CMD]]
+
+#+end_quote
+
+** entrypoint
+:PROPERTIES:
+:CUSTOM_ID: entrypoint
+:END:
+
+#+begin_quote
+ENTRYPOINT与CMD非常类似，不同的是通过docker
+run执行的命令不会覆盖ENTRYPOINT，而docker
+run命令中指定的任何参数，都会被当做参数再次传递给ENTRYPOINT。
+Dockerfile中只允许有一个ENTRYPOINT命令，多指定时会覆盖前面的设置，而只执行最后的ENTRYPOINT指令。
+
+#+end_quote
+
+#+begin_quote
+docker
+run运行容器时指定的参数都会被传递给ENTRYPOINT，且会覆盖CMD命令指定的参数。
+如，执行docker run -d时，-d参数将被传递给入口点。
+
+#+end_quote
+
+#+begin_quote
+也可以通过docker run --entrypoint重写ENTRYPOINT入口点。 see
+[[https://itbilu.com/linux/docker/VyhM5wPuz.html#cmd-entrypoint][ENTRYPOINT]]
+
+#+end_quote
+
+** timezone
+:PROPERTIES:
+:CUSTOM_ID: timezone
+:END:
+Add this into dockerfile
+
+#+begin_src shell
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+#+end_src
+
+see
+[[https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes][Docker
+Container time & timezone (will not reflect changes)]]
+
+** --from directive
+:PROPERTIES:
+:CUSTOM_ID: from-directive
+:END:
+#+begin_src shell
+FROM elixir:alpine
+ARG project_id
+...
+FROM alpine:latest
+COPY --from=0 /opt/release .
+#+end_src
+
+build command:
+
+#+begin_src shell
+docker build -t abc -f dockerfile . --build-arg project_id=abc
+#+end_src
+
+copy from
+[[https://cloud.google.com/community/tutorials/elixir-phoenix-on-kubernetes-google-container-engine][Run
+an Elixir Phoenix app in containers using Google Kubernetes Engine]]
+
+** workdir
+:PROPERTIES:
+:CUSTOM_ID: workdir
+:END:
+like linux command:
+
+#+begin_src shell
+cd /usr/local/otp_src_21.2 && erl
+#+end_src
+
+in the dockerfile :
+
+#+begin_src dockerfile
+WORKDIR /usr/local/otp_src_21
+CMD ["erl"];
+#+end_src
+
+** Multiple commands in Docker CMD directive
+:PROPERTIES:
+:CUSTOM_ID: multiple-commands-in-docker-cmd-directive
+:END:
+#+begin_src dockerfile
+CMD ["/etc/init.d/nullmailer", "start", ";", "/usr/sbin/php5-fpm"]
+#+end_src
+
+but it does not work, commands below works:
+
+#+begin_src dockerfile
+CMD ["sh", "-c", "/etc/init.d/nullmailer start ; /usr/sbin/php5-fpm"]
+#+end_src
+
+copy from
+[[https://serverfault.com/questions/685697/multiple-commands-in-docker-cmd-directive][Multiple
+commands in Docker CMD directive]]
+
+** copy directory
+:PROPERTIES:
+:CUSTOM_ID: copy-directory
+:END:
+#+begin_src dockerfile
+ADD go /usr/local/
+#+end_src
+
+will copy the contents of your local go directory in the /usr/local/
+directory of your docker image.
+
+To copy the go directory itself in /usr/local/ use:
+
+#+begin_src dockerfile
+ADD go /usr/local/go
+// or
+COPY go /usr/local/go
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/26504846/copy-directory-to-another-directory-using-add-command][Copy
+directory to another directory using ADD command]]
+
+** docker stop gracefully
+:PROPERTIES:
+:CUSTOM_ID: docker-stop-gracefully
+:END:
+see [[https://segmentfault.com/a/1190000022971054][你的 docker
+stop，它优雅吗？]] the pid 1 form:
+
+#+begin_src dockerfile
+ENTRYPOINT ["./entrypoint.sh"]
+#+end_src
+
+and the /entrypoint.sh might include =trap=, =wait= command, like below:
+
+#+begin_src shell
+#!/bin/sh
+echo 'Do something'
+
+kill_jar() {
+  echo 'Received TERM'
+  kill "$(ps -ef | grep java | grep app | awk '{print $1}')"
+  wait $! #<1>
+  echo 'Process finished'
+}
+
+trap 'kill_jar' TERM INT
+
+java -jar app.jar &
+
+wait $!
+#+end_src

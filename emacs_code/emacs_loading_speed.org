@@ -1,0 +1,14 @@
+* emacs loading speed
+:PROPERTIES:
+:CUSTOM_ID: emacs-loading-speed
+:END:
+How to check the emacs loading speed
+
+#+begin_src shell
+emacs --quick
+emacs --no-init-file
+emacs --no-desktop
+#+end_src
+
+see
+[[http://blog.kankanan.com/article/emacs-542f52a8901f5ea64f185316.html][emacs启动速度优化]]

@@ -1,0 +1,11 @@
+* rust safe arithmetic function
+:PROPERTIES:
+:CUSTOM_ID: rust-safe-arithmetic-function
+:END:
+** wrapping_add
+:PROPERTIES:
+:CUSTOM_ID: wrapping_add
+:END:
+#+begin_src rust
+255_u8.wrapping_add(1) == 0;
+#+end_src

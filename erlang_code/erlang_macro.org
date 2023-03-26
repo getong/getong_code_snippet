@@ -1,0 +1,31 @@
+* erlang use macro to avoid wrong spell
+:PROPERTIES:
+:CUSTOM_ID: erlang-use-macro-to-avoid-wrong-spell
+:END:
+Using =macro= to define an atom or a number in case of wrong spell and
+give it a full meaning.
+
+#+begin_example
+%% copy from erlang array.erl
+-define(DEFAULT, undefined).
+
+-define(LEAFSIZE, 10).| |   % the "base"
+#+end_example
+
+Like the number macro, if it is uesed in many places, when it has to be
+changed, edit the definition, it changes all.
+
+But when the atom is used in msg as the tuple tag, no need to used as
+macro.
+
+** normal_reason
+:PROPERTIES:
+:CUSTOM_ID: normal_reason
+:END:
+#+begin_src erlang
+-define(normal_reason(R),
+        (R == normal orelse R == shutdown orelse
+                                            (is_tuple(R) andalso element(1,R) == shutdown))).
+#+end_src
+
+copy from riak_core_vnode.erl

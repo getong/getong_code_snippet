@@ -1,0 +1,19 @@
+* elixir rust
+:PROPERTIES:
+:CUSTOM_ID: elixir-rust
+:END:
+** rustler
+:PROPERTIES:
+:CUSTOM_ID: rustler
+:END:
+#+begin_src shell
+mix new base64
+# add {:rustler, "~> 0.22-rc"} to mix.exs deps
+mix deps.get
+mix rustler.new
+# follow rustler instructions
+#+end_src
+
+copy from
+[[file:Writing%20Rust%20NIFs%20for%20Elixir%20With%20Rustler][Writing
+Rust NIFs for Elixir With Rustler]]

@@ -1,0 +1,12 @@
+* wifi
+:PROPERTIES:
+:CUSTOM_ID: wifi
+:END:
+** 不能连接到服务器，把 /local/ 连接的线给先拔掉
+:PROPERTIES:
+:CUSTOM_ID: 不能连接到服务器把-local-连接的线给先拔掉
+:END:
+** 如果还是不行，把 WAN 线给连接到电脑， 试试电脑能不能连接。
+:PROPERTIES:
+:CUSTOM_ID: 如果还是不行把-wan-线给连接到电脑-试试电脑能不能连接
+:END:

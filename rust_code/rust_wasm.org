@@ -1,0 +1,4 @@
+* rust wasm
+:PROPERTIES:
+:CUSTOM_ID: rust-wasm
+:END:

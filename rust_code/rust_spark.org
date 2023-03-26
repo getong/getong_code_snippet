@@ -1,0 +1,16 @@
+* rust spark
+:PROPERTIES:
+:CUSTOM_ID: rust-spark
+:END:
+** reference link
+:PROPERTIES:
+:CUSTOM_ID: reference-link
+:END:
+[[https://blog.phylum.io/insights-and-resources/spark-and-rust-how-to-build-fast-distributed-and-flexible-analytics-pipelines][Spark
+and Rust - How to Build Fast, Distributed and Flexible Analytics
+Pipelines with Side Effects]]
+[[https://miyake-akio.medium.com/big-data-with-rust-part-1-3-yes-we-can-fd396410e35][Big
+Data with RUST Part 1/3 --- Yes we can!!!]]
+[[https://gitlab.com/miyake-diogo/rust-big-data-playground][Rust Big
+Data Playground]]
+[[https://github.com/apache/arrow-datafusion][arrow-datafusion]]

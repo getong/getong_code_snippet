@@ -1,0 +1,47 @@
+* erlang todo
+:PROPERTIES:
+:CUSTOM_ID: erlang-todo
+:END:
+- [ ] read the net_adm:world/0 functions
+- [ ] read inet_res:nslookup/4
+- [X] read the =gen_statem= manual and write some examples
+- [ ] write code doc
+- [ ] write a callback module
+- [X] using open network in docker, a erlang cluster needs a epmd docker
+  container per host
+- [X] using bridge network in docker, a erlang cluster needs kubernetes,
+  docker compose, swarn and so on.
+- [ ] erlang pid is <A, B, C>. How is it represent the pid. Need to take
+  a look
+  [[https://stackoverflow.com/questions/243363/can-someone-explain-the-structure-of-a-pid-in-erlang][Can
+  someone explain the structure of a Pid in Erlang?]]
+  [[http://erlang.org/doc/apps/erts/erl_ext_dist.html][11 External Term
+  Format]]
+- [ ] erlang cpu usage
+- [ ] erlang and haproxy
+  [[https://github.com/heroku/ranch_proxy_protocol][ranch_proxy_protocol]]
+  the ranch includes the proxy option
+- [X] erlang handle the system signals?
+- [ ] erlang parse_transform (used in lager and epipe)
+- [X] tcp message delivery retry AMQP protocol might solve this problem.
+- [ ] riak_core
+- [ ] riak_ensemble
+- [X] why riak_ensemble try_commit will spawn in another process?
+- [ ] lasp, partisan, hyparview a gossip protocol
+- [X] cowboy, cowboy rest callback module
+- [X] hackney, just like httpc
+- [ ] common test
+- [X] dialyzer
+- [X] erlang application prep_stop
+- [ ] couchdb
+- [ ] zotonic
+- [ ] msgpack. It seems that msgpack is better than protobuf, right or
+  not?
+- [ ] sext
+- [ ] erlang release upgrade, rebar3 work with appup source file.
+  rebar3_appup_plugin might help. see
+  [[http://erlang.org/doc/design_principles/appup_cookbook.html][12
+  Appup Cookbook]], the relx might be much better.
+- [ ] dht
+- [X] new ssl handshake
+- [ ] docker open network erlang:open_port/2 failure

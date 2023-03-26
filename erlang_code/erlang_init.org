@@ -1,0 +1,69 @@
+* erlang init
+:PROPERTIES:
+:CUSTOM_ID: erlang-init
+:END:
+** stop node
+:PROPERTIES:
+:CUSTOM_ID: stop-node
+:END:
+#+begin_src erlang
+init:stop().
+#+end_src
+
+** restart node
+:PROPERTIES:
+:CUSTOM_ID: restart-node
+:END:
+#+begin_src erlang
+init:restart().
+#+end_src
+
+** get sys.config file location
+:PROPERTIES:
+:CUSTOM_ID: get-sys.config-file-location
+:END:
+#+begin_src shell
+init:get_argument(config)
+#+end_src
+
+** docker stop erlang_container_id
+:PROPERTIES:
+:CUSTOM_ID: docker-stop-erlang_container_id
+:END:
+#+begin_src erlang
+erts: A received SIGTERM signal to beam will generate a 'stop' message to the init process and terminate the Erlang VM nicely. This is equivalent to calling init:stop/0.
+#+end_src
+
+see [[http://www.erlang.org/news/110][Erlang/OTP 19.3 has been
+released]]
+
+In erlang application module, write the stop function inside the stop/1
+funtion.
+
+#+begin_src erlang
+stop(_State) ->
+    lager:info("Stop recieved."),
+    erlang:display("Stop recieved."),
+    ok.
+#+end_src
+
+see
+[[https://stackoverflow.com/questions/42912781/erlang-does-the-application-behavior-trap-sigterm][Erlang:
+does the application behavior trap SIGTERM?]]
+
+** use halt/1 in erlang cmd operation
+:PROPERTIES:
+:CUSTOM_ID: use-halt1-in-erlang-cmd-operation
+:END:
+#+begin_src erlang
+fail() ->
+    io:format("fail", []),
+    halt(1).
+#+end_src
+
+** ct_slave
+:PROPERTIES:
+:CUSTOM_ID: ct_slave
+:END:
+the =stop= function in ct_slave module is just use the =init:stop/0=
+function to ensure the node is not connected.

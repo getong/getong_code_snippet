@@ -1,0 +1,22 @@
+* elixir ast
+:PROPERTIES:
+:CUSTOM_ID: elixir-ast
+:END:
+All the elixir code is represented as this:
+
+#+begin_example
+{ tuple | atom, list, list | atom }
+#+end_example
+
+** macro
+:PROPERTIES:
+:CUSTOM_ID: macro
+:END:
+#+begin_example
+defmacro macro(code) do
+  IO.inspect Code
+  code
+end
+
+macro(IO.puts(“hello”))
+#+end_example

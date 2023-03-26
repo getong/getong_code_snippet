@@ -1,0 +1,18 @@
+Oreilly free ebook address:
+
+#+begin_example
+http://www.oreilly.com/data/free/
+http://www.oreilly.com/business/free/
+http://www.oreilly.com/iot/free/
+http://www.oreilly.com/programming/free/
+http://www.oreilly.com/security/free/
+http://www.oreilly.com/web-platform/free/
+http://www.oreilly.com/webops-perf/free/
+http://www.oreilly.com/design/free/
+#+end_example
+
+get the pdf link:
+
+#+begin_example
+grep -o "href.*csp" page_source_file | sed "s/href=\"//" | sed "s/free/free\/files/" | sed 's/csp/pdf/'
+#+end_example

@@ -1,0 +1,15 @@
+* protobuf
+:PROPERTIES:
+:CUSTOM_ID: protobuf
+:END:
+** required and optional is removed in Protocol Buffers 3
+:PROPERTIES:
+:CUSTOM_ID: required-and-optional-is-removed-in-protocol-buffers-3
+:END:
+see
+[[https://stackoverflow.com/questions/31801257/why-required-and-optional-is-removed-in-protocol-buffers-3][Why
+required and optional is removed in Protocol Buffers 3]]
+
+The =repeated= is still remained. see
+[[https://github.com/google/protobuf][Protocol Buffers]] for syntax 3
+examples

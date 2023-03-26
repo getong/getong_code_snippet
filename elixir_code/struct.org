@@ -1,0 +1,55 @@
+* struct
+:PROPERTIES:
+:CUSTOM_ID: struct
+:END:
+#+begin_example
+defmodule Db do
+
+  defstruct [
+    name: nil,
+    style: nil,
+    color: nil,
+    opts: %{}
+  ]
+
+end
+
+defmodule Db2 do
+
+  defstruct name: nil,
+    style: nil, color: nil, opts: %{}
+
+end
+#+end_example
+
+struct is very like the map type, but the struct often works with the
+module name.
+
+** struct to map
+:PROPERTIES:
+:CUSTOM_ID: struct-to-map
+:END:
+#+begin_src elixir
+Map.from_struct(struct)
+#+end_src
+
+** default values
+:PROPERTIES:
+:CUSTOM_ID: default-values
+:END:
+#+begin_src elixir
+defmodule User do
+  defstruct [:email, name: "John", age: 27]
+end
+#+end_src
+
+** required values
+:PROPERTIES:
+:CUSTOM_ID: required-values
+:END:
+#+begin_src elixir
+defmodule Car do
+ @enforce_keys [:make]
+ defstruct [:model, :make]
+end
+#+end_src

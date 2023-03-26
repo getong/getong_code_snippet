@@ -1,0 +1,518 @@
+* phoenix example
+:PROPERTIES:
+:CUSTOM_ID: phoenix-example
+:END:
+** install inotify-tools
+:PROPERTIES:
+:CUSTOM_ID: install-inotify-tools
+:END:
+#+begin_src shell
+sudo apt-get install -y inotify-tools
+#+end_src
+
+** running postgres with docker
+:PROPERTIES:
+:CUSTOM_ID: running-postgres-with-docker
+:END:
+#+begin_src shell
+docker run --name postgres_instance -e TZ=Asia/Shanghai -e POSTGRES_USER=user_name -e POSTGRES_PASSWORD=aek4iTu6 -e POSTGRES_DB=db_name -d -p 15432:5432 postgres:12.1
+#+end_src
+
+** pgadmin
+:PROPERTIES:
+:CUSTOM_ID: pgadmin
+:END:
+#+begin_src shell
+docker run -p 2080:80 -e "PGADMIN_DEFAULT_EMAIL=email_user@domain.com" -e "PGADMIN_DEFAULT_PASSWORD=quush2La" -d dpage/pgadmin4:4.16
+curl https://localhost:2080
+#+end_src
+
+It must notes that the postgres should be =local_ip:15432=, not
+=localhost:15432=.
+
+psql connection:
+
+#+begin_src shell
+ PGPASSWORD=aek4iTu6 psql -h localhost -U user_name  -p 15432 db_name
+#+end_src
+
+** phoenix example
+:PROPERTIES:
+:CUSTOM_ID: phoenix-example-1
+:END:
+#+begin_src shell
+## install hex
+$ mix local.hex --force
+
+## install phoenix framework
+$ mix archive.install hex phx_new 1.5.9 --force
+
+## phoenix hello project, when installing dependencies choose yes
+$ mix phx.new hello
+
+## with --no-ecto option
+$ mix phx.new hello --no-ecto
+
+## If in the last step, you choose no, you can do this manually
+$ cd hello
+$ mix deps.get
+$ cd assets && yarn && node node_modules/webpack/bin/webpack.js --mode development
+
+## cd hello
+$ cd ..
+$ mix phx.server
+#+end_src
+
+edit the config/dev.exs like below:
+
+#+begin_example
+config :hello, Hello.Repo,
+  username: "postgres",
+  password: "aek4iTu6",
+  database: "postgres",
+  hostname: "localhost",
+  port: 15432,
+  pool_size: 10
+#+end_example
+
+Then continue:
+
+#+begin_src shell
+## Start your Phoenix app with:
+$ mix phx.server
+## You can also run your app inside IEx (Interactive Elixir) as:
+$ iex -S mix phx.server
+#+end_src
+
+** learn phoenix framework
+:PROPERTIES:
+:CUSTOM_ID: learn-phoenix-framework
+:END:
+[[https://github.com/dwyl/learn-phoenix-framework][Learn Phoenix (Web
+App) Framework]]
+
+** postgres dump db struct
+:PROPERTIES:
+:CUSTOM_ID: postgres-dump-db-struct
+:END:
+export db struct
+
+#+begin_src shell
+PGPASSWORD=abc123 pg_dump -h localhost -U user -C -p 5432 -s db -f db_struct.sql
+#+end_src
+
+import db struct
+
+#+begin_src shell
+PGPASSWORD=abc123 psql -h localhost -U user -p 5432 -f db_struct.sql
+#+end_src
+
+** Building a JSON API in Elixir with Phoenix 1.4
+:PROPERTIES:
+:CUSTOM_ID: building-a-json-api-in-elixir-with-phoenix-1.4
+:END:
+A very good example for JSON API on
+[[https://lobotuerto.com/blog/building-a-json-api-in-elixir-with-phoenix/][Building
+a JSON API in Elixir with Phoenix 1.4]]
+
+** make resource paths with a different key than :id
+:PROPERTIES:
+:CUSTOM_ID: make-resource-paths-with-a-different-key-than-id
+:END:
+The default key in the path is :id, and the :id is the default key
+autogenerate in the table. But some time, the default key is not the :id
+in the table definition. So we need to set a different key in the
+resource. According to
+[[https://stackoverflow.com/questions/37512534/ectophoenix-how-to-make-resource-paths-with-a-different-key-than-id][Ecto+Phoenix:
+How to make resource paths with a different key than :id?]], the right
+method is to =to_param=.
+
+#+begin_src elixir
+@derive {Phoenix.Param, key: :username}
+schema "users" do
+#+end_src
+
+Copy from
+[[https://hexdocs.pm/phoenix/Phoenix.Param.html#to_param/1][Phoenix.Param]]
+
+** Unique Identifier For Session
+:PROPERTIES:
+:CUSTOM_ID: unique-identifier-for-session
+:END:
+copy from
+[[https://elixirforum.com/t/unique-identifier-for-session/13778][Unique
+Identifier For Session]]
+
+#+begin_src elixir
+## add this into mix.exs
+  defp deps do
+    [
+    ...
+      {:elixir_uuid, "~> 1.2"}
+    ]
+  end
+
+## create_token and validate_token
+def create_token() do
+  uuid = UUID.generate_v4() # you probably need to get a UUID package, therefore this is pseudo code
+  Phoenix.Token.sign(YourApp.Endpoint, "your secret salt", uuid)
+end
+
+def validate_token(token) do
+  Phoenix.Token.verify(YourApp.Endpoint, "your secret salt", token, max_age: 5 * 60)
+end
+#+end_src
+
+** cookies
+:PROPERTIES:
+:CUSTOM_ID: cookies
+:END:
+#+begin_example
+`conn.cookies` the request cookies with the response cookies
+`conn.req_cookies` the request cookies (without the response ones), of course there is `coon.resp_cookies` for the response cookies.
+#+end_example
+
+copy from
+[[https://stackoverflow.com/questions/51075838/elixir-phoenix-accessing-users-cookie-conn-cookies-vs-conn-req-cookies-vs-co][Elixir/Phoenix -
+Accessing user's cookie: conn.cookies vs conn.req_cookies vs
+conn.req_headers]]
+
+** configure the option
+:PROPERTIES:
+:CUSTOM_ID: configure-the-option
+:END:
+#+begin_src elixir
+config :example, Example.Endpoint,
+  http: [
+    port: 4000,
+    transport_options: [
+      num_acceptors: 50, ## default is 100
+      max_connections: 8888 ## default is 16_384
+    ]
+  ],
+#+end_src
+
+see the [[https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html][Plug.Cowboy]]
+
+** phoenix_live_view
+:PROPERTIES:
+:CUSTOM_ID: phoenix_live_view
+:END:
+[[https://elixirschool.com/blog/phoenix-live-view][Walk-Through of
+Phoenix LiveView]]
+
+** gen.secret
+:PROPERTIES:
+:CUSTOM_ID: gen.secret
+:END:
+#+begin_src shell
+mix phx.gen.secret
+#+end_src
+
+** guardian
+:PROPERTIES:
+:CUSTOM_ID: guardian
+:END:
+[[https://elixirschool.com/zh-hans/lessons/libraries/guardian/][guardian]]
+
+** websocket
+:PROPERTIES:
+:CUSTOM_ID: websocket
+:END:
+[[https://github.com/chrismccord/phoenix_chat_example][phoenix_chat_example]]
+[[https://medium.com/@loganbbres/elixir-websocket-chat-example-c72986ab5778][Elixir
+WebSocket Chat Example w/o Phoenix]]
+
+** plug parsers
+:PROPERTIES:
+:CUSTOM_ID: plug-parsers
+:END:
+Plug only have default parsers to json, multipart and urlencoded. see
+[[https://elixirforum.com/t/only-allowing-xml-requests/5153/2][Only
+allowing XML requests]]
+
+** Bcrypt
+:PROPERTIES:
+:CUSTOM_ID: bcrypt
+:END:
+add Bcrypt in the mix.ex
+
+#+begin_src shell
+{:bcrypt_elixir, "~> 2.0"}
+#+end_src
+
+basic usage:
+
+#+begin_src shell
+salt = Bcrypt.gen_salt(5)
+hash = Bcrypt.Base.hash_password(password = "test_password", salt)
+Bcrypt.verify_pass(password = "test_password", hash)
+
+## belongs_to
+gen the schema
+``` shell
+mix phx.gen.schema UserServer user_server body:text video_id:references:videos
+#+end_src
+
+in the schema
+
+#+begin_src elixir
+schema user_server do
+field :body, :string
+belogs_to :video, Video
+end
+#+end_src
+
+** scrivener_ecto
+:PROPERTIES:
+:CUSTOM_ID: scrivener_ecto
+:END:
+in the mix.exs file:
+
+#+begin_src elixir
+{:scrivener_ecto, "~> 2.2"}
+#+end_src
+
+in the Repo.ex
+
+#+begin_src elixir
+defmodule MyApp.Repo do
+  use Ecto.Repo, otp_app: :my_app, adapter: Ecto.Adapters.Postgres
+  use Scrivener, page_size: 10
+end
+#+end_src
+
+usage:
+
+#+begin_src elixir
+Schema |> Imcircle.Repo.paginate(page: 1)
+#+end_src
+
+** view and template
+:PROPERTIES:
+:CUSTOM_ID: view-and-template
+:END:
+#+begin_example
+it’s worth emphasizing that a view in Phoenix is just a module, and templates are just functions.
+#+end_example
+
+** file upload
+:PROPERTIES:
+:CUSTOM_ID: file-upload
+:END:
+[[https://phoenixframework.org/blog/file-uploads][File Uploads]]
+[[https://medium.com/@Stephanbv/elixir-phoenix-uploading-images-locally-with-arc-b1d5ec88f7a][Elixir
+/ Phoenix --- Uploading images locally (With ARC)]]
+
+#+begin_src elixir
+<%= form_for @conn, Routes.page_path(:conn, :upload_img), [multipart: true], fn f -> %>
+  <div class="form-group">
+    <label>Photo</label>
+    <%= file_input f, :photo, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+#+end_src
+
+in the controller:
+
+#+begin_src elixir
+def create(conn, %{"user" => user_params}) do
+    IO.inspect user_params
+    if upload = user_params["photo"] do
+        extension = Path.extname(upload.filename)
+        File.cp(upload.path, "/media/#{user.id}-profile#{extension}")
+    end
+    ...
+end
+#+end_src
+
+** show images in the browser
+:PROPERTIES:
+:CUSTOM_ID: show-images-in-the-browser
+:END:
+[[https://experimentingwithcode.com/creating-a-photo-gallery-in-phoenix-with-arc-part-1/][Creating
+a Photo Gallery in Phoenix with Arc - Part 1]]
+
+#+begin_src elixir
+plug Plug.Static,
+  at: "/uploads",
+  # from: Path.expand("./uploads"),
+  from: "./uploads",
+  gzip: false
+#+end_src
+
+** enable websocket
+:PROPERTIES:
+:CUSTOM_ID: enable-websocket
+:END:
+edit the endpoint.ex
+
+#+begin_src elixir
+socket "/socket", Web.UserSocket,
+websocket: true,
+longpoll: false
+#+end_src
+
+edit usersocket.ex
+
+#+begin_example
+channel "room:*", Web.RoomChannel
+#+end_example
+
+** How To Get Phoenix & VueJS working Together
+:PROPERTIES:
+:CUSTOM_ID: how-to-get-phoenix-vuejs-working-together
+:END:
+[[https://elixirforum.com/t/how-to-get-phoenix-vuejs-working-together/5108][How
+To Get Phoenix & VueJS working Together]]
+
+** channel detail
+:PROPERTIES:
+:CUSTOM_ID: channel-detail
+:END:
+the default protocol is websocket, but the data transport is serialized
+by its serializer.ex module, see
+phoenix/lib/phoenix/socket/serializer.ex and also
+phoenix/lib/phoenix/socket/serializers, currently it has two
+implementations: v1_json_serializer.ex and v2_json_serializer.ex. And
+its data form is just like:
+
+#+begin_src json
+{
+  "topic": "...",
+  "event": "...",
+  "payload": {},
+  "ref": 0
+}
+#+end_src
+
+these four fields are all needed.
+[[http://graemehill.ca/websocket-clients-and-phoenix-channels/][Websocket
+Clients and Phoenix Channels]] is a must read.
+
+** use wscat to connect phoenix channel
+:PROPERTIES:
+:CUSTOM_ID: use-wscat-to-connect-phoenix-channel
+:END:
+#+begin_src shell
+sudo npm install -g wscat
+wscat -c "ws://localhost:4000/socket/websocket"
+#+end_src
+
+then type these in the open terminal
+
+#+begin_src json
+{  "topic": "room:lobby",  "event": "phx_join",  "payload": {},  "ref": 0}
+{  "topic": "room:lobby",  "event": "heartbeat",  "payload": {},  "ref": 0}
+{  "topic": "room:lobby",  "event": "echo",  "payload": { "hello": "world" },  "ref": 0}
+#+end_src
+
+all are copied from
+[[http://graemehill.ca/websocket-clients-and-phoenix-channels/][Websocket
+Clients and Phoenix Channels]].
+[[https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-how-to-call-websocket-api-wscat.html][Use
+wscat to Connect to a WebSocket API and Send Messages to It]]
+
+** phoenix channel ip
+:PROPERTIES:
+:CUSTOM_ID: phoenix-channel-ip
+:END:
+#+begin_src elixir
+  socket("/socket", MyApp.Web.UserSocket,
+    websocket: [connect_info: [:peer_data, :x_headers]],
+    longpoll: [connect_info: [:peer_data, :x_headers]]
+  )
+
+  info: %{
+  peer_data: %{address: {127, 0, 0, 1}, port: 52372, ssl_cert: nil},
+  x_headers: []
+}
+#+end_src
+
+copy from
+[[https://elixirforum.com/t/phoenix-socket-channels-security-ip-identification/1463][Phoenix
+socket/channels security / IP identification]]
+
+also see
+[[https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3][Endpoint]]
+
+** layout
+:PROPERTIES:
+:CUSTOM_ID: layout
+:END:
+#+begin_src elixir
+layout(conn)
+false
+
+conn = put_layout conn, {AppView, "application.html"}
+layout(conn)
+{AppView, "application.html"}
+
+conn = put_layout conn, "print.html"
+layout(conn)
+{AppView, "print.html"}
+
+conn = put_layout conn, :print
+layout(conn)
+{AppView, :print}
+#+end_src
+
+** CorsPlug
+:PROPERTIES:
+:CUSTOM_ID: corsplug
+:END:
+see [[https://hexdocs.pm/cors_plug/readme.html#content][CorsPlug]]
+
+** priv repo migration file name
+:PROPERTIES:
+:CUSTOM_ID: priv-repo-migration-file-name
+:END:
+#+begin_src elixir
+@doc false
+  def copy_new_files(%Schema{context_app: ctx_app} = schema, paths, binding) do
+    files = files_to_be_generated(schema)
+    Mix.Phoenix.copy_from(paths, "priv/templates/phx.gen.schema", binding, files)
+
+    if schema.migration? do
+      migration_path = Mix.Phoenix.context_app_path(ctx_app, "priv/repo/migrations/#{timestamp()}_create_#{schema.table}.exs")
+      Mix.Phoenix.copy_from paths, "priv/templates/phx.gen.schema", binding, [
+        {:eex, "migration.exs", migration_path},
+      ]
+    end
+
+    schema
+  end
+
+defp timestamp do
+    {{y, m, d}, {hh, mm, ss}} = :calendar.universal_time()
+    "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss)}"
+  end
+  defp pad(i) when i < 10, do: << ?0, ?0 + i >>
+  defp pad(i), do: to_string(i)
+#+end_src
+
+** cors
+:PROPERTIES:
+:CUSTOM_ID: cors
+:END:
+#+begin_src elixir
+{:cors_plug, "~> 2.0"}
+#+end_src
+
+** broadcast
+:PROPERTIES:
+:CUSTOM_ID: broadcast
+:END:
+#+begin_src elixir
+Phoenix.Endpoint.broadcast(topic, event, msg)
+#+end_src
+
+** phoenix encryption example
+:PROPERTIES:
+:CUSTOM_ID: phoenix-encryption-example
+:END:
+[[https://github.com/dwyl/phoenix-ecto-encryption-example][phoenix-ecto-encryption-example]]

@@ -1,0 +1,31 @@
+* node connect to phoenix
+:PROPERTIES:
+:CUSTOM_ID: node-connect-to-phoenix
+:END:
+copy from
+[[https://elixirforum.com/t/use-phoenix-js-in-other-project/23466][Use
+phoenix.js in other project]]
+
+** start the phoenix
+:PROPERTIES:
+:CUSTOM_ID: start-the-phoenix
+:END:
+#+begin_src shell
+iex -S mix phx.server
+#+end_src
+
+** node connect to the phoenix
+:PROPERTIES:
+:CUSTOM_ID: node-connect-to-the-phoenix
+:END:
+#+begin_src shell
+mkdir temp
+cd temp
+yarn add phoenix-channels
+node
+> const { Socket } = require('phoenix-channels')
+> let socket = new Socket("ws://127.0.0.1:4000/socket")
+> socket.connect()
+> let channel = socket.channel("room:lobby", {})
+> channel.join().receive("ok", resp => { console.log("Joined successfully", resp) }).receive("error", resp => { console.log("Unable to join", resp) })
+#+end_src

@@ -1,0 +1,28 @@
+* modify local language
+:PROPERTIES:
+:CUSTOM_ID: modify-local-language
+:END:
+** server side setting
+:PROPERTIES:
+:CUSTOM_ID: server-side-setting
+:END:
+#+begin_example
+$cp /etc/default/locale /etc/default/locale.bak
+$vim /etc/default/locale
+LANG="zh_CN.UTF-8"
+LANGUAGE="zh_CN:zh"
+
+$locale-gen zh_CN.UTF-8
+#+end_example
+
+reboot and then it works.
+
+** desktop side
+:PROPERTIES:
+:CUSTOM_ID: desktop-side
+:END:
+#+begin_example
+dpkg-reconfigure locales
+#+end_example
+
+choose the utf-8 language, and reboot.

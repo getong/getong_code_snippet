@@ -1,0 +1,58 @@
+* nginx config
+:PROPERTIES:
+:CUSTOM_ID: nginx-config
+:END:
+** subfolders alias include all subfolder
+:PROPERTIES:
+:CUSTOM_ID: subfolders-alias-include-all-subfolder
+:END:
+#+begin_src nginx
+location /maps
+    {
+        alias /online/www/maps.domain.com/$1;
+    }
+#+end_src
+
+copy from
+[[https://serverfault.com/questions/1079230/nginx-subfolders-alias-include-all-subfolder][nginx -
+subfolders alias include all subfolder]]
+
+** force download file in nginx
+:PROPERTIES:
+:CUSTOM_ID: force-download-file-in-nginx
+:END:
+#+begin_src nginx
+location /downloads {
+   ...
+   add_header Content-disposition "attachment; filename=$1";
+   default_type application/octet-stream;
+   ...
+}
+#+end_src
+
+or:
+
+#+begin_src nginx
+location ~* ^/.+\.(?:gif|jpe?g|png|mp4|mp3)$ {
+   ...
+   add_header Content-disposition "attachment; filename=$1";
+   default_type application/octet-stream;
+   ...
+}
+#+end_src
+
+then restart nginx:
+
+#+begin_src shell
+sudo systemctl resetart nginx
+#+end_src
+
+copy from
+[[https://fedingo.com/how-to-force-download-file-in-nginx/][How to Force
+Download File in NGINX]]
+
+** nginx unit
+:PROPERTIES:
+:CUSTOM_ID: nginx-unit
+:END:
+see [[https://unit.nginx.org/howto/bottle/][Bottle]]

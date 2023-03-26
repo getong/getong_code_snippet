@@ -1,0 +1,209 @@
+* setting up typescript
+:PROPERTIES:
+:CUSTOM_ID: setting-up-typescript
+:END:
+just copy from [[https://alligator.io/typescript/new-project/][Setting
+Up a New TypeScript Project]]
+
+** init the project
+:PROPERTIES:
+:CUSTOM_ID: init-the-project
+:END:
+#+begin_src shell
+mkdir ts_project
+cd ts_project
+yarn add typescript --dev
+./node_modules/.bin/tsc --init
+#+end_src
+
+** edit the tsconfig.json file, enable some compileroptions
+:PROPERTIES:
+:CUSTOM_ID: edit-the-tsconfig.json-file-enable-some-compileroptions
+:END:
+the file before:
+
+#+begin_src typescript
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true
+  }
+}
+#+end_src
+
+change the file to be :
+
+#+begin_src typescript
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "dist",
+    "rootDir": "./src",
+    "sourceMap": true
+  }
+}
+#+end_src
+
+** mkdir the src directory and make a source file
+:PROPERTIES:
+:CUSTOM_ID: mkdir-the-src-directory-and-make-a-source-file
+:END:
+#+begin_src shell
+mkdir src
+touch src/index.ts
+#+end_src
+
+the src/index.ts is
+
+#+begin_src typescript
+const world = '🗺️';
+
+export function hello(word: string = world): string {
+  return `Hello ${world}! `;
+}
+#+end_src
+
+** compile the typescript source
+:PROPERTIES:
+:CUSTOM_ID: compile-the-typescript-source
+:END:
+#+begin_src shell
+./node_modules/.bin/tsc
+#+end_src
+
+** tslint
+:PROPERTIES:
+:CUSTOM_ID: tslint
+:END:
+#+begin_src shell
+yarn add tslint --dev
+./node_modules/.bin/tslint --init
+#+end_src
+
+** change the tslint.json file
+:PROPERTIES:
+:CUSTOM_ID: change-the-tslint.json-file
+:END:
+the tslint.json file before
+
+#+begin_src typescript
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {},
+  "rulesDirectory": []
+}
+#+end_src
+
+edit the file to be:
+
+#+begin_src typescript
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "eofline": false,
+        "quotemark": [
+            true,
+            "single"
+        ]
+    },
+    "rulesDirectory": []
+}
+#+end_src
+
+** use the tslint-config-airbnb
+:PROPERTIES:
+:CUSTOM_ID: use-the-tslint-config-airbnb
+:END:
+#+begin_src shell
+yarn add tslint-config-airbnb --dev
+#+end_src
+
+and edit the tslint.json to be:
+
+#+begin_src typescript
+{
+    "defaultSeverity": "error",
+    "extends": "tslint-config-airbnb",
+    "jsRules": {},
+    "rules": {
+        "eofline": false
+    },
+    "rulesDirectory": []
+}
+#+end_src
+
+** gts
+:PROPERTIES:
+:CUSTOM_ID: gts
+:END:
+#+begin_src shell
+yarn add gts --dev
+./node_modules/.bin/gts init
+./node_modules/.bin/gts check index.ts
+./node_modules/.bin/gts check one.ts two.ts three.ts
+./node_modules/.bin/gts check *.ts
+#+end_src
+
+the gts will regenerate the =package.json= file, and reinstall the
+packages:
+
+#+begin_src shell
+yarn
+#+end_src
+
+and you can also change the tslint.json
+
+#+begin_src typescript
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "./node_modules/gts/tslint.json"
+  ],
+  "jsRules": {},
+  "rules": {},
+  "rulesDirectory": []
+}
+#+end_src
+
+** general development step by step
+:PROPERTIES:
+:CUSTOM_ID: general-development-step-by-step
+:END:
+#+begin_src shell
+tsc
+node output/index.js
+#+end_src
+
+** add types example
+:PROPERTIES:
+:CUSTOM_ID: add-types-example
+:END:
+#+begin_src shell
+yarn add lowdb @types/lowdb
+#+end_src
+
+** allowJs
+:PROPERTIES:
+:CUSTOM_ID: allowjs
+:END:
+#+begin_src javascript
+{
+    "compilerOptions": {
+    ...
+    "allowJs": true,
+    "checkJs": true
+    ...
+    }
+}
+#+end_src

@@ -1,0 +1,86 @@
+* postgresql sql command
+:PROPERTIES:
+:CUSTOM_ID: postgresql-sql-command
+:END:
+** describe
+:PROPERTIES:
+:CUSTOM_ID: describe
+:END:
+#+begin_src sql
+SELECT
+   COLUMN_NAME
+FROM
+   information_schema.COLUMNS
+WHERE
+   TABLE_NAME = 'city';
+#+end_src
+
+copy from
+[[http://www.postgresqltutorial.com/postgresql-describe-table/][PostgreSQL
+Describe Table]]
+
+** with query
+:PROPERTIES:
+:CUSTOM_ID: with-query
+:END:
+see [[https://www.postgresql.org/docs/current/queries-with.html][Common
+Table Expressions]] see
+[[https://academy.vertabelo.com/blog/get-to-know-the-power-of-sql-recursive-queries/][Get
+to Know the Power of SQL Recursive Queries]] see
+[[https://academy.vertabelo.com/blog/do-it-in-sql-recursive-tree-traversal/][Do
+It in SQL: Recursive Tree Traversal]] see
+[[https://elixirforum.com/t/ecto-preload-for-tag-has-many-tags/4323][Ecto
+preload for tag has_many tags]] see
+[[https://www.technobytz.com/closure_table_store_hierarchical_data.html][Closure
+Table -- Store Hierarchical Data Seamlessly | PostgreSQL]]
+
+** check a table exist
+:PROPERTIES:
+:CUSTOM_ID: check-a-table-exist
+:END:
+#+begin_src sql
+SELECT EXISTS (
+   SELECT 1
+   FROM   information_schema.tables
+   WHERE  table_schema = 'schema_name'
+   AND    table_name = 'table_name'
+   );
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/20582500/how-to-check-if-a-table-exists-in-a-given-schema][How
+to check if a table exists in a given schema]]
+
+** alter sequence
+:PROPERTIES:
+:CUSTOM_ID: alter-sequence
+:END:
+#+begin_src sql
+ALTER SEQUENCE product_id_seq RESTART WITH 1453
+#+end_src
+
+=product= is the table name copy from
+[[https://stackoverflow.com/questions/5342440/reset-auto-increment-counter-in-postgres][Reset
+auto increment counter in postgres]]
+
+** ERROR: column c.relhasoids does not exist
+:PROPERTIES:
+:CUSTOM_ID: error-column-c.relhasoids-does-not-exist
+:END:
+the client and server version should be the same, the 12 version.
+
+#+begin_src shell
+docker exec -it postgres_container_name psql your_connection_string
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/58461178/how-to-fix-error-column-c-relhasoids-does-not-exist-in-postgres][How
+to fix "ERROR: column c.relhasoids does not exist" in Postgres?]]
+
+** change schema
+:PROPERTIES:
+:CUSTOM_ID: change-schema
+:END:
+#+begin_src sql
+set search_path to schema1, schema2;
+#+end_src

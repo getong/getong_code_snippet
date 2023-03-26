@@ -1,0 +1,102 @@
+* rust vector type
+:PROPERTIES:
+:CUSTOM_ID: rust-vector-type
+:END:
+** with_capacity
+:PROPERTIES:
+:CUSTOM_ID: with_capacity
+:END:
+#+begin_src rust
+let mut v = Vec::with_capacity(2);
+assert_eq!(v.len(), 0);
+assert_eq!(v.capacity(), 2);
+
+// initialize the four elements
+let v1 = vec![1,2,3,4];
+// initialize 10 elements, each element is 0
+let v2 = vec![0;10];
+println!("{}", v1);
+println!("{}", v2);
+#+end_src
+
+** insert
+:PROPERTIES:
+:CUSTOM_ID: insert
+:END:
+#+begin_src rust
+v.insert(3, 35); // insert the index 3 position with the value 35
+#+end_src
+
+** remove
+:PROPERTIES:
+:CUSTOM_ID: remove
+:END:
+#+begin_src rust
+v.remove(1); // remove the second element
+#+end_src
+
+** pop
+:PROPERTIES:
+:CUSTOM_ID: pop
+:END:
+#+begin_src rust
+assert_eq!(v.pop(), Some(35));
+#+end_src
+
+** swap_remove
+:PROPERTIES:
+:CUSTOM_ID: swap_remove
+:END:
+#+begin_src rust
+v.swap_remove(1);
+std::mem::replace(&mut v[2], 123);
+#+end_src
+
+** get is just like [], but return Result type
+:PROPERTIES:
+:CUSTOM_ID: get-is-just-like-but-return-result-type
+:END:
+#+begin_src rust
+assert_eq!(v.get(0), Some(1));
+assert_eq!(v[0], 1);
+#+end_src
+
+** slice.to_vec() method
+:PROPERTIES:
+:CUSTOM_ID: slice.to_vec-method
+:END:
+#+begin_src rust
+fn fill_vec(vec: &Vec<i32>) -> Vec<i32> {
+    let mut vec: Vec<i32> = vec.to_vec();
+
+    vec.push(22);
+    vec.push(44);
+    vec.push(66);
+
+    vec
+#+end_src
+
+** multi dimansion vector
+:PROPERTIES:
+:CUSTOM_ID: multi-dimansion-vector
+:END:
+#+begin_src rust
+let mut x = [[[23; 4]; 8]; 15];
+x[14][7][3] = 56;
+print!("{}, {}", x[0][0][0], x[14][7][3]);
+#+end_src
+
+Actually, only the usize type is allowed as an index of an array.
+
+** as char
+:PROPERTIES:
+:CUSTOM_ID: as-char
+:END:
+#+begin_src rust
+for n in 32..127 {
+println!("{}: [{}]", n, n as u8 as char);
+}
+for n in 160..256 {
+println!("{}: [{}]", n, n as u8 as char);
+}
+#+end_src

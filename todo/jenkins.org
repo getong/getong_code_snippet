@@ -1,0 +1,5 @@
+* jenkins
+:PROPERTIES:
+:CUSTOM_ID: jenkins
+:END:
+- [ ] jenkins installation with docker

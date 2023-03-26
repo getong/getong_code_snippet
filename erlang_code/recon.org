@@ -1,0 +1,19 @@
+* recon
+:PROPERTIES:
+:CUSTOM_ID: recon
+:END:
+** add recon to rebar.config
+:PROPERTIES:
+:CUSTOM_ID: add-recon-to-rebar.config
+:END:
+#+begin_src erlang
+{recon, "2.5.2"}
+#+end_src
+
+** get the pid info
+:PROPERTIES:
+:CUSTOM_ID: get-the-pid-info
+:END:
+#+begin_src erlang
+recon:info(Pid).
+#+end_src

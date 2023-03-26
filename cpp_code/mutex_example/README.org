@@ -1,0 +1,8 @@
+* mutex example
+:PROPERTIES:
+:CUSTOM_ID: mutex-example
+:END:
+#+begin_src shell
+g++ -std=c++0x -pthread mutex.cpp -o mutex
+./mutex
+#+end_src

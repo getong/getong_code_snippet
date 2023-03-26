@@ -1,0 +1,27 @@
+* manjaro
+:PROPERTIES:
+:CUSTOM_ID: manjaro
+:END:
+** manjaro installation
+:PROPERTIES:
+:CUSTOM_ID: manjaro-installation
+:END:
+copy from [[https://segmentfault.com/a/1190000022575018][linux 发行版
+manjaro 安装指南]] copy from
+[[https://zhuanlan.zhihu.com/p/64799118][Manjaro-GNOME的安装与配置]]
+
+#+begin_example
+$ sudo pacman -Syy
+$ sudo pacman-mirrors -i -c China -m rank
+$ sudo pacman -Syyu
+
+vim /etc/pacman.conf
+-------
+[archlinuxcn]
+SigLevel = Optional TrustedOnly
+Server =https://mirrors.ustc.edu.cn/archlinuxcn/$arch
+
+$ sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
+
+$ sudo pacman -S typora
+#+end_example

@@ -1,0 +1,5 @@
+* openstack
+:PROPERTIES:
+:CUSTOM_ID: openstack
+:END:
+- [ ] installation

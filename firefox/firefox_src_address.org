@@ -1,0 +1,5 @@
+* firefox source archive address
+:PROPERTIES:
+:CUSTOM_ID: firefox-source-archive-address
+:END:
+[[https://archive.mozilla.org/pub/firefox/releases/][firefox]]

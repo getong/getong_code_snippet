@@ -1,0 +1,58 @@
+* debug linux kernel shutdown
+:PROPERTIES:
+:CUSTOM_ID: debug-linux-kernel-shutdown
+:END:
+** Check which processes are causing long shutdown in Linux
+:PROPERTIES:
+:CUSTOM_ID: check-which-processes-are-causing-long-shutdown-in-linux
+:END:
+
+#+begin_quote
+
+#+begin_quote
+
+#+begin_quote
+When you shut down your Linux system, it sends the sigterm and politely
+asks the running processes to stop. Some processes misbehave and they
+ignore the sigterm and keep on running. This could cause a delay to the
+shutdown process as your system will wait for the running processes to
+stop for a predefined time period. After this time period, it sends the
+kill signal to force stop all the remaining running processes and shuts
+down the system. I recommend reading about sigterm vs sigkill to
+understand the difference.
+
+#+end_quote
+
+#+end_quote
+
+#+end_quote
+
+#+begin_src shell
+journalctl -rb -1
+#+end_src
+
+copy from [[https://itsfoss.com/long-shutdown-linux/][Investigate and
+Fix Long Shutdown Time in Linux]]
+
+** 
+:PROPERTIES:
+:CUSTOM_ID: section
+:END:
+#+begin_src shell
+who -b
+
+journalctl --list-boots
+
+journalctl -b -1 -n
+#+end_src
+
+copy from [[https://geekflare.com/check-linux-reboot-reason/][How to
+Find Linux Reboot Reason?]]
+
+** halt
+:PROPERTIES:
+:CUSTOM_ID: halt
+:END:
+You can do (sudo) =halt= instead of =poweroff= copy from
+[[https://bbs.archlinux.org/viewtopic.php?id=261086][Kernel 5.9.11
+Shutdown]]

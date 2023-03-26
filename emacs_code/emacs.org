@@ -1,0 +1,248 @@
+* emacs
+:PROPERTIES:
+:CUSTOM_ID: emacs
+:END:
+** case
+:PROPERTIES:
+:CUSTOM_ID: case
+:END:
+#+begin_src emacs-lisp
+M-l
+Convert following word to lower case (downcase-word).
+M-u
+Convert following word to upper case (upcase-word).
+M-c
+Capitalize the following word (capitalize-word).
+C-x C-l
+Convert region to lower case (downcase-region).
+C-x C-u
+Convert region to upper case (upcase-region).
+#+end_src
+
+copy from
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Case.html][Case
+Conversion Commands]]
+
+** jump to the matched parenthesis(bracket)
+:PROPERTIES:
+:CUSTOM_ID: jump-to-the-matched-parenthesisbracket
+:END:
+#+begin_example
+C-M-n,C-M-p
+#+end_example
+
+copy from
+[[https://bbs.csdn.net/topics/70029649][请问emacs中如何跳转到和光标所在括号配对的括号处？]]
+
+** coding system
+:PROPERTIES:
+:CUSTOM_ID: coding-system
+:END:
+#+begin_src emacs-lisp
+m-x revert-buffer-with-coding-system
+utf-8
+#+end_src
+
+change the coding headline of the file:
+
+#+begin_example
+%% -*- coding: utf-8 -*-
+#+end_example
+
+add the following into the ~/.emacs.d/init.el
+
+#+begin_src emacs-lisp
+(set-default-coding-systems 'utf-8)
+#+end_src
+
+copy from
+[[https://www.masteringemacs.org/article/working-coding-systems-unicode-emacs][Working
+with Coding Systems and Unicode in Emacs]]
+
+** ansi-term mode
+:PROPERTIES:
+:CUSTOM_ID: ansi-term-mode
+:END:
+
+#+begin_quote
+
+#+begin_quote
+
+#+begin_quote
+You may want to simply switch between character mode and line mode while
+using the terminal. C-c C-j will run term-line-mode, which treats the
+terminal buffer more like a normal text-buffer in which you can move the
+cursor and yank text. You can switch back to character mode by running
+term-char-mode with C-c C-k.
+
+#+end_quote
+
+#+end_quote
+
+#+end_quote
+
+copy from
+[[https://stackoverflow.com/questions/2886184/copy-paste-in-emacs-ansi-term-shell][Copy/Paste
+in emacs ansi-term shell]]
+
+** emacs ediff
+:PROPERTIES:
+:CUSTOM_ID: emacs-ediff
+:END:
+#+begin_src shell
+git clone https://github.com/paulotome/emacstool /tmp/emacstool
+cd /tmp/emacstool
+sudo mv ediff.sh /usr/local/bin/ediff.sh
+
+## change the ediff.sh
+## _EMACSCLIENTOPTS="-nw -t"
+
+sudo chmod +x /usr/local/bin/ediff.sh
+#+end_src
+
+** font
+:PROPERTIES:
+:CUSTOM_ID: font
+:END:
+
+#+begin_quote
+
+#+begin_quote
+
+#+begin_quote
+Global Fonts, .Xresources, and Emacs Daemon I found that the only way to
+set fonts so that they remain consistent across emacs -nw,
+emacs23(-gtk), emacsclient -t, emacsclient -c, was to declare them in
+.Xresources and .emacs. But the declarations can't conflict with each
+other. Otherwise, emacs --daemon complains. It doesn't like
+(set-face-attribute 'default nil :font FONT) and the like. For instance,
+to use Terminus, 9 pixel size across the board, I needed to insert
+
+#+end_quote
+
+#+end_quote
+
+#+end_quote
+
+Emacs.font: Terminus-9
+
+(set-default-font "Terminus-9")
+
+in my ~/.Xresources and ~/.emacs, respectively.
+
+copy from [[https://www.emacswiki.org/emacs/SetFonts][Set Fonts]]
+
+** emacs and rust
+:PROPERTIES:
+:CUSTOM_ID: emacs-and-rust
+:END:
+see
+[[https://stackoverflow.com/questions/72601990/how-to-show-suggestions-for-yasnippets-when-using-eglot][How
+to show suggestions for YASnippets when using eglot]] also see
+[[https://github.com/granddaifuku/.emacs.d][emacs.d]]
+
+** emacs-plus
+:PROPERTIES:
+:CUSTOM_ID: emacs-plus
+:END:
+#+begin_src shell
+brew tap d12frosted/emacs-plus
+brew install emacs-plus
+ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications
+#+end_src
+
+copy from
+[[https://www.sheerwill.live/posts/main/20220723211325-vanilla_emacs_with_purcell/][Vanilla
+Emacs with Purcell]] also see
+[[https://github.com/d12frosted/homebrew-emacs-plus][Emacs Plus]]
+
+** emacs vterm type escape key
+:PROPERTIES:
+:CUSTOM_ID: emacs-vterm-type-escape-key
+:END:
+#+begin_src emacs-lisp
+;; M-:
+(vterm-send-key "<escape>")
+#+end_src
+
+copy from [[https://github.com/akermu/emacs-libvterm/issues/256][forward
+esc to vterm]]
+
+** before-save-hook, after-save-hook
+:PROPERTIES:
+:CUSTOM_ID: before-save-hook-after-save-hook
+:END:
+#+begin_src emacs-lisp
+C-h v before-save-hook
+C-h v after-save-hook
+#+end_src
+
+It can also check out by undo-tree package. after-save-hook will do
+twice saving, while before-save-hook only does once saveing.
+
+** Migrating to a custom-file-less setup
+:PROPERTIES:
+:CUSTOM_ID: migrating-to-a-custom-file-less-setup
+:END:
+Answer 1: use-package emacs
+
+#+begin_src emacs-lisp
+   (use-package emacs
+      :straight (:type built-in)
+      :custom
+;; for example:
+      (backup-directory-alist '((".*" . "~/emacs/.emacs.d/temporary_files"))))
+#+end_src
+
+Answer 2: :custom-face
+
+#+begin_src emacs-lisp
+:custom-face
+(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "ADBO" :family "Source Code Pro"))))
+#+end_src
+
+The Final Piece: telling "no custom file"
+
+#+begin_src emacs-lisp
+(use-package cus-edit+
+  :defer t
+  :custom
+  (custom-file null-device "Don't store customizations"))
+#+end_src
+
+copy from
+[[https://tech.toryanderson.com/2020/11/13/migrating-to-a-custom-file-less-setup/][Migrating
+to a custom-file-less setup]] also see
+[[https://www.reddit.com/r/emacs/comments/js9r52/migrating_to_a_customfileless_setup/][Migrating
+to a custom-file-less setup]]
+
+** projectile
+:PROPERTIES:
+:CUSTOM_ID: projectile
+:END:
+使用projectile管理工程的方法很简单，只需要在工程的根目录下创建一个空白的.projectile文件即可。
+
+#+begin_src shell
+touch .projectile
+#+end_src
+
+copy from
+[[https://blog.51cto.com/greyzhang/3006231][Emacs-209-使用projectile管理工程]]
+
+** emacs, how to paste text in the search minibuffer
+:PROPERTIES:
+:CUSTOM_ID: emacs-how-to-paste-text-in-the-search-minibuffer
+:END:
+M-y key short, which will paste the text in the search minibuffer
+
+#+begin_example
+This seems a bit idiosincratic, in emacs the way to paste (yank) text in the search minibuffer is doing M-y not C-y (that is Meta-y not Control-y, as is the default way for all other matters)
+It’s funny that I didn’t realize something so basic until now. I don’t know what the reason might be, but this is still the way at least in emacs 23.1.91
+(R. Stallman answered the same question in 2005 here at http://www.mail-archive.com/emacs-pretest-bug@gnu.org/msg03693.html)
+
+UPDATE: maybe worth pointing that when editing a search (M-E) you need to use the canonical C-y to yank instead of M-y as it is the case in the search
+#+end_example
+
+copy from
+[[https://ignaciopp.wordpress.com/2010/12/02/emacs-how-to-paste-text-in-the-search-minibuffer/][emacs,
+how to paste text in the search minibuffer]]

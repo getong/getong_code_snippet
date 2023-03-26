@@ -1,0 +1,36 @@
+* riak_ensemble_peer_worker
+:PROPERTIES:
+:CUSTOM_ID: riak_ensemble_peer_worker
+:END:
+** communicate with ets table
+:PROPERTIES:
+:CUSTOM_ID: communicate-with-ets-table
+:END:
+#+begin_src erlang
+pause_workers(_Workers, ETS) ->
+    ets:insert(ETS, {paused, true}),
+        ok.
+
+unpause_workers(Workers, ETS) ->
+    ets:delete(ETS, paused),
+    _ = [Pid ! unpause || Pid <- Workers],
+    ok.
+#+end_src
+
+** only run Fun, not know of what the Fun is
+:PROPERTIES:
+:CUSTOM_ID: only-run-fun-not-know-of-what-the-fun-is
+:END:
+#+begin_src erlang
+loop(ETS) ->
+    receive
+        {async, Fun} ->
+            maybe_pause(ETS),
+            Fun();
+        {'DOWN', _, _, _, _} ->
+            exit(normal);
+        _ ->
+            ok
+    end,
+    ?MODULE:loop(ETS).
+#+end_src

@@ -1,0 +1,8 @@
+* pthread example
+:PROPERTIES:
+:CUSTOM_ID: pthread-example
+:END:
+#+begin_src shell
+g++ -std=c++0x -pthread pthread.cpp -o pthread
+./pthread
+#+end_src

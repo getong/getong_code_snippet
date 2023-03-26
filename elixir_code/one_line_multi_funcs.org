@@ -1,0 +1,7 @@
+* call multi funcs on one line
+:PROPERTIES:
+:CUSTOM_ID: call-multi-funcs-on-one-line
+:END:
+#+begin_example
+a(); b(); c()
+#+end_example

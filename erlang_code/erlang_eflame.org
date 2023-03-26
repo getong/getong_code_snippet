@@ -1,0 +1,9 @@
+* erlang eflame
+:PROPERTIES:
+:CUSTOM_ID: erlang-eflame
+:END:
+add this to rebar.config
+
+#+begin_src shell
+ {eflame, {git, "https://github.com/slfritchie/eflame.git", {branch, "master"}}}
+#+end_src

@@ -1,0 +1,26 @@
+* rust distributed framework
+:PROPERTIES:
+:CUSTOM_ID: rust-distributed-framework
+:END:
+[[https://github.com/apache/arrow-datafusion][arrow-datafusion]]
+[[https://github.com/infinyon/fluvio][fluvio]]
+[[https://github.com/tikv/tikv][tikv]]
+[[https://github.com/rust-crdt/rust-crdt][rust-crdt]]
+[[https://github.com/datafuselabs/databend][databend]]
+[[https://github.com/libp2p/rust-libp2p][rust-libp2p]]
+[[https://github.com/vectordotdev/vector][Vector]]
+[[https://github.com/BinChengZhao/delicate][delicate]]
+[[https://github.com/eclipse-zenoh/zenoh][zenoh]]
+[[https://github.com/tensorbase/tensorbase][tensorbase]]
+[[https://github.com/znx3p0/canary][canary]]
+[[https://github.com/apache/arrow-ballista][arrow-ballista]]
+[[https://github.com/quickwit-oss/quickwit][quickwit]]
+[[https://github.com/mozilla/sccache][sccache]]
+[[https://github.com/holochain/holochain][holochain]]
+[[https://github.com/stateright/stateright][stateright]]
+[[https://github.com/quickwit-oss/chitchat][chitchat]]
+
+** use with kubernetes
+:PROPERTIES:
+:CUSTOM_ID: use-with-kubernetes
+:END:

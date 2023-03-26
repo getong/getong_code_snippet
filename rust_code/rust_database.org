@@ -1,0 +1,27 @@
+* rust database
+:PROPERTIES:
+:CUSTOM_ID: rust-database
+:END:
+copy from [[https://morioh.com/p/2fee088c9750][10 Popular Rust Libraries
+for Database]]
+
+[[https://github.com/datafuselabs/databend][databend]]
+[[https://github.com/skytable/skytable][skytable]]
+[[https://github.com/lucid-kv/lucid][lucid]]
+[[https://github.com/MaterializeInc/materialize][materialize]]
+[[https://github.com/mit-pdos/noria][noria]]
+[[https://github.com/paritytech/parity-db][parity-db]]
+[[https://github.com/PumpkinDB/PumpkinDB][PumpkinDB]]
+[[https://github.com/qdrant/qdrant][qdrant]]
+[[https://github.com/risingwavelabs/risingwave][risingwave]]
+[[https://github.com/surrealdb/surrealdb][surrealdb]]
+[[https://github.com/Qovery/Replibyte][Replibyte]]
+[[https://github.com/neondatabase/neon][neon]]
+[[https://github.com/CeresDB/ceresdb][ceresdb]]
+[[https://github.com/indradb/indradb][indradb]]
+[[https://github.com/cswinter/LocustDB][LocustDB]]
+[[https://github.com/cnosdb/cnosdb][cnosdb]]
+[[https://github.com/engula/engula][engula]]
+[[https://github.com/lnx-search/lnx][lnx]]
+[[https://github.com/meilisearch/meilisearch][meilisearch]]
+[[https://github.com/quickwit-oss/quickwit][quickwit]]

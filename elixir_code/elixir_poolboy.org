@@ -1,0 +1,7 @@
+* elixir poolboy
+:PROPERTIES:
+:CUSTOM_ID: elixir-poolboy
+:END:
+the poolboy might be the best pool library in elixir, the
+[[https://elixirschool.com/en/lessons/libraries/poolboy/][Poolboy]]
+might be help.

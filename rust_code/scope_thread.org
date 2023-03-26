@@ -1,0 +1,50 @@
+* rust scope thread
+:PROPERTIES:
+:CUSTOM_ID: rust-scope-thread
+:END:
+** data structure
+:PROPERTIES:
+:CUSTOM_ID: data-structure
+:END:
+#+begin_src rust
+pub struct Scope<'scope, 'env: 'scope> {
+  data: Arc<ScopeData>,
+  scope: PhantomData<&'scope mut &'scope ()>,
+  env: PhantomData<&'env mut &'env ()>,
+}
+
+
+pub(super) struct ScopeData {
+  num_running_threads: AtomicUsize,
+  a_thread_panicked: AtomicBool,
+  main_thread: Thread,
+}
+#+end_src
+
+usage:
+
+#+begin_src rust
+let scope = Scope {
+  data: Arc::new(ScopeData {
+    num_running_threads: AtomicUsize::new(0),
+    main_thread: current(),
+    a_thread_panicked: AtomicBool::new(false),
+  }),
+  env: PhantomData,
+  scope: PhantomData,
+};
+
+
+while scope.data.num_running_threads.load(Ordering::Acquire) != 0 {
+  park();
+}
+
+// Book-keeping so the scope knows when it's done.
+if let Some(scope) = &self.scope {
+  scope.decrement_num_running_threads(unhandled_panic);
+}
+#+end_src
+
+copy from
+[[https://medium.com/@KevinBGreene/async-programming-in-rust-part-2-diving-into-scoped-threads-50aace437756][Async
+Programming in Rust --- Part 2: Scoped Threads]]

@@ -1,0 +1,19 @@
+* rust io
+:PROPERTIES:
+:CUSTOM_ID: rust-io
+:END:
+** io module
+:PROPERTIES:
+:CUSTOM_ID: io-module
+:END:
+#+begin_src rust
+use std::io;
+
+
+let stdin = io::stdin();
+let reader = stdin.lock();
+for line_ in reader.line() {
+    let line = line_.unwrap();
+    println!("line is {}", line);
+}
+#+end_src

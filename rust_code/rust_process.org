@@ -1,0 +1,205 @@
+* rust process
+:PROPERTIES:
+:CUSTOM_ID: rust-process
+:END:
+** process example
+:PROPERTIES:
+:CUSTOM_ID: process-example
+:END:
+#+begin_example
+use std::process::Command;
+
+fn main() {
+    let mut p = Command::new("../sub/target/debug/sub.exe").spawn().unwrap();
+    p.wait().unwrap();
+}
+
+
+use std::thread::sleep;
+use std::time::Duration;
+use std::process::Command;
+
+fn main() {
+    let mut p = Command::new("../sub/target/debug/sub.exe").spawn().unwrap();
+    loop {
+        let status = p.try_wait().unwrap();
+        match status {
+            Some(status) => {
+                if status.success() {
+                    println!("sub process over");
+
+                } else {
+                    println!("sub process error");
+                }
+                break;
+            }
+
+            None => {
+                sleep(Duration::from_secs(1));
+                continue;
+            }
+        }
+    }
+}
+
+
+
+use std::env::args;
+use std::thread::sleep;
+use std::time::Duration;
+
+fn main() {
+    println!("Hello, world!");
+    let mut args = args();
+    let secs = args.nth(1).unwrap().parse::<u64>().unwrap();
+
+    sleep(Duration::from_secs(secs));
+    println!("Bye, world!");
+}
+
+
+
+use std::process::Command;
+
+fn main() {
+    let mut p = Command::new("../sub/target/debug/sub.exe").arg("5").spawn().unwrap();
+    p.wait().unwrap();
+}
+
+
+use std::io;
+use std::env::args;
+
+fn main() {
+    println!("Hello, world!");
+    let mut args = args();
+    let count = args.nth(1).unwrap().parse::<u64>().unwrap();
+    let mut index  = 0;
+    let stdin = io::stdin();    // 打开标准输入
+    while index < count {
+        let mut s = String::new();
+        stdin.read_line(&mut s).unwrap();   //  读取标准输入中的一行
+        println!("{}", s.trim());   // trim掉最后的\n
+
+        index += 1;
+    }
+    println!("Bye, world!");
+}
+
+
+
+use std::process::{Command, Stdio};
+use std::io::{BufRead, Write, BufReader};
+
+fn main() {
+    // 消息数组
+    let msglist = ["msg1", "msg2", "msg3", "msg4", "msg5"];
+
+    // 启动子进程
+    let mut p = Command::new("../sub/target/debug/sub.exe")
+        .arg(msglist.len().to_string()) // 传递消息的个数
+        .stdin(Stdio::piped())  // 将子进程的标准输入重定向到管道
+        .stdout(Stdio::piped()) // 将子进程的标准输出重定向到管道
+        .spawn()
+        .unwrap();
+
+    let p_stdin = p.stdin.as_mut().unwrap();
+    let mut p_stdout = BufReader::new(p.stdout.as_mut().unwrap());
+    let mut line = String::new();
+
+    // 接收Hello world
+    p_stdout.read_line(&mut line).unwrap();
+    println!("{}", line);
+
+    // 循化发送消息
+    for msg in msglist.iter() {
+        // 发送消息
+        println!("write to stdid:{}", msg);
+        p_stdin.write(msg.as_bytes()).unwrap();
+        p_stdin.write("\n".as_bytes()).unwrap();    // 发送\n，子进程的read_line才会响应
+
+        // 接收消息
+        line.clear();   // 需要清空，否则会保留上次的结果
+        p_stdout.read_line(&mut line).unwrap();
+        println!("read from stdout:{}", line);
+    }
+
+    // 接收Bye world
+    line.clear();
+    p_stdout.read_line(&mut line).unwrap();
+    println!("{}", line);
+
+    // 等待子进程结束
+    p.wait().unwrap();
+}
+#+end_example
+
+copy from
+[[https://blog.csdn.net/zhmh326/article/details/108485752][Rust的并发编程（一）多进程并发]]
+
+** std::hint::spin_loop()
+:PROPERTIES:
+:CUSTOM_ID: stdhintspin_loop
+:END:
+Emits a machine instruction to signal the processor that it is running
+in a busy-wait spin-loop ("spin lock").
+
+Upon receiving the spin-loop signal the processor can optimize its
+behavior by, for example, saving power or switching hyper-threads.
+
+This function is different from thread::yield_now which directly yields
+to the system's scheduler, whereas spin_loop does not interact with the
+operating system.
+
+A common use case for spin_loop is implementing bounded optimistic
+spinning in a CAS loop in synchronization primitives. To avoid problems
+like priority inversion, it is strongly recommended that the spin loop
+is terminated after a finite amount of iterations and an appropriate
+blocking syscall is made.
+
+Note: On platforms that do not support receiving spin-loop hints this
+function does not do anything at all.
+
+#+begin_src rust
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+use std::{hint, thread};
+
+// A shared atomic value that threads will use to coordinate
+let live = Arc::new(AtomicBool::new(false));
+
+// In a background thread we'll eventually set the value
+let bg_work = {
+    let live = live.clone();
+    thread::spawn(move || {
+        // Do some work, then make the value live
+        do_some_work();
+        live.store(true, Ordering::Release);
+    })
+};
+
+// Back on our current thread, we wait for the value to be set
+while live.load(Ordering::Acquire) {
+    // The spin loop is a hint to the CPU that we're waiting, but probably
+    // not for very long
+    hint::spin_loop();
+}
+
+// The value is now set
+do_some_work();
+bg_work.join()?;
+#+end_src
+
+copy from
+[[https://doc.rust-lang.org/std/hint/fn.spin_loop.html][Function
+std::hint::spin_loop]]
+
+** get the current process id
+:PROPERTIES:
+:CUSTOM_ID: get-the-current-process-id
+:END:
+#+begin_src rust
+use std::process;
+
+let pid = process::id();
+#+end_src

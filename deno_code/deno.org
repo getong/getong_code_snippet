@@ -1,0 +1,46 @@
+* deno
+:PROPERTIES:
+:CUSTOM_ID: deno
+:END:
+** installation
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
+#+begin_src shell
+## linux
+curl -fsSL https://deno.land/x/install/install.sh | sh
+## macos
+brew install deno
+#+end_src
+
+** example
+:PROPERTIES:
+:CUSTOM_ID: example
+:END:
+#+begin_src shell
+deno run https://deno.land/std/examples/welcome.ts
+#+end_src
+
+** migration to deno
+:PROPERTIES:
+:CUSTOM_ID: migration-to-deno
+:END:
+#+begin_src shell
+
+## app.sh
+#!/bin/bash
+deno run -A myCode.ts
+
+pm2 start app.sh
+
+## fmt
+deno fmt
+
+## test
+deno test
+#+end_src
+
+copy from
+[[https://www.infoq.cn/article/IAHih5jdk8vslmaK10s4][手把手教你从 Node
+快速迁移到 Deno]] [[https://aralroca.com/blog/from-node-to-deno][From
+Node to Deno]]

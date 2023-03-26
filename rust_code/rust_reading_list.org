@@ -1,0 +1,33 @@
+* rust reading list
+:PROPERTIES:
+:CUSTOM_ID: rust-reading-list
+:END:
+[[https://www.lpalmieri.com/posts/2020-09-27-zero-to-production-4-are-we-observable-yet/][Are
+we observable yet? An introduction to Rust telemetry]]
+[[https://hirrolot.github.io/posts/rust-is-hard-or-the-misery-of-mainstream-programming.html][Rust
+Is Hard, Or: The Misery of Mainstream Programming]]
+[[https://www.infoq.cn/article/zlk9ri7eZvEvv5Q5spm9][是 Rust
+太难了，还是主流编程本来就这么折磨人？]]
+[[https://fasterthanli.me/articles/the-curse-of-strong-typing][The curse
+of strong typing]]
+[[https://www.thecodedmessage.com/posts/trivia-rust-types/][Trivia About
+Rust Types: An (Authorized) Transcription of Jon Gjengset's Twitter
+Thread]]
+[[https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md][Common
+Rust Lifetime Misconceptions]]
+[[https://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/][why
+async fn in traits are hard]]
+[[https://blog.yoshuawuyts.com/async-cancellation-1/][ASYNC CANCELLATION
+1]]
+[[https://fy.blackhats.net.au/blog/html/2021/11/14/transactional_operations_in_rust.html][Transactional
+Operations in Rust]]
+[[https://fasterthanli.me/articles/the-curse-of-strong-typing][The curse
+of strong typing]]
+[[https://blog.yoshuawuyts.com/async-cancellation-2/][ASYNC CANCELLATION
+II: TIME AND SIGNALS]]
+[[https://haibane-tenshi.github.io/rust-early-and-late-bound-generics/][Obscure
+Rust: early- and late-bound generics in functions]]
+[[https://quickwit.io/blog/chitchat/][Decentralized cluster membership
+in Rust]]
+[[https://smallcultfollowing.com/babysteps/blog/2022/06/13/async-cancellation-a-case-study-of-pub-sub-in-mini-redis/][Async
+cancellation: a case study of pub-sub in mini-redis]]

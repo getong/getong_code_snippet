@@ -1,0 +1,172 @@
+* vagrant
+:PROPERTIES:
+:CUSTOM_ID: vagrant
+:END:
+** vagrant boxes
+:PROPERTIES:
+:CUSTOM_ID: vagrant-boxes
+:END:
+[[https://app.vagrantup.com/boxes/search][Discover Vagrant Boxes]]
+
+** update box
+:PROPERTIES:
+:CUSTOM_ID: update-box
+:END:
+#+begin_src shell
+mkdir centos8
+cd centos8
+vagrant init generic/centos8
+vagrant up
+vagrant box update
+#+end_src
+
+** Vagrant was unable to mount VirtualBox shared folders.
+:PROPERTIES:
+:CUSTOM_ID: vagrant-was-unable-to-mount-virtualbox-shared-folders.
+:END:
+#+begin_src shell
+vagrant plugin install vagrant-vbguest
+vagrant reload
+#+end_src
+
+copy from
+[[https://mecromace.com/articles/2019/11/vagrant-was-unable-mount-virtualbox-shared-folders][Vagrant
+was unable to mount VirtualBox shared folders]]
+
+** vagrant mount usb device
+:PROPERTIES:
+:CUSTOM_ID: vagrant-mount-usb-device
+:END:
+see
+[[https://stackoverflow.com/questions/38956127/usb-device-is-not-visible-inside-vagrant][USB
+device is not visible inside Vagrant]] see
+[[https://code-chronicle.blogspot.com/2014/08/connect-usb-device-through-vagrant.html][Connect
+a Usb device through Vagrant]] see
+[[https://softwaretester.info/category/development/virtualization/][VirtualBox
+USB passthrough]]
+
+commands:
+
+#+begin_src shell
+$ VBoxManage list usbhost
+UUID:               e007f0f3-c498-495a-ac02-d88a92831bfb
+VendorId:           0x0930 (0930)
+ProductId:          0x1407 (1407)
+Revision:           16.117 (16117)
+Port:               3
+USB version/speed:  0/Super
+Manufacturer:       TOSHIBA
+Product:            TransMemory-Ex2
+SerialNumber:       60A44CB464581F40A35A00BB
+Address:            p=0x1407;v=0x0930;s=0x0000003b7c753fcd;l=0x01133000
+Current State:      Busy
+#+end_src
+
+Change the following to the =Vagrantfile= file:
+
+#+begin_src shell
+  config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #  vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+    vb.customize ["modifyvm", :id, "--usb", "on"]
+    vb.customize ["modifyvm", :id, "--usbxhci", "on"]
+    vb.customize ["usbfilter", "add", "0",
+                  "--target", :id,
+                  "--manufacturer", "TOSHIBA",
+                  "--name", "toshiba",
+                  "--product", "TransMemory-Ex2"]
+  end
+#+end_src
+
+Then run the virtualbox virtual machine:
+
+#+begin_src shell
+$ vagrant up
+#+end_src
+
+Run into the virtual machine:
+
+#+begin_src shell
+$ vagrant ssh
+$ sudo -i
+# mkdir -p /media/vagrant
+# fdisk -l
+# mount /dev/sdb1 /media/vagrant
+# cp * /vagrant
+# cd
+# umount /media/vagrant
+#+end_src
+
+** virtualbox add vram
+:PROPERTIES:
+:CUSTOM_ID: virtualbox-add-vram
+:END:
+#+begin_src shell
+VBoxManage modifyvm "name_of_vm" --vram 256
+#+end_src
+
+The max vram is 256m.
+
+** VAGRANT_HOME
+:PROPERTIES:
+:CUSTOM_ID: vagrant_home
+:END:
+#+begin_src shell
+export VAGRANT_HOME=/backup/vagrant_boxes
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/10155708/where-does-vagrant-download-its-box-files-to][Where
+does Vagrant download its .box files to?]]
+
+** transfer virtualbox image into vagrant box image
+:PROPERTIES:
+:CUSTOM_ID: transfer-virtualbox-image-into-vagrant-box-image
+:END:
+#+begin_src shell
+vagrant package --base [machine name as it shows in virtual box] --output /Users/myuser/Documents/Workspace/my.box
+
+// copy the box to your remote
+
+vagrant init [machine name as it shows in virtual box] /Users/myuser/Documents/Workspace/my.box
+
+vagrant up
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/20679054/how-to-export-a-vagrant-virtual-machine-to-transfer-it][How
+to export a Vagrant virtual machine to transfer it]]
+
+** package vagrant instance into box
+:PROPERTIES:
+:CUSTOM_ID: package-vagrant-instance-into-box
+:END:
+#+begin_src shell
+// cd vagrant instance directory
+vagrant package
+#+end_src
+
+** get the vagrant box download url link
+:PROPERTIES:
+:CUSTOM_ID: get-the-vagrant-box-download-url-link
+:END:
+for example get the image sakhan/ubuntu1404-contrail-devstack1:
+
+#+begin_src shell
+curl -i -L https://vagrantcloud.com/sakhan/ubuntu1404-contrail-devstack1
+{"description":"Vagrant box having Opencontail + Devstack environment","short_description":"Vagrant box having Opencontail + Devstack environment","name":"sakhan/ubuntu1404-contrail-devstack1","versions":[{"version":"0.0.2","status":"active","description_html":"<p>Vagrant box with opencontrail_devstack version 0.0.2</p>\n","description_markdown":"Vagrant box with opencontrail_devstack version 0.0.2","providers":[{"name":"virtualbox","url":"https://vagrantcloud.com/sakhan/boxes/ubuntu1404-contrail-devstack1/versions/0.0.2/providers/virtualbox.box"}]}]}
+#+end_src
+
+or use the --debug option:
+
+#+begin_src shell
+vagrant box add --debug hashicorp/precise32
+https://atlas.hashicorp.com/hashicorp/boxes/precise32/versions/1.0.0/providers/virtualbox.box
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/28004649/what-is-the-url-to-be-used-in-the-vagrant-box-add-command][What
+is the URL to be used in the vagrant box add command?]]

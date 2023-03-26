@@ -1,0 +1,16 @@
+* chrome
+:PROPERTIES:
+:CUSTOM_ID: chrome
+:END:
+** google translate
+:PROPERTIES:
+:CUSTOM_ID: google-translate
+:END:
+/etc/hosts
+
+#+begin_example
+180.163.151.162 translate.googleapis.com
+#+end_example
+
+copy from [[https://www.v2ex.com/t/883934][translate.google.cn
+似乎准备要关闭了]]

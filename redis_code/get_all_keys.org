@@ -1,0 +1,8 @@
+* get all redis keys
+:PROPERTIES:
+:CUSTOM_ID: get-all-redis-keys
+:END:
+#+begin_example
+# 比较消耗性能
+redis-cli keys '*' > keys.txt
+#+end_example

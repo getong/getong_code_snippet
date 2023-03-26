@@ -1,0 +1,55 @@
+* rust tricks
+:PROPERTIES:
+:CUSTOM_ID: rust-tricks
+:END:
+** Better Looking Numbers
+:PROPERTIES:
+:CUSTOM_ID: better-looking-numbers
+:END:
+#+begin_src rust
+let numberval: u64 = 12_000_000;
+#+end_src
+
+** Swapping
+:PROPERTIES:
+:CUSTOM_ID: swapping
+:END:
+#+begin_src rust
+use std::mem;
+
+let mut x = 5;
+let mut y = 42;
+
+mem::swap(&mut x, &mut y);
+
+assert_eq!(42, x);
+assert_eq!(5, y);
+#+end_src
+
+** drop
+:PROPERTIES:
+:CUSTOM_ID: drop
+:END:
+#+begin_src rust
+let v = vec![1, 2, 3];
+
+drop(v); // explicitly drop the vector
+#+end_src
+
+** Print Debugging
+:PROPERTIES:
+:CUSTOM_ID: print-debugging
+:END:
+#+begin_src rust
+fn foo(n: usize) {
+    if let Some(_) = dbg!(n.checked_sub(4)) {
+        // ...
+    }
+}
+
+foo(3)
+#+end_src
+
+copy from
+[[https://preettheman.medium.com/rust-tricks-i-wish-i-knew-earlier-a39e2c214ecf][Rust
+tricks I wish I knew earlier]]

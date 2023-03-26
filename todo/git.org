@@ -1,0 +1,7 @@
+* git todo
+:PROPERTIES:
+:CUSTOM_ID: git-todo
+:END:
+- [ ] know git command
+- [ ] gitea, gogs, gitlab
+- [X] git stash command

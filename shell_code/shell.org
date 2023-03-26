@@ -1,0 +1,256 @@
+alias mv='mv -i' alias rm='trash-put' alias cp='cp -i' export
+LS_OPTIONS='--color=auto' alias ls='ls
+\(LS_OPTIONS' export PATH=/usr/local/tmux-2.4/bin:\)PATH
+
+* alias fbterm="zsh ~/.background_fbterm /usr/share/images/desktop-base/spacefun-grub-widescreen2.png"
+:PROPERTIES:
+:CUSTOM_ID: alias-fbtermzsh-.background_fbterm-usrshareimagesdesktop-basespacefun-grub-widescreen2.png
+:END:
+tmux_init() { tmux new-session -s "getong" -d #-n "local" 开启一个会话
+tmux new-window #-n "other" 开启一个窗口 tmux -2 attach-session -d #
+tmux -2强制启用256color，连接已开启的tmux }
+
+* 判断是否已有开启的tmux会话，没有则开启
+:PROPERTIES:
+:CUSTOM_ID: 判断是否已有开启的tmux会话没有则开启
+:END:
+if [[
+\((tty) == \/dev\/tty[1-6]* ]]; then  # eval `dbus-launch --auto-syntax`  fcitx > /dev/null 2>&1  if [ -z `ps aux | grep -i tmux | grep -v grep` ]; then  fbterm -s 40 -i fcitx-fbterm -- tmux new-session -s "getong"  else  fbterm -s 40 -i fcitx-fbterm -- tmux attach  fi elif which tmux 2>&1 >/dev/null; then  test -z "\)TMUX”
+&& (tmux attach || tmux_init) fi
+
+alias emacs='emacs -nw'
+
+alias tmux_lock='tmux lock-session'
+
+export PS1=$
+
+* change the man page output
+:PROPERTIES:
+:CUSTOM_ID: change-the-man-page-output
+:END:
+man() { env\\
+LESS_TERMCAP_mb=\((printf "\e[1;31m") \
+ LESS_TERMCAP_md=\)(printf “\e[1;31m") \
+        LESS_TERMCAP_me=$(printf "\e[0m") \
+        LESS_TERMCAP_se=$(printf "\e[0m") \
+        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+        LESS_TERMCAP_ue=$(printf "\e[0m") \
+        LESS_TERMCAP_us=$(printf "\e[1;32m") \
+            man "$@"
+}
+
+# 7z compress
+function 7z_cp() {
+    7z a -p`cat password.txt` -mhe -t7z -m0=lzma2 -mx=0 -mfb=64 -md=32m -ms=on -v100m $1.7z $1 &> /dev/null
+}
+
+# 7z decompress
+function 7z_dc() {
+    7z x $1 &> /dev/null
+}
+
+
+# append absolute path to the filenames
+function get_dir_file() {
+   find $1 -type f
+}
+
+## iperf3
+```
+# iperf3 -s -p 5202
+# iperf3 -c 192.168.89.3 -p 5202
+```
+see [Docker network performance]## iperf3
+
+#+begin_example
+# iperf3 -s -p 5202
+# iperf3 -c 192.168.89.3 -p 5202
+#+end_example
+
+see [[https://jtway.co/docker-network-performance-b95bce32b4b9][Docker
+network performance]]
+
+** Makefile, continue after a command fails
+:PROPERTIES:
+:CUSTOM_ID: makefile-continue-after-a-command-fails
+:END:
+see
+[[https://stackoverflow.com/questions/2670130/make-how-to-continue-after-a-command-fails][Make:
+how to continue after a command fails?]]
+
+#+begin_quote
+
+#+begin_quote
+To ignore errors in a command line, write a - at the beginning of the
+line's text (after the initial tab). The - is discarded before the
+command is passed to the shell for execution.
+
+#+end_quote
+
+#+end_quote
+
+#+begin_quote
+
+#+begin_quote
+For example,
+
+#+end_quote
+
+#+end_quote
+
+#+begin_src shell
+clean:
+  -rm -f *.o
+#+end_src
+
+** ssh-agent and tmux
+:PROPERTIES:
+:CUSTOM_ID: ssh-agent-and-tmux
+:END:
+#+begin_src shell
+# ~/.bashrc
+
+if [ -z "$TMUX" ]; then
+    # we're not in a tmux session
+
+    if [ ! -z "$SSH_TTY" ]; then
+        # We logged in via SSH
+
+        # if ssh auth variable is missing
+        if [ -z "$SSH_AUTH_SOCK" ]; then
+            export SSH_AUTH_SOCK="$HOME/.ssh/.auth_socket"
+        fi
+
+        # if socket is available create the new auth session
+        if [ ! -S "$SSH_AUTH_SOCK" ]; then
+            `ssh-agent -a $SSH_AUTH_SOCK` > /dev/null 2>&1
+            echo $SSH_AGENT_PID > $HOME/.ssh/.auth_pid
+        fi
+
+        # if agent isn't defined, recreate it from pid file
+        if [ -z $SSH_AGENT_PID ]; then
+            export SSH_AGENT_PID=`cat $HOME/.ssh/.auth_pid`
+        fi
+
+        # Add all default keys to ssh auth
+        ssh-add 2>/dev/null
+
+        # start tmux
+        tmux attach
+    fi
+fi
+#+end_src
+
+and append this into ~/.tmux.conf
+
+#+begin_src shell
+# ~/.tmux.conf
+set -g update-environment -r
+#+end_src
+
+copy from
+[[https://development.robinwinslow.uk/2012/07/20/tmux-and-ssh-auto-login-with-ssh-agent-finally/][TMUX
+and SSH auto-login with ssh-agent (finally!)]]
+
+** install multiple languages on travis-ci.org
+:PROPERTIES:
+:CUSTOM_ID: install-multiple-languages-on-travis-ci.org
+:END:
+[[https://stackoverflow.com/questions/27644586/how-to-set-up-travis-ci-with-multiple-languages][How
+to set up Travis CI with multiple languages]]
+
+#+begin_src shell
+matrix:
+  include:
+    - language: python
+      python: 2.7
+      before_script:
+        - cd backend/tests
+      script:
+        - python -m unittest discover
+
+    - language: android
+      dist: trusty
+      jdk: oraclejdk8
+      android:
+        components:
+          - tools
+          - android-25
+          - build-tools-25.0.3
+      before_script:
+        - cd android/AppName
+      script:
+        - ./gradlew build connectedCheck
+
+    - language: objective-c
+      os: osx
+      osx_image: xcode8.3
+      before_script:
+        - cd ios/AppName
+      script:
+        - xcodebuild -workspace AppName.xcworkspace -scheme AppName
+          -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3' build test
+
+notifications:
+  email:
+    - yourname@gmail.com
+#+end_src
+
+or
+
+#+begin_src shell
+before_install:
+  - wget https://raw.githubusercontent.com/creationix/nvm/v0.31.0/nvm.sh -O ~/.nvm/nvm.sh
+  - source ~/.nvm/nvm.sh
+  - nvm install 5 # for Node v5
+  - node --version
+#+end_src
+
+** shell shortcut
+:PROPERTIES:
+:CUSTOM_ID: shell-shortcut
+:END:
+#+begin_example
+in zsh, Alt+w clears all characters before the cursor.
+Ctrl-a Move cursor to beginning of line
+Ctrl-e Move cursor to end of line
+Ctrl-b Move cursor back one word
+Ctrl-f Move cursor forward one word
+Ctrl-w Cut the last word
+Ctrl-k Cut everything after the cursor
+Ctrl-y Paste the last thing to be cut
+Ctrl-_ Undo
+#+end_example
+
+copy from
+[[https://stackoverflow.com/questions/12334526/on-bash-command-line-how-to-delete-all-letters-before-cursor][On
+bash command-line, how to delete all letters before cursor]]
+
+** vterm enable zsh
+:PROPERTIES:
+:CUSTOM_ID: vterm-enable-zsh
+:END:
+#+begin_src shell
+# vterm
+if [[ "$INSIDE_EMACS" = 'vterm' ]] \
+    && [[ -n ${EMACS_VTERM_PATH} ]] \
+    && [[ -f ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+    source ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
+fi
+
+# This speeds up pasting w/ autosuggest
+# https://github.com/zsh-users/zsh-autosuggestions/issues/238#issuecomment-389324292
+pasteinit() {
+  OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+  zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+}
+
+pastefinish() {
+  zle -N self-insert $OLD_SELF_INSERT
+}
+zstyle :bracketed-paste-magic paste-init pasteinit
+zstyle :bracketed-paste-magic paste-finish pastefinish
+
+# https://github.com/zsh-users/zsh-autosuggestions/issues/351
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste)
+#+end_src

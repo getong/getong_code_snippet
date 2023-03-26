@@ -1,0 +1,39 @@
+* compiler parse_transform option
+:PROPERTIES:
+:CUSTOM_ID: compiler-parse_transform-option
+:END:
+** compiler module supoort parse_transform
+:PROPERTIES:
+:CUSTOM_ID: compiler-module-supoort-parse_transform
+:END:
+#+begin_src erlang
+{parse_transform,Module}
+    Causes the parse transformation function Module:parse_transform/2 to be applied to the parsed code before the code is checked for errors.
+#+end_src
+
+The =Module= file must export the =parse_transform= function, with 2
+arguments.
+
+** the abstract_code
+:PROPERTIES:
+:CUSTOM_ID: the-abstract_code
+:END:
+use the compiler option, debug_info and checkout the abstract code of a
+module
+
+#+begin_src erlang
+erlc +debug_info test.erl
+{ok,{_,[{abstract_code,{_,AC}}]}} = beam_lib:chunks(filename:dirname(code:which(test)) ++ "/test.beam",[abstract_code]).
+#+end_src
+
+lager use the parse_transform option too.
+
+** related modules
+:PROPERTIES:
+:CUSTOM_ID: related-modules
+:END:
+#+begin_src erlang
+erl_parse   the erlang parse
+epp    an erlang code preprocessor
+merl    metaprogramming in erlang
+#+end_src

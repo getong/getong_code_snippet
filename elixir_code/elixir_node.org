@@ -1,0 +1,47 @@
+* elixir node
+:PROPERTIES:
+:CUSTOM_ID: elixir-node
+:END:
+** a node
+:PROPERTIES:
+:CUSTOM_ID: a-node
+:END:
+#+begin_example
+iex --sname a
+1> Node.self()
+:b@DebianLighten
+#+end_example
+
+** b node
+:PROPERTIES:
+:CUSTOM_ID: b-node
+:END:
+#+begin_example
+iex --sname b
+iex(b@DebianLighten)1> Node.self()
+:b@DebianLighten
+iex(b@DebianLighten)2>
+#+end_example
+
+** connection
+:PROPERTIES:
+:CUSTOM_ID: connection
+:END:
+#+begin_example
+iex(b@DebianLighten)2> Node.connect :a@DebianLighten
+true
+#+end_example
+
+in a node
+
+#+begin_example
+iex(a@DebianLighten)2> Node.list
+[:b@DebianLighten]
+#+end_example
+
+in b node
+
+#+begin_example
+iex(b@DebianLighten)3> Node.list
+[:a@DebianLighten]
+#+end_example

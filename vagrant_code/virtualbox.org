@@ -1,0 +1,113 @@
+#+begin_quote
+* virtualbox
+:PROPERTIES:
+:CUSTOM_ID: virtualbox
+:END:
+#+end_quote
+
+** Fixing your virtualbox shared folder symlink error
+:PROPERTIES:
+:CUSTOM_ID: fixing-your-virtualbox-shared-folder-symlink-error
+:END:
+windows install virtualbox, and linux guest host has this problem. see
+[[https://ahtik.com/fixing-your-virtualbox-shared-folder-symlink-error/][Fixing
+your virtualbox shared folder symlink error]]
+
+#+begin_src powershell
+cd virtualbox_install_dir
+VBoxManage setextradata YOURVMNAME VBoxInternal2/SharedFoldersEnableSymlinksCreate/YOURSHAREFOLDERNAME 1
+
+VBoxManage getextradata YOURVMNAME enumerate
+#+end_src
+
+** normal user can use the shared folder
+:PROPERTIES:
+:CUSTOM_ID: normal-user-can-use-the-shared-folder
+:END:
+#+begin_src shell
+sudo usermod -aG vboxsf $(whoami)
+#+end_src
+
+** virtualbox can not start on macos 12
+:PROPERTIES:
+:CUSTOM_ID: virtualbox-can-not-start-on-macos-12
+:END:
+Vagrantfile:
+
+#+begin_example
+    config.vm.provider "virtualbox" do |v|
+      v.gui = true
+    end
+#+end_example
+
+network config:
+
+#+begin_src shell
+echo "* 0.0.0.0/0 ::/0" > /usr/local/etc/vbox/networks.conf
+#+end_src
+
+run the command:
+
+#+begin_src shell
+sudo kextload -b org.virtualbox.kext.VBoxDrv
+sudo kextload -b org.virtualbox.kext.VBoxNetFlt
+sudo kextload -b org.virtualbox.kext.VBoxNetAdp
+sudo kextload -b org.virtualbox.kext.VBoxUSB
+#+end_src
+
+copy from
+[[https://apple.stackexchange.com/questions/429609/running-vagrant-via-vagrant-up-on-macos-monterey-12-0-1-fails][Running
+Vagrant via "vagrant up" on macOS Monterey (12.0.1) fails]] copy from
+[[https://stackoverflow.com/questions/69839697/cant-run-virtualbox-after-updating-mac-to-12-0-1-monterey-error-with-host-only][Cant
+run virtualbox after updating mac to 12.0.1 monterey - error with host
+only adapter]]
+
+** start virtualbox machine
+:PROPERTIES:
+:CUSTOM_ID: start-virtualbox-machine
+:END:
+#+begin_src shell
+$ VBoxManage list vms
+
+$ VBoxManage startvm XP --type gui
+
+$ VBoxManage list runningvms # 列出运行中的虚拟机
+$ VBoxManage controlvm XP acpipowerbutton # 关闭虚拟机，等价于点击系统关闭按钮，正常关机
+$ VBoxManage controlvm XP poweroff # 关闭虚拟机，等价于直接关闭电源，非正常关机
+$ VBoxManage controlvm XP pause # 暂停虚拟机的运行
+$ VBoxManage controlvm XP resume # 恢复暂停的虚拟机
+$ VBoxManage controlvm XP savestate # 保存当前虚拟机的运行状态
+$ VBoxManage controlvm XP reset # a cold reboot of the virtual machine
+#+end_src
+
+copy from [[https://kodango.com/use-cli-to-start-vm][使用命令行启动
+VirtualBox 虚拟机]]
+
+** fix install driver error code 2
+:PROPERTIES:
+:CUSTOM_ID: fix-install-driver-error-code-2
+:END:
+Install 6.1.26 iso. It can be download from
+https://download.virtualbox.org/virtualbox/6.1.26/VBoxGuestAdditions_6.1.26.iso .
+copy from
+[[https://linuxmanr4.com/2022/02/17/error-al-instalar-las-guest-additions-en-virtualbox-exit-code-2/][Error
+al instalar las Guest Additions en Virtualbox : Exit code 2]]
+
+** modifymedium
+:PROPERTIES:
+:CUSTOM_ID: modifymedium
+:END:
+#+begin_src shell
+VBoxManage modifymedium imageFile --resize  newSizeMb
+
+// for example, 100Gb disk
+// VBoxManage modifymedium win7.vdi --resize  102400
+
+// or clone it, and modify it
+VBoxManage clonemedium centos7-4G.vmdk centos7-4G.vdi --format VDI
+VBoxManage modifymedium centos7-4G.vdi --resize 10000
+#+end_src
+
+copy from
+[[https://zangchuantao.com/tech-zh/2021/virturalbox-adjust-storage-size/][VirturalBox
+调整虚拟磁盘大小]]

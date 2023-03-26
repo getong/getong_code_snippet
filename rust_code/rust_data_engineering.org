@@ -1,0 +1,16 @@
+* rust data engineering
+:PROPERTIES:
+:CUSTOM_ID: rust-data-engineering
+:END:
+copy from [[https://airbyte.com/blog/rust-for-data-engineering][Will
+Rust Take over Data Engineering?]]
+
+[[https://github.com/apache/arrow-datafusion][DataFusion]]
+[[https://github.com/pola-rs/polars][Polars]]
+[[https://github.com/delta-io/delta-rs][Delta Lake Rust]]
+[[https://github.com/cube-js/cube.js][Cube]]
+[[https://github.com/vectordotdev/vector][Vector.dev]]
+[[https://github.com/roapi/roapi][ROAPI]]
+[[https://github.com/meilisearch/meilisearch][Meilisearch]]
+[[https://github.com/quickwit-oss/tantivy][Tantivy]]
+[[https://github.com/prql/prql][PRQL]]

@@ -1,0 +1,10 @@
+* bevy material
+:PROPERTIES:
+:CUSTOM_ID: bevy-material
+:END:
+[[https://github.com/naia-lib/naia][naia]]
+[[https://github.com/jamescarterbell/bevy_eventwork][bevy_eventwork]]
+[[https://github.com/theon/bevy_tokio_example][bevy_tokio_example]]
+[[https://chadnauseam.com/coding/gamedev/automated-testing-in-bevy/][How
+I learned to love testing game code in bevy]]
+[[https://github.com/Rust-Ninja-Sabi/bevy-nature-of-code][bevy-nature-of-code]]

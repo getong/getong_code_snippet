@@ -1,0 +1,120 @@
+* gpg verify file
+:PROPERTIES:
+:CUSTOM_ID: gpg-verify-file
+:END:
+The =.sig=, =.asc= file is the signature file, use the =gpg= command
+line the verify it. ## get the key
+
+#+begin_example
+gpg --keyserver keyserver.ubuntu.com --recv-keys  03D6E495
+#+end_example
+
+** verify the file
+:PROPERTIES:
+:CUSTOM_ID: verify-the-file
+:END:
+#+begin_example
+gpg --verify julia-0.5.1-full.tar.gz.asc julia-0.5.1-full.tar.gz
+#+end_example
+
+** restart the gpg-agent
+:PROPERTIES:
+:CUSTOM_ID: restart-the-gpg-agent
+:END:
+#+begin_example
+gpgconf --kill gpg-agent
+#+end_example
+
+** gpg
+:PROPERTIES:
+:CUSTOM_ID: gpg
+:END:
+#+begin_example
+## gpg 2.1.17 above, generate a gpg key
+gpg --full-generate-key
+
+gpg --default-new-key-algo rsa4096 --gen-key
+
+## list gpg keys
+gpg --list-secret-keys --keyid-format LONG
+gpg --list-secret-keys
+
+## export key
+gpg --armor --export pub-GPG-KEY-ID
+
+## use below
+gpg --export ${ID} > public.key
+gpg --export-secret-key ${ID} > private.key
+
+## import key
+gpg --import public.key
+gpg --import private.key
+gpg --edit-key {KEY} trust quit
+#+end_example
+
+copy from
+[[https://unix.stackexchange.com/questions/184947/how-to-import-secret-gpg-key-copied-from-one-machine-to-another][How
+to import secret gpg key (copied from one machine to another)?]]
+
+** gpg Inappropriate ioctl for device
+:PROPERTIES:
+:CUSTOM_ID: gpg-inappropriate-ioctl-for-device
+:END:
+#+begin_src shell
+mkdir -p ~/.gnupg/
+echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+echo "use-agent
+pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+#+end_src
+
+copy from
+[[https://blog.csdn.net/wenbo20182/article/details/72850810][gpg:
+签名时失败处理]]
+
+** set the gpg key pasword ttl
+:PROPERTIES:
+:CUSTOM_ID: set-the-gpg-key-pasword-ttl
+:END:
+#+begin_src shell
+echo "default-cache-ttl 36000" >> ~/.gnupg/gpg-agent.conf
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/36847431/remember-gpg-password-when-signing-git-commits][Remember
+GPG password when signing git commits]]
+
+** use console-based prompt and reload gpg setting
+:PROPERTIES:
+:CUSTOM_ID: use-console-based-prompt-and-reload-gpg-setting
+:END:
+copy from
+[[https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords][How
+to force GPG to use console-mode pinentry to prompt for passwords?]]
+
+#+begin_src shell
+echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
+gpg-connect-agent reloadagent /bye
+#+end_src
+
+** delete keys
+:PROPERTIES:
+:CUSTOM_ID: delete-keys
+:END:
+Generally, it can use the command:
+
+#+begin_src shell
+gpg --delete-keys xxxx
+#+end_src
+
+but sometimes, it can be deleted by this command:
+
+#+begin_src shell
+gpg --list-secret-keys --with-keygrip
+gpg-connect-agent "delete_key <keygrip>" /bye
+gpg --list-keys
+gpg --delete-keys xxxxx-keys
+#+end_src
+
+copy from
+[[https://superuser.com/questions/1388426/unable-to-delete-private-subkeys-in-gnupg-if-no-master-key-present][Unable
+to delete private subkeys in GnuPG if no master key present]]

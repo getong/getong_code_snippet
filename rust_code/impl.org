@@ -1,0 +1,12 @@
+* rust impl
+:PROPERTIES:
+:CUSTOM_ID: rust-impl
+:END:
+** the first parameter is self
+:PROPERTIES:
+:CUSTOM_ID: the-first-parameter-is-self
+:END:
+** the :: operator is used by associated function
+:PROPERTIES:
+:CUSTOM_ID: the-operator-is-used-by-associated-function
+:END:

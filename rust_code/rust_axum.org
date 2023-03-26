@@ -1,0 +1,59 @@
+* rust axum
+:PROPERTIES:
+:CUSTOM_ID: rust-axum
+:END:
+** handler
+:PROPERTIES:
+:CUSTOM_ID: handler
+:END:
+#+begin_src rust
+pub struct Core {
+    public_url: Url,
+    secret_key: String,
+    storage: Storage,
+    client: SomeThirdPartyClient,
+}
+
+impl Core {
+    pub async fn create_something(
+        &self,
+        new_something: NewSomething,
+    ) -> Result<Something, BusinessErr> {
+    ...
+}
+#+end_src
+
+Core can be provided to handlers using Extension Layer mechanism like
+this:
+
+#+begin_src rust
+
+...
+let shared_core = Arc::new(core);
+...
+let app = Router::new()
+    .route("/something", post(post_something))
+    ...
+    .layer(AddExtensionLayer::new(shared_core));
+#+end_src
+
+Which in a handler can be declared in parameter list using extension
+extractor:
+
+#+begin_src rust
+async fn post_something(
+    Extension(core): Extension<Arc<Core>>,
+    Json(new_something): Json<NewSomething>,
+) -> impl IntoResponse {
+    core
+        .create_something(new_something)
+        .await
+}
+#+end_src
+
+copy from
+[[https://stackoverflow.com/questions/69415050/how-to-design-the-test-friendly-application-with-rust-axum][How
+to design the test-friendly application with Rust/Axum?]]
+
+also see
+[[https://github.com/launchbadge/realworld-axum-sqlx][realworld-axum-sqlx]]

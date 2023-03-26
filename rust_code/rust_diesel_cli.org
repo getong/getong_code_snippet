@@ -1,0 +1,46 @@
+* rust diesel_cli
+:PROPERTIES:
+:CUSTOM_ID: rust-diesel_cli
+:END:
+** installation
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
+#+begin_src shell
+## debian
+sudo apt-get install libsqlite3-dev postgresql-server-dev-11 postgresql-server-dev-all default-libmysqlclient-dev
+cargo install diesel_cli
+
+## MacOS
+brew install postgresql mysql
+#+end_src
+
+** migration
+:PROPERTIES:
+:CUSTOM_ID: migration
+:END:
+#+begin_src shell
+cargo new project_name
+cd project_name
+mkdir migrations
+diesel migration generate table_name
+
+## edit table_name files
+#+end_src
+
+** setup
+:PROPERTIES:
+:CUSTOM_ID: setup
+:END:
+#+begin_src shell
+docker run --name postgres-db -e POSTGRES_PASSWORD=mypassword -p 15432:5432 -d postgres:13.1-alpine
+cargo new --lib diesel_demo
+cd diesel_demo
+cargo add diesel dotenv
+cargo build
+echo DATABASE_URL=postgres://postgres:mypassword@localhost:15432/diesel_demo > .env
+diesel setup
+diesel migration run
+diesel migration redo
+diesel migration revert
+#+end_src
