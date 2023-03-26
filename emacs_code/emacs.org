@@ -246,3 +246,19 @@ UPDATE: maybe worth pointing that when editing a search (M-E) you need to use th
 copy from
 [[https://ignaciopp.wordpress.com/2010/12/02/emacs-how-to-paste-text-in-the-search-minibuffer/][emacs,
 how to paste text in the search minibuffer]]
+
+** change markdown file to org file
+#+begin_src sh
+for f in `ls *.md`; do
+  pandoc -f markdown -t org -o ${f}.org ${f};
+done
+#+end_src
+copy from [[https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format][How to migrate Markdown files to Emacs org mode format]]
+
+I change a bit
+#+begin_src sh
+find . -name "*.md" -exec pandoc -f markdown -t org -o {}.org  {} \;
+find . -name "*.md.org" -exec rename -v 's/md.org/org/' {} \;
+find . -name "*.md" -exec git rm {} \;
+find . -name "*.md.org" -exec git add {} \;
+#+end_src
