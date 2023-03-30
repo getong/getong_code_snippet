@@ -1,0 +1,4 @@
+* ios
+
+** vlc delete files remain system data -- a bug disable vlc
+see [[https://code.videolan.org/videolan/vlc-ios/-/issues/1464][Deleted files still remain in iOS System Data]]
