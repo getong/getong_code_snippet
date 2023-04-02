@@ -1,0 +1,281 @@
+* dart map example
+
+** Dart Map literal
+#+begin_src dart
+void main() {
+  var data = {'name': 'John Doe', 'occupation': 'gardener'};
+  print(data);
+
+  print(data.runtimeType);
+
+  var words = <int, String>{1: 'sky', 2: 'falcon', 3: 'rock'};
+  print(words);
+
+  print(words.runtimeType);
+}
+#+end_src
+
+#+RESULTS:
+: {name: John Doe, occupation: gardener}
+: _Map<String, String>
+: {1: sky, 2: falcon, 3: rock}
+: _Map<int, String>
+
+** Dart Map size
+#+begin_src dart
+void main() {
+  var fruit = {1: 'Apple', 2: 'Orange'};
+  print(fruit.length);
+
+  print('There are ${fruit.length} elements in the map');
+}
+#+end_src
+
+#+RESULTS:
+: 2
+: There are 2 elements in the map
+
+
+** Dart empty map
+#+begin_src dart
+void main() {
+  var words = {
+    1: 'sky',
+    2: 'fly',
+    3: 'ribbon',
+    4: 'falcon',
+    5: 'rock',
+    6: 'ocean',
+    7: 'cloud'
+  };
+
+  print(words.isEmpty);
+  print(words.isNotEmpty);
+
+  print('---------------');
+  words.clear();
+
+  print(words.isEmpty);
+  print(words.isNotEmpty);
+}
+#+end_src
+
+#+RESULTS:
+: false
+: true
+: ---------------
+: true
+: false
+
+** Dart add pair
+#+begin_src dart
+void main() {
+  var fruit = {1: 'Apple', 2: 'Orange'};
+
+  fruit[3] = 'Banana';
+  print(fruit);
+
+  var val = fruit.putIfAbsent(3, () => 'Mango');
+  print(fruit);
+  print(val);
+
+  var val2 = fruit.putIfAbsent(4, () => 'Cherry');
+  print(fruit);
+  print(val2);
+}
+#+end_src
+
+#+RESULTS:
+: {1: Apple, 2: Orange, 3: Banana}
+: {1: Apple, 2: Orange, 3: Banana}
+: Banana
+: {1: Apple, 2: Orange, 3: Banana, 4: Cherry}
+: Cherry
+
+** Dart map removing pairs
+#+begin_src dart
+void main() {
+  var words = {
+    1: 'sky',
+    2: 'fly',
+    3: 'ribbon',
+    4: 'falcon',
+    5: 'rock',
+    6: 'ocean',
+    7: 'cloud'
+  };
+
+  words.remove(1);
+  print(words);
+
+  words.removeWhere((key, value) => value.startsWith('f'));
+  print(words);
+
+  words.clear();
+  print(words);
+}
+#+end_src
+
+#+RESULTS:
+: {2: fly, 3: ribbon, 4: falcon, 5: rock, 6: ocean, 7: cloud}
+: {3: ribbon, 5: rock, 6: ocean, 7: cloud}
+: {}
+
+** Dart Map fromIterables
+#+begin_src dart
+void main() {
+  var letters = ['I', 'II', 'V', 'X', 'L'];
+  var numbers = [1, 2, 5, 10, 50];
+
+  var data = Map<String, int>.fromIterables(letters, numbers);
+  print(data);
+}
+#+end_src
+
+#+RESULTS:
+: {I: 1, II: 2, V: 5, X: 10, L: 50}
+
+** Dart Map collection if & for forms
+#+begin_src dart
+void main() {
+  var words = ['sky', 'cloud', 'sod', 'worm', 'put', 'water', 'cup'];
+
+  var i = 0;
+  var data = {
+    for (var e in words)
+      if (e.length == 3) i++: e
+  };
+
+  print(data);
+}
+#+end_src
+
+#+RESULTS:
+: {0: sky, 1: sod, 2: put, 3: cup}
+
+** Dart merge maps
+#+begin_src dart
+void main() {
+  var f1 = {1: 'Apple', 2: 'Orange'};
+  var f2 = {3: 'Banana'};
+  var f3 = {4: 'Mango'};
+
+  var fruit = {}..addAll(f1)..addAll(f2)..addAll(f3);
+  print(fruit);
+
+  var fruit2 = Map.from(f1)..addAll(f2)..addAll(f3);
+  print(fruit2);
+
+  var fruit3 = {...f1, ...f2, ...f3};
+  print(fruit3);
+}
+#+end_src
+
+#+RESULTS:
+: {1: Apple, 2: Orange, 3: Banana, 4: Mango}
+: {1: Apple, 2: Orange, 3: Banana, 4: Mango}
+: {1: Apple, 2: Orange, 3: Banana, 4: Mango}
+
+** Dart containsKey/containsValue
+#+begin_src dart
+void main() {
+  var myMap = {1: 'Apple', 2: 'Orange', 3: 'Banana'};
+  print(myMap.containsKey(1));
+  print(myMap.containsKey(3));
+
+  print(myMap.containsValue('Apple'));
+  print(myMap.containsValue('Cherry'));
+}
+#+end_src
+
+#+RESULTS:
+: true
+: true
+: true
+: false
+
+** Dart map iteration
+#+begin_src dart
+void main() {
+  var fruit = {1: 'Apple', 2: 'Banana', 3: 'Cherry', 4: 'Orange'};
+
+  fruit.forEach((key, val) {
+    print('{ key: $key, value: $val}');
+  });
+
+  print('---------------------------');
+
+  fruit.entries.forEach((e) {
+    print('{ key: ${e.key}, value: ${e.value} }');
+  });
+
+  print('---------------------------');
+
+  for (var key in fruit.keys) print(key);
+  for (var value in fruit.values) print(value);
+}
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{ key: 1, value: Apple}
+{ key: 2, value: Banana}
+{ key: 3, value: Cherry}
+{ key: 4, value: Orange}
+---------------------------
+{ key: 1, value: Apple }
+{ key: 2, value: Banana }
+{ key: 3, value: Cherry }
+{ key: 4, value: Orange }
+---------------------------
+1
+2
+3
+4
+Apple
+Banana
+Cherry
+Orange
+#+end_example
+
+** Dart sort map
+#+begin_src dart
+import 'dart:collection';
+
+void main() {
+  var fruit = new SplayTreeMap<int, String>();
+
+  fruit[0] = 'Banana';
+  fruit[5] = 'Plum';
+  fruit[6] = 'Strawberry';
+  fruit[2] = 'Orange';
+  fruit[3] = 'Mango';
+  fruit[4] = 'Blueberry';
+  fruit[1] = 'Apple';
+
+  print(fruit);
+
+  fruit.forEach((key, val) {
+    print('{ key: $key, value: $val}');
+  });
+
+  var sortedByValue = new SplayTreeMap<int, String>.from(
+//       fruit, (key1, key2) => fruit[key1].compareTo(fruit[key2]));
+     fruit, (key1, key2) => fruit[key1]?.compareTo(fruit[key2] ?? '') ?? 0);
+  print(sortedByValue);
+}
+#+end_src
+
+#+RESULTS:
+: {0: Banana, 1: Apple, 2: Orange, 3: Mango, 4: Blueberry, 5: Plum, 6: Strawberry}
+: { key: 0, value: Banana}
+: { key: 1, value: Apple}
+: { key: 2, value: Orange}
+: { key: 3, value: Mango}
+: { key: 4, value: Blueberry}
+: { key: 5, value: Plum}
+: { key: 6, value: Strawberry}
+: {1: Apple, 0: Banana, 4: Blueberry, 3: Mango, 2: Orange, 5: Plum, 6: Strawberry}
+
+copy from [[https://zetcode.com/dart/map/][Dart Map]]
