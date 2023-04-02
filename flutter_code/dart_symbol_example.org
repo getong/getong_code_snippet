@@ -1,0 +1,67 @@
+* dart symbol example
+
+Symbols are special types to represent source names or identifiers at runtime.
+
+** symbol object
+
+#+begin_src dart
+import 'dart:convert';
+
+void main() {
+    Symbol object = new Symbol('name');
+    // name must be a valid public Dart member name, public constructor name, or library name.
+    print(object);
+}
+#+end_src
+
+#+RESULTS:
+: Symbol("name")
+
+** symbol constructor
+
+#+begin_src dart
+void main() {
+  // using a new  operator
+  Symbol symb1 = new Symbol('name1');
+  // using without a new  operator
+  Symbol symb2 = Symbol('name1');
+  print(symb1);
+  print(symb1.runtimeType);
+  print(symb2);
+  print(symb2.runtimeType);
+}
+
+#+end_src
+
+#+RESULTS:
+: Symbol("name1")
+: Symbol
+: Symbol("name1")
+: Symbol
+
+** Convert Symbol to String in dart
+
+#+begin_src dart
+import 'dart:mirrors';
+
+void main() {
+  // using new  operator
+  Symbol symb1 = new Symbol('name1');
+  // using without a new  operator
+  String name = MirrorSystem.getName(symb1);
+  print(name);
+  print(name.runtimeType);
+  print(symb1);
+  print(symb1.runtimeType);
+}
+
+#+end_src
+
+#+RESULTS:
+: name1
+: String
+: Symbol("name1")
+: Symbol
+
+
+copy from [[https://www.w3schools.io/languages/dart-symbol-type/][Dart - Symbol]]
