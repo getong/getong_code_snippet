@@ -1,0 +1,322 @@
+* dart object example
+
+** Dart objects
+#+begin_src dart
+class Being {}
+
+void main() {
+  var b = Being();
+
+  print(b.hashCode);
+  print("falcon".toUpperCase());
+  print(2.isNegative);
+
+  print(b.runtimeType);
+  print(2.runtimeType);
+}
+#+end_src
+
+#+RESULTS:
+: 1010207144
+: FALCON
+: false
+: Being
+: int
+
+** Dart object attributes
+#+begin_src dart
+class Person {
+  var name;
+  var occupation;
+}
+
+void main() {
+  var p1 = Person();
+  p1.name = "John Doe";
+  p1.occupation = "gardener";
+
+  var p2 = Person();
+  p2.name = "Roger Roe";
+  p2.occupation = "driver";
+
+  print("${p1.name} is a ${p1.occupation}");
+  print("${p2.name} is a ${p2.occupation}");
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a gardener
+: Roger Roe is a driver
+
+** Dart cascade operator
+#+begin_src dart
+class User {
+  var fname;
+  var lname;
+  var occupation;
+  String toString() {
+    return "$fname $lname is a $occupation";
+  }
+}
+
+void main() {
+  var u = User();
+  u
+    ..fname = "Roger"
+    ..lname = "Roe"
+    ..occupation = "driver";
+
+  print(u);
+}
+#+end_src
+
+#+RESULTS:
+: Roger Roe is a driver
+
+** Dart object methods
+#+begin_src dart
+import 'dart:math';
+
+class Circle {
+  int radius = 5;
+
+  double area() {
+    return this.radius * this.radius * pi;
+  }
+}
+
+void main() {
+  var c = Circle();
+  c.radius = 5;
+
+  print(c.area());
+}
+#+end_src
+
+#+RESULTS:
+: 78.53981633974483
+
+** Dart object constructor
+#+begin_src dart
+class User {
+  String name = "a";
+  String occupation = "b";
+
+  User(String name, String occupation) {
+    this.name = name;
+    this.occupation = occupation;
+  }
+}
+
+void main() {
+  var u1 = new User("John Doe", "gardener");
+  var u2 = new User("Roder Roe", "driver");
+
+  print("${u1.name} is a ${u1.occupation}");
+  print("${u2.name} is a ${u2.occupation}");
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a gardener
+: Roder Roe is a driver
+
+** dart  factory constructor
+#+begin_src dart
+import 'dart:math';
+
+abstract class Shape {
+  factory Shape(String type) {
+    if (type == 'circle') {
+      return Circle(4);
+    } else if (type == 'square') {
+      return Square(4);
+    } else if (type == 'triangle') {
+      return Triangle(4);
+    } else {
+      throw new Exception("Unknown shape");
+    }
+  }
+  num get area;
+}
+
+class Circle implements Shape {
+  final num radius;
+  Circle(this.radius);
+  num get area => pi * pow(radius, 2);
+}
+
+class Square implements Shape {
+  final num side;
+  Square(this.side);
+  num get area => pow(side, 2);
+}
+
+class Triangle implements Shape {
+  final num side;
+  Triangle(this.side);
+  num get area => pow(side, 2) / 2;
+}
+
+void main() {
+  print(Shape('circle').area);
+  print(Shape('square').area);
+  print(Shape('triangle').area);
+}
+#+end_src
+
+#+RESULTS:
+: 50.26548245743669
+: 16
+: 8.0
+
+** Dart toString method
+#+begin_src dart
+class User {
+  String name;
+  String occupation;
+
+  User(this.name, this.occupation);
+
+  String toString() {
+    return "$name is a $occupation";
+  }
+}
+
+void main() {
+  var u1 = new User("John Doe", "gardener");
+  var u2 = new User("Roder Roe", "driver");
+
+  print(u1);
+  print(u2);
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a gardener
+: Roder Roe is a driver
+
+** Dart automatic initializers
+
+#+begin_src dart
+class User {
+  String name;
+  String occupation;
+
+  User(this.name, this.occupation);
+}
+
+void main() {
+  var u1 = new User("John Doe", "gardener");
+  var u2 = new User("Roder Roe", "driver");
+
+  print("${u1.name} is a ${u1.occupation}");
+  print("${u2.name} is a ${u2.occupation}");
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a gardener
+: Roder Roe is a driver
+
+** Dart named parameters
+#+begin_src dart
+class User {
+  String name = "a";
+  String occupation = "b";
+
+  User({this.name = "", this.occupation = ""});
+
+  String toString() {
+    return "$name is a $occupation";
+  }
+}
+
+void main() {
+  var u1 = new User(name: "John Doe", occupation: "gardener");
+  print(u1);
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a gardener
+
+** Dart object inheritance
+#+begin_src dart
+class Being {
+  static int count = 0;
+
+  Being() {
+    count++;
+    print("Being is created");
+  }
+
+  void getCount() {
+    print("There are $count Beings\n");
+  }
+}
+
+class Human extends Being {
+  Human() {
+    print("Human is created");
+  }
+}
+
+class Animal extends Being {
+  Animal() {
+    print("Animal is created");
+  }
+}
+
+class Dog extends Animal {
+  Dog() {
+    print("Dog is created");
+  }
+}
+
+void main() {
+  Human();
+  var dog = Dog();
+  dog.getCount();
+}
+#+end_src
+
+#+RESULTS:
+: Being is created
+: Human is created
+: Being is created
+: Animal is created
+: Dog is created
+: There are 2 Beings
+:
+
+** Dart check type
+
+#+begin_src dart
+class Person {}
+
+class Student {}
+
+void main() {
+  var p = Person();
+  var s = Student();
+
+  print(p is Person);
+  print(s is Person);
+  print(p is Object);
+  print(s is Object);
+
+  print(2 is int);
+  print(2 is Object);
+}
+#+end_src
+
+#+RESULTS:
+: true
+: false
+: true
+: true
+: true
+: true
+
+copy from [[https://zetcode.com/dart/object/][Dart object]]
