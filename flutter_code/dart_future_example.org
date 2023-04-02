@@ -1,0 +1,146 @@
+* dart future example
+
+** Dart future simple example
+#+begin_src dart
+void main() async {
+  final myfut1 = Future.value(14);
+  print(myfut1);
+
+  final myfut2 = await Future.value(14);
+  print(myfut2);
+}
+#+end_src
+
+#+RESULTS:
+: Instance of 'Future<int>'
+: 14
+
+** Dart Future.delayed
+#+begin_src dart
+void main() async {
+  Future.delayed(Duration(seconds: 2), () => 12).then((value) => print(value));
+
+  final res = await Future.delayed(Duration(seconds: 2), () => 14);
+  print(res);
+}
+#+end_src
+
+#+RESULTS:
+: 12
+: 14
+
+** Dart Future.wait
+#+begin_src dart
+import 'dart:async';
+import 'dart:math';
+
+Future<int> getRandomValue() async {
+  await Future.delayed(Duration(seconds: 1));
+  final random = new Random();
+  return random.nextInt(150);
+}
+
+int findMinVal(List<int> lst) {
+  lst.forEach((e) => print(e));
+
+  return lst.reduce(max);
+}
+
+void main() async {
+  final maximum = await Future.wait([
+    getRandomValue(),
+    getRandomValue(),
+    getRandomValue(),
+    getRandomValue(),
+    getRandomValue(),
+    getRandomValue()
+  ]).then((List<int> results) => findMinVal(results));
+
+  print('Maximum is : $maximum');
+}
+#+end_src
+
+#+RESULTS:
+: 98
+: 135
+: 113
+: 89
+: 81
+: 64
+: Maximum is : 135
+
+** dart check for the existence of a directory.
+#+begin_src dart
+import 'dart:io';
+
+void main() async {
+  final path = 'doc/crypto';
+  final dr = Directory(path);
+
+  final present = await dr.exists();
+
+  if (present) {
+    print('directory exists');
+    Future.wait([dr.delete()]).then((_) => checkIfExists(dr));
+  } else {
+    print('directory does not exist');
+  }
+}
+
+void checkIfExists(Directory dr) async {
+  final present = await dr.exists();
+  print(present ? 'directory exists' : 'directory does not exist');
+}
+#+end_src
+
+#+RESULTS:
+: directory does not exist
+
+** Dart future get request
+#+begin_src sh
+dart create http_example
+dart add http
+#+end_src
+
+change http_example/bin/http_example.dart
+
+#+begin_src dart
+import 'package:http/http.dart' as http;
+
+Future<String> fetchData() async {
+  final resp = await http.get(Uri.http('webcode.me'));
+
+  if (resp.statusCode == 200) {
+    return resp.body;
+  } else {
+    throw Exception('Failed to fetch data');
+  }
+}
+
+void main() async {
+  final data = await fetchData();
+  print(data);
+}
+#+end_src
+
+#+RESULTS:
+: <!DOCTYPE html>
+: <html lang="en">
+: <head>
+:     <meta charset="UTF-8">
+:     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+:     <link rel="stylesheet" href="format.css">
+:     <title>My html page</title>
+: </head>
+: <body>
+:
+:     <p>
+:         Today is a beautiful day. We go swimming and fishing.
+:     </p>
+:
+:     <p>
+:          Hello there. How are you?
+:     </p>
+:
+: </body>
+: </html>
