@@ -1,0 +1,144 @@
+* dart rune example
+
+** Dart runes simple example
+#+begin_src dart
+void main() {
+  final msg = 'an old falcon';
+  print(msg.codeUnits);
+
+  for (final rune in msg.runes) {
+    print(rune);
+  }
+}
+
+#+end_src
+
+#+RESULTS:
+: [97, 110, 32, 111, 108, 100, 32, 102, 97, 108, 99, 111, 110]
+: 97
+: 110
+: 32
+: 111
+: 108
+: 100
+: 32
+: 102
+: 97
+: 108
+: 99
+: 111
+: 110
+
+
+** Dart String.fromCharCode
+#+begin_src dart
+import 'dart:io';
+void main() {
+  final msg = "one 🐘 and three 🐋";
+
+  for (final rune in msg.runes) {
+      stdout.write("${String.fromCharCode(rune)} ");
+  }
+}
+#+end_src
+
+#+RESULTS:
+: o n e   🐘   a n d   t h r e e   🐋
+
+** Dart emojis
+#+begin_src dart
+void main() {
+  final c1 = '\u{1F9F6}';
+  final c2 = '\u{1FA86}';
+  final c3 = '\u26C4';
+  final c4 = '\u{1F37A}';
+
+  print(c1);
+  print(c2);
+  print(c3);
+  print(c4);
+
+  print(c3.codeUnits);
+  print(c4.codeUnits);
+}
+#+end_src
+
+#+RESULTS:
+: 🧶
+: 🪆
+: ⛄
+: 🍺
+: [9924]
+: [55356, 57210]
+
+** Dart runes length
+#+begin_src dart
+void main() {
+  final msg = 'one 🐘 and three 🐋';
+
+  print(msg.length);
+  print(msg.runes.length);
+}
+
+#+end_src
+
+#+RESULTS:
+: 19
+: 17
+
+
+** dart graphemes
+#+begin_src dart
+void main() {
+  final msg1 = "falcon";
+  final msg2 = "вишня";
+  final msg3 = "🐺🦊🦝";
+  final msg4 = "नमस्ते";
+
+  print(msg1.length);
+  print(msg2.runes.length);
+  print(msg3.runes.length);
+  print(msg4.runes.length);
+}
+#+end_src
+
+#+RESULTS:
+: 6
+: 5
+: 3
+: 6
+
+** Dart characters
+#+begin_src dart
+import 'package:characters/characters.dart';
+
+void main() {
+  final m1 = "🐺🦊🦝";
+  final m2 = "вишня";
+  final m3 = "नमस्ते";
+
+  print(m1.characters.length);
+  print(m2.characters.length);
+  print(m3.characters.length);
+
+  print(m3.characters.first);
+  print(m3.characters.last);
+
+  for (final e in m3.characters) {
+    print(e);
+  }
+}
+#+end_src
+
+#+RESULTS:
+: 3
+: 5
+: 4
+: न
+: ते
+: न
+: म
+: स्
+: ते
+
+copy from [[https://zetcode.com/dart/runes/][Dart runes]]
