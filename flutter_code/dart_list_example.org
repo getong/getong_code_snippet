@@ -1,0 +1,416 @@
+* dart list example
+
+** Dart List simple example
+#+begin_src dart
+void main() {
+  var vals = <int>[1, 2, 3, 4, 5];
+
+  var e1 = vals.first;
+  var e2 = vals.last;
+  var e3 = vals.elementAt(1);
+
+  var len = vals.length;
+
+  print('There are $len elements in the list');
+  print('The first element is $e1');
+  print('The last element is $e2');
+  print('The second element is $e3');
+}
+#+end_src
+
+#+RESULTS:
+: There are 5 elements in the list
+: The first element is 1
+: The last element is 5
+: The second element is 2
+
+** Dart initialize list
+#+begin_src dart
+void main() {
+  List<String> words = [
+    'sky',
+    'cloud',
+    'tent',
+    'tree',
+    'falcon',
+  ];
+  print(words);
+
+  var vals1 = List<int>.filled(8, 1);
+  print(vals1);
+
+  var vals2 = List<int>.generate(10, (n) => n * n);
+  print(vals2);
+
+  var vals3 = List.of(<int>{2, 4, 6, 8});
+  vals3.add(10);
+  print(vals3);
+
+  // var vals4 = List<int>.empty(growable: true)..length = 3;
+  var vals4 = List<int?>.empty(growable: true)..length = 3;
+
+  vals4[0] = 1;
+  vals4[1] = 2;
+  vals4[2] = 3;
+  print(vals4);
+
+  var vals5 = List<int>.unmodifiable(vals3);
+  print(vals5);
+}
+#+end_src
+
+#+RESULTS:
+: [sky, cloud, tent, tree, falcon]
+: [1, 1, 1, 1, 1, 1, 1, 1]
+: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+: [2, 4, 6, 8, 10]
+: [1, 2, 3]
+: [2, 4, 6, 8, 10]
+
+** Dart empty list
+#+begin_src dart
+void main() {
+  List<int> vals = [];
+
+  if (vals.isEmpty) {
+    print('the list is empty');
+  }
+
+  vals.add(1);
+  vals.add(2);
+  vals.add(3);
+
+  if (vals.isNotEmpty) {
+    print('the list is not empty');
+  }
+
+  vals.clear();
+
+  if (vals.isEmpty) {
+    print('the list is empty');
+  }
+}
+#+end_src
+
+#+RESULTS:
+: the list is empty
+: the list is not empty
+: the list is empty
+
+** Dart dynamic list
+#+begin_src dart
+void main() {
+  var nums = <int>[1, 2, 3];
+  print('$nums - ${nums.runtimeType}');
+
+  var items = [1, 2.0, "three"];
+  print('$items - ${items.runtimeType}');
+
+  List<dynamic> items2 = List.of(items);
+  print('$items2 - ${items2.runtimeType}');
+
+  var vals = [1, 2.0, 3.0, 1.0, 4, 5, 6, 7, 8.0];
+  print('$vals - ${vals.runtimeType}');
+}
+#+end_src
+
+#+RESULTS:
+: [1, 2, 3] - List<int>
+: [1, 2.0, three] - List<Object>
+: [1, 2.0, three] - List<dynamic>
+: [1, 2.0, 3.0, 1.0, 4, 5, 6, 7, 8.0] - List<num>
+
+** Dart reversed list
+#+begin_src dart
+void main() {
+  var vals = <int>[8, 4, 1, 2, 4, 5, 9];
+
+  var reversed = List.of(vals.reversed);
+  print(reversed);
+}
+#+end_src
+
+#+RESULTS:
+: [9, 5, 4, 2, 1, 4, 8]
+
+** Dart shuffle list
+#+begin_src dart
+void main() {
+  var vals = <int>[8, 4, 1, 2, 4, 5, 9];
+
+  vals.shuffle();
+  print(vals);
+}
+#+end_src
+
+#+RESULTS:
+: [4 (\, 8) (\, 5) (\, 9) (\, 2) (\, 4) (\, 1)]
+
+** Dart list iteration
+#+begin_src dart
+import 'dart:io';
+
+void main() {
+  var vals = <int>[1, 2, 3, 4, 5];
+
+  vals.forEach((e) {
+    stdout.write("$e ");
+  });
+  print("");
+
+  for (var e in vals) {
+    stdout.write("$e ");
+  }
+  print("");
+
+  for (int i = 0; i < vals.length; i++) {
+    stdout.write("${vals[i]} ");
+  }
+  print("");
+
+  var lit = vals.iterator;
+
+  while (lit.moveNext()) {
+    stdout.write("${lit.current} ");
+  }
+
+  print("");
+
+  int i = 0;
+
+  while (i < vals.length) {
+    stdout.write("${vals[i]} ");
+    i++;
+  }
+  print("");
+}
+#+end_src
+
+#+RESULTS:
+: 1 2 3 4 5
+: 1 2 3 4 5
+: 1 2 3 4 5
+: 1 2 3 4 5
+: 1 2 3 4 5
+
+** Dart List collection if & for forms
+#+begin_src dart
+void main() {
+  var integers = [for (var i = 1; i < 10; i++) i];
+  var squares = [for (var n in integers) n * n];
+  var evens = [
+    for (var n in integers)
+      if (n % 2 == 0) n
+  ];
+
+  print(integers);
+  print(squares);
+  print(evens);
+}
+#+end_src
+
+#+RESULTS:
+: [1 (\, 2) (\, 3) (\, 4) (\, 5) (\, 6) (\, 7) (\, 8) (\, 9)]
+
+** Dart unique elements
+#+begin_src dart
+void main() {
+  var vals = <int>[1, 1, 1, 2, 2, 2, 3, 3, 4, 5];
+
+  var res = vals.toSet().toList();
+  print(res);
+
+  var res2 = [
+    ...{...vals}
+  ];
+  print(res2);
+}
+#+end_src
+
+#+RESULTS:
+: [1 (\, 2) (\, 3) (\, 4) (\, 5)]
+
+** Dart list add elements
+#+begin_src dart
+void main() {
+  var vals = <int>[1, 2, 3];
+
+  vals.add(4);
+  vals.addAll([5, 6, 7]);
+
+  vals.insert(0, 0);
+  vals.insertAll(vals.length, [8, 9, 10]);
+
+  print(vals);
+}
+#+end_src
+
+#+RESULTS:
+: [0 (\, 1) (\, 2) (\, 3) (\, 4) (\, 5) (\, 6) (\, 7) (\, 8) (\, 9) (\, 10)]
+
+** Dart list remove elements
+#+begin_src dart
+void main() {
+  var vals = <int>[1, 2, 3, 4, 5, 6];
+
+  vals.remove(1);
+  print(vals);
+
+  vals.removeAt(vals.length - 1);
+  print(vals);
+
+  vals.removeLast();
+  print(vals);
+
+  vals.clear();
+  print(vals);
+
+  print('---------------');
+
+  var vals2 = <int>[-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  vals2.removeWhere((e) => e < 0);
+  print(vals2);
+
+  vals2.removeRange(0, 5);
+  print(vals2);
+
+  vals2.retainWhere((e) => e > 7);
+  print(vals2);
+}
+
+#+end_src
+
+#+RESULTS:
+: [2 (\, 3) (\, 4) (\, 5) (\, 6)]
+
+** Dart filter list
+#+begin_src dart
+void main() {
+  var vals = <int>[-1, 3, 2, 0, 1, -3, 4, 3, 5];
+  var positive = vals.where((e) => e > 0);
+  print(positive);
+
+  var words = <String>["wolf", "sky", "falcon", "cloud", "wood", "oak"];
+  var w3 = words.where((e) => e.length == 3);
+  print(w3);
+
+  var e1 = words.firstWhere((e) => e.startsWith('w'));
+  print(e1);
+
+  var e2 = words.lastWhere((e) => e.startsWith('w'));
+  print(e2);
+}
+#+end_src
+
+#+RESULTS:
+: (3, 2, 1, 4, 3, 5)
+: (sky, oak)
+: wolf
+: wood
+
+
+** Dart list map
+#+begin_src dart
+import 'dart:math';
+
+void main() {
+  var vals = <int>[1, 2, 3, 4, 5];
+
+  var powered = vals.map((e) => pow(e, 2));
+
+  for (var e in powered) {
+    print(e);
+  }
+}
+#+end_src
+
+#+RESULTS:
+: 1
+: 4
+: 9
+: 16
+: 25
+
+** Dart list every
+#+begin_src dart
+class User {
+  String firstName;
+  String lastName;
+  bool married;
+
+  User(this.firstName, this.lastName, this.married);
+
+  bool get isMarried => this.married;
+
+  @override
+  String toString() => "${this.firstName} ${this.lastName} ${this.married}";
+}
+
+void main() {
+  var users = <User>[
+    User('John', 'Doe', true),
+    User('Jane', 'Doe', true),
+    User('Peter', 'Smith', false),
+    User('Roger', 'Roe', true),
+    User('Martin', 'Fonda', false),
+  ];
+
+  var allMarried = users.every((e) => e.isMarried);
+  if (allMarried) {
+    print('all users are married');
+  } else {
+    print('not all users are married');
+  }
+}
+
+#+end_src
+
+#+RESULTS:
+: not all users are married
+
+
+** Dart list partitions
+#+begin_src dart
+void main() {
+  var vals = <int>[1, 2, 0, 4, 3, 6, 5];
+
+  var res = vals.skip(2);
+  print(res);
+
+  var res2 = vals.skipWhile((e) => e <= 4);
+  print(res2);
+
+  var res3 = vals.take(4);
+  print(res3);
+
+  var res4 = vals.takeWhile((e) => e <= 4);
+  print(res4);
+}
+#+end_src
+
+#+RESULTS:
+: (0, 4, 3, 6, 5)
+: (6, 5)
+: (1, 2, 0, 4)
+: (1, 2, 0, 4, 3)
+
+** Dart list reduce
+#+begin_src dart
+void main() {
+  var vals = <int>[1, 2, 3, 4, 5];
+
+  var sum = vals.reduce((sum, e) => sum += e);
+  var product = vals.reduce((product, e) => product *= e);
+
+  print('The sum is $sum');
+  print('The product is $product');
+}
+#+end_src
+
+#+RESULTS:
+: The sum is 15
+: The product is 120
+
+
+The code is copied from [[https://zetcode.com/dart/list/][Dart List]]
