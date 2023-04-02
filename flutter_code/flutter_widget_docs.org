@@ -71,3 +71,136 @@ copy from [[https://flutterchina.club/cookbook/navigation/navigation-basics/][å¯
 
 ** flutter and rust
 see [[https://blog.argonauths.eu/2022/09/26/flutter-and-rust-combined-creating-a-plugin-to-support-various-operating-systems/][Flutter and Rust combined. Creating a plugin to support various operating systems]]
+
+** stateless widget example
+
+#+begin_src dart
+class MyStatelessCarWidget extends StatelessWidget {
+  const MyStatelessCarWidget ({ Key key }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(color: const Color(0x0xFEEFE));
+  }
+}
+#+end_src
+
+** statefull widget example
+
+#+begin_src dart
+class Car extends StatefulWidget {
+  const Car({ Key key, this.title }) : super(key: key);
+
+  @override
+  _CarState createState() => _CarState();
+}
+
+class _CarState extends State<Car> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFEEFE),
+           child: Container(
+            child: Container( //child: Container() )
+        )
+    );
+  }
+}
+#+end_src
+
+** visible widget
+
+#+begin_src dart
+new Text(
+'Hello, Javatpoint!',
+textAlign: TextAlign.center,
+style: new TextStyle(fontWeight: FontWeight.bold),
+)
+
+//FlatButton Example
+new FlatButton(
+  child: Text("Click here"),
+  onPressed: () {
+    // Do something here
+  },
+),
+
+//RaisedButton Example
+new RaisedButton(
+  child: Text("Click here"),
+  elevation: 5.0,
+  onPressed: () {
+    // Do something here
+  },
+),
+
+Image.asset('assets/computer.png')
+
+new Icon(
+  Icons.add,
+  size: 34.0,
+)
+#+end_src
+
+
+** invisible widget
+
+#+begin_src dart
+new Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    new Text(
+      "VegElement",
+    ),
+    new Text(
+      "Non-vegElement"
+    ),
+  ],
+),
+
+new Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: <Widget>[
+    new Text(
+      "VegElement",
+    ),
+    new Text(
+      "Non-vegElement"
+    ),
+  ],
+),
+
+Center(
+  child: new clumn(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      new Text(
+        "VegElement",
+      ),
+      new Text(
+        "Non-vegElement"
+      ),
+    ],
+  ),
+),
+
+Padding(
+  padding: const EdgeInsets.all(6.0),
+  child: new Text(
+    "Element 1",
+  ),
+),
+
+
+Scaffold
+
+This widget provides a framework that allows you to add common material design elements like AppBar, Floating Action Buttons, Drawers, etc.
+
+Stack
+
+It is an essential widget, which is mainly used for overlapping a widget, such as a button on a background gradient.
+
+
+#+end_src
+
+copy from [[https://www.javatpoint.com/flutter-widgets][Flutter Widgets]]
