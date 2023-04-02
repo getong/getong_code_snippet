@@ -1,0 +1,174 @@
+* dart set example
+
+** Dart set example
+#+begin_src dart
+void main() {
+  var brands = <String>{};
+
+  brands.add("Wilson");
+  brands.add("Nike");
+  brands.add("Volvo");
+  brands.add("IBM");
+  brands.add("IBM");
+
+  int n = brands.length;
+
+  print("The set contains $n elements");
+  print(brands);
+}
+#+end_src
+
+#+RESULTS:
+: The set contains 4 elements
+: {Wilson, Nike, Volvo, IBM}
+
+** Dart set remove elements
+#+begin_src dart
+void main() {
+  var brands = <String>{};
+
+  brands.add("Wilson");
+  brands.add("Nike");
+  brands.add("Volkswagen");
+  brands.add("Volvo");
+  brands.add("IBM");
+  brands.add("Kia");
+  brands.add("Lenovo");
+
+  print(brands);
+
+  brands.remove('Volvo');
+
+  print(brands);
+
+  brands.removeWhere((e) => e.length == 3);
+
+  print(brands);
+
+  brands.clear();
+
+  print(brands);
+
+  print("The set contains ${brands.length} elements");
+}
+#+end_src
+
+#+RESULTS:
+: {Wilson, Nike, Volkswagen, Volvo, IBM, Kia, Lenovo}
+: {Wilson, Nike, Volkswagen, IBM, Kia, Lenovo}
+: {Wilson, Nike, Volkswagen, Lenovo}
+: {}
+: The set contains 0 elements
+
+** Dart iterate set
+#+begin_src dart
+import 'dart:collection';
+
+void main() {
+  var nums = HashSet<int>();
+  nums.add(1);
+  nums.add(2);
+  nums.add(3);
+  nums.add(4);
+  nums.add(5);
+
+  nums.forEach((e) {
+    print(e);
+  });
+
+  for (var e in nums) {
+    print(e);
+  }
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+1
+2
+3
+4
+5
+1
+2
+3
+4
+5
+#+end_example
+
+** Dart set insertion order
+#+begin_src dart
+import 'dart:collection';
+
+void main() {
+  var nums1 = HashSet<int>();
+  nums1.add(4);
+  nums1.add(3);
+  nums1.add(2);
+  nums1.add(1);
+
+  print(nums1);
+  print(nums1.runtimeType);
+
+  nums1.forEach((e) {
+    print(e);
+  });
+
+  print("-----------------------");
+
+  var nums2 = LinkedHashSet<int>();
+  nums2.add(4);
+  nums2.add(3);
+  nums2.add(2);
+  nums2.add(1);
+
+  print(nums2);
+  print(nums2.runtimeType);
+
+  nums2.forEach((e) {
+    print(e);
+  });
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{1, 2, 3, 4}
+_HashSet<int>
+1
+2
+3
+4
+-----------------------
+{4, 3, 2, 1}
+_Set<int>
+4
+3
+2
+1
+#+end_example
+
+** Dart set functions
+#+begin_src dart
+void main() {
+  var vals1 = <int>{1, 2, 3, 4, 5, 6, 7};
+  var vals2 = <int>{6, 7, 8, 9, 10};
+
+  var res = vals1.union(vals2);
+  print(res);
+
+  var res2 = vals1.intersection(vals2);
+  print(res2);
+
+  var res3 = vals1.difference(vals2);
+  print(res3);
+}
+#+end_src
+
+#+RESULTS:
+: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+: {6, 7}
+: {1, 2, 3, 4, 5}
+
+
+copy from [[https://zetcode.com/dart/set/][Dart Set]]
