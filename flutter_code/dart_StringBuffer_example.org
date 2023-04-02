@@ -1,0 +1,68 @@
+* dart StringBuffer example
+
+** Dart StringBuffer simple example
+
+#+begin_src dart
+void main() {
+  var msg = StringBuffer('There are');
+  msg.write(' three ');
+  msg.writeAll(['hawks', 'in', 'the sky'], " ");
+
+  String output = msg.toString();
+  print(output);
+}
+#+end_src
+
+#+RESULTS:
+: There are three hawks in the sky
+
+
+** Dart StringBuffer writeln
+#+begin_src dart
+void main() {
+  var msg = StringBuffer('blue sky\n');
+  msg.writeln('old owl');
+  msg.writeln('lonely wolf');
+  msg.writeln('strict regime');
+
+  print(msg.length);
+  print(msg.toString());
+}
+
+#+end_src
+
+#+RESULTS:
+: 43
+: blue sky
+: old owl
+: lonely wolf
+: strict regime
+:
+
+** Dart StringBuffer isEmpty
+
+#+begin_src dart
+void main() {
+  var msg = StringBuffer();
+  check(msg);
+  msg.writeAll(['an', 'old', 'hawk', 'in', 'the', 'sky'], ' ');
+  check(msg);
+  print(msg.toString());
+  msg.clear();
+  check(msg);
+}
+
+void check(StringBuffer msg) {
+  if (msg.isEmpty) {
+    print('the buffer is empty');
+  } else {
+    print('the buffer is not empty');
+  }
+}
+#+end_src
+
+#+RESULTS:
+: the buffer is empty
+: the buffer is not empty
+: an old hawk in the sky
+: the buffer is empty
