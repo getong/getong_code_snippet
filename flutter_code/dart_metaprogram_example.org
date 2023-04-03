@@ -1,0 +1,31 @@
+* dart metaprogramming example
+
+** dart mirror metaprogramming
+#+begin_src dart
+import 'dart:mirrors';
+
+class MyClass {
+  String name;
+  int age;
+
+  MyClass(this.name, this.age);
+}
+
+void main() {
+  var symbol = Symbol('MyClass');
+  var type = reflectClass(MyClass);
+  var constructor = type.declarations[Symbol('.ctor')];
+  var instance = type.newInstance(Symbol.empty, ['John', 30]).reflectee;
+  print(instance.name); // prints 'John'
+  print(instance.age); // prints '30'
+}
+#+end_src
+
+#+RESULTS:
+: John
+: 30
+
+It is created by chatgpt.
+
+** reflectable
+basic example [[https://github.com/eernstg/reflectable-flutter][reflectable-flutter]]
