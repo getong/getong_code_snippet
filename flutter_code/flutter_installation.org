@@ -195,3 +195,8 @@ setState/1 function will rebuild the UI.
 createState/0 function will create the State.
 initState/0 function will init the State.
 #+end_src
+
+** flutter run enable-experiment=record
+#+begin_src sh
+flutter run --enable-experiment=records
+#+end_src
