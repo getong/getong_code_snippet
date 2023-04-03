@@ -1,0 +1,180 @@
+* dart function example
+
+** Dart function simple example
+#+begin_src dart :results output
+void main() {
+  int x = 4;
+  int y = 5;
+
+  int z = add(x, y);
+
+  print("Output: $z");
+}
+
+int add(int a, int b) {
+  return a + b;
+}
+#+end_src
+
+#+RESULTS:
+: Output: 9
+
+** Dart main function arguments
+#+begin_src dart :results output
+void main(List<String> args) {
+  print(args);
+  print(args.length);
+
+  if (args.length > 1) {
+    var a = args[1];
+    print(a);
+  }
+}
+#+end_src
+
+#+RESULTS:
+: [output]
+: 1
+
+** Dart arrow function
+#+begin_src dart :results output
+int add(int x, int y) => x + y;
+
+int sub(int x, int y) => x - y;
+
+void main() {
+  print(add(3, 5));
+  print(sub(5, 4));
+}
+#+end_src
+
+#+RESULTS:
+: 8
+: 1
+
+** Dart optional positional parameter
+#+begin_src dart :results output
+void main() {
+  print(pow(2, 2));
+  print(pow(2, 3));
+  print(pow(3));
+}
+
+int pow(int x, [int y = 2]) {
+  int r = 1;
+  for (int i = 0; i < 2; i++) {
+    r *= x;
+  }
+  return r;
+}
+#+end_src
+
+#+RESULTS:
+: 4
+: 4
+: 9
+
+
+** Dart optional named parameters
+#+begin_src dart :results output
+void main() {
+  var name = "John Doe";
+  var occupation = "carpenter";
+
+  info(name, occupation: occupation);
+}
+
+// void info(String name, {String occupation}) {
+//   print("$name is a $occupation");
+// }
+void info(String name, {String occupation = 'unknown'}) {
+  print('$name is a ${occupation ?? "unknown"}');
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a carpenter
+
+
+** Dart anonymous function
+#+begin_src dart :results output
+void main() {
+  var words = ['sky', 'cloud', 'forest', 'welcome'];
+
+  words.forEach((String word) {
+    print('$word has ${word.length} characters');
+  });
+}
+#+end_src
+
+#+RESULTS:
+: sky has 3 characters
+: cloud has 5 characters
+: forest has 6 characters
+: welcome has 7 characters
+
+
+** Dart recursive function
+#+begin_src dart :results output
+int fact(int n) {
+  if (n == 0 || n == 1) {
+    return 1;
+  }
+
+  return n * fact(n - 1);
+}
+
+void main() {
+  print(fact(7));
+  print(fact(10));
+  print(fact(15));
+}
+#+end_src
+
+#+RESULTS:
+: 5040
+: 3628800
+: 1307674368000
+
+
+** Dart function as parameter
+#+begin_src dart :results output
+int inc(int x) => ++x;
+
+int dec(int x) => --x;
+
+int apply(int x, Function f) {
+  return f(x);
+}
+
+void main() {
+  int r1 = apply(3, inc);
+  int r2 = apply(2, dec);
+  print(r1);
+  print(r2);
+}
+#+end_src
+
+#+RESULTS:
+: 4
+: 1
+
+** Dart nested function
+#+begin_src dart :results output
+void main() {
+  String buildMessage(String name, String occupation) {
+    return "$name is a $occupation";
+  }
+
+  var name = "John Doe";
+  var occupation = "gardener";
+
+  var msg = buildMessage(name, occupation);
+  print(msg);
+}
+#+end_src
+
+#+RESULTS:
+: John Doe is a gardener
+
+copy from [[https://zetcode.com/dart/function/][Dart function]]
