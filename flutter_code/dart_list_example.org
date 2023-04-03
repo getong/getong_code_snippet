@@ -426,3 +426,122 @@ void main() {
 
 
 The code is copied from [[https://zetcode.com/dart/list/][Dart List]]
+
+** from function
+
+#+begin_src dart :results output
+var list1 = [1, 2, 3];
+var list2 = [4, 5];
+var list3 = [6, 7, 8];
+
+// from() and addAll() method
+var combinedList1= List.from(list1)..addAll(list2)..addAll(list3);
+
+// expand() method
+var combinedList2 = [list1, list2, list3].expand((x) => x).toList();
+
+// operator +
+var combinedList3  = list1 + list2 + list3;
+
+// spread operator
+var combinedList4 = [...list1, ...list2, ...list3];
+print(combinedList1);
+print(combinedList2);
+print(combinedList3);
+print(combinedList4);
+#+end_src
+
+#+RESULTS:
+: [1, 2, 3, 4, 5, 6, 7, 8]
+: [1, 2, 3, 4, 5, 6, 7, 8]
+: [1, 2, 3, 4, 5, 6, 7, 8]
+: [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+** remove operation function
+#+begin_src dart :results output
+var myList = [0, 'one', 'two', 'three', 'four', 'five'];
+
+// remove the item at index '3'
+myList.removeAt(3);
+print(myList);
+/* myList:
+[0, one, two, four, five]
+,*/
+
+// remove() returns false if the item does not exist in the List
+bool isRemoved = myList.remove('three');
+print(isRemoved);
+/* isRemoved:
+false
+,*/
+
+bool isRemoved4thItem = myList.remove('four');
+print(isRemoved4thItem);
+/* isRemoved4thItem :
+true
+
+myList:
+[0, one, two, five]
+,*/
+
+// remove all items which length > 3
+myList.removeWhere((item) => item.toString().length > 3);
+print(myList);
+/* myList:
+[0, one, two]
+,*/
+
+// remove all items in the List
+myList.clear();
+/* myList:
+[]
+,*/
+
+var anotherList = [0, 'one', 'two', 'three', 'four', 'five'];
+// remove items from index 2 to 4
+anotherList.removeRange(2, 5);
+print(anotherList);
+/* myList:
+[0, one, five]
+,*/
+#+end_src
+
+#+RESULTS:
+: [0, one, two, four, five]
+: false
+: true
+: [0, one, two]
+: [0, one, five]
+
+** custom list element
+#+begin_src dart :results output
+class Customer {
+  String name;
+  int age;
+
+  Customer(this.name, this.age);
+
+  @override
+  String toString() {
+    return '{ ${this.name}, ${this.age} }';
+  }
+}
+
+void main() {
+  List customers = [];
+  customers.add(Customer('Jack', 23));
+  customers.add(Customer('Adam', 27));
+  customers.add(Customer('Katherin', 25));
+
+  customers.sort((a, b) => a.age.compareTo(b.age));
+  print('Sort by Age: ' + customers.toString());
+
+  customers.sort((a, b) => a.name.compareTo(b.name));
+  print('Sort by Name: ' + customers.toString());
+}
+#+end_src
+
+#+RESULTS:
+: Sort by Age: [{ Jack, 23 }, { Katherin, 25 }, { Adam, 27 }]
+: Sort by Name: [{ Adam, 27 }, { Jack, 23 }, { Katherin, 25 }]
