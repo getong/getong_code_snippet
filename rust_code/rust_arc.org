@@ -213,25 +213,36 @@ Take more care with the =drop= function.
 use std::sync::{Arc, Mutex, Condvar};
 use std::thread;
 
-let pair = Arc::new((Mutex::new(false), Condvar::new()));
-let pair2 = pair.clone();
+fn main() {
+    let pair = Arc::new((Mutex::new(false), Condvar::new()));
+    let pair2 = pair.clone();
 
-// Inside of our lock, spawn a new thread, and then wait for it to start.
-thread::spawn(move|| {
-    let (lock, cvar) = &*pair2;
+    // Inside of our lock, spawn a new thread, and then wait for it to start.
+    thread::spawn(move|| {
+        let (lock, cvar) = &*pair2;
+        let mut started = lock.lock().unwrap();
+        *started = true;
+        println!("set");
+        // We notify the condvar that the value has changed.
+        cvar.notify_one();
+    });
+
+    // Wait for the thread to start up.
+    let (lock, cvar) = &*pair;
+
     let mut started = lock.lock().unwrap();
-    *started = true;
-    // We notify the condvar that the value has changed.
-    cvar.notify_one();
-});
-
-// Wait for the thread to start up.
-let (lock, cvar) = &*pair;
-let mut started = lock.lock().unwrap();
-while !*started {
-    started = cvar.wait(started).unwrap();
+    println!("waiting");
+    while !*started {
+        started = cvar.wait(started).unwrap();
+        println!("done");
+    }
 }
 #+end_src
+
+#+RESULTS:
+: waiting
+: set
+: done
 
 And the meaning of the &*pair is :
 
