@@ -1,0 +1,67 @@
+* riverpod
+
+** widget替换
+
+StatelessWidget替换为ConsumerWidget。
+StatefulWidget和State替换为ConsumerStatefulWidget和ConsumerState。
+Consumer可以直接在widget tree中使用。
+
+** ref的方法 (ref就是ProviderElementBase)
+
+ref.watch 获取一个provider的值并监听变化，等值变化时重建widget。
+ref.listen 添加一个监听到provider上，当值变化的时候执行一个动作，如打开一个新页面或展示一个新内容。（事件触发用listen）
+ref.read获取一个provider的值并忽略值的改变。如在点击事件中获取一个provider的值。
+
+注意点
+1. ref.watch
+
+多个provider联用，可以在provider通过ref.watch其他的provider来做到自动更新。
+不应该在async异步中调用，比如在button的onPresssed中。
+不应该在initState或其他state生命周期中调用。
+
+2. ref.listen
+
+传入2个参数ref和(pre, new)回调函数。可在回调函数中进行操作。
+可在一个provider或build中。
+不应该在async异步中调用，比如在button的onPresssed中。
+不应该在initState或其他state生命周期中调用。
+
+3. ref.read
+
+获取数据。通常在用户交互中使用。
+尽量避免使用ref.read,因为他不是反应式的。（即数据变化的时候，不会跟随的变化）
+不要在build中使用。
+
+4. ref.refresh
+
+使之前的provider失效，然后重新获取数据。 (不是立刻重新获取数据，而是等下一次读取时刷新)
+重新获取数据不需要返回值时，可使用invalidate.
+
+final productsProvider = FutureProvider((ref) async {
+  final response = await httpClient.get('https://host.com/products');
+  return Products.fromJson(response.data);
+});
+
+class Example extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Products products = ref.watch(productsProvider);
+    return RefreshIndicator(
+      onRefresh: () => ref.refresh(productsProvider.future),
+      child: ListView(
+        children: [
+          for (final product in products.items) ProductItem(product: product),
+        ],
+      ),
+    );
+  }
+}
+复制代码
+4. ref.invalidate
+使provider失效，可以调用很多次，只刷新一次provider。
+需要返回state时，使用refresh方法。
+
+
+copy from [[RiverPod 使用记录][https://juejin.cn/post/7172482155812454431]]
+also see [[https://www.jianshu.com/p/407795aa19c4][Flutter Riverpod 使用]]
+also see [[重走Flutter状态管理之路—Riverpod入门篇][https://xuyisheng.top/riverpod1/]]
