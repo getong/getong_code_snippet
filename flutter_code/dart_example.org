@@ -34,17 +34,54 @@ int funcName() => 42;
 
 ** get and set function
 
-#+begin_src dart
+#+begin_src dart :results output
 class myClass {
-  String name;
+  String name = '';
   String get getName => name;
   set setName(String aValue) => name = aValue;
 }
 
+void main() {
 var myObject = myClass();
 myObject.setName = "Sanjib";
 print(myObject.getName);
+}
 #+end_src
+
+#+RESULTS:
+: Sanjib
+
+** another get and set function
+
+#+begin_src dart :results output
+class Circle {
+  double _radius = 0;
+
+  Circle(double radius) {
+    this.radius = radius;
+  }
+
+  set radius(double value) {
+    if (value >= 0) {
+      _radius = value;
+    }
+  }
+
+  double get radius => _radius;
+
+  get area => radius * radius * 3.14;
+}
+
+
+void main() {
+  var circle = Circle(10);
+  circle.radius = 100;
+  print('The area is ${circle.area}');
+}
+#+end_src
+
+#+RESULTS:
+: The area is 31400.0
 
 
 ** override
