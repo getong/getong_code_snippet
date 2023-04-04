@@ -1,6 +1,6 @@
-* dart set example
+* dart set type example
 
-** Dart set example
+** Dart set type basic example
 #+begin_src dart
 void main() {
   var brands = <String>{};
