@@ -1,0 +1,61 @@
+* pass -- the standard unix password manager
+
+** installation
+
+#+begin_src sh
+##  macos
+brew install pass
+
+## ArchLinux
+sudo pacman -S pass
+#+end_src
+
+** Setting it up
+
+#+begin_src sh
+pass init "ZX2C4 Password Storage Key"
+#+end_src
+
+** initialize the password store as a git repository
+
+#+begin_src sh
+pass git init
+#+end_src
+
+** Using the password store
+
+#+begin_src sh
+pass
+#+end_src
+
+** get password
+
+#+begin_src sh
+pass Email/zx2c4.com
+#+end_src
+
+** copy them to the clipboard
+
+#+begin_src sh
+pass -c Email/zx2c4.com
+#+end_src
+
+** add existing passwords to the store with insert
+
+#+begin_src sh
+pass insert Business/cheese-whiz-factory
+#+end_src
+
+** The utility can generate new passwords using /dev/urandom internally:
+
+#+begin_src sh
+pass generate Email/jasondonenfeld.com 15
+#+end_src
+
+**  passwords can be removed
+
+#+begin_src sh
+pass rm Business/cheese-whiz-factory
+#+end_src
+
+copy from [[https://www.passwordstore.org/][pass -- the standard unix password manager]]
