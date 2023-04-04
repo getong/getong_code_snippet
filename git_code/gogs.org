@@ -1,0 +1,14 @@
+* gogs
+
+** podman run gogs
+
+#+begin_src sh
+mkdir -p $HOME/var/gogs
+podman run -d --name gogs01 -p 10022:22 -p 10080:3000 -v $HOME/var/gogs:/data:Z gogs/gogs
+#+end_src
+
+Note that we used the option :Z when mounting the local volume.
+This is necessary on RHEL8 to allow Podman to create the volume with the correct SELinux permissions.
+You can omit this option when running this example in a system that does not use SELinux.
+
+copy from [[https://www.redhat.com/sysadmin/git-gogs-podman][Build a personal Git server with Gogs and Podman]]
