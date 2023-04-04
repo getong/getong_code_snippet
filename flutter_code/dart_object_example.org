@@ -109,8 +109,8 @@ class User {
 }
 
 void main() {
-  var u1 = new User("John Doe", "gardener");
-  var u2 = new User("Roder Roe", "driver");
+  var u1 = User("John Doe", "gardener");
+  var u2 = User("Roder Roe", "driver");
 
   print("${u1.name} is a ${u1.occupation}");
   print("${u2.name} is a ${u2.occupation}");
@@ -120,6 +120,8 @@ void main() {
 #+RESULTS:
 : John Doe is a gardener
 : Roder Roe is a driver
+
+
 
 ** dart  factory constructor
 #+begin_src dart
@@ -320,3 +322,77 @@ void main() {
 : true
 
 copy from [[https://zetcode.com/dart/object/][Dart object]]
+
+
+** super keyword
+#+begin_src dart :results output
+// Super class Car
+class Car
+{
+    int speed = 180;
+}
+
+// sub class Bike extending Car
+class Bike extends Car
+{
+    int speed = 110;
+
+    void display()
+    {
+        //print varible of the base class (Bike)
+        print("The speed of car: ${super.speed}");
+    }
+}
+void main() {
+// Creating object of sub class
+Bike b = new Bike();
+b.display();
+}
+
+#+end_src
+
+#+RESULTS:
+: The speed of car: 180
+
+changed example
+#+begin_src dart :results output
+// Base class Super
+class Super
+{
+  void display()
+  {
+    print("This is the super class method");
+  }
+}
+
+// Child class inherits Super
+class Child extends Super
+{
+  void display()
+  {
+    print("This is the child class");
+  }
+
+  // Note that message() is only in Student class
+  void message()
+  {
+    // will invoke or call current class display() method
+    display();
+
+    // will invoke or call parent class displa() method
+    super.display();
+  }
+}
+
+void main() {
+  // Creating object of sub class
+  Child c = new Child();
+  // calling display() of Student
+  c.message();
+}
+
+#+end_src
+
+#+RESULTS:
+: This is the child class
+: This is the super class method
