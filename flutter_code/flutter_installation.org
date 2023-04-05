@@ -204,3 +204,29 @@ flutter run --enable-experiment=records
 
 ** flutter tutorial
 [[https://www.darttutorial.org/flutter-tutorial/][Flutter Tutorial]]
+
+** Fix "SocketException: Connection failed (Operation not permitted)" with Flutter on macOS
+
+add macos support
+
+#+begin_src sh
+cd flutter_project_directory
+flutter create --platforms macos .
+#+end_src
+
+Client networking entitlements on macOS
+#+begin_src sh
+## vim macos/Runner/DebugProfile.entitlements
+
+<key>com.apple.security.network.client</key>
+<true/>
+#+end_src
+
+and the macos/Runner/Release.entitlements
+
+#+begin_src sh
+## vim macos/Runner/Release.entitlements
+
+<key>com.apple.security.network.client</key>
+<true/>
+#+end_src
