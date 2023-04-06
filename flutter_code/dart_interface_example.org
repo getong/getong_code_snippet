@@ -82,3 +82,57 @@ void main() {
 : hello world
 
 copy from [[https://www.darttutorial.org/dart-tutorial/dart-interface/][Dart Interface]]
+
+
+** mixin example
+
+#+begin_src dart :results output
+class Car {
+  void accelerate(){
+    print("simple acceleration");
+  }
+
+  void brakes(){
+    print("simple brakes");
+  }
+}
+mixin EuroVICar {
+ void emission(){
+    print("euro vi standard emission");
+  }
+}
+// mixin using class keyword
+class Autonomus {
+  // don't declare a constructor if you want to use this
+  // class as a mixin type
+  void autonomusDrive(){
+    print("autonomus drive capable");
+  }
+
+}
+// This class is using two mixins
+class Toyota with EuroVICar, Autonomus implements Car  {
+void brakes(){
+    print("toyota disk brakes");
+  }
+
+  void accelerate(){
+    print("toyota power acceleration");
+  }
+}
+void main(){
+  Toyota toyota = new Toyota();
+  toyota.accelerate();
+  toyota.brakes();
+  toyota.emission();
+  toyota.autonomusDrive();
+}
+#+end_src
+
+#+RESULTS:
+: toyota power acceleration
+: toyota disk brakes
+: euro vi standard emission
+: autonomus drive capable
+
+copy from [[https://medium.com/learn-dart/dart-tutorial-inheritance-using-class-interfaces-and-mixin-7fc6774ed6bd][Dart Tutorial - Inheritance using class, interfaces and mixin]]
