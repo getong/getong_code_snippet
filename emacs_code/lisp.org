@@ -90,3 +90,15 @@ use-package company
 copy from
 [[https://medium.com/helpshift-engineering/configuring-emacs-from-scratch-use-package-c30382297877][Configuring
 Emacs from Scratch --- use-package]]
+
+** funcall-interactively
+
+#+begin_src emacs-lisp
+(defun foo (beg end)
+  (interactive "r")
+  (message "begin:%d and end:%d" beg end))
+
+(funcall-interactively 'foo (point-min) (point-max))
+(call-interactively 'foo)  ;;和M-x foo RET 结果一样。
+#+end_src
+copy from [[https://emacs-china.org/t/call-interactively-funcall-interactively/21989/2][call-interactively和funcall-interactively的区别是什么？]]
