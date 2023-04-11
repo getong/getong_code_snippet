@@ -3,7 +3,7 @@
 ** basic data types:
 
 #+begin_src dart
-Number
+Number(int double)
 String
 Boolean
 List
@@ -11,6 +11,8 @@ Set
 Map
 Rune
 Symbol
+null
+tuple
 #+end_src
 
 
