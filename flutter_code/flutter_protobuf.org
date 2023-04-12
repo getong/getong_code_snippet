@@ -1,0 +1,26 @@
+* flutter protobuf
+
+** install
+
+#+begin_src sh
+flutter pub global activate protoc_plugin
+#+end_src
+
+** generate proto file into dart source code
+
+mymessage.proto
+#+begin_src protobuf
+syntax = "proto3";
+
+package mypackage;
+
+message MyMessage {
+  string text = 1;
+  int32 number = 2;
+}
+#+end_src
+
+generate dart code
+#+begin_src sh
+protoc --dart_out=grpc:lib/ mymessage.proto
+#+end_src
