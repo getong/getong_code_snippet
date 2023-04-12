@@ -912,6 +912,18 @@ $ nc –u –l 9999
 $ nc -u 192.168.1.102 9999
 #+end_src
 
+** Send and Receive packets via Linux CLI
+:PROPERTIES:
+:CUSTOM_ID: send-and-receive-udp-packets-via-linux-cli
+:END:
+#+begin_src shell
+# Start tcp Server:
+$ nc –l 9999
+
+# start tcp client:
+$ nc 192.168.1.102 9999
+#+end_src
+
 ** update grub2
 :PROPERTIES:
 :CUSTOM_ID: update-grub2
