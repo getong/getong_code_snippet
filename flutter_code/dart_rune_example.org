@@ -1,7 +1,7 @@
 * dart rune example
 
 ** Dart runes simple example
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   final msg = 'an old falcon';
   print(msg.codeUnits);
@@ -14,24 +14,26 @@ void main() {
 #+end_src
 
 #+RESULTS:
-: [97, 110, 32, 111, 108, 100, 32, 102, 97, 108, 99, 111, 110]
-: 97
-: 110
-: 32
-: 111
-: 108
-: 100
-: 32
-: 102
-: 97
-: 108
-: 99
-: 111
-: 110
+#+begin_example
+[97, 110, 32, 111, 108, 100, 32, 102, 97, 108, 99, 111, 110]
+97
+110
+32
+111
+108
+100
+32
+102
+97
+108
+99
+111
+110
+#+end_example
 
 
 ** Dart String.fromCharCode
-#+begin_src dart
+#+begin_src dart :results output
 import 'dart:io';
 void main() {
   final msg = "one 🐘 and three 🐋";
@@ -46,7 +48,7 @@ void main() {
 : o n e   🐘   a n d   t h r e e   🐋
 
 ** Dart emojis
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   final c1 = '\u{1F9F6}';
   final c2 = '\u{1FA86}';
@@ -72,7 +74,7 @@ void main() {
 : [55356, 57210]
 
 ** Dart runes length
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   final msg = 'one 🐘 and three 🐋';
 
@@ -88,7 +90,7 @@ void main() {
 
 
 ** dart graphemes
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   final msg1 = "falcon";
   final msg2 = "вишня";
@@ -109,7 +111,7 @@ void main() {
 : 6
 
 ** Dart characters
-#+begin_src dart
+#+begin_src dart :results output
 import 'package:characters/characters.dart';
 
 void main() {
