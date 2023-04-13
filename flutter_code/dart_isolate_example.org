@@ -180,3 +180,53 @@ echo(SendPort sendPort) async {
 : main received "echo said: port 4"
 
 copy from [[https://alvinalexander.com/dart/dart-isolates-example/][A Dart Isolates example (Actors in Dart)]]
+
+
+** another spawn example
+
+#+begin_src dart :results output
+import 'dart:async';
+import 'dart:isolate';
+
+void main() async {
+  final receivePort = ReceivePort(); // create a new ReceivePort to communicate with the isolate
+  final isolate = await Isolate.spawn(isolateFunction, receivePort.sendPort); // spawn the isolate and pass the sendPort of the ReceivePort
+
+  receivePort.listen((message) {
+    print('Received message: $message');
+  });
+
+  receivePort.sendPort.send('Hello from main isolate!'); // send a message to the isolate
+
+  await Future.delayed(Duration(seconds: 1)); // wait for 1 second
+
+  receivePort.sendPort.send('Another message from main isolate!'); // send another message to the isolate
+
+  await Future.delayed(Duration(seconds: 1)); // wait for 1 second
+
+  receivePort.sendPort.send('Goodbye from main isolate!'); // send a final message to the isolate
+
+  receivePort.close(); // close the ReceivePort when done
+}
+
+void isolateFunction(SendPort sendPort) {
+  final receivePort = ReceivePort(); // create a new ReceivePort to receive messages from the main isolate
+
+  sendPort.send('Hello from spawned isolate!'); // send a message to the main isolate
+
+  receivePort.listen((message) {
+    print('Received message: $message');
+  });
+
+  sendPort.send(receivePort.sendPort); // send the sendPort of the ReceivePort back to the main isolate
+
+  receivePort.close(); // close the ReceivePort when done
+}
+
+#+end_src
+
+#+RESULTS:
+: Received message: Hello from spawned isolate!
+: Received message: SendPort
+: Received message: Hello from main isolate!
+: Received message: Another message from main isolate!
