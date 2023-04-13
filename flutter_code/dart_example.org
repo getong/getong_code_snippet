@@ -2,7 +2,7 @@
 
 ** basic data types:
 
-#+begin_src dart
+#+begin_src dartrt
 Number(int double)
 String
 Boolean
@@ -29,7 +29,7 @@ class ClassName {
 
 ** fat arrow function
 
-#+begin_src dart
+#+begin_src dart :results output
 int funcName() => 42;
 #+end_src
 
@@ -108,41 +108,55 @@ A can inheritance B class and use C class functions.
 
 ** null check
 
-#+begin_src dart
+#+begin_src dart :results output
 x ??= 3;
 #+end_src
 
 
 ** Cascades
 
-#+begin_src dart
-"String".length.toString(); // 6
-"String"..length.toString(); // "String"
+#+begin_src dart :results output
+print("String".length.toString()); // 6
+print("String"..length.toString()); // "String"
 #+end_src
+
+#+RESULTS:
+: 6
+: String
 
 ** type
 
-#+begin_src dart
+#+begin_src dart :results output
 var type_string = <String> ['a', 'b', 'c'];
 print(type_string);
 print("hello" + "world");
 print("hello" * 2);
 #+end_src
 
+#+RESULTS:
+: [a, b, c]
+: helloworld
+: hellohello
+
 
 ** Set, StringBuffer data type
 
-#+begin_src dart
+#+begin_src dart :results output
 Set mySet = {1, 2, 3};
-mySet.lookup(2);
+print(mySet.lookup(2));
 
 StringBuffer stringBuffer = StringBuffer('test string');
 stringBuffer.write(' append string');
+print(stringBuffer);
 #+end_src
+
+#+RESULTS:
+: 2
+: test string append string
 
 ** Future class
 
-#+begin_src dart
+#+begin_src dart :results output
 import 'dart:async';
 
 void main(){
@@ -162,16 +176,16 @@ void main(){
 
 the output:
 
-#+begin_src sh
-The main UI thread is starting on here.
-The main UI thread ends.
-Displaying news headlines here: Instance of 'Future<String>', the displayString : The latest headlines are displayed here after 1 second.
-#+end_src
+#+RESULTS:
+: The main UI thread is starting on here.
+: The main UI thread ends.
+: Displaying news headlines here: Instance of 'Future<String>', the displayString : The latest headlines are displayed here after 1 second.
+
 
 It is noted that, the Future object still runs after the end of the main function.
 Some methods:
 
-#+begin_src dart
+#+begin_src dart :results output
 catchError(Function onError, {bool test(Object error)}) → Future<T>
 then<R>(FutureOr<R> onValue(T value), {Function onError}) → Future<R>
 timeout(Duration timeLimit, {FutureOr<T> onTimeout()}) → Future<T>
@@ -181,7 +195,7 @@ whenComplete(FutureOr action()) → Future<T>
 
 ** runZonedGuarded function
 
-#+begin_src dart
+#+begin_src dart :results output
 // 这样就可以处理所有未处理的异常了。
 void main() async {
   runZonedGuarded(() => runApp(const App()));
@@ -192,7 +206,7 @@ copy from [[https://segmentfault.com/a/1190000022892971][Flutter runZonedGuarded
 
 ** Isolate
 
-#+begin_src dart
+#+begin_src dart :results output
 Isolate.spawn<T>(void entryPoint(T message), T message, {bool paused: false, bool errorsAreFatal, SendPort onExit, SendPort onError, String debugName}) → Future<Isolate>
 Isolate.kill({int priority: beforeNextEvent}) → void
 #+end_src
@@ -200,7 +214,7 @@ Isolate.kill({int priority: beforeNextEvent}) → void
 
 ** async, await
 
-#+begin_src dart
+#+begin_src dart :results output
 main() {
     getData();
     print("continue...");
@@ -220,16 +234,15 @@ getData() async {
 
 ** ~/ operator
 
-#+begin_src dart
+#+begin_src dart :results output
 5 ~/ 2 == 2;
 7 ~/ 4 == 2;
 #+end_src
 
 #+RESULTS:
-: null
 
 ** number example
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   var i = 2;
   print(i.runtimeType);

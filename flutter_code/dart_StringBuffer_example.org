@@ -2,7 +2,7 @@
 
 ** Dart StringBuffer simple example
 
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   var msg = StringBuffer('There are');
   msg.write(' three ');
@@ -18,7 +18,7 @@ void main() {
 
 
 ** Dart StringBuffer writeln
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   var msg = StringBuffer('blue sky\n');
   msg.writeln('old owl');
@@ -41,7 +41,7 @@ void main() {
 
 ** Dart StringBuffer isEmpty
 
-#+begin_src dart
+#+begin_src dart :results output
 void main() {
   var msg = StringBuffer();
   check(msg);
