@@ -1,0 +1,91 @@
+* rust manage process
+
+** use tokio
+
+#+begin_src rust  :results output
+#!/usr/bin/env rust-script
+//! Dependencies can be specified in the script file itself as follows:
+//!
+//! ```cargo
+//! [dependencies]
+//! tokio = { version = "1.27.0", features = ["full"] }
+//! tracing = "0.1.37"
+//! rand = "0.8.0"
+//! ```
+use std::{process::Stdio, sync::Arc, time::Duration};
+use tokio::{io::AsyncBufReadExt, time::sleep};
+use tokio::{io::BufReader, process::Command, sync::RwLock};
+
+#[tokio::main]
+async fn main() {
+    println!("Let me run ls /tmp");
+    let mut command = Command::new("ls");
+    command.arg("/tmp");
+    command
+        // Output gets piped and read in separate tokio thread
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped());
+    let child = command
+        .spawn()
+        .expect(format!("Expect ls /tmp to start").as_str());
+    let child_ref = Arc::new(RwLock::new(child));
+
+    tokio::spawn(async move {
+        let mut child = child_ref.write().await;
+        let stdout = child
+            .stdout
+            .take()
+            .expect("child did not have a handle to stdout");
+        let stderr = child
+            .stderr
+            .take()
+            .expect("child did not have a handle to stderr");
+
+        let mut stdout_reader = BufReader::new(stdout).lines();
+        let mut stderr_reader = BufReader::new(stderr).lines();
+
+        drop(child);
+
+        loop {
+            tokio::select! {
+                result = stdout_reader.next_line() => {
+                    match result {
+                        Ok(Some(line)) => println!("ls said: {}", line),
+                        Err(_) => break,
+                        _ => (),
+                    }
+                }
+                result = stderr_reader.next_line() => {
+                    match result {
+                        Ok(Some(line)) => println!("ls complained: {}", line),
+                        Err(_) => break,
+                        _ => (),
+                    }
+                }
+            };
+        }
+    });
+
+    // We need to add this to make the parent process live long enough
+    sleep(Duration::from_secs(1)).await
+}
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Let me run ls /tmp
+ls said: TemporaryDirectory.8LTmJx
+ls said: TemporaryDirectory.8sgOmd
+ls said: TemporaryDirectory.Pym7au
+ls said: TemporaryDirectory.fPV9c8
+ls said: TemporaryDirectory.zCmEVx
+ls said: com.apple.launchd.n0ax55JeDv
+ls said: com.google.Keystone
+ls said: com.sogou.inputmethod
+ls said: powerlog
+ls said: tmux-501
+#+end_example
+
+copy from [[https://danielmschmidt.de/posts/managing-processes-in-rust/][Managing Processes in Rust]]
