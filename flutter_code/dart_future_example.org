@@ -1,7 +1,7 @@
 * dart future example
 
 ** Dart future simple example
-#+begin_src dart
+#+begin_src dart :results output
 void main() async {
   final myfut1 = Future.value(14);
   print(myfut1);
@@ -16,7 +16,7 @@ void main() async {
 : 14
 
 ** Dart Future.delayed
-#+begin_src dart
+#+begin_src dart :results output
 void main() async {
   Future.delayed(Duration(seconds: 2), () => 12).then((value) => print(value));
 
@@ -30,7 +30,7 @@ void main() async {
 : 14
 
 ** Dart Future.wait
-#+begin_src dart
+#+begin_src dart :results output
 import 'dart:async';
 import 'dart:math';
 
@@ -61,16 +61,16 @@ void main() async {
 #+end_src
 
 #+RESULTS:
-: 98
-: 135
-: 113
-: 89
-: 81
-: 64
-: Maximum is : 135
+: 71
+: 24
+: 52
+: 63
+: 28
+: 35
+: Maximum is : 71
 
 ** dart check for the existence of a directory.
-#+begin_src dart
+#+begin_src dart :results output
 import 'dart:io';
 
 void main() async {
