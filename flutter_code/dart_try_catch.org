@@ -1,0 +1,155 @@
+* dart try catch
+
+** basic example
+
+#+begin_src dart :results output
+void main() {
+  String message = "Hello";
+
+  try {
+    print("The character at the position 5 is ${message[5]}.");
+  } catch (e) {
+    print(e);
+  }
+
+  print('Bye!');
+}
+#+end_src
+
+#+RESULTS:
+: RangeError (index): Invalid value: Not in inclusive range 0..4: 5
+: Bye!
+
+** Stack trace
+
+#+begin_src dart :results output
+void fn() {
+  String message = "Hello";
+  try {
+    print("The character at the position 5 is ${message[5]}.");
+  } catch (e, s) {
+    print(e);
+    print(s);
+  }
+}
+
+void main() {
+  fn();
+  print('Bye!');
+}
+
+#+end_src
+
+#+RESULTS:
+: RangeError (index): Invalid value: Not in inclusive range 0..4: 5
+: #0      _StringBase.[] (dart:core-patch/string_patch.dart:258:41)
+: #1      fn (file:///var/folders/52/0w1s2h5s4073p6d8xjxsgyn80000gn/T/babel-vtz1MW/dart-JQiJ5u:5:56)
+: #2      main (file:///var/folders/52/0w1s2h5s4073p6d8xjxsgyn80000gn/T/babel-vtz1MW/dart-JQiJ5u:13:3)
+: #3      _delayEntrypointInvocation.<anonymous closure> (dart:isolate-patch/isolate_patch.dart:297:19)
+: #4      _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:192:26)
+:
+: Bye!
+
+** The on clauses
+
+#+begin_src dart :results output
+void main() {
+  String message = "Hello";
+
+  try {
+    print("The character at the position 5 is ${message[5]}.");
+  } on RangeError {
+    print('The valid range for the index is [0..${message.length - 1}].');
+  } catch (e) {
+    print(e);
+  }
+
+  print('Bye!');
+}
+#+end_src
+
+#+RESULTS:
+: The valid range for the index is [0..4].
+: Bye!
+
+** catch on statement
+
+#+begin_src dart :results output
+void main() {
+  String message = "Hello";
+  try {
+    print("The character at the position 5 is ${message[5]}.");
+  } on RangeError catch (e) {
+    print(e);
+  } catch (e) {
+    print(e);
+  }
+  print('Bye!');
+}
+#+end_src
+
+#+RESULTS:
+: RangeError (index): Invalid value: Not in inclusive range 0..4: 5
+: Bye!
+
+copy from [[https://www.darttutorial.org/dart-tutorial/dart-try-catch/][Dart try catch]]
+
+** throw function
+
+#+begin_src dart :results output
+void displayName(str) {
+  if (str.length > 0) {
+    print(str);
+  } else {
+    throw new Exception('Name is empty.');
+  }
+}
+
+void main() {
+  var name = '';
+  try {
+    displayName(name);
+  } catch (e) {
+    print('There is an exception.');
+  }
+  print('Bye');
+}
+#+end_src
+
+#+RESULTS:
+: There is an exception.
+: Bye
+
+
+** implements Exception
+
+#+begin_src dart :results output
+class EmptyNameException implements Exception {
+  String cause;
+  EmptyNameException(this.cause);
+}
+
+void displayName(str) {
+  if (str.length > 0) {
+    print(str);
+  } else {
+    throw new EmptyNameException('Name is empty.');
+  }
+}
+
+void main() {
+  var name = '';
+  try {
+    displayName(name);
+  } on EmptyNameException {
+    print('Given name is empty.');
+  }
+  print('Bye');
+}
+#+end_src
+
+#+RESULTS:
+: Given name is empty.
+: Bye
+
+copy from [[https://www.tutorialkart.com/dart/dart-try-catch/][Dart – Try Catch]]
