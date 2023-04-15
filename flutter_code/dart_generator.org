@@ -1,0 +1,141 @@
+* dart generator
+
+** async* stands for generator
+
+** dart synchronous generator
+Iterable<int> createSyncGenerator(int n) sync* {
+-----------
+}
+
+  yield k++;
+
+#+begin_src dart :results output
+void main() {
+
+  //call SyncGenerator
+  Iterable<int> syncGenerator=createSyncGenerator(15);
+
+  //use SyncGenerator
+  Iterator<int> iterator=syncGenerator.iterator;
+  while(iterator.moveNext()) {
+    print(iterator.current);
+  }
+
+}
+
+//Create SyncGenerator
+Iterable<int> createSyncGenerator(int n) sync* {
+  int k = 0;
+  while (k < n) yield k++;
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+#+end_example
+
+
+** dart asynchronous generator
+
+Stream<int> createAsyncGenerator(int n) async* {
+  -------------------
+}
+
+  yield k++;
+
+#+begin_src dart :results output
+void main() {
+
+  //call AsyncGenerator
+  Stream<int> asyncGenerator=createAsyncGenerator(15);
+
+  //use AsyncGenerator
+  asyncGenerator.listen((int value) {
+    print('Value Form Async Generator: $value');
+  });
+
+}
+
+//Create AsyncGenerator
+Stream<int> createAsyncGenerator(int n) async* {
+  int k = 0;
+  while (k < n) {
+     await new Future.delayed(new Duration(seconds: 1)); //sleep 1s
+     yield k++;
+  }
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Value Form Async Generator: 0
+Value Form Async Generator: 1
+Value Form Async Generator: 2
+Value Form Async Generator: 3
+Value Form Async Generator: 4
+Value Form Async Generator: 5
+Value Form Async Generator: 6
+Value Form Async Generator: 7
+Value Form Async Generator: 8
+Value Form Async Generator: 9
+Value Form Async Generator: 10
+Value Form Async Generator: 11
+Value Form Async Generator: 12
+Value Form Async Generator: 13
+Value Form Async Generator: 14
+#+end_example
+
+copy from [[https://medium.com/@mibcoder/async-coding-with-dart-generators-e2523901b34d][Async Coding With Dart: Generators]]
+
+** stream generator function example
+
+#+begin_src dart :results output
+// async* function(s) return an stream
+Stream asyncNo(int num) async* {
+  int x = 10;
+
+  while (x >= num) {
+    yield x--;
+  }
+}
+
+// Main Function
+void main(){
+  print("using Asynchronous Generator:");
+
+  asyncNo(0).forEach(print);
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+using Asynchronous Generator:
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+#+end_example
+
+copy from [[https://www.educative.io/answers/what-are-generators-in-dart][What are generators in Dart?]]

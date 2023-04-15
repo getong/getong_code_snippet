@@ -1,0 +1,89 @@
+* dart stream and timer
+
+** StreamController example
+
+#+begin_src dart :results output
+import 'dart:async';
+
+void main() async {
+    final streamController = StreamController<DateTime>();
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      streamController.add(DateTime.now());
+    });
+
+    streamController.stream.listen((event) {
+      print(event);
+    });
+}
+#+end_src
+
+** Cleaning up the stream subscription
+
+#+begin_src dart :results output
+import 'dart:async';
+
+void main() async {
+   final streamController = StreamController<DateTime>();
+    final unsubscribeAt = DateTime.now().add(Duration(seconds: 10));
+    StreamSubscription<DateTime>? subscription;
+
+    Timer.periodic(Duration(seconds: 2), (timer) {
+      streamController.add(DateTime.now());
+    });
+
+    subscription = streamController.stream.listen((event) async {
+      print(event);
+      if (event.isAfter(unsubscribeAt)) {
+        print("It's after ${unsubscribeAt}, cleaning up the stream");
+        await subscription?.cancel();
+      }
+    });
+}
+#+end_src
+
+** stream error
+
+#+begin_src dart :results output
+import 'dart:async';
+
+void main() async {
+   final streamController = StreamController<DateTime>();
+    final unsubscribeAt = DateTime.now().add(Duration(seconds: 10));
+    late StreamSubscription<DateTime> subscription;
+
+    final timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      streamController.add(DateTime.now());
+      if (DateTime.now().second % 3 == 0) {
+        streamController.addError(() => Exception('Seconds are divisible by three.'));
+      }
+    });
+
+    subscription = streamController.stream.listen((event) async {
+      print(event);
+      if (event.isAfter(unsubscribeAt)) {
+        print("It's after ${unsubscribeAt}, cleaning up the stream");
+        timer.cancel();
+        await streamController.close();
+        await subscription.cancel();
+      }
+    }, onError: (err, stack) {
+      print('the stream had an error :(');
+    }, onDone: () {
+      print('the stream is done :)');
+    });
+}
+#+end_src
+
+#+RESULTS:
+: 2023-04-16 01:37:23.097879
+: 2023-04-16 01:37:25.095293
+: 2023-04-16 01:37:27.094806
+: the stream had an error :(
+: 2023-04-16 01:37:29.095187
+: 2023-04-16 01:37:31.095688
+: It's after 2023-04-16 01:37:31.090588, cleaning up the stream
+: the stream is done :)
+
+
+copy from [[https://blog.logrocket.com/understanding-flutter-streams/][Understanding Flutter streams
+]]
