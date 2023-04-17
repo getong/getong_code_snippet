@@ -910,6 +910,9 @@ $ nc –u –l 9999
 
 # start udp client:
 $ nc -u 192.168.1.102 9999
+
+# macos udp server
+$ nc –u –l 192.168.1.101 9999
 #+end_src
 
 ** Send and Receive packets via Linux CLI
@@ -919,6 +922,9 @@ $ nc -u 192.168.1.102 9999
 #+begin_src shell
 # Start tcp Server:
 $ nc –l 9999
+
+# macos tcp server
+$ nc –l 192.168.1.101 9999
 
 # start tcp client:
 $ nc 192.168.1.102 9999
