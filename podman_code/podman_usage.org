@@ -1,0 +1,23 @@
+* podman usage
+
+** podman installation
+
+#+begin_src sh
+brew upgrade podman
+
+podman machine init
+podman machine set --rootful
+podman machine start
+#+end_src
+
+** get current images
+
+#+begin_src sh
+podman images
+#+end_src
+
+** poll a image
+
+#+begin_src sh
+podman pull docker.io/qaware/protocurl
+#+end_src
