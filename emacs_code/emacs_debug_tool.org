@@ -1,0 +1,90 @@
+* emacs debug tool
+
+** gud
+
+#+begin_quote
+在 Emacs 中进行 Rust 的调试可以使用 GUD（Grand Unified Debugger）模式。下面是调试 Rust 程序的步骤：
+
+确保您已经安装了 Rust 的调试工具链（GDB）。
+
+打开要调试的 Rust 程序文件，并在文件中设置断点。您可以使用 rust-lldb 包来设置断点，例如 M-x rust-lldb 命令。
+
+使用 M-x gdb 命令打开 GUD 模式，并在打开的窗口中输入要调试的程序的执行命令和参数。
+
+使用 C-x C-a C-n 命令开始调试，或使用 C-x C-a C-j 命令跳转到当前行的断点处。
+
+使用 C-x C-a C-b 命令继续执行程序，直到下一个断点或程序结束。
+
+在 GUD 模式中，您可以使用常规的调试命令，如 C-x C-a C-s 命令单步执行程序，C-x C-a C-r 命令运行程序到下一个断点，C-x C-a C-u 命令返回当前调用栈的上一层等等。
+#+end_quote
+
+copy from [[https://juejin.cn/s/debug%20rust%20in%20emacs][debug rust in emacs]]
+
+** Debugging Rust with rust-lldb
+
+#+begin_src sh
+rust-lldb target/debug/deps/BIN-HASH -- arg1 arg2 ...
+
+breakpoint set --name func
+b func
+
+breakpoint set -f src/path/to/file.rs -l linenr
+b src/path/to/file.rs:linenr
+
+settings set target.input-path <path-to-file>
+#+end_src
+
+copy from [[https://dev.to/bmatcuk/debugging-rust-with-rust-lldb-j1f][Debugging Rust with rust-lldb]]
+
+** Cargo.toml setting
+#+begin_src rust
+# The development profile, used for `cargo build`
+[profile.dev]
+opt-level = 0  # Controls the --opt-level the compiler builds with
+debug = true   # Controls whether the compiler passes `-g`
+# The release profile, used for `cargo build --release`
+[profile.release]
+opt-level = 3
+debug = false
+#+end_src
+
+** gdb example
+
+#+begin_src sh
+$ gdb -q ./pretty
+Reading symbols from ./pretty...done.
+warning: Missing auto-load script at offset 0 in section
+.debug_gdb_scripts of file /home/cam/pretty.
+Use `info auto-load python-scripts [REGEXP]' to list them.
+
+
+
+(gdb) b 14
+Breakpoint 1 at 0x4d1f: file pretty.rs, line 14.
+(gdb) r
+Starting program: /home/cam/pretty
+Breakpoint 1, pretty::main () at pretty.rs:14
+14            println!("{}: {}", label.index, label.color);
+(gdb) p label
+$1 = {index = 0, color = {
+    data_ptr = 0x55555559155c <str4488>
+        "redyellowpinkgreenpurpleorangebluepretty.rs: \n",
+    length = 3}}
+#+end_src
+
+** rust-gdb example
+
+#+begin_src sh
+$ rust-gdb -q ./pretty
+Reading symbols from ./pretty...done.
+(gdb) b 14
+Breakpoint 1 at 0x4d1f: file pretty.rs, line 14.
+(gdb) r
+Starting program: /home/cam/pretty
+Breakpoint 1, pretty::main () at pretty.rs:14
+14            println!("{}: {}", label.index, label.color);
+(gdb) p label
+$1 = Label = {index = 0, color = "red"}
+#+end_src
+
+copy from [[https://bitshifter.github.io/rr+rust/index.html#1][Debugging & Rust]]
