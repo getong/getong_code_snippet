@@ -183,3 +183,37 @@ Stream<S> transform<S>(StreamTransformer<T, S> streamTransformer);
 #+end_src
 
 copy from [[https://dart.dev/tutorials/language/streams][Asynchronous programming: Streams]]
+
+** simple timer
+
+#+begin_src dart :results output
+import 'dart:async';
+
+void main() {
+  final stream = Stream.periodic(Duration(seconds: 2), (i) => i)
+      .take(5); // create a stream that emits an integer every second, for 5 seconds
+
+  final timeout = Duration(seconds: 1); // set a timeout of 3 seconds
+
+  stream.timeout(timeout, onTimeout: (event) {
+    print('Timeout occurred!');
+    // return 0; // return a default value when a timeout occurs
+  }).listen((event) {
+    print('Received $event');
+  });
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Timeout occurred!
+Received 0
+Timeout occurred!
+Received 1
+Timeout occurred!
+Received 2
+Timeout occurred!
+Received 3
+Timeout occurred!
+Received 4
+#+end_example
