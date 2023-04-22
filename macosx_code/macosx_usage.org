@@ -323,3 +323,9 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE
 
 copy from
 [[https://www.jianshu.com/p/3f8008fb3985][MacOS禁止.DS_store生成]]
+
+
+** homebrew use proxy
+#+begin_src sh
+ALL_PROXY=socks5://127.0.0.1:10808 brew upgrade
+#+end_src
