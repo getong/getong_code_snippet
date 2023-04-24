@@ -136,3 +136,69 @@ Use .count(). len() is only for iterators which know their exact size
 without needing to be consumed, count() consumes the iterator. copy from
 [[https://stackoverflow.com/questions/26643688/how-do-i-split-a-string-in-rust][How
 do I split a string in Rust?]]
+
+** skip
+
+#+begin_src rust
+fn main() {
+    let m = FloatIter::new(1.0, 0.1, 2.0)
+        .into_iter()
+        //here x is converted to String from float
+        .map(|x| format!("{x:.1}"))
+        //here x is converted to formatted float from string
+        .filter_map(|x| x.parse::<f64>().ok())
+        .collect::<Vec<_>>();
+
+    for i in &m {
+        println!("{:?}", i);
+    }
+
+    for i in FloatIter::new(2.0, 0.3, 3.0).into_iter() {
+        println!("Square root {i:.1}");
+    }
+}
+#[derive(Debug)]
+struct FloatIter {
+    start: f64,
+    incr: f64,
+    end: f64,
+}
+impl FloatIter {
+    fn new(start: f64, incr: f64, end: f64) -> Self {
+        Self { start, incr, end }
+    }
+}
+impl Iterator for FloatIter {
+    type Item = f64;
+    fn next(&mut self) -> Option<Self::Item> {
+        let end = self.start;
+        if end >= self.end {
+            return None;
+        } else {
+            self.start += self.incr;
+            Some(end)
+        }
+    }
+}
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+1.0
+1.1
+1.2
+1.3
+1.4
+1.5
+1.6
+1.7
+1.8
+1.9
+Square root 2.0
+Square root 2.3
+Square root 2.6
+Square root 2.9
+#+end_example
+
+copy from [[https://github.com/Sanjuvi/Object-Oriented-Programming-In-Rust][Object-Oriented-Programming-In-Rust]]
