@@ -27,4 +27,36 @@ cd edge_functions
 supabase init
 #+end_src
 
+** edge build
+#+begin_src sh
+edge build supabase_functions
+supabase start
+supabase functions serve dart_edge --no-verify-jwt
+#+end_src
+
+** edge deploy
+
+#+begin_src sh
+supabase functions deploy dart_edge
+#+end_src
+
+** Connect to Supabase from the edge
+
+#+begin_src sh
+dart pub add supabase
+dart pub add edge_http_client
+#+end_src
+
 copy from [[https://dartling.dev/full-stack-dart-with-flutter-supabase-and-dart-edge][Full-stack Dart with Flutter, Supabase and Dart Edge]]
+
+
+** supabase_flutter example
+
+#+begin_src sh
+flutter create supabase_quickstart
+cd supabase_quickstart
+flutter pub add supabase_flutter
+flutter pub get
+#+end_src
+
+copy from [[https://supabase.com/docs/guides/getting-started/tutorials/with-flutter][Build a User Management App with Flutter]]
