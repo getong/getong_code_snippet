@@ -1,0 +1,30 @@
+* supabase
+
+** installation on macos
+
+#+begin_src sh
+brew install supabase/tap/supabase
+#+end_src
+
+upgrade
+#+begin_src sh
+brew upgrade supabase
+#+end_src
+
+copy from [[https://supabase.com/docs/guides/cli][Supabase CLI]]
+
+** edge installation
+
+#+begin_src sh
+dart pub global activate edge
+#+end_src
+
+** edge example
+
+#+begin_src sh
+edge new supabase_functions edge_functions
+cd edge_functions
+supabase init
+#+end_src
+
+copy from [[https://dartling.dev/full-stack-dart-with-flutter-supabase-and-dart-edge][Full-stack Dart with Flutter, Supabase and Dart Edge]]
