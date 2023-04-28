@@ -1,0 +1,110 @@
+* dart future timeout
+
+** set timeout
+
+#+begin_src dart :resouts output
+Future<String> fetchValue() async {
+    await Future.delayed(Duration(seconds: 5));
+    print('done');
+    return Future.value('my_value');
+  }
+// String value = await fetchValue()
+//       .timeout(Duration(seconds: 3));
+
+// print(value);
+
+try {
+    final value = await fetchValue()
+        .timeout(Duration(seconds: 3));
+    print('value: $value');
+  } catch (err) {
+    print(err);
+  }
+
+await fetchValue()
+      .timeout(
+        Duration(seconds: 3),
+        onTimeout: () {
+          // Handle timeout here
+          return 'timeout';
+        }
+      );
+#+end_src
+
+#+RESULTS:
+: null
+
+
+**
+#+begin_src dart :results output
+void main() async {
+  var result =
+      await waitTask("completed").timeout(const Duration(seconds: 10));
+  print(result); // Prints "completed" after 5 seconds.
+
+  result = await waitTask("completed")
+      .timeout(const Duration(seconds: 1), onTimeout: () => "timeout");
+  print(result); // Prints "timeout" after 1 second.
+
+  result = await waitTask("first").timeout(const Duration(seconds: 2),
+      onTimeout: () => waitTask("second"));
+  // Prints "second" after 7 seconds.
+
+  try {
+    await waitTask("completed").timeout(const Duration(seconds: 2));
+  } on TimeoutException {
+    print("throws"); // Prints "throws" after 2 seconds.
+  }
+
+  var printFuture = waitPrint();
+  await printFuture.timeout(const Duration(seconds: 2), onTimeout: () {
+    print("timeout");
+  });
+  // Prints "timeout" after 2 seconds.
+  await printFuture;
+  // Prints "printed" after additional 3 seconds.
+}
+
+// Returns [string] after five seconds.
+Future<String> waitTask(String string) async {
+  await Future.delayed(const Duration(seconds: 5));
+  return string;
+}
+
+// Prints "printed" after five seconds.
+Future<void> waitPrint() async {
+  await Future.delayed(const Duration(seconds: 5));
+  print("printed");
+}
+#+end_src
+
+#+RESULTS:
+: completed
+: timeout
+: throws
+: timeout
+: printed
+
+
+
+copy from [[https://api.flutter.dev/flutter/dart-async/Future/timeout.html][timeout abstract method]]
+
+
+** basic
+
+#+begin_src dart :results output
+try {
+  // TODO: show loading
+  fianl userLocation = await location.current.timeout(Duration(seconds: 30));
+  print(userLocation);
+  // TODO: access userLocation here
+} catch (error) {
+  print("error");
+  // TODO: handle future timed out or some other error
+} finally {
+  // TODO: hide loading
+  print("finally");
+}
+#+end_src
+
+#+RESULTS:
