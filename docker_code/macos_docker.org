@@ -1,0 +1,23 @@
+* macos docker
+
+** install docker, not cask
+
+#+begin_src sh
+brew install docker docker-compose docker-machine
+
+echo 'export PATH=$HOME/.docker/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+#+end_src
+
+** install
+
+#+begin_src sh
+docker-machine rm default
+docker-machine create -d virtualbox --virtualbox-hostonly-cidr "192.168.1.100/24" default
+#+end_src
+
+copy from [[https://www.robinwieruch.de/docker-macos/][How to install Docker on MacOS]]
+[[https://stackoverflow.com/questions/69805077/cannot-start-docker-daemon-at-macbook/70373434#70373434][Cannot start Docker daemon at MacBook]]
+[[https://stackoverflow.com/questions/70281938/docker-machine-unable-to-create-a-machine-on-macos-vboxmanage-returning-e-acces][docker-machine unable to create a machine on macOS, VBoxManage returning E_ACCESSDENIED error]]
+[[https://jongsma.wordpress.com/2021/11/29/docker-and-the-virtualbox-host-only-networks/][Docker and the VirtualBox host-only networks]]
+[[https://pilsniak.com/how-to-install-docker-on-mac-os-using-brew][How to install Docker on Mac OS using brew?]]
