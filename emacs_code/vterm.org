@@ -1,0 +1,26 @@
+* vterm
+
+** vterm change current working directory on macos
+
+add below into ~/.zshrc
+#+begin_src sh
+vterm_set_directory() {
+  vterm_cmd update-pwd "$PWD/"
+}
+vterm_set_directory() {
+  vterm_cmd update-pwd "/-:""$USER""@""$HOSTNAME"":""$PWD/"
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook -Uz chpwd (){ vterm_set_directory }
+#+end_src
+
+copy from [[https://github.com/akermu/emacs-libvterm#how-can-i-get-the-local-directory-without-shell-side-configuration][How can I get the local directory without shell-side configuration?
+]]
+
+add this into ~/.tmux.conf
+#+begin_src tmux
+set -g allow-passthrough on
+#+end_src
+
+copy from [[https://github.com/akermu/emacs-libvterm/issues/600][Directory & prompt tracking work, except in tmux]]
