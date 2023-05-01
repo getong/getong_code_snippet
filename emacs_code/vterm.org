@@ -2,7 +2,7 @@
 
 ** vterm change current working directory on macos
 
-add below into ~/.zshrc
+*** add below into ~/.zshrc
 #+begin_src sh
 vterm_printf() {
    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ]); then
@@ -48,9 +48,17 @@ add-zsh-hook -Uz chpwd (){ vterm_set_directory }
 copy from [[https://github.com/akermu/emacs-libvterm#how-can-i-get-the-local-directory-without-shell-side-configuration][How can I get the local directory without shell-side configuration?
 ]]
 
-add this into ~/.tmux.conf
-#+begin_src tmux
+*** add this into ~/.tmux.conf
+#+begin_src sh
 set -g allow-passthrough on
 #+end_src
 
 copy from [[https://github.com/akermu/emacs-libvterm/issues/600][Directory & prompt tracking work, except in tmux]]
+
+*** add this into emacs init.el
+
+#+begin_src emacs-lisp
+(add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
+#+end_src
+
+copy from [[https://github.com/akermu/emacs-libvterm][Emacs libvterm integration]]
