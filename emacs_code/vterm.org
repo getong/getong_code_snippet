@@ -35,8 +35,8 @@ say() {
  }
 
 vterm_set_directory() {
-    vterm_cmd update-pwd "/-:""$USER""@""$HOSTNAME"":""$PWD/"
-}
+   vterm_cmd update-pwd "$PWD/"
+ }
 
 autoload -U add-zsh-hook
 add-zsh-hook -Uz chpwd (){ vterm_set_directory }
