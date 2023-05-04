@@ -2,8 +2,9 @@
 :PROPERTIES:
 :CUSTOM_ID: rust-database
 :END:
-copy from [[https://morioh.com/p/2fee088c9750][10 Popular Rust Libraries
-for Database]]
+copy from [[https://morioh.com/p/2fee088c9750][10 Popular Rust Libraries for Database]]
+copy from [[https://www.libhunt.com/l/rust/topic/cloud-native][Top 14 Rust cloud-native Projects]]
+
 
 [[https://github.com/datafuselabs/databend][databend]]
 [[https://github.com/skytable/skytable][skytable]]
@@ -25,3 +26,15 @@ for Database]]
 [[https://github.com/lnx-search/lnx][lnx]]
 [[https://github.com/meilisearch/meilisearch][meilisearch]]
 [[https://github.com/quickwit-oss/quickwit][quickwit]]
+[[https://github.com/roapi/roapi][roapi]]
+[[https://github.com/GreptimeTeam/greptimedb][greptimedb]]
+[[https://github.com/infinyon/fluvio][fluvio]]
+[[https://github.com/parseablehq/parseable][parseable]]
+[[https://github.com/matanolabs/matano][matano]]
+[[https://github.com/wasmCloud/wasmCloud][wasmCloud]]
+[[https://github.com/nats-io/nats.rs][nats.rs]]
+[[https://github.com/curiefense/curiefense][curiefense]]
+[[https://github.com/deislabs/spiderlightning][spiderlightning]]
+[[https://github.com/akkoro/assemblylift][assemblylift]]
+[[https://github.com/okteto/rust-getting-started][Develop Rust Apps in Kubernetes with Okteto]]
+[[https://rust-cloud-native.github.io/][Rust Cloud Native]]
