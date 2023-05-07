@@ -500,6 +500,21 @@ copy from
 to modify a PKGBUILD which uses git sources to pull only a shallow
 clone?]]
 
+** fix Verifying source file signatures with gpg
+#+begin_src
+Verifying source file signatures with gpg...
+    archlinux-linux git repo ... SIGNATURE NOT FOUND
+==> ERROR: One or more PGP signatures could not be verified!
+#+end_src
+
+It must fetch the latest source, including tags
+#+begin_src sh
+cd archlinux-linux
+git fetch origin --tags
+git checkout master
+git reset --hard origin/master
+#+end_src
+
 ** install software
 :PROPERTIES:
 :CUSTOM_ID: install-software
