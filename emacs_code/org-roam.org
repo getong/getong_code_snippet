@@ -1,0 +1,27 @@
+* org-roam
+
+** basic usage
+#+begin_src
+创建日记
+C-c n j
+这个会在 org-roam-directory/daily 下创建一个日记, 日记名字为日期
+
+创建笔记
+C-c n c
+如果存在 则跳到对应的地方 更新笔记
+
+查找笔记或者创建笔记
+C-c n f
+
+如果笔记不存在则创建笔记
+如果笔记存在则打开笔记
+在笔记中引用别的笔记
+C-c n i
+org-roam
+
+查看笔记的2D 图
+C-c n g
+笔记多了就不好看了 有可能会显示失败
+#+end_src
+
+coopy from [[https://www.skfwe.cn/p/org-roam-%E4%BD%BF%E7%94%A8/][org-roam 使用]]
