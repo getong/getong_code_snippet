@@ -9,5 +9,50 @@
 see
 [[https://www.bilibili.com/read/cv12686863][HHKB无刻键帽清洁后如何装回]]
 
+#+begin_src
+1.白色普通键帽（最小的那种）
+
+规律：键帽背后通常有4种编号：B、C、D、E，分别对应四个倾斜度。B对应最下面两层（含空格层），CDE分别对应最上面三层（由下到上）
+
+方法：按编号分为4类，然后直接安装到对应行
+
+注意：有凸起点的是F键和J键
+
+2.灰色特殊键帽
+
+规律：和同一行的普通键帽倾斜度相同。同时有特定的位置（参考上图）
+
+方法：和普通键帽对比倾斜度，倾斜度一样的装在同一行即可
+#+end_src
+
 also see
-[[https://i0.hdslb.com/bfs/article/f686b3374e532d8ca5df4530e3ac4ce809d200cb.png@858w_410h_progressive.webp]]
+[[file:./f686b3374e532d8ca5df4530e3ac4ce809d200cb.png@858w_410h_progressive.webp]]
+
+** hhkb key map
+
+[[file:./5659772-82d548fddc90a436.webp]]
+
+** connect key
+
+#+begin_src
+Turn on HHKB.
+Press “Fn + Q” followed by “Fn + Ctrl + 1”.
+Open the system preference in macOS and select “Bluetooth”.
+You will find the Bluetooth keyboard in the list of available devices.
+Click the connect button.
+Paring will complete shortly.
+#+end_src
+
+copy from [[https://www.lewuathe.com/macos-monterey-does-not-find-hhkb-for-bluetooth.html][macOS Monterey does not find HHKB for Bluetooth]]
+
+** other connect key
+
+#+begin_src
+键盘开机
+按住Fn + Q进入配对模式, 表现为蓝色的灯一直闪烁
+再按住Fn + Z + ~键清空键盘蓝牙配对信息, 键盘会自动关闭, 灯会变成橙色
+再长按开关键重新打开键盘, 按住Fn + Q重新进行进入配对模式
+按住Fn + Control + 1/2/3/4, 指定1,2,3,4任意一个序号, 之后电脑重新搜索蓝牙就可以找到你刚才用的序号命名的键盘了, 再次连接键盘就恢复了
+#+end_src
+
+[[file:./hhkb-bluetooth-match-fix.png]]
