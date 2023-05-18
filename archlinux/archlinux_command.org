@@ -2137,3 +2137,8 @@ pdftk input.pdf cat 1 output 1.pdf
 #+begin_src shell
 sudo pacman -S nushell starship zellij
 #+end_src
+
+** emacs-pretest
+#+begin_src sh
+yay -S emacs-pretest
+#+end_src
