@@ -2,7 +2,7 @@
 
 ** macos set java sdk
 If already have android studio installed simply run:
-#+begin_src
+#+begin_src sh
 # add this into ~/.zshrc file
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
@@ -19,7 +19,7 @@ flutter doctor
 copy from [[https://stackoverflow.com/questions/68236007/i-am-getting-error-cmdline-tools-component-is-missing-after-installing-flutter][cmdline-tools component is missing]]
 
 ** archlinux install flutter
-#+begin_src
+#+begin_src sh
 pacman -S --needed git base-devel
 git clone https://aur.archlinux.org/yay.git
 cd yay
@@ -73,7 +73,7 @@ see also [[https://www.rockyourcode.com/how-to-get-flutter-and-android-working-o
 
 
 ** dart repl package
-#+begin_src
+#+begin_src sh
 $ dart pub global activate interactive
 
 $ echo 'export PATH="$HOME/.pub-cache/bin":"$PATH"' >> ~/.zshrc
@@ -83,7 +83,7 @@ $ interactive
 #+end_src
 
 interactive usage
-#+begin_src
+#+begin_src dart
 >>> class A {
 ...     late int val;
 ... }
@@ -121,7 +121,7 @@ copy from [[https://devlights.hatenablog.com/entry/2022/11/04/073000][Flutterメ
 see also [[https://flutterawesome.com/repl-interactive-shell-for-dart-supporting-3rd-party-packages-hot-reload-and-full-grammar/][REPL (interactive shell) for Dart, supporting 3rd party packages, hot reload, and full grammar]]
 
 ** flutter download link
-#+begin_src
+#+begin_src sh
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/linux/flutter_linux_3.0.2-stable.tar.xz
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/macos/flutter_macos_3.0.2-stable.zip
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/dart-archive/channels/stable/release/2.17.3/sdk/dartsdk-linux-x64-release.zip
@@ -146,12 +146,12 @@ get android studio [[https://developer.android.google.cn/studio]]
 
 ** pub install package
 
-#+begin_src
+#+begin_src sh
 pub global active package_names
 #+end_src
 
 ** install flutter in archlinux
-#+begin_src
+#+begin_src sh
 sudo pacman -S flutter android-tools kotlin dart android-studio android-emulator android-sdk
 sudo gpasswd -a $USER flutterusers
 newgrp flutterusers
@@ -159,7 +159,7 @@ newgrp flutterusers
 copy from [[https://dev.to/nabbisen/start-flutter-2-in-arch-linux-4ab6][Start Flutter 2 in Arch Linux]]
 
 ** flutter cmd usage
-#+begin_src
+#+begin_src sh
 ## detector the fluter environment
 flutter doctor
 
@@ -189,7 +189,7 @@ flutter run
 #+end_src
 
 ** flutter widget key functions
-#+begin_src
+#+begin_src dart
 Widget.build/1 function will build the UI.
 setState/1 function will rebuild the UI.
 createState/0 function will create the State.
@@ -229,4 +229,9 @@ and the macos/Runner/Release.entitlements
 
 <key>com.apple.security.network.client</key>
 <true/>
+#+end_src
+
+** set android-studio directory
+#+begin_src sh
+flutter config --android-studio-dir /Applications/Android\ Studio.app
 #+end_src
