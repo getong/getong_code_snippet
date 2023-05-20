@@ -1,0 +1,88 @@
+* cpp call rust code
+
+** install cbindgen
+
+macos
+#+begin_src sh
+brew install cbindgen
+#+end_src
+
+linux
+#+begin_src sh
+cargo install --force cbindgen
+#+end_src
+
+copy from https://github.com/mozilla/cbindgen
+
+** setup rust library project
+#+begin_src sh
+cargo new --lib my_lib
+#+end_src
+
+add to Cargo.toml
+#+begin_src sh
+[package]
+name = "my_lib"
+version = "0.1.0"
+edition = "2021"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "my_lib"
+crate-type = ["cdylib"]      # Creates dynamic lib
+# crate-type = ["staticlib"] # Creates static lib
+
+[build-dependencies]
+cbindgen = "0.24.3"
+#+end_src
+
+add rust code to src/lib.rs
+#+begin_src rust
+#[no_mangle]
+pub extern "C" fn rust_function() {
+    println!("hello wrold from rust code");
+}
+#+end_src
+
+build.rs
+#+begin_src rust
+use std::env;
+
+fn main() {
+    let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+
+    cbindgen::Builder::new()
+        .with_crate(crate_dir)
+        .generate()
+        .expect("Unable to generate bindings")
+        .write_to_file("my_lib.h");
+}
+#+end_src
+
+** compile the rust code
+#+begin_src sh
+cargo build --release --lib
+#+end_src
+
+This command wil generate my_lib.h in current directory.
+
+** the cpp file calling rust code
+#+begin_src cpp
+#include "my_lib.h"
+
+int main() {
+  rust_function();
+  return 0;
+}
+#+end_src
+
+** compile cpp source file
+#+begin_src sh
+g++ my_lib.cpp -o my_lib  -I . -L target/release -l my_lib
+#+end_src
+
+** execute the binary file
+#+begin_src sh
+./my_lib
+#+end_src
