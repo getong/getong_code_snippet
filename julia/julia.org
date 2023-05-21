@@ -130,3 +130,9 @@ copy from [[https://stackoverflow.com/questions/36398629/change-package-director
 #+begin_src sh
 Flux
 #+END_SRC
+
+** makie library
+#+begin_src julia
+]add GLMakie
+using GLMakie
+#+end_src
