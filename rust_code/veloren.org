@@ -168,7 +168,7 @@ let thread_pool = Arc::new(
         );
 #+end_src
 
-** 
+**
 :PROPERTIES:
 :CUSTOM_ID: section
 :END:
@@ -388,4 +388,66 @@ veloren.
 :END:
 #+begin_src rust
 spin_sleep::sleep(Duration::from_secs(5));
+#+end_src
+
+
+** new connection
+
+#+begin_src rust
+#[cfg(feature = "quic")]
+    pub(crate) async fn new_quic(
+        mut connection: quinn::NewConnection,
+        listen: bool,
+        metrics: ProtocolMetricCache,
+    ) -> Result<Self, quinn::ConnectionError> {
+        let (sendstream, recvstream) = if listen {
+            connection.connection.open_bi().await?
+        } else {
+            connection
+                .bi_streams
+                .next()
+                .await
+                .ok_or(quinn::ConnectionError::LocallyClosed)??
+        };
+        let (recvstreams_s, recvstreams_r) = mpsc::unbounded_channel();
+        let streams_s_clone = recvstreams_s.clone();
+        let (sendstreams_s, sendstreams_r) = mpsc::unbounded_channel();
+        let sp = QuicSendProtocol::new(
+            QuicDrain {
+                con: connection.connection.clone(),
+                main: sendstream,
+                reliables: HashMap::new(),
+                recvstreams_s: streams_s_clone,
+                sendstreams_r,
+            },
+            metrics.clone(),
+        );
+        spawn_new(recvstream, None, &recvstreams_s);
+        let rp = QuicRecvProtocol::new(
+            QuicSink {
+                con: connection.connection,
+                bi: connection.bi_streams,
+                recvstreams_r,
+                recvstreams_s,
+                sendstreams_s,
+            },
+            metrics,
+        );
+        Ok(Protocols::Quic((sp, rp)))
+    }
+
+#[cfg(feature = "quic")]
+fn spawn_new(
+    mut recvstream: quinn::RecvStream,
+    sid: Option<Sid>,
+    streams_s: &mpsc::UnboundedSender<QuicStream>,
+) {
+    let streams_s_clone = streams_s.clone();
+    tokio::spawn(async move {
+        let mut buffer = BytesMut::new();
+        buffer.resize(1500, 0u8);
+        let r = recvstream.read(&mut buffer).await;
+        let _ = streams_s_clone.send((buffer, r, recvstream, sid));
+    });
+}
 #+end_src
