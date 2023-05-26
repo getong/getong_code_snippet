@@ -3,3 +3,14 @@
 :CUSTOM_ID: unreal-engine-learning
 :END:
 [[https://github.com/botman99/ue4-xcode-vscode-mac][ue4-xcode-vscode-mac]]
+
+** GenerateProjectFiles.sh
+
+#+begin_src sh
+cd /Users/Shared/Epic\ Games/UE_5.2/Engine/Build/BatchFiles/Mac
+
+./GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a1/a1.uproject" -game -vscode
+
+#+end_src
+
+copy from [[https://medium.com/techiepedia/setting-up-unreal-engine-m1-macbook-for-c-game-development-eb40c12237d1][Setting up Unreal engine in M1 Mac for C++ game development]]
