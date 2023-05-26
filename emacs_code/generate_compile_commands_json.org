@@ -1,0 +1,37 @@
+* generate compile_commands.json
+
+** cmake
+
+#+begin_src sh
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+#+end_src
+
+** makefile
+
+#+begin_src sh
+bear make
+#+end_src
+
+** other
+
+#+begin_src sh
+bear --append -o compile_commands_org.json compile_cmds_replace.sh
+#+end_src
+
+the compile_cmds_replace.sh :
+
+#+begin_src sh
+#!/bin/bash
+
+sed 's#/usr/local/svcfrm2#/data/dev-deps/XxxMod/svcfrm2#g' compile_commands_org.json > compile_commands.json
+sed -i 's#/usr/local/commlib#/data/dev-deps/XxxMod/commlib#g' compile_commands.json
+
+# -I单独一行，下一行还是-I
+perl -i -0pe 's/"-I",\s+"-I/"-I/gms' compile_commands.json
+# -I单独一行，下一行是绝对路径
+perl -i -0pe 's/"-I",\s+"\//"-I\//gms' compile_commands.json
+# -I单独一行，下一行是相对路径
+perl -i -0pe 's/"-I",\s+"\./"-I\./gms' compile_commands.json
+#+end_src
+
+copy from [[https://edward852.github.io/post/%E7%94%9F%E6%88%90compile_commands.json%E6%96%87%E4%BB%B6/][生成compile_commands.json文件]]
