@@ -84,13 +84,15 @@ ue4 gen
 
 gen compile_commands.json
 #+begin_src sh
-/Users/Shared/Epic\ Games/UE_5.2/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a4/a4.uproject" -game -vscode
+# /Users/Shared/Epic\ Games/UE_5.2/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a4/a4.uproject" -game -vscode
+
+/usr/local/bin/ue4 gen -vscode
 
 ue gen
 #+end_src
 
 copy from [[https://neunerdhausen.de/posts/unreal-engine-5-with-vim/][Unreal Engine 5 with Vim or Emacs on Linux]]
-
+copy from [[https://github.com/adamrehn/ue4cli/issues/18][UnrealBuildTool isn't built by ue4 build]]
 
 ** change project directory
 
