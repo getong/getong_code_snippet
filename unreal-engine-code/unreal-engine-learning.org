@@ -84,6 +84,8 @@ ue4 gen
 
 gen compile_commands.json
 #+begin_src sh
+/Users/Shared/Epic\ Games/UE_5.2/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a4/a4.uproject" -game -vscode
+
 ue gen
 #+end_src
 
