@@ -90,3 +90,14 @@ ue gen
 #+end_src
 
 copy from [[https://neunerdhausen.de/posts/unreal-engine-5-with-vim/][Unreal Engine 5 with Vim or Emacs on Linux]]
+
+
+** change project directory
+
+#+begin_src sh
+vim ~/Library/Preferences/Unreal Engine/EpicGamesLauncher/Mac/GameUserSettings.ini
+
+CreatedProjectPaths=/Users/gerald/Documents/Unreal-Projects
+#+end_src
+
+copy from [[https://forums.unrealengine.com/t/how-do-i-get-a-project-to-show-up-in-the-project-browser/515095/2][How do I get a project to show up in the Project Browser]]
