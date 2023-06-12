@@ -8,3 +8,6 @@
 [[https://chadnauseam.com/coding/gamedev/automated-testing-in-bevy/][How
 I learned to love testing game code in bevy]]
 [[https://github.com/Rust-Ninja-Sabi/bevy-nature-of-code][bevy-nature-of-code]]
+[[https://medium.com/better-programming/learning-game-dev-building-a-platformer-with-bevy-1-6e32c889c923][Learning Game Dev — Building a Platformer With Bevy (Part 1)]]
+[[https://medium.com/better-programming/learning-game-dev-building-a-platformer-with-bevy-part-2-6afdfeca05e2][Learning Game Dev — Building a Platformer With Bevy (Part 2)]]
+[[https://github.com/affanshahid/bevy-platformer][bevy-platformer]]
