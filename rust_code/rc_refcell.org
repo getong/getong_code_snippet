@@ -1,0 +1,12 @@
+* rc refcell
+
+** difference
+#+begin_quote
+Rc is a pointer with shared ownership while RefCell provides interior mutability. The order in which they are composed makes a big difference to how they can be used.
+
+Usually, you compose them as Rc<RefCell<T>>; the whole thing is shared and each shared owner gets to mutate the contents. The effect of mutating the contents will be seen by all of the shared owners of the outer Rc because the inner data is shared.
+
+You can't share a RefCell<Rc<T>> except by reference, so this configuration is more limited in how it can be used. In order to mutate the inner data, you would need to mutably borrow from the outer RefCell, but then you'd have access to an immutable Rc. The only way to mutate it would be to replace it with a completely different Rc.
+#+end_quote
+
+copy from https://stackoverflow.com/questions/57367092/what-is-the-difference-between-rcrefcellt-and-refcellrct
