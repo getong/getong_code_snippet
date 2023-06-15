@@ -113,5 +113,5 @@ Can Coerce, and Where, in Rust]]
 Rust]]
 [[https://smallcultfollowing.com/babysteps//blog/2022/03/29/dyn-can-we-make-dyn-sized/][dyn*:
 can we make dyn sized?]]
-[[https://blog.theincredibleholk.org/blog/2022/04/18/how-async-functions-in-traits-could-work-in-rustc/][How
-Async Functions in Traits could Work in Rustc]]
+[[https://blog.theincredibleholk.org/blog/2022/04/18/how-async-functions-in-traits-could-work-in-rustc/][How Async Functions in Traits could Work in Rustc]]
+[[https://www.lurklurk.org/effective-rust/][Effective Rust]]
