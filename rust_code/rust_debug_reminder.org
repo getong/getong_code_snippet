@@ -1,0 +1,29 @@
+* rust debug reminder
+
+** duplicate customize self define type
+error message
+```rust
+65 | #[derive(NetworkBehaviour)]
+   |          ^^^^^^^^^^^^^^^^
+   |          |
+   |          expected 1 generic argument
+   |          help: remove this generic argument
+   |
+note: type alias defined here, with 1 generic parameter: `T`
+  --> /Users/gerald/.rustup/toolchains/nightly-x86_64-apple-darwin/lib/rustlib/src/rust/library/std/src/io/error.rs:54:10
+   |
+54 | pub type Result<T> = result::Result<T, Error>;
+   |          ^^^^^^ -
+   = note: this error originates in the derive macro `NetworkBehaviour` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+```
+
+the self define type:
+``` rust
+type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
+```
+This is because Result<T, E> is auto import in Rust Edition 2021.
+The solution is :
+``` rust
+type RecipeResult<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
+```
