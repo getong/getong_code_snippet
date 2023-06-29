@@ -2,9 +2,10 @@
 
 ** duplicate customize self define type
 error message
-```rust
+
+#+begin_src rust
 65 | #[derive(NetworkBehaviour)]
-   |          ^^^^^^^^^^^^^^^^
+
    |          |
    |          expected 1 generic argument
    |          help: remove this generic argument
@@ -15,15 +16,39 @@ note: type alias defined here, with 1 generic parameter: `T`
 54 | pub type Result<T> = result::Result<T, Error>;
    |          ^^^^^^ -
    = note: this error originates in the derive macro `NetworkBehaviour` (in Nightly builds, run with -Z macro-backtrace for more info)
+#+end_src
 
-```
 
 the self define type:
-``` rust
+
+#+begin_src rust
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
-```
+#+end_src
+
 This is because Result<T, E> is auto import in Rust Edition 2021.
 The solution is :
-``` rust
+#+begin_src rust
 type RecipeResult<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
-```
+#+end_src
+
+** 'static parameter variable
+
+#+begin_src rust
+pub fn send(&mut self, reader: impl Read + 'static) -> Response
+#+end_src
+
+#+begin_quote
+The distinction between owned and non-owned "objects" becomes a bit more complicated when you consider types like Vec<&u8>. The vector is owned but it contains references which borrow some other data. Similar to this are e.g. structs that contain references. The bound T: 'static basically means that T is a type that does not contain any non-'static references, even nested. (Static references like e.g. &'static str are allowed.)
+
+One of the most popular cases of a T: 'static bound is std::thread::spawn 8. The reason there is that the closure and its return value need to be sent between threads, escaping their call-stack which is why they cannot contain any non-'static references since these could become invalidated in the other thread in the mean-time.
+
+This is a good detailed explanation. A more pithy explanation is:
+If a type is : 'static, it's possible for it to live for the rest of the program's duration.
+
+This includes owned objects. A Vec<f64> can live for the rest of the program's duration. If you own that vec, you know it will live for as long as you do, up until the end of the program.
+Since a static variable will live for the rest of the program's duration no matter what, it fits the above statement.
+
+Note that the signature does not imply that reader is an owned object, with or without the 'static bound.
+#+end_quote
+
+copy from [[https://users.rust-lang.org/t/static-lifetime-with-owned-object/50637][‘static lifetime with owned object?]]
