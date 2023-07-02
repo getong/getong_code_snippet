@@ -54,5 +54,57 @@ async fn increment_and_do_stuff(mutex: &Mutex<i32>) {
 see
 [[https://zhuanlan.zhihu.com/p/413659832][进击的Rust多线程--混合自旋锁]]
 
-see [[https://zhuanlan.zhihu.com/p/365905573][透过 Rust
-探索系统的本原：并发原语]]
+see [[https://zhuanlan.zhihu.com/p/365905573][透过 Rust 探索系统的本原：并发原语]]
+
+
+## std::mutex deadlock
+
+#+begin_src rust
+async fn main() {
+  let x = Arc::new(Mutex::new(0));
+  let x1 = Arc::clone(&x);
+  tokio::spawn(async move {
+    loop {
+      let x = x1.lock();
+      tokio::fs::read_to_string("file").await;
+      *x += 1;
+      // the lock of x is automatically droped here
+    }
+  });
+  let x2 = Arc::clone(&x);
+  tokio::spawn(async move {
+    loop {
+      *x2.lock() -= 1;
+    }
+  });
+}
+
+#+end_src
+
+which will lead to deadlock, the code will simplify to:
+#+begin_src rust
+let x = x1.lock(); // async func 1 get the lock
+tokio::fs::read_to_string("file").await; // func 1 yields!
+
+// tokio runtime stores the context and switch to func 2
+
+*x2.lock() -= 1; // async func 2 tries to get the lock but fails;
+// the thread is blocked.
+
+#+end_src
+
+#+begin_quote
+Let's say this time; the spawn decides to run the program in just one thread.
+When the line 7 tokio::fs::read_to_string("file").await; gets executed,
+the function will yield and get back to the executor (tokio runtime).
+Then, the executor decides to execute the function in line 15 *x2.lock() -= 1;.
+Now we encounter a deadlock.
+x2 will wait for the lock to be released.
+Interestingly, the Operating System never thought that a thread could be executed in such behavior.
+Usually, the locks are valid among the threads. And once a thread tries to get the lock,
+the Operating System will block it until the lock is released.
+#+end_quote
+
+copy from [[https://www.whexy.com/posts/asynchronous][Asynchronous Mutex]]
+
+The solusion might be using  tokio::sync::Mutex.
