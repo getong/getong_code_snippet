@@ -33,7 +33,7 @@ $ cargo update -p wasm-bindgen
 echo 'edition = "2021"\n' >> ~/.rustfmt.toml
 #+end_src
 
-qThe =cargo/env= file is just like this:
+The =cargo/env= file is just like this:
 
 #+begin_src shell
 #!/bin/sh
@@ -69,7 +69,7 @@ emacs $CARGO_HOME/config
 
 ---------------
 [source.crates-io]
-replace-with = 'rsproxy'
+replace-with = 'rsproxy-sparse'
 [source.rsproxy]
 registry = "https://rsproxy.cn/crates.io-index"
 [source.rsproxy-sparse]
@@ -175,13 +175,6 @@ cargo clippy
 cargo +nightly build -Z timings
 #+end_src
 
-** rust src path
-:PROPERTIES:
-:CUSTOM_ID: rust-src-path
-:END:
-#+begin_src shell
-#+end_src
-
 ** rustdoc and cargo
 :PROPERTIES:
 :CUSTOM_ID: rustdoc-and-cargo
@@ -216,9 +209,7 @@ replace-with = 'tuna'
 registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
 #+end_src
 
-copy from
-[[https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index.git/][Rust
-crates.io 索引镜像使用帮助]]
+copy from [[https://mirrors.tuna.tsinghua.edu.cn/help/crates.io-index.git/][Rust crates.io 索引镜像使用帮助]]
 
 or use ustc
 
@@ -230,8 +221,7 @@ replace-with = 'ustc'
 registry = "git://mirrors.ustc.edu.cn/crates.io-index"
 #+end_src
 
-copy from [[https://mirrors.ustc.edu.cn/help/crates.io-index.html][Rust
-Crates 源使用帮助]]
+copy from [[https://mirrors.ustc.edu.cn/help/crates.io-index.html][Rust Crates 源使用帮助]]
 
 ** install evcxr
 :PROPERTIES:
@@ -243,10 +233,8 @@ cargo install evcxr_repl
 evcxr
 #+end_src
 
-see
-[[https://github.com/google/evcxr/blob/master/evcxr_repl/README.md][Evcxr
-REPL]] see [[https://github.com/rust-lang/rust/issues/1120][Implement a
-Rust REPL #1120]]
+see [[https://github.com/google/evcxr/blob/master/evcxr_repl/README.md][Evcxr REPL]]
+see [[https://github.com/rust-lang/rust/issues/1120][Implement a Rust REPL #1120]]
 
 ** install rustlings
 :PROPERTIES:
@@ -361,9 +349,7 @@ solved by:
 cargo install cargo-edit --features "vendored-libgit2"
 #+end_src
 
-copy from [[https://github.com/killercup/cargo-edit/issues/510][cargo
-upgrade gives "unhandled error: invalid version 0 on
-git_proxy_options"]]
+copy from [[https://github.com/killercup/cargo-edit/issues/510][cargo upgrade gives "unhandled error: invalid version 0 on git_proxy_options"]]
 
 ** rust-toolchain
 :PROPERTIES:
@@ -392,11 +378,7 @@ rustup toolchain install nightly-2021-09-24
 rustup install nightly-2021-09-24
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/67024062/change-nightly-rust-version][Change
-nightly Rust version?]]
-[[https://stackoverflow.com/questions/27758387/is-it-possible-to-download-previous-nightly-builds][Is
-it possible to download previous nightly builds?]]
+copy from [[https://stackoverflow.com/questions/67024062/change-nightly-rust-version][Change nightly Rust version?]] [[https://stackoverflow.com/questions/27758387/is-it-possible-to-download-previous-nightly-builds][Is it possible to download previous nightly builds?]]
 
 install component:
 
@@ -405,8 +387,7 @@ rustup toolchain install nightly-2021-09-24 --component rust-src
 rustup toolchain install nightly --component rust-docs
 #+end_src
 
-copy from
-[[https://rust-lang.github.io/rustup/concepts/components.html][Components]]
+copy from [[https://rust-lang.github.io/rustup/concepts/components.html][Components]]
 
 ** expand the code macro
 :PROPERTIES:
@@ -451,8 +432,7 @@ copy from
 cargo build --jobs 1
 #+end_src
 
-copy from [[https://github.com/rust-lang/rust/issues/88902][Compiling
-large projects with over-heating CPUs causes weird crashes]]
+copy from [[https://github.com/rust-lang/rust/issues/88902][Compiling large projects with over-heating CPUs causes weird crashes]]
 
 ** Minimizing Rust Binary Size
 :PROPERTIES:
@@ -472,22 +452,32 @@ strip = true        # Strip symbols from binary*
 3 Build in release mode using cargo build --release
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/29008127/why-are-rust-executables-so-huge/54842093#54842093][Why
-are Rust executables so huge?]] also see
-[[https://github.com/johnthagen/min-sized-rust][Minimizing Rust Binary
-Size]]
+copy from [[https://stackoverflow.com/questions/29008127/why-are-rust-executables-so-huge/54842093#54842093][Why are Rust executables so huge?]]
+also see [[https://github.com/johnthagen/min-sized-rust][Minimizing Rust Binary Size]]
 
 ** compile fast
 :PROPERTIES:
 :CUSTOM_ID: compile-fast
 :END:
-copy from
-[[https://robert.kra.hn/posts/2022-09-09-speeding-up-incremental-rust-compilation-with-dylibs/][Speeding
-up incremental Rust compilation with dynamic libraries]]
+copy from [[https://robert.kra.hn/posts/2022-09-09-speeding-up-incremental-rust-compilation-with-dylibs/][Speeding up incremental Rust compilation with dynamic libraries]]
 
 #+begin_src shell
 cargo install cargo-add-dynamic
 cargo add-dynamic polars --features csv-file,lazy,list,describe,rows,fmt,strings,temporal
 cargo build
+#+end_src
+
+** switch rust toolchain
+#+begin_src shell
+# ~/.zshrc
+export CARGO_HOME=$HOME/.cargo
+export PATH=$CARGO_HOME/bin:$PATH
+
+# switch
+rustup override set nightly-2023-05-31
+rustup override set nightly
+rustup override set stable
+
+# show the result
+rustup show
 #+end_src
