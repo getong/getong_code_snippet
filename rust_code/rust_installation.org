@@ -69,7 +69,7 @@ emacs $CARGO_HOME/config
 
 ---------------
 [source.crates-io]
-replace-with = 'rsproxy-sparse'
+replace-with = 'rsproxy'
 [source.rsproxy]
 registry = "https://rsproxy.cn/crates.io-index"
 [source.rsproxy-sparse]
