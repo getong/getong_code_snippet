@@ -1,0 +1,11 @@
+* rust rpc framework
+
+** grpc
+ [[https://github.com/hyperium/tonic][tonic]]
+ [[https://github.com/hyperium/tonic][tonic-build]]
+
+** tarpc
+ [[https://github.com/google/tarpc][tarpc]]
+
+** thrift
+ [[https://github.com/apache/thrift/tree/master/lib/rs][thrift]]
