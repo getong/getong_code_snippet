@@ -21,6 +21,7 @@
 [[https://github.com/quickwit-oss/chitchat][chitchat]]
 [[https://github.com/ArroyoSystems/Arroyo][arroyo]]
 [[https://github.com/rlink-rs/rlink-rs][rlink-rs]]
+[[https://github.com/lnx-search/datacake][datacake]]
 
 ** use with kubernetes
 :PROPERTIES:
