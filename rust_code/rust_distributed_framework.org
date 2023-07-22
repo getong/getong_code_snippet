@@ -19,6 +19,8 @@
 [[https://github.com/holochain/holochain][holochain]]
 [[https://github.com/stateright/stateright][stateright]]
 [[https://github.com/quickwit-oss/chitchat][chitchat]]
+[[https://github.com/ArroyoSystems/Arroyo][arroyo]]
+[[https://github.com/rlink-rs/rlink-rs][rlink-rs]]
 
 ** use with kubernetes
 :PROPERTIES:
