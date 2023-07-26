@@ -1,0 +1,7 @@
+* rust tarpc projects
+
+[[https://github.com/ditsing/ruaft][ruaft]]
+[[https://github.com/library-angels/code-library-backend][code-library-backend]]
+[[https://github.com/fasttravel-xyz/factor][factor]]
+[[https://github.com/skewballfox/sniper-node][sniper-node]]
+[[https://github.com/lieuwex/LirsFS][LirsFs]]
