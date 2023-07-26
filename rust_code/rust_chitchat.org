@@ -489,3 +489,10 @@ impl UdpSocket {
     }
 }
 #+end_src
+
+** chitchat projects
+[[https://github.com/StractOrg/stract][stract]]
+[[https://github.com/sphenlee/waterwheel][waterwheel]]
+[[https://github.com/nuclia/nucliadb][nucliadb]]
+[[https://github.com/lnx-search/datacake][datacake]]
+[[https://github.com/quickwit-oss/quickwit][quickwit]]
