@@ -107,17 +107,8 @@ copy from
 :END:
 
 #+begin_quote
-
-#+begin_quote
-
-#+begin_quote
 matcher 可以有反复捕获 (repetition)，这使得匹配一连串标记 (token)
 成为可能。反复捕获的一般形式为 $ ( ... ) sep rep。
-
-#+end_quote
-
-#+end_quote
-
 #+end_quote
 
 $ 是字面上的美元符号标记 ( ... ) 是被反复匹配的模式，由小括号包围。 sep
@@ -158,4 +149,11 @@ fn main() {
     let s = vec_strs![1, "a", true, 3.14159f32];
     assert_eq!(s, &["1", "a", "true", "3.14159"]);
 }
+#+end_src
+
+** Procedural macros come in three flavors:
+#+begin_src rust
+Function-like macros — custom!(…)
+Derive macros — #[derive(CustomDerive)]
+Attribute macros — #[CustomAttribute]
 #+end_src
