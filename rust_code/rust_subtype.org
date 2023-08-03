@@ -93,3 +93,22 @@ fn main() {
 :PROPERTIES:
 :CUSTOM_ID: variable-invariant-might-be-move-out-of-scope-and-free-the-memory.
 :END:
+
+
+** 定义
+#+begin_quote
+假设1 C<T>是一个泛型类或接口, T是类型参数.
+
+假设2 类型Dog是Animal的子类型.
+
+定义1 Covariance/Covariant译作协变:
+如果C<Dog>是C<Animal>的子类型, 那么C<T>对T协变.
+
+定义2 Contravariance/Contravariant译作逆变:
+如果C<Animal>是C<Dog>的子类型, 那么C<T>对T逆变.
+
+定义3 Invariance/Invariant译作不变, 或译作抗变:
+C<T>对T既不是协变也不是逆变, 那么C<T>对T不变.
+#+end_quote
+
+copy from [[https://rustcc.cn/article?id=698f0ff0-c96d-4686-89d4-af71f5656051][代码写明 Rust 中的泛型型变]]
