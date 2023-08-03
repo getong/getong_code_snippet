@@ -113,4 +113,69 @@ C<T>对T既不是协变也不是逆变, 那么C<T>对T不变.
 
 copy from [[https://rustcc.cn/article?id=698f0ff0-c96d-4686-89d4-af71f5656051][代码写明 Rust 中的泛型型变]]
 also see [[https://waruto.top/posts/rust-lifetime-variance/][Rust生命周期与变形]]
+
+#+begin_quote
+Vec<T> 以及所有其他拥有指针和集合遵循与 Box<T> 相同的逻辑
+Cell<T> 以及所有其他内部可变性类型遵循与 UnsafeCell<T> 相同的逻辑
+具有内部可变性的 UnsafeCell<T> 使其具有与 &mut T 相同的协变属性
+*const T 遵循 &T 的逻辑
+*mut T 遵循 &mut T（或 UnsafeCell<T>）的逻辑
+#+end_quote
 also see [[https://nomicon.purewhite.io/subtyping.html][子类型和协变]]
+
+** example
+#+begin_src rust
+// compile error
+fn invariant<'a: 'b, 'b, 'c>(
+    sub: &'c mut Vec<&'a String>,
+    sup: &'c mut Vec<&'b String>,
+) -> &'c mut Vec<&'b String> {
+    sub
+}
+
+// compile ok
+fn covariant<'a: 'b, 'b, 'c>(
+    sub: &'c Vec<&'a String>,
+    sup: &'c Vec<&'b String>,
+) -> &'c Vec<&'b String> {
+    sub
+}
+#+end_src
+
+explaination
+#+begin_quote
+在两个函数的泛型参数中，显式标注了'a : 'b；
+由于&'a T对'a covariant，所以&'a String : &'b String；
+由于Vec<T>对T covariant，所以Vec<&'a String> : Vec<&'b String>；
+由于&'a T对 T 是 covariant，所以&'c Vec<&'a String> : &'c Vec<&'b String>；
+所以在 covariant 函数中，当函数要求返回&'c Vec<&'b String>时，可以直接返回&'c Vec<&'a String>；
+但是&'c mut T对 T 是 invariant，&'c mut Vec<&'a String>与``&‘c mut Vec<&‘b String>`间没有子类型关系，所以在 invariant 函数中无法再这么做。
+#+end_quote
+
+#+begin_src rust
+struct ContraVariant<Mixed> {
+    f: fn(Mixed),
+}
+
+fn test<'a>(
+    a: &mut ContraVariant<&'a i32>,
+    b: &mut ContraVariant<&'static i32>,
+    f1: fn(&'a i32),
+    f2: fn(&'static i32),
+) {
+    a.f = f1;
+    a.f = f2;
+    b.f = f1;
+    b.f = f2;
+}
+#+end_src
+
+#+begin_quote
+可以看到，四个赋值语句中，只有a.f = f2失败了。
+
+fn(T)对T contravariant，&'static i32 : &'a i32，所以 fn(&'a i32) : fn(&'static i32)；
+a.f类型为fn(&'a i32)，f2类型为fn(&'static i32)；
+a.f = f2，相当于把父类型变量赋值给了子类型，类型不匹配，失败了。
+#+end_quote
+
+copy from [[https://waruto.top/posts/rust-lifetime-variance/][Rust生命周期与变形]]
