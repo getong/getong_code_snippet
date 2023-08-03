@@ -112,3 +112,5 @@ C<T>对T既不是协变也不是逆变, 那么C<T>对T不变.
 #+end_quote
 
 copy from [[https://rustcc.cn/article?id=698f0ff0-c96d-4686-89d4-af71f5656051][代码写明 Rust 中的泛型型变]]
+also see [[https://waruto.top/posts/rust-lifetime-variance/][Rust生命周期与变形]]
+also see [[https://nomicon.purewhite.io/subtyping.html][子类型和协变]]
