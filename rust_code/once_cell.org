@@ -45,3 +45,34 @@ pub async fn get_by_id(Query(req): Query<SearchReq>) -> Res<Vec<sys_api_db::Mode
 
 copy from
 [[https://github.com/liweilijie/wgr_axum_admin][wgr_axum_admin]]
+
+** once_cell and spawn_blocking
+#+begin_src rust
+static LOCAL_WORKER: Lazy<flume::Sender<NonSendCons>> = Lazy::new(|| {
+    // Create a new thread which runs the local futures
+    let (tx, rx) = flume::unbounded::<NonSendCons>();
+    let mut rx = rx.into_stream();
+
+    tokio::task::spawn_blocking(|| {
+        let rt = tokio::runtime::Handle::current();
+        let mut set = FuturesUnordered::new();
+        rt.block_on(async move {
+            loop {
+                tokio::select! {
+                    Some(()) = set.next() => {
+                        tracing::info!("Local future completed");
+                    },
+                    Some(task) = rx.next() => {
+                        tracing::info!("Received new future");
+                        set.push(task());
+                    },
+                }
+            }
+        });
+    });
+
+    tx
+});
+#+end_src
+
+copy from https://github.com/sarvex/Ambient/blob/6d8ec36162cb51787d62d6ebe7deb43ecb9008d6/crates/sys/src/native/task.rs#L10
