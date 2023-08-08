@@ -183,3 +183,21 @@ loop {
 #+end_src
 
 copy from [[https://ryhl.io/blog/actors-with-tokio/][Actors with Tokio]]
+
+** Actor with FnOnce
+#+begin_src rust
+use futures::channel::oneshot;
+
+fn block<T>(function: impl FnOnce() -> T) -> impl Future<Item=T> {
+  let (sender, receiver) = oneshot::channel();
+
+  GLOBAL_THREAD_POOL.submit_work(move || {
+    let result = function();
+    sender.send(result);
+  });
+
+  receiver
+}
+#+end_src
+
+copy from [[https://users.rust-lang.org/t/what-is-best-tokio-based-actor-framework-also-support-multi-threading/71509][What is Best tokio based actor framework also support multi-threading]]
