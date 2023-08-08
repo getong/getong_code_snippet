@@ -52,3 +52,17 @@ Note that the signature does not imply that reader is an owned object, with or w
 #+end_quote
 
 copy from [[https://users.rust-lang.org/t/static-lifetime-with-owned-object/50637][‘static lifetime with owned object?]]
+
+** use await with impl<futur>
+
+not work:
+#+begin_src rust
+let (tx, mut rx) = tokio::sync::mpsc::channel(64);
+send_channel.send(1);
+#+end_src
+
+change with await:
+#+begin_src rust
+let (tx, mut rx) = tokio::sync::mpsc::channel(64);
+send_channel.send(1).await;
+#+end_src
