@@ -763,3 +763,28 @@ Options:
   -h, --help                           Print help information
   -V, --version                        Print version information
 #+end_src
+
+** stop signal and stop the server
+#+begin_src rust
+let (shutdown_tx, shutdown_rx) = watch::channel::<()>(());
+
+#[cfg(target_os = "linux")]
+let mut sig_term_fut = signal::unix::signal(signal::unix::SignalKind::terminate())?;
+
+tokio::spawn(async move {
+    #[cfg(target_os = "linux")]
+    let sig_term = sig_term_fut.recv();
+    #[cfg(not(target_os = "linux"))]
+    let sig_term = std::future::pending();
+
+    let signal = tokio::select! {
+        _ = signal::ctrl_c() => "SIGINT",
+        _ = sig_term => "SIGTERM",
+    };
+
+    tracing::info!(%signal, "shutting down from signal");
+    // Don't unwrap in order to ensure that we execute
+    // any subsequent shutdown tasks.
+    shutdown_tx.send(()).ok();
+});
+#+end_src
