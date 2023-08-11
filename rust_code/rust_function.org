@@ -1051,6 +1051,26 @@ fn setup_hanoi_queue(pool: &rayon::ThreadPool) {
 }
 #+end_src
 
-copy from
-[[https://betterprogramming.pub/rust-as-part-of-a-micro-service-architecture-25d600ecde0][Rust
-as Part of a Microservice Architecture]]
+copy from [[https://betterprogramming.pub/rust-as-part-of-a-micro-service-architecture-25d600ecde0][Rust as Part of a Microservice Architecture]]
+
+
+** return impl<Future<>> result
+
+#+begin_src rust
+/// Sends a packet to the Session's dest.
+    pub fn send<'buf>(
+        &self,
+        buf: &'buf [u8],
+    ) -> impl std::future::Future<Output = Result<usize, super::PipelineError>> + 'buf {
+        tracing::trace!(
+        dest_address = %self.dest.address,
+        contents = %crate::utils::base64_encode(buf),
+        "sending packet upstream");
+
+        let socket = self.upstream_socket.clone();
+        async move { socket.send(buf).await.map_err(From::from) }
+    }
+
+#+end_src
+
+copy from quilkin sessions.rs
