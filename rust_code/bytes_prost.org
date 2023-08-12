@@ -1,0 +1,85 @@
+* bytes prost
+
+** struct data type definition
+
+#+begin_src rust
+#[must_use]
+#[derive(Clone)]
+pub struct SrvMessage {
+    header: SrvHeader,
+    transaction: Option<SrvTxn>,
+    message_id: String,
+    body: Bytes,
+}
+#+end_src
+
+
+** decode bytes into struct
+
+#+begin_src rust
+impl Decoder for SrvCodec {
+    type Error = io::Error;
+    type Item = SrvMessage;
+
+    fn decode(&mut self, bytes: &mut BytesMut) -> Result<Option<Self::Item>, io::Error> {
+        if bytes.len() < HEADER_LEN {
+            trace!("Got fewer than HEADER_LEN bytes: {}", bytes.len());
+            return Ok(None);
+        }
+        trace!("Decoding SrvMessage\n  -> Bytes: {:?}", bytes);
+        let mut buf = Cursor::new(bytes);
+        let header = SrvHeader(buf.get_u32());
+        trace!("  -> SrvHeader: {:?}", header);
+        let txn = if header.is_transaction() {
+            if buf.remaining() < TXN_LEN {
+                return Ok(None);
+            }
+            let t = SrvTxn(buf.get_u32());
+            trace!("  -> SrvTxn: {:?}", t);
+            Some(t)
+        } else {
+            None
+        };
+        if buf.remaining() < (header.message_id_len() + header.body_len()) {
+            trace!("  -> Not enough bytes to read message_id and body");
+            return Ok(None);
+        }
+        buf.copy_to_slice(&mut self.recv_buf[0..header.message_id_len()]);
+        let message_id = str::from_utf8(&self.recv_buf[0..header.message_id_len()]).map_err(|e| {
+                             trace!("  -> Invalid message data: {}", e);
+                             io::Error::new(io::ErrorKind::InvalidData, e)
+                         })?
+                         .to_string();
+        buf.copy_to_slice(&mut self.recv_buf[0..header.body_len()]);
+        let position = buf.position() as usize;
+        let bytes = buf.into_inner();
+        bytes.advance(position);
+        Ok(Some(SrvMessage { header,
+                             transaction: txn,
+                             message_id,
+                             body:
+                                 Bytes::copy_from_slice(&self.recv_buf[0..header.body_len()]) }))
+    }
+}
+#+end_src
+
+** encode
+
+#+begin_src rust
+impl Encoder<SrvMessage> for SrvCodec {
+    type Error = io::Error;
+
+    fn encode(&mut self, msg: SrvMessage, buf: &mut BytesMut) -> io::Result<()> {
+        buf.reserve(msg.size());
+        buf.put_u32(msg.header().0);
+        if let Some(txn) = msg.transaction {
+            buf.put_u32(txn.0);
+        }
+        buf.put_slice(msg.message_id().as_bytes());
+        buf.put_slice(msg.body());
+        Ok(())
+    }
+}
+#+end_src
+
+copy from habitat codec.rs
