@@ -82,4 +82,60 @@ impl Encoder<SrvMessage> for SrvCodec {
 }
 #+end_src
 
+** format the parse method code
+#+begin_src rust
+impl SrvMessage {
+    pub fn parse<T>(&self) -> Result<T, prost::DecodeError>
+        where T: Message + MessageStatic + Default
+    {
+        T::decode(self.body())
+    }
+}
+#+end_src
+it call the prost::Message::decode()
+
+** usage example
+#+begin_src
+include!(concat!(env!("OUT_DIR"), "/sup.ctl.rs"));
+
+fn handle_ctl_reply(reply: &SrvMessage) -> result::Result<(), SrvClientError> {
+    let mut progress_bar = pbr::ProgressBar::<io::Stdout>::new(0);
+    progress_bar.set_units(pbr::Units::Bytes);
+    progress_bar.show_tick = true;
+    progress_bar.message("    ");
+    match reply.message_id() {
+        "ConsoleLine" => {
+            let m = reply.parse::<sup_proto::ctl::ConsoleLine>()
+                         .map_err(SrvClientError::Decode)?;
+            let mut new_spec = ColorSpec::new();
+            let msg_spec = match m.color {
+                Some(color) => {
+                    new_spec.set_fg(Some(Color::from_str(&color)?))
+                            .set_bold(m.bold)
+                }
+                None => new_spec.set_bold(m.bold),
+            };
+            common::ui::print(UI::default_with_env().out(), m.line.as_bytes(), msg_spec)?;
+        }
+        "NetProgress" => {
+            let m = reply.parse::<sup_proto::ctl::NetProgress>()
+                         .map_err(SrvClientError::Decode)?;
+            progress_bar.total = m.total;
+            if progress_bar.set(m.position) >= m.total {
+                progress_bar.finish();
+            }
+        }
+        "NetErr" => {
+            let m = reply.parse::<sup_proto::net::NetErr>()
+                         .map_err(SrvClientError::Decode)?;
+            return Err(SrvClientError::from(m));
+        }
+        _ => (),
+    }
+    Ok(())
+}
+
+#+end_src
+
+
 copy from habitat codec.rs
