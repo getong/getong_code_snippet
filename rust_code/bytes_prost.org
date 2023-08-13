@@ -137,5 +137,30 @@ fn handle_ctl_reply(reply: &SrvMessage) -> result::Result<(), SrvClientError> {
 
 #+end_src
 
+** from definition
+#+begin_src rust
+impl<T> From<T> for SrvMessage where T: Message + MessageStatic
+{
+    fn from(msg: T) -> Self {
+        let mut buf = BytesMut::with_capacity(msg.encoded_len());
+        msg.encode(&mut buf).unwrap();
+        let body = buf.freeze();
+        let message_id = T::MESSAGE_ID.to_string();
+        SrvMessage { header: SrvHeader::new(body.len() as u32, message_id.len() as u32, false),
+                     transaction: None,
+                     message_id,
+                     body }
+    }
+}
+#+end_src
+
+** from usage code example
+#+begin_src rust
+// Send the handshake message to the server
+let handshake = protocol::ctl::Handshake { secret_key: Some(Self::ctl_secret_key()?), };
+let mut message = SrvMessage::from(handshake);
+message.set_transaction(current_transaction);
+tcp_stream.send(message).await?;
+#+end_src
 
 copy from habitat codec.rs
