@@ -277,6 +277,10 @@ impl Server {
 }
 #+end_src
 
+run() method will gossip multiple at interval by config, will transport recv(), gossip addr and break down.
+
+run() method will run in the background.
+
 ** ChitchatHandle
 :PROPERTIES:
 :CUSTOM_ID: chitchathandle
