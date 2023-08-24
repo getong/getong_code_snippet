@@ -38,3 +38,5 @@ copy from [[https://www.libhunt.com/l/rust/topic/cloud-native][Top 14 Rust cloud
 [[https://github.com/akkoro/assemblylift][assemblylift]]
 [[https://github.com/okteto/rust-getting-started][Develop Rust Apps in Kubernetes with Okteto]]
 [[https://rust-cloud-native.github.io/][Rust Cloud Native]]
+[[https://github.com/alibaba/GraphScope][GraphScope]]
+[[https://github.com/influxdata/influxdb_iox][influxdb_iox]]
