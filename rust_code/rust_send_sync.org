@@ -31,17 +31,16 @@ Rc 不是 Sync。因为只要一做 &Rc<T> 操作，就会克隆一个新引用�
 原始指针（*mut, *const）既不是 Send 也不是 Sync；
 #+end_example
 
-copy from
-[[https://wiki.jikexueyuan.com/project/rust-primer/marker/sendsync.html][Send
-和 Sync]]
+copy from [[https://wiki.jikexueyuan.com/project/rust-primer/marker/sendsync.html][Send 和 Sync]]
 
 #+begin_example
 std::marker::Sync
-如果类型T实现了Sync类型，那说明在不同的线程中使用&T访问同一个变量是安全的。
+如果类型TaT4hei6L
+实现了Sync类型，那说明在不同的线程中使用&T访问同一个变量是安全的。
 
 std::marker::Send
 如果类型T实现了Send类型，那说明这个类型的变量在不同线程中传递所有权是安全的。
-
+t
 如果一个类型可以安全地从一个线程 move 进入另一个线程，那它就是 Send 类型。比如说，显然的，普通的数字类型肯定是 Send。稍微复杂一点的，Vec<T>这种，只要我们能保证 T: Send，那么Vec<T>肯定也是 Send，把它 move 进其它线程是没什么问题的。那么什么样的类型是 !Send 呢？比如 Rc 类型。我们知道，Rc是引用计数指针，把Rc类型的变量move 进入另外一个线程，只是其中一个引用计数指针 move 到了其它线程，这样会导致不同的线程中的Rc变量引用同一块数据，Rc内部实现没有做任何线程同步处理，这是肯定有问题的。所以标准库中早已指定Rc是!Send。当我们试图在线程边界传递这个类型的时候，就会出现编译错误。
 
 但是相对的是， Arc 类型是符合 Send 的(当然需要T:Send)。为什么呢？因为 Arc 类型内部的引用计数用的是“原子计数”，对它进行增减操作，不会出现多线数据竞争。所以，多个线程拥有指向同一个变量的 Arc 指针是可以接受的。
