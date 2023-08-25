@@ -14,7 +14,7 @@ impl<T: ?Sized + Send> Send for Mutex<T>
 impl<T: ?Sized + Send> Sync for Mutex<T>
 
 impl<T: Send> Send for Sender<T>
-impl<T> !Sync for Sender<T>
+mpl<T> Sync for Sender<T> where T: Send,
 
 impl<T: ?Sized + Sync + Send> Send for Arc<T>
 impl<T: ?Sized + Sync + Send> Sync for Arc<T>
@@ -24,13 +24,7 @@ Sender is not Sync. Mutex is both Send and Sync if T inside of it is
 Send. RwLock is Send where T is Send, but it is only Sync if T is both
 Send + Sync.
 
-copy from
-[[https://onesignal.com/blog/thread-safety-rust/][Understanding Rust
-Thread Safety]]
-
-#+begin_quote
-
-#+begin_quote
+copy from [[https://onesignal.com/blog/thread-safety-rust/][Understanding Rust Thread Safety]]
 
 #+begin_quote
 RwLock is Send only if the underlying value is Send (and same for Sync).
@@ -38,13 +32,7 @@ Arc is Sync if the underlying value is Send.
 
 #+end_quote
 
-#+end_quote
-
-#+end_quote
-
-copy from
-[[https://users.rust-lang.org/t/moving-arc-rwlock-t-to-threads-leads-to-errors-regarding-missing-send-trait/66055/2][Moving
-Arc<RwLock> to threads leads to errors regarding missing Send trait]]
+copy from [[https://users.rust-lang.org/t/moving-arc-rwlock-t-to-threads-leads-to-errors-regarding-missing-send-trait/66055/2][Moving Arc<RwLock> to threads leads to errors regarding missing Send trait]]
 
 ** Sender is not sync, but can move into
 :PROPERTIES:
@@ -57,23 +45,14 @@ Arc<RwLock> to threads leads to errors regarding missing Send trait]]
 #+end_src
 
 #+begin_quote
-
-#+begin_quote
-
-#+begin_quote
 Sender is not Sync, so it cannot be shared, but it is Send, so you can
 move it into the async task.
 
 #+end_quote
 
-#+end_quote
-
-#+end_quote
 
 The problem with your code is that the closure is capturing its
 environment by reference, even though the async block inside is move.
 You should just need to make the closure move too:
 
-copy from
-[[https://stackoverflow.com/questions/63432657/how-to-pass-a-stdsyncmpscsendert-to-a-handler-in-warp][How
-to pass a std::sync::mpsc::Sender to a handler in warp?]]
+copy from [[https://stackoverflow.com/questions/63432657/how-to-pass-a-stdsyncmpscsendert-to-a-handler-in-warp][How to pass a std::sync::mpsc::Sender to a handler in warp?]]
