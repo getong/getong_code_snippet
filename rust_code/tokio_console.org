@@ -1,0 +1,20 @@
+* tokio_console
+
+** use with console_subscriber
+#+begin_src rust
+#[tokio::main]
+async fn main() {
+    console_subscriber::init();
+    ...
+}
+
+#+end_src
+
+** usage
+#+begin_src shell
+cargo install tokio-console
+
+tokio-console
+#+end_src
+
+copy from [[https://docs.rs/tokio-console/latest/tokio_console/index.html][Crate tokio_console]]
