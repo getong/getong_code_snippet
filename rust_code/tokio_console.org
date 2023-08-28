@@ -10,11 +10,25 @@ async fn main() {
 
 #+end_src
 
+or:
+#+begin_src rust
+console_subscriber::ConsoleLayer::builder()
+        // set the address the server is bound to
+        .server_addr(([127, 0, 0, 1], 5000_u16))
+        // ... other configurations ...
+        .init();
+#+end_src
+
 ** usage
 #+begin_src shell
 cargo install tokio-console
 
 tokio-console
+#+end_src
+
+or:
+#+begin_src shell
+tokio-console http://127.0.0.1:5000
 #+end_src
 
 copy from [[https://docs.rs/tokio-console/latest/tokio_console/index.html][Crate tokio_console]]
