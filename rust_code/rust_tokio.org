@@ -39,7 +39,7 @@ pub async fn main() -> Result<()> {
 
 run the mini-redis-server
 
-#+begin_src sh
+#+begin_src shell
 mini-redis-server
 #+end_src
 
@@ -268,7 +268,7 @@ let Some(message) = rx.recv().await;
 
 
 ** tokio sync method
-#+begin_src
+#+begin_quote
 通常来说，有以下几种基本的同步原语，这些也是tokio所提供的：
 
 Mutex: 互斥锁，任务要执行某些操作时，必须先申请锁，只有申请到锁之后才能执行操作，否则就等待
@@ -276,6 +276,98 @@ RwLock: 读写锁，类似于互斥锁，但粒度更细，区分读操作和写
 Notify: 任务通知，用于唤醒正在等待的任务，使其进入就绪态等待调度
 Barrier: 屏障，多个任务在某个屏障处互相等待，只有这些任务都达到了那个屏障点，这些任务才都继续向下执行
 Semaphore: 信号量(信号灯)，限制同时执行的任务数量，例如限制最多只有20个线程(或tokio的异步任务)同时执行
-#+end_src
+#+end_quote
 
 copy from [[https://rust-book.junmajinlong.com/ch100/04_task_communication_and_sync.html][tokio task的通信和同步(1): 简介]]
+
+** axum use tokio runtime
+#+begin_src rust
+use axum::{Router, Server};
+use std::{net::SocketAddr, sync::Arc, time::Duration};
+use tokio::{runtime::Handle, select, sync::Barrier, time::sleep};
+
+#[tokio::main(flavor = "multi_thread")]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Create the socket & the router
+    let socket = SocketAddr::new("0.0.0.0".parse()?, 12678);
+    let router = Router::new();
+    /* many routes */
+
+    // wait for ctrl-c: can be given to multiple tasks
+    let barrier = Arc::new(Barrier::new(2));
+
+    // Start the cache manager thread
+    let blocking_task = {
+        let barrier = barrier.clone();
+        Handle::current().spawn_blocking(move || {
+            Handle::current().block_on(async move {
+                // ...
+
+                select! {
+                    _ = sleep(Duration::from_secs(3)) => println!("sleep done"),
+                    _ = barrier.wait() => println!("server closed"),
+                }
+            });
+        })
+    };
+
+    // Start the Axum HTTP server
+    Server::bind(&socket)
+        .serve(router.into_make_service())
+        .with_graceful_shutdown(async move {
+            tokio::signal::ctrl_c()
+                .await
+                .expect("Failed to catch the SIGINT signal");
+            barrier.wait().await;
+        })
+        .await?;
+
+    // ensure the blocking_task is finished
+    blocking_task.await?;
+
+    Ok(())
+}
+#+end_src
+
+The key point is to tell the task to finish before the runtime shuts down. Otherwise, you'll get the runtime worker's panic.
+
+copy from [[https://users.rust-lang.org/t/tokio-runtime-panics-at-shutdown/93651/3][Tokio runtime panics at shutdown]]
+
+The axum does not spawn a task, only use tokio runtime:
+#+begin_src rust
+pin_project! {
+    /// A listening HTTP server that accepts connections in both HTTP1 and HTTP2 by default.
+    ///
+    /// `Server` is a `Future` mapping a bound listener with a set of service
+    /// handlers. It is built using the [`Builder`](Builder), and the future
+    /// completes when the server has been shutdown. It should be run by an
+    /// `Executor`.
+    pub struct Server<I, S, E = Exec> {
+        #[pin]
+        incoming: I,
+        make_service: S,
+        protocol: Http_<E>,
+    }
+}
+
+#[cfg_attr(docsrs, doc(cfg(any(feature = "http1", feature = "http2"))))]
+impl<I, IO, IE, S, B, E> Future for Server<I, S, E>
+where
+    I: Accept<Conn = IO, Error = IE>,
+    IE: Into<Box<dyn StdError + Send + Sync>>,
+    IO: AsyncRead + AsyncWrite + Unpin + Send + 'static,
+    S: MakeServiceRef<IO, Body, ResBody = B>,
+    S::Error: Into<Box<dyn StdError + Send + Sync>>,
+    B: HttpBody + 'static,
+    B::Error: Into<Box<dyn StdError + Send + Sync>>,
+    E: ConnStreamExec<<S::Service as HttpService<Body>>::Future, B>,
+    E: NewSvcExec<IO, S::Future, S::Service, E, NoopWatcher>,
+{
+    type Output = crate::Result<()>;
+
+    fn poll(self: Pin<&mut Self>, cx: &mut task::Context<'_>) -> Poll<Self::Output> {
+        self.poll_watch(cx, &NoopWatcher)
+    }
+}
+
+#+end_src
