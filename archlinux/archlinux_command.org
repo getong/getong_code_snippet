@@ -2142,3 +2142,12 @@ sudo pacman -S nushell starship zellij
 #+begin_src sh
 yay -S emacs-pretest
 #+end_src
+
+** enable systemd-timesyncd
+#+begin_src rust
+sudo systemctl enable systemd-timesyncd
+sudo systemctl start systemd-timesyncd
+#+end_src
+
+copy from [[http://blog.lujun9972.win/blog/2018/10/16/%E5%9C%A8archlinux%E4%B8%8A%E8%BF%9B%E8%A1%8C%E6%97%B6%E9%92%9F%E5%90%8C%E6%AD%A5/index.html][在Archlinux上进行时钟同步
+]]

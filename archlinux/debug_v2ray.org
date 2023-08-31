@@ -1,0 +1,6 @@
+# debug v2ray
+
+** date time not sync
+enable systemd-timesyncd
+or
+timedatectl set-ntp true
