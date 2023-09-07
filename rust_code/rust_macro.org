@@ -28,6 +28,8 @@ path A path (discussed on page 183): ferns, ::std::sync::mpsc => , ; = | { [ : >
 
 pat A pattern (discussed on page 239): _, Some(ref x) => , = | if in
 
+pat_param: a PatternNoTopAlt
+
 item An item (discussed on page 138): struct Point { x: f64, y: f64 }, mod ferns; Anything
 
 block A block (discussed on page 137): { s += "ok\n"; true } Anything
