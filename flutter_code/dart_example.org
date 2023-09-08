@@ -2,7 +2,7 @@
 
 ** basic data types:
 
-#+begin_src dartrt
+#+begin_src dart
 Number(int double)
 String
 Boolean
@@ -15,6 +15,17 @@ null
 tuple
 #+end_src
 
+Some other types also have special roles in the Dart language:
+#+begin_src dart
+Object: The superclass of all Dart classes except Null.
+Enum: The superclass of all enums.
+Future and Stream: Used in asynchrony support.
+Iterable: Used in for-in loops and in synchronous generator functions.
+Never: Indicates that an expression can never successfully finish evaluating. Most often used for functions that always throw an exception.
+dynamic: Indicates that you want to disable static checking. Usually you should use Object or Object? instead.
+void: Indicates that a value is never used. Often used as a return type.
+#+end_src
+copy from [[https://dart.dev/language/built-in-types][Built-in types]]
 
 ** constructor function
 
