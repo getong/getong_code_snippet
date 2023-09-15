@@ -1,0 +1,12 @@
+* slint
+
+** slint-rust-template
+#+begin_src shell
+cargo install cargo-generate
+cargo generate --git https://github.com/slint-ui/slint-rust-template --name my-project
+cd my-project
+cargo build
+cargo run
+#+end_src
+
+copy from https://github.com/slint-ui/slint-rust-template#slint-rust-template
