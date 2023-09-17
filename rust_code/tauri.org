@@ -1,0 +1,9 @@
+* tauri
+
+** installation
+#+begin_src shell
+cargo install create-tauri-app --locked
+cargo create-tauri-app
+#+end_src
+
+copy from [[https://tauri.app/][tauri]]
