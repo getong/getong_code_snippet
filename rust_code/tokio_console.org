@@ -1,5 +1,11 @@
 * tokio_console
 
+** add console-subscriber
+
+#+begin_src shell
+cargo add console-subscriber
+#+end_src
+
 ** use with console_subscriber
 #+begin_src rust
 #[tokio::main]
