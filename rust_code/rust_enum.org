@@ -1,0 +1,38 @@
+* rust enum
+
+** enum reference
+
+#+begin_src rust
+#[derive(Debug)]
+enum Amount {
+    One,
+    Few(Option<i64>),
+}
+
+impl Amount {
+    fn how_much(&self) -> Option<i64> {
+        match self {
+            Amount::One => Some(1),
+            Amount::Few(a) => *a,
+        }
+    }
+}
+
+fn main() {
+    let amount = Amount::One;
+    println!("{:?}", amount.how_much());
+
+    let amount = Amount::Few(Some(5));
+    println!("{:?}", amount.how_much());
+
+    let amount = Amount::Few(None);
+    println!("{:?}", amount.how_much());
+}
+#+end_src
+
+#+begin_quote
+This is because self has the type &Amount, and when you match on a reference,
+the pattern gives you references to fields.
+#+end_quote
+
+copy from [[https://users.rust-lang.org/t/why-match-on-enum-variant-with-option-get-a-reference/53890][Why match on enum variant with option get a reference]]
