@@ -24,6 +24,7 @@
 [[https://github.com/lnx-search/datacake][datacake]]
 [[https://github.com/superfly/corrosion][Gossip-based service discovery (and more) for large distributed systems]]
 [[https://github.com/caio/foca][Gossip-based cluster membership discovery (SWIM)]]
+[[https://github.com/build-trust/ockam][ockam]]
 
 ** use with kubernetes
 :PROPERTIES:
