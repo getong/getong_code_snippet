@@ -1,0 +1,33 @@
+* dart extension
+
+the code is copied from go_router
+
+** GoRouterHelper extension example
+
+#+begin_src dart
+extension GoRouterHelper on BuildContext {
+    /// Navigate to a named route.
+  void goNamed(
+    String name, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) =>
+      GoRouter.of(this).goNamed(
+        name,
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+        extra: extra,
+      );
+}
+#+end_src
+
+usage:
+#+begin_src dart
+context.goNamed('product', pathParameters: {'id': '123'});
+#+end_src
+
+also we can still use goNamed method:
+#+begin_src dart
+GoRouter.of(context).goNamed('product', pathParameters: {'id': '123'});
+#+end_src
