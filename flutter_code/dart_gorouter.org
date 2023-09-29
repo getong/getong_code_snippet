@@ -103,3 +103,16 @@ class ScaffoldWithNavbar extends StatelessWidget {
 #+end_src
 
 copy from [[https://juejin.cn/post/7270343009790853172][Flutter go_router 路由管理全面指南]]
+
+** go_router architeture
+
+GoRouter
+└─ StatefulShellRoute
+    ├─ StatefulShellBranch
+    │   └─ GoRoute('/a')
+    │      └─ GoRoute('details')
+    └─ StatefulShellBranch
+        └─ GoRoute('/b')
+            └─ GoRoute('details')
+
+copy from [[https://codewithandrea.com/articles/flutter-bottom-navigation-bar-nested-routes-gorouter/][Flutter Bottom Navigation Bar with Stateful Nested Routes using GoRouter]]
