@@ -1,0 +1,55 @@
+* flutter globalkey
+
+** A reliable way to achieve context-less navigation is by declaring a global navigatorKey
+
+#+begin_src dart
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+#+end_src
+
+Pass it to MaterialApp:
+#+begin_src dart
+new MaterialApp(
+      title: 'MyApp',
+      onGenerateRoute: generateRoute,
+      navigatorKey: navigatorKey,
+    );
+#+end_src
+
+Push routes:
+#+begin_src dart
+navigatorKey.currentState.pushNamed('/someRoute');
+#+end_src
+
+quick code example:
+
+#+begin_src dart
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() {
+  runApp(CupertinoApp(
+    title: 'Navigate without context',
+    initialRoute: '/',
+    navigatorKey: navigatorKey, // important
+    onGenerateRoute: ...
+  ));
+}
+#+end_src
+
+For example you are in your lib/utils/api.dart
+#+begin_src dart
+import 'package:your_package_name/main.dart'; // important
+
+abstract class API {
+  static Future<dynamic> get() async {
+     // call some api
+     ...
+     // then you want to navigate to specific screen like login
+     navigatorKey.currentState?.pushNamed('/login'); // navigate to login, with null-aware check
+  }
+}
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/52962112/how-to-navigate-without-context-in-flutter-app][How to navigate without context in flutter app?]]
+
+
+also see https://gist.github.com/josephdicdican/81e59fad70530eac251ad6c28e2dcd4b
