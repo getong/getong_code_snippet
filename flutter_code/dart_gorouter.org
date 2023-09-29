@@ -116,3 +116,123 @@ GoRouter
             └─ GoRoute('details')
 
 copy from [[https://codewithandrea.com/articles/flutter-bottom-navigation-bar-nested-routes-gorouter/][Flutter Bottom Navigation Bar with Stateful Nested Routes using GoRouter]]
+
+** Navigate Without Context with GoRouter and Riverpod in Flutter
+
+#+begin_src dart
+// some button callback
+onPressed: () async {
+  try {
+    // get the database from a provider (using Riverpod)
+    final database = ref.read(databaseProvider);
+    // do some async work
+    await database.submit(someFormData);
+    // on success, pop the route if the widget is still mounted
+    if (context.mounted) {
+      context.pop();
+    }
+  } catch (e, st) {
+    // TODO: show alert error
+  }
+}
+#+end_src
+
+1. Pass the BuildContext as an argument
+
+#+begin_src dart
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class LeaveReviewController extends AutoDisposeAsyncNotifier<void> {
+  // @override build method
+
+  Future<void> submitReview({
+    required ProductID productId,
+    required double rating,
+    required String comment,
+    required BuildContext context,
+  }) {
+    // all the previous logic here
+    state = await AsyncValue.guard(...);
+    // then do this:
+    if (state.hasError == false) {
+      if (context.mounted) {
+        // pop the current route (uses GoRouter extension)
+        context.pop();
+      }
+    }
+  }
+}
+#+end_src
+
+2. Use an onSuccess callback
+#+begin_src dart
+class LeaveReviewController extends AutoDisposeAsyncNotifier<void> {
+  // @override build method
+
+  Future<void> submitReview({
+    required ProductID productId,
+    required double rating,
+    required String comment,
+    required VoidCallback onSuccess,
+  }) {
+    // all the previous logic here
+    state = await AsyncValue.guard(...);
+    // then do this:
+    if (state.hasError == false) {
+      onSuccess();
+    }
+  }
+}
+
+
+onPressed: () => ref.read(leaveReviewControllerProvider.notifier)
+  .submitReview(
+    productId: widget.productId,
+    rating: _rating, // get the rating score from a local state variable
+    comment: _controller.text, // get the text from the TextEditingController
+    onSuccess: context.pop, // pop using GoRouter extension
+  ),
+#+end_src
+
+
+3. Navigate without context using ref.read(goRouterProvider)
+#+begin_src dart
+final goRouterProvider = Provider<GoRouter>((ref) {
+  return GoRouter(...);
+});
+
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final goRouter = ref.watch(goRouterProvider);
+    return MaterialApp.router(
+      routerConfig: goRouter,
+      ...
+    );
+  }
+}
+
+
+class LeaveReviewController extends AutoDisposeAsyncNotifier<void> {
+  // @override build method
+
+  Future<void> submitReview({
+    required ProductID productId,
+    required double rating,
+    required String comment,
+  }) {
+    // all the previous logic here
+    state = await AsyncValue.guard(...);
+    // then do this:
+    if (state.hasError == false) {
+      // get the GoRouter instance and call pop on it
+      ref.read(goRouterProvider).pop();
+    }
+  }
+}
+#+end_src
+
+copy from [[https://codewithandrea.com/articles/flutter-navigate-without-context-gorouter-riverpod/][How to Navigate Without Context with GoRouter and Riverpod in Flutter]]
