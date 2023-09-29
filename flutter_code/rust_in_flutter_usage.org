@@ -1,0 +1,54 @@
+* rust_in_flutter usage
+
+** install rust 1.66.1
+
+#+begin_src shell
+rustup install 1.66.1
+#+end_src
+
+** install rifs
+
+#+begin_src shell
+cargo install rifs
+#+end_src
+
+** create a flutter project, for example hello_project
+
+#+begin_src shell
+flutter create hello_project
+cd hello_project
+#+end_src
+
+** add dependency
+
+#+begin_src shell
+flutter pub add rust_in_flutter protobuf
+#+end_src
+
+** create template
+
+#+begin_src shell
+rifs template
+#+end_src
+
+It will create messages directory and create rust dependency library.
+
+** put the protobuf file into messages directory
+
+Now we use the example directory protobuf files here.
+
+#+begin_src shell
+git clone https://github.com/cunarist/rust-in-flutter
+cp -rf rust-in-flutter/example/messages/* messages
+#+end_src
+
+** generate protobuf dart source file
+
+#+begin_src shell
+rifs message
+#+end_src
+
+** run the code
+#+begin_src shell
+flutter run
+#+end_src
