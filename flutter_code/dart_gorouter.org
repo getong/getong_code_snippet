@@ -1,0 +1,15 @@
+* dart gorouter
+
+** go vs push
+#+begin_quote
+Think of go as a way to jump to a new route. This will modify the underlying navigation stack
+if the new route is not a sub-route of the old one.
+
+On the other hand, push will always push the destination route on top of the existing navigation stack.
+
+If you can, try to not use push and always prefer go instead,
+since this doesn't require you to set special flags (such as optionURLReflectsImperativeAPIs),
+and plays nice with deep links on mobile.
+#+end_quote
+
+copy from [[https://codewithandrea.com/articles/flutter-navigation-gorouter-go-vs-push/][Flutter Navigation with GoRouter: Go vs Push]]
