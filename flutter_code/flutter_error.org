@@ -1,0 +1,12 @@
+* flutter error
+
+** Expanded can only be as a child of Column and Row or the Flex widget.
+#+begin_src dart
+child: Wrap(
+  alignment: WrapAlignment.spaceAround,
+  children: <Widget>[
+    // Expanded(   => remove this
+       Row()
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/74259224/the-ownership-chain-for-the-renderobject-that-received-the-incompatible-parent-d][The ownership chain for the RenderObject that received the incompatible parent data in Flutter]]
