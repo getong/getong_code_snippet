@@ -3,4 +3,3 @@
 [[https://pub.dev/packages/go_router][go_router]]
 [[https://pub.dev/packages/riverpod][riverpod]]
 [[https://pub.dev/packages/bloc][bloc]]
-[[https://pub.dev/packages/provider][provider]]
