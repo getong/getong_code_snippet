@@ -65,3 +65,18 @@ class Example extends ConsumerWidget {
 copy from [[RiverPod 使用记录][https://juejin.cn/post/7172482155812454431]]
 also see [[https://www.jianshu.com/p/407795aa19c4][Flutter Riverpod 使用]]
 also see [[重走Flutter状态管理之路—Riverpod入门篇][https://xuyisheng.top/riverpod1/]]
+
+** add dependency example
+#+begin_src shell
+flutter pub add \
+  flutter_riverpod \
+  riverpod_annotation \
+  flutter_hooks \
+  hooks_riverpod \
+  dev:riverpod_generator \
+  dev:build_runner \
+  dev:custom_lint \
+  dev:riverpod_lint
+#+end_src
+
+copy from [[https://docs-v2.riverpod.dev/docs/introduction/getting_started][Installing the package]]
