@@ -1,0 +1,19 @@
+* install xcode ios simulator runtime
+
+** download dmg file
+#+begin_quote
+Go to the URL: https://developer.apple.com/download/all/
+
+Download "iOS 17 Simulator Runtime", With Chrome.
+
+#+end_quote
+
+** Run the following command:
+
+#+begin_src shell
+xcrun simctl runtime add "Path to downloaded dmg file"
+e.g. xcrun simctl runtime add "~Downloads/iOS_17_Simulator_Runtime.dmg"
+#+end_src
+
+
+copy from [[https://developer.apple.com/forums/thread/674599][Could not download IOS Simulator Xcode 12.4]]
