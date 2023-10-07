@@ -27,7 +27,12 @@ use [[https://github.com/Desdaemon/flutter_rust_bridge_template][flutter_rust_br
 git clone https://github.com/Desdaemon/flutter_rust_bridge_template new_project_name
 cd new_project_name
 
-flutter_rust_bridge_codegen --rust-input native/src/api.rs --dart-output ./lib/bridge_generated.dart --dart-decl-output ./lib/bridge_definitions.dart
+flutter_rust_bridge_codegen \
+    --rust-input native/src/api.rs \
+    --dart-output ./lib/bridge_generated.dart \
+    --dart-decl-output ./lib/bridge_definitions.dart \
+    -c ios/Runner/bridge_generated.h \
+    -e macos/Runner/
 
 flutter run
 #+end_src
