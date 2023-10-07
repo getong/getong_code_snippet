@@ -17,3 +17,17 @@ flutter_rust_bridge_codegen \
 copy from [[https://cjycode.com/flutter_rust_bridge/integrate/ios_gen.html][Generating bindings]]
 
 also see [[https://blog.logrocket.com/using-flutter-rust-bridge-cross-platform-development/][Using Flutter Rust Bridge for cross-platform development]]
+
+
+** flutter_rust_bridge_template
+
+use [[https://github.com/Desdaemon/flutter_rust_bridge_template][flutter_rust_bridge_template]]
+
+#+begin_src shell
+git clone https://github.com/Desdaemon/flutter_rust_bridge_template new_project_name
+cd new_project_name
+
+flutter_rust_bridge_codegen --rust-input native/src/api.rs --dart-output ./lib/bridge_generated.dart --dart-decl-output ./lib/bridge_definitions.dart
+
+flutter run
+#+end_src
