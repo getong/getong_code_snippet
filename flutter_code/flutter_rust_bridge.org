@@ -1,0 +1,19 @@
+* flutter_rust_bridge
+
+** basic commands
+#+begin_src shell
+cargo install flutter_rust_bridge_codegen
+
+flutter_rust_bridge_codegen --rust-input native/src/api.rs --dart-output lib/bridge_generated.dart --dart-decl-output lib/bridge_definitions.dart
+
+flutter_rust_bridge_codegen \
+    -r $crate/src/api.rs \
+    -d lib/bridge_generated.dart \
+    -c ios/Runner/bridge_generated.h \
+    -e macos/Runner/   # if building for MacOS, extra path is essential
+
+#+end_src
+
+copy from [[https://cjycode.com/flutter_rust_bridge/integrate/ios_gen.html][Generating bindings]]
+
+also see [[https://blog.logrocket.com/using-flutter-rust-bridge-cross-platform-development/][Using Flutter Rust Bridge for cross-platform development]]
