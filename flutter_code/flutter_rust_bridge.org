@@ -44,7 +44,7 @@ flutter_rust_bridge_codegen \
 copy from [[https://cjycode.com/flutter_rust_bridge/integrate/ios_gen.html][Generating bindings]]
 
 also see [[https://blog.logrocket.com/using-flutter-rust-bridge-cross-platform-development/][Using Flutter Rust Bridge for cross-platform development]]
-
+also see [[https://www.zaynetro.com/post/flutter-rust-bridge-2023][Using Flutter Rust bridge in 2023]]
 
 ** flutter_rust_bridge_template
 
