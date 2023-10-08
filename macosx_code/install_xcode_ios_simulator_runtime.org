@@ -9,4 +9,9 @@ xcodebuild -downloadPlatform watchos
 xcodebuild -downloadPlatform tvos
 #+end_src
 
+or
+#+begin_src shell
+xcodebuild -downloadAllPlatforms
+#+end_src
+
 copy from [[https://developer.apple.com/documentation/xcode/installing-additional-simulator-runtimes][Installing and managing Simulator runtimes]]
