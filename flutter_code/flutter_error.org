@@ -10,3 +10,90 @@ child: Wrap(
 #+end_src
 
 copy from [[https://stackoverflow.com/questions/74259224/the-ownership-chain-for-the-renderobject-that-received-the-incompatible-parent-d][The ownership chain for the RenderObject that received the incompatible parent data in Flutter]]
+
+** No MaterialLocalizations found.
+
+#+begin_src dart
+void main() {
+  runApp(MaterialApp(home: App()));
+}
+#+end_src
+
+but cannot do:
+#+begin_src dart
+void main() {
+  runApp(App());
+}
+
+class App{
+  Widget build() {
+    return MaterialApp()
+    }
+  }
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/56275595/no-materiallocalizations-found-myapp-widgets-require-materiallocalizations-to][No MaterialLocalizations found - MyApp widgets require MaterialLocalizations to be provided by a Localizations widget ancestor]]
+
+** riverpod listview return result
+#+begin_src dart
+ void remove(String item) {
+    state = state.copyWith(
+      foos: [...state.foos.remove(item)],
+    );
+  }
+
+  void add(String item) {
+    state = state.copyWith(
+      foos: [...state.foos.add(item)],
+    );
+  }
+#+end_src
+
+copy from [[https://github.com/rrousselGit/riverpod/issues/287][Data change doesn't reflect when listen to List<T> value from StateNotifierProvider inside other provider]]
+
+or:
+#+begin_src dart
+void addItem(String item) {
+     state = [...state, item];
+  }
+
+  void removeItem(int index) {
+    // state.removeAt(index);
+    // state = [...state];
+    state = List.from(state)..removeAt(index);
+  }
+#+end_src
+
+** RenderBox was not laid out Error in Flutter
+
+#+begin_src dart
+ListView(
+  shrinkWrap: true,
+  children: [
+
+  ],
+)
+#+end_src
+change to be:
+#+begin_src dart
+Expanded(
+  child:ListView(
+      children: [
+
+      ],
+  ),
+)
+#+end_src
+
+If the error is caused by TextField() or TextFormField() inside Row() widget, then wrap your TextField() like
+
+#+begin_src dart
+Row(
+  children: [
+    Expanded(
+      child:TextField()
+    )
+  ],
+)
+#+end_src
+copy from [[https://www.fluttercampus.com/guide/228/renderbox-was-not-laid-out-error/][RenderBox was not laid out Error in Flutter]]
