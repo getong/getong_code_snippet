@@ -1,0 +1,21 @@
+* dart socket
+
+** socket connection
+#+begin_src dart
+import 'dart:io';
+_socket = await Socket.connect('127.0.0.1', 64123);
+#+end_src
+
+** socket send string
+
+#+begin_src dart
+String data = "hello world";
+_socket.write('$data\r\n');
+#+end_src
+
+** socket send List<int>
+
+#+begin_src dart
+List<int> list = [1,2,3];
+_socket.add(list);
+#+end_src
