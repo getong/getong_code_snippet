@@ -450,12 +450,9 @@ $ cd ~/build/linux/src/archlinux
 $ git branch --delete --force --verbose 5.16.11-arch1-1
 #+end_src
 
-copy from
-[[https://wiki.archlinux.org/title/Kernel_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Arch_Build_System_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Kernel
-(简体中文)/Arch Build System (简体中文)]] also see
-[[https://wiki.archlinux.org/title/Kernel/Arch_Build_System][Kernel/Arch
-Build System]] also see
-[[https://cloud.tencent.com/developer/article/1791129][使用ABS编译ArchLinux内核]]
+copy from [[https://wiki.archlinux.org/title/Kernel_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Arch_Build_System_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Kernel (简体中文)/Arch Build System (简体中文)]]
+also see [[https://wiki.archlinux.org/title/Kernel/Arch_Build_System][Kernel/Arch Build System]]
+also see [[https://cloud.tencent.com/developer/article/1791129][使用ABS编译ArchLinux内核]]
 
 ** git clone source and makepkg
 :PROPERTIES:
@@ -514,20 +511,17 @@ build() {
  $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 #+end_src
 
-copy from
-[[https://unix.stackexchange.com/questions/154919/how-to-modify-a-pkgbuild-which-uses-git-sources-to-pull-only-a-shallow-clone][How
-to modify a PKGBUILD which uses git sources to pull only a shallow
-clone?]]
+copy from [[https://unix.stackexchange.com/questions/154919/how-to-modify-a-pkgbuild-which-uses-git-sources-to-pull-only-a-shallow-clone][How to modify a PKGBUILD which uses git sources to pull only a shallow clone?]]
 
 ** fix Verifying source file signatures with gpg
-#+begin_src
+#+begin_quote
 Verifying source file signatures with gpg...
     archlinux-linux git repo ... SIGNATURE NOT FOUND
 ==> ERROR: One or more PGP signatures could not be verified!
-#+end_src
+#+end_quote
 
 It must fetch the latest source, including tags
-#+begin_src sh
+#+begin_src shell
 cd archlinux-linux
 git fetch origin --tags
 git checkout master
@@ -555,8 +549,7 @@ gpg --import A2FF3A36AAA56654109064AB19802F8B0D70FC30
 gpg --import C7E7849466FE2358343588377258734B41C31549
 #+end_src
 
-copy from [[https://bbs.archlinux.org/viewtopic.php?id=268750][[SOLVED]
-Unknown public key error while building linux kernel]]
+copy from [[https://bbs.archlinux.org/viewtopic.php?id=268750][[SOLVED] Unknown public key error while building linux kernel]]
 
 ** install gnome desktop
 :PROPERTIES:
@@ -601,13 +594,9 @@ systemd-analyze critical-chain
 systemd-analyze plot > plot.svg
 #+end_src
 
-see
-[[https://wiki.archlinux.org/title/Improving_performance/Boot_process][Improving
-performance/Boot process]]
+see [[https://wiki.archlinux.org/title/Improving_performance/Boot_process][Improving performance/Boot process]]
 
-also see
-[[https://forum.manjaro.org/t/manjaro-booting-is-very-slow-40sec/32489][Manjaro
-booting is very slow (40sec)]]
+also see [[https://forum.manjaro.org/t/manjaro-booting-is-very-slow-40sec/32489][Manjaro booting is very slow (40sec)]]
 
 ** yay usage
 :PROPERTIES:
@@ -627,10 +616,8 @@ yay -S nvidia-340xx-dkms
 sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
 #+end_src
 
-copy from
-[[https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/][Unable
-to find =nvidia-390xx= anymore]] also see
-[[https://wiki.archlinux.org/title/NVIDIA#Unsupported_drivers][Unsupported_drivers]]
+copy from [[https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/][Unable to find =nvidia-390xx= anymore]]
+also see [[https://wiki.archlinux.org/title/NVIDIA#Unsupported_drivers][Unsupported_drivers]]
 
 ** nvidia
 :PROPERTIES:
@@ -677,8 +664,7 @@ sudo vboxreload
 sudo /sbin/rcvboxdrv setup
 #+end_src
 
-copy from [[https://cxybb.com/article/weixin_34280237/91997886][Arch
-Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝]]
+copy from [[https://cxybb.com/article/weixin_34280237/91997886][Arch Linux 安装 virtualbox_powerx_yc的博客-程序员宝宝]]
 
 ** chinese font
 :PROPERTIES:
@@ -706,9 +692,7 @@ sudo pacman -S nfs-utils
 sudo systemctl stop packagekit.service
 #+end_src
 
-copy from
-[[https://bbs.archlinux.org/viewtopic.php?pid=1975599#p1975599][Gnome
-software store stopped working]]
+copy from [[https://bbs.archlinux.org/viewtopic.php?pid=1975599#p1975599][Gnome software store stopped working]]
 
 ** install google-chrome browser
 :PROPERTIES:
@@ -746,9 +730,7 @@ then reinstall systemd
 sudo pacman -S systemd
 #+end_src
 
-copy from
-[[https://bbs.archlinux.org/viewtopic.php?pid=1927195#p1927195][pam
-fails to find unit dbus-org.freedesktop.home1.service]]
+copy from [[https://bbs.archlinux.org/viewtopic.php?pid=1927195#p1927195][pam fails to find unit dbus-org.freedesktop.home1.service]]
 
 ** mpv player
 :PROPERTIES:
@@ -804,11 +786,8 @@ wpa_supplicant -D nl80211,wext -B -i wlp3s0 -c /etc/wpa_supplicant/wpa_supplican
 dhcpcd wlp3s0 // 给无线网卡分配动态IP
 #+end_src
 
-copy from
-[[https://wangbinweb.github.io/htm/18-archlinux-install-wireless-network-card.htm][archlinux
-系统安装无线网卡]] also see
-[[https://wiki.archlinux.org/title/Network_configuration_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Wireless_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Network
-configuration (简体中文)/Wireless (简体中文)]]
+copy from [[https://wangbinweb.github.io/htm/18-archlinux-install-wireless-network-card.htm][archlinux 系统安装无线网卡]]
+also see [[https://wiki.archlinux.org/title/Network_configuration_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)/Wireless_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Network configuration (简体中文)/Wireless (简体中文)]]
 
 ** ctrl swap caps
 :PROPERTIES:
@@ -827,11 +806,8 @@ gnome-session (or similar) line .
 setxkbmap -option ctrl:swapcaps
 #+end_src
 
-copy from
-[[https://n1ghtmare.github.io/2021-05-19/remapping-caps-lock-to-esc-on-arch-linux/][Remapping
-Caps Lock to Esc on Arch Linux]] also see
-[[https://itectec.com/superuser/how-to-map-the-caps-lock-key-to-escape-key-in-arch-linux/][Linux
--- How to map the Caps Lock key to Escape key in Arch Linux]]
+copy from [[https://n1ghtmare.github.io/2021-05-19/remapping-caps-lock-to-esc-on-arch-linux/][Remapping Caps Lock to Esc on Arch Linux]]
+also see [[https://itectec.com/superuser/how-to-map-the-caps-lock-key-to-escape-key-in-arch-linux/][Linux -- How to map the Caps Lock key to Escape key in Arch Linux]]
 
 ** samba
 :PROPERTIES:
@@ -893,11 +869,9 @@ sudo systemctl enable smb
 sudo systemctl restart sshd
 #+end_src
 
-see [[https://www.cnblogs.com/chenyucong/p/8452770.html][Arch
-Linux下配置Samba]] see
-[[https://wiki.archlinux.org/title/Samba_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Samba
-(简体中文)]] see [[https://www.xiebruce.top/1089.html][Linux --
-限制ssh的登录用户和登录ip]]
+see [[https://www.cnblogs.com/chenyucong/p/8452770.html][Arch Linux下配置Samba]]
+see [[https://wiki.archlinux.org/title/Samba_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)][Samba (简体中文)]]
+see [[https://www.xiebruce.top/1089.html][Linux -- 限制ssh的登录用户和登录ip]]
 
 ** mount external disk drivers
 :PROPERTIES:
@@ -1765,9 +1739,7 @@ SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="aa:bb:cc:dd:ee:ff", NAME="net1"
 SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="ff:ee:dd:cc:bb:aa", NAME="net0"
 #+end_src
 
-copy from
-[[https://wiki.archlinux.org/title/Network_configuration#Change_interface_name][Change
-interface name]]
+copy from [[https://wiki.archlinux.org/title/Network_configuration#Change_interface_name][Change interface name]]
 
 ** android filesystem support
 :PROPERTIES:
@@ -1784,8 +1756,7 @@ jmtpfs /mnt                             //to mount android to /mnt
 fusermount -u /mnt                      //umount mnt
 #+end_src
 
-copy from [[https://www.jianshu.com/p/e90f9e45fe62][How to Transfer
-Files from Arch Linux to Android]]
+copy from [[https://www.jianshu.com/p/e90f9e45fe62][How to Transfer Files from Arch Linux to Android]]
 
 ** at batch command line
 :PROPERTIES:
@@ -1839,8 +1810,7 @@ pandoc README.md -o README.pdf --pdf-engine=xelatex -V CJKmainfont='Sarasa UI SC
 pandoc README.md -o README.docx
 #+end_src
 
-copy from [[https://zhuanlan.zhihu.com/p/417566961][ArchLinux 安装
-TeXLive]]
+copy from [[https://zhuanlan.zhihu.com/p/417566961][ArchLinux 安装 TeXLive]]
 
 ** appflowy
 :PROPERTIES:
@@ -1905,8 +1875,7 @@ Error: crun: error stat'ing file `/dev/vboxusb/001/007`: Permission denied: OCI 
 #+end_src
 
 it might be error to be fixed by：
-[[https://github.com/containers/podman/issues/13899][Privileged
-containers cannot be restarted if host devices changed]]
+[[https://github.com/containers/podman/issues/13899][Privileged containers cannot be restarted if host devices changed]]
 
 ** docker
 :PROPERTIES:
