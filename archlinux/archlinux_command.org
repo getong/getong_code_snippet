@@ -470,11 +470,22 @@ Build System]] also see
 
  // edit `PKGBUILD` file
  ------------------
- pkgbase=linux-custom20231017
+ pkgbase=linux-custom3
+ pkgver=6.5.7.arch1
 
  // change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
  ------------------------------------------------------------------
  pkgname=("$pkgbase" "$pkgbase-headers")
+
+ build() {
+   cd $_srcname
+   _make htmldocs all
+}
+  to change be:
+build() {
+   cd $_srcname
+   _make all
+}
 
  $ mv config config.origin
 
@@ -486,15 +497,15 @@ Build System]] also see
 
  $ cd archlinux-linux
  // checkout a tag like 6.5.7-arch1
- $ git branch --delete --force --verbose 6.5.7-arch1
+ // $ git branch --delete --force --verbose 6.5.7-arch1
  $ git checkout tags/v5.16.11-arch1 -b 6.5.7-arch1
  $ cd ..
 
  $ rm -rf pkg src  ## there might be old building directory
  $ updpkgsums
  $ makepkg --holdver
- $ sudo pacman -U <kernel-headers_package>
  $ sudo pacman -U <kernel_package>
+ $ sudo pacman -U <kernel-headers_package>
  $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
  // uninstall custom linux kernel
