@@ -468,6 +468,14 @@ Build System]] also see
  $ cd linux
  $ git clone https://gitee.com/mirrors_Archlinux/linux archlinux-linux
 
+ // edit `PKGBUILD` file
+ ------------------
+ pkgbase=linux-custom20231017
+
+ // change pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs") to be:
+ ------------------------------------------------------------------
+ pkgname=("$pkgbase" "$pkgbase-headers")
+
  $ mv config config.origin
 
  $ zcat /proc/config.gz > config
@@ -476,13 +484,13 @@ Build System]] also see
  ------------------
  CONFIG_SATA_PMP=n
 
-
- // checkout a tag like 5.16.11-arch1
- $ git branch --delete --force --verbose 5.16.11-arch1
- $ git checkout tags/v5.16.11-arch1 -b 5.16.11-arch1
+ $ cd archlinux-linux
+ // checkout a tag like 6.5.7-arch1
+ $ git branch --delete --force --verbose 6.5.7-arch1
+ $ git checkout tags/v5.16.11-arch1 -b 6.5.7-arch1
+ $ cd ..
 
  $ rm -rf pkg src  ## there might be old building directory
-
  $ updpkgsums
  $ makepkg --holdver
  $ sudo pacman -U <kernel-headers_package>
