@@ -1,0 +1,23 @@
+* dart interactive
+
+** installation
+
+#+begin_src shell
+dart pub global activate interactive
+#+end_src
+
+** usage
+#+begin_src shell
+$ interactive
+#+end_src
+
+** demo
+
+#+begin_src dart
+>>> !dart pub add path // normal shell command
+>>> import 'package:path/path.dart'; // normal import
+>>> join('directory', 'file.txt') // use it (`join` is a function in 3rd party package `path`)
+directory/file.txt
+#+end_src
+
+copy from [[https://pub.dev/packages/interactive][interactive]]
