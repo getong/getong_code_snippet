@@ -501,9 +501,15 @@ build() {
  $ rm -rf pkg src  ## there might be old building directory
  $ updpkgsums
  $ makepkg --holdver
- $ sudo pacman -U <kernel_package>
  $ sudo pacman -U <kernel-headers_package>
+ $ sudo pacman -U <kernel_package>
  $ sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+ # and run as USER:
+ yay -S nvidia-390xx-dkms
+ yay -S nvidia-340xx-dkms
+
+ sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
 
  // uninstall custom linux kernel
  $ sudo pacman -R linux-custom-headers
