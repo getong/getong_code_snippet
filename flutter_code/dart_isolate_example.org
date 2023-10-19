@@ -334,3 +334,19 @@ void heavyComputationTask(SendPort mySendPort) async {
 #+RESULTS:
 : Mike, I'm taking an Espresso coffee
 : You're taking Espresso, and I'm taking Latte
+
+
+** receiveport listen and use protobuf
+#+begin_src dart
+late ReceivePort _receivePort;
+_receivePort = ReceivePort();
+_receivePortSubscription = _receivePort.listen((dynamic msgPtr) async {
+    final ptr = Lib.lib.sideswap_msg_ptr(msgPtr as int);
+    final len = Lib.lib.sideswap_msg_len(msgPtr);
+    final msg = From.fromBuffer(ptr.asTypedList(len));
+    Lib.lib.sideswap_msg_free(msgPtr);
+    _recvSubject.add(msg);
+});
+#+end_src
+
+copy from https://github.com/sideswap-io/sideswapclient
