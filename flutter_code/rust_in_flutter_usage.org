@@ -6,10 +6,10 @@
 rustup install 1.66.1
 #+end_src
 
-** install rifs
+** install rinf
 
 #+begin_src shell
-cargo install rifs
+cargo install rinf
 #+end_src
 
 ** create a flutter project, for example hello_project
@@ -22,13 +22,13 @@ cd hello_project
 ** add dependency
 
 #+begin_src shell
-flutter pub add rust_in_flutter protobuf
+flutter pub add rinf protobuf
 #+end_src
 
 ** create template
 
 #+begin_src shell
-rifs template
+rinf template
 #+end_src
 
 It will create messages directory and create rust dependency library.
@@ -38,14 +38,14 @@ It will create messages directory and create rust dependency library.
 Now we use the example directory protobuf files here.
 
 #+begin_src shell
-git clone https://github.com/cunarist/rust-in-flutter
-cp -rf rust-in-flutter/example/messages/* messages
+git clone https://github.com/cunarist/rinf
+cp -rf rinf/example/messages/* messages
 #+end_src
 
 ** generate protobuf dart source file
 
 #+begin_src shell
-rifs message
+rinf message
 #+end_src
 
 ** run the code
