@@ -194,6 +194,9 @@ rustup show
 
 rustup override set stable
 rustup show
+
+rustup override set 1.73.0
+rustup component add rust-analyzer-preview
 #+end_src
 
 ** cargo mirror
