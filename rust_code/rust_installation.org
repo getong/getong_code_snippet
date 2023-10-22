@@ -1,4 +1,4 @@
-* rust installation
+n* rust installation
 :PROPERTIES:
 :CUSTOM_ID: rust-installation
 :END:
@@ -418,7 +418,7 @@ or install with rustup
 rustup +nightly component add rust-analyzer-preview
 
 rustup +nightly which rust-analyzer
-rust which rust-analyzer
+rustup which rust-analyzer
 #+end_src
 
 the install path is
