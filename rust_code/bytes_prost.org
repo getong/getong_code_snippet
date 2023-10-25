@@ -95,7 +95,7 @@ impl SrvMessage {
 it call the prost::Message::decode()
 
 ** usage example
-#+begin_src
+#+begin_src rust
 include!(concat!(env!("OUT_DIR"), "/sup.ctl.rs"));
 
 fn handle_ctl_reply(reply: &SrvMessage) -> result::Result<(), SrvClientError> {
