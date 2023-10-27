@@ -1102,3 +1102,16 @@ grep -R linuxize.com /etc
 copy from
 [[https://linuxize.com/post/how-to-use-grep-command-to-search-files-in-linux/][Grep
 Command in Linux (Find Text in Files)]]
+
+** echo server command line
+TCP echo server
+#+begin_src shell
+ncat -l 2000 --keep-open --exec "/bin/cat"
+#+end_src
+
+UDP echo server
+#+begin_src shell
+ncat -l 2000 --keep-open --udp --exec "/bin/cat"
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/8375860/how-to-make-an-echo-server-with-bash][How to make an Echo server with Bash?]]
