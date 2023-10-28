@@ -80,3 +80,16 @@ flutter pub add \
 #+end_src
 
 copy from [[https://docs-v2.riverpod.dev/docs/introduction/getting_started][Installing the package]]
+
+** riverpod_generator
+
+#+begin_quote
+Provider
+FutureProvider
+StreamProvider
+NotifierProvider (new in Riverpod 2.0)
+AsyncNotifierProvider (new in Riverpod 2.0)
+Legacy providers like StateProvider, StateNotifierProvider, and ChangeNotifierProvider are not supported, and I've already explained how they can be replaced in my article about how to use Notifier and AsyncNotifier with the new Flutter Riverpod Generator.
+#+end_quote
+
+copy from [[https://codewithandrea.com/articles/flutter-riverpod-generator/][How to Auto-Generate your Providers with Flutter Riverpod Generator]]
