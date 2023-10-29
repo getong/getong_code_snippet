@@ -93,3 +93,16 @@ Legacy providers like StateProvider, StateNotifierProvider, and ChangeNotifierPr
 #+end_quote
 
 copy from [[https://codewithandrea.com/articles/flutter-riverpod-generator/][How to Auto-Generate your Providers with Flutter Riverpod Generator]]
+
+#+begin_quote
+Provider
+StateProvider (legacy)
+StateNotifierProvider (legacy)
+FutureProvider
+StreamProvider
+ChangeNotifierProvider (legacy)
+NotifierProvider (new in Riverpod 2.0)
+AsyncNotifierProvider (new in Riverpod 2.0)
+#+end_quote
+
+copy from [[https://codewithandrea.com/articles/flutter-state-management-riverpod/][Flutter Riverpod 2.0: The Ultimate Guide]]
