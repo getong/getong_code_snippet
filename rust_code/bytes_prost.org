@@ -473,4 +473,4 @@ fn handle_ctl_reply(reply: &SrvMessage) -> result::Result<(), SrvClientError> {
 }
 #+end_src
 
-copy from [[https://github.com/habitat-sh/habitat][habitat]] codec.rs gameway_util.rs
+copy from [[https://github.com/habitat-sh/habitat][habitat]] codec.rs gateway_util.rs
