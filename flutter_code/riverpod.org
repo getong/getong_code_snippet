@@ -103,6 +103,8 @@ StreamProvider
 ChangeNotifierProvider (legacy)
 NotifierProvider (new in Riverpod 2.0)
 AsyncNotifierProvider (new in Riverpod 2.0)
+StreamNotifierProvider (new in Riverpod 2.3)
 #+end_quote
 
 copy from [[https://codewithandrea.com/articles/flutter-state-management-riverpod/][Flutter Riverpod 2.0: The Ultimate Guide]]
+also see [[https://codewithandrea.com/articles/flutter-riverpod-async-notifier/][How to use Notifier and AsyncNotifier with the new Flutter Riverpod Generator]]
