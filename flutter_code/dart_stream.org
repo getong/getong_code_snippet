@@ -1,0 +1,32 @@
+* dart stream
+
+** stream concept
+#+begin_quote
+In order to easily visualize the notion of Stream, simply consider a pipe with 2 ends, only one allowing to insert something into it. When you insert something into the pipe, it flows inside the pipe and goes out by the other end.
+
+In Flutter,
+
+the pipe is called a Stream
+to control the Stream, we usually(*) use a StreamController
+to insert something into the Stream, the StreamController exposes the “_entrance_”, called a StreamSink, accessible via the sink property
+the way out of the Stream, is exposed by the StreamController via the stream property
+#+end_quote
+
+copy from [[https://medium.com/flutter-community/reactive-programming-streams-bloc-6f0d2bd2d248][Reactive Programming — Streams — BLoC]]
+
+
+** streamcontroller
+#+begin_quote
+Flutter中 Stream 、StreamController 、StreamSink 和 StreamSubscription 都是 abstract 对象，他们对外抽象出接口，而内部实现对象大部分都是 _ 开头的如 _SyncStreamController 、ControllerStream 等私有类，在这基础上整个流程概括起来就是：
+
+有一个事件源叫 Stream，为了方便控制 Stream ，官方提供了使用 StreamController 作为管理；同时它对外提供了 StreamSink 对象作为事件输入口，可通过 sink 属性访问; 又提供 stream 属性提供 Stream 对象的监听和变换，最后得到的 StreamSubscription 可以管理事件的订阅。
+
+所以我们可以总结出：
+
+StreamController ：如类名描述，用于整个 Stream 过程的控制，提供各类接口用于创建各种事件流。
+StreamSink：一般作为事件的入口，提供如 add ， addStream 等。
+Stream：事件源本身，一般可用于监听事件或者对事件进行转换，如 listen 、 where 。
+StreamSubscription：事件订阅后的对象，表面上用于管理订阅过等各类操作，如 cacenl 、pause ，同时在内部也是事件的中转关键。
+#+end_quote
+
+copy from [[https://guoshuyu.cn/home/wx/Flutter-11.html][Stream 四天王]]
