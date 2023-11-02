@@ -860,6 +860,7 @@ sh -c 'env HOME=$(mktemp -d) zsh'
 :END:
 #+begin_src shell
 rsync -avh --remove-source-files --progress -e "ssh -i id_rsa" user@ip:src_file dest_file
+find src_file -type d -empty -delete
 #+end_src
 
 copy from
