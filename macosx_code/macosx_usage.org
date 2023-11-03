@@ -329,3 +329,7 @@ copy from
 #+begin_src sh
 ALL_PROXY=socks5://127.0.0.1:10808 brew upgrade
 #+end_src
+
+** 允许来自身份不明开发者在emacs运行
+系统设置 -> 隐私与安全性 -> 开发者工具
+添加 Emacs
