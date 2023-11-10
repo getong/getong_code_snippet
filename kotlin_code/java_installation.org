@@ -1,0 +1,37 @@
+* java installation
+
+** install java on macos
+
+*** install openjdk@21
+#+begin_src shell
+brew install openjdk@21
+#+end_src
+
+*** use openjskd@21 as default jdk
+#+begin_src shell
+sudo ln -sfn /usr/local/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+#+end_src
+
+*** check the current jdk path
+#+begin_src shell
+/usr/libexec/java_home
+#+end_src
+
+*** path setting
+#+begin_src shell
+export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH=$JAVA_HOME/bin:$PATH
+#+end_src
+
+*** openjdk@17 example
+#+begin_src shell
+brew install openjdk@17
+sudo ln -sfn /usr/local/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+#+end_src
+
+*** android studio jdk path
+#+begin_src shell
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/71381050/java-home-is-set-to-an-invalid-directory-android-studio-flutter][JAVA_HOME is set to an invalid directory Android Studio (Flutter)]]
