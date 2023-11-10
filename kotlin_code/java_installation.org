@@ -29,6 +29,8 @@ brew install openjdk@17
 sudo ln -sfn /usr/local/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
 #+end_src
 
+kotlin use openjdk@17 as the default by now(2023-11-11).
+
 *** android studio jdk path
 #+begin_src shell
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
@@ -37,7 +39,15 @@ export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 copy from [[https://stackoverflow.com/questions/71381050/java-home-is-set-to-an-invalid-directory-android-studio-flutter][JAVA_HOME is set to an invalid directory Android Studio (Flutter)]]
 
 *** ERROR: JAVA_HOME is set to an invalid directory: @@HOMEBREW_JAVA@@
+
 see [[file:../emacs_code/lsp-bridge-language-server.org][kotlin-language-server]]
+
+When installing kafka might occurs this error, it could be resoled by this command:
+#+begin_src shell
+HOMEBREW_BOTTLE_DOMAIN= ALL_PROXY=socks5://127.0.0.1:10808  brew install kafka
+// or reinstall
+HOMEBREW_BOTTLE_DOMAIN= ALL_PROXY=socks5://127.0.0.1:10808  brew reinstall kafka
+#+end_src
 
 ** install java on linux
 
