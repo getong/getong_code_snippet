@@ -1,0 +1,17 @@
+* gradle installation
+
+** install on macos
+
+#+begin_src shell
+brew install gradle
+#+end_src
+
+** basic commands usage
+
+#+begin_src shell
+mkdir HelloWorld
+cd HelloWorld
+gradle init
+## answer some question
+grade build
+#+end_src
