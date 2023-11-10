@@ -36,6 +36,9 @@ export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
 copy from [[https://stackoverflow.com/questions/71381050/java-home-is-set-to-an-invalid-directory-android-studio-flutter][JAVA_HOME is set to an invalid directory Android Studio (Flutter)]]
 
+*** ERROR: JAVA_HOME is set to an invalid directory: @@HOMEBREW_JAVA@@
+see [[file:../emacs_code/lsp-bridge-language-server.org][kotlin-language-server]]
+
 ** install java on linux
 
 *** manually install java as default on linux
