@@ -1,0 +1,18 @@
+* lsp-bridge language server installation
+
+** install on macos
+
+*** python
+#+begin_src shell
+brew install pyright pyenv ruff-lsp
+#+end_src
+
+*** kotlin
+#+begin_src shell
+brew install kotlin-language-server
+#+end_src
+
+*** misc
+#+begin_src shell
+brew install sql-language-server yaml-language-server
+#+end_src
