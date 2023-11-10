@@ -9,8 +9,14 @@ brew install pyright pyenv ruff-lsp
 
 *** kotlin
 #+begin_src shell
-brew install kotlin-language-server
+HOMEBREW_BOTTLE_DOMAIN= ALL_PROXY=socks5://127.0.0.1:10808  brew install kotlin-language-server
+// or reinstall
+HOMEBREW_BOTTLE_DOMAIN= ALL_PROXY=socks5://127.0.0.1:10808  brew reinstall kotlin-language-server
 #+end_src
+
+see [[https://n2n1.cn/article-785-1-1.htm][mac安装kafka运行错误@@HOMEBREW_JAVA@@/bin/java: No such file or directory]]
+also see [[https://github.com/orgs/Homebrew/discussions/2530][brew bottle command replaces JAVA_HOME path with @@HOMEBREW_JAVA@@ #2530]]
+这是因为brew只知道如何从 ghcr.io 获取清单, 但我们用了其他的源，导致找不到对应的文件。
 
 *** misc
 #+begin_src shell
