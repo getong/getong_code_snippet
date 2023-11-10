@@ -1,0 +1,22 @@
+* swift project
+
+** create swift project
+
+#+begin_src shell
+mkdir hello_world
+cd hello_world
+
+swift package init --type executable
+#+end_src
+
+** build command
+
+#+begin_src shell
+swift build
+#+end_src
+
+** run command
+
+#+begin_src shell
+swift run
+#+end_src
