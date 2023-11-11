@@ -13,5 +13,6 @@ mkdir HelloWorld
 cd HelloWorld
 gradle init
 ## answer some question
-grade build
+gradle build
+gradle run
 #+end_src
