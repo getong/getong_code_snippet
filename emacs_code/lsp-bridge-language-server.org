@@ -18,6 +18,16 @@ see [[https://n2n1.cn/article-785-1-1.htm][mac安装kafka运行错误@@HOMEBREW_
 also see [[https://github.com/orgs/Homebrew/discussions/2530][brew bottle command replaces JAVA_HOME path with @@HOMEBREW_JAVA@@ #2530]]
 这是因为brew只知道如何从 ghcr.io 获取清单, 但我们用了其他的源，导致找不到对应的文件。
 
+**** compile kotlin language server from source
+
+#+begin_src shell
+git clone https://github.com/fwcd/kotlin-language-server
+cd kotlin-language-server
+./gradlew :server:installDist -PjavaVersion=17
+
+export PATH=$PWD/server/build/install/server/bin:$PATH
+#+end_src
+
 *** misc language server
 #+begin_src shell
 brew install sql-language-server yaml-language-server
