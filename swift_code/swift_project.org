@@ -20,3 +20,25 @@ swift build
 #+begin_src shell
 swift run
 #+end_src
+
+** develop with emacs swift-mode
+
+*** open simulator
+
+on a terminal
+#+begin_src shell
+open -a Simulator
+#+end_src
+
+*** compile
+
+select local device
+#+begin_src elisp
+swift-mode:build-ios-app
+#+end_src
+
+*** run the application on simulator
+
+#+begin_src elisp
+swift-mode:debug-ios-app
+#+end_src
