@@ -1,0 +1,25 @@
+* flutter dio usage
+
+** upload image using binary body with Dio package
+
+#+begin_src dart
+Uint8List image = File(path).readAsBytesSync();
+
+Options options = Options(
+  contentType: lookupMimeType(path),
+  headers: {
+    'Accept': "*/*",
+    'Content-Length': image.length,
+    'Connection': 'keep-alive',
+    'User-Agent': 'ClinicPlush'
+  }
+);
+
+Response response = await dio.put(
+  url,
+  data: file.openRead(), <--- change here
+  options: options
+);
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/62648883/flutter-dio-upload-image-using-binary-body-with-dio-package][Flutter DIO: upload image using binary body with Dio package]]
