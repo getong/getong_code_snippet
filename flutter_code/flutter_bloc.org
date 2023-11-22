@@ -9,3 +9,29 @@ BlocListener
 BlocConsumer
 BlocObserver
 #+end_quote
+
+** usage
+
+
+#+begin_src dart
+// which makes the widget listen to changes on T
+context.watch<T>()
+
+// which returns T without listening to it
+context.read<T>()
+
+// which allows a widget to listen to only a small part of T.
+context.select<T, R>(R cb(T value))
+#+end_src
+
+example
+#+begin_src dart
+Widget build(BuildContext context) {
+  final person = context .watch<Person>():
+  return Text(person.name);
+  Widget build(BuildContext context) {
+    final name = context.select((Person p) => p.name);
+    return Text(name);
+  }
+}
+#+end_src
