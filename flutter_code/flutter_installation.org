@@ -235,3 +235,12 @@ and the macos/Runner/Release.entitlements
 #+begin_src sh
 flutter config --android-studio-dir /Applications/Android\ Studio.app
 #+end_src
+
+** set remote git url
+#+begin_src shell
+absolute_path=$(readlink -f `which flutter`)
+flutter_bin_dir=$(dirname $absolute_path)
+flutter_dir=$(dirname $flutter_bin_dir)
+cd $flutter_dir
+git remote set-url origin https://gitee.com/mirrors/Flutter
+#+end_src
