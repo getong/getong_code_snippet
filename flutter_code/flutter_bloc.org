@@ -29,9 +29,10 @@ example
 Widget build(BuildContext context) {
   final person = context .watch<Person>():
   return Text(person.name);
-  Widget build(BuildContext context) {
-    final name = context.select((Person p) => p.name);
-    return Text(name);
-  }
+}
+
+Widget build(BuildContext context) {
+  final name = context.select((Person p) => p.name);
+  return Text(name);
 }
 #+end_src
