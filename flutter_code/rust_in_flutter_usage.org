@@ -1,4 +1,4 @@
-* rust_in_flutter usage
+* rinf usage
 
 ** install rust 1.66.1
 
@@ -51,4 +51,20 @@ rinf message
 ** run the code
 #+begin_src shell
 flutter run
+#+end_src
+
+** compile rinf project
+
+#+begin_src shell
+git clone https://github.com/getong/rinf
+cd rinf/rust_crate
+
+cargo install --path ./
+
+cd ..
+python3 automate create-test-app
+cd test_app
+
+# macos
+flutter build macos --verbose
 #+end_src
