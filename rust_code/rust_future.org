@@ -563,3 +563,43 @@ fn foo(...args) -> BoxFuture<'lifetime, ...return_type> {
 without an async before the fn
 
 copy from [[https://users.rust-lang.org/t/how-to-unbox-deference-a-boxfuture/56691/8][How to unbox/deference a `BoxFuture`?]]
+
+** afit (async fn in trait)
+
+before
+
+#+begin_src rust
+use async_trait::async_trait;
+
+#[async_trait]
+fn func_name()
+#+end_src
+
+after
+
+#+begin_src rust
+fn func_name()
+#+end_src
+
+** RPITIT (return-position impl Trait in trait)
+
+before:
+
+#+begin_src rust
+use futures_util::future::BoxFuture;
+
+fn func_name(self) -> BoxFuture<'static, Result<E, Error>>
+#+end_src
+
+after:
+
+#+begin_src rust
+use std::future::Future;
+
+fn func_name(self) -> impl Future<Output = Result<E, Error>> + Send
+#+end_src
+
+see the code from [[https://github.com/rust-lang/rust/pull/115822][Stabilize async fn and return-position impl Trait in trait ]]
+
+also see [[https://www.neteye-blog.com/2023/10/taking-rpitit-%E2%80%95-rusts-shiny-new-feature-%E2%80%95-for-a-test-ride-with-type-system-level-lambda-calculus/][Taking RPITIT ― Rust’s Shiny New Feature ― for a Test Ride with Type-system-level Lambda Calculus]]
+also see [[https://github.com/w1ll-i-code/rpitit-lambda][Taking RPITIT]]
