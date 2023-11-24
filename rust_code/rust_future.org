@@ -529,3 +529,37 @@ impl<'a, 'b> Future for ReadFuture<'a, 'b> {
 copy from
 [[https://medium.com/@gftea/basic-concept-of-async-i-o-and-executor-623f3242a102][Basic
 concept of Async I/O and Executor]]
+
+
+** boxfuture code example
+
+Keep in mind that
+#+begin_src rust
+async fn foo(...args) -> ...return_type {
+    ...function body
+}
+#+end_src
+
+more or less just a shorthand for
+
+#+begin_src rust
+fn foo(...args) -> impl Future<Output=...return_type> + 'lifetime {
+    async move {
+        ...function body
+    }
+}
+#+end_src
+
+hence the corresponding version of that where it returns a boxed future is
+
+#+begin_src rust
+fn foo(...args) -> BoxFuture<'lifetime, ...return_type> {
+    async move {
+        ...function body
+    }.boxed()
+}
+#+end_src
+
+without an async before the fn
+
+copy from [[https://users.rust-lang.org/t/how-to-unbox-deference-a-boxfuture/56691/8][How to unbox/deference a `BoxFuture`?]]
