@@ -603,3 +603,7 @@ see the code from [[https://github.com/rust-lang/rust/pull/115822][Stabilize asy
 
 also see [[https://www.neteye-blog.com/2023/10/taking-rpitit-%E2%80%95-rusts-shiny-new-feature-%E2%80%95-for-a-test-ride-with-type-system-level-lambda-calculus/][Taking RPITIT ― Rust’s Shiny New Feature ― for a Test Ride with Type-system-level Lambda Calculus]]
 also see [[https://github.com/w1ll-i-code/rpitit-lambda][Taking RPITIT]]
+
+1.75.0 will be stable on: 28 December, 2023.
+
+Remove async-trait and use AFIT(Async Fn In Trait) and RPITIT(Return Position Impl Trait In Traits).
