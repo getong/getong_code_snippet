@@ -607,3 +607,33 @@ also see [[https://github.com/w1ll-i-code/rpitit-lambda][Taking RPITIT]]
 1.75.0 will be stable on: 28 December, 2023.
 
 Remove async-trait and use AFIT(Async Fn In Trait) and RPITIT(Return Position Impl Trait In Traits).
+
+** pin future and stream
+
+pin future code:
+#+begin_src rust
+let future1 = pin!(async_function1().fuse());
+let future2 = pin!(async_function2().fuse());
+
+loop {
+    select! {
+        result = &mut future1 => // ...
+        result = &mut future2 => // ...
+    }
+}
+#+end_src
+
+pin stream code:
+#+begin_src rust
+let stream = pin!(stream);
+while let Some(element) = stream.next().await {
+    // ...
+}
+
+// or:
+for await element in async_iter {
+    // ...
+}
+#+end_src
+
+copy from [[https://without.boats/blog/three-problems-of-pinning/][Three problems of pinning]]
