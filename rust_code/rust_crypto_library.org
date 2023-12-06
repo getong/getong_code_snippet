@@ -1,0 +1,5 @@
+* rust crypto library
+
+[[https://github.com/briansmith/ring][ring]]
+[[https://github.com/rustls/rustls][rustls]]
+[[https://github.com/sfackler/rust-openssl][openssl]]
