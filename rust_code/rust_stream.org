@@ -99,3 +99,47 @@ fn bind_and_accept(addr: SocketAddr)
 }
 #+end_src
 copy from [[https://zhuanlan.zhihu.com/p/266269521][Rust Async: async-stream源码分析]]
+
+** stream for_each method
+
+#+begin_src rust
+for await item in stream { /* process item */ }
+
+while let Some(item) = stream.next().await { /* process item */ }
+
+async fn batch_job(db: &Database) {
+    let work = run_query(db, FIND_WORK_QUERY).await;
+    for item in work {
+        let result = run_query(db, work_query(item)).await;
+        upload_result(result).await;
+    }
+}
+
+async fn run_query(db: &Database, query: Query) -> Vec<Row> {
+    let conn = db.connect().await;
+    conn.select_query(query).await
+}
+
+async fn batch_job(db: &Database) {
+    let work = run_query(db, FIND_WORK_QUERY).await;
+    let work_queries = stream::iter(work)
+        .map(|item| run_query(db, work_query(item)))
+        .buffered(5);
+    for await result in work_queries {
+        upload_result(result).await;
+    }
+}
+
+// change to be
+async fn batch_job(db: &Database) {
+    let work = run_query(db, FIND_WORK_QUERY).await;
+    let work_queries = stream::iter(work)
+        .map(|item| run_query(db, work_query(item)))
+        .buffered(5);
+    work_queries.for_each(async |result| {
+        upload_result(result).await;
+    }).await;
+}
+#+end_src
+
+copy from [[https://tmandry.gitlab.io/blog/posts/for-await-buffered-streams/][`for await` and the battle of buffered streams]]
