@@ -1,0 +1,39 @@
+* cargo build
+
+** debug build.rs
+
+add code like below
+#+begin_src rust
+println!("cargo:warning=MESSAGE");
+#+end_src
+
+copy from [[https://substrate.stackexchange.com/questions/1475/how-to-output-debug-log-in-build-rs][How to output debug log in `build.rs`?]]
+
+** std::process::Command does not support wildcard(*) match
+
+consider this code
+#+begin_src rust
+std::process::Command::new("cargo")
+        .args(["fmt", "--", "src/*.rs"])
+        .status()
+        .expect("cargo fmt failed");
+#+end_src
+
+The _src/*.rs_ does not match all the rs files in the src directory
+
+It might changed like this:
+
+#+begin_src rust
+let generated_proto_files: Vec<_> = walkdir::WalkDir::new("src")
+    .into_iter()
+    .filter_map(|entry| entry.ok())
+    .filter(|entry| entry.path().is_file() && entry.path().extension() == Some("rs".as_ref()))
+    .filter_map(|entry| entry.path().to_str().map(String::from))
+    .collect();
+let mut args = vec!["fmt", "--"];
+args.extend(generated_proto_files.iter().map(|s| s.as_str()));
+std::process::Command::new("cargo")
+        .args(&args)
+        .status()
+        .expect("cargo fmt failed");
+#+end_src
