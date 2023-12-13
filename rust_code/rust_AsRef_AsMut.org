@@ -17,8 +17,7 @@ trait AsMut<T: ?Sized> {
 }
 #+end_src
 
-copy from [[file:Rust笔记%20-%20AsRef%20and%20AsMut%20trait][Rust笔记 -
-AsRef and AsMut trait]]
+copy from [[file:Rust笔记%20-%20AsRef%20and%20AsMut%20trait][Rust笔记 - AsRef and AsMut trait]]
 
 std::convert 下面，还有另外两个
 Trait，AsRef/AsMut，它们功能是配合泛型，在执行引用操作的时候，进行自动类型转换。
@@ -51,9 +50,7 @@ AsMut 提供了一个方法 .as_mut()。它是 AsRef 的可变（mutable）引�
 
 注：在转换的过程中，foo 会被可变（mutable）借用。
 
-copy from
-[[https://wiki.jikexueyuan.com/project/rust-primer/intoborrow/asref.html][AsRef
-和 AsMut]]
+copy from [[https://wiki.jikexueyuan.com/project/rust-primer/intoborrow/asref.html][AsRef 和 AsMut]]
 
 ** explaining as_ref
 :PROPERTIES:
@@ -127,6 +124,6 @@ fn main() {
 }
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/31233938/converting-from-optionstring-to-optionstr][Converting
-from Option to Option<&str>]]
+copy from [[https://stackoverflow.com/questions/31233938/converting-from-optionstring-to-optionstr][Converting from Option to Option<&str>]]
+
+** & is short for as_ref(), &mut is short for as_mut()
