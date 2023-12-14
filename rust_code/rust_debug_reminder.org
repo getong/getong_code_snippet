@@ -167,3 +167,64 @@ let num = Arc::new(Mutex::new(0));
       .await
   });
 #+end_src
+
+** the trait `_::_serde::Serialize` is not implemented for `std::io::Error`
+
+The wrong code
+
+#+begin_src rust
+#[tarpc::service]
+pub trait World {
+  async fn vote(vote: VoteRequest<u64>) -> Result<VoteResponse<u64>, std::io::Error>;
+}
+#+end_src
+
+As _std::io::Error_ is not defined in current crate, neither _serde::Serialize_ is not defined in current crate.
+We can define a new type like below:
+
+#+begin_src rust
+use serde::{Serialize, Deserialize};
+use std::fmt;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CustomError {
+    message: String,
+}
+
+impl From<std::io::Error> for CustomError {
+    fn from(e: std::io::Error) -> Self {
+        CustomError {
+            message: e.to_string(),
+        }
+    }
+}
+
+impl fmt::Display for CustomError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CustomError: {}", self.message)
+    }
+}
+
+// Now use CustomError in your RPC trait
+#[tarpc::service]
+pub trait World {
+    async fn vote(vote: VoteRequest<u64>) -> Result<VoteResponse<u64>, CustomError>;
+}
+
+#[tarpc::server]
+impl World for Api {
+  async fn vote(
+    self,
+    _context_info: context::Context,
+    vote: VoteRequest<u64>,
+  ) -> Result<VoteResponse<u64>, CustomError> {
+    self
+      .raft
+      .vote(vote)
+      .await
+      .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.to_string()).into())
+  }
+}
+#+end_src
+
+Note that, we use the _map_error()_ method to convert _std::io::Error_ into _CustomError_
