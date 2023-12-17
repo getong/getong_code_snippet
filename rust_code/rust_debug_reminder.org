@@ -228,3 +228,8 @@ impl World for Api {
 #+end_src
 
 Note that, we use the _map_error()_ method to convert _std::io::Error_ into _CustomError_
+
+** how to deal with rust strong type
+*** function variable sometimes can not make sure of the number of variable and data type, use macro.
+*** return value might not be the same type, use trait.
+*** orphan rule, the struct or the trait must be defined in current crate, either is fine. If not, define a newtype or new trait.
