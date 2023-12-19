@@ -1,5 +1,13 @@
 * lsp-bridge language server installation
 
+** python3 requirement
+
+#+begin_src shell
+ pypy3 -m pip install epc orjson sexpdata six setuptools paramiko rapidfuzz
+#+end_src
+
+copy from [[https://emacs-china.org/t/lsp-bridge/20786/2996][lsp-bridge – 速度最快的语法补全插件]]
+
 ** install on macos
 
 *** python language server
