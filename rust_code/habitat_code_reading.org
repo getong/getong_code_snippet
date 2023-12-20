@@ -216,3 +216,120 @@ impl SrvHandler {
 #+end_src
 
 It depends on the message id to make CtlCommand.
+
+** impl Future for SrvHandler
+
+#+begin_src rust
+impl Future for SrvHandler {
+    type Output = Result<(), HandlerError>;
+
+    /// # Locking (see locking.md)
+    /// * `GatewayState::inner` (read)
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context) -> Poll<Self::Output> {
+        loop {
+            match self.state {
+                SrvHandlerState::Receiving => {
+                    match ready!(self.io.poll_next_unpin(cx)) {
+                        None => {
+                            break;
+                        }
+                        Some(Ok(msg)) => {
+                            self.start_timer(msg.message_id());
+                            trace!("OnMessage, {}", msg.message_id());
+
+                            let fut =
+                                Self::command_from_message_gsr_msr(&msg, self.ctl_sender.clone());
+                            tokio::pin!(fut);
+                            let cmd = match futures::ready!(fut.poll_unpin(cx)) {
+                                Ok(cmd) => cmd,
+                                Err(_) => {
+                                    break;
+                                }
+                            };
+                            if let Err(err) = futures::ready!(self.mgr_sender.poll_ready(cx)) {
+                                return Poll::Ready(Err(HandlerError::from(err)));
+                            }
+                            match self.mgr_sender.start_send(cmd) {
+                                Ok(()) => {
+                                    self.state = SrvHandlerState::Sending;
+                                    continue;
+                                }
+                                Err(err) => {
+                                    // An error here means that the
+                                    // receiving end of this channel went
+                                    // away.
+                                    //
+                                    // Most often, this will be because
+                                    // we're in the middle of an orderly
+                                    // shutdown and no longer wish to
+                                    // process incoming commands.
+                                    warn!("ManagerReceiver err: {}", err);
+                                    return Poll::Ready(Err(HandlerError::from(err)));
+                                }
+                            }
+                        }
+                        Some(Err(err)) => {
+                            error!("SrvHandler failed to receive message, err: {}", err);
+                            return Poll::Ready(Err(HandlerError::from(err)));
+                        }
+                    }
+                }
+                SrvHandlerState::Sending => {
+                    match futures::ready!(self.ctl_receiver.poll_next_unpin(cx)) {
+                        Some(msg) => {
+                            trace!("MgrSender -> SrvHandler, {:?}", msg);
+                            if msg.is_complete() {
+                                self.state = SrvHandlerState::Sent;
+                            }
+                            if let Err(err) =
+                                futures::ready!(self.as_mut().project().io.poll_ready(cx))
+                            {
+                                return Poll::Ready(Err(HandlerError::from(err)));
+                            }
+                            match self.as_mut().project().io.start_send(msg) {
+                                Ok(()) => {
+                                    if let Err(err) =
+                                        futures::ready!(self.as_mut().project().io.poll_flush(cx))
+                                    {
+                                        return Poll::Ready(Err(HandlerError::from(err)));
+                                    }
+                                    continue;
+                                }
+                                Err(e) if e.kind() == ::std::io::ErrorKind::WouldBlock => {
+                                    return Poll::Pending;
+                                }
+                                Err(err) => return Poll::Ready(Err(HandlerError::from(err))),
+                            }
+                        }
+                        None => self.state = SrvHandlerState::Sent,
+                    }
+                }
+                SrvHandlerState::Sent => {
+                    if let Some(timer) = self.timer.take() {
+                        timer.observe_duration();
+                    }
+                    if let Err(err) = futures::ready!(Pin::new(self.io.get_mut()).poll_shutdown(cx))
+                    {
+                        return Poll::Ready(Err(HandlerError::from(err)));
+                    }
+                    trace!("OnMessage complete");
+                    break;
+                }
+            }
+        }
+        Poll::Ready(Ok(()))
+    }
+}
+
+enum SrvHandlerState {
+    /// Handler is Receiving/Waiting for message from client.
+    Receiving,
+    /// Handler has sent a request to the Manager and is streaming replies back to the client
+    /// socket.
+    Sending,
+    /// All messages have been sent to the client and the Handler is now flushing the connection.
+    Sent,
+}
+#+end_src
+
+It will add ctlcommand to the poll future
