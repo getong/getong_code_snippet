@@ -165,3 +165,45 @@ where
 #+end_src
 
 The _poll_unpin_ is still using _poll_ function.
+
+** 如果不Pin住实现Future的struct会有可能发生Panic
+
+#+begin_src rust
+use futures::Future;
+use std::{
+    mem::swap,
+    pin::Pin,
+    task::Poll,
+    time::Duration
+};
+use tokio::{
+    macros::support::poll_fn,
+    time::sleep
+};
+
+
+async fn main() {
+    let mut sleep1 = sleep(Duration::from_secs(1));
+    let mut sleep2 = sleep(Duration::from_secs(1));
+
+    {
+        let mut sleep1 = unsafe { Pin::new_unchecked(&mut sleep1)};
+        poll_fn(|cx| {
+            let _ = sleep1.as_mut().poll(cx);
+            Poll::Ready(())
+        }).await;
+    }
+    swap(&mut sleep1, &mut sleep2);
+    sleep1.await;
+    sleep2.await;
+}
+#+end_src
+
+The code is wrong.
+
+It must be pin in box.
+But if you're holding a Box, well, then you're only holding a pointer to a Sleep that lives somewhere
+in heap-allocated memory. That somewhere will never change, ie. the Sleep itself will never move.
+The pointer to Sleep can be passed around, and everything is fine.
+
+copy from [[https://chaochaogege.com/2021/06/08/54/][Rust-Pin提出的必要性-以及我对Pin的认识]]
