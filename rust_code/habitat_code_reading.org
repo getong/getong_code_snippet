@@ -1,0 +1,218 @@
+* habitat code reading
+
+** CtlAcceptor
+
+translate channel into stream
+
+#+begin_src rust
+use super::handler::CtlHandler;
+use crate::{ctl_gateway::server::MgrReceiver,
+            manager::{action::ActionSender,
+                      ManagerState}};
+use futures::{channel::oneshot,
+              future::FutureExt,
+              stream::{Stream,
+                       StreamExt},
+              task::{Context,
+                     Poll}};
+use log::{error,
+          info};
+use std::{pin::Pin,
+          sync::Arc};
+
+pub struct CtlAcceptor {
+    /// Communication channel from the control gateway server. User
+    /// interactions are received there and then sent here into the
+    /// `CtlAcceptor` future for further processing.
+    mgr_receiver:     MgrReceiver,
+    /// Reference to the Supervisor's main state. This is passed into
+    /// handlers that need to access, e.g., what services are running,
+    /// etc.
+    state:            Arc<ManagerState>,
+    /// Signaling channel for the intention to shut down. A message
+    /// received on this channel will cause the `CtlAcceptor` future
+    /// stream to terminate.
+    shutdown_trigger: oneshot::Receiver<()>,
+    /// Communication channel back into the main Supervisor loop. This
+    /// is passed into any generated command handlers as a way to
+    /// send actions into the Supervisor.
+    action_sender:    ActionSender,
+}
+
+impl CtlAcceptor {
+    pub fn new(state: Arc<ManagerState>,
+               mgr_receiver: MgrReceiver,
+               shutdown_trigger: oneshot::Receiver<()>,
+               action_sender: ActionSender)
+               -> Self {
+        CtlAcceptor { mgr_receiver,
+                      state,
+                      shutdown_trigger,
+                      action_sender }
+    }
+}
+
+impl Stream for CtlAcceptor {
+    type Item = CtlHandler;
+
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context) -> Poll<Option<Self::Item>> {
+        match self.shutdown_trigger.poll_unpin(cx) {
+            Poll::Ready(Ok(())) => {
+                info!("Signal received; stopping CtlAcceptor");
+                Poll::Ready(None)
+            }
+            Poll::Ready(Err(e)) => {
+                error!("Error polling CtlAcceptor shutdown trigger: {}", e);
+                Poll::Ready(None)
+            }
+            Poll::Pending => {
+                match futures::ready!(self.mgr_receiver.poll_next_unpin(cx)) {
+                    Some(cmd) => {
+                        let task =
+                            CtlHandler::new(cmd, self.state.clone(), self.action_sender.clone());
+                        Poll::Ready(Some(task))
+                    }
+                    None => Poll::Ready(None),
+                }
+            }
+        }
+    }
+}
+#+end_src
+
+First listen to check shutdown_trigger.
+If not, poll the next CtlCommand, each CtlCommand will be handled with CtlHandler.
+
+** CtlCommand
+
+CtlCommand store the Fn trait, and execute it.
+
+#+begin_src rust
+pub struct CtlCommand {
+    pub req: CtlRequest,
+    // JW: This needs to be an `FnOnce<Box>` and not an `Fn<Box>` but right now there is no support
+    // for boxing an FnOnce in stable Rust. There is a new type called `FnBox` which exists only on
+    // nightly right now which accomplishes this but it won't stabilize because the Rust core team
+    // feels that they should just get `Box<FnOnce>` working. We'll need to clone the `CtlRequest`
+    // argument passed to this closure until `FnOnce<Box>` stabilizes.
+    //
+    // https://github.com/rust-lang/rust/issues/28796
+    //
+    // TODO: This is now possible see https://github.com/habitat-sh/habitat/issues/6832
+    // We held off on making the change to reduce the risk of a regression and to lump it in with
+    // more general Future refactoring.
+    #[allow(clippy::type_complexity)]
+    fun:     Box<dyn Fn(&ManagerState, &mut CtlRequest, ActionSender) -> NetResult<()> + Send>,
+}
+
+impl CtlCommand {
+    /// Create a new CtlCommand from the given CtlSender, transaction, and closure to execute.
+    pub fn new<F>(tx: CtlSender, txn: Option<SrvTxn>, fun: F) -> Self
+        where F: Fn(&ManagerState, &mut CtlRequest, ActionSender) -> NetResult<()> + Send + 'static
+    {
+        CtlCommand { fun: Box::new(fun),
+                     req: CtlRequest::new(tx, txn), }
+    }
+
+    /// Run the contained closure with the given [`manager.ManagerState`].
+    pub fn run(&mut self, state: &ManagerState, action_sender: ActionSender) -> NetResult<()> {
+        (self.fun)(state, &mut self.req, action_sender)
+    }
+}
+#+end_src
+
+
+** Client
+#+begin_src rust
+/// Server's client representation. Each new connection will allocate a new Client.
+struct Client {
+    state: Arc<Mutex<SrvState>>,
+}
+#+end_src
+
+Client store all the SrvState in globally.
+
+** SrvHandler
+
+#+begin_src rust
+#[must_use = "futures do nothing unless polled"]
+#[pin_project]
+struct SrvHandler {
+    #[pin]
+    io:           SrvStream,
+    state:        SrvHandlerState,
+    mgr_sender:   MgrSender,
+    ctl_receiver: CtlReceiver,
+    ctl_sender:   CtlSender,
+    timer:        Option<HistogramTimer>,
+}
+
+impl SrvHandler {
+    fn new(io: SrvStream, mgr_sender: MgrSender) -> Self {
+        let (ctl_sender, ctl_receiver) = mpsc::unbounded();
+
+        SrvHandler { io,
+                     state: SrvHandlerState::Receiving,
+                     mgr_sender,
+                     ctl_receiver,
+                     ctl_sender,
+                     timer: None }
+    }
+
+    /// # Locking (see locking.md)
+    /// * `GatewayState::inner` (read)
+    /// * `ManagerServices::inner` (read)
+    async fn command_from_message_gsr_msr(msg: &SrvMessage,
+                                          ctl_sender: CtlSender)
+                                          -> std::result::Result<CtlCommand, HandlerError> {
+        match msg.message_id() {
+            "SvcGetDefaultCfg" => util::to_command(msg, ctl_sender, commands::service_cfg_msr),
+            "SvcFilePut" => util::to_command(msg, ctl_sender, commands::service_file_put),
+            "SvcSetCfg" => util::to_command(msg, ctl_sender, commands::service_cfg_set),
+            "SvcValidateCfg" => util::to_command(msg, ctl_sender, commands::service_cfg_validate),
+            "SvcLoad" => {
+                // This arm doesn't use a `util` module helper because
+                // it's currently the only thing that behaves like
+                // this.
+                let m = msg.parse::<protocol::ctl::SvcLoad>()
+                           .map_err(HandlerError::from)?;
+                Ok(CtlCommand::new(ctl_sender,
+                                   msg.transaction(),
+                                   move |state, req, _action_sender| {
+                                       // To avoid significant architecture changes to `CtlCommand,`
+                                       // block on the load service future because futures cannot
+                                       // be awaited in a closure. It is safe to use
+                                       // `block_in_place` here because it is called within a
+                                       // spawned future.
+                                       task::block_in_place(|| {
+                                           executor::block_on(commands::service_load(state,
+                                                                                     req,
+                                                                                     m.clone()))
+                                       })
+                                   }))
+            }
+            "SvcUpdate" => util::to_supervisor_command(msg, ctl_sender, commands::service_update),
+            "SvcUnload" => util::to_supervisor_command(msg, ctl_sender, commands::service_unload),
+            "SvcStart" => util::to_command(msg, ctl_sender, commands::service_start),
+            "SvcStop" => util::to_supervisor_command(msg, ctl_sender, commands::service_stop),
+            "SvcStatus" => util::to_command(msg, ctl_sender, commands::service_status_gsr),
+            "SupDepart" => util::to_command(msg, ctl_sender, commands::supervisor_depart),
+            "SupRestart" => util::to_command(msg, ctl_sender, commands::supervisor_restart),
+            _ => {
+                warn!("Unhandled message, {}", msg.message_id());
+                Err(HandlerError::from(io::Error::from(io::ErrorKind::InvalidData)))
+            }
+        }
+    }
+
+    fn start_timer(&mut self, label: &str) {
+        let label_values = &[label];
+        RPC_CALLS.with_label_values(label_values).inc();
+        let timer = RPC_CALL_DURATION.with_label_values(label_values)
+                                     .start_timer();
+        self.timer = Some(timer);
+    }
+}
+#+end_src
+
+It depends on the message id to make CtlCommand.
