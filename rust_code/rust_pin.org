@@ -207,3 +207,39 @@ in heap-allocated memory. That somewhere will never change, ie. the Sleep itself
 The pointer to Sleep can be passed around, and everything is fine.
 
 copy from [[https://chaochaogege.com/2021/06/08/54/][Rust-Pin提出的必要性-以及我对Pin的认识]]
+
+** tokio::select requires unpin future
+
+Using the same future in multiple select! expressions can be done by passing a reference to the future.
+Doing so requires the future to be Unpin.
+A future can be made Unpin by either using Box::pin or stack pinning.
+
+Here, a stream is consumed for at most 1 second.
+
+#+begin_src rust
+use tokio_stream::{self as stream, StreamExt};
+use tokio::time::{self, Duration};
+
+#[tokio::main]
+async fn main() {
+    let mut stream = stream::iter(vec![1, 2, 3]);
+    let sleep = time::sleep(Duration::from_secs(1));
+    tokio::pin!(sleep);
+
+    loop {
+        tokio::select! {
+            maybe_v = stream.next() => {
+                if let Some(v) = maybe_v {
+                    println!("got = {}", v);
+                } else {
+                    break;
+                }
+            }
+            _ = &mut sleep => {
+                println!("timeout");
+                break;
+            }
+        }
+    }
+}
+#+end_src
