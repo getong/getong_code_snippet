@@ -243,3 +243,42 @@ async fn main() {
     }
 }
 #+end_src
+
+
+** unpin trait definition
+
+#+begin_src rust
+#[stable(feature = "pin", since = "1.33.0")]
+#[rustc_on_unimplemented(
+    note = "consider using the `pin!` macro\nconsider using `Box::pin` if you need to access the pinned value outside of the current scope",
+    message = "`{Self}` cannot be unpinned"
+)]
+#[lang = "unpin"]
+pub auto trait Unpin {}
+
+/// A marker type which does not implement `Unpin`.
+///
+/// If a type contains a `PhantomPinned`, it will not implement `Unpin` by default.
+#[stable(feature = "pin", since = "1.33.0")]
+#[derive(Debug, Default, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct PhantomPinned;
+
+#[stable(feature = "pin", since = "1.33.0")]
+impl !Unpin for PhantomPinned {}
+
+marker_impls! {
+    #[stable(feature = "pin", since = "1.33.0")]
+    Unpin for
+        {T: ?Sized} &T,
+        {T: ?Sized} &mut T,
+}
+
+marker_impls! {
+    #[stable(feature = "pin_raw", since = "1.38.0")]
+    Unpin for
+        {T: ?Sized} *const T,
+        {T: ?Sized} *mut T,
+}
+#+end_src
+
+That is why PhantomPinned is !Unpin.
