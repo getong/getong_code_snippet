@@ -268,3 +268,5 @@ fn temporary_closure_is_mutate() {
   greet.clone()("Alfred");
 }
 #+end_src
+
+copy from [[https://users.rust-lang.org/t/mut-binding-required-to-mutate-move-captured-var-in-a-closure/26825][`mut` binding required to mutate `move`-captured var in a closure]]
