@@ -233,3 +233,38 @@ Note that, we use the _map_error()_ method to convert _std::io::Error_ into _Cus
 *** function variable sometimes can not make sure of the number of variable and data type, use macro.
 *** return value might not be the same type, use trait.
 *** orphan rule, the struct or the trait must be defined in current crate, either is fine. If not, define a newtype or new trait.
+
+** Temporary values are always mutable.
+
+#+begin_src rust
+#[derive(Debug)]
+struct Point {
+  x: i32,
+  y: i32,
+  z: String,
+}
+
+fn main() {
+  let p = Point {
+    x: 10,
+    y: 20,
+    z: "this is old".to_owned(),
+  };
+  println!("x is {}, y is {}", p.x, p.y);
+
+  println!("Temporary variable: {:?}", p);
+
+  println!("clone string: {}", p.z.clone().replace("old", "new"));
+  assert_eq!("this is new", p.z.clone().replace("old", "new"));
+  temporary_closure_is_mutate();
+}
+
+fn temporary_closure_is_mutate() {
+  let mut greeting = String::from("Hello, ");
+  let greet = move |name| {
+    greeting.push_str(name);
+    println!("{}", greeting);
+  };
+  greet.clone()("Alfred");
+}
+#+end_src
