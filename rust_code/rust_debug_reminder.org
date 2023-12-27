@@ -270,3 +270,22 @@ fn temporary_closure_is_mutate() {
 #+end_src
 
 copy from [[https://users.rust-lang.org/t/mut-binding-required-to-mutate-move-captured-var-in-a-closure/26825][`mut` binding required to mutate `move`-captured var in a closure]]
+
+** cannot move out of a shared reference
+
+The used method might be iterator, which will be called many times, and it cause this problem.
+
+#+begin_src rust
+let https = HttpsConnector::new();
+let client = Client::builder(TokioExecutor::new()).build::<_, Empty<Bytes>>(https);
+
+let resp = client.get(Uri::from_static(url)).await?;
+let whole_body = resp.body().collect().await.unwrap().to_bytes();
+#+end_src
+
+change to be:
+
+#+begin_src rust
+let mut resp = client.get(Uri::from_static(url)).await?;
+let whole_body = resp.body_mut().collect().await.unwrap().to_bytes();
+#+end_src
