@@ -306,3 +306,29 @@ async fn echo(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<By
   let (parts, body) = req.into_parts();
   let body = body.collect().await?.to_bytes();
 #+end_src
+
+** how to convert ReadBufCursor into ReadBuf
+
+#+begin_src rust
+impl hyper::rt::Read for TurmoilConnection {
+    fn poll_read(
+      self: Pin<&mut Self>,
+      cx: &mut std::task::Context<'_>,
+      mut buf: hyper::rt::ReadBufCursor<'_>,
+    ) -> std::task::Poll<Result<(), Error>> {
+      let n = unsafe {
+        let mut tbuf = tokio::io::ReadBuf::uninit(buf.as_mut());
+        let result = tokio::io::AsyncRead::poll_read(self.project().fut, cx, &mut tbuf);
+        match result {
+          std::task::Poll::Ready(Ok(())) => tbuf.filled().len(),
+          other => return other,
+        }
+      };
+
+      unsafe {
+        buf.advance(n);
+      }
+      std::task::Poll::Ready(Ok(()))
+    }
+  }
+#+end_src
