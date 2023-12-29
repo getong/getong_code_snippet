@@ -25,6 +25,7 @@
 [[https://github.com/superfly/corrosion][Gossip-based service discovery (and more) for large distributed systems]]
 [[https://github.com/caio/foca][Gossip-based cluster membership discovery (SWIM)]]
 [[https://github.com/build-trust/ockam][ockam]]
+[[https://github.com/LeonHartley/Coerce-rs][Coerce-rs Actor runtime and distributed systems framework for Rust]]
 
 ** use with kubernetes
 :PROPERTIES:
