@@ -1,0 +1,11 @@
+* hyper 1.0 code snippet
+
+** Body usage
+
+#+begin_src rust
+use hyper::body::Body;
+
+pub type BoxError = Box<dyn std::error::Error + Send + Sync>;
+
+Boxed(Pin<Box<dyn Body<Data = Bytes, Error = BoxError> + Send + Sync + 'static>>),
+#+end_src
