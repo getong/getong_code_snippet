@@ -157,3 +157,7 @@ pub(crate) struct Vtable {
 }
 
 #+end_src
+
+** http_doby body type conversion
+
+Incoming -> Collect -> Collected -> Bytes -> Vec<u8>
