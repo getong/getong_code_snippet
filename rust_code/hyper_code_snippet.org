@@ -1,5 +1,23 @@
 * hyper 1.0 code snippet
 
+
+** hyper 1.0 how to get Incoming body
+
+#+begin_src rust
+use http_body_util::BodyExt;
+async fn echo(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
+  let reversed_body = req.collect().await?.to_bytes().to_vec();
+#+end_src
+
+or
+#+begin_src rust
+use http_body_util::BodyExt;
+async fn echo(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
+
+  let (parts, body) = req.into_parts();
+  let body = body.collect().await?.to_bytes().to_vec();
+#+end_src
+
 ** Body usage
 
 #+begin_src rust

@@ -290,23 +290,6 @@ let mut resp = client.get(Uri::from_static(url)).await?;
 let whole_body = resp.body_mut().collect().await.unwrap().to_bytes();
 #+end_src
 
-** hyper 1.0 how to get Incoming body
-
-#+begin_src rust
-use http_body_util::BodyExt;
-async fn echo(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
-  let reversed_body = req.collect().await?.to_bytes().to_vec();
-#+end_src
-
-or
-#+begin_src rust
-use http_body_util::BodyExt;
-async fn echo(req: Request<hyper::body::Incoming>) -> Result<Response<BoxBody<Bytes, hyper::Error>>, hyper::Error> {
-
-  let (parts, body) = req.into_parts();
-  let body = body.collect().await?.to_bytes();
-#+end_src
-
 ** how to convert ReadBufCursor into ReadBuf
 
 #+begin_src rust
