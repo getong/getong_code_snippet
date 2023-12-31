@@ -53,3 +53,107 @@ impl<T: ?Sized> BodyExt for T where T: http_body::Body {}
 #+end_src
 
 BodyExt auto add method to Body trait object.
+
+** hyper Incoming
+
+#+begin_src rust
+impl Body for Incoming {
+    type Data = Bytes;
+    type Error = crate::Error;
+}
+#+end_src
+
+
+** collect function
+
+#+begin_src rust
+fn collect(self) -> combinators::Collect<Self>
+    where
+        Self: Sized,
+    {
+        combinators::Collect {
+            body: self,
+            collected: Some(crate::Collected::default()),
+        }
+    }
+#+end_src
+
+** Collect
+
+#+begin_src rust
+pin_project! {
+    /// Future that resolves into a [`Collected`].
+    ///
+    /// [`Collected`]: crate::Collected
+    pub struct Collect<T>
+    where
+        T: Body,
+        T: ?Sized,
+    {
+        pub(crate) collected: Option<crate::Collected<T::Data>>,
+        #[pin]
+        pub(crate) body: T,
+    }
+}
+
+impl<T: Body + ?Sized> Future for Collect<T> {
+    type Output = Result<crate::Collected<T::Data>, T::Error>;
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> std::task::Poll<Self::Output> {
+        let mut me = self.project();
+
+        loop {
+            let frame = futures_util::ready!(me.body.as_mut().poll_frame(cx));
+
+            let frame = if let Some(frame) = frame {
+                frame?
+            } else {
+                return Poll::Ready(Ok(me.collected.take().expect("polled after complete")));
+            };
+
+            me.collected.as_mut().unwrap().push_frame(frame);
+        }
+    }
+}
+#+end_src
+
+** Collected
+
+#+begin_src rust
+#[derive(Debug)]
+pub struct Collected<B> {
+    bufs: BufList<B>,
+    trailers: Option<HeaderMap>,
+}
+
+impl<B: Buf> Collected<B> {
+  /// Convert this body into a [`Bytes`].
+    pub fn to_bytes(mut self) -> Bytes {
+        self.bufs.copy_to_bytes(self.bufs.remaining())
+    }
+}
+#+end_src
+
+** Bytes to_vec() method
+
+#+begin_src rust
+pub struct Bytes {
+    ptr: *const u8,
+    len: usize,
+    // inlined "trait object"
+    data: AtomicPtr<()>,
+    vtable: &'static Vtable,
+}
+
+pub(crate) struct Vtable {
+    /// fn(data, ptr, len)
+    pub clone: unsafe fn(&AtomicPtr<()>, *const u8, usize) -> Bytes,
+    /// fn(data, ptr, len)
+    ///
+    /// takes `Bytes` to value
+    pub to_vec: unsafe fn(&AtomicPtr<()>, *const u8, usize) -> Vec<u8>,
+    /// fn(data, ptr, len)
+    pub drop: unsafe fn(&mut AtomicPtr<()>, *const u8, usize),
+}
+
+#+end_src
