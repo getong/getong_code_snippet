@@ -167,3 +167,55 @@ Incoming -> Collect -> Collected -> Bytes -> Vec<u8>
 0.x       1.x
   Body => Incoming
 #+end_src
+
+** hyper Read, Write trait impl example
+
+#+begin_src rust
+use std::task::{Context, Poll};
+
+use hyper::rt::{Read, ReadBufCursor, Write};
+
+use hyper_util::{
+    client::legacy::connect::{Connected, Connection},
+    rt::TokioIo,
+};
+pub use tokio_native_tls::TlsStream;
+
+/// A stream that might be protected with TLS.
+pub enum MaybeHttpsStream<T> {
+    /// A stream over plain text.
+    Http(T),
+    /// A stream protected with TLS.
+    Https(TokioIo<TlsStream<TokioIo<T>>>),
+}
+
+impl<T: Read + Write + Unpin> Read for MaybeHttpsStream<T> {
+    #[inline]
+    fn poll_read(
+        self: Pin<&mut Self>,
+        cx: &mut Context,
+        buf: ReadBufCursor<'_>,
+    ) -> Poll<Result<(), io::Error>> {
+        match Pin::get_mut(self) {
+            MaybeHttpsStream::Http(s) => Pin::new(s).poll_read(cx, buf),
+            MaybeHttpsStream::Https(s) => Pin::new(s).poll_read(cx, buf),
+        }
+    }
+}
+
+impl<T: Write + Read + Unpin> Write for MaybeHttpsStream<T> {
+    #[inline]
+    fn poll_write(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &[u8],
+    ) -> Poll<Result<usize, io::Error>> {
+        match Pin::get_mut(self) {
+            MaybeHttpsStream::Http(s) => Pin::new(s).poll_write(cx, buf),
+            MaybeHttpsStream::Https(s) => Pin::new(s).poll_write(cx, buf),
+        }
+    }
+  }
+#+end_src
+
+copy from https://github.com/hyperium/hyper-tls
