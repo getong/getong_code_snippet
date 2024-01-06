@@ -294,3 +294,19 @@ copy from [[https://github.com/Sollimann/bonsai][bonsai]]
 *cursor is Box::new(State), **cursor is State.
 
 cursor's data type is &mut Box::new(State).
+
+** two style of reference
+
+#+begin_src rust
+pub trait SignableRequest
+where for <'a> Self: 'a {
+    type Body<'a>: AsRef<[u8]> +'a;
+    fn body(&self) -> Self::Body<'_>;
+}
+pub trait SignableRequest2 {
+    type Body<'a>: AsRef<[u8]> where Self: 'a;
+    fn body(&self) -> Self::Body<'_>;
+}
+#+end_src
+
+The second might be better, which uses GAT.
