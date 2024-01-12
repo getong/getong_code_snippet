@@ -1,0 +1,11 @@
+* why future is hard
+
+** future might in future
+
+can not use .await syntax, only poll(cx)
+
+** pin object not live long enough
+Which might use 'static lifetime
+
+** generice type
+Think twice
