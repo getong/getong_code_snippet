@@ -313,3 +313,14 @@ macro_rules! pin_mut {
 #+end_src
 
 It use _Pin::new_unchecked(&mut x)_
+
+** Pin<&mut F> note
+#+begin_quote
+You can only call `poll` on an `Pin<&mut F>` for `F` some future. In the case of your `Pin<Box<dyn Future>>` i believe you can do `as_mut` to reborrow it as an `Pin<&dyn mut Future>`.
+
+The pinning macros are meant for async functions, not inside a poll impl.
+
+As for the stream, you can just do `Pin::new(&mut the_stream)` as it is Unpin.
+#+end_quote
+
+copy from [[https://users.rust-lang.org/t/help-polling-a-pinned-future-inside-a-stream/44739][Help polling a pinned future inside a stream]]
