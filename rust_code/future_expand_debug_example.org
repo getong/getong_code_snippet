@@ -90,14 +90,14 @@ impl Future for WriteHelloFile {
 }
 #+end_src
 
-** Pin::get_mut() return *mut T, and the return result can ben resigned value
+** Pin::get_mut() return *mut T, and the return result can be resigned to a WriteHelloFile value
 #+begin_src rust
 let this = self.get_mut();
 *this = WriteHelloFile::AwaitingWrite(fut);
 #+end_src
 
 As in the Future implementation, _self_ is _Pin<&mut WriteHelloFile>_, _get_mut()_ return _&mut WriteHelloFile_ .
-So assigning the _WriteHelloFile::AwaitingWrite(fut)_ value to the _*this_ , and use the value in the next loop statement.
+So assigning the _WriteHelloFile::AwaitingWrite(fut)_ value to the _*this_ , and loop statement uses the value later.
 
 ** Pin::as_mut() convert Pin<Box<dyn Future>> to be Pin<&mut Future>
 #+begin_src rust
@@ -114,15 +114,15 @@ WriteHelloFile::Init(name) => {
 
 If not, _name_ can not be assigned to _*this* value
 
-** move one value from one closure to another closre
+** move one value from one closure to another closure
 #+begin_src rust
 WriteHelloFile::AwaitingCreate(fut) => match fut.as_mut().poll(cx) {
   Poll::Ready(Ok(mut v)) => {
     let fut = Box::pin(async move { v.write_all(b"hello world!") });
 #+end_src
 
-The _v_ variable must _move_ from one closure to another closure
-In order to use write_all() method, we need to add _use std::io::Write;_, and besides, add _mut_ in front of the _v_ variable.
+The _v_ variable must _move_ from one closure to another closure.
+In order to use write_all() method, we need to add _use std::io::Write;_ trait, and besides, adding _mut_ in front of the _v_ variable.
 
 ** make <dyn Future> return value
 #+begin_src rust
@@ -135,6 +135,9 @@ The _async{}_ block convert function to _Future_ object
 
 ** Adding return Pool::Ready(()) in the match arm branch
 #+begin_src rust
+*this = WriteHelloFile::AwaitingCreate(fut);
+return Poll::Ready(Ok(()));
+
 *this = WriteHelloFile::AwaitingWrite(fut);
 return Poll::Ready(Ok(()));
 #+end_src
