@@ -1,0 +1,137 @@
+* future expand debug example
+
+** origin code
+#+begin_src rust
+enum WriteHelloFile {
+    Init(String),
+    AwaitingCreate(Pin<Box<dyn Future<Output = Result<fs::File, std::io::Error>>>>),
+    AwaitingWrite(Pin<Box<dyn Future<Output = Result<(), std::io::Error>>>>),
+    Done,
+}
+
+impl Future for WriteHelloFile {
+    type Output = Result<(), std::io::Error>;
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let this = self.get_mut();
+        loop {
+            match this {
+                WriteHelloFile::Init(name) => {
+                    let fut = Box::pin(fs::File::create(name));
+                    ,*self = WriteHelloFile::AwaitingCreate(fut);
+                }
+                WriteHelloFile::AwaitingCreate(fut) => match fut.poll_unpin(cx) {
+                    Poll::Ready(Ok(v)) => {
+                        let fut = Box::pin(v.write_all(b"hello world!"));
+                        ,*self = WriteHelloFile::AwaitingWrite(fut);
+                    }
+                    Poll::Ready(Err(e)) => return Poll::Ready(Err(e)),
+                    Poll::Pending => return Poll::Pending,
+                },
+                WriteHelloFile::AwaitingWrite(fut) => match fut.poll_unpin(cx) {
+                    Poll::Ready(Ok(_)) => {
+                        ,*self = WriteHelloFile::Done;
+                        return Poll::Ready(Ok(()));
+                    }
+                    Poll::Ready(Err(e)) => return Poll::Ready(Err(e)),
+                    Poll::Pending => return Poll::Pending,
+                },
+                WriteHelloFile::Done => return Poll::Ready(Ok(())),
+            }
+        }
+    }
+}
+#+end_src
+
+make it to be well compiled code:
+#+begin_src rust
+enum WriteHelloFile {
+    Init(String),
+    AwaitingCreate(Pin<Box<dyn Future<Output = Result<fs::File, std::io::Error>>>>),
+    AwaitingWrite(Pin<Box<dyn Future<Output = Result<(), std::io::Error>>>>),
+    Done,
+}
+
+impl Future for WriteHelloFile {
+  type Output = Result<(), std::io::Error>;
+  fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    let this = self.get_mut();
+    loop {
+      match this {
+        WriteHelloFile::Init(name) => {
+          let name_clone = name.clone();
+          let fut = Box::pin(async { fs::File::create(name_clone) });
+          *this = WriteHelloFile::AwaitingCreate(fut);
+          return Poll::Ready(Ok(()));
+        }
+        WriteHelloFile::AwaitingCreate(fut) => match fut.as_mut().poll(cx) {
+          Poll::Ready(Ok(mut v)) => {
+            let fut = Box::pin(async move { v.write_all(b"hello world!") });
+            *this = WriteHelloFile::AwaitingWrite(fut);
+            return Poll::Ready(Ok(()));
+          }
+          Poll::Ready(Err(e)) => return Poll::Ready(Err(e)),
+          Poll::Pending => return Poll::Pending,
+        },
+        WriteHelloFile::AwaitingWrite(fut) => match fut.as_mut().poll(cx) {
+          Poll::Ready(Ok(_)) => {
+            *this = WriteHelloFile::Done;
+            return Poll::Ready(Ok(()));
+          }
+          Poll::Ready(Err(e)) => return Poll::Ready(Err(e)),
+          Poll::Pending => return Poll::Pending,
+        },
+        WriteHelloFile::Done => return Poll::Ready(Ok(())),
+      }
+    }
+  }
+}
+#+end_src
+
+** Pin::get_mut() return *mut T, and the return result can ben resigned value
+#+begin_src rust
+let this = self.get_mut();
+*this = WriteHelloFile::AwaitingWrite(fut);
+#+end_src
+
+As in the Future implementation, _self_ is _Pin<&mut WriteHelloFile>_, _get_mut()_ return _&mut WriteHelloFile_ .
+So assigning the _WriteHelloFile::AwaitingWrite(fut)_ value to the _*this_ , and use the value in the next loop statement.
+
+** Pin::as_mut() convert Pin<Box<dyn Future>> to be Pin<&mut Future>
+#+begin_src rust
+WriteHelloFile::AwaitingCreate(fut) => match fut.as_mut().poll(cx) {
+#+end_src
+
+_fut_ value here can use the _poll_ method.
+
+** in match arm branch, value need to be cloned in the next loop statement
+#+begin_src rust
+WriteHelloFile::Init(name) => {
+  let name_clone = name.clone();
+#+end_src
+
+If not, _name_ can not be assigned to _*this* value
+
+** move one value from one closure to another closre
+#+begin_src rust
+WriteHelloFile::AwaitingCreate(fut) => match fut.as_mut().poll(cx) {
+  Poll::Ready(Ok(mut v)) => {
+    let fut = Box::pin(async move { v.write_all(b"hello world!") });
+#+end_src
+
+The _v_ variable must _move_ from one closure to another closure
+
+** make <dyn Future> return value
+#+begin_src rust
+let fut = Box::pin(async { fs::File::create(name_clone) });
+
+let fut = Box::pin(async move { v.write_all(b"hello world!") });
+#+end_src
+
+The _async{}_ block convert function to _Future_ object
+
+** Adding return Pool::Ready(()) in the match arm branch
+#+begin_src rust
+*this = WriteHelloFile::AwaitingWrite(fut);
+return Poll::Ready(Ok(()));
+#+end_src
