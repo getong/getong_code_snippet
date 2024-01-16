@@ -750,7 +750,7 @@ copy from
 [[https://www.reddit.com/r/archlinux/comments/blo3zs/vlc_process_remains_active_after_closing_it/][VLC -
 process remains active after closing it]]
 
-** ugrren ac1300 wireless card
+** ugreen ac1300 wireless card
 :PROPERTIES:
 :CUSTOM_ID: ugrren-ac1300-wireless-card
 :END:
@@ -762,8 +762,16 @@ sudo reboot
 #+end_src
 
 copy from
-[[https://aur.archlinux.org/packages/rtl88xxau-aircrack-dkms-git][Package
-Details: rtl88xxau-aircrack-dkms-git r1174.3a6402e-1]]
+[[https://aur.archlinux.org/packages/rtl88xxau-aircrack-dkms-git][Package Details: rtl88xxau-aircrack-dkms-git r1174.3a6402e-1]]
+
+** delete and update driver
+#+begin_src shell
+sudo sh remove-driver.sh
+sudo dkms remove rtl8812au/5.13.6 --all
+sudo sh install-driver.sh
+#+end_src
+
+copy from https://github.com/morrownr/8812au-20210629/issues/117
 
 ** some useful command:
 :PROPERTIES:
