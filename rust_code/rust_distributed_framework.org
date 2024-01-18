@@ -31,3 +31,8 @@
 :PROPERTIES:
 :CUSTOM_ID: use-with-kubernetes
 :END:
+
+** paxos, raft, curp protocol
+[[https://github.com/datafuselabs/openraft][openraft]]
+[[https://github.com/xline-kv/curp-proto][curp-proto]]
+[[https://github.com/xline-kv/Xline][Xline]]
