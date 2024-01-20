@@ -22,7 +22,7 @@ see [[https://www.cnblogs.com/LzsCxb/p/15669736.html][Archlinux
 vim /etc/pacman.d/mirrorlist
 -------------------------------
 ## delete all other mirrors
-Server = http://mirrors.163.com/archlinux/$repo/os/i686
+Server = https://mirrors.163.com/archlinux/$repo/os/$arch
 
 timedatectl set-ntp true
 
