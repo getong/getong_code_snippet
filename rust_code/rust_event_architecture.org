@@ -1,0 +1,62 @@
+* rust event architecture
+
+** Event-Driven Architecture in Rust
+
+#+begin_src rust
+// Define the UserEvents enum with various event types
+pub enum UserEvents {
+    Joined(i64, String, bool, i64, i64),
+    Left(i64),
+    SentText(i64, String, bool, i64, i64),
+}
+
+// The Observer trait with an async notify method
+#[async_trait]
+pub trait Observer {
+    async fn notify(&self, rx: UnboundedReceiver);
+}
+
+// Implementing Observer for a Users struct
+#[async_trait]
+impl Observer for Users {
+    async fn notify(&self, mut rx: UnboundedReceiver) {
+        let hashmap: Arc>>> =
+            Arc::new(RwLock::new(HashMap::new()));
+
+        while let Some(event) = rx.recv().await {
+            let users_pool = self.pool.clone();
+            match event {
+                UserEvents::Joined(user_id, nick, is_bot, guild_id, multiplier) => {
+                    // handle logic
+                }
+                UserEvents::Left(user_id) => {
+                    // handle logic
+                }
+                UserEvents::SentText(user_id, nick, is_bot, guild_id, multiplier) => {
+                    // handle logic
+                }
+            }
+        }
+    }
+}
+
+
+impl UsersRepo for Users {
+  async fn new(pool: &Pool) -> Arc {
+    let (tx, rx) = mpsc::unbounded_channel::();
+    let users = Arc::new(Users {
+      tx,
+      pool: pool.clone(),
+    });
+    let users_clone = Arc::clone(&users);
+    tokio::spawn(async move {
+      users_clone.notify(rx).await;
+    });
+    users
+  }
+  // other database functions
+}
+#+end_src
+
+copy from [[https://www.fulvio.dev/articles/event-driven-architecture-rust.html][Event-Driven Architecture in Rust]]
+also see [[https://github.com/fulviodenza/rankore][rankore]]
