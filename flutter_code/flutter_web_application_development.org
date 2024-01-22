@@ -20,3 +20,71 @@ flutter create --platforms web .
 
 
 copy from [[https://docs.flutter.dev/platform-integration/web/building][Building a web application with Flutter]]
+
+** docker build
+
+#+begin_src docker
+# Stage 1 - Install dependencies and build the app
+FROM ubuntu:20.04 AS builder
+
+RUN apt-get update
+RUN apt-get install -y bash curl file git unzip xz-utils zip libglu1-mesa
+RUN apt-get clean
+
+# Clone the flutter repo
+RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+
+# Set flutter path
+# RUN /usr/local/flutter/bin/flutter doctor -v
+ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+
+# Change stable channel
+RUN flutter channel stable
+
+# Enable web capabilities
+RUN flutter config --enable-web
+RUN flutter upgrade
+RUN flutter pub global activate webdev
+
+# RUN flutter doctor -v
+
+# Copy files to container and build
+RUN mkdir /app
+COPY . /app
+WORKDIR /app
+RUN flutter pub get
+RUN flutter build web
+
+# Stage 2 - Create the run-time image
+FROM nginx:stable-alpine AS runner
+
+COPY default.conf /etc/nginx/conf.d
+# COPY package.json /usr/share/nginx/html
+COPY --from=builder /app/build/web /usr/share/nginx/html
+#+end_src
+
+default.conf
+
+#+begin_src nginx
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    root /usr/share/nginx/html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+#+end_src
+
+copy from [[https://blog.siposdani87.com/posts/dockerfile-for-flutter-web-app][Dockerfile for Flutter web app]]
