@@ -1,0 +1,22 @@
+* flutter web application development
+
+** Creating a new project and build web
+
+#+begin_src shell
+flutter create my_app
+cd my_app
+
+# run the application
+# flutter run -d chrome
+
+flutter build web
+#+end_src
+
+** Add web support to an existing app
+
+#+begin_src shell
+flutter create --platforms web .
+#+end_src
+
+
+copy from [[https://docs.flutter.dev/platform-integration/web/building][Building a web application with Flutter]]
