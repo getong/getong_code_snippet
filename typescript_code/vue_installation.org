@@ -25,4 +25,5 @@ yarn serve
 
 #+begin_src shell
 npm i @volar/vue-language-server
+npm install -g emmet-ls
 #+end_src
