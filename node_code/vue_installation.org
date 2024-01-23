@@ -1,0 +1,22 @@
+* vue installation
+
+** install via npm
+
+#+begin_src shell
+npm install -g @vue/cli
+#+end_src
+
+** install via homebrew
+
+#+begin_src shell
+brew install vue-cli
+#+end_src
+
+
+** create project example
+
+#+begin_src shell
+vue create app
+cd app
+yarn serve
+#+end_src
