@@ -20,3 +20,9 @@ vue create app
 cd app
 yarn serve
 #+end_src
+
+** install vue language server
+
+#+begin_src shell
+npm i @volar/vue-language-server
+#+end_src
