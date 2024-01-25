@@ -16,7 +16,7 @@ $ curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh
 $ source $CARGO_HOME/env
 $ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/library"
 $ rustup toolchain add nightly
-$ rustup component add rls-preview rust-analysis rust-src
+$ rustup component add rust-analysis rust-src
 
 $ rustup toolchain install nightly
 $ rustup component add rustc-dev --toolchain=nightly
@@ -132,8 +132,7 @@ rustup override set stable
 rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
 rustup component add rust-docs
-## set toolchain ngithly
-rustup default nightly
+
 rustup docs
 rustup show
 #+end_src
