@@ -127,8 +127,6 @@ rustup self update
 rustup install stable
 rustup install nightly
 rustup update nightly
-rustup override set nightly
-rustup override set stable
 rustup component add rust-analysis --toolchain nightly
 rustup component add rust-src --toolchain nightly
 rustup component add rust-docs
@@ -180,21 +178,6 @@ cargo +nightly build -Z timings
 #+begin_src shell
 $ rustdoc main.rs
 $ cargo doc
-#+end_src
-
-** switch stable and nightly
-:PROPERTIES:
-:CUSTOM_ID: switch-stable-and-nightly
-:END:
-#+begin_src shell
-rustup override set nightly
-rustup show
-
-rustup override set stable
-rustup show
-
-rustup override set 1.73.0
-rustup component add rust-analyzer-preview
 #+end_src
 
 ** cargo mirror
@@ -481,4 +464,9 @@ rustup override set stable
 
 # show the result
 rustup show
+
+rustup default nightly
+rustup default 1.74
+rustup default stable
+
 #+end_src
