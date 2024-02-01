@@ -347,3 +347,29 @@ impl_error!(bitcoin::hex::HexToBytesError, HexToBytes, Error);
 #+end_src
 
 copy from [[https://github.com/bitcoindevkit/rust-esplora-client][rust-esplora-client]]
+
+The code equals to, or something like below:
+#+begin_src rust
+/// Errors related to the parsing and usage of descriptors
+#[derive(Debug)]
+pub enum Error {
+    /// Hex Array decoding error
+    HexToArray(bitcoin::hex::HexToArrayError),
+    /// Hex Bytes decoding error
+    HexToBytes(bitcoin::hex::HexToBytesError),
+}
+
+impl From<bitcoin::hex::HexToArrayError> for Error {
+    fn from(err: bitcoin::hex::HexToArrayError) -> Self {
+        Error::HexToArray(err)
+    }
+}
+
+impl From<bitcoin::hex::HexToBytesError> for Error {
+    fn from(err: bitcoin::hex::HexToBytesError) -> Self {
+        Error::HexToBytes(err)
+    }
+}
+#+end_src
+
+copy from [[https://github.com/bitcoindevkit/bdk][bdk]]
