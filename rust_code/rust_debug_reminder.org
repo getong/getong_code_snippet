@@ -315,3 +315,35 @@ impl hyper::rt::Read for TurmoilConnection {
     }
   }
 #+end_src
+
+
+** impl_error macro
+
+#+begin_src rust
+/// Errors that can happen during a sync with `Esplora`
+#[derive(Debug)]
+pub enum Error {
+    /// Invalid hex data returned (attempting to create an array)
+    HexToArray(bitcoin::hex::HexToArrayError),
+    /// Invalid hex data returned (attempting to create a vector)
+    HexToBytes(bitcoin::hex::HexToBytesError),
+}
+
+macro_rules! impl_error {
+    ( $from:ty, $to:ident ) => {
+        impl_error!($from, $to, Error);
+    };
+    ( $from:ty, $to:ident, $impl_for:ty ) => {
+        impl std::convert::From<$from> for $impl_for {
+            fn from(err: $from) -> Self {
+                <$impl_for>::$to(err)
+            }
+        }
+    };
+}
+
+impl_error!(bitcoin::hex::HexToArrayError, HexToArray, Error);
+impl_error!(bitcoin::hex::HexToBytesError, HexToBytes, Error);
+#+end_src
+
+copy from [[https://github.com/bitcoindevkit/rust-esplora-client][rust-esplora-client]]
