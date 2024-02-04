@@ -457,14 +457,16 @@ cargo build
 export CARGO_HOME=$HOME/.cargo
 export PATH=$CARGO_HOME/bin:$PATH
 
-# switch
+# switch for just one directory or project
 rustup override set nightly-2023-05-31
 rustup override set nightly
 rustup override set stable
+rustup override unset
 
 # show the result
 rustup show
 
+# set nightly as the default toolchain globally.
 rustup default nightly
 rustup default 1.74
 rustup default stable
