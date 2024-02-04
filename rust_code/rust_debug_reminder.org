@@ -373,3 +373,23 @@ impl From<bitcoin::hex::HexToBytesError> for Error {
 #+end_src
 
 copy from [[https://github.com/bitcoindevkit/bdk][bdk]]
+
+** if let style change to be let else
+
+#+begin_src rust
+if let Ok(a) = b {
+  ...
+  } else {
+  panic("error")
+}
+#+end_src
+
+change to be
+
+#+begin_src rust
+let Ok(a) = b else {
+  panic("error");
+}
+
+// code continue here
+#+end_src
