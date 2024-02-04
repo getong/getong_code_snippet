@@ -1,0 +1,3 @@
+* llm ebook
+
+[[https://intro-llm.github.io/chapter/LLM-TAP.pdf][llm-tap]]
