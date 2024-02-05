@@ -1,6 +1,0 @@
-# rustic
-
-** clippy fix
-#+begin_src elisp
-rustic-cargo-clippy-fix
-#+end_src
