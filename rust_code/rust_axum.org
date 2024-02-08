@@ -51,9 +51,25 @@ async fn post_something(
 }
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/69415050/how-to-design-the-test-friendly-application-with-rust-axum][How
-to design the test-friendly application with Rust/Axum?]]
+copy from [[https://stackoverflow.com/questions/69415050/how-to-design-the-test-friendly-application-with-rust-axum][How to design the test-friendly application with Rust/Axum?]]
 
-also see
-[[https://github.com/launchbadge/realworld-axum-sqlx][realworld-axum-sqlx]]
+also see [[https://github.com/launchbadge/realworld-axum-sqlx][realworld-axum-sqlx]]
+
+** axum::handler Debugging handler type errors
+
+#+begin_quote
+For a function to be used as a handler it must implement the Handler trait. axum provides blanket implementations for functions that:
+
+Are async fns.
+Take no more than 16 arguments that all implement Send.
+All except the last argument implement FromRequestParts.
+The last argument implements FromRequest.
+Returns something that implements IntoResponse.
+If a closure is used it must implement Clone + Send and be 'static.
+Returns a future that is Send. The most common way to accidentally make a future !Send is to hold a !Send type across an await.
+
+
+This error doesn’t tell you why your function doesn’t implement Handler. It’s possible to improve the error with the debug_handler proc-macro from the axum-macros crate.
+#+end_quote
+
+copy from [[https://docs.rs/axum/latest/axum/handler/index.html][Module axum::handler]]
