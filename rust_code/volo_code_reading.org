@@ -1,0 +1,109 @@
+* volo code reading
+
+** ConnStream
+
+#+begin_src rust
+#[pin_project(project = IoStreamProj)]
+pub enum ConnStream {
+    Tcp(#[pin] TcpStream),
+    #[cfg(target_family = "unix")]
+    Unix(#[pin] UnixStream),
+    #[cfg(feature = "rustls")]
+    Rustls(#[pin] tokio_rustls::TlsStream<TcpStream>),
+    #[cfg(feature = "native-tls")]
+    NativeTls(#[pin] tokio_native_tls::TlsStream<TcpStream>),
+}
+
+pub struct Conn {
+    pub stream: ConnStream,
+    pub info: ConnInfo,
+}
+#+end_src
+
+
+** impl for Conn
+
+#+begin_src rust
+impl hyper::rt::Read for ConnectionWrapper {
+    fn poll_read(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        mut buf: ReadBufCursor<'_>,
+    ) -> Poll<Result<(), std::io::Error>> {
+        let n = unsafe {
+            let mut tbuf = tokio::io::ReadBuf::uninit(buf.as_mut());
+            match tokio::io::AsyncRead::poll_read(self.project().inner, cx, &mut tbuf) {
+                Poll::Ready(Ok(())) => tbuf.filled().len(),
+                other => return other,
+            }
+        };
+
+        unsafe {
+            buf.advance(n);
+        }
+        Poll::Ready(Ok(()))
+    }
+}
+
+impl AsyncRead for ConnectionWrapper {
+    #[inline]
+    fn poll_read(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &mut ReadBuf<'_>,
+    ) -> Poll<io::Result<()>> {
+        Pin::new(&mut self.inner).poll_read(cx, buf)
+    }
+}
+
+impl hyper::rt::Write for ConnectionWrapper {
+    fn poll_write(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &[u8],
+    ) -> Poll<Result<usize, std::io::Error>> {
+        Pin::new(&mut self.inner).poll_write(cx, buf)
+    }
+
+    fn poll_flush(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Result<(), std::io::Error>> {
+        Pin::new(&mut self.inner).poll_flush(cx)
+    }
+
+    fn poll_shutdown(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Result<(), std::io::Error>> {
+        Pin::new(&mut self.inner).poll_shutdown(cx)
+    }
+}
+
+impl AsyncWrite for ConnectionWrapper {
+    #[inline]
+    fn poll_write(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &[u8],
+    ) -> Poll<io::Result<usize>> {
+        Pin::new(&mut self.inner).poll_write(cx, buf)
+    }
+
+    #[inline]
+    fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<io::Result<()>> {
+        Pin::new(&mut self.inner).poll_flush(cx)
+    }
+
+    #[inline]
+    fn poll_shutdown(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<io::Result<()>> {
+        Pin::new(&mut self.inner).poll_shutdown(cx)
+    }
+}
+
+impl Connection for ConnectionWrapper {
+    fn connected(&self) -> Connected {
+        Connected::new()
+    }
+}
+#+end_src
