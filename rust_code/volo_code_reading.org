@@ -18,6 +18,12 @@ pub struct Conn {
     pub stream: ConnStream,
     pub info: ConnInfo,
 }
+
+#[pin_project::pin_project]
+pub struct ConnectionWrapper {
+    #[pin]
+    inner: Conn,
+}
 #+end_src
 
 
