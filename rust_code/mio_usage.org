@@ -1,0 +1,24 @@
+* mio usage
+
+** from_std method
+
+#+begin_src rust
+fn write_request(&mut self) {
+  let stream = std::net::TcpStream::connect("127.0.0.1:8080").unwrap();
+  stream.set_nonblocking(true).unwrap();
+  let mut stream = mio::net::TcpStream::from_std(stream);
+  stream.write_all(get_req(&self.path).as_bytes()).unwrap();
+  self.stream = Some(stream);
+}
+#+end_src
+
+The other method:
+
+#+begin_src rust
+mio::net::TcpListener::from_std
+mio::net::TcpStream::from_std
+mio::net::UdpSocket::from_std
+mio::net::UnixDatagram::from_std
+mio::net::UnixListener::from_std
+mio::net::UnixStream::from_std
+#+end_src
