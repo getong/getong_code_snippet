@@ -29,3 +29,13 @@ fib(19)
 #+begin_src kotlin
 kotlin.Int = 6765
 #+end_src
+
+** compile kotlin-language-server
+
+#+begin_src shell
+git clone https://github.com/fwcd/kotlin-language-server
+cd kotlin-language-server
+
+./gradlew :server:installDist -PjavaVersion=11
+export PATH=$PWD/server/build/install/server/bin:$PATH
+#+end_src
