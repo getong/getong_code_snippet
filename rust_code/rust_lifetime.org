@@ -194,3 +194,7 @@ enum ConnectionIdInner<'a> {
 #+end_src
 
 copy from quiche.
+
+** Box<dyn A> equals to <dyn A + 'static>
+
+copy from [[https://doc.rust-lang.org/reference/lifetime-elision.html#default-trait-object-lifetimes][Default trait object lifetimes]]
