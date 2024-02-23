@@ -3,7 +3,12 @@
 ** python3 requirement
 
 #+begin_src shell
- pypy3 -m pip install epc orjson sexpdata six setuptools paramiko rapidfuzz
+pypy3 -m pip install epc orjson sexpdata six setuptools paramiko rapidfuzz 
+#+end_src
+
+** macos
+#+begin_src shell
+pip3 install --break-system-packages epc orjson sexpdata six paramiko
 #+end_src
 
 copy from [[https://emacs-china.org/t/lsp-bridge/20786/2996][lsp-bridge – 速度最快的语法补全插件]]
