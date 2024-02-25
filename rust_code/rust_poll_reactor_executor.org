@@ -1,0 +1,16 @@
+* rust poll reactor executor
+
+#+begin_quote
+An executor is essentially a scheduler.
+It is responsible for actually executing the futures that got spawned as tasks onto it.
+However if a future can‘t make progress it needs to ensure that the executor is getting notified again
+such that it knows to enqueue the task again.
+This happens via a Waker.
+The piece actually noticing that the task can make progress again and calling the Waker is the reactor.
+
+Executor ask if future ready to go if not it passes it to reactor,
+reactor does magic (basically ask OS reports back when future is ready) and
+when it ready gives back it to executor, so it can ask future again.
+#+end_quote
+
+copy from [[https://www.reddit.com/r/rust/comments/bnmzhm/tokio_difference_between_executor_and_reactor/][Tokio: difference between executor and reactor]]
