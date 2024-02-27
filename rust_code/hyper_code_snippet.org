@@ -305,3 +305,33 @@ pub(super) mod sealed {
 #+end_src
 
 copy from hyper_util project
+
+** trait alias
+
+#+begin_src rust
+trait Valid: PartialOrd + Display + PartialEq + Clone {}
+
+impl<T: PartialOrd + Display + PartialEq + Clone> Valid for T {}
+
+struct Foobar<T> {
+    t: T,
+}
+
+impl<T> Foobar<T> {
+    fn something_foo(&self)
+    where
+        T: Foo,
+    { ... }
+
+    fn something_bar(&self)
+    where
+        T: Bar,
+    { ... }
+}
+
+trait Trait: PartialOrd + Display + PartialEq +Clone;
+
+impl<T> Trait for T where T: PartialOrd + Display+ PartialEq + Clone;
+#+end_src
+
+copy from [[https://www.reddit.com/r/rust/comments/1582jku/how_can_one_create_a_trait_alias/][How can one create a trait alias?]]
