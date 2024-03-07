@@ -27,3 +27,13 @@ print ("Hello World!")
 #+RESULTS: lua-hello-world
 : Hello World!
 : Hello World!
+
+
+** skynet compile
+
+
+#+begin_quote
+https://stackoverflow.com/questions/43085652/link-error-with-undefined-lua-xxxxx-when-building-lsnes
+https://blog.csdn.net/wc188996/article/details/114931760
+https://blog.csdn.net/qq_38872258/article/details/114584331
+#+end_quote
