@@ -37,3 +37,11 @@ https://stackoverflow.com/questions/43085652/link-error-with-undefined-lua-xxxxx
 https://blog.csdn.net/wc188996/article/details/114931760
 https://blog.csdn.net/qq_38872258/article/details/114584331
 #+end_quote
+
+compile skynet on centos 7
+#+begin_src shell
+yum install centos-release-scl
+yum install devtoolset-9-gcc* -y
+scl enable devtoolset-9 bash
+sudo yum install -y readline-devel protobuf-compiler lua lua-devel gcc-c++ automake autoconf libtool git vim
+#+end_src
