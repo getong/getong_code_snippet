@@ -335,3 +335,18 @@ impl<T> Trait for T where T: PartialOrd + Display+ PartialEq + Clone;
 #+end_src
 
 copy from [[https://www.reddit.com/r/rust/comments/1582jku/how_can_one_create_a_trait_alias/][How can one create a trait alias?]]
+
+
+** changelog
+empty 改为 Empty
+Body 改为 Incoming
+addrIncoming 删除
+make_service_fn 删除
+hyper::Server 改为 hyper_util::server::conn::auto
+hyper::server::conn::AddrStream 删除
+hyper::service::Service 删除 poll_ready 方法
+hyper::server::accept::from_stream(incoming.into_stream()) 改为 hyper_util::rt::TokioExecutor
+hyper::body::to_bytes 改为 http-body-util::Collected::to_bytes()
+hyper::body::aggregate 改为 http-body-util::Collected::aggregate
+Body::wrap_stream ?
+Body::from ?
