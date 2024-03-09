@@ -43,5 +43,8 @@ compile skynet on centos 7
 yum install centos-release-scl
 yum install devtoolset-9-gcc* -y
 scl enable devtoolset-9 bash
-sudo yum install -y readline-devel protobuf-compiler lua lua-devel gcc-c++ automake autoconf libtool git vim
+source scl_source enable devtoolset-9
+echo 'source scl_source enable devtoolset-9' >> ~/.bashrc
+
+sudo yum install -y readline-devel protobuf-compiler lua lua-devel automake autoconf libtool git vim
 #+end_src
