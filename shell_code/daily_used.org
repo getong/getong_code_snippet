@@ -42,15 +42,12 @@ reset
 dos2unix filename
 #+end_example
 
-** use adduser to add normal user, use useradd to add system user
+** use useradd to add system user
 :PROPERTIES:
 :CUSTOM_ID: use-adduser-to-add-normal-user-use-useradd-to-add-system-user
 :END:
 #+begin_example
-# will create /home/user
-adduser user
-#not create /home/user2
-useradd user2
+useradd user_name
 #+end_example
 
 ** 列出归属于user的用户的进程和线程
