@@ -333,3 +333,109 @@ enum SrvHandlerState {
 #+end_src
 
 It will add ctlcommand to the poll future
+
+** Handler trait
+
+#+begin_src rusttype HandleResult<T> = Result<T, protocol::NetErr>;
+
+pub trait Handler {
+    type Message: protocol::LauncherMessage;
+    type Reply: protocol::LauncherMessage;
+
+    fn handle(msg: Self::Message, services: &mut ServiceTable) -> HandleResult<Self::Reply>;
+
+    fn run(tx: &Sender, txn: protocol::NetTxn, services: &mut ServiceTable) {
+        let msg = match txn.decode::<Self::Message>() {
+            Ok(msg) => msg,
+            Err(err) => {
+                error!("{}: decoding, {}", txn.message_id(), err);
+                return;
+            }
+        };
+        trace!("{}, {:?}, {:?}", txn.message_id(), msg, services);
+        match Self::handle(msg, services) {
+            Ok(reply) => {
+                if let Err(err) = super::send(tx, &reply) {
+                    error!("{}: replying, {}", txn.message_id(), err);
+                }
+            }
+            Err(reply) => {
+                if let Err(err) = super::send(tx, &reply) {
+                    error!("{}: replying, {}", txn.message_id(), err);
+                }
+            }
+        }
+    }
+}
+#+end_src
+
+** dispatch message function
+
+#+begin_src rust
+fn dispatch(tx: &Sender, bytes: &[u8], services: &mut ServiceTable) {
+    let msg = match protocol::NetTxn::from_bytes(bytes) {
+        Ok(msg) => msg,
+        Err(err) => {
+            error!("Unable to decode NetTxn from Supervisor, {}", err);
+            return;
+        }
+    };
+    let func = match msg.message_id() {
+        "Restart" => handlers::RestartHandler::run,
+        "Spawn" => handlers::SpawnHandler::run,
+        "Terminate" => handlers::TerminateHandler::run,
+        "PidOf" => handlers::PidHandler::run,
+        "Version" => handlers::VersionHandler::run,
+        unknown => {
+            // This sucks a bit because it replicates some code from the
+            // Handler trait, but manipulating an unknown message
+            // doesn't really fit that pattern :(
+            let msg = format!("Received unknown message from Supervisor, {}", unknown);
+            warn!("{}", msg);
+            let reply = protocol::NetErr {
+                code: protocol::ErrCode::UnknownMessage,
+                msg,
+            };
+            if let Err(err) = send(tx, &reply) {
+                error!("{}: replying, {}", unknown, err);
+            }
+            return;
+        }
+    };
+    func(tx, msg, services);
+}
+#+end_src
+
+The _run_ method is defined in _Handler_ Trait, and the basic function call is like this:
+
+#+begin_src rust
+ProtobufData.run(&mut ServiceTable)
+#+end_src
+
+** Server handle_message method
+
+#+begin_src rust
+fn handle_message(&mut self) -> Result<TickState> {
+  match self.rx.try_recv() {
+    Ok(bytes) => {
+      dispatch(&self.tx, &bytes, &mut self.services);
+      Ok(TickState::Continue)
+    }
+    Err(_) => {
+      match self.supervisor.try_wait() {
+        Ok(None) => Ok(TickState::Continue),
+        Ok(Some(status)) => {
+          // Supervisor exited
+          self.handle_supervisor_exit(status)
+        }
+        Err(err) => {
+          warn!("Failed to wait for supervisor process: {}", err);
+          Err(anyhow!("Failed to wait for supervisor process to exit"))
+        }
+      }
+    }
+  }
+}
+#+end_src
+
+The Server recv the _bytes_ message, and handle it.
