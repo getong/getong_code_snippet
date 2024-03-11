@@ -1,0 +1,29 @@
+* rust dynamic call
+
+** trait call
+
+#+begin_src rust
+struct State;
+
+trait DynCall{
+  fn call(&self, &mut State);
+}
+
+struct Data;
+
+impl Data for DynCall{
+  fn call(&self, &mut State)
+}
+
+let mut state = STate;
+let data = Data;
+data.run(&mut state);
+#+end_src
+
+Use _mut State_ to save state here.
+
+Like Erlang here:
+
+#+begin_src rust
+Module::Handle(Data, State);
+#+end_src
