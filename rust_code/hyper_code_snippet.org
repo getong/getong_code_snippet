@@ -348,5 +348,11 @@ hyper::service::Service 删除 poll_ready 方法
 hyper::server::accept::from_stream(incoming.into_stream()) 改为 hyper_util::rt::TokioExecutor
 hyper::body::to_bytes 改为 http-body-util::Collected::to_bytes()
 hyper::body::aggregate 改为 http-body-util::Collected::aggregate
-Body::wrap_stream ?
+hyper::Body::wrap_stream(stream) 改为BoxBody::new(http_body_util::StreamBody::new(
+            SyncStream::new(
+                stream
+                    .map_ok(|data| Frame::data(data.into()))
+                    .map_err(Into::into),
+            ),
+        ))
 Body::from ?
