@@ -339,7 +339,7 @@ copy from [[https://www.reddit.com/r/rust/comments/1582jku/how_can_one_create_a_
 
 ** changelog
 empty 改为 Empty
-Body 改为 Incoming
+Body 改为 http_body_util::combinators::BoxBody<bytes::Bytes, std::io::Error>
 addrIncoming 删除
 make_service_fn 删除
 hyper::Server 改为 hyper_util::server::conn::auto
