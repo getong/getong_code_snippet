@@ -27,3 +27,13 @@ Like Erlang here:
 #+begin_src rust
 Module::Handle(Data, State);
 #+end_src
+
+** can not String to a Type name in runtime
+
+#+begin_quote
+Generics need to be resolved at compile time.
+You can have a fixed list of types, write a macro to generate all the possible function calls.
+But not a runtime list.
+#+end_quote
+
+copy from [[https://users.rust-lang.org/t/can-i-convert-a-string-to-a-type-name/89671/4][Can I convert a String to a Type name?]]
