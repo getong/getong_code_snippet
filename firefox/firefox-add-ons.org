@@ -14,8 +14,11 @@
 :PROPERTIES:
 :CUSTOM_ID: https-everywhere
 :END:
-~+## Certificate Patrol+~ ## Adblock Plus ## FoxyProxy Standard ## Video
-Download helper
+** Adblock Plus
+
+** FoxyProxy Standard
+
+** Video Download helper
 
 ** chrome does have the same plugins as well
 :PROPERTIES:
