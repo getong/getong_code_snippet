@@ -157,7 +157,7 @@ sudo apt install -y libgail-common libcanberra-gtk-module
 centos
 
 #+begin_src shell
-yum groupinstall -y “Development Tools”
+yum groupinstall -y "Development Tools"
 yum install -y openssl-devel unixODBC-devel ncurses-devel libxslt fop java-1.8.0-openjdk-devel tk
 #+end_src
 
@@ -170,10 +170,7 @@ made by RabbitMQ. See
 [[https://github.com/rabbitmq/erlang-rpm][erlang-rpm]] With some patches
 in its script.
 
-Something releated: [[https://gist.github.com/RJ/2284940][Use ESL erlang
-deb, provide fake erlang-nox package so deps behave]]
-[[https://blog.eriksen.com.br/en/how-install-rabbitmq-latest-erlang-release-debian][How
-to install RabbitMQ with the latest Erlang release on Debian]]
+Something releated: [[https://gist.github.com/RJ/2284940][Use ESL erlang deb, provide fake erlang-nox package so deps behave]] [[https://blog.eriksen.com.br/en/how-install-rabbitmq-latest-erlang-release-debian][How to install RabbitMQ with the latest Erlang release on Debian]]
 
 ** centos 7 compile erlang
 :PROPERTIES:
@@ -211,16 +208,12 @@ $ ./configure --prefix=/usr/local/otp-24.3 --enable-jit --with-wx-config=/usr/bi
 $ make && sudo make install
 #+end_src
 
-#+begin_quote
-wx* packages have never been part of CentOS base/updates. They are in
-EPEL. See
-[[https://www.centos.org/forums/viewtopic.php?t=50620][wxBase/wxGTK/wxGTK-gl
-packages in centos 7 repos?]]
+#+begin_quote wx* packages have never been part of CentOS base/updates. They are in EPEL.
+See [[https://www.centos.org/forums/viewtopic.php?t=50620][wxBase/wxGTK/wxGTK-gl packages in centos 7 repos?]]
 
 #+end_quote
 
-also see
-[[https://centos.pkgs.org/7/epel-x86_64/wxGTK3-3.0.4-1.el7.x86_64.rpm.html][wxGTK3]]
+also see [[https://centos.pkgs.org/7/epel-x86_64/wxGTK3-3.0.4-1.el7.x86_64.rpm.html][wxGTK3]]
 
 ** erlang centos china mirror
 :PROPERTIES:
@@ -249,9 +242,7 @@ baseurl=https://mirrors.tuna.tsinghua.edu.cn/erlang-solutions/centos/7/
 :PROPERTIES:
 :CUSTOM_ID: compile-erlang-from-source-using-self-compiled-openssl
 :END:
-see
-[[https://stackoverflow.com/questions/6618233/openssl-error-building-erlang-otp-from-source][OpenSSL
-error building Erlang OTP from source]]
+see [[https://stackoverflow.com/questions/6618233/openssl-error-building-erlang-otp-from-source][OpenSSL error building Erlang OTP from source]]
 
 compile openssl
 
