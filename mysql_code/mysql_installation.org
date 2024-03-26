@@ -207,3 +207,29 @@ mysql -u root -p*Y3Io7s_fkxv
 > update mysql.user set host='%' where user='root';
 > flush privileges;
 #+end_example
+
+
+** install mysql 8.0 on centos 7
+
+#+begin_src shell
+sudo rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2023
+sudo yum install mysql-server
+sudo systemctl start mysqld
+sudo systemctl enable mysqld
+
+## get the password
+sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
+
+mysql_secure_installation
+
+New password:
+Re-enter new password:
+Remove anonymous users? (Press y|Y for Yes, any other key for No) : y
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : y
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : y
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
+#+end_src
+
+see [[https://stackoverflow.com/questions/71239450/gpg-keys-issue-while-installing-mysql-community-server][GPG keys issue while installing mysql-community-server]]
+see [[https://www.mysqltutorial.org/getting-started-with-mysql/install-mysql-centos/][Install MySQL CentOS]]
