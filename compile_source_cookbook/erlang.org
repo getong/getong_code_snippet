@@ -157,8 +157,8 @@ sudo apt install -y libgail-common libcanberra-gtk-module
 centos
 
 #+begin_src shell
-yum groupinstall -y "Development Tools"
-yum install -y openssl-devel unixODBC-devel ncurses-devel libxslt fop java-1.8.0-openjdk-devel tk
+sudo yum groupinstall -y "Development Tools"
+sudo yum install -y openssl-devel unixODBC-devel ncurses-devel libxslt fop java-1.8.0-openjdk-devel tk
 #+end_src
 
 ** erlang-rpm project
