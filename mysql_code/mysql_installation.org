@@ -233,3 +233,32 @@ Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
 
 see [[https://stackoverflow.com/questions/71239450/gpg-keys-issue-while-installing-mysql-community-server][GPG keys issue while installing mysql-community-server]]
 see [[https://www.mysqltutorial.org/getting-started-with-mysql/install-mysql-centos/][Install MySQL CentOS]]
+
+** install mysql 5.7 on centos 7
+
+#+begin_src shell
+sudo yum remove mysql mysql-server mysql80-community-release-el7-7.noarch mysql-community-client-plugins mysql-community-common
+sudo rpm -Uvh https://repo.mysql.com/mysql57-community-release-el7.rpm
+
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2023
+sudo yum install mysql-server
+sudo systemctl start mysqld
+sudo systemctl enable mysqld
+
+## get the password
+sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
+
+mysql_secure_installation
+
+New password:
+Re-enter new password:
+Remove anonymous users? (Press y|Y for Yes, any other key for No) : y
+Disallow root login remotely? (Press y|Y for Yes, any other key for No) : y
+Remove test database and access to it? (Press y|Y for Yes, any other key for No) : y
+Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
+#+end_src
+
+see [[https://stackoverflow.com/questions/71239450/gpg-keys-issue-while-installing-mysql-community-server][GPG keys issue while installing mysql-community-server]]
+see [[https://www.mysqltutorial.org/getting-started-with-mysql/install-mysql-centos/][Install MySQL CentOS]]
