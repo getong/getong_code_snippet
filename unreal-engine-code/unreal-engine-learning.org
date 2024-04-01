@@ -19,8 +19,9 @@ copy from [[https://medium.com/techiepedia/setting-up-unreal-engine-m1-macbook-f
 ** using ue4 tool
 
 #+begin_src sh
-pip install ue4cli
-ue4 setroot /Users/Shared/Epic\ Games/UE_5.2
+## pip install ue4cli
+pip3 install --break-system-packages ue4cli
+ue4 setroot /Users/Shared/Epic\ Games/UE_5.3
 
 # add below into ~/.zshrc
 # Expand ue4cli
