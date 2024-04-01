@@ -1,0 +1,25 @@
+* cpp access class member
+
+** use a dot, arrow, or double colon to refer to members of a class
+
+#+begin_quote
+The three distinct operators C++ uses to access the members of a class or class object, namely the double colon ::, the dot ., and the arrow ->, are used for three different scenarios that are always well-defined. Knowing this allows you to immediately know quite a lot about a and b just by looking at a::b, a.b, or a->b, respectively, in any code you look at.
+
+a::b is only used if b is a member of the class (or namespace) a. That is, in this case a will always be the name of a class (or namespace).
+
+a.b is only used if b is a member of the object (or reference to an object) a. So for a.b, a will always be an actual object (or a reference to an object) of a class.
+
+a->b is, originally, a shorthand notation for (*a).b. However, -> is the only of the member access operators that can be overloaded, so if a is an object of a class that overloads operator-> (common such types are smart pointers and iterators), then the meaning is whatever the class designer implemented. To conclude: With a->b, if a is a pointer, b will be a member of the object the pointer a refers to. If, however, a is an object of a class that overloads this operator, then the overloaded operator function operator->() gets invoked.
+
+
+
+45
+
+Suggesting an alternative for sbi's point 3
+
+a->b is only used if a is a pointer. It is a shorthand for (*a).b, the b member of the object that a points to. C++ has two kinds of pointers, "regular" and smart pointers. For regular pointers such as A* a, the compiler implements ->. For smart pointers such as std::shared_ptr<A> a, -> is a member function of class shared_ptr.
+
+Rationale: the target audience of this FAQ isn't writing smart pointers. They don't need to know -> is really called operator->(), or that it is the only member access method that can be overloaded.
+#+end_quote
+
+copy from [[https://stackoverflow.com/questions/4984600/when-do-i-use-a-dot-arrow-or-double-colon-to-refer-to-members-of-a-class-in-c][When do I use a dot, arrow, or double colon to refer to members of a class in C++?]]
