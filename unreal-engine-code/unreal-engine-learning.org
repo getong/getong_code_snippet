@@ -105,3 +105,8 @@ CreatedProjectPaths=/Users/gerald/Documents/Unreal-Projects
 #+end_src
 
 copy from [[https://forums.unrealengine.com/t/how-do-i-get-a-project-to-show-up-in-the-project-browser/515095/2][How do I get a project to show up in the Project Browser]]
+
+** lua plugin
+
+[[sluaunreal][https://github.com/Tencent/sluaunreal]]
+[[UnLua][https://github.com/Tencent/UnLua]]
