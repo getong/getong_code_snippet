@@ -1,0 +1,22 @@
+* unreal engine actor component
+
+** actor compoinent relationship
+
+Composition over Inheritance
+
+see [[https://www.zhihu.com/question/448847061/answer/1777957142][UE4是否是ECS架构？ - 知乎用户的回答 - 知乎]]
+
+** actor crud compoinent
+
+#+begin_quote
+RootComponent
+OwnedComponents
+AddOwnedComponent
+RemoveOwnedComponent
+OwnsComponent
+TArray<UActorComponent*> ReplicatedComponents;
+TArray<UActorComponent*> BlueprintCreatedComponents;
+TArray<UActorComponent*> InstanceComponents;
+#+end_quote
+
+see [[https://zhuanlan.zhihu.com/p/74908124][UE4 Actor与ActorComponent之间的关联]]
