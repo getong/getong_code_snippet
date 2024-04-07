@@ -2,6 +2,19 @@
 :PROPERTIES:
 :CUSTOM_ID: epmd
 :END:
+
+** epmd start first
+
+epmd should be start first, or the erlang node can not use the global to
+find the name, and the log is that Slogan: Kernel pid terminated
+(application_controller)
+
+add the command to the /etc/rc.local
+
+#+begin_src shell
+/usr/local/otp_src_19.2/bin/epmd -daemon
+#+end_src
+
 ** node() and net_adm:names()
 :PROPERTIES:
 :CUSTOM_ID: node-and-net_admnames
