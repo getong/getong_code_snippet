@@ -1,0 +1,17 @@
+* rust runtime dynamic factor
+
+** pointer
+
+** trait
+
+** method
+
+#+begin_src rust
+std::ptr:NonNull
+NonNull<T>:new(ptr: *mut T)
+NonNull<T>:new_unchecked(ptr: *mut T)
+
+std::num::NonZeroUsize
+NonZeroUsize::new(n: usize)
+NonZeroUsize::new_unchecked(n: usize)
+#+end_src
