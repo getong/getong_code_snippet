@@ -49,3 +49,53 @@ pub fn process_instruction(
   todo!()
 }
 #+end_src
+
+** Create local wallets
+
+*** Create a folder for local wallets
+
+#+begin_src shell
+mkdir ~/solana-wallets
+#+end_src
+
+*** Generate keypairs for Alice and Bob
+
+#+begin_src shell
+solana-keygen new --outfile ~/solana-wallets/bob.json
+
+solana-keygen new --outfile ~/solana-wallets/alice.json
+#+end_src
+
+*** Display Bob and Alice's public keys using their private keys
+
+#+begin_src shell
+solana-keygen pubkey ~/solana-wallets/bob.json
+
+solana-keygen pubkey ~/solana-wallets/alice.json
+#+end_src
+
+*** Set Alice's wallet as the default wallet
+
+#+begin_src shell
+solana config set -k ~/solana-wallets/alice.json
+
+## check the default wallet
+solana address
+#+end_src
+
+
+*** Wallet operations
+
+#+begin_src shell
+## check balance
+solana balance
+
+## airdrop 2 SOLs
+solana airdrop 2
+
+## check balance of Bob's walltet
+solana balance $bobs_public_key
+
+## airdrop a SOL to Bob's wallet
+solana airdrop 1 $bobs_public_key
+#+end_src
