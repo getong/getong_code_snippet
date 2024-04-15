@@ -99,3 +99,78 @@ solana balance $bobs_public_key
 ## airdrop a SOL to Bob's wallet
 solana airdrop 1 $bobs_public_key
 #+end_src
+
+
+** A "Hello world!" Solana program
+
+*** Create a library
+
+#+begin_src shell
+cargo new --lib solana_rust_demo
+cd solana_rust_demo
+#+end_src
+
+*** Add the solana_program crate
+
+#+begin_src shell
+cargo add solana-program
+#+end_src
+
+*** Update the TOML file
+
+#+begin_src rust
+[lib]
+name = "solana_rust_demo"
+crate-type = ["cdylib", "lib"]
+#+end_src
+
+*** A "Hello world!" Solana program
+
+#+begin_src rust
+// lib.rs
+
+use solana_program::{
+    account_info::AccountInfo,
+    entrypoint,
+    entrypoint::ProgramResult,
+    pubkey::Pubkey,
+    msg,
+};
+
+entrypoint!(process_instruction);
+
+pub fn process_instruction(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo],
+    instruction_data: &[u8]
+) -> ProgramResult {
+    msg!("Hello, world!");
+    Ok(())
+}
+#+end_src
+
+*** Build the Solana program
+
+#+begin_src shell
+cd solana_rust_demo
+cargo-build-bpf
+#+end_src
+
+*** Deploy the Solana program
+
+#+begin_src shell
+solana program deploy ./target/deploy/solana_rust_demo.so
+#+end_src
+
+*** Show all deployed programs
+
+#+begin_src shell
+solana program show --programs
+#+end_src
+
+*** View a program
+
+#+begin_src shell
+solana account $program_id
+solana program show $program_id
+#+end_src
