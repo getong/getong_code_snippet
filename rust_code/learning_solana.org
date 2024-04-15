@@ -1,6 +1,16 @@
 * learning solana
 
-** solana cluster
+** Install Solana CLI
+
+#+begin_src shell
+wget -c https://github.com/solana-labs/solana/releases/download/v1.17.31/solana-release-x86_64-unknown-linux-gnu.tar.bz2
+tar jxf solana-release-x86_64-unknown-linux-gnu.tar.bz2
+cd solana-release/
+
+export PATH=$HOME/solana-release/bin:$PATH
+#+end_src
+
+** A local Solana cluster
 
 #+begin_src shell
 ## start a local cluster
