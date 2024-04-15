@@ -1,0 +1,17 @@
+* learning solana
+
+** solana cluster
+
+#+begin_src shell
+## start a local cluster
+solana-test-validator
+
+## view local configuration
+solana config get
+
+## configure the CLI to interact with localhost
+solana config set --url http://127.0.0.1:8899
+
+## verify the CLI tool configuration with the genesis hash
+solana genesis-hash
+#+end_src
