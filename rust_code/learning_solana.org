@@ -25,3 +25,27 @@ solana config set --url http://127.0.0.1:8899
 ## verify the CLI tool configuration with the genesis hash
 solana genesis-hash
 #+end_src
+
+** Rust for Solana
+
+The solana_program crate: https://docs.rs/solana-program/latest/solana_program/
+
+#+begin_src rust
+use solana_program::{
+  account_info::AccountInfo,
+  entrypoint,
+  entrypoint::ProgramResult,
+  pubkey::Pubkey,
+};
+
+entrypoint!(process_instruction);
+
+pub fn process_instruction(
+  program_id: &Pubkey,
+  accounts: &[AccountInfo],
+  instruction_data: &[u8],
+) -> ProgramResult {
+  // Decode and dispatch instructions here.
+  todo!()
+}
+#+end_src
