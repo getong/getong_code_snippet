@@ -149,6 +149,26 @@ pub fn process_instruction(
 }
 #+end_src
 
+*** install cargo-build-bpf
+
+#+begin_src shell
+# it might fail, but it does not matter
+cargo-build-bpf
+
+mkdir -p ~/solana-release/bin/sdk/sbf/dependencies
+wget -c https://github.com/Snaipe/Criterion/releases/download/v2.3.3/criterion-v2.3.3-linux-x86_64.tar.bz2 -O ~/solana-release/bin/sdk/sbf/dependencies
+cd ~/solana-release/bin/sdk/sbf/dependencies
+mkdir -p criterion
+tar --strip-components 1 -xjf criterion-v2.3.3-linux-x86_64.tar.bz2 -C criterion
+
+wget -c https://github.com/anza-xyz/platform-tools/releases/download/v1.41/platform-tools-linux-x86_64.tar.bz2 -O ~/solana-release/bin/sdk/sbf/dependencies
+cd ~/solana-release/bin/sdk/sbf/dependencies
+mkdir -p platform-tools
+tar xjf platform-tools-linux-x86_64.tar.bz2 -C platform-tools
+#+end_src
+
+#+RESULTS:
+
 *** Build the Solana program
 
 #+begin_src shell
