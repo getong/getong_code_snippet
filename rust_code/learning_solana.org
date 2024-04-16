@@ -64,6 +64,8 @@ mkdir ~/solana-wallets
 solana-keygen new --outfile ~/solana-wallets/bob.json
 
 solana-keygen new --outfile ~/solana-wallets/alice.json
+
+solana-keygen new --outfile ~/.config/solana/id.json
 #+end_src
 
 *** Display Bob and Alice's public keys using their private keys
@@ -72,6 +74,8 @@ solana-keygen new --outfile ~/solana-wallets/alice.json
 solana-keygen pubkey ~/solana-wallets/bob.json
 
 solana-keygen pubkey ~/solana-wallets/alice.json
+
+solana-keygen pubkey ~/.config/solana/id.json
 #+end_src
 
 *** Set Alice's wallet as the default wallet
