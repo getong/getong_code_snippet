@@ -135,3 +135,15 @@ extension _MyExtension on _MyClass {
 #+end_src
 
 copy from [[https://www.cnblogs.com/webabcd/p/flutter_lib_dart_class2.html][一统天下 flutter - dart: 类（抽象类，接口，继承，混入，扩展方法）]]
+
+** oop class inheritance
+
+#+begin_quote
+Dart中继承是单继承.
+构造函数或者析构函数不能继承.
+子类重写父类方法要在方法前加@override.
+子类调用父类的方法用super.
+Dart中子类可以访问父类的所有变量和方法.
+#+end_quote
+
+copy from [[https://www.coder-dong.com/archives/flutterclassextension][Flutter浅谈extends、implements、with、extension]]
