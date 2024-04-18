@@ -1119,3 +1119,11 @@ copy from [[https://stackoverflow.com/questions/8375860/how-to-make-an-echo-serv
 #+begin_src shell
 mv -- "-begined_directory_name" "directory_name"
 #+end_src
+
+** find in nested find exec statement
+
+#+begin_src shell
+find `find /tmp/a -maxdepth 1 -iname "*b*" -type d` -type d -exec rmdir -p {} \;
+#+end_src
+
+see [[https://unix.stackexchange.com/questions/18100/is-it-possible-to-nest-a-find-exec-within-another-find-exec][Is it possible to nest a 'find -exec' within another 'find -exec'?]]
