@@ -1,0 +1,28 @@
+* love2d
+
+** create love2d hello world project
+
+#+begin_src shell
+mkdir mygame
+cd mygame
+touch main.lua
+#+end_src
+
+#+begin_src lua
+-- main.lua
+function love.draw()
+    love.graphics.print("Hello World", 400, 300)
+end
+#+end_src
+
+** run love2d project
+
+linux
+#+begin_src shell
+love mygame
+#+end_src
+
+macos
+#+begin_src shell
+open -n -a love mygame
+#+end_src
