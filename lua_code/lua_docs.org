@@ -99,3 +99,7 @@ echo 'source scl_source enable devtoolset-9' >> ~/.bashrc
 
 sudo yum install -y readline-devel protobuf-compiler lua lua-devel automake autoconf libtool git vim
 #+end_src
+
+** syntax station
+
+see [[https://syntaxstation.com/lua.html][lua]]
