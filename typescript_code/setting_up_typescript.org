@@ -58,7 +58,7 @@ touch src/index.ts
 
 the src/index.ts is
 
-#+begin_src ts
+#+begin_src typescript
 const world = 'world️';
 
 export function hello(word: string = world): string {
@@ -68,7 +68,7 @@ export function hello(word: string = world): string {
 
 another code example
 
-#+begin_src ts
+#+begin_src typescript
 module Greeting {
     export class Hello {
         constructor(private text : string) {
