@@ -225,3 +225,16 @@ yarn add lowdb @types/lowdb
     }
 }
 #+end_quote
+
+
+** typescript language server
+
+macos
+#+begin_src shell
+brew install vscode-langservers-extracted
+#+end_src
+
+archlinux:
+#+begin_src shell
+yay -S vscode-langservers-extracted
+#+end_src
