@@ -1,9 +1,9 @@
 * setting up typescript
+
 :PROPERTIES:
 :CUSTOM_ID: setting-up-typescript
 :END:
-just copy from [[https://alligator.io/typescript/new-project/][Setting
-Up a New TypeScript Project]]
+just copy from [[https://alligator.io/typescript/new-project/][Setting Up a New TypeScript Project]]
 
 ** init the project
 :PROPERTIES:
@@ -22,7 +22,7 @@ yarn add typescript --dev
 :END:
 the file before:
 
-#+begin_src js
+#+begin_quote
 {
   "compilerOptions": {
     "target": "es5",
@@ -30,11 +30,11 @@ the file before:
     "strict": true
   }
 }
-#+end_src
+#+end_quote
 
 change the file to be :
 
-#+begin_src js
+#+begin_quote
 {
   "compilerOptions": {
     "target": "es5",
@@ -45,7 +45,7 @@ change the file to be :
     "sourceMap": true
   }
 }
-#+end_src
+#+end_quote
 
 ** mkdir the src directory and make a source file
 :PROPERTIES:
@@ -58,12 +58,30 @@ touch src/index.ts
 
 the src/index.ts is
 
-#+begin_src js
-const world = '🗺️';
+#+begin_src ts
+const world = 'world️';
 
 export function hello(word: string = world): string {
   return `Hello ${world}! `;
 }
+#+end_src
+
+another code example
+
+#+begin_src ts
+module Greeting {
+    export class Hello {
+        constructor(private text : string) {
+        }
+        say() :void{
+            console.log(`${this.text}, ${x}, ${y}`);
+        }
+    }
+}
+
+var hello : Greeting.Hello = new Greeting.Hello("Hello, World!");
+hello.say();
+
 #+end_src
 
 ** compile the typescript source
@@ -89,7 +107,7 @@ yarn add tslint --dev
 :END:
 the tslint.json file before
 
-#+begin_src js
+#+begin_quote
 {
   "defaultSeverity": "error",
   "extends": [
@@ -99,11 +117,11 @@ the tslint.json file before
   "rules": {},
   "rulesDirectory": []
 }
-#+end_src
+#+end_quote
 
 edit the file to be:
 
-#+begin_src js
+#+begin_quote
 {
     "defaultSeverity": "error",
     "extends": [
@@ -119,7 +137,7 @@ edit the file to be:
     },
     "rulesDirectory": []
 }
-#+end_src
+#+end_quote
 
 ** use the tslint-config-airbnb
 :PROPERTIES:
@@ -131,7 +149,7 @@ yarn add tslint-config-airbnb --dev
 
 and edit the tslint.json to be:
 
-#+begin_src js
+#+begin_quote
 {
     "defaultSeverity": "error",
     "extends": "tslint-config-airbnb",
@@ -141,7 +159,7 @@ and edit the tslint.json to be:
     },
     "rulesDirectory": []
 }
-#+end_src
+#+end_quote
 
 ** gts
 :PROPERTIES:
@@ -164,7 +182,7 @@ yarn
 
 and you can also change the tslint.json
 
-#+begin_src js
+#+begin_quote
 {
   "defaultSeverity": "error",
   "extends": [
@@ -174,7 +192,7 @@ and you can also change the tslint.json
   "rules": {},
   "rulesDirectory": []
 }
-#+end_src
+#+end_quote
 
 ** general development step by step
 :PROPERTIES:
@@ -197,7 +215,7 @@ yarn add lowdb @types/lowdb
 :PROPERTIES:
 :CUSTOM_ID: allowjs
 :END:
-#+begin_src js
+#+begin_quote
 {
     "compilerOptions": {
     ...
@@ -206,4 +224,4 @@ yarn add lowdb @types/lowdb
     ...
     }
 }
-#+end_src
+#+end_quote
