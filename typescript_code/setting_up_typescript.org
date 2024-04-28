@@ -22,7 +22,7 @@ yarn add typescript --dev
 :END:
 the file before:
 
-#+begin_src typescript
+#+begin_src js
 {
   "compilerOptions": {
     "target": "es5",
@@ -34,7 +34,7 @@ the file before:
 
 change the file to be :
 
-#+begin_src typescript
+#+begin_src js
 {
   "compilerOptions": {
     "target": "es5",
@@ -58,7 +58,7 @@ touch src/index.ts
 
 the src/index.ts is
 
-#+begin_src typescript
+#+begin_src js
 const world = '🗺️';
 
 export function hello(word: string = world): string {
@@ -89,7 +89,7 @@ yarn add tslint --dev
 :END:
 the tslint.json file before
 
-#+begin_src typescript
+#+begin_src js
 {
   "defaultSeverity": "error",
   "extends": [
@@ -103,7 +103,7 @@ the tslint.json file before
 
 edit the file to be:
 
-#+begin_src typescript
+#+begin_src js
 {
     "defaultSeverity": "error",
     "extends": [
@@ -131,7 +131,7 @@ yarn add tslint-config-airbnb --dev
 
 and edit the tslint.json to be:
 
-#+begin_src typescript
+#+begin_src js
 {
     "defaultSeverity": "error",
     "extends": "tslint-config-airbnb",
@@ -164,7 +164,7 @@ yarn
 
 and you can also change the tslint.json
 
-#+begin_src typescript
+#+begin_src js
 {
   "defaultSeverity": "error",
   "extends": [
@@ -197,7 +197,7 @@ yarn add lowdb @types/lowdb
 :PROPERTIES:
 :CUSTOM_ID: allowjs
 :END:
-#+begin_src javascript
+#+begin_src js
 {
     "compilerOptions": {
     ...
