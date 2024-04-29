@@ -82,17 +82,5 @@ yarn config set registry https://registry.npmmirror.com
 npm cache clean --force # 清空缓存
 #+end_src
 
-copy from [[https://gist.github.com/52cik/c1de8926e20971f415dd][npm
-淘宝镜像配置]] copy from
-[[https://zhuanlan.zhihu.com/p/35856841][npm，yarn如何查看源和换源]]
-
-** ts-node
-:PROPERTIES:
-:CUSTOM_ID: ts-node
-:END:
-#+begin_src shell
-ts-node ts_source_file
-# repl
-ts-node
->
-#+end_src
+copy from [[https://gist.github.com/52cik/c1de8926e20971f415dd][npm 淘宝镜像配置]]
+copy from [[https://zhuanlan.zhihu.com/p/35856841][npm，yarn如何查看源和换源]]

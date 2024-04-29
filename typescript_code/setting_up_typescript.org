@@ -238,3 +238,24 @@ archlinux:
 #+begin_src shell
 yay -S vscode-langservers-extracted
 #+end_src
+
+** running typescript code
+
+*** compile and run
+
+#+begin_src shell
+tsc
+node dist/compile_file.js
+#+end_src
+
+*** run with ts-node
+
+:PROPERTIES:
+:CUSTOM_ID: ts-node
+:END:
+#+begin_src shell
+ts-node ts_source_file
+# repl
+ts-node
+>
+#+end_src
