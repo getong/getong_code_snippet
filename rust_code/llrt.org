@@ -1,0 +1,169 @@
+* llrt code reading
+
+** vm struct definition
+
+#+begin_src rust
+pub struct Vm {
+    pub runtime: AsyncRuntime,
+    pub ctx: AsyncContext,
+}
+#+end_src
+
+** vm struct methods
+
+#+begin_src rust
+impl Vm {
+    pub const ENV_LAMBDA_TASK_ROOT: &'static str = "LAMBDA_TASK_ROOT";
+
+    pub async fn from_options(
+        vm_options: VmOptions,
+    ) -> StdResult<Self, Box<dyn std::error::Error + Send + Sync>> {
+        if TIME_ORIGIN.load(Ordering::Relaxed) == 0 {
+            let time_origin = Utc::now().timestamp_nanos_opt().unwrap_or_default() as usize;
+            TIME_ORIGIN.store(time_origin, Ordering::Relaxed)
+        }
+
+        SYSTEM_RANDOM
+            .fill(&mut [0; 8])
+            .expect("Failed to initialize SystemRandom");
+
+        let mut file_resolver = FileResolver::default();
+        let mut binary_resolver = BinaryResolver::default();
+        let mut paths: Vec<&str> = Vec::with_capacity(10);
+
+        paths.push(".");
+
+        let task_root = env::var(Self::ENV_LAMBDA_TASK_ROOT).unwrap_or_else(|_| String::from(""));
+        let task_root = task_root.as_str();
+        if cfg!(debug_assertions) {
+            paths.push("bundle");
+        } else {
+            paths.push("/opt");
+        }
+
+        if !task_root.is_empty() {
+            paths.push(task_root);
+        }
+
+        for path in paths.iter() {
+            file_resolver.add_path(*path);
+            binary_resolver.add_path(*path);
+        }
+
+        let (builtin_resolver, module_loader, module_names, init_globals) =
+            vm_options.module_builder.build();
+
+        let resolver = (builtin_resolver, binary_resolver, file_resolver);
+
+        let loader = RawLoaderContainer::new((
+            module_loader,
+            BinaryLoader,
+            BuiltinLoader::default(),
+            ScriptLoader::default()
+                .with_extension("mjs")
+                .with_extension("cjs"),
+        ));
+
+        let runtime = AsyncRuntime::new()?;
+        runtime.set_max_stack_size(vm_options.max_stack_size).await;
+        runtime.set_gc_threshold(vm_options.gc_threshold_mb).await;
+        runtime.set_loader(resolver, loader).await;
+        let ctx = AsyncContext::full(&runtime).await?;
+        ctx.with(|ctx| {
+            for init_global in init_globals {
+                init_global(&ctx)?;
+            }
+            init(&ctx, module_names)?;
+            Ok::<_, Error>(())
+        })
+        .await?;
+
+        Ok(Vm { runtime, ctx })
+    }
+
+    pub async fn new() -> StdResult<Self, Box<dyn std::error::Error + Send + Sync>> {
+        let vm = Self::from_options(VmOptions::default()).await?;
+        Ok(vm)
+    }
+
+    pub fn load_module<'js>(ctx: &Ctx<'js>, filename: PathBuf) -> Result<Object<'js>> {
+        Module::import(ctx, filename.to_string_lossy().to_string())
+    }
+
+    pub async fn run_module(ctx: &AsyncContext, filename: &Path) {
+        Self::run_and_handle_exceptions(ctx, |ctx| {
+            let _res = Vm::load_module(&ctx, filename.to_path_buf())?;
+            Ok(())
+        })
+        .await
+    }
+
+    pub async fn run_and_handle_exceptions<'js, F>(ctx: &AsyncContext, f: F)
+    where
+        F: FnOnce(Ctx) -> rquickjs::Result<()> + Send,
+    {
+        ctx.with(|ctx| {
+            f(ctx.clone())
+                .catch(&ctx)
+                .unwrap_or_else(|err| Self::print_error_and_exit(&ctx, err));
+        })
+        .await;
+    }
+
+    pub fn print_error_and_exit<'js>(ctx: &Ctx<'js>, err: CaughtError<'js>) -> ! {
+        let ErrorDetails {
+            msg,
+            r#type: _,
+            stack: _,
+        } = Self::error_details(ctx, &err);
+        eprintln!("{}", msg);
+        exit(1)
+    }
+
+    pub fn error_details<'js>(ctx: &Ctx<'js>, err: &CaughtError<'js>) -> ErrorDetails {
+        let (mut err_stack, mut err_type): (String, String) =
+            (String::default(), String::from("Error"));
+        let error_msg = match err {
+            CaughtError::Error(err) => format!("Error: {:?}", &err),
+            CaughtError::Exception(ex) => {
+                let error_name = get_class_name(ex)
+                    .unwrap_or(None)
+                    .unwrap_or(String::from("Error"));
+
+                let mut str = String::with_capacity(100);
+                str.push_str(&error_name);
+                str.push_str(": ");
+                str.push_str(&ex.message().unwrap_or_default());
+                str.push('\n');
+                err_type = error_name;
+                if let Some(stack) = ex.stack() {
+                    str.push_str(&stack);
+                    err_stack = stack;
+                }
+                str
+            },
+            CaughtError::Value(value) => {
+                let log_msg = console::format(ctx, Rest(vec![value.clone()]))
+                    .unwrap_or(String::from("{unknown value}"));
+                format!("Error: {}", &log_msg)
+            },
+        };
+        ErrorDetails {
+            msg: error_msg,
+            r#type: err_type,
+            stack: err_stack,
+        }
+    }
+
+    pub async fn idle(self) -> StdResult<(), Box<dyn std::error::Error + Sync + Send>> {
+        self.runtime.idle().await;
+
+        drop(self.ctx);
+        drop(self.runtime);
+        Ok(())
+    }
+}
+#+end_src
+
+With `AsyncRuntime` and `AsyncContext`, it can handle any javascript code.
+`run_and_handle_exceptions` method can be executed with any javascript code.
