@@ -262,3 +262,16 @@ find . -name "*.md.org" -exec rename -v 's/md.org/org/' {} \;
 find . -name "*.md" -exec git rm {} \;
 find . -name "*.md.org" -exec git add {} \;
 #+end_src
+
+** recompile magit
+#+begin_src shell
+cd ~/.emacs.d/var/straight/repos/magit
+git pull
+rm -rf ~/.emacs.d/var/straight/build-29.3/magit
+#+end_src
+
+Then in emacs
+#+begin_quote
+m-x straight-rebuild-package
+magit
+#+end_quote
