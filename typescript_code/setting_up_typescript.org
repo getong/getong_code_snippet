@@ -264,13 +264,14 @@ ts-node
 ** swc basic usage
 
 *** compile with single file
+
 #+begin_src shell
 cd ts_project
 yarn add @swc/cli @swc/core
 npx swc src/index.ts -o dist/index.js
 #+end_src
 
-*** compile with whole directory
+*** compile with src whole directory
 
 #+begin_src shell
 npx swc src -d dist
@@ -278,7 +279,7 @@ npx swc src -d dist
 
 *** .swcrc config file
 
-#+begin_src
+#+begin_src typescript
 {
   "jsc": {
     "target": "es2021",
