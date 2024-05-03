@@ -299,3 +299,15 @@ npx swc src -d dist
 copy from [[https://www.volcengine.com/theme/6190680-R-7-1][如何使用SWC生成TypeScript代码？]]
 also see [[https://www.cnblogs.com/jasongrass/p/17746316.html][swc plugin hello world]]
 also see [[https://www.51cto.com/article/699091.html][一文带你了解新一代的编译工具 SWC]]
+
+** setup a typescript project by command line
+
+#+begin_src shell
+npm create vite@latest my-vue-app -- --template vue
+
+yarn create vite my-vue-app --template vue
+
+pnpm create vite my-vue-app --template vue
+
+bun create vite my-vue-app --template vue
+#+end_src
