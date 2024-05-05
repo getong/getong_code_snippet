@@ -303,11 +303,11 @@ also see [[https://www.51cto.com/article/699091.html][一文带你了解新一�
 ** setup a typescript project by command line
 
 #+begin_src shell
-npm create vite@latest my-vue-app -- --template vue
+npm create vite@latest my-vue-app -- --template vanilla-ts
 
-yarn create vite my-vue-app --template vue
+yarn create vite my-vue-app --template vanilla-ts
 
-pnpm create vite my-vue-app --template vue
+pnpm create vite my-vue-app --template vanilla-ts
 
-bun create vite my-vue-app --template vue
+bun create vite my-vue-app --template vanilla-ts
 #+end_src
