@@ -215,3 +215,25 @@ curl http://127.0.0.1:8899 \
 #+end_src
 
 see [[https://solana.com/docs/rpc/http][Solana RPC HTTP Methods]]
+
+** anchor
+
+see [[https://github.com/coral-xyz/anchor][anchor]]
+
+basic usage
+
+#+begin_src shell
+cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+## linux
+sudo apt-get update && sudo apt-get upgrade && sudo apt-get install -y pkg-config build-essential libudev-dev
+
+avm install latest
+avm use latest
+
+anchor init hello-anchor
+cd hello-anchor
+anchor build
+anchor test
+#+end_src
+
+copy from [[https://book.anchor-lang.com/][The Anchor Book]]
