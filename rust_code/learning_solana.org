@@ -237,3 +237,13 @@ anchor test
 #+end_src
 
 copy from [[https://book.anchor-lang.com/][The Anchor Book]]
+
+
+** solana javascript project setup
+
+#+begin_src shell
+mkdir solana_js_project
+cd solana_js_project
+npm init -y
+npm install --save @solana/web3.js
+#+end_src
