@@ -1,0 +1,6 @@
+* cpp reference
+
+[[https://zhuanlan.zhihu.com/p/672410503][现代C++模板编程：从C++11到C++20的进阶之旅]]
+[[https://zhuanlan.zhihu.com/p/673024107][探索C++内存屏障：如何保证多线程编程的数据一致性]]
+[[https://zhuanlan.zhihu.com/p/673629320][深入探究：C++11原子操作在x86架构中的应用与性能分析]]
+[[https://zhuanlan.zhihu.com/p/688548252][C++编程精粹：函数指针、Lambda表达式、std::function与实践技巧大全]]
