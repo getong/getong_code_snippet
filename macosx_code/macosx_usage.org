@@ -39,9 +39,7 @@ Then open a Terminal and enter : spctl kext-consent add VB5E2TV963
 Restart your mac.
 #+end_example
 
-copy from
-[[https://forums.virtualbox.org/viewtopic.php?f=8&t=93246][Can't
-Reinstall VirtualBox on Mojave]]
+copy from [[https://forums.virtualbox.org/viewtopic.php?f=8&t=93246][Can't Reinstall VirtualBox on Mojave]]
 
 ** add keyboard shortcuts
 :PROPERTIES:

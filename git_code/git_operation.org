@@ -478,13 +478,13 @@ Loop to fetch 10 commits each time.
 
 #+begin_src sh
 // get the detached head source code
-git clone --depth=1 --branch=5.0.1-release https://github.com/EpicGames/UnrealEngine
+git clone --depth=1 --branch=5.4.1-release https://github.com/EpicGames/UnrealEngine
 
 cd UnrealEngine
 git branch release
 git checkout release
 
-for i in {10..244099..10}
+for i in {10..460632..10}
 do
     git fetch --depth=$i
 done
@@ -501,9 +501,6 @@ git gc
 #+end_src
 
 see [[https://www.cloudbees.com/blog/git-detached-head]["Git detached head" is a weird error message to receive...]]
-#+begin_export html
-
-#+end_export
 
 ** git add proxy
 #+begin_src sh
