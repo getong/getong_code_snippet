@@ -170,4 +170,11 @@ updpkgsums
 makepkg --holdver
 
 sudo pacman -U unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
+
+sudo groupadd unrealengine-users
+sudo usermod -aG unrealengine-users $USERNAME
+sudo chown -R root:unrealengine-users /opt/unreal-engine
+sudo chmod -R 775 /opt/unreal-engine
 #+end_src
+
+see [[https://aur.archlinux.org/packages/unreal-engine][Package Details: unreal-engine]]
