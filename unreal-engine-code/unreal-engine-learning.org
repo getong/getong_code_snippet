@@ -168,4 +168,6 @@ continue to run command:
 cd ~/.cache/yay/unreal-engine
 updpkgsums
 makepkg --holdver
+
+sudo pacman -U unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
 #+end_src
