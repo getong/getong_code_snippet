@@ -2,11 +2,14 @@
 
 ** python3 requirement
 
+*** linux
+
 #+begin_src shell
-pypy3 -m pip install epc orjson sexpdata six setuptools paramiko rapidfuzz 
+pip3 install epc orjson sexpdata six paramiko
 #+end_src
 
 ** macos
+
 #+begin_src shell
 pip3 install --break-system-packages epc orjson sexpdata six paramiko
 #+end_src
