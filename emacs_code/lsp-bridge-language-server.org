@@ -48,3 +48,15 @@ export PATH=$PWD/server/build/install/server/bin:$PATH
 #+begin_src shell
 brew install sql-language-server yaml-language-server
 #+end_src
+
+** lsp-bridge remote server
+
+*** on the remote machine
+
+#+begin_src shell
+python3 ~/.emacs.d/var/straight/repos/lsp-bridge/lsp_bridge.py
+#+end_src
+
+*** open with tramp package
+
+copy from [[https://github.com/manateelazycat/lsp-bridge][lsp-bridge]]
