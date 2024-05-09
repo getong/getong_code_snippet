@@ -26,6 +26,8 @@ go install github.com/cweill/gotests/gotests@latest
 
 # Add `json` or `bson` to structs easily
 go install github.com/fatih/gomodifytags@latest
+
+go install golang.org/x/tools/gopls@latest
 #+end_src
 
 copy from [[https://wmanger.com/articles/go-on-doom-emacs/][GOLANG ON DOOM EMACS]]
