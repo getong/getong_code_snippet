@@ -247,3 +247,51 @@ cd solana_js_project
 npm init -y
 npm install --save @solana/web3.js
 #+end_src
+
+
+** spl-token usage
+
+*** spl-token installation
+
+#+begin_src shell
+cargo install spl-token-cli
+#+end_src
+
+*** spl-token create token
+
+#+begin_src shell
+$ spl-token create-token
+Creating token G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL
+#+end_src
+
+*** spl-token supply
+
+#+begin_src shell
+spl-token supply G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL
+#+end_src
+
+*** spl-token create-account
+
+#+begin_src shell
+spl-token create-account G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL
+#+end_src
+
+*** spl-token balance
+
+#+begin_src shell
+spl-token balance G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL
+#+end_src
+
+*** spl-token mint
+
+#+begin_src shell
+spl-token mint G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL 100000
+#+end_src
+
+*** spl-token authorize
+
+#+begin_src shell
+spl-token authorize G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL mint --disable
+#+end_src
+
+copy from [[https://spl.solana.com/token][spl-token]]
