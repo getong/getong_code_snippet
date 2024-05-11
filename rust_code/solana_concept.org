@@ -1,0 +1,54 @@
+* solana concept
+
+** program_id
+
+program_id is pubkey
+
+** accounts
+
+accounts is array
+
+** instruction_data
+
+instruction_data is byte array
+
+** account
+
+account use to store data
+accoutns have a max size of 10mb
+each account has a unique address
+account data storage is paid with rent
+Default account owner is the System Program
+PDA have a max size of 10kb, can be used to sign in behalf of a program
+
+*** account types
+_Data account_ are for data storing
+_Program Accoutns_ are for storing executable programs(smart contract)
+_Native Accounts_ are native solana programs: _System_, _Stake_, and _Vote_
+
+** instructions "ingredients"
+
+The _program_id_ of the program invoked
+An _array of all accounts_ it tries to read from or write to
+an _instruction_data_ byte array that is specific to the intended program
+
+** Transaction
+
+Transactions are limited to 1232 bytes
+The max age of a transaction's blockhash is 150 blocks
+
+** solana fees
+
+Transactions fees aka as "gas fees"
+Rent fees for storing data on the chain
+
+** PDA
+Program Derived Addresses (PDAs) can create accounts that are designed to be controlled by a specific program.
+Need a seed + bump
+Can perform Cross Program Invocation CPI withour reading a Private Key
+- [X] PDAs are 32 byte strings similar to solana public keys, but they don't have a private key they don't live in the ed25519 Elliptic Curve
+- [X] _findProgramAddress_ can derive deterministically a PDA using a ProgramId and Seeds
+- [X] Bump (one byte) -> used to push away a PDA from the ed25519 Elliptic Curve
+- [X] Programs may sign for their PDAs by providing the seeds + bump -> invoke_signed in CPI
+- [X] PDA can be only signed by Program that was Derived
+- [X] PDA provide -> hashmap-like interface for indexing accounts
