@@ -295,3 +295,9 @@ spl-token authorize G5gy7E6WFxNvGhs9iGyTYEUAy8NvuCCEjxNpWXzY44VL mint --disable
 #+end_src
 
 copy from [[https://spl.solana.com/token][spl-token]]
+
+** how to deplay a program
+
+#+begin_src shell
+solana program deploy <PROGRAM_FILEPATH>
+#+end_src
