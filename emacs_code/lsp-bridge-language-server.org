@@ -60,3 +60,13 @@ python3 ~/.emacs.d/var/straight/repos/lsp-bridge/lsp_bridge.py
 *** open with tramp package
 
 copy from [[https://github.com/manateelazycat/lsp-bridge][lsp-bridge]]
+
+** lsp-bridge open remote project
+
+#+begin_quote
+1 macos ssh 连接到远程服务器，中途离开，关闭 emacs，然后回来又打开 emacs。但 ssh 没有断开，后台 ssh 一直都在连接着。
+2 在 dashboard 打开 sshx 文件, lsp-bridge没有启动成功
+3 切换到打开的文件，c-x c-j 打开 dired， 打开另外一个文件，跟上面的 sshx 文件不是同一个
+   3.1 在这时就要输入 ssh 到远程服务器的密码了，然后 lsp-bridge 就启动正常了。
+   3.2 最初那个sshx 打开的文件，关闭后重新打开，也正常了。
+#+end_quote
