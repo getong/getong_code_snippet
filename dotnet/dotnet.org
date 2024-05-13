@@ -1,13 +1,10 @@
 * dotnet
 
-** dotnet 6
+** dotnet
 #+begin_src sh
-brew install dotnet@6
+brew install dotnet
 
-echo 'export DOTNET_ROOT="/usr/local/opt/dotnet@6/libexec"' >> ~/.zshrc
-
-echo 'export PATH="/usr/local/opt/dotnet@6/bin:$PATH"' >> ~/.zshrc
-
+echo 'export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"' >> ~/.zshrc
 source ~/.zshrc
 
 dotnet --version

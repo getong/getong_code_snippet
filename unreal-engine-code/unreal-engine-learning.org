@@ -178,3 +178,15 @@ sudo chmod -R 775 /opt/unreal-engine
 #+end_src
 
 see [[https://aur.archlinux.org/packages/unreal-engine][Package Details: unreal-engine]]
+
+
+** macos install dotnet
+
+#+begin_src shell
+brew remove dotnet@6
+brew install dotnet
+echo 'export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"' >> ~/.zshrc
+source ~/.zshrc
+#+end_src
+
+After this, unreal-engine does not crash, and works well.
