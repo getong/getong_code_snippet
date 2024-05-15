@@ -190,3 +190,7 @@ source ~/.zshrc
 #+end_src
 
 After this, unreal-engine does not crash, and works well.
+
+** unreal-engine hello world example
+
+see [[https://www.youtube.com/watch?v=GJYwmEQ-hwA][Hello World in C++ in Unreal Engine 5.3 (as a log message)]]
