@@ -29,12 +29,47 @@ vcpkg search
 #+end_src
 
 ** install package
-for example, install eigen3
+for example, install jsoncpp
 
 #+begin_src shell
-vcpkg install eigen3
+vcpkg install jsoncpp
 #+end_src
 
+** remove package
+
+#+begin_src shell
+vcpkg remove jsoncpp
+#+end_src
+
+** remove outdated
+
+#+begin_src shell
+vcpkg remove --outdated
+#+end_src
+
+** list
+
+#+begin_src shell
+vcpkg list
+#+end_src
+
+** export
+
+#+begin_src shell
+vcpkg export jsoncpp --zip
+#+end_src
+
+** export some architecture
+
+#+begin_src shell
+vcpkg export jsoncpp:x86-windows jsoncpp:x64-windows --zip
+#+end_src
+
+** import
+
+#+begin_src shell
+vcpkg import jsoncpp.zip
+#+end_src
 
 ** integrate install
 
