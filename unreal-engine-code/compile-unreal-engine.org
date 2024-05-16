@@ -3,28 +3,73 @@
 :CUSTOM_ID: compile-unreal-engine
 :END:
 ** compile unreal engine on linux
-:PROPERTIES:
-:CUSTOM_ID: compile-unreal-engine-on-linux
-:END:
+
+[[https://aur.archlinux.org/packages/unreal-engine-bin][unreal-engine-bin]] 5.4.1 does not work with [[https://github.com/adamrehn/ue4cli][ue4cli]]
+
 #+begin_src shell
-git clone https://github.com/EpicGames/UnrealEngine.git
-
-// or download the tar file from github, for example
-// https://github.com/EpicGames/UnrealEngine/archive/refs/tags/4.27.2-release.tar.gz
-// tar xzf UnrealEngine-4.27.2-release.tar.gz
-// cd UnrealEngine-4.27.2-release
-
-## on archlinux, copy from https://aur.archlinux.org/packages/unreal-engine
-yay -S libicu53
-
-cd UnrealEngine
-./Setup.sh
-./GenerateProjectFiles.sh
-make
-./Engine/Binaries/Linux/UE4Editor
+yay -S unreal-engine
+cd ~/.cache/yay/unreal-engine
+mkdir -p src
+proxychains git clone --depth=1 --branch=ue5-main git@github.com:EpicGames/UnrealEngine  ~/.cache/yay/unreal-engine/src/unreal-engine
 #+end_src
 
-copy from [[https://michaeljcole.github.io/wiki.unrealengine.com/Building_On_Linux/][Building On Linux]]
+By running this command line, in _yay install prepare_ period, stop the command line.
+
+Edit _~/.cache/yay/unreal-engine/PKGBUILD_ file
+
+#+begin_src shell
+prepare() {
+  # Download Unreal Engine source or update if the folder exists
+    cd "${pkgname}" || return
+  # if [[ ! -d "${pkgname}" ]]
+  # then
+  #   # git clone --depth=1 --branch=ue5-main git@github.com:EpicGames/UnrealEngine "${pkgname}"
+  #   # git clone --depth=1 --branch=${pkgver}-release git@github.com:EpicGames/UnrealEngine "${pkgname}"
+  #   cd "${pkgname}" || return
+  # else
+  #   cd "${pkgname}" || return
+  #   CURRENT_CLONED_VERSION="$(git describe --tags)"
+  #   if [ "${CURRENT_CLONED_VERSION}" != "${pkgver}-release" ]; then
+  #     cd ..
+  #     # rm -rf "${pkgname}"
+  #     # git clone --depth=1 --branch=ue5-main git@github.com:EpicGames/UnrealEngine "${pkgname}"
+  #     cd "${pkgname}" || return
+  #   else
+  #     rm -f .git/index.lock
+  #     git fetch --depth=1 origin tag ${pkgver}-release
+  #     git reset --hard ${pkgver}-release
+  #   fi
+  # fi
+#+end_src
+
+
+continue to run command:
+
+#+begin_src shell
+cd ~/.cache/yay/unreal-engine
+updpkgsums
+makepkg --holdver
+
+sudo pacman -U unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
+
+sudo groupadd unrealengine-users
+sudo usermod -aG unrealengine-users ${USERNAME}
+sudo chown -R ${USERNAME}:unrealengine-users /opt/unreal-engine
+sudo chmod -R 775 /opt/unreal-engine
+#+end_src
+
+see [[https://aur.archlinux.org/packages/unreal-engine][Package Details: unreal-engine]]
+
+** macos install dotnet
+
+#+begin_src shell
+brew remove dotnet@6
+brew install dotnet
+echo 'export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"' >> ~/.zshrc
+source ~/.zshrc
+#+end_src
+
+After this, unreal-engine does not crash, and works well.
 
 ** compile unreal engine on macos
 :PROPERTIES:
@@ -65,8 +110,9 @@ export SSL_CERT_DIR=/dev/null
 ./Engine/Build/BatchFiles/RunUAT.sh BuildGraph -target="Make Installed Build Linux" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=false -set:HostPlatformOnly=true
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/72539119/cant-generate-project-files-for-ue5-on-linux][Can't generate project files for UE5 on Linux]] or
+copy from [[https://stackoverflow.com/questions/72539119/cant-generate-project-files-for-ue5-on-linux][Can't generate project files for UE5 on Linux]]
+
+or
 
 #+begin_src shell
 sudo pacman -S libssl
@@ -81,12 +127,15 @@ sudo ln -s /etc/ssl/certs /usr/lib/ssl
 copy from [[https://forums.unrealengine.com/t/error-compiling-unreal-engine-on-arch-linux/549637][Error Compiling Unreal Engine on Arch Linux]]
 
 ** pre-compiled unreal engine
+
 :PROPERTIES:
 :CUSTOM_ID: pre-compiled-unreal-engine
 :END:
 see [[https://www.unrealengine.com/en-US/linux][Unreal Engine is now available to download for Linux]]
 
 ** install unreal engine bin on archlinux
+
+_This package does not work with ue4cli on archlinux, deprecated._
 
 To build this package, you need to:
 

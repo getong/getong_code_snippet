@@ -132,65 +132,6 @@ All engine modules are compiled by default with C++20, regardless of the target 
 
 copy from [[https://portal.productboard.com/epicgames/1-unreal-engine-public-roadmap/c/1165-c-20-default-version][C++20 Default Version]]
 
-** compile unreal-engine in archlinux from source
-
-[[https://aur.archlinux.org/packages/unreal-engine-bin][unreal-engine-bin]] 5.4.1 does not work with [[https://github.com/adamrehn/ue4cli][ue4cli]]
-
-#+begin_src shell
-yay -S unreal-engine
-#+end_src
-
-By running this command line, in _yay install prepare_ period, stop the command line.
-
-Edit _~/.cache/yay/unreal-engine/PKGBUILD_ file
-
-#+begin_src shell
-prepare() {
-   # ...
-  cd "${pkgname}" || return
-    CURRENT_CLONED_VERSION="$(git describe --tags)"
-    if [ "${CURRENT_CLONED_VERSION}" != "${pkgver}-release" ]; then
-      cd ..
-      # rm -rf "${pkgname}"
-      git clone --depth=1 --branch=${pkgver}-release git@github.com:EpicGames/UnrealEngine "${pkgname}"
-      cd "${pkgname}" || return
-    else
-      rm -f .git/index.lock
-      git fetch --depth=1 origin tag ${pkgver}-release
-      git reset --hard ${pkgver}-release
-#+end_src
-
-_# rm -rf "${pkgname}"_ is commented.
-
-continue to run command:
-
-#+begin_src shell
-cd ~/.cache/yay/unreal-engine
-updpkgsums
-makepkg --holdver
-
-sudo pacman -U unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
-
-sudo groupadd unrealengine-users
-sudo usermod -aG unrealengine-users ${USERNAME}
-sudo chown -R ${USERNAME}:unrealengine-users /opt/unreal-engine
-sudo chmod -R 775 /opt/unreal-engine
-#+end_src
-
-see [[https://aur.archlinux.org/packages/unreal-engine][Package Details: unreal-engine]]
-
-
-** macos install dotnet
-
-#+begin_src shell
-brew remove dotnet@6
-brew install dotnet
-echo 'export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"' >> ~/.zshrc
-source ~/.zshrc
-#+end_src
-
-After this, unreal-engine does not crash, and works well.
-
 ** unreal-engine hello world example
 
 see [[https://www.youtube.com/watch?v=GJYwmEQ-hwA][Hello World in C++ in Unreal Engine 5.3 (as a log message)]]
