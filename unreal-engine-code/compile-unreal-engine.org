@@ -50,7 +50,7 @@ cd ~/.cache/yay/unreal-engine
 updpkgsums
 makepkg --holdver
 
-sudo pacman -U unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
+sudo pacman -U --noconfirm unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
 
 sudo groupadd unrealengine-users
 sudo usermod -aG unrealengine-users ${USERNAME}
