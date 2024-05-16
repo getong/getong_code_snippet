@@ -1,0 +1,56 @@
+* vcpkg
+
+** installation
+
+*** macos installation
+
+#+begin_src shell
+brew install vcpkg
+#+end_src
+
+*** linux installation
+
+#+begin_src shell
+sudo pacman -S vcpkg
+#+end_src
+
+*** setup vcpkg_root
+
+#+begin_src shell
+git clone https://github.com/microsoft/vcpkg "$HOME/vcpkg"
+echo 'export VCPKG_ROOT="$HOME/vcpkg"' >> ~/.zshrc
+source ~/.zshrc
+#+end_src
+
+** search
+
+#+begin_src shell
+vcpkg search
+#+end_src
+
+** install package
+for example, install eigen3
+
+#+begin_src shell
+vcpkg install eigen3
+#+end_src
+
+
+** integrate install
+
+#+begin_src shell
+vcpkg integrate install
+#+end_src
+
+
+** integrate remove
+
+#+begin_src shell
+vcpkg integrate remove
+#+end_src
+
+** integrate project
+
+#+begin_src shell
+vcpkg integrate project
+#+end_src
