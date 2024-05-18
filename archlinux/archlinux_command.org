@@ -751,8 +751,8 @@ process remains active after closing it]]
 :CUSTOM_ID: ugrren-ac1300-wireless-card
 :END:
 #+begin_src shell
-git clone https://github.com/morrownr/8812au-20210629
-cd 8812au-20210629
+git clone https://github.com/morrownr/8812au-20210820
+cd 8812au-20210820
 sudo ./install-driver.sh
 sudo reboot
 #+end_src
@@ -766,8 +766,6 @@ sudo sh remove-driver.sh
 sudo dkms remove rtl8812au/5.13.6 --all
 sudo sh install-driver.sh
 #+end_src
-
-copy from https://github.com/morrownr/8812au-20210629/issues/117
 
 ** some useful command:
 :PROPERTIES:
