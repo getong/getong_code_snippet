@@ -13,3 +13,98 @@ see [[https://github.com/puerts/puerts_addon_demos][puerts_addon_demo]]
 ** doc
 
 see [[https://cloud.tencent.com/developer/article/2312302][最强nodejs下C++绑定方案介绍]]
+
+
+** installation
+
+archlinux
+#+begin_src shell
+sudo npm install -g puerts
+#+end_src
+
+macos
+#+begin_src shell
+npm install -g puerts
+#+end_src
+
+** make a puerts project
+
+for example, make a puerts_example project
+
+#+begin_src shell
+mkdir puerts_example
+cd puerts_example
+npm init -y
+yarn add typescript --dev
+yarn add puerts
+npm install .
+./node_modules/typescript/bin/tsc --init
+#+end_src
+
+make a c++ plugin library
+
+#+begin_src shell
+puerts init hello_world
+cd hello_world
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+#+end_src
+
+make src and create typescript source file
+
+#+begin_src shell
+cd ../..
+mkdir src
+touch src/index.ts
+#+end_src
+
+Edit src/index.ts
+#+begin_src typescript
+import {load} from "puerts";
+import * as HelloWorldModlue from 'hello_world'
+
+let hello_world = load<typeof HelloWorldModlue>('hello_world/hello_world');
+
+const HelloWorld = hello_world.HelloWorld;
+
+const obj = new HelloWorld(101);
+
+obj.Foo((x, y) => x > y);
+
+HelloWorld.Bar("hello");
+
+HelloWorld.StaticField = 999;
+obj.Field = 888;
+
+obj.Foo((x, y) => x > y);
+#+end_src
+
+Generate typescript declaration file (index.d.ts) for a puerts addon
+
+#+begin_src shell
+puerts gen_dts hello_world/hello_world -t src
+#+end_src
+
+edit tsconfig.json
+#+begin_src typescript
+"compilerOptions":{
+    "outDir": "./dist",
+    // ...
+},
+"exclude": ["dist/", "hello_world"]
+#+end_src
+
+compile typescript into javascript
+
+#+begin_src shell
+./node_modules/typescript/bin/tsc
+#+end_src
+
+run the code:
+#+begin_src shell
+node dist/index.js
+#+end_src
+
+copy from [[https://www.npmjs.com/package/puerts#calling-addon-in-javascript][Puerts Node.js Addon: High-Performance Bridge between C++ and JavaScript]]
