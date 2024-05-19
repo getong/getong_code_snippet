@@ -1,0 +1,15 @@
+# folly
+
+** installation
+
+macos
+
+#+begin_src shell
+brew install folly
+#+end_src
+
+archlinux
+
+#+begin_src shell
+yay -S folly
+#+end_src
