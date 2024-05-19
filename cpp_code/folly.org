@@ -13,3 +13,9 @@ archlinux
 #+begin_src shell
 yay -S folly
 #+end_src
+
+hard to use, deprecated, chagne to use with vcpkg.
+
+** use with vcpkg
+
+see [[./vcpkg.org::#build project example][vcpkg]]
