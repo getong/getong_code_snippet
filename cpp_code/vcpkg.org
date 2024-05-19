@@ -6,20 +6,18 @@
 
 #+begin_src shell
 brew install vcpkg
+git clone https://github.com/microsoft/vcpkg "$HOME/vcpkg"
+echo 'export VCPKG_ROOT="$HOME/vcpkg"' >> ~/.zshrc
+source ~/.zshrc
 #+end_src
 
 *** linux installation
 
 #+begin_src shell
-sudo pacman -S vcpkg
-#+end_src
-
-*** setup vcpkg_root
-
-#+begin_src shell
 git clone https://github.com/microsoft/vcpkg "$HOME/vcpkg"
+$HOME/vcpkg/bootstrap.sh
 echo 'export VCPKG_ROOT="$HOME/vcpkg"' >> ~/.zshrc
-source ~/.zshrc
+echo 'export PATH=$HOME/vcpkg:$PATH' >> ~/.zshrc
 #+end_src
 
 ** search
@@ -89,3 +87,25 @@ vcpkg integrate remove
 #+begin_src shell
 vcpkg integrate project
 #+end_src
+
+** build project example
+
+add folly library
+
+#+begin_src shell
+vcpkg install folly
+#+end_src
+
+build command line script
+
+#+begin_src shell
+#!/bin/sh
+
+mkdir -p build
+cd build
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -B . -S .. "-DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake"
+cmake --build .
+mv compile_commands.json ../..
+#+end_src
+
+copy from [[https://github.com/microsoft/vcpkg][vcpkg]]
