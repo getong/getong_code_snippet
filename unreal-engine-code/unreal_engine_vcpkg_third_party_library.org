@@ -1,0 +1,13 @@
+# unreal engine vcpkg third party library
+
+** vcpkg install library
+
+[[https://bionicape.com/use-vcpkg-for-third-party-libraries-in-unreal-engine/][USE VCPKG FOR THIRD PARTY LIBRARIES IN UNREAL ENGINE]]
+
+** unreal engine integrate with awk sdk
+
+[[https://aws.amazon.com/cn/blogs/gametech/how-to-integrate-the-aws-c-sdk-with-unreal-engine/][How to Integrate the AWS C++ SDK with Unreal Engine]]
+
+** unreal third party doc
+
+[[https://dev.epicgames.com/documentation/en-us/unreal-engine/integrating-third-party-libraries-into-unreal-engine?application_version=5.4][Third-Party Libraries]]
