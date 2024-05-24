@@ -1,0 +1,13 @@
+* learn solidity
+
+** install solidity
+
+#+begin_src shell
+brew install solidity
+#+end_src
+
+** install remix-ide
+
+#+begin_src shell
+brew install --cask remix-ide
+#+end_src
