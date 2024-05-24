@@ -2,12 +2,40 @@
 
 ** install solidity
 
+macos
+
 #+begin_src shell
 brew install solidity
 #+end_src
 
+archlinux
+
+#+begin_src shell
+yay -S solidity
+#+end_src
+
 ** install remix-ide
+
+macos
 
 #+begin_src shell
 brew install --cask remix-ide
+#+end_src
+
+archlinux
+
+#+begin_src shell
+yay -S remix-desktop
+#+end_src
+
+** solium
+
+#+begin_src
+npm install -g solium
+#+end_src
+
+** solidity language server
+
+#+begin_src shell
+npm install @nomicfoundation/solidity-language-server -g
 #+end_src
