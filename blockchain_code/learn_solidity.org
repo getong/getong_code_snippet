@@ -31,6 +31,8 @@ yay -S remix-desktop
 ** solium
 
 #+begin_src
+npm install -g solc
+npm install -g solhint
 npm install -g solium
 #+end_src
 
