@@ -41,3 +41,7 @@ npm install -g solium
 #+begin_src shell
 npm install @nomicfoundation/solidity-language-server -g
 #+end_src
+
+** Truffle,Ganache have been sunset,use HardHat
+
+see [[https://archive.trufflesuite.com/blog/consensys-announces-the-sunset-of-truffle-and-ganache-and-new-hardhat-partnership/][Consensys Announces the Sunset of Truffle and Ganache and New HardHat Partnership]]
