@@ -2,8 +2,7 @@
 :PROPERTIES:
 :CUSTOM_ID: blockchain-cource
 :END:
-[[https://cs251.stanford.edu/syllabus.html][CS 251: Blockchain
-Technologies]] [[https://defi-learning.org/][Decentralized Finance]]
-[[https://docs.substrate.io/tutorials/v3/][substrate Tutorials]]
-[[https://medium.com/@kklas/smart-contract-development-move-vs-rust-4d8f84754a8f][Smart
-Contract Development --- Move vs. Rust]]
+[[https://cs251.stanford.edu/syllabus.html][CS 251: Blockchain Technologies]]
+[[https://defi-learning.org/][Decentralized Finance]]
+[[https://docs.substrate.io/tutorials/][substrate Tutorials]]
+[[https://medium.com/@kklas/smart-contract-development-move-vs-rust-4d8f84754a8f][Smart Contract Development --- Move vs. Rust]]
