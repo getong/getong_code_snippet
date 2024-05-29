@@ -30,7 +30,7 @@ yay -S remix-desktop
 
 ** solium
 
-#+begin_src
+#+begin_src shell
 npm install -g solc
 npm install -g solhint
 npm install -g solium
