@@ -2,3 +2,4 @@
 
 [[https://github.com/zilch/type-route][type-route]]
 [[https://github.com/ReactiveX/rxjs][rxjs]]
+[[https://github.com/reduxjs/redux][redux]]
