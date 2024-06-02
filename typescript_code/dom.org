@@ -1,0 +1,15 @@
+* dom
+
+** How Virtual DOM Works in Vue
+
+#+begin_src typescript
+const node = {
+    tag: 'div',
+    attributes: [{ id: 'list-container', class: 'list-container' }],
+    children: [ /* an array of nodes */]
+}
+#+end_src
+
+Let’s call this node VNode. VNode is a virtual node that
+resides within the Virtual DOM and represents the actual
+DOM element in the real DOM.
