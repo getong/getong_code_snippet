@@ -1,0 +1,27 @@
+* vue basic
+
+** basic example
+
+#+begin_src typescript
+import { createApp } from 'vue'
+const App = {
+    template: "hello world",
+}
+const app = createApp(App)
+app.mount('#app')
+#+end_src
+
+** pinia example
+
+#+begin_src typescript
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
+const App = {
+    template: "hello world",
+}
+const app = createApp(App)
+app.use(createPinia())
+
+app.mount('#app')
+#+end_src
