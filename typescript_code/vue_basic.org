@@ -5,7 +5,10 @@
 #+begin_src typescript
 import { createApp } from 'vue'
 const App = {
-    template: "hello world",
+    // template: "hello world",
+    render() {
+        return "hello world"
+    }
 }
 const app = createApp(App)
 app.mount('#app')
@@ -18,10 +21,15 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 const App = {
-    template: "hello world",
+    // template: "hello world",
+    render() {
+        return "hello world"
+    }
 }
 const app = createApp(App)
 app.use(createPinia())
 
 app.mount('#app')
 #+end_src
+
+_template_ does not work, must use _render()_ function.
