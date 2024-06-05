@@ -3,8 +3,15 @@
 ** install doctnet on macos
 
 #+begin_src shell
-brew install dotnet
+brew install --cask dotnet-sdk
+dotnet tool install --global csharp-ls
 #+end_src
+
+see [[https://learn.microsoft.com/en-us/dotnet/core/install/macos][Install .NET on macOS]]
+
+csharp-ls works with emacs lsp-mode
+
+see [[https://emacs-lsp.github.io/lsp-mode/page/lsp-csharp-ls/][csharp-ls]]
 
 ** dotnet create project
 
