@@ -49,7 +49,8 @@ continue to run command:
 cd ~/.cache/yay/unreal-engine
 updpkgsums
 makepkg --holdver
-
+sudo pacman -R unreal-engine
+sudo rm -rf /opt/unreal-engine
 sudo pacman -U --noconfirm unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
 
 sudo groupadd unrealengine-users
