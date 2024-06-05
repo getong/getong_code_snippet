@@ -1,0 +1,22 @@
+* dotnet installation
+
+** install doctnet on macos
+
+#+begin_src shell
+brew install dotnet
+#+end_src
+
+** dotnet create project
+
+#+begin_src shell
+mkdir project_name
+cd project_name
+
+dotnet net console
+#+end_src
+
+** dotnet build
+
+#+begin_src shell
+dotnet build
+#+end_src
