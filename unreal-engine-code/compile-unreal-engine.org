@@ -65,7 +65,7 @@ see [[https://aur.archlinux.org/packages/unreal-engine][Package Details: unreal-
 
 #+begin_src shell
 brew remove dotnet@6
-brew install dotnet
+brew install dotnet-sdk
 echo 'export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"' >> ~/.zshrc
 source ~/.zshrc
 #+end_src
