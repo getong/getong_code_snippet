@@ -135,3 +135,14 @@ copy from [[https://portal.productboard.com/epicgames/1-unreal-engine-public-roa
 ** unreal-engine hello world example
 
 see [[https://www.youtube.com/watch?v=GJYwmEQ-hwA][Hello World in C++ in Unreal Engine 5.3 (as a log message)]]
+
+
+** UE makes use of prefixes to point out the class type
+
+- U is used for generic objects deriving from UObject (for instance, components)
+- A is used for objects deriving from an Actor (i.e., AActor) and that can be added to a level
+- F is used for generic classes and structures such as the FColor structure
+- T is used for templates such as TArray or TMap
+- I is used for interfaces
+- E is used for enums
+- B is used for bool or uint8 (which may be used instead of bool)
