@@ -9,6 +9,13 @@ dotnet tool install --global csharp-ls
 
 see [[https://learn.microsoft.com/en-us/dotnet/core/install/macos][Install .NET on macOS]]
 
+** add env to ~/.zshrc
+
+#+begin_src shell
+export DOTNET_ROOT="/usr/local/share/dotnet/libexec"
+export PATH=$HOME/.dotnet/tools:$PATH
+#+end_src
+
 csharp-ls works with emacs lsp-mode
 
 see [[https://emacs-lsp.github.io/lsp-mode/page/lsp-csharp-ls/][csharp-ls]]
