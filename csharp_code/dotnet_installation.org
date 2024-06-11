@@ -34,3 +34,13 @@ dotnet net console
 #+begin_src shell
 dotnet build
 #+end_src
+
+** sln file
+
+#+begin_src shell
+dotnet new sln
+dotnet new console --output folder1/folder2/myapp
+dotnet sln add folder1/folder2/myapp
+#+end_src
+
+copy from [[https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-sln#arguments-2][dotnet-sln]]
