@@ -1,4 +1,4 @@
-* archlinux command
+p* archlinux command
 :PROPERTIES:
 :CUSTOM_ID: archlinux-command
 :END:
@@ -2106,6 +2106,14 @@ sudo pacman -S yt-dlp
 yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --write-description --write-info-json --write-annotations --write-thumbnail --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt https://www.youtube.com/watch\?v\=69h1zhIdCN0
 
 yt-dlp --proxy socks5://127.0.0.1:10808/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --write-description --write-info-json --write-annotations --write-thumbnail --write-auto-sub --sub-lang en,zh-Hans --convert-subtitles srt -a youtube-download-file.txt
+#+end_src
+
+** yt-dlp download bilibili video with high quality
+
+login with account in firefox browser, then download videos:
+
+#+begin_src
+yt-dlp --cookies-from-browser firefox  https://www.bilibili.com/video/BV1af421R7BD
 #+end_src
 
 ** julia
