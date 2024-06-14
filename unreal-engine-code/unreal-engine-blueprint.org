@@ -4,3 +4,7 @@
 see [[https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-functions-in-unreal-engine?application_version=5.3][Creating Functions]]
 
 Add a blueprint class -> add function and handle event in blueprint class -> add the blueprint class instance into level
+
+** add a Spinning Cube
+
+see [[https://unrealiseasy.com/tutorial-make-a-spinning-cube-actor-blueprint-in-unreal-engine-5/][Make a Spinning Cube Actor Blueprint in Unreal Engine]]
