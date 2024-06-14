@@ -1,4 +1,4 @@
-* unreal engine learning
+* unreal engine setting
 :PROPERTIES:
 :CUSTOM_ID: unreal-engine-learning
 :END:
