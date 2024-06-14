@@ -1,0 +1,7 @@
+* unreal engine cpp
+
+** book code
+
+[[https://github.com/PacktPublishing/Elevating-Game-Experiences-with-Unreal-Engine-5-Second-Edition][Elevating Game Experiences with Unreal Engine 5 - Second Edition, published by Packt]]
+[[https://github.com/PacktPublishing/Multiplayer-Game-Development-with-Unreal-Engine-5][Multiplayer Game Development with Unreal Engine 5, Published by Packt]]
+[[https://github.com/PacktPublishing/Unreal-Engine-5-Game-Development-with-C-Scripting][Unreal Engine 5 Game Development with C++ Scripting, published by Packt]]
