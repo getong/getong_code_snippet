@@ -1,0 +1,6 @@
+* unreal engine blueprint
+
+** create blueprint class
+see [[https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-functions-in-unreal-engine?application_version=5.3][Creating Functions]]
+
+Add a blueprint class -> add function and handle event in blueprint class -> add the blueprint class instance into level
