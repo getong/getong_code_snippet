@@ -104,6 +104,15 @@ TObjectPtr<AGameStateBase> GameState = World->GetGameState();
 TObjectPtr<UGameInstance> GameInstance = World->GetGameInstance();
 #+end_src
 
+** cast code example
+
+#+begin_src cpp
+TObjectPtr<APangaeaPlayerController> pangaeaPlayerController = Cast<APangaeaPlayerController>(playerController);
+TObjectPtr<APangaeaGameMode> pangaeaGameMode = Cast<APangaeaGameMode*> gameMode;
+TObjectPtr<APangaeaGameStateBase> pangaeaGameState = Cast<APangaeaGameStateBase*>(gameState);
+TObjectPtr<UPangaeaGameInstance> panGaeaGameInstance = Cast<UPangaeaGameInstance>(gameInstance);
+#+end_src
+
 ** Actor, Pawn, Character
 
 #+begin_quote
