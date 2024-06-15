@@ -93,3 +93,21 @@ node "AActor" {
 
 #+RESULTS:
 [[file:./unreal_class_instance.png]]
+
+** get world code example
+
+#+begin_src cpp
+TObjectPtr<UWorld> World = GetWorld();
+TObjectPtr<APlayerController> PlayerController = World-> GetFirstPlayerController();
+TObjectPtr<AGameModeBase> GameMode = World->GetAuthGameMode();
+TObjectPtr<AGameStateBase> GameState = World->GetGameState();
+TObjectPtr<UGameInstance> GameInstance = World->GetGameInstance();
+#+end_src
+
+** Actor, Pawn, Character
+
+#+begin_quote
+The main difference between ACharacter and AActor and APawn is that ACharacter
+contains the SkeletalMesh, Movement, and Capsule collider components by default,
+as well as the animation supports.
+#+end_quote
