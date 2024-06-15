@@ -1,0 +1,45 @@
+* unreal engine class
+
+** class inheritance
+
+#+BEGIN_SRC plantuml :file ./unreal_class.png :width 800 :exports both
+@startuml
+!theme materia
+scale 0.8
+skinparam componentStyle rectangle
+class UObject
+class UActorComponent
+class AActor
+class UGameInstance
+class USceneComponent
+class AInfo
+class APawn
+class AController
+class AGameModeBase
+class AGameStateBase
+class ACharacter
+class APlayerController
+class AAiController
+
+UActorComponent -up-|> UObject
+AActor -up-|> UObject
+UGameInstance -up-|> UObject
+
+AInfo -up-|> AActor
+APawn -up-|> AActor
+AController -up-|> AActor
+
+USceneComponent -up-|> UActorComponent
+
+APlayerController -up-|> AController
+AAiController -up-|> AController
+
+ACharacter -up-|> APawn
+
+AGameModeBase -up-|> AInfo
+AGameStateBase -up-|> AInfo
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:./unreal_class.png]]
