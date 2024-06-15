@@ -2,7 +2,7 @@
 
 ** class inheritance
 
-#+BEGIN_SRC plantuml :file ./unreal_class.png :width 800 :exports both
+#+BEGIN_SRC plantuml :file ./unreal_class.png :width 800 :exports results
 @startuml
 !theme materia
 scale 0.8
@@ -43,3 +43,53 @@ AGameStateBase -up-|> AInfo
 
 #+RESULTS:
 [[file:./unreal_class.png]]
+
+
+** unreal engine class instances
+#+begin_quote
+UEngine：它是引擎类，在All classes页面搜索这个类，可以找到它的文档页面链接（每个类都可以在这个页面搜索到它的API文档）。如其名，它完成引擎方面的工作。在本示例中，用该类的全局变量GEngine来获取其下管理的所有UWorld对象。
+
+UWorld：它是描述游戏世界的类。每个UWorld对象都有一个类型成员，通过该成员区别这个world是编辑器中正在处于编辑状态的世界（Editor类型），还是编辑器中模拟运行的游戏世界（Game类型），或者独立EXE运行的游戏世界。
+
+ULevel：它是关卡对象。每个UWorld都管理着一个或者多个ULevel对象。
+
+AActor：所有可以放置在viewport中的对象都是AActor实例。比如说玩家对象，花草树木，高山大海……等等。
+
+UActorComponent：这个类用于对actor进行各种属性拓展，使之可以表达世间万物。举例来说，如果给一个球体添加一个光源组件（light component），便可以令其发光，使其表现得像一个灯泡或者太阳。
+
+以上这些就是UE非常基础且核心的几个类，它们的关系是：UEngine下管理着若干个UWorld，UWorld下若干个ULevel，ULevel下若干个AActor，AActor下若干个UActorComponent。
+#+end_quote
+
+copy from [[https://zhuanlan.zhihu.com/p/643791806][Unreal engine C++开发从路人到入门（一）hello world]]
+
+#+BEGIN_SRC plantuml :file ./unreal_class_instance.png :width 800 :exports results
+@startuml
+!theme materia
+scale 0.8
+skinparam componentStyle rectangle
+
+node "UEngine" {
+  [UWorld Class]
+}
+
+node "UWorld" {
+  [ULevel Class]
+}
+
+node "ULevel" {
+  [AActor Class]
+}
+
+node "AActor" {
+    [UActorComponent Class]
+}
+
+
+[UWorld Class] --> [ULevel Class]
+[ULevel Class] --> [AActor Class]
+[AActor Class] --> [UActorComponent Class]
+@enduml
+#+end_src
+
+#+RESULTS:
+[[file:./unreal_class_instance.png]]
