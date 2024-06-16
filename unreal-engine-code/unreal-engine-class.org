@@ -120,3 +120,22 @@ The main difference between ACharacter and AActor and APawn is that ACharacter
 contains the SkeletalMesh, Movement, and Capsule collider components by default,
 as well as the animation supports.
 #+end_quote
+
+
+** spawn actor
+
+#+begin_src cpp
+GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+{
+const auto Character = Cast<AUS_Character>(GetOwner());
+const auto ProjectileSpawnLocation = GetComponentLocation();
+const auto ProjectileSpawnRotation = GetComponentRotation();
+auto ProjectileSpawnParams = FActorSpawnParameters();
+ProjectileSpawnParams.Owner = GetOwner();
+ProjectileSpawnParams.Instigator = Character;
+GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass,
+ProjectileSpawnLocation, ProjectileSpawnRotation,
+ProjectileSpawnParams);
+}, .4f, false);
+}
+#+end_src
