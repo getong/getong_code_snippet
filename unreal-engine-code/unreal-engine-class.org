@@ -72,7 +72,13 @@ animations, such as idle, walk, run, attack, die, and so on. We will extend this
 new APlayerAvatar class.
   #+end_quote
 
+- pawn and character difference
 
+  #+begin_quote
+The main difference between ACharacter and AActor and APawn is that ACharacter
+contains the SkeletalMesh, Movement, and Capsule collider components by default,
+as well as the animation supports.
+  #+end_quote
 ** unreal engine class instances
 #+begin_quote
 UEngine：它是引擎类，在All classes页面搜索这个类，可以找到它的文档页面链接（每个类都可以在这个页面搜索到它的API文档）。如其名，它完成引擎方面的工作。在本示例中，用该类的全局变量GEngine来获取其下管理的所有UWorld对象。
