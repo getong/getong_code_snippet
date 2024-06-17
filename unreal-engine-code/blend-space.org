@@ -1,0 +1,5 @@
+* blend space
+
+see [[https://dev.epicgames.com/documentation/en-us/unreal-engine/blend-spaces-in-unreal-engine?application_version=5.3][Blend Spaces]]
+also see [[https://www.cnblogs.com/suozhiyuan/p/16506165.html][UE4 blendspace —— 角色面向前方的8方向移动
+]]
