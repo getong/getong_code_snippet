@@ -45,6 +45,34 @@ AGameStateBase -up-|> AInfo
 [[file:./unreal_class.png]]
 
 
+** Actor, Pawn, Character difference
+
+- AActor
+
+  #+begin_quote
+AActor is the base class for creating a wide range of objects, such as buildings, spawn points,
+portals, vehicles, characters, and so on. We will extend this class to create ADefenseTower,
+AWeapon, and AProjectile classes.
+  #+end_quote
+
+- APawn
+
+  #+begin_quote
+APawn is a subclass of AActor that is used to create non-character, player-controllable actors
+(not characters) that accept and react to player inputs—racing cars, for example.
+  #+end_quote
+
+
+- ACharacter
+
+  #+begin_quote
+ACharacter extends the APawn class for creating characters. A character can not only
+accept user inputs and moves but also has at least one skeletal mesh and the character state
+animations, such as idle, walk, run, attack, die, and so on. We will extend this class to create a
+new APlayerAvatar class.
+  #+end_quote
+
+
 ** unreal engine class instances
 #+begin_quote
 UEngine：它是引擎类，在All classes页面搜索这个类，可以找到它的文档页面链接（每个类都可以在这个页面搜索到它的API文档）。如其名，它完成引擎方面的工作。在本示例中，用该类的全局变量GEngine来获取其下管理的所有UWorld对象。
