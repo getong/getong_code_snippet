@@ -79,6 +79,8 @@ The main difference between ACharacter and AActor and APawn is that ACharacter
 contains the SkeletalMesh, Movement, and Capsule collider components by default,
 as well as the animation supports.
   #+end_quote
+
+
 ** unreal engine class instances
 #+begin_quote
 UEngine：它是引擎类，在All classes页面搜索这个类，可以找到它的文档页面链接（每个类都可以在这个页面搜索到它的API文档）。如其名，它完成引擎方面的工作。在本示例中，用该类的全局变量GEngine来获取其下管理的所有UWorld对象。
@@ -128,6 +130,80 @@ node "AActor" {
 #+RESULTS:
 [[file:./unreal_class_instance.png]]
 
+
+
+** Unreal gameplay framework classes
+
+#+begin_quote
+The Unreal gameplay framework includes four classes, PlayerController, GameModeBase,
+GameState, and GameInstance, playing vital roles in managing various aspects of gameplay
+and overall game functionality.
+#+end_quote
+
+*** The GameMode class
+
+#+begin_quote
+The GameMode object is needed for all UE projects. It stores important game information and settings,
+such as the starting level, the default player pawn, the player controller, and so on. By extending the
+GameModeBase class, you can add more gameplay information and rules to the child class. It could
+include the following:
+• Flags that allow pausing the game, playing cinematics, enabling tutorials, and so on
+• Level-transition conditions and processes
+• Spawn locations
+• For multiplayer games, the minimum number of players to start the game
+• The conditions to end a game—the maximum game time, for example
+For online games, the GameMode object only exists on the server side.
+#+end_quote
+
+*** The GameState class
+
+#+begin_quote
+The GameState object is usually used to store dynamic gameplay information. By extending the
+GameStateBase class, you can store important gameplay information in the child class. It could
+include the following:
+• The time elapsed since the start of the game
+• Total scores
+• Waves of enemies
+• Enemy positions for the minimap
+• A countdown timer
+For online games, the GameState object exists on both the server and client sides. The GameState
+object’s information can be synced from the server to the clients.
+#+end_quote
+
+*** The GameInstance class
+
+#+begin_quote
+The GameInstance object is a high-level manager representing the instance of a running game.
+By extending the UGameInstance class, you can put important local gameplay variables into the
+child class. In the context of online games, it’s important to note that the GameInstance object
+exclusively exists on the client side.
+
+Unreal games are internally built up on the multiplayer game framework, even if they may be single-player
+games. Therefore, during game development, you should always assume that the game was an online
+game and determine whether those global variables are necessary on the server. If a variable doesn’t
+need to exist on the server, it can be considered a local gameplay variable and appropriately assigned
+as an attribute of the GameInstance class.
+Obviously, the gameplay framework class instances encompass global variables that we may need to
+access from any part of our code. Thus, our next objective is to learn how to retrieve the instances to
+gain access to them.
+#+end_quote
+
+*** the PlayerController class
+
+#+begin_quote
+PlayerController is the engine’s base C++ class, which can be extended for specific gameplay
+controls.
+It is not mandatory but recommended to consider using PlayerController in your game.
+PlayerController can be considered an invisible pawn that bridges the player and the controlled
+pawn or character. PlayerController decouples the player pawn’s logic and view and makes it
+easier to let the player possess different pawns or characters.
+When using PlayerController, you should consider letting it take care of the following responsibilities:
+• Receiving and handling player inputs
+• Moving and rotating the controlled pawn or character
+• Changing the state of the controlled pawn or character
+• Manipulating the camera views
+#+end_quote
+
 ** get world code example
 
 #+begin_src cpp
@@ -146,14 +222,6 @@ TObjectPtr<APangaeaGameMode> pangaeaGameMode = Cast<APangaeaGameMode*> gameMode;
 TObjectPtr<APangaeaGameStateBase> pangaeaGameState = Cast<APangaeaGameStateBase*>(gameState);
 TObjectPtr<UPangaeaGameInstance> panGaeaGameInstance = Cast<UPangaeaGameInstance>(gameInstance);
 #+end_src
-
-** Actor, Pawn, Character
-
-#+begin_quote
-The main difference between ACharacter and AActor and APawn is that ACharacter
-contains the SkeletalMesh, Movement, and Capsule collider components by default,
-as well as the animation supports.
-#+end_quote
 
 
 ** spawn actor
