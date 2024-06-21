@@ -241,3 +241,10 @@ ProjectileSpawnParams);
 }, .4f, false);
 }
 #+end_src
+
+** manual gc
+
+#+begin_src shell
+bool bForceGarbageCollectionPurge = true;
+GEngine->ForceGarbageCollection(bForceGarbageCollectionPurge);
+#+end_src
