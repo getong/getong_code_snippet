@@ -42,7 +42,7 @@ AGameStateBase -up-|> AInfo
 #+END_SRC
 
 #+RESULTS:
-[[file:./unreal_class.png]]
+[[file:./resource/unreal_class.png]]
 
 
 ** Actor, Pawn, Character difference
@@ -128,7 +128,7 @@ node "AActor" {
 #+end_src
 
 #+RESULTS:
-[[file:./unreal_class_instance.png]]
+[[file:./resource/unreal_class_instance.png]]
 
 
 
