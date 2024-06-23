@@ -11,3 +11,86 @@
 ** unreal third party doc
 
 [[https://dev.epicgames.com/documentation/en-us/unreal-engine/integrating-third-party-libraries-into-unreal-engine?application_version=5.4][Third-Party Libraries]]
+
+
+** unreal engine third party directory
+
+*** in macos
+#+begin_src shell
+$ ls /Users/Shared/Epic\ Games/UE_5.4/Engine/Source/ThirdParty
+ADO               DirectShow        Imath             Protobuf          asio              llvm
+AHEasing          Distorm           Intel             Python3           astcenc           metis
+AMD               DotNetZip         Kiss_FFT          RapidJSON         coremod           mimalloc
+ANGLE             EOSSDK            LibTiff           RawPDB            etc2comp          msdfgen
+ARM               Eigen             Licenses          Re2               fmt               nanoflann
+AVXMathFun        Expat             MaterialX         RenderDoc         heapprofd         nanosvg
+Alembic           FBX               MetalCPP          SDL2              hlslcc            nghttp2
+Android           Facebook          MikkTSpace        SPIRV-Reflect     http_parser       nvTextureTools
+AndroidPermission FakeIt            MsQuic            SSEMathFun        jemalloc          nvTriStrip
+Apple             FontConfig        NVIDIA            SentryNative      libJPG            nvtesslib
+AtomicQueue       ForsythTriOO      Oculus            ShaderConductor   libOpus           openexr
+AvidDNxHD         FreeImage         Ogg               SoundTouchZ       libPNG            portmidi
+BLAKE3            FreeType2         OneSky            SpeedTree         libPhonon         rpclib
+Blosc             GoogleARCore      OpenAL            Steamworks        libSampleRate     stb_image_resize
+Boost             GoogleGameSDK     OpenColorIO       Tencent           libWebSockets     vcpkg
+Breakpad          GoogleOboe        OpenGL            Unix              libcurl           xxhash
+CEF3              GoogleTest        OpenSSL           VHACD             libjpeg-turbo     zlib
+CLI11             HAPMedia          OpenSubdiv        Vorbis            libpas
+Catch2            HWCPipe           OpenVDB           Vulkan            libstrophe
+CryptoPP          HarfBuzz          OpenXR            WebRTC            libvpx
+Detours           ICU               PLCrashReporter   WiX               libxml2
+DirectML          IOS               Perforce          Windows           libzip
+
+$ ls
+#+end_src
+
+*** in archlinux
+
+#+begin_src shell
+$ ls /opt/unreal-engine/Engine/Source/ThirdParty
+ADO                CryptoPP       GoogleTest     LibTiff         OneSky           SpatialAudioClientInterop
+AHEasing           Detours        HAPMedia       libvpx          OpenAL           SpeedTree
+Alembic            DirectML       HarfBuzz       libWebSockets   OpenColorIO      SPIRV-Reflect
+AMD                DirectShow     heapprofd      libxml2         openexr          SSEMathFun
+Android            Distorm        hlslcc         libzip          OpenGL           stb_image_resize
+AndroidPermission  dlmalloc       http_parser    Licenses        OpenSSL          Steamworks
+ANGLE              DotNetZip      HWCPipe        Linux           OpenSubdiv       Tencent
+Apple              dr_libs        ICU            llvm            OpenVDB          Unix
+ARM                Eigen          Imath          MaterialX       OpenXR           vcpkg
+asio               EOSSDK         Intel          MetalCPP        Perforce         VHACD
+astcenc            etc2comp       IOS            metis           PhysX3           Vorbis
+AtomicQueue        Expat          jemalloc       MikkTSpace      PLCrashReporter  Vulkan
+AvidDNxHD          Facebook       Kiss_FFT       mimalloc        portmidi         WebRTC
+AVXMathFun         FakeIt         libav          msdfgen         Protobuf         Windows
+BLAKE3             fastJSON       libcurl        MsQuic          Python3          WinHttp
+Blosc              FBX            libjpeg-turbo  nanoflann       RapidJSON        WiX
+Boost              fmt            libJPG         nanosvg         RawPDB           xxhash
+Breakpad           FontConfig     libOpus        nghttp2         Re2              zlib
+BuildScripts       ForsythTriOO   libpas         NVIDIA          RenderDoc        zstd
+Catch2             FreeImage      libPhonon      nvtesslib       rpclib
+CEF3               FreeType2      libPNG         nvTextureTools  SDL2
+CLI11              GoogleARCore   LibreSSL       nvTriStrip      SentryNative
+CMake              GoogleGameSDK  libSampleRate  Oculus          ShaderConductor
+coremod            GoogleOboe     libstrophe     Ogg             SoundTouchZ
+#+end_src
+
+*** enable third party library
+
+for example, add boost in .Build.cs in your c++ project
+
+#+begin_src csharp
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+using UnrealBuildTool;
+
+public class GameTop : ModuleRules
+{
+        public GameTop(ReadOnlyTargetRules Target) : base(Target)
+        {
+                PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+    PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "NavigationSystem", "AIModule", "Niagara", "EnhancedInput", "Boost" });
+    }
+}
+
+#+end_src
