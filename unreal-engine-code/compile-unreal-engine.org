@@ -4,7 +4,7 @@
 :END:
 ** compile unreal engine on linux
 
-[[https://aur.archlinux.org/packages/unreal-engine-bin][unreal-engine-bin]] 5.4.1 does not work with [[https://github.com/adamrehn/ue4cli][ue4cli]]
+[[https://aur.archlinux.org/packages/unreal-engine-bin][unreal-engine-bin]] 5.4.2 does not work with [[https://github.com/adamrehn/ue4cli][ue4cli]]
 
 #+begin_src shell
 yay -S unreal-engine
@@ -46,12 +46,13 @@ prepare() {
 continue to run command:
 
 #+begin_src shell
+sudo yay -R unreal-engine
+sudo rm -rf /opt/unreal-engine
+
 cd ~/.cache/yay/unreal-engine
 updpkgsums
 makepkg --holdver
-sudo pacman -R unreal-engine
-sudo rm -rf /opt/unreal-engine
-sudo pacman -U --noconfirm unreal-engine-5.4.1-0-x86_64.pkg.tar.zst
+sudo pacman -U --noconfirm unreal-engine-5.4.2-0-x86_64.pkg.tar.zst
 
 sudo groupadd unrealengine-users
 sudo usermod -aG unrealengine-users ${USERNAME}
