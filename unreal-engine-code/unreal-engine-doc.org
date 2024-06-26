@@ -1,4 +1,4 @@
-* unreal engine cpp
+* unreal engine doc
 
 ** book code
 
@@ -7,3 +7,9 @@
 [[https://github.com/PacktPublishing/Unreal-Engine-5-Game-Development-with-C-Scripting][Unreal Engine 5 Game Development with C++ Scripting, published by Packt]]
 [[https://github.com/Italink/ModernGraphicsEngineGuide][ModernGraphicsEngineGuide]]
 [[https://dev.epicgames.com/documentation/zh-cn/unreal-engine/unreal-engine-cpp-programming-tutorials?application_version=5.4][C++ Programming Tutorials]]
+
+
+** online guide
+
+[[https://github.com/MrRobinOfficial/Guide-UnrealEngine][Guide-UnrealEngine]]
+[[https://github.com/mikeroyal/Unreal-Engine-Guide][Unreal-Engine-Guide]]
