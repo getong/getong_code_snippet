@@ -1,0 +1,16 @@
+* ncu
+
+** installation
+
+#+begin_src shell
+npm install -g npm-check-updates
+#+end_src
+
+** To upgrade dependencies, you just need to run:
+
+#+begin_src shell
+ncu --upgrade
+
+// or
+ncu -u
+#+end_src
