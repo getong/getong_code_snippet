@@ -1,0 +1,15 @@
+* pm2
+
+** installation
+
+#+begin_src shell
+$ npm install pm2@latest -g
+# or
+$ yarn global add pm2
+#+end_src
+
+** start app
+
+#+begin_src shell
+$ pm2 start app.js
+#+end_src
