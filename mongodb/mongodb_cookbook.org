@@ -216,7 +216,7 @@ db.createCollection("users", {capped:true, size: 16384, max: 100});
 :PROPERTIES:
 :CUSTOM_ID: renamecollection
 :END:
-#+begin_src javascript
+#+begin_src shell
 db.old_name.renameCollection("new_name");
 #+end_src
 
