@@ -1,0 +1,192 @@
+* object typescript
+
+** Inheritance in TypeScript
+
+#+begin_src typescript
+// Define the Person class with three properties: name, age, and address
+class Person {
+  protected name: string;
+  protected age: number;
+  protected address: string;
+
+  // Constructor function that takes three parameters and initializes the name, age, and address properties of the Person class
+  constructor(name: string, age: number, address: string ,phone : number, school: string) {
+    this.name = name;
+    this.age = age;
+    this.address = address;
+  }
+
+  // Getter function that returns the name property of the Person class
+
+  public getName(): string {
+    return this.name;
+  }
+
+  // Getter function that returns the age property of the Person class
+  public getAge(): number {
+    return this.age;
+  }
+
+  // Getter function that returns the address property of the Person class
+  public getAddress(): string {
+    return this.address;
+  }
+}
+
+// Define the Student class as a subclass of Person, with an additional property rollNo, phone  and school
+class Student extends Person {
+  private rollNo: number;
+
+  constructor(name: string, age: number, address: string, rollNo: number , phone: number, school: string) {
+    super(name, age, address);
+    this.rollNo = rollNo;
+    this.phone = phone;
+    this.school = school;
+  }
+
+  // Override the getName() method of Person to return the student's name and roll number
+  public getName(): string {
+    return `${this.name} your roll number is  ${this.rollNo}`;
+  }
+
+  // Define a method that returns the details of the student
+  public getDetails(): string {
+    return `Name: ${this.name}, Age: ${this.age}, Address: ${this.address}, Roll No: ${this.rollNo} , phone: ${this.phone} , school: ${this.school}`;
+  }
+}
+
+// Create an object of the Student class
+let student = new Student("Clifford", 25, "Ghana", 10, 0240000000, "AAMUSTED");
+
+console.log(student.getName()); // Output: clifford your roll number is 10
+console.log(student.getAge()); //  Output: 25
+console.log(student.getAddress()); // Output: Ghana
+console.log(student.getDetails()); // Output: Name: Clifford, Age: 25, Address: Ghana, Roll No: 10 , phone: 0240000000 , school: AAMUSTED
+#+end_src
+
+** Interfaces
+
+#+begin_src typescript
+
+// Define an interface Person with two properties: name and age
+interface Person {
+  name: string;
+  age: number;
+}
+
+// Define a function that takes an object of type Person as a parameter and returns a string
+function getDetails(person: Person): string {
+  return `Name: ${person.name}, Age: ${person.age}`;
+}
+
+// Create an object of type Person
+let person = { name: "John", age: 25 };
+console.log(getDetails(person)); // Output: Name: John, Age: 25
+#+end_src
+
+** Abstract Classes
+
+#+begin_src typescript
+// Define an abstract class Animal with an abstract method makeSound and a concrete method move
+abstract class Animal {
+  abstract makeSound(): void;
+
+//  concrete method
+  move(): void {
+    console.log("Moving...");
+  }
+}
+
+// Define a class Dog that extends the Animal class and implements the makeSound method
+class Dog extends Animal {
+  makeSound(): void {
+    console.log("Woof!");
+  }
+}
+
+// Create an instance of the Dog class and call its makeSound and move methods
+let dog = new Dog();
+dog.makeSound(); // Output: Woof!
+dog.move(); // Output: Moving...
+#+end_src
+
+** Generics
+
+#+begin_src typescript
+// Define a generic function reverse that takes an array of type T and returns an array of type T
+function reverse<T>(list: T[]): T[] {
+  return list.reverse();
+}
+
+// Create two arrays of type string and type number and pass them to the reverse function
+let names = ["John", "Mary", "Joe"];
+let reversedNames = reverse(names);
+console.log(reversedNames); // Output: ["Joe", "Mary", "John"]
+
+// Create two arrays of type string and type number and pass them to the reverse function
+let numbers = [1, 2, 3, 4, 5];
+let reversedNumbers = reverse(numbers);
+console.log(reversedNumbers); // Output: [5, 4, 3, 2, 1]
+#+end_src
+
+** Abstraction in TypeScript
+
+#+begin_src typescript
+// This is an abstract class called Person that contains private properties name, age, and address,
+// and methods getName(), getAge(), and getAddress(). It also contains an abstract method getDetails(),
+// which is implemented by its subclass Student.
+
+abstract class Person {
+  private name: string;
+  private age: number;
+  private address: string;
+
+  constructor(name: string, age: number, address: string) {
+    this.name = name;
+    this.age = age;
+    this.address = address;
+  }
+
+  public getName(): string {
+    return this.name;
+  }
+
+  public getAge(): number {
+    return this.age;
+  }
+
+  public getAddress(): string {
+    return this.address;
+  }
+
+  abstract getDetails(): string;
+}
+
+// This is a subclass called Student that extends the Person class.
+// It contains a private property rollNo and methods getRollNo() and getDetails(),
+// which implement the abstract method getDetails() of the Person class.
+
+class Student extends Person {
+  private rollNo: number;
+
+  constructor(name: string, age: number, address: string, rollNo: number) {
+    super(name, age, address);
+    this.rollNo = rollNo;
+  }
+
+  public getRollNo(): number {
+    return this.rollNo;
+  }
+
+  public getDetails(): string {
+    return `${this.getName()} ${this.getAge()} ${this.getAddress()} ${this.getRollNo()}`;
+  }
+}
+
+// This creates a new object of the Student class and calls its getDetails() method.
+
+let student = new Student("John", 25, "USA", 1);
+console.log(student.getDetails()); // Output: John 25 USA 1
+#+end_src
+
+copy from [[https://dev.to/cliff123tech/oop-typescript-jk4][Object Oriented Programming with Typescript]]
