@@ -150,3 +150,73 @@ JavaScript 数据类型目前是有 8 种，在大的方向可以分为两种，
 引用类型统称为 object 类型，细分的话有：Object 类型、Array 类型、Date 类型、RegExp 类型、Function 类型 等。
 
 copy from [[https://juejin.cn/post/7033283459929866270][JS中8种数据类型、4种类型检测方法总结]]
+
+
+** object data type
+
+#+begin_src typescript
+class Example {
+    // 函数普通参数的传递
+    public useBaseFunction(num: number, str: string, bChange: boolean) {
+        num = 10;
+        str = "new";
+        bChange = true;
+        // 基本类型参数传递的时候.复制栈帧的拷贝动作,外部变量和形参是两个不同的地址,只是复制了对应的值
+    }
+
+    // 函数引用参数的传递
+    public useSpecialFunction(obj: { name: string }, list: number[]) {
+        obj.name = "change";
+        list.push(99);
+        // 引用类型参数传递的时候,由于本身存储的值是地址,因此传递的过程中把地址传递到函数中,引用类型的参数内容地址的内容发生改变
+        // 原有的值也因此被改变
+    }
+
+    // 函数引用参数的传递并重新赋值
+    public newSpecialFunction(obj: { name: string }) {
+        obj.name = "change";
+        obj = { name: "new" };
+        // 同理,引用类型参数传递的时候,对象的内容发生改变;而此时对象整个被新的对象赋值了,此时,新的对象的地址发生了改变,但是不影响此前原有地址内容的变化.
+    }
+}
+
+let example = new Example();
+
+// 对象赋值的行为
+let obj = { name: "1" };
+let copyObj = obj;
+
+obj.name = "2";
+
+console.log(copyObj.name); // 2
+
+// 函数普通参数的传递
+let num = 1;
+let str = "str";
+let bChange = false;
+example.useBaseFunction(num, str, bChange);
+console.log(num); // 1
+console.log(str); // str
+console.log(bChange); // false
+
+// 函数引用参数的传递
+let objUseSpecail = { name: "spe" };
+let list = [1, 2, 3, 4];
+example.useSpecialFunction(objUseSpecail, list);
+console.log(objUseSpecail.name); // change
+console.log(list.toString()); // "1,2,3,4,99"
+
+// 函数引用参数的传递并重新赋值
+let newObj = { name: "newObj" };
+example.newSpecialFunction(newObj);
+console.log(newObj.name); // change
+#+end_src
+
+#+RESULTS:
+: 2
+: 1
+: str
+: false
+: change
+: 1,2,3,4,99
+: change
