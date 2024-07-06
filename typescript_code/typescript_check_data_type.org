@@ -142,6 +142,11 @@ console.log(test.call({}))
 [object Object]
 #+end_example
 
-Js中常用的引用类型有：Object，Array ，Function， Date， RegExp等
+JavaScript 数据类型目前是有 8 种，在大的方向可以分为两种，一种是基本类型，另外一种是引用类型。
+
+基本类型
+基本类型也称为原始数据类型，基本数据类型有 7 种，number、string、boolean、null、undefined，symbol(ES6)，bigint(ES10)
+引用类型
+引用类型统称为 object 类型，细分的话有：Object 类型、Array 类型、Date 类型、RegExp 类型、Function 类型 等。
 
 copy from [[https://juejin.cn/post/7033283459929866270][JS中8种数据类型、4种类型检测方法总结]]
