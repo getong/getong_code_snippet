@@ -1,0 +1,147 @@
+* typescript check data type
+
+** typeof
+
+#+begin_src typescript
+// 基本类型
+console.log(typeof "");
+console.log(typeof 1);
+console.log(typeof true);
+console.log(typeof undefined);
+console.log(typeof null); // object---有点儿特殊，见下
+console.log(typeof Symbol('id'))
+console.log(typeof 9007199254740999n)
+console.log(typeof BigInt(9007199254740999))
+
+// 引用类型
+console.log(typeof []);
+console.log(typeof function(){});
+console.log(typeof {});
+#+end_src
+
+#+RESULTS:
+#+begin_example
+string
+number
+boolean
+undefined
+object
+symbol
+bigint
+bigint
+object
+function
+object
+#+end_example
+
+
+** instanceof
+
+#+begin_src typescript
+// 基本类型
+console.log('1' instanceof String)
+console.log(1 instanceof Number)
+console.log(true instanceof Boolean)
+
+// console.log(undefined instanceof undefined)
+      // Uncaught TypeError: Right-hand side of 'instanceof' is not an object
+// console.log(null instanceof null)
+      // Uncaught TypeError: Right-hand side of 'instanceof' is not an object
+
+console.log(typeof Symbol('id') instanceof Symbol)
+console.log(typeof 9007199254740999n instanceof BigInt)
+console.log(typeof BigInt(9007199254740999) instanceof BigInt)
+
+// 引用类型
+console.log([] instanceof Array)
+console.log(function () {} instanceof Function)
+console.log({} instanceof Object)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+false
+false
+false
+false
+false
+false
+true
+true
+true
+#+end_example
+
+** constructor
+
+#+begin_src typescript
+// 基本类型
+console.log('1'.constructor === String)
+console.log((1).constructor === Number)
+console.log(true.constructor === Boolean)
+// console.log(undefined.constructor === undefined)
+     // Uncaught TypeError: Cannot read properties of undefined (reading 'constructor')
+// console.log(null.constructor === null)
+     // Uncaught TypeError: Cannot read properties of undefined (reading 'constructor')
+console.log(Symbol('id').constructor === Symbol)
+console.log(9007199254740999n.constructor === BigInt)
+console.log(BigInt(9007199254740999).constructor === BigInt)
+
+// 引用类型
+console.log([].constructor === Array)
+console.log(function () {}.constructor === Function)
+console.log({}.constructor === Object)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+true
+true
+true
+true
+true
+true
+true
+true
+true
+#+end_example
+
+** Object.prototype.toString.call()
+
+#+begin_src typescript
+let test = Object.prototype.toString
+
+// 基本类型
+console.log(test.call('str'))
+console.log(test.call(1))
+console.log(test.call(true))
+console.log(test.call(null))
+console.log(test.call(undefined))
+
+console.log(test.call(Symbol('id')))
+console.log(test.call(9007199254740999n))
+console.log(test.call(BigInt(9007199254740999)))
+
+// 引用类型
+console.log(test.call([]))
+console.log(test.call(function () {}))
+console.log(test.call({}))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[object String]
+[object Number]
+[object Boolean]
+[object Null]
+[object Undefined]
+[object Symbol]
+[object BigInt]
+[object BigInt]
+[object Array]
+[object Function]
+[object Object]
+#+end_example
+
+Js中常用的引用类型有：Object，Array ，Function， Date， RegExp等
+
+copy from [[https://juejin.cn/post/7033283459929866270][JS中8种数据类型、4种类型检测方法总结]]
