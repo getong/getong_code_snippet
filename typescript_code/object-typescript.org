@@ -190,3 +190,45 @@ console.log(student.getDetails()); // Output: John 25 USA 1
 #+end_src
 
 copy from [[https://dev.to/cliff123tech/oop-typescript-jk4][Object Oriented Programming with Typescript]]
+
+
+** javascript object vs typescript object
+
+#+begin_src typescript
+var sites = {
+   site1:"Runoob",
+   site2:"Google"
+};
+
+sites.sayHello = function(){ return "hello";}
+#+end_src
+
+But Typescript cannot do this:
+
+#+begin_src typescript
+var sites = {
+    site1: "Runoob",
+    site2: "Google",
+    sayHello: function () { } // 类型模板
+};
+sites.sayHello = function () {
+    console.log("hello " + sites.site1);
+};
+sites.sayHello();
+#+end_src
+
+only Typescript can do this:
+
+#+begin_src typescript
+var sites = {
+    site1: "Runoob",
+    site2: "Google",
+    sayHello: function () { } // 类型模板
+};
+sites.sayHello = function () {
+    console.log("hello " + sites.site1);
+};
+sites.sayHello();
+#+end_src
+
+copy from [[TypeScript 对象][https://www.runoob.com/typescript/ts-object.html]]
