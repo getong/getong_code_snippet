@@ -65,3 +65,11 @@ sudo update-alternatives --config java
 Note that, =/usr/local/jdk1.8.0_131/bin/java= is my local install dir, change as your install dir.
 
 More than java, this might be apply to many other softwares.
+
+
+** jdtls
+
+*** macos
+#+begin_src shell
+brew install jdtls
+#+end_src
