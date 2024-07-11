@@ -1,0 +1,101 @@
+* laya java js
+
+** js call java
+
+java code, JSbridge.java
+
+#+begin_src java
+package demo;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+
+public class JSBridge {
+    public static Handler m_Handler = new Handler(Looper.getMainLooper());
+    public static Activity mMainActivity = null;
+
+    public static void setTips(final JSONArray tips) {
+        m_Handler.post(
+                new Runnable() {
+                    public void run() {
+                        try {
+                            String[] tipsArray = new String[tips.length()];
+                            for (int i = 0; i < tips.length(); i++) {
+                                tipsArray[i] = tips.getString(i);
+                            }
+                            MainActivity.mSplashDialog.setTips(tipsArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+    public static void bgColor(final String color) {
+        m_Handler.post(
+                new Runnable() {
+                    public void run() {
+                        MainActivity.mSplashDialog.setBackgroundColor(Color.parseColor(color));
+                    }
+                });
+    }
+
+    public static void loading(final double percent) {
+        m_Handler.post(
+                new Runnable() {
+                    public void run() {
+                        MainActivity.mSplashDialog.setPercent((int)percent);
+                    }
+                });
+    }
+
+    public static void showTextInfo(final boolean show) {
+        m_Handler.post(
+                new Runnable() {
+                    public void run() {
+                        MainActivity.mSplashDialog.showTextInfo(show);
+                    }
+                });
+    }
+}
+
+#+end_src
+
+js call code snippet:
+
+#+begin_src js
+class loadingView
+{
+    constructor()
+    {
+        this.sOS = conchConfig.getOS();
+        if (this.sOS == "Conch-ios")
+        {
+            this.bridge = PlatformClass.createClass("JSBridge");
+        }
+        else if (this.sOS == "Conch-android")
+        {
+            this.bridge = PlatformClass.createClass("demo.JSBridge");
+        }
+    }
+}
+window.loadingView = new loadingView();
+if(window.loadingView)
+{
+    window.loadingView.setTips(["a","b","c"]);
+}
+#+end_src
+
+** java call js
+
+#+begin_src java
+//注意：参数内的js方法也必须定义成静态方法，否则会报undefined错误
+ConchJNI.RunJS("common.Utils.revive()");
+#+end_src
+
+copy from [[https://layaair.com/3.x/doc/released/native/Secondary_Development/readme.html][用反射机制实现二次开发]]
