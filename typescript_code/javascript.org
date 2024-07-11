@@ -6,7 +6,7 @@
 :PROPERTIES:
 :CUSTOM_ID: make-http-request
 :END:
-#+begin_src javascript
+#+begin_src js
 const Http = new XMLHttpRequest();
 const url='https://jsonplaceholder.typicode.com/posts';
 Http.open("GET", url);
@@ -40,7 +40,7 @@ JavaScript]]
 :PROPERTIES:
 :CUSTOM_ID: code-example
 :END:
-#+begin_src javascript
+#+begin_src js
 typeof(null) === 'object'
 Number("100")
 String(100)
