@@ -48,6 +48,12 @@ copy from [[https://www.lewuathe.com/macos-monterey-does-not-find-hhkb-for-bluet
 ** other connect key
 
 #+begin_src
+1.按下Fn+Q，蓝灯闪烁，进入配对模式
+2.按Fn+contro+1、2、3、4（四选一），为当前匹配设备指定序号（必须进行这一步）
+3.电脑端蓝牙搜索设备，出现HHKB键盘信息后点连接
+4.输入屏幕显示的PIN码后按回车
+
+
 键盘开机
 按住Fn + Q进入配对模式, 表现为蓝色的灯一直闪烁
 再按住Fn + Z + ~键清空键盘蓝牙配对信息, 键盘会自动关闭, 灯会变成橙色
@@ -56,3 +62,5 @@ copy from [[https://www.lewuathe.com/macos-monterey-does-not-find-hhkb-for-bluet
 #+end_src
 
 [[file:./hhkb-bluetooth-match-fix.png]]
+
+copy from [[https://www.jianshu.com/p/7ec2769f6640][如何连接HHKB键盘（ Type-s双模静音版）]]
