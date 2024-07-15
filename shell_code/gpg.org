@@ -52,9 +52,7 @@ gpg --import private.key
 gpg --edit-key {KEY} trust quit
 #+end_example
 
-copy from
-[[https://unix.stackexchange.com/questions/184947/how-to-import-secret-gpg-key-copied-from-one-machine-to-another][How
-to import secret gpg key (copied from one machine to another)?]]
+copy from [[https://unix.stackexchange.com/questions/184947/how-to-import-secret-gpg-key-copied-from-one-machine-to-another][How to import secret gpg key (copied from one machine to another)?]]
 
 ** gpg Inappropriate ioctl for device
 :PROPERTIES:
@@ -67,9 +65,7 @@ echo "use-agent
 pinentry-mode loopback" >> ~/.gnupg/gpg.conf
 #+end_src
 
-copy from
-[[https://blog.csdn.net/wenbo20182/article/details/72850810][gpg:
-签名时失败处理]]
+copy from [[https://blog.csdn.net/wenbo20182/article/details/72850810][gpg: 签名时失败处理]]
 
 ** set the gpg key pasword ttl
 :PROPERTIES:
@@ -79,17 +75,13 @@ copy from
 echo "default-cache-ttl 36000" >> ~/.gnupg/gpg-agent.conf
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/36847431/remember-gpg-password-when-signing-git-commits][Remember
-GPG password when signing git commits]]
+copy from [[https://stackoverflow.com/questions/36847431/remember-gpg-password-when-signing-git-commits][Remember GPG password when signing git commits]]
 
 ** use console-based prompt and reload gpg setting
 :PROPERTIES:
 :CUSTOM_ID: use-console-based-prompt-and-reload-gpg-setting
 :END:
-copy from
-[[https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords][How
-to force GPG to use console-mode pinentry to prompt for passwords?]]
+copy from [[https://superuser.com/questions/520980/how-to-force-gpg-to-use-console-mode-pinentry-to-prompt-for-passwords][How to force GPG to use console-mode pinentry to prompt for passwords?]]
 
 #+begin_src shell
 echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
@@ -115,6 +107,4 @@ gpg --list-keys
 gpg --delete-keys xxxxx-keys
 #+end_src
 
-copy from
-[[https://superuser.com/questions/1388426/unable-to-delete-private-subkeys-in-gnupg-if-no-master-key-present][Unable
-to delete private subkeys in GnuPG if no master key present]]
+copy from [[https://superuser.com/questions/1388426/unable-to-delete-private-subkeys-in-gnupg-if-no-master-key-present][Unable to delete private subkeys in GnuPG if no master key present]]
