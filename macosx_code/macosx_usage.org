@@ -335,3 +335,7 @@ ALL_PROXY=socks5://127.0.0.1:10808 brew upgrade
 #+begin_src shell
 sudo spctl --master-disable
 #+end_src
+
+** swap caps & ctrl in macos
+System Settings -> Keyboard -> Keyboard Shortcuts -> Modifier Keys
+[[file:./pics/swap-caps-ctrl.png]]
