@@ -339,3 +339,18 @@ sudo spctl --master-disable
 ** swap caps & ctrl in macos
 System Settings -> Keyboard -> Keyboard Shortcuts -> Modifier Keys
 [[file:./pics/swap-caps-ctrl.png]]
+
+** enable boot with power on
+
+#+begin_src shell
+sudo nvram AutoBoot=%00
+sudo pmset autorestart 1
+#+end_src
+
+** enable boot as normal
+
+#+begin_src shell
+sudo nvram AutoBoot=%03
+
+sudo pmset autorestart 0
+#+end_src
