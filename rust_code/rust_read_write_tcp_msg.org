@@ -1,0 +1,80 @@
+* rust read write tcp msg
+
+#+begin_src rust
+let a = async move {
+        loop {
+            match self_receiver.recv().await {
+                Some(msg) => {
+                    let is_close = match msg {
+                        EndpointMessage::Close => true,
+                        _ => false,
+                    };
+
+                    let bytes = msg.to_bytes();
+                    if writer
+                        .write(&(bytes.len() as u32).to_be_bytes())
+                        .await
+                        .is_ok()
+                    {
+                        let _ = writer.write_all(&bytes[..]).await;
+                    }
+
+                    if is_close {
+                        break;
+                    }
+                }
+                None => break,
+            }
+        }
+
+        Err::<(), ()>(())
+    };
+
+    let b = async move {
+        let mut read_len = [0u8; 4];
+        let mut received: usize = 0;
+
+        loop {
+            match reader.read(&mut read_len).await {
+                Ok(size) => {
+                    if size == 0 {
+                        // when close or better when many Ok(0)
+                        let _ = out_sender.send(EndpointMessage::Close).await;
+                        break;
+                    }
+
+                    let len: usize = u32::from_be_bytes(read_len) as usize;
+                    let mut read_bytes = vec![0u8; len];
+                    while let Ok(bytes_size) = reader.read(&mut read_bytes[received..]).await {
+                        received += bytes_size;
+                        if received > len {
+                            break;
+                        }
+
+                        if received != len {
+                            continue;
+                        }
+
+                        if let Ok(msg) = EndpointMessage::from_bytes(read_bytes) {
+                            let _ = out_sender.send(msg).await;
+                        }
+
+                        break;
+                    }
+                    read_len = [0u8; 4];
+                    received = 0;
+                }
+                Err(_e) => {
+                    let _ = out_sender.send(EndpointMessage::Close).await;
+                    break;
+                }
+            }
+        }
+
+        Err::<(), ()>(())
+    };
+
+    let _ = join!(a, b);
+#+end_src
+
+copy from chamomile
