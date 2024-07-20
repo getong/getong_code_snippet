@@ -472,3 +472,11 @@ rustup default 1.74
 rustup default stable
 
 #+end_src
+
+** cargo feature
+
+#+begin_src shell
+cargo install cargo-feature
+cargo add libp2p
+cargo feature libp2p +tokio +macros +tls +tcp +noise
+#+end_src
