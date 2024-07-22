@@ -1,0 +1,22 @@
+* clash-verge-rev
+
+** installation
+
+#+begin_src shell
+brew install clash-verge-rev
+#+end_src
+
+** use with terminal
+
+#+begin_src shell
+$ cat ~/.zshrc
+enable_proxy(){
+  export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
+}
+
+disable_proxy(){
+  unset https_proxy http_proxy all_proxy
+}
+#+end_src
+
+The _http_proxy_ is copied from clash-verge-rev environment variable.
