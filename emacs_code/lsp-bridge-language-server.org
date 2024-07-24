@@ -21,6 +21,8 @@ copy from [[https://emacs-china.org/t/lsp-bridge/20786/2996][lsp-bridge – 速�
 *** python language server
 #+begin_src shell
 brew install pyright pyenv ruff-lsp
+
+pip3 install --break-system-packages basedpyright
 #+end_src
 
 *** kotlin language server
