@@ -1,0 +1,37 @@
+* rust hex operation
+
+#+begin_src rust
+use sha3::{Digest, Keccak256};
+pub fn from_hex(s: &str) -> Result<PeerId> {
+  let raw = if s.starts_with("0x") { &s[2..] } else { s };
+  let bytes = hex::decode(raw).map_err(|_| new_io_error("Invalid hex string"))?;
+  if bytes.len() != PEER_ID_LENGTH {
+    return Err(new_io_error("Invalid address length"));
+  }
+  let mut fixed_bytes = [0u8; PEER_ID_LENGTH];
+  fixed_bytes.copy_from_slice(&bytes);
+  Ok(PeerId(fixed_bytes))
+}
+
+pub fn to_hex(&self) -> String {
+  // with checksum encode
+  let hex = hex::encode(self.0);
+
+  let mut hasher = Keccak256::new();
+  hasher.update(hex.as_bytes());
+  let hash = hasher.finalize();
+  let check_hash = hex::encode(&hash);
+
+  let mut res = String::from("0x");
+  for (index, byte) in hex[..PEER_ID_LENGTH * 2].chars().enumerate() {
+    if check_hash.chars().nth(index).unwrap().to_digit(16).unwrap() > 7 {
+      res += &byte.to_uppercase().to_string();
+    } else {
+      res += &byte.to_string();
+    }
+  }
+  res
+}
+#+end_src
+
+copy from chamomile_types
