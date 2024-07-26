@@ -3,7 +3,7 @@
 ** python china mirror
 
 #+begin_src sh
-pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/
+pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/
 #+end_src
 
 copy from https://gist.github.com/schnell18/d0ed716917905d2c142a370906cfa32f
