@@ -5,6 +5,7 @@
 *** linux
 
 #+begin_src shell
+sudo apt install python3-pip
 pip3 install epc orjson sexpdata six paramiko
 #+end_src
 

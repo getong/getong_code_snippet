@@ -275,3 +275,12 @@ Then in emacs
 m-x straight-rebuild-package
 magit
 #+end_quote
+
+
+** ubuntu install emacs-snapshot
+
+#+begin_src shell
+sudo apt-add-repository ppa:ubuntu-elisp/ppa
+sudo apt update
+sudo apt install emacs-snapshot
+#+end_src
