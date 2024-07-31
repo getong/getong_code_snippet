@@ -159,3 +159,55 @@ Function-like macros — custom!(…)
 Derive macros — #[derive(CustomDerive)]
 Attribute macros — #[CustomAttribute]
 #+end_src
+
+** use macro to add dynamic function
+
+#+begin_src rust
+#[inline]
+fn contract_parse(name: &str, file: &str, network: Network) -> Result<(Abi, Address), ()> {
+    let address: Value = serde_json::from_str(network.address()).map_err(|_| ())?;
+    let (ctype, name) = if name.starts_with("Root") {
+        ("root", name.trim_start_matches("Root"))
+    } else {
+        ("child", name)
+    };
+    let contract_address: Address = address[ctype][name]["address"]
+        .as_str()
+        .ok_or(())?
+        .parse()
+        .map_err(|_| ())?;
+
+    let abi: Abi = serde_json::from_str(file).map_err(|_| ())?;
+    Ok((abi, contract_address))
+}
+
+macro_rules! contract {
+    ($func_name:ident,$name:expr,$abi:expr) => {
+        paste::item! {
+            pub fn [< $func_name _parse >] (network: Network) -> Result<(Abi, Address), ()> {
+                contract_parse($name, $abi, network)
+            }
+
+            pub fn $func_name<M: Middleware>(
+                client: Arc<M>,
+                network: Network,
+            ) -> Result<Contract<M>, ()> {
+                let (abi, contract) = [< $func_name _parse >](network)?;
+                Ok(Contract::new(contract, abi, client))
+            }
+        }
+    };
+}
+
+// root
+contract!(
+    root_proxy_admin,
+    "RootProxyAdmin",
+    include_str!("../publish/ABI/ProxyAdmin.json")
+);
+#+end_src
+
+The macro `contract!` adds dynamic function to current module.
+In this code, you can use the `root_proxy_admin` function in this module.
+
+copy from https://github.com/subquery/network-contracts
