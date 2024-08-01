@@ -12,7 +12,9 @@ pip3 install epc orjson sexpdata six paramiko
 ** macos
 
 #+begin_src shell
-pip3 install --break-system-packages epc orjson sexpdata six paramiko
+pip3 install --break-system-packages --upgrade epc orjson sexpdata six paramiko
+
+python3.12 -m pip install --break-system-packages --upgrade pip
 #+end_src
 
 copy from [[https://emacs-china.org/t/lsp-bridge/20786/2996][lsp-bridge – 速度最快的语法补全插件]]
