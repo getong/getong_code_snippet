@@ -75,3 +75,8 @@ copy from [[https://github.com/manateelazycat/lsp-bridge][lsp-bridge]]
    3.1 在这时就要输入 ssh 到远程服务器的密码了，然后 lsp-bridge 就启动正常了。
    3.2 最初那个sshx 打开的文件，关闭后重新打开，也正常了。
 #+end_quote
+
+** rust package open error
+
+Sometimes, lsp-bridge does not open the rust package properly.
+But it opens it with `lib.rs` file, and then open the other rust file, it will reconized properly.
