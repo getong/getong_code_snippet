@@ -387,3 +387,56 @@ impl<P: Provider + Sync> Relay<P> {
 #+end_src
 
 copy from https://github.com/dojoengine/dojo
+
+** tcp and quic config
+
+#+begin_src rust
+pub async fn init_swarm() -> Result<Swarm<chain::Behaviour>, Box<dyn SError>> {
+    let auth_keys = gen_ed25519(0);
+    let mut swarm = libp2p::SwarmBuilder::with_existing_identity(auth_keys.clone())
+        .with_tokio()
+        .with_tcp(tcp::Config::default()
+                .nodelay(true)
+                .port_reuse(true)
+        , noise::Config::new, yamux::Config::default)?
+        .with_quic()
+        .with_other_transport(|k| {
+            let nc = noise::Config::new(k).unwrap();
+            let yc: libp2p::yamux::Config = libp2p::yamux::Config::default();
+            let tc = tcp::Config::default()
+                .port_reuse(false)
+                .nodelay(true);
+            tcp::tokio::Transport::new(tc)
+                .upgrade(Version::V1Lazy)
+                .authenticate(nc)
+                .multiplex(yc)
+        })?
+        .with_other_transport(|k| {
+            tcp::tokio::Transport::new(tcp::Config::default()
+                .port_reuse(false)
+                .nodelay(true)
+            )
+                .upgrade(Version::V1)
+                .authenticate(noise::Config::new(k).unwrap())
+                .multiplex(yamux::Config::default())
+        })?
+        .with_dns()?
+        .with_relay_client(noise::Config::new, yamux::Config::default)?
+        .with_behaviour(|k, relay_behaviour| chain::Behaviour::from(k.clone()))?
+        .with_swarm_config(|c| c.with_idle_connection_timeout(Duration::from_secs(5)))
+        .build();
+    swarm.behaviour_mut()
+        .kad
+        .set_mode(Some(libp2p::kad::Mode::Server));
+    let gst = gossipsub::IdentTopic::new("test-net");
+    let fst = floodsub::Topic::new("chain");
+    swarm.behaviour_mut().fs.subscribe(fst);
+    swarm.behaviour_mut().gs.subscribe(&gst)?;
+    // let mut stdin = std::io::BufReader::new(std::io::stdin()).lines();
+
+
+    Ok(swarm)
+}
+#+end_src
+
+copy from https://github.com/clpi/mbc
