@@ -273,3 +273,117 @@ pub fn create_transport(
 #+end_src
 
 copy from https://github.com/filecoin-station/zinnia
+
+
+** libp2p with_other_transport usage
+
+#+begin_src rust
+#[allow(missing_debug_implementations)]
+pub struct Relay<P: Provider + Sync> {
+  swarm: Swarm<Behaviour>,
+  db: Sql,
+  provider: Box<P>,
+}
+
+impl<P: Provider + Sync> Relay<P> {
+  pub fn new(
+    pool: Sql,
+    provider: P,
+    port: u16,
+    port_webrtc: u16,
+    local_key_path: Option<String>,
+    cert_path: Option<String>,
+  ) -> Result<Self, Error> {
+    let local_key = if let Some(path) = local_key_path {
+      let path = Path::new(&path);
+      read_or_create_identity(path).map_err(Error::ReadIdentityError)?
+    } else {
+      identity::Keypair::generate_ed25519()
+    };
+
+    let cert = if let Some(path) = cert_path {
+      let path = Path::new(&path);
+      read_or_create_certificate(path).map_err(Error::ReadCertificateError)?
+    } else {
+      Certificate::generate(&mut thread_rng()).unwrap()
+    };
+
+    info!(target: LOG_TARGET, peer_id = %PeerId::from(local_key.public()), "Relay peer id.");
+
+    let mut swarm = libp2p::SwarmBuilder::with_existing_identity(local_key)
+      .with_tokio()
+      .with_tcp(tcp::Config::default(), noise::Config::new, yamux::Config::default)?
+      .with_quic()
+      .with_other_transport(|key| {
+        Ok(webrtc::tokio::Transport::new(key.clone(), cert)
+           .map(|(peer_id, conn), _| (peer_id, StreamMuxerBox::new(conn))))
+      })
+      .expect("Failed to create WebRTC transport")
+      .with_behaviour(|key| {
+        // Hash messages by their content. No two messages of the same content will be
+        // propagated.
+        let _message_id_fn = |message: &gossipsub::Message| {
+          let mut s = DefaultHasher::new();
+          message.data.hash(&mut s);
+          gossipsub::MessageId::from(s.finish().to_string())
+        };
+        let gossipsub_config = gossipsub::ConfigBuilder::default()
+          .heartbeat_interval(Duration::from_secs(constants::GOSSIPSUB_HEARTBEAT_INTERVAL_SECS)) // This is set to aid debugging by not cluttering the log space
+          .validation_mode(gossipsub::ValidationMode::Strict) // This sets the kind of message validation. The default is Strict (enforce message signing)
+        // TODO: Use this once we incorporate nonces in the message model?
+        // .message_id_fn(message_id_fn) // content-address messages. No two messages of the same content will be propagated.
+          .build()
+          .map_err(|msg| io::Error::new(io::ErrorKind::Other, msg)).unwrap(); // Temporary hack because `build` does not return a proper `std::error::Error`.
+
+        Behaviour {
+          relay: relay::Behaviour::new(key.public().to_peer_id(), Default::default()),
+          ping: ping::Behaviour::new(ping::Config::new()),
+          identify: identify::Behaviour::new(identify::Config::new(
+            "/torii-relay/0.0.1".to_string(),
+            key.public(),
+          )),
+          gossipsub: gossipsub::Behaviour::new(
+            gossipsub::MessageAuthenticity::Signed(key.clone()),
+            gossipsub_config,
+          )
+            .unwrap(),
+        }
+      })?
+      .with_swarm_config(|cfg| {
+        cfg.with_idle_connection_timeout(Duration::from_secs(
+          constants::IDLE_CONNECTION_TIMEOUT_SECS,
+        ))
+      })
+      .build();
+
+    // TCP
+    let listen_addr_tcp = Multiaddr::from(Ipv4Addr::UNSPECIFIED).with(Protocol::Tcp(port));
+    swarm.listen_on(listen_addr_tcp.clone())?;
+
+    // UDP QUIC
+    let listen_addr_quic =
+      Multiaddr::from(Ipv4Addr::UNSPECIFIED).with(Protocol::Udp(port)).with(Protocol::QuicV1);
+    swarm.listen_on(listen_addr_quic.clone())?;
+
+    // WebRTC
+    let listen_addr_webrtc = Multiaddr::from(Ipv4Addr::UNSPECIFIED)
+      .with(Protocol::Udp(port_webrtc))
+      .with(Protocol::WebRTCDirect);
+    swarm.listen_on(listen_addr_webrtc.clone())?;
+
+    // Clients will send their messages to the "message" topic
+    // with a room name as the message data.
+    // and we will forward those messages to a specific room - in this case the topic
+    // along with the message data.
+    swarm
+      .behaviour_mut()
+      .gossipsub
+      .subscribe(&IdentTopic::new(constants::MESSAGING_TOPIC))
+      .unwrap();
+
+    Ok(Self { swarm, db: pool, provider: Box::new(provider) })
+  }
+}
+#+end_src
+
+copy from https://github.com/dojoengine/dojo
