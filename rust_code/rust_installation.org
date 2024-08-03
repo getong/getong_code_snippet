@@ -480,3 +480,17 @@ cargo install cargo-feature
 cargo add libp2p
 cargo feature libp2p +tokio +macros +tls +tcp +noise
 #+end_src
+
+** cargo fmt
+
+#+begin_src shell
+mkdir -p ~/.config/rustfmt
+touch ~/.config/rustfmt/rustfmt.toml
+echo -e "\nformat_strings = true" >> ~/.config/rustfmt/rustfmt.toml
+echo -e "\nedition = "2021"" >> ~/.config/rustfmt/rustfmt.toml
+echo -e "\ntab_spaces = 2" >> ~/.config/rustfmt/rustfmt.toml
+echo -e "\nspaces_around_ranges = true" >> ~/.config/rustfmt/rustfmt.toml
+cargo fmt
+#+end_src
+
+copy from https://github.com/rust-lang/rust-analyzer/issues/10818
