@@ -494,3 +494,10 @@ cargo fmt
 #+end_src
 
 copy from https://github.com/rust-lang/rust-analyzer/issues/10818
+
+** cargo sort
+
+#+begin_src shell
+cargo install cargo-sort
+cargo sort
+#+end_src
