@@ -1,0 +1,41 @@
+* rust panic
+
+** set_panic_hook code example
+
+#+begin_src rust
+pub fn set_panic_hook() {
+    let prev_hook = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |panic| {
+        log_panic(panic);
+        prev_hook(panic);
+    }));
+}
+
+pub fn log_panic(panic: &PanicInfo) {
+    let backtrace = {
+        #[cfg(feature = "bt")]
+        {
+            format!("{:?}", Backtrace::force_capture())
+        }
+
+        #[cfg(not(feature = "bt"))]
+        {
+            "backtrace is disabled without --features 'bt'".to_string()
+        }
+    };
+
+    if let Some(location) = panic.location() {
+        tracing::error!(
+            message = %panic.to_string().replace('\n', " "),
+            backtrace = %backtrace,
+            panic.file = location.file(),
+            panic.line = location.line(),
+            panic.column = location.column(),
+        );
+    } else {
+        tracing::error!(message = %panic.to_string().replace('\n', " "), backtrace = %backtrace);
+    }
+}
+#+end_src
+
+copy from openraft
