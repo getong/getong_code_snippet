@@ -623,3 +623,21 @@ mod tests {
 #+end_src
 
 copy from https://github.com/logos-co/nomos-node
+
+
+** convert libsecp256k1::SecretKey to libp2p_identity::secp256k1::Keypair
+
+#+begin_src rust
+/// Converts a `libsecp256k1::SecretKey` to a `libp2p_identity::secp256k1::Keypair`.
+/// To do this, we serialize the secret key and create a new keypair from it.
+#[inline]
+pub fn secret_to_keypair(secret_key: &SecretKey) -> Keypair {
+    let bytes = secret_key.serialize();
+
+    let secret_key = libp2p_identity::secp256k1::SecretKey::try_from_bytes(bytes)
+        .expect("Failed to create secret key");
+    libp2p_identity::secp256k1::Keypair::from(secret_key).into()
+}
+#+end_src
+
+copy from https://github.com/firstbatchxyz/dkn-compute-node
