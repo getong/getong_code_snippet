@@ -302,6 +302,271 @@ let resp = raft1
 
 ** network
 
+#+begin_src rust
+pub type Path = String;
+pub type Payload = String;
+pub type ResponseTx = oneshot::Sender<String>;
+pub type RequestTx = mpsc::UnboundedSender<(Path, Payload, ResponseTx)>;
+
+/// Simulate a network router.
+#[derive(Debug, Clone, Default)]
+pub struct Router {
+  pub targets: Arc<Mutex<BTreeMap<NodeId, RequestTx>>>,
+}
+
+impl Router {
+  /// Send request `Req` to target node `to`, and wait for response `Result<Resp, RaftError<E>>`.
+  pub async fn send<Req, Resp>(&self, to: NodeId, path: &str, req: Req) -> Result<Resp, Unreachable>
+  where
+    Req: serde::Serialize,
+    Result<Resp, RaftError>: serde::de::DeserializeOwned,
+  {
+    let (resp_tx, resp_rx) = oneshot::channel();
+
+    let encoded_req = encode(req);
+    tracing::debug!("send to: {}, {}, {}", to, path, encoded_req);
+
+    {
+      let mut targets = self.targets.lock().unwrap();
+      let tx = targets.get_mut(&to).unwrap();
+
+      tx.send((path.to_string(), encoded_req, resp_tx)).unwrap();
+    }
+
+    let resp_str = resp_rx.await.unwrap();
+    tracing::debug!("resp from: {}, {}, {}", to, path, resp_str);
+
+    let res = decode::<Result<Resp, RaftError>>(&resp_str);
+    res.map_err(|e| Unreachable::new(&e))
+  }
+}
+#+end_src
 ** raft data
 
+#+begin_src rust
+pub async fn new_raft(node_id: NodeId, router: Router) -> (Raft, App) {
+  // Create a configuration for the raft instance.
+  let config = Config {
+    heartbeat_interval: 500,
+    election_timeout_min: 1500,
+    election_timeout_max: 3000,
+    // Once snapshot is built, delete the logs at once.
+    // So that all further replication will be based on the snapshot.
+    max_in_snapshot_log_to_keep: 0,
+    ..Default::default()
+  };
+
+  let config = Arc::new(config.validate().unwrap());
+
+  // Create a instance of where the Raft logs will be stored.
+  let log_store = LogStore::default();
+
+  // Create a instance of where the state machine data will be stored.
+  let state_machine_store = Arc::new(StateMachineStore::default());
+
+  // Create a local raft instance.
+  let raft = openraft::Raft::new(
+    node_id,
+    config,
+    router.clone(),
+    log_store,
+    state_machine_store.clone(),
+  )
+  .await
+  .unwrap();
+
+  let app = App::new(node_id, raft.clone(), router, state_machine_store);
+
+  (raft, app)
+}
+#+end_src
+
 ** statemachine
+
+#+begin_src rust
+  pub meta: SnapshotMeta<TypeConfig>,
+
+  /// The data of the state machine at the time of this snapshot.
+  pub data: Box<SnapshotData>,
+}
+
+/// Data contained in the Raft state machine. Note that we are using `serde` to serialize the
+/// `data`, which has a implementation to be serialized. Note that for this test we set both the key
+/// and value as String, but you could set any type of value that has the serialization impl.
+#[derive(Serialize, Deserialize, Debug, Default, Clone)]
+pub struct StateMachineData {
+  pub last_applied: Option<LogId<NodeId>>,
+
+  pub last_membership: StoredMembership<TypeConfig>,
+
+  /// Application data.
+  pub data: BTreeMap<String, String>,
+}
+
+/// Defines a state machine for the Raft cluster. This state machine represents a copy of the
+/// data for this node. Additionally, it is responsible for storing the last snapshot of the data.
+#[derive(Debug, Default)]
+pub struct StateMachineStore {
+  /// The Raft state machine.
+  pub state_machine: Mutex<StateMachineData>,
+
+  snapshot_idx: Mutex<u64>,
+
+  /// The last received snapshot.
+  current_snapshot: Mutex<Option<StoredSnapshot>>,
+}
+
+impl RaftSnapshotBuilder<TypeConfig> for Arc<StateMachineStore> {
+  #[tracing::instrument(level = "trace", skip(self))]
+  async fn build_snapshot(&mut self) -> Result<Snapshot<TypeConfig>, StorageError<TypeConfig>> {
+    let data;
+    let last_applied_log;
+    let last_membership;
+
+    {
+      // Serialize the data of the state machine.
+      let state_machine = self.state_machine.lock().unwrap().clone();
+
+      last_applied_log = state_machine.last_applied;
+      last_membership = state_machine.last_membership.clone();
+      data = state_machine;
+    }
+
+    let snapshot_idx = {
+      let mut l = self.snapshot_idx.lock().unwrap();
+      *l += 1;
+      *l
+    };
+
+    let snapshot_id = if let Some(last) = last_applied_log {
+      format!("{}-{}-{}", last.leader_id, last.index, snapshot_idx)
+    } else {
+      format!("--{}", snapshot_idx)
+    };
+
+    let meta = SnapshotMeta {
+      last_log_id: last_applied_log,
+      last_membership,
+      snapshot_id,
+    };
+
+    let snapshot = StoredSnapshot {
+      meta: meta.clone(),
+      data: Box::new(data.clone()),
+    };
+
+    {
+      let mut current_snapshot = self.current_snapshot.lock().unwrap();
+      *current_snapshot = Some(snapshot);
+    }
+
+    Ok(Snapshot {
+      meta,
+      snapshot: Box::new(data),
+    })
+  }
+}
+
+impl RaftStateMachine<TypeConfig> for Arc<StateMachineStore> {
+  type SnapshotBuilder = Self;
+
+  async fn applied_state(
+    &mut self,
+  ) -> Result<(Option<LogId<NodeId>>, StoredMembership<TypeConfig>), StorageError<TypeConfig>> {
+    let state_machine = self.state_machine.lock().unwrap();
+    Ok((
+      state_machine.last_applied,
+      state_machine.last_membership.clone(),
+    ))
+  }
+
+  #[tracing::instrument(level = "trace", skip(self, entries))]
+  async fn apply<I>(&mut self, entries: I) -> Result<Vec<Response>, StorageError<TypeConfig>>
+  where
+    I: IntoIterator<Item = Entry<TypeConfig>>,
+  {
+    let mut res = Vec::new(); //No `with_capacity`; do not know `len` of iterator
+
+    let mut sm = self.state_machine.lock().unwrap();
+
+    for entry in entries {
+      tracing::debug!(%entry.log_id, "replicate to sm");
+
+      sm.last_applied = Some(entry.log_id);
+
+      match entry.payload {
+        EntryPayload::Blank => res.push(Response { value: None }),
+        EntryPayload::Normal(ref req) => match req {
+          Request::Set { key, value, .. } => {
+            sm.data.insert(key.clone(), value.clone());
+            res.push(Response {
+              value: Some(value.clone()),
+            })
+          }
+        },
+        EntryPayload::Membership(ref mem) => {
+          sm.last_membership = StoredMembership::new(Some(entry.log_id), mem.clone());
+          res.push(Response { value: None })
+        }
+      };
+    }
+    Ok(res)
+  }
+
+  #[tracing::instrument(level = "trace", skip(self))]
+  async fn begin_receiving_snapshot(
+    &mut self,
+  ) -> Result<Box<SnapshotDataOf<TypeConfig>>, StorageError<TypeConfig>> {
+    Ok(Box::default())
+  }
+
+  #[tracing::instrument(level = "trace", skip(self, snapshot))]
+  async fn install_snapshot(
+    &mut self,
+    meta: &SnapshotMeta<TypeConfig>,
+    snapshot: Box<SnapshotDataOf<TypeConfig>>,
+  ) -> Result<(), StorageError<TypeConfig>> {
+    tracing::info!("install snapshot");
+
+    let new_snapshot = StoredSnapshot {
+      meta: meta.clone(),
+      data: snapshot,
+    };
+
+    // Update the state machine.
+    {
+      let updated_state_machine: StateMachineData = *new_snapshot.data.clone();
+      let mut state_machine = self.state_machine.lock().unwrap();
+      *state_machine = updated_state_machine;
+    }
+
+    // Update current snapshot.
+    let mut current_snapshot = self.current_snapshot.lock().unwrap();
+    *current_snapshot = Some(new_snapshot);
+    Ok(())
+  }
+
+  #[tracing::instrument(level = "trace", skip(self))]
+  async fn get_current_snapshot(
+    &mut self,
+  ) -> Result<Option<Snapshot<TypeConfig>>, StorageError<TypeConfig>> {
+    match &*self.current_snapshot.lock().unwrap() {
+      Some(snapshot) => {
+        let data = snapshot.data.clone();
+        Ok(Some(Snapshot {
+          meta: snapshot.meta.clone(),
+          snapshot: data,
+        }))
+      }
+      None => Ok(None),
+    }
+  }
+
+  async fn get_snapshot_builder(&mut self) -> Self::SnapshotBuilder {
+    self.clone()
+  }
+}
+
+// Create a instance of where the state machine data will be stored.
+let state_machine_store = Arc::new(StateMachineStore::default());
+#+end_src
