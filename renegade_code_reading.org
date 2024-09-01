@@ -58,3 +58,63 @@ impl RaftClient {
   }
 }
 #+end_src
+
+** P2PNetworkFactory definition
+
+#+begin_src rust
+pub trait P2PNetworkFactory: Send + Sync + 'static {
+  /// Create a new p2p client
+  fn new_p2p_client(&self, target: NodeId, target_info: Node) -> P2PRaftNetworkWrapper;
+}
+
+/// A wrapper around the p2p raft network that allows for a default
+/// `RaftNetwork` implementation and to hide generics from higher level
+/// interfaces
+pub struct P2PRaftNetworkWrapper {
+  /// The inner p2p network
+  inner: Box<dyn P2PRaftNetwork + Send + Sync>,
+}
+
+/// A generalization of the raft network trait that specifically allows for
+/// point-to-point communication
+///
+/// We implement the general raft network trait for all types that fit this
+/// signature by simply calling out to the p2p implementation
+#[async_trait]
+pub trait P2PRaftNetwork: 'static + Sync + Send {
+  /// The target this client is sending requests to
+  fn target(&self) -> NodeId;
+  /// Send an request to the target node
+  async fn send_request(
+    &self,
+    target: NodeId,
+    request: RaftRequest,
+  ) -> Result<RaftResponse, RPCError<NodeId, Node, RaftError<NodeId>>>;
+}
+
+/// The request type a raft node may send to another
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub enum RaftRequest {
+  /// A request to append entries
+  AppendEntries(AppendEntriesRequest<TypeConfig>),
+  /// A request to install a snapshot
+  InstallSnapshot(InstallSnapshotRequest<TypeConfig>),
+  /// A request to vote
+  Vote(VoteRequest<NodeId>),
+  /// A proposal forwarded to the leader
+  ForwardedProposal(Proposal),
+}
+
+/// The response type a raft node may send to another
+#[derive(Debug, Serialize, Deserialize)]
+pub enum RaftResponse {
+  /// A simple ack when no data must be returned
+  Ack,
+  /// A response to an append entries request
+  AppendEntries(AppendEntriesResponse<NodeId>),
+  /// A response to an install snapshot request
+  InstallSnapshot(Result<InstallSnapshotResponse<NodeId>, InstallSnapshotError>),
+  /// A response to a vote request
+  Vote(VoteResponse<NodeId>),
+}
+#+end_src
