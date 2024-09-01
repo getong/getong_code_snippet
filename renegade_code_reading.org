@@ -1,0 +1,60 @@
+* renegade code reading
+
+** openraft raft start
+
+#+begin_src rust
+/// A client interface to the raft
+#[derive(Clone)]
+pub struct RaftClient {
+    /// The client's config
+    pub(crate) config: RaftClientConfig,
+    /// The inner raft
+    raft: Raft,
+    /// The network to use for the raft client
+    network_factory: P2PNetworkFactoryWrapper,
+    /// A lock to prevent simultaneous membership changes
+    membership_change_lock: Arc<Mutex<()>>,
+}
+
+impl RaftClient {
+  /// Create a new raft client
+  pub async fn new<N: P2PNetworkFactory>(
+    config: RaftClientConfig,
+    db: Arc<DB>,
+    net_factory: N,
+    state_machine: StateMachine,
+  ) -> Result<Self, ReplicationV2Error> {
+    let raft_config = Arc::new(RaftConfig {
+      cluster_name: config.cluster_name.clone(),
+      heartbeat_interval: config.heartbeat_interval,
+      election_timeout_min: config.election_timeout_min,
+      election_timeout_max: config.election_timeout_max,
+      snapshot_max_chunk_size: config.snapshot_max_chunk_size,
+      install_snapshot_timeout: config.install_snapshot_timeout,
+      max_payload_entries: config.max_payload_entries,
+      ..Default::default()
+    });
+
+    // Create the raft
+    let p2p_factory = P2PNetworkFactoryWrapper::new(net_factory);
+    let log_store = LogStore::new(db.clone());
+    let raft = Raft::new(config.id, raft_config, p2p_factory.clone(), log_store, state_machine)
+      .await
+      .map_err(err_str!(ReplicationV2Error::RaftSetup))?;
+
+    // Initialize the raft
+    if config.init {
+      let initial_nodes = config.initial_nodes.clone();
+      let members = initial_nodes.into_iter().collect::<BTreeMap<_, _>>();
+      raft.initialize(members).await.map_err(err_str!(ReplicationV2Error::RaftSetup))?;
+    }
+
+    Ok(Self {
+      config,
+      raft,
+      network_factory: p2p_factory,
+      membership_change_lock: Arc::new(Mutex::new(())),
+    })
+  }
+}
+#+end_src
