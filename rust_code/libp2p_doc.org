@@ -641,3 +641,29 @@ pub fn secret_to_keypair(secret_key: &SecretKey) -> Keypair {
 #+end_src
 
 copy from https://github.com/firstbatchxyz/dkn-compute-node
+
+** request_response
+
+#+begin_src rust
+use libp2p::{
+  request_response::{self, OutboundRequestId, ProtocolSupport, ResponseChannel},
+};
+
+pub(crate) struct EventLoop {
+  swarm: Swarm<Behaviour>,
+  command_receiver: mpsc::Receiver<Command>,
+  event_sender: mpsc::Sender<Event>,
+  pending_dial: HashMap<PeerId, oneshot::Sender<Result<(), Box<dyn Error + Send>>>>,
+  pending_start_providing: HashMap<kad::QueryId, oneshot::Sender<()>>,
+  pending_get_providers: HashMap<kad::QueryId, oneshot::Sender<HashSet<PeerId>>>,
+  pending_request_file:
+    HashMap<OutboundRequestId, oneshot::Sender<Result<Vec<u8>, Box<dyn Error + Send>>>>,
+}
+
+let request_id = self
+  .swarm
+  .behaviour_mut()
+  .request_response
+  .send_request(&peer, FileRequest(file_name));
+self.pending_request_file.insert(request_id, sender);
+#+end_src
