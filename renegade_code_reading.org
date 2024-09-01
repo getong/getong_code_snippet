@@ -118,3 +118,119 @@ pub enum RaftResponse {
   Vote(VoteResponse<NodeId>),
 }
 #+end_src
+
+** openraft type definition
+
+#+begin_src rust
+// Declare the types config for the raft
+openraft::declare_raft_types! (
+    /// The type config for the raft
+    pub TypeConfig:
+        D = Proposal,
+        R = (), // Response
+        Node = RaftNode,
+        SnapshotData = tokio::fs::File,
+);
+
+/// A type alias for the node id type
+pub type NodeId = <TypeConfig as RaftTypeConfig>::NodeId;
+/// A type alias for the node type
+pub type Node = <TypeConfig as RaftTypeConfig>::Node;
+
+/// The network shim
+#[derive(Clone)]
+pub struct GossipNetwork {
+    /// The target node for this instance
+    target: NodeId,
+    /// The target node info
+    target_info: Node,
+    /// A sender to the network manager's queue
+    network_sender: NetworkManagerQueue,
+}
+
+#+end_src
+
+** libp2p code example
+
+#+begin_src rust
+use libp2p::request_response::ResponseChannel;
+use libp2p_core::Multiaddr;
+use tokio::sync::{
+    mpsc::{unbounded_channel, UnboundedSender as TokioSender},
+    oneshot::{channel as oneshot_channel, Receiver as OneshotReceiver, Sender as OneshotSender},
+};
+
+/// The job type for the network manager
+#[derive(Debug)]
+pub enum NetworkManagerJob {
+    /// Send an outbound pubsub message
+    ///
+    /// The first field is the topic, the second is the message body
+    Pubsub(String, PubsubMessage),
+    /// Send a gossip request
+    ///
+    /// Optionally, the sending worker may specify a channel to receive the
+    /// corresponding gossip response on
+    Request(WrappedPeerId, GossipRequest, Option<NetworkResponseChannel>),
+    /// Send a gossip response
+    Response(GossipResponse, ResponseChannel<AuthenticatedGossipResponse>),
+    /// An internal networking directive
+    Internal(NetworkManagerControlSignal),
+}
+
+/// The task queue type for the network manager
+pub type NetworkManagerQueue = TokioSender<NetworkManagerJob>;
+/// The task queue receiver type for the network manager
+pub type NetworkManagerReceiver = MeteredTokioReceiver<NetworkManagerJob>;
+
+/// The composed behavior that handles all types of network requests that
+/// various workers need access to
+#[derive(NetworkBehaviour)]
+#[behaviour(out_event = "ComposedProtocolEvent")]
+pub struct ComposedNetworkBehavior {
+    /// The request/response behavior; provides a point-to-point communication
+    /// primitive for relayers to dial each other directly on
+    pub request_response: RequestResponse<RelayerGossipCodec>,
+    /// The Kademlia DHT behavior; used for storing distributed state, including
+    /// peer address information
+    pub kademlia_dht: Kademlia<MemoryStore>,
+    /// The Gossipsub behavior; used for broadcast (pubsub) primitives
+    pub pubsub: Gossipsub,
+    /// The identify protocol behavior, used for getting publicly facing
+    /// information about the local node
+    pub identify: IdentifyProtocol,
+}
+
+fn start(&mut self) -> Result<(), Self::Error> {
+  // Build a quic transport
+  let hostport = format!("/ip4/{}/udp/{}/quic-v1", self.config.bind_addr, self.config.port);
+  let addr: Multiaddr = hostport.parse().unwrap();
+
+  // Build the quic transport
+  let config = QuicConfig::new(&self.local_keypair);
+  let quic_transport = QuicTransport::new(config)
+    .map(|(peer_id, quic_conn), _| (peer_id, StreamMuxerBox::new(quic_conn)))
+    .boxed();
+
+  // Defines the behaviors of the underlying networking stack: including gossip,
+  // pubsub, address discovery, etc
+  let mut behavior = ComposedNetworkBehavior::new(
+    ,*self.local_peer_id,
+    ProtocolVersion::Version0,
+    &self.local_keypair,
+  )?;
+
+  // Add any bootstrap addresses to the peer info table
+  let peer_index = block_on(self.config.clone().global_state.get_peer_info_map())?;
+  for (peer_id, peer_info) in peer_index.iter() {
+    info!("Adding {:?}: {} to routing table...", peer_id, peer_info.get_addr());
+    behavior.kademlia_dht.add_address(peer_id, peer_info.get_addr());
+  }
+
+  // Connect the behavior and the transport via swarm and enter the network
+  let mut swarm =
+    SwarmBuilder::with_tokio_executor(quic_transport, behavior, *self.local_peer_id)
+    .build();
+  swarm.listen_on(addr).map_err(|err| NetworkManagerError::SetupError(err.to_string()))?;
+}
+#+end_src
