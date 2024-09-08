@@ -26,6 +26,7 @@
 [[https://github.com/caio/foca][Gossip-based cluster membership discovery (SWIM)]]
 [[https://github.com/build-trust/ockam][ockam]]
 [[https://github.com/LeonHartley/Coerce-rs][Coerce-rs Actor runtime and distributed systems framework for Rust]]
+[[https://github.com/n0-computer/iroh][iroh]]
 
 ** use with kubernetes
 :PROPERTIES:
