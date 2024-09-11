@@ -1,4 +1,4 @@
-* docker cmd
+z* docker cmd
 :PROPERTIES:
 :CUSTOM_ID: docker-cmd
 :END:
@@ -301,4 +301,21 @@ $ docker network rm testing_bridge
 :END:
 #+begin_src shell
 sudo ip link delete docker0
+#+end_src
+
+
+** dockerfile build with github secret
+
+github workflow yaml file:
+#+begin_src shell
+build-args: |
+  SECRETS_TOKEN=${{ secrets.SECRETS_DSN }}
+
+#+end_src
+
+in dockerfile
+
+#+begin_src docker
+ARG SECRETS_TOKEN
+ENV SECRETS_TOKEN=${SECRETS_TOKEN}
 #+end_src
