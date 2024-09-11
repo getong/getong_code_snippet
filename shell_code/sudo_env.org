@@ -1,0 +1,25 @@
+* sudo with env
+
+** set env in ~/.zshrc
+
+#+begin_src shell
+enable_proxy(){
+  export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
+}
+
+disable_proxy(){
+  unset https_proxy http_proxy all_proxy
+}
+#+end_src
+
+** edit /etc/sudoers
+
+#+begin_quote
+Defaults:%sudo env_keep += "http_proxy https_proxy all_proxy"
+#+end_quote
+
+** use with sudo command
+
+#+begin_src shell
+sudo -E comamnd_line_you_wanna_use
+#+end_src
