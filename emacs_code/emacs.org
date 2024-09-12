@@ -267,8 +267,9 @@ find . -name "*.md.org" -exec git add {} \;
 #+begin_src shell
 cd ~/.emacs.d/var/straight/repos/magit
 git pull
-rm -rf ~/.emacs.d/var/straight/build-29.3/magit
+rm -rf ~/.emacs.d/var/straight/build-29.4/magit*
 #+end_src
+delete all magit* packages
 
 Then in emacs
 #+begin_quote
