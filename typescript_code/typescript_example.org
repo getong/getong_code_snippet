@@ -66,3 +66,9 @@ add.apply(null, [10, 20]);
 add.call(null, 10, 20);
 add.bind(null, 10, 20)()
 #+end_src
+
+#+RESULTS:
+: a + b is 30
+: a + b is 30
+: a + b is 30
+: a + b is 30
