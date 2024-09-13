@@ -27,6 +27,8 @@
 [[https://github.com/build-trust/ockam][ockam]]
 [[https://github.com/LeonHartley/Coerce-rs][Coerce-rs Actor runtime and distributed systems framework for Rust]]
 [[https://github.com/n0-computer/iroh][iroh]]
+[[https://github.com/automerge/automerge][automerge]]
+[[https://github.com/loro-dev/loro][loro]]
 
 ** use with kubernetes
 :PROPERTIES:
