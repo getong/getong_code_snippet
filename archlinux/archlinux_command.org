@@ -2126,6 +2126,8 @@ yt-dlp --username oauth2  --password "" --proxy socks5://127.0.0.1:7890/ -R infi
 # open chrome and input token
 #+end_src
 
+copy from https://www.reddit.com/r/youtubedl/comments/1e6bzu4/ytdlp_error_sign_in_to_confirm_youre_not_a_bot/
+
 ** julia
 :PROPERTIES:
 :CUSTOM_ID: julia
