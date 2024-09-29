@@ -55,3 +55,11 @@ tempel
 #+begin_quote
 yasinppet has more package than tempel
 #+end_quote
+
+** nerd-icons
+
+kind-icon
+
+** org-mode
+
+markdown
