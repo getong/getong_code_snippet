@@ -5,8 +5,9 @@
 rg
 deadgred
 
-** treesit
+** treesit-auto
 
+treesit
 tree-sitter
 
 ** treesit-fold
@@ -16,6 +17,7 @@ ts-fold
 ** lsp-bridge
 
 lsp-mode
+lsp-ui
 eglot
 
 ** lsp-bridge
@@ -38,3 +40,18 @@ projectile
 ** vterm
 
 shell
+
+** formator
+*** elisp formator
+
+elisp-autofmt
+
+*** web formator
+apheleia
+
+** yasinppet
+
+tempel
+#+begin_quote
+yasinppet has more package than tempel
+#+end_quote
