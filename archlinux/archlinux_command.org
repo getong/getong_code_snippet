@@ -2116,6 +2116,16 @@ login with account in firefox browser, then download videos:
 yt-dlp --cookies-from-browser firefox  https://www.bilibili.com/video/BV1af421R7BD
 #+end_src
 
+** yt-dlp download with auth
+
+#+begin_src shell
+python3 -m pip install -U --break-system-packages https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
+
+yt-dlp --username oauth2  --password "" --proxy socks5://127.0.0.1:7890/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'  --sub-lang zh-Hans --convert-subtitles srt youtube_url
+
+# open chrome and input token
+#+end_src
+
 ** julia
 :PROPERTIES:
 :CUSTOM_ID: julia
