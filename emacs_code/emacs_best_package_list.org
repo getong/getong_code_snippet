@@ -18,6 +18,11 @@ ts-fold
 lsp-mode
 eglot
 
+** lsp-bridge
+
+corfu
+company
+
 ** consult
 
 swiper
@@ -25,3 +30,11 @@ swiper
 ** denote
 
 org-roam-ui
+
+** project.el
+
+projectile
+
+** vterm
+
+shell
