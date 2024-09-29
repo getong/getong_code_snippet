@@ -1,0 +1,23 @@
+* emacs best package list
+
+** color-rg
+
+rg
+deadgred
+
+** treesit
+
+tree-sitter
+
+** treesit-fold
+
+ts-fold
+
+** lsp-bridge
+
+lsp-mode
+eglot
+
+** consult
+
+swiper
