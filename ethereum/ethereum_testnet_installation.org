@@ -1,0 +1,5 @@
+* ethereum testnet installation
+
+** eth2-pos-testnet
+
+see https://github.com/qymlyl/eth2-pos-testnet
