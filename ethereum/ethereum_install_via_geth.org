@@ -1,0 +1,92 @@
+* ethereum install via geth
+
+see https://geth.ethereum.org/docs/getting-started
+
+** Step 1: Generating accounts
+
+#+begin_src shell
+clef newaccount --keystore geth-tutorial/keystore
+#+end_src
+
+** Step 2: Start Clef
+
+#+begin_src shell
+clef --keystore geth-tutorial/keystore --configdir geth-tutorial/clef --chainid 11155111
+#+end_src
+
+** Step 3: Start Geth
+
+#+begin_src shell
+geth --sepolia --datadir geth-tutorial --authrpc.addr localhost \
+  --authrpc.port 8551 --authrpc.vhosts localhost \
+  --authrpc.jwtsecret geth-tutorial/jwtsecret\
+  --http --http.api eth,net --signer=geth-tutorial/clef/clef.ipc --http
+#+end_src
+
+** Step 4: Get Testnet Ether
+
+** Step 5: Interact with Geth
+
+#+begin_src shell
+geth attach http://127.0.0.1:8545
+
+> eth.accounts;
+#+end_src
+
+
+in the Step 2 terminal, press y
+
+
+** Checking account balance.
+
+#+begin_src javascript
+web3.fromWei(eth.getBalance('0xca57F3b40B42FCce3c37B8D18aDBca5260ca72EC'), 'ether');
+#+end_src
+
+** Send ether to another account
+
+#+begin_src javascript
+eth.sendTransaction({
+  from: '0xca57f3b40b42fcce3c37b8d18adbca5260ca72ec',
+  to: '0xce8dba5e4157c2b284d8853afeeea259344c1653',
+  value: web3.toWei(0.1, 'ether')
+});
+#+end_src
+
+** Checking the transaction hash
+
+#+begin_src javascript
+eth.getTransaction('0x99d489d0bd984915fd370b307c2d39320860950666aac3f261921113ae4f95bb');
+#+end_src
+
+** Using Curl
+
+*** Checking account balance
+
+#+begin_src shell
+$ curl -X POST http://127.0.0.1:8545 \
+  -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0", "method":"eth_getBalance", "params":["0xca57f3b40b42fcce3c37b8d18adbca5260ca72ec","latest"], "id":1}'
+
+{"jsonrpc":"2.0","id":1,"result":"0xc7d54951f87f7c0"}
+#+end_src
+
+*** Checking the account list
+
+#+begin_src shell
+$ curl -X POST http://127.0.0.1:8545 \
+    -H "Content-Type: application/json" \
+   --data '{"jsonrpc":"2.0", "method":"eth_accounts","params":[], "id":1}'
+
+{"jsonrpc":"2.0","id":1,"result":["0xca57f3b40b42fcce3c37b8d18adbca5260ca72ec"]}
+#+end_src
+
+*** Sending Transactions
+
+#+begin_src shell
+curl -X POST http://127.0.0.1:8545 \
+    -H "Content-Type: application/json" \
+   --data '{"jsonrpc":"2.0", "method":"eth_sendTransaction", "params":[{"from": "0xca57f3b40b42fcce3c37b8d18adbca5260ca72ec","to": "0xce8dba5e4157c2b284d8853afeeea259344c1653","value": "0x16345785d8a0000"}], "id":1}'
+
+{"jsonrpc":"2.0","id":5,"result":"0xac8b347d70a82805edb85fc136fc2c4e77d31677c2f9e4e7950e0342f0dc7e7c"}
+#+end_src
