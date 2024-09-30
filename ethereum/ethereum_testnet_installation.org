@@ -17,3 +17,7 @@ also see https://cloud.google.com/application/web3/faucet/ethereum/sepolia
 
 ** rust alloy book
 [[https://alloy.rs/getting-started/installation.html][alloy book]]
+
+** rust Foundry
+[[https://getfoundry.sh/][Foundry]]
+[[https://book.getfoundry.sh/][foundry book]]
