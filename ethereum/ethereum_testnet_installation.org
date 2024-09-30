@@ -21,3 +21,22 @@ also see https://cloud.google.com/application/web3/faucet/ethereum/sepolia
 ** rust Foundry
 [[https://getfoundry.sh/][Foundry]]
 [[https://book.getfoundry.sh/][foundry book]]
+
+
+** install foundry
+
+#+begin_src shell
+# enable proxy
+$ curl -L https://foundry.paradigm.xyz | bash
+
+# source env
+$ source ~/.foundry/bin
+# or
+$ source ~/.zshenv
+
+# install
+$ foundryup
+
+$ which anvil
+~/.foundry/bin/anvil
+#+end_src
