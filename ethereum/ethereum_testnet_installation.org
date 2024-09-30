@@ -40,3 +40,13 @@ $ foundryup
 $ which anvil
 ~/.foundry/bin/anvil
 #+end_src
+
+** test with anvil
+
+#+begin_src shell
+anvil -a 20 -p 8546 --balance 2000
+#+end_src
+
+** foundry cast
+
+** foundry chisel
