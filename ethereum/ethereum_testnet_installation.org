@@ -3,3 +3,13 @@
 ** eth2-pos-testnet
 
 see https://github.com/qymlyl/eth2-pos-testnet
+
+
+** get testnet eth
+
+see https://www.alchemy.com/faucets/ethereum-sepolia
+also see https://faucet.chainstack.com/sepolia-testnet-faucet
+also see https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+
+** ethereum tool
+[[https://hardhat.org/][hardhat]]
