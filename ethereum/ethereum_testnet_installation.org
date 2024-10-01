@@ -47,6 +47,89 @@ $ which anvil
 anvil -a 20 -p 8546 --balance 2000
 #+end_src
 
+** anvil mnemonic argument
+
+use the exact same mnemonic (secret phrase) to generate the keys & addresses.
+
+#+begin_src shell
+anvil -m 'test test test test test test test test test test test junk'
+#+end_src
+
+copy from https://ethereum.stackexchange.com/questions/154921/how-to-use-anvil-accounts-in-the-foundry-test
+
 ** foundry cast
+
+**** Set interval mining with anvil:
+
+Initiate an anvil blockchain instance that produces a block every 10 seconds.
+
+#+begin_src shell
+anvil --block-time 10
+#+end_src
+
+*** Turn on interval mining:
+
+#+begin_src shell
+$ RPC="http://127.0.0.1:8545"
+$ cast rpc evm_setIntervalMining 10 --rpc-url $RPC
+null
+#+end_src
+
+*** Return to auto mining:
+
+#+begin_src shell
+$ cast rpc evm_setAutomine true --rpc-url $RPC
+null
+#+end_src
+
+*** Take a snapshot of the current state of the blockchain (save "0x0" for future use).
+
+#+begin_src shell
+$ RPC="http://127.0.0.1:8545"
+$ cast rpc evm_snapshot --rpc-url $RPC
+"0x0"
+#+end_src
+
+*** Get current block timestamp.
+
+#+begin_src shell
+$ cast rpc eth_getBlockByNumber "latest" "false" --rpc-url $RPC
+{..., timestamp: "0x64460395", ...}
+#+end_src
+
+*** Manually mine a single block.
+
+#+begin_src shell
+$ cast rpc evm_mine --rpc-url $RPC
+"0x0"
+
+$ cast rpc eth_getBlockByNumber "latest" "false" --rpc-url $RPC
+{..., timestamp: "0x64460c86", ...}
+#+end_src
+
+*** Manually specify the timestamp to advance.
+
+#+begin_src shell
+$ cast rpc evm_setNextBlockTimestamp 0xeeeeeeee --rpc-url $RPC
+null
+
+$ cast rpc evm_mine --rpc-url $RPC
+"0x0"
+
+$ cast rpc eth_getBlockByNumber "latest" "false" --rpc-url $RPC
+{..., "timestamp":"0xeeeeeeee", ...}
+#+end_src
+
+*** Return back to original snapshot.
+
+#+begin_src shell
+$ cast rpc evm_revert 0x0 --rpc-url $RPC
+true
+
+$ cast rpc eth_getBlockByNumber "latest" "false" --rpc-url $RPC
+{..., "timestamp":"0x64460395", ...}
+#+end_src
+
+copy from https://ethereum.stackexchange.com/questions/135085/how-do-i-use-foundrys-anvil
 
 ** foundry chisel
