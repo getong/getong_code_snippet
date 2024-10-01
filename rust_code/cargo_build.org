@@ -37,3 +37,24 @@ std::process::Command::new("cargo")
         .status()
         .expect("cargo fmt failed");
 #+end_src
+
+
+** disable colored output in cargo
+
+#+begin_src shell
+mkdir -p ~/.cargo
+echo -e "[term]\ncolor = 'never'" >> ~/.cargo/config.toml
+#+end_src
+
+or
+#+begin_src shell
+cargo build --color never
+#+end_src
+
+or
+
+.cargo/config.toml
+#+begin_quote
+[term]
+color = "never"
+#+end_quote
