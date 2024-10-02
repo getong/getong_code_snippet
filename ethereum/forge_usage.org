@@ -1,0 +1,25 @@
+* forge usage
+
+** init
+
+#+begin_src shell
+forge init --offline hello_evm
+#+end_src
+
+** change the directory
+
+#+begin_src shell
+cd hello_evm
+#+end_src
+
+** remapping
+
+#+begin_src shell
+forge remappings
+#+end_src
+
+** build
+
+#+begin_src shell
+forge build
+#+end_src
