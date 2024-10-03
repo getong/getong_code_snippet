@@ -1,0 +1,21 @@
+* ethereum knowledge
+
+** state channel
+
+see https://inevitableeth.com/home/ethereum/upgrades/scaling/execution/state-channel#:~:text=State%20channels%20allow%20participants%20to,submitting%20two%20on%2Dchain%20transactions
+
+#+begin_quote
+Users open a state channel by depositing funds into a smart contract on the main blockchain, escrowing the capital.
+
+This capital cannot be touched until the state channel is closed.
+
+Within the state channel, participants can send each other funds for little to no cost. To make a payment, a user signs a ticket (off-chain message) and delivers it to the recipient. This can continue for as many payments as needed.
+
+When the participants are done transacting, they can sign and publish the highest-value ticket back to the main blockchain.
+
+The smart contract will verify the signatures and settle the state channel (paying the receiver and sending the rest to the original owner)
+
+If one party is unwilling to close the channel (malice, tech failure, etc), the other participant(s) can initiate a withdrawal period.
+
+If the unwilling party does not provide a ticket within the withdrawal time, the withdrawing participant gets all his/her money back.
+#+end_quote
