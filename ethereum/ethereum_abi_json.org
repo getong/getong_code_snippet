@@ -7,6 +7,12 @@
 forge build --silent
 #+end_src
 
+also can use inspect
+
+#+begin_src shell
+forge inspect src/MyContract.sol:MyContract abi
+#+end_src
+
 ** generate abi json into solidity file
 
 
