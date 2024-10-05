@@ -46,6 +46,8 @@ shell
 
 elisp-autofmt
 
+format-all ?
+
 *** web formator
 apheleia
 
