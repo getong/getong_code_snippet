@@ -198,3 +198,25 @@ contract ReentracyProtected is ReentrancyGuard {
 #+end_src
 
 copy from https://www.cyfrin.io/blog/what-is-a-reentrancy-attack-solidity-smart-contracts
+
+
+** Using block.number instead of block.timestamp
+
+To mitigate the risks associated with block.timestamp, the usage of block.number is recommended.
+Instead of relying on the timestamp, block.number represents the number of the current block.
+
+#+begin_src solidity
+contract TimeBasedContract {
+    uint256 public expirationBlock;
+
+    function setTimeLock(uint256 _duration) public {
+        expirationBlock = block.number + _duration;
+    }
+
+    function isExpired() public view returns (bool) {
+        return block.number >= expirationBlock;
+    }
+}
+#+end_src
+
+copy from https://detectors.auditbase.com/blocknumber-vs-timestamp-solidity
