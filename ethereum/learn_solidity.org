@@ -89,3 +89,112 @@ contract HelloWorld {
 #+end_src
 
 copy from https://www.educative.io/answers/what-is-the-memory-keyword-in-solidity
+
+
+** SafeMath library
+
+
+#+begin_quote
+The SafeMath library validates if an arithmetic operation would result in an integer overflow/underflow.
+If it would, the library throws an exception, effectively reverting the transaction.
+
+Since Solidity 0.8, the overflow/underflow check is implemented on the language level - it adds
+the validation to the bytecode during compilation.
+
+You don't need the SafeMath library for Solidity 0.8+. You're still free to use it in this version,
+it will just perform the same validation twice (one on the language level and one in the library).
+
+And it's strongly recommended to use it in 0.7, since the validation is not performed on the language
+level in this version yet.
+
+So if you allow your contract to be compiled in both versions, you should include the library.
+#+end_quote
+
+#+begin_src solidity
+pragma solidity >=0.7.0 <0.9.0;
+
+library SafeMath {
+  function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    c = a + b;
+    assert(c >= a);
+    return c;
+  }
+}
+
+contract MyContract {
+    using SafeMath for uint256;
+
+    function foo() external pure {
+        uint256 number = 1;
+        number.add(1);
+    }
+}
+#+end_src
+
+copy from https://stackoverflow.com/questions/70074736/do-you-need-safemath-in-solidity-version-0-8-and-if-not-can-you-still-import
+
+** Mitigating against Solidity Reentrancy Attacks
+
+*** Use the checks-effects-intefractions pattern
+
+#+begin_quote
+Ensure that state changes are made before interacting with external contracts or sending Ether.
+Examining the example described earlier, modifying the steps to follow the Checks-Effects-Interactions
+pattern:
+
+Checks: Check the state of the caller e.g. require that the caller has a balance to withdraw.
+Effects: Update global state e.g. decrement the caller’s balance in a mapping.
+Interactions: If the check(s) pass, perform an external call e.g. to transfer tokens.
+Let’s see what this looks like in practice:
+#+end_quote
+
+#+begin_src solidity
+mapping (address => uint) public balance;
+
+function withdraw(uint amount) public {
+	 // 1. Checks
+   require(balance[msg.sender] >= amount);
+   // 2. Effects
+   balance[msg.sender] -= amount;
+   // 3. Interactions
+   msg.sender.call{value: amount}("");
+   // Note: always emit an event after a change of state
+   emit Withdrawal(msg.sender, amount);
+}
+#+end_src
+
+*** Implement mutexes or locks
+
+#+begin_quote
+A mutex (mutual exclusion) mechanism prevents a function from being executed multiple times
+within the same transaction. This is usually achieved using a boolean flag to indicate whether
+the function is currently executing e.g. isWithdrawing = true.
+Locks can be used to “lock” the function ensuring that another function call cannot reenter it until
+the current execution is completed. This prevents the function from being called recursively or
+reentered from external contracts while its state is still being modified, thus mitigating the risk of
+reentrancy attacks.
+One example of a lock is a reentrancy guard: a function modifier (a reusable piece of code that executes
+before or after a function call), the most commonly used guard is Open Zeppelin’s ReentrancyGuard.
+This modifier ensures the attacker can’t make more than one function run at a time.
+#+end_quote
+
+#+begin_src solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.18;
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+contract ReentracyProtected is ReentrancyGuard {
+	mapping(address => uint) public balances;
+
+	function withdraw() external nonReentrant {
+        uint balance = balances[msg.sender];
+        require(balance > 0, "Insufficient balance");
+        balances[msg.sender] = 0;
+        (bool success, ) = address(msg.sender).call{ value: balance }("");
+        require(success, "Failed to withdraw");
+    }
+}
+#+end_src
+
+copy from https://www.cyfrin.io/blog/what-is-a-reentrancy-attack-solidity-smart-contracts
