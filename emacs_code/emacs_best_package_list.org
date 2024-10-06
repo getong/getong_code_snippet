@@ -44,9 +44,9 @@ shell
 ** formator
 *** elisp formator
 
-elisp-autofmt
+format-all
 
-format-all ?
+elisp-autofmt
 
 *** web formator
 apheleia
