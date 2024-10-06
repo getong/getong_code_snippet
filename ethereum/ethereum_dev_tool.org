@@ -1,0 +1,13 @@
+* ethereum development tool
+
+** typescript
+
+[[https://hardhat.org/][hardhat]]
+
+** foundry
+
+[[https://getfoundry.sh/][foundry]]
+
+** rust development crate
+
+[[https://alloy.rs/][alloy]]
