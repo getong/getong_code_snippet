@@ -2,32 +2,31 @@
 
 ** builtin movement
 
-| command       | meaning                                     |
-|---------------+---------------------------------------------|
-| C-a           | 跳到行首                                     |
-| C-e           | 跳到行尾                                     |
-| M-<           | 跳到buffer 开头                              |
-| M->           | 跳到buffer 结尾                              |
-| M-a           | 向前移动一个句子，移动之后光标会停在句子的开头     |
-| M-e           | 向后移动一个句子，移动之后光标会停在句子的结尾     |
-| M - }         | 光标移动到下一个段落的开头                      |
-| M - {         | 光标移动到前一个段落的开头                      |
-| M-m           | 移动到第一个非空格字符。(back-to-indentation)  |
-| C-v, M-v      | 翻页。                                       |
-| M-r + 参数     | 移动到窗口里的某一行。不加参数缺省移动到窗口中间。 |
-| M-x goto-char | 到文件的第 N 字节。                           |
-| M-x goto-line | 到文件第 N 行。                               |
-| C-x C-n       | 设定 goal-column.                            |
-| C-u C-x C-n   | 取消 goal-column.                            |
-| C-M-a         | 到 defun 头                                  |
-| C-M-e         | 到 defun 尾                                  |
-| C-M-f         | 到下一个同级语法结构                           |
-| C-M-b         | 到上一个同级语法结构                           |
-| C-c C-f       | 向前跳过同一级 tag (sgml-skip-tag-forward)    |
-| C-c C-b       | 向后跳过同一级 tag (sgml-skip-tag-backward)   |
-| C-c C-u       | 到最近的上一级 \begin{...} 处。                |
-| C-c }         | 到最近的上一级匹配 {...} 处。                  |
-
+| Command       | Meaning                                                                                          |
+|---------------+--------------------------------------------------------------------------------------------------|
+| C-a           | Move to the beginning of the line                                                                |
+| C-e           | Move to the end of the line                                                                      |
+| M-<           | Move to the beginning of the buffer                                                              |
+| M->           | Move to the end of the buffer                                                                    |
+| M-a           | Move backward to the beginning of a sentence                                                     |
+| M-e           | Move forward to the end of a sentence                                                            |
+| M-}           | Move to the beginning of the next paragraph                                                      |
+| M-{           | Move to the beginning of the previous paragraph                                                  |
+| M-m           | Move to the first non-whitespace character on the line                                           |
+| C-v, M-v      | Scroll the text up or down by one screen                                                         |
+| M-r + number  | Move to a specific line in the window. Without an argument, it moves to the middle of the window |
+| M-x goto-char | Move to the Nth character in the buffer                                                          |
+| M-x goto-line | Move to the Nth line in the buffer                                                               |
+| C-x C-n       | Set the goal column for vertical motion                                                          |
+| C-u C-x C-n   | Unset the goal column                                                                            |
+| C-M-a         | Move to the beginning of the current function (defun)                                            |
+| C-M-e         | Move to the end of the current function (defun)                                                  |
+| C-M-f         | Move forward to the next balanced expression                                                     |
+| C-M-b         | Move backward to the previous balanced expression                                                |
+| C-c C-f       | Skip forward over a tag in SGML mode                                                             |
+| C-c C-b       | Skip backward over a tag in SGML mode                                                            |
+| C-c C-u       | Move to the nearest enclosing \begin{...} in LaTeX mode                                          |
+| C-c }         | Move to the nearest enclosing matching {...} in LaTeX mode                                       |
 
 copy from https://docs.huihoo.com/homepage/shredderyin/emacs_move.html
 
