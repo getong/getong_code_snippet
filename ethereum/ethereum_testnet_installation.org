@@ -11,14 +11,16 @@ see https://www.alchemy.com/faucets/ethereum-sepolia
 also see https://faucet.chainstack.com/sepolia-testnet-faucet
 also see https://cloud.google.com/application/web3/faucet/ethereum/sepolia
 
-** ethereum tool
+** ethereum tool, typescript
+
 [[https://hardhat.org/][hardhat]]
 
-
 ** rust alloy book
+
 [[https://alloy.rs/getting-started/installation.html][alloy book]]
 
 ** rust Foundry
+
 [[https://getfoundry.sh/][Foundry]]
 [[https://book.getfoundry.sh/][foundry book]]
 
