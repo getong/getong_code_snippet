@@ -2,9 +2,7 @@
 :PROPERTIES:
 :CUSTOM_ID: archlinux-gnome
 :END:
-also see
-[[https://wiki.archlinux.org/title/GNOME/Tips_and_tricks][GNOME/Tips and
-tricks]]
+also see [[https://wiki.archlinux.org/title/GNOME/Tips_and_tricks][GNOME/Tips and tricks]]
 
 ** clock with seconds
 :PROPERTIES:
@@ -14,9 +12,7 @@ tricks]]
 gsettings set org.gnome.desktop.interface clock-show-seconds false
 #+end_src
 
-copy from
-[[https://askubuntu.com/questions/1036441/ubuntu-18-04-gnome-shell-high-cpu-usage][Ubuntu
-18.04 gnome-shell high CPU usage]]
+copy from [[https://askubuntu.com/questions/1036441/ubuntu-18-04-gnome-shell-high-cpu-usage][Ubuntu 18.04 gnome-shell high CPU usage]]
 
 ** install gst-libav
 :PROPERTIES:
@@ -36,8 +32,7 @@ sudo systemctl start haveged
 sudo systemctl enable haveged
 #+end_src
 
-copy from [[https://bbs.archlinux.org/viewtopic.php?id=250490][gdm takes
-a very long time to load]]
+copy from [[https://bbs.archlinux.org/viewtopic.php?id=250490][gdm takes a very long time to load]]
 
 ** gstreamer0.10-plugins
 :PROPERTIES:
@@ -47,9 +42,7 @@ a very long time to load]]
 sudo pacman -S a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 xvidcore gstreamer0.10-base-plugins
 #+end_src
 
-copy from
-[[https://itsfoss.com/things-to-do-after-installing-arch-linux/][7
-Essential Things To Do After Installing Arch Linux]]
+copy from [[https://itsfoss.com/things-to-do-after-installing-arch-linux/][7 Essential Things To Do After Installing Arch Linux]]
 
 ** very old graphical card
 :PROPERTIES:

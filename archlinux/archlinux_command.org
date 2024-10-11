@@ -1924,9 +1924,9 @@ sudo systemctl start /dev/zram0
 zramctl
 #+end_src
 
-swap is no more needed. copy from
-[[https://github.com/systemd/zram-generator][systemctl start
-/dev/zram0]] The reason why choose zram: 1, the kubernetes dislike swap
+swap is no more needed.
+copy from [[https://github.com/systemd/zram-generator][systemctl start /dev/zram0]]
+The reason why choose zram: 1, the kubernetes dislike swap
 2, the zram is much more high performance.
 
 Or change the zram-generator.conf:
@@ -1937,9 +1937,7 @@ zram-fraction = 1
 max-zram-size=none
 #+end_example
 
-copy from
-[[https://medium.com/nerd-for-tech/dynamically-adjust-swap-zram-size-in-fedora-linux-78cd712808f2][Dynamically
-Increase SWAP (ZRAM) Size in Linux]]
+copy from [[https://medium.com/nerd-for-tech/dynamically-adjust-swap-zram-size-in-fedora-linux-78cd712808f2][Dynamically Increase SWAP (ZRAM) Size in Linux]]
 
 kubernetes does not accept swap, the zram is also not accepted. Do not
 install zram.
@@ -1982,9 +1980,8 @@ sudo ln -s /usr/bin/sha512sum /usr/bin/sha512
 #+end_src
 
 copy from
-[[https://bbs.archlinux.org/viewtopic.php?id=277700][/usr/sbin/dkms:
-line 1033: sha512: command not found.]] also see
-[[https://github.com/dell/dkms/issues/229][https://bbs.archlinux.org/viewtopic.php?id=277700]]
+[[https://bbs.archlinux.org/viewtopic.php?id=277700][/usr/sbin/dkms: line 1033: sha512: command not found.]]
+also see [[https://github.com/dell/dkms/issues/229][https://bbs.archlinux.org/viewtopic.php?id=277700]]
 
 ** cpupower
 :PROPERTIES:
@@ -2013,9 +2010,7 @@ ExecStart=
 ExecStart=/usr/lib/systemd/systemd-networkd-wait-online --ignore=enp0s31f6
 #+end_src
 
-copy from
-[[https://unix.stackexchange.com/questions/381448/systemd-networkd-wait-online-failure][systemd-networkd-wait-online
-failure]]
+copy from [[https://unix.stackexchange.com/questions/381448/systemd-networkd-wait-online-failure][systemd-networkd-wait-online failure]]
 
 ** qemu
 :PROPERTIES:
