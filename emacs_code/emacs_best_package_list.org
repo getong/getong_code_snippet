@@ -70,3 +70,5 @@ markdown
 
 lsp-bridge copilot plugin does not work fast as copilot.el
 Not enable copilot in lsp-bridge
+
+** tsx mode enables html-mode and parens-mode
