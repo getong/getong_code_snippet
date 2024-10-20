@@ -15,6 +15,7 @@ Solidity supports various data types, such as:
 - Mapping: mapping
 
 #+begin_src solidity
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 contract DataTypesExample {
@@ -26,14 +27,14 @@ contract DataTypesExample {
     uint256 public unsignedInteger = 10;
 
     // Address
-    address public userAddress = 0x742d35Cc6634C0532925a3b844Bc454e4438f44e;
+    address public userAddress;
 
     // String
     string public greeting = "Hello, World!";
 
     // Bytes (dynamic-size and fixed-size)
     bytes public dynamicBytes = "hello, solidity";
-    bytes32 public fixedBytes = "hello, solidity";
+    bytes32 public fixedBytes = bytes32(abi.encodePacked("hello, solidity"));
 
     // Arrays (dynamic-size and fixed-size)
     uint[] public dynamicArray = [1, 2, 3];
@@ -55,14 +56,28 @@ contract DataTypesExample {
     // Enums
     enum Status { Open, Closed, Pending }
     Status public currentStatus = Status.Open;
-    Status public nextStatus = Status.Closed;
-    Status public previousStatus = Status.Pending;
 
     // Mapping
     mapping(address => uint) public balances;
 
-    constructor() {
+    // Events for transparency
+    event BalanceUpdated(address indexed user, uint newBalance);
+
+    constructor(address _userAddress) {
+        userAddress = _userAddress;
         balances[msg.sender] = 100;
+        emit BalanceUpdated(msg.sender, 100);
+    }
+
+    // Function to update balance
+    function updateBalance(uint newBalance) public {
+        balances[msg.sender] = newBalance;
+        emit BalanceUpdated(msg.sender, newBalance);
+    }
+
+    // Function to change status
+    function changeStatus(Status newStatus) public {
+        currentStatus = newStatus;
     }
 }
 #+end_src
