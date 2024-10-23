@@ -1,4 +1,4 @@
-z* docker cmd
+* docker cmd
 :PROPERTIES:
 :CUSTOM_ID: docker-cmd
 :END:
@@ -319,3 +319,25 @@ in dockerfile
 ARG SECRETS_TOKEN
 ENV SECRETS_TOKEN=${SECRETS_TOKEN}
 #+end_src
+
+** docker china mirror
+
+#+begin_src shell
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+    "registry-mirrors": [
+    	"https://dockerpull.com",
+        "https://docker.anyhub.us.kg",
+        "https://dockerhub.jobcher.com",
+        "https://dockerhub.icu",
+        "https://docker.awsl9527.cn"
+    ]
+}
+EOF
+sudo systemctl daemon-reload && sudo systemctl restart docker
+
+#+end_src
+
+copy from [[https://www.coderjia.cn/archives/dba3f94c-a021-468a-8ac6-e840f85867ea][目前国内可用Docker镜像源汇总（截至2024年8月）
+]]
