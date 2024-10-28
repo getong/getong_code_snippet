@@ -135,3 +135,83 @@ $ cast rpc eth_getBlockByNumber "latest" "false" --rpc-url $RPC
 copy from https://ethereum.stackexchange.com/questions/135085/how-do-i-use-foundrys-anvil
 
 ** foundry chisel
+
+
+** ethers decode logs
+
+#+begin_src rust
+pub fn parse_deposits_from_receipts<'a, I>(
+    chain_spec: &ChainSpec,
+    receipts: I,
+) -> Result<Vec<Request>, BlockValidationError>
+where
+    I: IntoIterator<Item = &'a Receipt>,
+{
+    let deposit_contract_address = chain_spec
+        .deposit_contract
+        .as_ref()
+        .map_or(MAINNET_DEPOSIT_CONTRACT_ADDRESS, |contract| contract.address);
+    receipts
+        .into_iter()
+        .flat_map(|receipt| receipt.logs.iter())
+        // No need to filter for topic because there's only one event and that's the Deposit event
+        // in the deposit contract.
+        .filter(|log| log.address == deposit_contract_address)
+        .map(|log| {
+            let decoded_log = DepositEvent::decode_log(log, false)?;
+            let deposit = parse_deposit_from_log(&decoded_log);
+            Ok(Request::DepositRequest(deposit))
+        })
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(|err: alloy_sol_types::Error| {
+            BlockValidationError::DepositRequestDecode(err.to_string())
+        })
+}
+#+end_src
+
+copy from https://github.com/fluentlabs-xyz/fluent/blob/b9af4046dfd0d79fde1abed272ac0b858abbd5f0/crates/ethereum/evm/src/eip6110.rs#L37
+
+
+also see https://github.com/drunest/fetching-uniswap-v3-raydium/blob/46a71df75ba5a5c5f94feadb1de59378bb2101a6/src/main.rs#L86
+
+#+begin_src rust
+fn decode_uniswap_event(log: &Log) -> Result<UniswapEvent, Box<dyn std::error::Error + Send + Sync>> {
+    // Event signatures for Uniswap V3 pool events
+    let swap_signature = H256::from_slice(&hex::decode("c42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67").unwrap());
+    let mint_signature = H256::from_slice(&hex::decode("7a53080ba414158be7ec69b987b5fb7d07dee101fe85488f0853ae16239d0bde").unwrap());
+    let burn_signature = H256::from_slice(&hex::decode("0c396cd989a39f4459b5fa1aed6a9a8dcdbc45908acfd67e028cd568da98982c").unwrap());
+    let collect_signature = H256::from_slice(&hex::decode("70935338e69775456a85ddef226c395fb668b63fa0115f5f20610b388e6ca9c0").unwrap());
+
+    // Parse the raw log data
+    let raw_log = RawLog {
+        topics: log.topics.clone(),
+        data: log.data.to_vec(),
+    };
+
+    // Match based on event signature and decode the appropriate event
+    if log.topics[0] == swap_signature {
+        match <SwapEvent as EthLogDecode>::decode_log(&raw_log) {
+            Ok(event) => return Ok(UniswapEvent::Swap(event)),
+            Err(err) => return Err(Box::new(err)),
+        }
+    } else if log.topics[0] == mint_signature {
+        match <MintEvent as EthLogDecode>::decode_log(&raw_log) {
+            Ok(event) => return Ok(UniswapEvent::Mint(event)),
+            Err(err) => return Err(Box::new(err)),
+        }
+    } else if log.topics[0] == burn_signature {
+        match <BurnEvent as EthLogDecode>::decode_log(&raw_log) {
+            Ok(event) => return Ok(UniswapEvent::Burn(event)),
+            Err(err) => return Err(Box::new(err)),
+        }
+    } else if log.topics[0] == collect_signature {
+        match <CollectEvent as EthLogDecode>::decode_log(&raw_log) {
+            Ok(event) => return Ok(UniswapEvent::Collect(event)),
+            Err(err) => return Err(Box::new(err)),
+        }
+    } else {
+        println!("Unknown event signature: {:?}", log);
+    }
+    Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "Unknown event signature")))
+}
+#+end_src
