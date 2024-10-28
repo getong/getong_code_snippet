@@ -339,5 +339,11 @@ sudo systemctl daemon-reload && sudo systemctl restart docker
 
 #+end_src
 
-copy from [[https://www.coderjia.cn/archives/dba3f94c-a021-468a-8ac6-e840f85867ea][目前国内可用Docker镜像源汇总（截至2024年8月）
-]]
+copy from [[https://www.coderjia.cn/archives/dba3f94c-a021-468a-8ac6-e840f85867ea][目前国内可用Docker镜像源汇总（截至2024年8月）]]
+
+
+** run another entrypoint, not the default entrypoint
+
+#+begin_src shell
+docker run -it --entrypoint /bin/sh docker_image_name
+#+end_src
