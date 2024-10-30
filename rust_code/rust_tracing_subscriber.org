@@ -1,0 +1,15 @@
+* rust tracing_subscriber
+
+** show line number and file on tracing events
+
+#+begin_src rust
+tracing_subscriber::fmt()
+    .event_format(
+        tracing_subscriber::fmt::format()
+            .with_file(true)
+            .with_line_number(true)
+    )
+    .init();
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/72947600/how-to-show-line-number-and-file-on-tracing-events][How to show line number and file on tracing events?]]
