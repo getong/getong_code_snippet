@@ -354,3 +354,12 @@ sudo nvram AutoBoot=%03
 
 sudo pmset autorestart 0
 #+end_src
+
+** Finder does not have permission to open (null)
+
+#+begin_src shell
+codesign --remove-signature /Applications/Emacs.app
+codesign --force --deep --sign -  /Applications/Emacs.app
+#+end_src
+
+copy from [[https://forums.macrumors.com/threads/finder-does-not-have-permission-to-open-null.2441374/][Finder does not have permission to open (null)]]
