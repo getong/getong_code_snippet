@@ -108,3 +108,33 @@ gpg --delete-keys xxxxx-keys
 #+end_src
 
 copy from [[https://superuser.com/questions/1388426/unable-to-delete-private-subkeys-in-gnupg-if-no-master-key-present][Unable to delete private subkeys in GnuPG if no master key present]]
+
+** Git Commit Freeze Due to GPG Lock Issues
+
+For Linux:
+
+#+begin_src shell
+ls -l ~/.gnupg/*.lock
+#+end_src
+
+For MacOS (Darwin):
+
+#+begin_src shell
+ls -l ~/.gnupg/**/*.lock
+#+end_src
+
+Remove the Identified Stale Lock File:
+
+macos:
+
+#+begin_src shell
+rm -f ~/.gnupg/public-keys.d/pubring.db.lock
+#+end_src
+
+Restart GPG-Agent
+
+#+begin_src shell
+gpgconf --reload gpg-agent
+#+end_src
+
+copy from [[https://gist.github.com/bahadiraraz/f2fb15b07e0fce92d8d5a86ab33469f7][Git Commit Freeze Due to GPG Lock Issues]]
