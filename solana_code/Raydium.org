@@ -1,0 +1,6 @@
+* raydium
+
+** raydium usage
+
+[[https://thewealthmastery.io/how-to-use-raydium-solana-defi-guide/][How To Use Raydium]]
+[[http://defiplot.com/blog/raydium-crash-tutorial/][Raydium 简明教程]]
