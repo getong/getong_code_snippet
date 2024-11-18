@@ -13,3 +13,16 @@ tracing_subscriber::fmt()
 #+end_src
 
 copy from [[https://stackoverflow.com/questions/72947600/how-to-show-line-number-and-file-on-tracing-events][How to show line number and file on tracing events?]]
+
+** avoid text coloring
+
+#+begin_src shell
+let (non_blocking, _guard) = tracing_appender::non_blocking(TestWriter);
+
+tracing_subscriber::fmt()
+    .with_writer(non_blocking)
+    .with_ansi(false) // <------ this
+    .init();
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/69424261/how-to-avoid-text-coloring-when-using-tracing-appender][How to avoid text coloring when using tracing-appender?]]
