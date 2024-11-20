@@ -1,0 +1,66 @@
+* sqlx
+
+** offline mode
+
+*** enable database connection
+
+#+begin_src shell
+$ cat .env
+# -----------------------------------------------------------------------------
+# Database (PostgreSQL)
+# -----------------------------------------------------------------------------
+DATABASE_URL=postgresql://postgres:mypassword@localhost:15433/test_database
+#+end_src
+
+*** prepare
+
+#+begin_src shell
+cargo sqlx prepare
+#+end_src
+
+*** check the .sqlx directory
+
+#+begin_src shell
+$ ls .sqlx
+query-1694e502790548ba1a5bd558209757d5042a90628e57c1cc9ba776809794e0a8.json
+query-347d77ba13c2248f9ab95d004cb45200c1cfb5d28aad8ecb4f4457a1615210a4.json
+query-4b1027821277e8811f62add38153f002b6c559442edaa0f21ce0d26d26c62dc4.json
+query-4cd4c09126d5dd0f9dfb7f481511d4c866e5f52dbc7ed9a50bceaed276322255.json
+query-4e65070a4e778949d110ecdd2ab11c2f894e4767781232c649cb77d12ceb9ddb.json
+query-4eb8ff408ec4c7f385c54abaf4114cc0d18d49babeee497c9f04ec077eb873ee.json
+query-5aac2d3455d5496f0540e408a6b79664decaa6054a2065b32c258e0ad682c5e8.json
+query-7846f0e268aa1559269832599d3f292953c0a1679cd2352cce17e4a09082bbdf.json
+query-7ee1115805acc81e09c04b65e8ccfc417be7bfc93457ff7b8730062bc4368c8c.json
+query-8a4d0de484b0fc6443dca8d0ad4156ef2a4111543d470fac28f5ed9dea72a46d.json
+query-9d2b7672089c4b26c7d1fa7f25be2363f870c30ba6196fb19dded24bdb34564e.json
+query-a5e6c30f3e88b6c8a7f0d5843d1aea34f86fd8462fe1fcc21cd1102ecf12acbc.json
+query-a8a436600318e38ebf0794667f9c580ff0c30deebc9882e35fae0d606d514033.json
+query-b1c90600f5ed041d0a7fe3272762173d802a4840c4d953cf83da1f0a4fc53470.json
+query-c7bb4a6eaee4457c2e12625aeac2696aa6d72b0017270381e2764b31d7078c22.json
+query-c92db6b406c0864357cd5c6d3889d5c5923ea9fe4fe6cc97b91220ca9ab71457.json
+query-e35b26a6f0183eb09cefbbabef8c99ead3a9d74fc1fdc6253715fbcfaad6ca78.json
+query-e5bca3f6ecdf60c6630e730af220eb8fa83cfd391cbdb157a60d6dd0b27d36b8.json
+query-fa9a965dea804b49ba4c80bd979c7e05d71a6619977f97ae2e9ef536ca25b16f.json
+query-fb59972a15cdb64dac63843470cd28c6e64bcc3aab5f78fdf3b3ffe5c42b4256.json
+#+end_src
+
+*** enable offline mode
+
+#+begin_src shell
+export SQLX_OFFLINE=true
+#+end_src
+
+or in .env
+
+#+begin_src shell
+$ cat .env
+SQLX_OFFLINE=true
+#+end_src
+
+*** build
+
+#+begin_src shell
+cargo build
+#+end_src
+
+copy from [[https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md#enable-building-in-offline-mode-with-query][Enable building in "offline mode" with query!()]]
