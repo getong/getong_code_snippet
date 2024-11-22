@@ -15,24 +15,17 @@ WHERE
    TABLE_NAME = 'city';
 #+end_src
 
-copy from
-[[http://www.postgresqltutorial.com/postgresql-describe-table/][PostgreSQL
-Describe Table]]
+copy from [[http://www.postgresqltutorial.com/postgresql-describe-table/][PostgreSQL Describe Table]]
 
 ** with query
 :PROPERTIES:
 :CUSTOM_ID: with-query
 :END:
-see [[https://www.postgresql.org/docs/current/queries-with.html][Common
-Table Expressions]] see
-[[https://academy.vertabelo.com/blog/get-to-know-the-power-of-sql-recursive-queries/][Get
-to Know the Power of SQL Recursive Queries]] see
-[[https://academy.vertabelo.com/blog/do-it-in-sql-recursive-tree-traversal/][Do
-It in SQL: Recursive Tree Traversal]] see
-[[https://elixirforum.com/t/ecto-preload-for-tag-has-many-tags/4323][Ecto
-preload for tag has_many tags]] see
-[[https://www.technobytz.com/closure_table_store_hierarchical_data.html][Closure
-Table -- Store Hierarchical Data Seamlessly | PostgreSQL]]
+see [[https://www.postgresql.org/docs/current/queries-with.html][Common Table Expressions]]
+see [[https://academy.vertabelo.com/blog/get-to-know-the-power-of-sql-recursive-queries/][Get to Know the Power of SQL Recursive Queries]]
+see [[https://academy.vertabelo.com/blog/do-it-in-sql-recursive-tree-traversal/][Do It in SQL: Recursive Tree Traversal]]
+see [[https://elixirforum.com/t/ecto-preload-for-tag-has-many-tags/4323][Ecto preload for tag has_many tags]]
+see [[https://www.technobytz.com/closure_table_store_hierarchical_data.html][Closure Table -- Store Hierarchical Data Seamlessly | PostgreSQL]]
 
 ** check a table exist
 :PROPERTIES:
@@ -47,9 +40,7 @@ SELECT EXISTS (
    );
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/20582500/how-to-check-if-a-table-exists-in-a-given-schema][How
-to check if a table exists in a given schema]]
+copy from [[https://stackoverflow.com/questions/20582500/how-to-check-if-a-table-exists-in-a-given-schema][How to check if a table exists in a given schema]]
 
 ** alter sequence
 :PROPERTIES:
@@ -59,9 +50,8 @@ to check if a table exists in a given schema]]
 ALTER SEQUENCE product_id_seq RESTART WITH 1453
 #+end_src
 
-=product= is the table name copy from
-[[https://stackoverflow.com/questions/5342440/reset-auto-increment-counter-in-postgres][Reset
-auto increment counter in postgres]]
+=product= is the table name
+copy from [[https://stackoverflow.com/questions/5342440/reset-auto-increment-counter-in-postgres][Reset auto increment counter in postgres]]
 
 ** ERROR: column c.relhasoids does not exist
 :PROPERTIES:
@@ -73,9 +63,7 @@ the client and server version should be the same, the 12 version.
 docker exec -it postgres_container_name psql your_connection_string
 #+end_src
 
-copy from
-[[https://stackoverflow.com/questions/58461178/how-to-fix-error-column-c-relhasoids-does-not-exist-in-postgres][How
-to fix "ERROR: column c.relhasoids does not exist" in Postgres?]]
+copy from [[https://stackoverflow.com/questions/58461178/how-to-fix-error-column-c-relhasoids-does-not-exist-in-postgres][How to fix "ERROR: column c.relhasoids does not exist" in Postgres?]]
 
 ** change schema
 :PROPERTIES:
@@ -83,4 +71,16 @@ to fix "ERROR: column c.relhasoids does not exist" in Postgres?]]
 :END:
 #+begin_src sql
 set search_path to schema1, schema2;
+#+end_src
+
+
+** backup and restore from two docker containers
+
+#+begin_src shell
+pg_dump -h remote_host -U postgres -p 15433 -d database_name -F c -f database_name-20241121.sqlc
+
+createdb -U postgres database_name
+# sqlx database create
+
+pg_restore -h localhost -U postgres -d database_name -F c database_name-20241121.sqlc
 #+end_src
