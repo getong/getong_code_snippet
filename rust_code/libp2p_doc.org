@@ -685,3 +685,20 @@ struct Behaviour {
 ** libp2p quic implementation does not support pnet protocol
 
 see [[https://github.com/libp2p/rust-libp2p/issues/3275][Add Support for Pnet on quic]]
+
+** libp2p pnet protocol
+
+#+begin_quote
+Libp2p nodes configured with a pre-shared key can only communicate with other nodes with the same key.
+#+end_quote
+
+copy from [[https://docs.rs/libp2p/0.54.1/libp2p/pnet/index.html][Crate libp2p::pnet]]
+
+#+begin_quote
+对于联盟链的业务中搭建一个私有网络的 IPFS 集群还是很有必要的，私有网络集群允许 IPFS 节点只连接到拥有共享密钥的其他对等节点，网络中的节点不响应来自网络外节点的通信。
+#+end_quote
+
+copy from [[https://chain-code.github.io/docs/%E5%8C%BA%E5%9D%97%E9%93%BE/ipfs/2021-06-02-ipfs%E7%A7%81%E6%9C%89%E7%BD%91%E7%BB%9C%E6%90%AD%E5%BB%BA/][IPFS私有网络集群搭建]]
+
+
+also see [[https://github.com/libp2p/specs/blob/master/pnet/Private-Networks-PSK-V1.md][Pre-shared Key Based Private Networks in libp2p]]
