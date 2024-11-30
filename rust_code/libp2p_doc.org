@@ -702,3 +702,22 @@ copy from [[https://chain-code.github.io/docs/%E5%8C%BA%E5%9D%97%E9%93%BE/ipfs/2
 
 
 also see [[https://github.com/libp2p/specs/blob/master/pnet/Private-Networks-PSK-V1.md][Pre-shared Key Based Private Networks in libp2p]]
+
+
+** libp2p dctur, relay server, rendezvous protocol, autoNAT
+
+#+begin_quote
+rendezvous is a protocol for peer discovery of all kinds (e.g. services, relays, etc). a "rendezvous" peer is typically a well-know peer at a public fixed address. typically, when a peer starts up it connects to a set of fixed rendezvous servers to query for other peers and to also register itself so that other peers may find it. the rendezvous server acts as a centralized routing table/directory. one popular use for rendezvous servers is for them to advertise peers subscribed to a topic in a pub-sub network. this is how some blockchain networks bootstrap. rendezvous servers have also used pub-sub among themselves to gossip advertising data so that they all advertise the same information to peers.
+
+NOTE: this isn't very "decentralized" but is very handy and is how most of the p2p networks using libp2p "bootstrap". use of rendezvous servers forms a hub-and-spoke network topology, even if briefly. if you're goal is to create metastable p2p networks with no fixed infrastructure then rendezvous is not for you and you'll have to use other peer discovery methods.
+
+relay server is when a publicly available libp2p peer relays traffic from one peer to another. this is typically done when one or both peers are behind a NAT and do not have publicly routable IP addresses.
+
+dcutr is a method for using a relay server as a signaling server to do hole punching through a NAT so that a direct connection between peers is possible even when one or both peers are behind a NAT.
+
+autonat is a protocol/method that a peer uses to discover if it is behind a NAT. it enables asking other peers to dial back to the initiating peer. this is often used in conjunction with a relay server that receives the dial back and relays the traffic if the initiating peer is behind a NAT.
+
+To wrap your head around this better, you have to remember that all libp2p peers typically act as servers as well as clients. Meaning they make outbound dials to other peers as well as accept inbound dials from other peers. When a peer is behind a NAT it typically doesn't have a public routable IP address. the best way for it to accept an inbound dial is to first connect to a relay server and get a reservation for accepting inbound dials on its behalf. Once an inbound dial happens, the relay server can continue to relay traffic or dcutr can be attempted to punch a hole in the NAT and establish a direct connection between the NAT'd peer and the dialing peer.
+#+end_quote
+
+copy from [[https://stackoverflow.com/questions/78431030/difference-between-dctur-relay-server-rendezvous-protocol-signalling-server-a][Difference between dctur, relay server, rendezvous protocol, signalling server and a tracking server? in terms of peer to peer network]]
