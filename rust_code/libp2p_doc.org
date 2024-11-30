@@ -680,3 +680,8 @@ struct Behaviour {
   kademlia: kad::Behaviour<kad::store::MemoryStore>,
 }
 #+end_src
+
+
+** libp2p quic implementation does not support pnet protocol
+
+see [[https://github.com/libp2p/rust-libp2p/issues/3275][Add Support for Pnet on quic]]
