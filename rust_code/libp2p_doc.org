@@ -721,3 +721,8 @@ To wrap your head around this better, you have to remember that all libp2p peers
 #+end_quote
 
 copy from [[https://stackoverflow.com/questions/78431030/difference-between-dctur-relay-server-rendezvous-protocol-signalling-server-a][Difference between dctur, relay server, rendezvous protocol, signalling server and a tracking server? in terms of peer to peer network]]
+
+
+** libp2p performance test
+
+see [[https://observablehq.com/@libp2p-workspace/libp2p-perf-blog-post-1][libp2p Performance]]
