@@ -726,3 +726,18 @@ copy from [[https://stackoverflow.com/questions/78431030/difference-between-dctu
 ** libp2p performance test
 
 see [[https://observablehq.com/@libp2p-workspace/libp2p-perf-blog-post-1][libp2p Performance]]
+
+** rust libp2p project
+
+https://github.com/renegade-fi/renegade
+https://github.com/ethersync/ethersync
+https://github.com/p2panda/aquadoggo
+https://github.com/domo-iot/libp2p-rust-dht
+https://github.com/Actyx/Actyx
+https://github.com/Sherlock-Holo/private_share
+https://github.com/ipfs-rust/ipfs-embed
+https://github.com/molyee-tech/syncy
+https://github.com/project-takoyaki/project-takoyaki-botnet
+https://github.com/gcp-development/ipfs-private-network
+https://github.com/brian-dawn/lab-monitor
+https://github.com/clpi/mbc
