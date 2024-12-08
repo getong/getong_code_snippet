@@ -29,3 +29,7 @@ see [[https://www.reddit.com/r/rust/comments/1cdei2s/comparison_between_templati
 see https://github.com/avored/avored-rust-cms
 
 also see https://github.com/hongquan/QuanWeb/
+
+see [[https://tulipemoutarde.be/posts/2023-08-20-depencency-injection-rust-axum/][Dependency injection in Axum handlers. A quick tour]]
+
+source code [[https://github.com/fstephany/axum-di-example][axum-di-example]]
