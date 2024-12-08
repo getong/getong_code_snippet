@@ -17,3 +17,5 @@ https://github.com/sunng87/handlebars-rust
 ** demo project
 
 see https://github.com/avored/avored-rust-cms
+
+also see https://github.com/hongquan/QuanWeb/
