@@ -12,7 +12,17 @@ https://github.com/djc/askama
 
 https://github.com/sunng87/handlebars-rust
 
+** maud
+
+https://github.com/lambda-fairy/maud
+
+** minijinja
+
+https://github.com/mitsuhiko/minijinja
+
 ** winner is handlebars
+
+see [[https://www.reddit.com/r/rust/comments/1cdei2s/comparison_between_templating_libs_maud_askama/][Comparison between templating libs: Maud, Askama and Minijinja]]
 
 ** demo project
 
