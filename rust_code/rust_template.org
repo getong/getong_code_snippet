@@ -1,0 +1,19 @@
+* rust template
+
+** tera
+
+https://github.com/Keats/tera
+
+** askama
+
+https://github.com/djc/askama
+
+** handlebars
+
+https://github.com/sunng87/handlebars-rust
+
+** winner is handlebars
+
+** demo project
+
+see https://github.com/avored/avored-rust-cms
