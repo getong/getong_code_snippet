@@ -741,3 +741,100 @@ https://github.com/project-takoyaki/project-takoyaki-botnet
 https://github.com/gcp-development/ipfs-private-network
 https://github.com/brian-dawn/lab-monitor
 https://github.com/clpi/mbc
+
+
+** libp2p perf protocol
+
+see [[https://observablehq.com/@libp2p-workspace/libp2p-perf-blog-post-1][libp2p Performance]]
+
+[[https://github.com/libp2p/test-plans][Interoperability/end to end test-plans & performance benchmarking for libp2p]]
+
+[[https://discuss.libp2p.io/t/rough-stress-metrics-for-gossipsub/2223][Rough stress metrics for Gossipsub]]
+
+
+** libp2p perf command line example
+
+*** clone the rust-libp2p repo, and build
+
+#+begin_src shell
+git clone https://github.com/libp2p/rust-libp2p
+cd rust-libp2p
+cargo build
+$ ./target/debug/perf -h
+Usage: perf [OPTIONS]
+
+Options:
+      --server-address <SERVER_ADDRESS>
+      --transport <TRANSPORT>
+      --upload-bytes <UPLOAD_BYTES>
+      --download-bytes <DOWNLOAD_BYTES>
+      --run-server                       Run in server mode
+  -h, --help                             Print help
+#+end_src
+
+*** Run in server mode:
+
+#+begin_src shell
+./target/debug/perf --server-address '127.0.0.1:8080' --run-server
+#+end_src
+
+*** In another terminal, try to upload/download 100MB:
+
+#+begin_src shell
+./target/debug/perf --server-address '127.0.0.1:8080' --transport tcp --upload-bytes 104857600 --download-bytes 104857600
+#+end_src
+
+** To simulate network latency and packet loss, we can use pfctl and dnctl
+
+*** enable the packet filter:
+
+#+begin_src shell
+sudo pfctl -E
+#+end_src
+
+*** Then create a custom anchor in pf:
+
+#+begin_src shell
+cat /etc/pf.conf && echo "dummynet-anchor \"libp2p\"" && echo "anchor \"libp2p\"" | sudo pfctl -f -
+#+end_src
+
+*** Pipe the traffic to dummynet:
+
+#+begin_src shell
+echo "dummynet in quick proto tcp from any to any port 8080 pipe 1" | sudo pfctl -a libp2p -f -
+#+end_src
+
+*** Simulate the network latency:
+
+#+begin_src shell
+sudo dnctl pipe 1 config delay 10ms
+#+end_src
+
+*** Benchmark again, server:
+
+#+begin_src shell
+./target/debug/perf --server-address '127.0.0.1:8080' --transport tcp --upload-bytes 104857600 --download-bytes 104857600
+#+end_src
+
+
+*** Simulate the packet loss:
+
+#+begin_src shell
+$ sudo dnctl pipe 1 config plr 0.01
+
+$ sudo dnctl list
+00001: unlimited    0 ms   50 sl.plr 0.010000 1 queues (1 buckets) droptail
+mask: 0x00 0x00000000/0x0000 -> 0x00000000/0x0000
+4BKT Prot ___Source IP/port____ ____Dest. IP/port____ Tot_pkt/bytes Pkt/Byte Drp
+mask: 0x00 0x00000000/0x0000 -> 0x00000000/0x0000
+BKT Prot ___Source IP/port____ ____Dest. IP/port____ Tot_pkt/bytes Pkt/Byte Drp
+0 tcp        127.0.0.1/63691       127.0.0.1/8080  1011241 490303519  0    0 9463
+#+end_src
+
+*** client:
+
+#+begin_src shell
+./target/debug/perf --server-address '127.0.0.1:8080' --transport tcp --upload-bytes 104857600 --download-bytes 104857600
+#+end_src
+
+copy from [[https://quantonganh.com/2023/10/27/libp2p-perf-benchmark.md][libp2p performance benchmarking]]
