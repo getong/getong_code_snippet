@@ -810,7 +810,7 @@ echo "dummynet in quick proto tcp from any to any port 8080 pipe 1" | sudo pfctl
 sudo dnctl pipe 1 config delay 10ms
 #+end_src
 
-*** Benchmark again, server:
+*** Benchmark again, client:
 
 #+begin_src shell
 ./target/debug/perf --server-address '127.0.0.1:8080' --transport tcp --upload-bytes 104857600 --download-bytes 104857600
