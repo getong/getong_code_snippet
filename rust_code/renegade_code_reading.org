@@ -234,3 +234,19 @@ fn start(&mut self) -> Result<(), Self::Error> {
   swarm.listen_on(addr).map_err(|err| NetworkManagerError::SetupError(err.to_string()))?;
 }
 #+end_src
+
+** job queue and notification
+
+#+begin_src rust
+/// Create a new task driver queue
+pub fn new_task_driver_queue() -> (TaskDriverQueue, TaskDriverReceiver) {
+    let (send, recv) = crossbeam::channel::unbounded();
+    (send, MeteredCrossbeamReceiver::new(recv, TASK_DRIVER_QUEUE_NAME))
+}
+
+/// Create a new notification channel and job for the task driver
+pub fn new_task_notification(task_id: TaskIdentifier) -> (TaskNotificationReceiver, TaskDriverJob) {
+    let (sender, receiver) = oneshot_channel();
+    (receiver, TaskDriverJob::Notify { task_id, channel: sender })
+}
+#+end_src
