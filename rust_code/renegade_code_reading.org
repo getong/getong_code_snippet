@@ -250,3 +250,52 @@ pub fn new_task_notification(task_id: TaskIdentifier) -> (TaskNotificationReceiv
     (receiver, TaskDriverJob::Notify { task_id, channel: sender })
 }
 #+end_src
+
+
+** raft request response function
+
+#+begin_src rust
+/// Propose an update to the raft
+pub async fn propose_transition(&self, update: Proposal) -> Result<(), ReplicationV2Error> {
+    // If the current node is not the leader, forward to the leader
+    let (mut leader_nid, leader_info) = self
+        .leader_info()
+        .ok_or_else(|| ReplicationV2Error::Proposal(ERR_NO_LEADER.to_string()))?;
+
+    // If we're expiring the leader, first change leader then propose an expiry
+    if let StateTransition::RemoveRaftPeers { peer_ids } = update.transition.as_ref()
+        && peer_ids.contains(&leader_nid)
+    {
+        info!("removing raft leader");
+        leader_nid = self.change_leader().await?;
+    }
+
+    if leader_nid != self.node_id() {
+        // Get a client to the leader's raft
+        let net = self.network_factory.new_p2p_client(leader_nid, leader_info);
+
+        // Send a message
+        let msg = RaftRequest::ForwardedProposal(update);
+        net.send_request(leader_nid, msg)
+            .await
+            .map_err(err_str!(ReplicationV2Error::Proposal))?;
+        return Ok(());
+    }
+
+    match *update.transition {
+        StateTransition::AddRaftLearners { learners } => {
+            self.handle_add_learners(learners).await
+        },
+        StateTransition::AddRaftVoters { peer_ids } => self.handle_add_voters(peer_ids).await,
+        StateTransition::RemoveRaftPeers { peer_ids } => {
+            self.handle_remove_peers(peer_ids).await
+        },
+        _ => self
+            .raft()
+            .client_write(update)
+            .await
+            .map_err(err_str!(ReplicationV2Error::Proposal))
+            .map(|_| ()),
+    }
+}
+#+end_src
