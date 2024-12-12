@@ -332,3 +332,6 @@ pub async fn create_global_state(
 #+end_src
 
 _StateInner_ is the inner state of renegade.
+
+
+openraft <=> tokio oneshot <=> libp2p request response
