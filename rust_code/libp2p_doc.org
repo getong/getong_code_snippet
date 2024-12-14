@@ -838,3 +838,35 @@ BKT Prot ___Source IP/port____ ____Dest. IP/port____ Tot_pkt/bytes Pkt/Byte Drp
 #+end_src
 
 copy from [[https://quantonganh.com/2023/10/27/libp2p-perf-benchmark.md][libp2p performance benchmarking]]
+
+
+** request_response multiple protcol support
+
+copy from mbc
+
+#+begin_src rust
+fn req_resp(k: &PeerId) -> request_response::cbor::Behaviour<LocalChainReq, ChainResponse> {
+    request_response::cbor::Behaviour::<LocalChainReq, ChainResponse>::new(
+        [
+            (StreamProtocol::new("/chain/client/1"), ProtocolSupport::Outbound),
+            (StreamProtocol::new("/chain/1"), ProtocolSupport::Full),
+            (StreamProtocol::new("/chain/server/1"), ProtocolSupport::Inbound)
+        ],
+        request_response::Config::default(),
+    )
+}
+#+end_src
+
+** dns ResolverConfig
+
+** toggle
+
+** allow_block_list
+
+** keepalive deprecated
+
+#+begin_quote
+Deprecate KeepAlive::Until. Individual protocols should not keep connections alive for longer than necessary. Users should use swarm::Config::idle_connection_timeout instead. See PR 4656.
+#+end_quote
+
+copy from https://github.com/libp2p/rust-libp2p/blob/master/swarm/CHANGELOG.md
