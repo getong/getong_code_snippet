@@ -877,3 +877,38 @@ https://github.com/ipfs-rust/ipfs-embed
 https://github.com/electricherd/audiobookfinder
 https://github.com/project-takoyaki/project-takoyaki-botnet
 https://github.com/ChainSafe/forest
+
+
+** libp2p::request_response::Behaviour::send_request
+
+#+begin_src rust
+pub fn send_request(&mut self, peer: &PeerId, request: TCodec::Request) -> OutboundRequestId {
+    let request_id = self.next_outbound_request_id();
+    let request = OutboundMessage {
+        request_id,
+        request,
+        protocols: self.outbound_protocols.clone(),
+    };
+
+    if let Some(request) = self.try_send_request(peer, request) {
+        self.pending_events.push_back(ToSwarm::Dial {
+            opts: DialOpts::peer_id(*peer).build(),
+        });
+        self.pending_outbound_requests
+            .entry(*peer)
+            .or_default()
+            .push(request);
+    }
+
+    request_id
+}
+
+/// Returns the next outbound request ID.
+fn next_outbound_request_id(&mut self) -> OutboundRequestId {
+    let request_id = self.next_outbound_request_id;
+    self.next_outbound_request_id.0 += 1;
+    request_id
+}
+#+end_src
+
+The _+= 1_ means that request_response is sent one by one.
