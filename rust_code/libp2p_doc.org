@@ -870,3 +870,10 @@ Deprecate KeepAlive::Until. Individual protocols should not keep connections ali
 #+end_quote
 
 copy from https://github.com/libp2p/rust-libp2p/blob/master/swarm/CHANGELOG.md
+
+** libp2p PnetConfig project
+
+https://github.com/ipfs-rust/ipfs-embed
+https://github.com/electricherd/audiobookfinder
+https://github.com/project-takoyaki/project-takoyaki-botnet
+https://github.com/ChainSafe/forest
