@@ -912,3 +912,93 @@ fn next_outbound_request_id(&mut self) -> OutboundRequestId {
 #+end_src
 
 The _+= 1_ means that request_response is sent one by one.
+
+
+** kad behaviour
+
+
+#+begin_quote
+Kademlia 网络协议
+
+Kademlia 是一种分布式哈希表协议和算法，用于构建去中心化的对等网络，核心思想是通过分布式的网络结构来实现高效的数据查找和存储。在这个学习项目里，Kademlia 作为 libp2p 中的 NetworkBehaviour的组成。
+
+以下这些函数或方法是根据 Kademlia 网络协议设计的，它们实现了基本的网络操作，包括获取数据记录、获取数据提供者、存储数据记录和开始提供数据等功能（这里只展示了项目中用到的函数，常用函数可以看libp2p Kademlia DHT 规范，更多函数可见如下图中的源码部分）。
+
+1. get_record
+
+kademlia.get_record(key, Quorum::One);
+
+    作用： 从 Kademlia 网络中获取与指定 key 相关的记录。
+    参数：
+        key: 要获取记录的键。
+        Quorum::One: 获取记录时所需的一致性要求，这里是指只需要从一个节点获取记录即可。
+    实现逻辑：
+        根据 Kademlia 协议，节点首先根据 key 计算出其对应的 K-bucket 或者具体的节点 ID，然后向网络中查找负责该 key 的节点。
+        节点通过网络查询和消息传递机制，从负责节点处获取存储的记录。
+        返回获取到的记录或者执行相应的处理逻辑。
+
+2. get_providers
+
+kademlia.get_providers(key);
+
+    作用： 获取能够提供与指定 key 相关数据的节点信息（即数据的提供者）。
+    参数：
+        key: 要获取提供者信息的数据的键。
+    实现逻辑：
+        类似于 get_record，节点根据 key 计算出其对应的 K-bucket 或者节点 ID。
+        节点向网络发送查询请求，询问哪些节点能够提供与 key 相关的数据。
+        返回能够提供数据的节点列表或者执行相应的处理逻辑。
+
+3. put_record
+
+let record = Record {
+    key,
+    value,
+    publisher: None,
+    expires: None,
+};
+kademlia.put_record(record, Quorum::One).expect("Failed to store record locally.");
+
+    作用： 将指定的记录存储到 Kademlia 网络中。
+    参数：
+        record: 包含要存储的数据信息的记录对象，包括 key（键）、value（值）、publisher（发布者，可能为空）、expires（过期时间，可能为空）等字段。
+        Quorum::One: 存储记录时的一致性要求，这里是指只需要将记录存储在一个节点即可。
+    实现逻辑：
+        节点根据 key 计算出对应的 K-bucket 或节点 ID。
+        节点将 record 发送给负责存储该 key 的节点，并根据指定的一致性要求存储副本。
+        返回存储成功或失败的结果，或者执行相应的处理逻辑。
+
+4. start_providing
+
+kademlia.start_providing(key).expect("Failed to start providing key");
+
+    作用： 在 Kademlia 网络中开始提供指定 key 的数据。
+    参数：
+        key: 要开始提供的数据的键。
+    实现逻辑：
+        节点将 key 注册为它可以提供的数据标识。
+        当其他节点查询或需要该 key 的数据时，该节点将响应并提供相应的数据。
+        返回启动提供成功或失败的结果，或者执行相应的处理逻辑。
+#+end_quote
+
+copy from [[https://blog.csdn.net/ResumeProject/article/details/140108419][p2p、分布式，区块链笔记: 通过libp2p的Kademlia网络协议实现kv-store_kademlia协议]]
+
+*** get_closest_peers and get_closest_local_peers function
+
+#+begin_quote
+pub fn get_closest_peers<K>(&mut self, key: K) -> QueryId
+where
+    K: Into<Key<K>> + Into<Vec<u8>> + Clone,
+Initiates an iterative query for the closest peers to the given key.
+
+The result of the query is delivered in a [Event::OutboundQueryProgressed{QueryResult::GetClosestPeers}].
+
+source
+pub fn get_closest_local_peers<'a, K>(
+    &'a mut self,
+    key: &'a Key<K>,
+) -> impl Iterator<Item = Key<PeerId>> + 'a
+where
+    K: Clone,
+Returns closest peers to the given key; takes peers from local routing table only.
+#+end_quote
