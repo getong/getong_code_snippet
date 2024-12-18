@@ -235,6 +235,298 @@ fn start(&mut self) -> Result<(), Self::Error> {
 }
 #+end_src
 
+** NetworkManagerExecutor implementation
+
+#+begin_src rust
+impl NetworkManagerExecutor {
+    /// Enqueue a behavior job from elsewhere in the network manager
+    pub(crate) fn send_behavior(&self, job: BehaviorJob) -> Result<(), NetworkManagerError> {
+        self.behavior_tx.send(job).map_err(err_str!(NetworkManagerError::EnqueueJob))
+    }
+
+    /// Handle a behavior job
+    #[instrument(name = "handle_behavior_job", skip_all)]
+    pub(crate) async fn handle_behavior_job(
+        &mut self,
+        job: BehaviorJob,
+        swarm: &mut Swarm<ComposedNetworkBehavior>,
+    ) -> Result<(), NetworkManagerError> {
+        match job {
+            BehaviorJob::SendReq(peer_id, req, chan) => {
+                set_parent_span_from_headers(&req.inner.tracing_headers());
+
+                let rid = swarm.behaviour_mut().request_response.send_request(&peer_id, req);
+                if let Some(chan) = chan {
+                    self.response_waiters.insert(rid, chan).await;
+                }
+
+                Ok(())
+            },
+            // ....
+        }
+    }
+}
+#+end_src
+
+** event loop
+
+#+begin_src rust
+let thread_handle = Builder::new()
+    .name("network-manager-main-loop".to_string())
+    .spawn(move || {
+        // Build a tokio runtime for the network manager
+        let runtime = TokioRuntimeBuilder::new_multi_thread()
+            .worker_threads(NETWORK_MANAGER_N_THREADS)
+            .enable_all()
+            .build()
+            .expect("building a runtime to the network manager failed");
+
+        // Block on this to execute the future in a separate thread
+        runtime.block_on(executor.executor_loop(swarm))
+    })
+    .map_err(|err| NetworkManagerError::SetupError(err.to_string()))?;
+
+pub async fn executor_loop(
+    mut self,
+    mut swarm: Swarm<ComposedNetworkBehavior>,
+) -> NetworkManagerError {
+    info!("Starting executor loop for network manager...");
+    let mut cancel_channel = self.cancel.take().unwrap();
+    let mut job_channel = self.job_channel.take().unwrap();
+    let mut behavior_channel = self.behavior_rx.take().unwrap();
+
+    loop {
+        tokio::select! {
+            // Handle behavior requests from inside the worker
+            Some(behavior_request) = behavior_channel.recv() => {
+                if let Err(err) = self.handle_behavior_job(behavior_request, &mut swarm).await {
+                    error!("Error handling behavior job: {err}");
+                }
+            },
+
+            // Handle network requests from worker components of the relayer
+            Some(job) = job_channel.recv() => {
+                // Forward the message
+                let this = self.clone();
+                tokio::spawn(async move {
+                    if let Err(err) = this.handle_job(job).await {
+                        error!("Error sending outbound message: {err}");
+                    }
+                });
+            },
+
+            // Handle network events and dispatch
+            event = swarm.select_next_some() => {
+                match event {
+                    SwarmEvent::Behaviour(event) => {
+                        let this = self.clone();
+                        tokio::spawn(async move {
+                            if let Err(err) = this.handle_inbound_message(event).await {
+                                error!("error in network manager: {:?}", err);
+                            }
+                        });
+                    },
+                    SwarmEvent::NewListenAddr { address, .. } => {
+                        info!("Listening on {}/p2p/{}\n", address, self.local_peer_id);
+                    },
+                    // This catchall may be enabled for fine-grained libp2p introspection
+                    x => { debug!("Unhandled swarm event: {:?}", x) }
+                }
+            }
+
+            // Handle a cancel signal from the coordinator
+            _ = cancel_channel.changed() => {
+                return NetworkManagerError::Cancelled("received cancel signal".to_string())
+            }
+        }
+    }
+}
+
+pub(crate) async fn handle_behavior_job(
+    &mut self,
+    job: BehaviorJob,
+    swarm: &mut Swarm<ComposedNetworkBehavior>,
+) -> Result<(), NetworkManagerError> {
+    match job {
+        BehaviorJob::SendReq(peer_id, req, chan) => {
+            set_parent_span_from_headers(&req.inner.tracing_headers());
+
+            let rid = swarm.behaviour_mut().request_response.send_request(&peer_id, req);
+            if let Some(chan) = chan {
+                self.response_waiters.insert(rid, chan).await;
+            }
+
+            Ok(())
+        },
+        BehaviorJob::SendResp(channel, resp) => {
+            set_parent_span_from_headers(&resp.inner.tracing_headers());
+
+            swarm
+                .behaviour_mut()
+                .request_response
+                .send_response(channel, resp)
+                .map_err(|_| NetworkManagerError::Network(ERR_SEND_RESPONSE.to_string()))
+        },
+        BehaviorJob::SendPubsub(topic, msg) => swarm
+            .behaviour_mut()
+            .pubsub
+            .publish(topic, msg)
+            .map(|_| ())
+            .map_err(err_str!(NetworkManagerError::Network)),
+        BehaviorJob::AddAddress(peer_id, addr) => {
+            swarm.behaviour_mut().kademlia_dht.add_address(&peer_id, addr);
+            Ok(())
+        },
+        BehaviorJob::RemovePeer(peer_id) => {
+            swarm.behaviour_mut().kademlia_dht.remove_peer(&peer_id);
+            Ok(())
+        },
+        BehaviorJob::LookupAddr(peer_id, sender) => {
+            let addr = swarm
+                .behaviour_mut()
+                .handle_pending_outbound_connection(
+                    ConnectionId::new_unchecked(0),
+                    Some(peer_id),
+                    &[],
+                    Endpoint::Dialer,
+                )
+                .map_err(|_| NetworkManagerError::Network(ERR_NO_KNOWN_ADDR.to_string()))?;
+
+            sender
+                .send(addr)
+                .map_err(|_| NetworkManagerError::SendInternal(ERR_SEND_INTERNAL.to_string()))
+        },
+    }
+}
+#+end_src
+
+** GossipNetwork
+
+#+begin_src rust
+/// The network shim
+#[derive(Clone)]
+pub struct GossipNetwork {
+    /// The target node for this instance
+    target: NodeId,
+    /// The target node info
+    target_info: Node,
+    /// A sender to the network manager's queue
+    network_sender: NetworkManagerQueue,
+}
+
+impl GossipNetwork {
+    /// Constructor
+    pub fn new(target: NodeId, target_info: Node, network_sender: NetworkManagerQueue) -> Self {
+        Self { target, target_info, network_sender }
+    }
+
+    /// Construct a new `GossipNetwork` instance without target specified
+    pub fn empty(network_sender: NetworkManagerQueue) -> Self {
+        Self { target: NodeId::default(), target_info: Node::default(), network_sender }
+    }
+
+    /// Convert a gossip response into a raft response
+    fn to_raft_response(resp: GossipResponse) -> Result<RaftResponse, ReplicationV2Error> {
+        let resp_bytes = match resp.body {
+            GossipResponseType::Raft(x) => x,
+            _ => {
+                return Err(ReplicationV2Error::Deserialize(ERR_INVALID_RESPONSE.to_string()));
+            },
+        };
+
+        let raft_resp = Self::deserialize_raft_response(&resp_bytes)?;
+        Ok(raft_resp)
+    }
+
+    /// Deserialize a raft response from bytes
+    fn deserialize_raft_response(msg_bytes: &[u8]) -> Result<RaftResponse, ReplicationV2Error> {
+        ciborium::de::from_reader(msg_bytes).map_err(err_str!(ReplicationV2Error::Deserialize))
+    }
+}
+
+#[async_trait]
+impl P2PRaftNetwork for GossipNetwork {
+    fn target(&self) -> NodeId {
+        self.target
+    }
+
+    #[allow(clippy::blocks_in_conditions)]
+    #[instrument(
+        name = "send_raft_request",
+        skip_all, err
+        fields(req_type = %request.type_str())
+    )]
+    async fn send_request(
+        &self,
+        _target: NodeId,
+        request: RaftRequest,
+    ) -> Result<RaftResponse, RPCError<NodeId, Node, RaftError<NodeId>>> {
+        // We serialize in the raft layer to avoid the `gossip-api` depending on `state`
+        let ser =
+            ciborium_serialize(&request).map_err(|e| RPCError::Network(NetworkError::new(&e)))?;
+        let req = GossipRequestType::Raft(ser);
+
+        // Send a network manager job
+        let peer_id = self.target_info.peer_id;
+        let (job, rx) = NetworkManagerJob::request_with_response(peer_id, req);
+        self.network_sender.send(job).unwrap();
+
+        // TODO: timeout and error handling
+        let resp = rx.await.unwrap();
+        Self::to_raft_response(resp).map_err(new_network_error)
+    }
+}
+
+impl P2PNetworkFactory for GossipNetwork {
+    fn new_p2p_client(&self, target: NodeId, target_info: Node) -> P2PRaftNetworkWrapper {
+        let mut clone = self.clone();
+        clone.target = target;
+        clone.target_info = target_info;
+
+        P2PRaftNetworkWrapper::new(clone)
+    }
+}
+
+#+end_src
+
+_GossipNetwork_ send request to network, and work in _StateInner_ .
+
+StateInner::new() method
+
+#+begin_src rust
+impl StateInner {
+    // ----------------
+    // | Constructors |
+    // ----------------
+
+    /// Construct a new default state handle using the `GossipNetwork`
+    pub async fn new(
+        config: &RelayerConfig,
+        network_queue: NetworkManagerQueue,
+        task_queue: TaskDriverQueue,
+        handshake_manager_queue: HandshakeManagerQueue,
+        system_bus: SystemBus<SystemBusMessage>,
+        system_clock: &SystemClock,
+        failure_send: WorkerFailureSender,
+    ) -> Result<Self, StateError> {
+        let raft_config = Self::build_raft_config(config);
+        let net = GossipNetwork::empty(network_queue);
+        Self::new_with_network(
+            config,
+            raft_config,
+            net,
+            task_queue,
+            handshake_manager_queue,
+            system_bus,
+            system_clock,
+            failure_send,
+        )
+            .await
+    }
+}
+#+end_src
+
+
 ** job queue and notification
 
 #+begin_src rust
