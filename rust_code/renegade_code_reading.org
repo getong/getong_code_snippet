@@ -335,3 +335,56 @@ _StateInner_ is the inner state of renegade.
 
 
 openraft <=> tokio oneshot <=> libp2p request response
+
+
+** lookup addr
+
+#+begin_src rust
+BehaviorJob::AddAddress(peer_id, addr) => {
+    swarm.behaviour_mut().kademlia_dht.add_address(&peer_id, addr);
+    Ok(())
+},
+BehaviorJob::RemovePeer(peer_id) => {
+    swarm.behaviour_mut().kademlia_dht.remove_peer(&peer_id);
+    Ok(())
+},
+BehaviorJob::LookupAddr(peer_id, sender) => {
+    let addr = swarm
+        .behaviour_mut()
+        .handle_pending_outbound_connection(
+            ConnectionId::new_unchecked(0),
+            Some(peer_id),
+            &[],
+            Endpoint::Dialer,
+        )
+        .map_err(|_| NetworkManagerError::Network(ERR_NO_KNOWN_ADDR.to_string()))?;
+
+    sender
+        .send(addr)
+        .map_err(|_| NetworkManagerError::SendInternal(ERR_SEND_INTERNAL.to_string()))
+}
+#+end_src
+
+
+#+begin_quote
+fn handle_pending_outbound_connection(
+    &mut self,
+    _connection_id: ConnectionId,
+    _maybe_peer: Option<PeerId>,
+    _addresses: &[Multiaddr],
+    _effective_role: Endpoint,
+) -> Result<Vec<Multiaddr>, ConnectionDenied>
+Callback that is invoked for every outbound connection attempt.
+
+We have access to:
+
+The PeerId, if known. Remember that we can dial without a PeerId.
+All addresses passed to DialOpts are passed in here too.
+The effective Role of this peer in the dial attempt. Typically, this is set to Endpoint::Dialer except if we are attempting a hole-punch.
+The ConnectionId identifying the future connection resulting from this dial, if successful.
+Note that the addresses returned from this function are only used for dialing if WithPeerIdWithAddresses::extend_addresses_through_behaviour is set.
+
+Any error returned from this function will immediately abort the dial attempt.
+
+
+#+end_quote
