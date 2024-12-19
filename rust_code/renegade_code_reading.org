@@ -126,10 +126,10 @@ pub enum RaftResponse {
 openraft::declare_raft_types! (
     /// The type config for the raft
     pub TypeConfig:
-        D = Proposal,
-        R = (), // Response
-        Node = RaftNode,
-        SnapshotData = tokio::fs::File,
+    D = Proposal,
+    R = (), // Response
+    Node = RaftNode,
+    SnapshotData = tokio::fs::File,
 );
 
 /// A type alias for the node id type
@@ -627,7 +627,187 @@ _StateInner_ is the inner state of renegade.
 
 
 openraft <=> tokio oneshot <=> libp2p request response
+RaftClient <=> GossipNetwork <=> StateInner <=> NetworkManager
 
+** entity definition
+
+#+begin_src rust
+/// The worker configuration for the network manager
+#[derive(Clone)]
+pub struct NetworkManagerConfig {
+    /// The port to listen for inbound traffic on
+    pub port: u16,
+    /// The address to bind to for inbound traffic
+    pub bind_addr: IpAddr,
+    /// The cluster ID of the local peer
+    pub cluster_id: ClusterId,
+    /// Whether or not to allow discovery of peers on the localhost
+    pub allow_local: bool,
+    /// The cluster keypair, wrapped in an option to allow the worker thread to
+    /// take ownership of the keypair
+    pub cluster_symmetric_key: HmacKey,
+    /// The asymmetric key of the cluster
+    pub cluster_keypair: DefaultOption<Keypair>,
+    /// The known public addr that the local node is listening behind, if one
+    /// exists
+    pub known_public_addr: Option<SocketAddr>,
+    /// The channel on which to receive requests from other workers
+    /// for outbound traffic
+    /// This is wrapped in an option to allow the worker thread to take
+    /// ownership of the work queue once it is started. The coordinator
+    /// will be left with `None` after this happens
+    pub send_channel: DefaultOption<NetworkManagerReceiver>,
+    /// The work queue to forward inbound heartbeat requests to
+    pub gossip_work_queue: GossipServerQueue,
+    /// The work queue to forward inbound handshake requests to
+    pub handshake_work_queue: HandshakeManagerQueue,
+    /// The system bus, used to stream internal pubsub messages
+    pub system_bus: SystemBus<SystemBusMessage>,
+    /// The global shared state of the local relayer
+    pub global_state: State,
+    /// The channel on which the coordinator can send a cancel signal to
+    /// all network worker threads
+    pub cancel_channel: CancelChannel,
+}
+
+/// A handle on the state that allows workers throughout the node to access the
+/// replication and durability primitives backing the state machine
+pub type State = Arc<StateInner>;
+
+/// The inner state struct, wrapped in an `Arc` to allow for efficient clones
+#[derive(Clone)]
+pub struct StateInner {
+    /// The runtime config of the state
+    pub(crate) config: StateConfig,
+    /// The order book cache
+    pub(crate) order_cache: Arc<OrderBookCache>,
+    /// A handle on the database
+    pub(crate) db: Arc<DB>,
+    /// The system bus for sending notifications to other workers
+    pub(crate) bus: SystemBus<SystemBusMessage>,
+    /// The notifications map
+    pub(crate) notifications: OpenNotifications,
+    /// The raft client
+    pub(crate) raft: RaftClient,
+}
+
+/// A client interface to the raft
+#[derive(Clone)]
+pub struct RaftClient {
+    /// The client's config
+    pub(crate) config: RaftClientConfig,
+    /// The inner raft
+    raft: Raft,
+    /// The network to use for the raft client
+    network_factory: P2PNetworkFactoryWrapper,
+    /// A lock to prevent simultaneous membership changes
+    membership_change_lock: Arc<Mutex<()>>,
+}
+
+/// The config for the raft client
+#[derive(Clone)]
+pub struct RaftClientConfig {
+    /// The id of the local node
+    pub id: NodeId,
+    /// Whether to initialize the cluster
+    ///
+    /// Initialization handles the process of setting up an initial set of nodes
+    /// and running an initial election
+    pub init: bool,
+    /// The name of the cluster
+    pub cluster_name: String,
+    /// The interval in milliseconds between heartbeats
+    pub heartbeat_interval: u64,
+    /// The minimum election timeout in milliseconds
+    pub election_timeout_min: u64,
+    /// The maximum election timeout in milliseconds
+    pub election_timeout_max: u64,
+    /// The length of a learner's log lag before being promoted to a follower
+    pub learner_promotion_threshold: u64,
+    /// The directory at which snapshots are stored
+    pub snapshot_path: String,
+    /// The nodes to initialize the membership with
+    pub initial_nodes: Vec<(NodeId, RaftNode)>,
+    /// The maximum size of snapshot chunks in bytes
+    pub snapshot_max_chunk_size: u64,
+    /// The timeout on individual `InstallSnapshot` RPC calls
+    pub install_snapshot_timeout: u64,
+    /// The maximum number of log entries in an `AppendEntries` payload
+    pub max_payload_entries: u64,
+}
+
+/// A client interface to the raft
+#[derive(Clone)]
+pub struct RaftClient {
+    /// The client's config
+    pub(crate) config: RaftClientConfig,
+    /// The inner raft
+    raft: Raft,
+    /// The network to use for the raft client
+    network_factory: P2PNetworkFactoryWrapper,
+    /// A lock to prevent simultaneous membership changes
+    membership_change_lock: Arc<Mutex<()>>,
+}
+
+/// A wrapper type allowing for default implementations of the network factory
+/// traits, particularly the foreign `RaftNetworkFactory` trait
+#[derive(Clone)]
+pub struct P2PNetworkFactoryWrapper {
+    /// The inner factory implementation
+    inner: Arc<dyn P2PNetworkFactory>,
+}
+
+/// The network shim
+#[derive(Clone)]
+pub struct GossipNetwork {
+    /// The target node for this instance
+    target: NodeId,
+    /// The target node info
+    target_info: Node,
+    /// A sender to the network manager's queue
+    network_sender: NetworkManagerQueue,
+}
+#[async_trait]
+impl P2PRaftNetwork for GossipNetwork {
+}
+
+/// The task queue type for the network manager
+pub type NetworkManagerQueue = TokioSender<NetworkManagerJob>;
+
+/// A wrapper trait for the `openraft` network factory
+///
+/// We define this trait to allow for p2p specific implementation as well as to
+/// enable use as a trait object
+pub trait P2PNetworkFactory: Send + Sync + 'static {
+    /// Create a new p2p client
+    fn new_p2p_client(&self, target: NodeId, target_info: Node) -> P2PRaftNetworkWrapper;
+}
+
+/// A generalization of the raft network trait that specifically allows for
+/// point-to-point communication
+///
+/// We implement the general raft network trait for all types that fit this
+/// signature by simply calling out to the p2p implementation
+#[async_trait]
+pub trait P2PRaftNetwork: 'static + Sync + Send {
+    /// The target this client is sending requests to
+    fn target(&self) -> NodeId;
+    /// Send an request to the target node
+    async fn send_request(
+        &self,
+        target: NodeId,
+        request: RaftRequest,
+    ) -> Result<RaftResponse, RPCError<NodeId, Node, RaftError<NodeId>>>;
+}
+
+/// A wrapper around the p2p raft network that allows for a default
+/// `RaftNetwork` implementation and to hide generics from higher level
+/// interfaces
+pub struct P2PRaftNetworkWrapper {
+    /// The inner p2p network
+    inner: Box<dyn P2PRaftNetwork + Send + Sync>,
+}
+#+end_src
 
 ** lookup addr
 
