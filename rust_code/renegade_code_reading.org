@@ -403,6 +403,8 @@ pub(crate) async fn handle_behavior_job(
 ** GossipNetwork
 
 #+begin_src rust
+let (network_sender, network_receiver) = new_network_manager_queue();
+
 /// The network shim
 #[derive(Clone)]
 pub struct GossipNetwork {
@@ -490,8 +492,9 @@ impl P2PNetworkFactory for GossipNetwork {
 #+end_src
 
 _GossipNetwork_ send request to network, and work in _StateInner_ .
+_send_request()_ method is used to send msg to NetworkManagerExecutor, and decode reponse via _ciborium_ crate with _to_raft_response_ method.
 
-StateInner::new() method
+*** StateInner::new() method
 
 #+begin_src rust
 impl StateInner {
@@ -627,7 +630,7 @@ _StateInner_ is the inner state of renegade.
 
 
 openraft <=> tokio oneshot <=> libp2p request response
-RaftClient <=> GossipNetwork <=> StateInner <=> NetworkManager
+StateInner(has RaftClient) <=> GossipNetwork <=> NetworkManagerExecutor(config with NetworkManagerConfig and NetworkManager)
 
 ** entity definition
 
