@@ -1,0 +1,43 @@
+* clash-verge-rev
+
+** clone
+
+#+begin_src shell
+git clone https://github.com/clash-verge-rev/clash-verge-rev
+cd clash-verge-rev
+#+end_src
+
+** compile
+
+#+begin_src shell
+pnpm i
+pnpm run check
+pnpm dev
+#+end_src
+
+
+** check fail troubleshoot
+
+*** get the mihomo version
+
+go to https://github.com/MetaCubeX/mihomo, and check release note, find the os build version
+
+#+begin_src shell
+wget -c https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/mihomo-darwin-arm64-alpha-89dfabe.gz
+gzip -d mihomo-darwin-arm64-alpha-89dfabe.gz
+mv mihomo-darwin-arm64-alpha-89dfabe mihomo-darwin-arm64
+#+end_src
+
+*** rerun pnpm check
+
+#+begin_src shell
+pnpm check
+#+end_src
+
+** build the package
+
+not work here, need more doc
+
+#+begin_src shell
+pnpm build
+#+end_src
