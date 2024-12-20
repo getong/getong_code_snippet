@@ -4,6 +4,8 @@
 
 #+begin_src shell
 curl -fsSL https://bun.sh/install | bash
+
+source ~/.zshrc
 #+end_src
 
 ** set npmmirror
