@@ -1,0 +1,13 @@
+* bun
+
+** installation
+
+#+begin_src shell
+curl -fsSL https://bun.sh/install | bash
+#+end_src
+
+** set npmmirror
+
+#+begin_src shell
+grep -q '\[install\]' ~/.bunfig.toml || echo -e "[install]\nregistry = \"https://registry.npmmirror.com\"" >> ~/.bunfig.toml
+#+end_src
