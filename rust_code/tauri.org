@@ -7,3 +7,9 @@ cargo create-tauri-app
 #+end_src
 
 copy from [[https://tauri.app/][tauri]]
+
+** tauri project
+
+[[https://github.com/mediar-ai/screenpipe][screenpipe]]
+[[https://github.com/gitbutlerapp/gitbutler][gitbutler]]
+[[https://github.com/clash-verge-rev/clash-verge-rev][clash-verge-rev]]
