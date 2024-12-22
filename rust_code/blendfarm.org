@@ -1,0 +1,223 @@
+* BlendFarm
+
+** code repo
+
+https://github.com/tiberiumboy/BlendFarm
+
+** libp2p swarm gossip
+
+#+begin_src rust
+pub async fn run(mut self) {
+    if let Err(e) = tokio::spawn(async move {
+        loop {
+            select! {
+                event = self.swarm.select_next_some() => self.handle_event(event).await,
+                Some(cmd) = self.command_receiver.recv() => self.handle_command(cmd).await,
+            }
+        }
+    })
+        .await
+    {
+        println!("fail to start background pool for network run! {e:?}");
+    }
+}
+
+async fn handle_event(&mut self, event: SwarmEvent<BlendFarmBehaviourEvent>) {
+    match event {
+        SwarmEvent::Behaviour(BlendFarmBehaviourEvent::Mdns(mdns)) => {
+            self.handle_mdns(mdns).await
+        }
+        SwarmEvent::Behaviour(BlendFarmBehaviourEvent::Gossipsub(gossip)) => {
+            self.handle_gossip(gossip).await
+        }
+        SwarmEvent::Behaviour(BlendFarmBehaviourEvent::Kad(kad)) => {
+            self.handle_kademila(kad).await
+        }
+        SwarmEvent::Behaviour(BlendFarmBehaviourEvent::RequestResponse(rr)) => {
+            self.handle_response(rr).await
+        }
+        SwarmEvent::ConnectionEstablished { .. } => {
+            self.event_sender.send(NetEvent::OnConnected).await.unwrap();
+        }
+        SwarmEvent::ConnectionClosed { peer_id, .. } => {
+            self.event_sender
+                .send(NetEvent::NodeDisconnected(peer_id))
+                .await
+                .unwrap();
+        }
+        _ => {
+            println!("{event:?}")
+        }
+    }
+}
+
+async fn handle_gossip(&mut self, event: gossipsub::Event) {
+    match event {
+        gossipsub::Event::Message { message, .. } => match message.topic.as_str() {
+            SPEC => {
+                let source = message.source.expect("Source cannot be empty!");
+                let specs =
+                    bincode::deserialize(&message.data).expect("Fail to parse Computer Specs!");
+                if let Err(e) = self
+                    .event_sender
+                    .send(NetEvent::NodeDiscovered(source, specs))
+                    .await
+                {
+                    eprintln!("Something failed? {e:?}");
+                }
+            }
+
+        }
+    }
+}
+
+
+#+end_src
+
+** blendfarm recv libp2p msg
+
+#+begin_src rust
+spawn(async move {
+    loop {
+        select! {
+            Some(msg) = from_ui.recv() => self.handle_ui_command(&mut client, msg).await,
+            Some(event) = event_receiver.recv() => self.handle_net_event(&mut client, event, app_handle.clone()).await,
+        }
+    }
+});
+
+
+async fn handle_net_event(
+    &mut self,
+    client: &mut NetworkController,
+    event: NetEvent,
+    app_handle: Arc<RwLock<AppHandle>>,
+) {
+    match event {
+        NetEvent::Status(peer_id, msg) => {
+            let handle = app_handle.read().await;
+            handle
+                .emit("node_status", (peer_id.to_base58(), msg))
+                .unwrap();
+        }
+        NetEvent::NodeDiscovered(peer_id, comp_spec) => {
+            let handle = app_handle.read().await;
+            handle
+                .emit("node_discover", (peer_id.to_base58(), comp_spec.clone()))
+                .unwrap();
+            self.peers.insert(peer_id, comp_spec);
+        }
+        // don't think there's a way for me to get this working?
+        NetEvent::NodeDisconnected(peer_id) => {
+            let handle = app_handle.read().await;
+            handle.emit("node_disconnect", peer_id.to_base58()).unwrap();
+        }
+        NetEvent::InboundRequest { request, channel } => {
+            if let Some(path) = client.providing_files.get(&request) {
+                println!("Sending client file {path:?}");
+                client
+                    .respond_file(std::fs::read(path).unwrap(), channel)
+                    .await
+            }
+        }
+        NetEvent::JobUpdate(job_event) => match job_event {
+            // when we receive a completed image, send a notification to the host and update job index to obtain the latest render image.
+            JobEvent::ImageCompleted {
+                id,
+                frame,
+                file_name,
+            } => {
+                // create a destination with respective job id path.
+                let destination = client.settings.render_dir.join(id.to_string());
+                if let Err(e) = async_std::fs::create_dir_all(destination.clone()).await {
+                    println!("Issue creating temp job directory! {e:?}");
+                }
+
+                // Fetch the completed image file from the network
+                if let Ok(file) = client.get_file_from_peers(&file_name, &destination).await {
+                    let handle = app_handle.write().await;
+                    if let Err(e) = handle.emit("job_image_complete", (id, frame, file)) {
+                        eprintln!("Fail to publish image completion emit to front end! {e:?}");
+                    }
+                }
+            }
+
+            // when a job is complete, check the poll for next available job queue?
+            JobEvent::JobComplete => {} // Hmm how do I go about handling this one?
+            // TODO: how do we handle error from node? What kind of errors are we expecting here and what can the host do about it?
+            JobEvent::Error(job_error) => {
+                todo!("See how this can be replicated? {job_error:?}")
+            }
+            // send a render job -
+            JobEvent::Render(_) => {} // should be ignored.
+            // Received a request job?
+            JobEvent::RequestJob => {}
+        },
+        _ => println!("{:?}", event),
+    }
+}
+#+end_src
+
+handle.emit() method send msg from tauri rust code to tauri javascript code.
+
+** tauri javascript code
+
+#+begin_src typescript
+import { listen } from "@tauri-apps/api/event";
+
+export default function NodeWindow() {
+    const [nodes, setNodes] = useState<RenderNodeProps[]>([]);
+
+    const unlisten_status = listen('node_status', (event: any) => {
+        let id = event.payload[0];  // which node is reporting the status message
+        let msg = event.payload[1]; // the content of the message
+    })
+
+    // This is later fetch after the node sends the host information about the specs.
+    const unlisten_identity = listen('node_discover', (event: any) => {
+        console.log("Node discovered");
+        // 0 is peer_id in base58, 1 is computer specs object
+        let id = event.payload[0];
+        // 1 is the computer spec payload
+        let spec: ComputerSpec = event.payload[1];
+
+        let node: RenderNodeProps = { name: id, spec, status: "Idle" };
+        let tmp = [...nodes];
+        tmp.push(node);
+        setNodes(tmp);
+    })
+
+    // this probably won't happen...
+    const unlisten_disconnect = listen('node_disconnect', (event: any) => {
+        console.log("Node Disconnected");
+        let tmp = [...nodes];
+        let id = event.payload;
+        tmp.filter((t) => t.name == id);
+        console.log("Node disconnected", id, tmp);
+        setNodes(tmp);
+    });
+
+    // TODO: Find a way to make this node selectable, and refresh the screen to display node property and information (E.g. Blender preview window, Activity monitor, specs, files completed, etc.)
+    function nodeWindow() {
+        return (
+            <div>
+                {/* Show the activity of the computer progress */}
+                <h2>Computer Nodes</h2>
+                <div className="group" id="RenderNodes">
+                {nodes.map((node) =>
+                    <div>{RenderNode(node)}</div>
+                    )}
+            </div>
+                </div>
+        );
+    }
+
+    return (
+        <div>
+            {nodeWindow()}
+        </div>
+    );
+}
+#+end_src
+
+the typescript code part use _listen_ function from _@tauri-apps/api/event_, and handle msg received from rust code part.
