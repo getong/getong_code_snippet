@@ -23,3 +23,4 @@ copy from [[https://tauri.app/][tauri]]
 
 see [[https://dev.to/valorsoftware/developing-a-desktop-application-via-rust-and-nextjs-the-tauri-way-2iin][Developing a Desktop Application via Rust and NextJS. The Tauri Way]]
 also see [[https://zenn.dev/kei1232/articles/d171d6f9c3aa81][TauriとNext.jsでデスクトップアプリケーションを作成する手順]]
+also see [[https://blog.aiherrera.com/easy-guide-to-create-a-desktop-app-with-nextjs-and-tauri-step-by-step][Easy Guide to Create a Desktop App with Next.js and Tauri: Step-by-Step]]
