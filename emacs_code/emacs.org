@@ -148,7 +148,13 @@ to show suggestions for YASnippets when using eglot]] also see
 #+begin_src shell
 brew tap d12frosted/emacs-plus
 brew install emacs-plus
-ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications
+rm /Applications/Emacs.app
+
+# intel cpu
+ln -s /usr/local/opt/emacs-plus@30/Emacs.app /Applications
+
+# arm cpu
+ln -s /opt/homebrew/opt/emacs-plus@30/Emacs.app  /Applications
 #+end_src
 
 copy from
