@@ -8,3 +8,12 @@ axum serve directory
 
 see [[https://robert.kra.hn/posts/2022-04-03_rust-web-wasm/][A Rust web server / frontend setup like it's 2022 (with axum and yew)]]
 also see [[https://github.com/rksm/axum-yew-setup][A starter project that sets up axum and yew for full stack Rust web apps]]
+
+** leptos with nginx
+
+https://github.com/noobmastercn/leptos-csr-template
+
+** axum leptos ssr and csr
+
+see [[https://nulab.com/ja/blog/nulab/rust-leptos-ssr-hydration/][RustのフロントエンドフレームワークLeptosでWASM+SSR/Hydrationするアプリをつくる]]
+also see [[https://github.com/safx/leptos-taskboard-sample][Sample taskboard application for Leptos]]
