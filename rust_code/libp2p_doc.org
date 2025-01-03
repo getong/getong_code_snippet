@@ -1002,3 +1002,32 @@ where
     K: Clone,
 Returns closest peers to the given key; takes peers from local routing table only.
 #+end_quote
+
+
+** handle OutgoingConnectionError
+
+#+begin_src rust
+use libp2p::core::{DialError, Multiaddr, TransportError};
+
+const BOOT_ADDRESS: &str = "/ip4/127.0.0.1/tcp/8080"; // Replace with your actual BOOT_ADDRESS
+
+match event {
+    SwarmEvent::OutgoingConnectionError { error, .. } => {
+        match error {
+            DialError::Transport(error_list) => {
+
+                // Use `any` to check if any Multiaddr matches BOOT_ADDRESS
+                let found_boot_address = error_list.iter().any(|(multiaddr, _)| multiaddr.to_string() == BOOT_ADDRESS);
+
+                if found_boot_address {
+                    println!("Found error related to BOOT_ADDRESS");
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
+#+end_src
+
+code with chatgpt
