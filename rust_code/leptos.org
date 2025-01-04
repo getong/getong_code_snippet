@@ -17,3 +17,16 @@ https://github.com/noobmastercn/leptos-csr-template
 
 see [[https://nulab.com/ja/blog/nulab/rust-leptos-ssr-hydration/][RustのフロントエンドフレームワークLeptosでWASM+SSR/Hydrationするアプリをつくる]]
 also see [[https://github.com/safx/leptos-taskboard-sample][Sample taskboard application for Leptos]]
+
+** cargo leptos installation
+
+#+begin_src shell
+cargo install cargo-leptos
+#+end_src
+
+** cargo leptos new project
+
+#+begin_src shell
+cargo leptos new -g leptos-rs/start-axum -n cargo_leptos_basic_example
+#+end_src
+use _leptos-rs/start-axum_ as template, and name new project to be _cargo_leptos_basic_example_
