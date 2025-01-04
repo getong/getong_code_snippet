@@ -30,3 +30,17 @@ cargo install cargo-leptos
 cargo leptos new -g leptos-rs/start-axum -n cargo_leptos_basic_example
 #+end_src
 use _leptos-rs/start-axum_ as template, and name new project to be _cargo_leptos_basic_example_
+
+
+** leptosfmt installation
+
+#+begin_src shell
+cargo install leptosfmt
+#+end_src
+
+** leptosfmt usage
+
+#+begin_src shell
+cd <leptos project>
+leptosfmt .
+#+end_src
