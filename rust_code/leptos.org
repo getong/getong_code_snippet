@@ -72,3 +72,8 @@ pub fn Counter() -> impl IntoView{
 #+end_src
 
 copy from [[https://benw.is/posts/full-stack-rust-with-leptos][Type Reuse and Seamless API Endpoints]]
+
+
+** html function doc
+
+see https://docs.rs/leptos/latest/leptos/html/index.html
