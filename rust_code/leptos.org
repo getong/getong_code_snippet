@@ -44,3 +44,31 @@ cargo install leptosfmt
 cd <leptos project>
 leptosfmt .
 #+end_src
+
+
+** leptos component call rust code example
+
+#+begin_src rust
+// Server Function
+#[server]
+pub async fn update_count(increment_by: i64) -> Result<i64,ServerFnError> {
+   let new_count= fetch_count() + increment_by;
+   println!("Count is {new_count}");
+    Ok(new_count)
+
+// Call from Component
+#[component]
+pub fn Counter() -> impl IntoView{
+    let update_count = create_server_action::<UpdateCount>();
+
+    view!{
+            <ActionForm action=update_count>
+                <span>Increment By:</span>
+                <input type="number" name="increment_by" value=initial_increment/>
+                <button type="submit">Update</button>
+            </ActionForm>
+    }
+}
+#+end_src
+
+copy from [[https://benw.is/posts/full-stack-rust-with-leptos][Type Reuse and Seamless API Endpoints]]
