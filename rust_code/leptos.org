@@ -77,3 +77,17 @@ copy from [[https://benw.is/posts/full-stack-rust-with-leptos][Type Reuse and Se
 ** html function doc
 
 see https://docs.rs/leptos/latest/leptos/html/index.html
+
+** leptos projects
+
+https://github.com/Romira915/blog-romira-dev-leptos
+https://github.com/javdl/leptos-tutorial-csr
+https://github.com/mondeja/leptos-fluent
+https://github.com/doubleden/hockey-shop
+https://github.com/hrzlgnm/mdns-browser
+https://github.com/s1n7ax/my-website
+https://github.com/ozpv/haemolacriaa
+https://github.com/juspay/superposition
+https://github.com/Estate-DAO/estate-dao-platform-leptos-ssr
+https://github.com/rust-dd/blog
+https://github.com/JonasKruckenberg/tauri-sys
