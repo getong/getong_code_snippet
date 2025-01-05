@@ -363,3 +363,77 @@ Body::from ?
 Incoming to be bytes is ok, but bytes how to be ncoming?
 
 can Request to be bytes?
+
+
+** migration code snippets
+Cargo.toml
+#+begin_src rust
+  [dependencies]
+  (...)
+- hyper = { version = "0.14", features = ["server", "http1", "http2", "tcp"] }
+
++ hyper = { version = "1", features = ["server", "http1", "http2"] }
++ hyper-util = { version = "^0.1", features = ["server", "http1", "http2", "tokio"] }
++ http-body-util = "^0.1"
+#+end_src
+
+Body change log
+#+begin_src rust
+- use hyper::Body;
+
++ use hyper::body::{Bytes, Incoming}};
+#+end_src
+
+std::body::* Structs implementing Body Trait are available. They are such as std::body::Bytes and std::body::Incoming.
+#+begin_src rust
+- pub async fn handle(
+-     req: Request<Body>,
+-     app_state: Arc<Mutex<Config>>,
+- ) -> Result<Response<Body>, Error> {
+
++ type BoxBody = http_body_util::combinators::BoxBody<Bytes, Infallible>;
++ pub async fn handle(
++     req: Request<Incoming>,
++     app_state: Arc<Mutex<Config>>,
++ ) -> Result<Response<BoxBody>, Error> {
+#+end_src
+
+
+whole bulk full of the frames at once with BoxBody:
+#+begin_src rust
+- let body_bytes = hyper::body::to_bytes(request_body).await.unwrap();
+
++ let body_bytes = request_body
++                 .boxed() // here, `BoxBody` comes !
++                 .collect()
++                 .await
++                 .expect("failed to collect request incoming body")
++                 .to_bytes();
+#+end_src
+
+
+The client case was similar with it.
+
+#+begin_src rust
+- hyper::body::to_bytes;
+- (...)
+- let response = client.request(request).await.unwrap();
+- (...)
+- let response_body_str =
+-         String::from_utf8(to_bytes(response.into_body()).await.unwrap().to_vec()).unwrap();
+
++ use http_body_util::{BodyExt, Empty, Full};
++ (...)
++ let request_body = Full::new(Bytes::from(body.unwrap().to_owned())).boxed()
++ (...)
++ let response_body_bytes = response
++         .into_body()
++         .boxed()
++         .collect()
++         .await
++         .unwrap()
++         .to_bytes();
++ let response_body_str = String::from_utf8(body_bytes.into()).unwrap();
+#+end_src
+
+copy from [[https://scqr.net/en/blog/2024/05/21/hyper-rust-upgrade-to-v1-body-became-trait/][hyper (Rust) upgrade to v1: Body became Trait]]
