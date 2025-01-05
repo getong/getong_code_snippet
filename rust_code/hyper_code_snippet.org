@@ -338,6 +338,7 @@ copy from [[https://www.reddit.com/r/rust/comments/1582jku/how_can_one_create_a_
 
 
 ** changelog
+#+begin_quote
 empty 改为 Empty
 Body 改为 http_body_util::combinators::BoxBody<bytes::Bytes, std::io::Error>
 addrIncoming 删除
@@ -356,3 +357,9 @@ hyper::Body::wrap_stream(stream) 改为BoxBody::new(http_body_util::StreamBody::
             ),
         ))
 Body::from ?
+#+end_quote
+
+** Incoming
+Incoming to be bytes is ok, but bytes how to be ncoming?
+
+can Request to be bytes?
