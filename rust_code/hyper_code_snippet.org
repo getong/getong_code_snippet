@@ -360,9 +360,11 @@ Body::from ?
 #+end_quote
 
 ** Incoming
-Incoming to be bytes is ok, but bytes how to be ncoming?
+Incoming to be bytes is ok, but bytes how to be Incoming? No, bytes cannot change to be Incoming
 
-can Request to be bytes?
+see https://github.com/tauri-apps/tauri/pull/12240
+*** Incoming change to be Full<Bytes>
+*** change to use async closure, which is Future object.
 
 
 ** migration code snippets
