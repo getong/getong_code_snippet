@@ -501,3 +501,12 @@ copy from https://github.com/rust-lang/rust-analyzer/issues/10818
 cargo install cargo-sort
 cargo sort
 #+end_src
+
+** sort toml feature
+
+#+begin_src shell
+brew install taplo
+
+cd <rust_project>
+taplo fmt
+#+end_src
