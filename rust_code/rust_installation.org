@@ -510,3 +510,8 @@ brew install taplo
 cd <rust_project>
 taplo fmt
 #+end_src
+
+
+** rust 2024 blog
+
+[[https://rust-dd.com/post/rust-2024-wrap-up-biggest-changes-and-future-outlook][Rust 2024 Wrap-Up: Biggest Changes and Future Outlook]]
