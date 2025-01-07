@@ -91,3 +91,13 @@ https://github.com/juspay/superposition
 https://github.com/Estate-DAO/estate-dao-platform-leptos-ssr
 https://github.com/rust-dd/blog
 https://github.com/JonasKruckenberg/tauri-sys
+https://github.com/rust-dd/blog
+
+** support leptos 0.7 crate
+
+[[https://leptos-use.rs/][leptos use]]
+[[https://github.com/carloskiki/leptos-icons][leptos-icons]]
+[[https://github.com/tqwewe/leptos_server_signal][leptos_server_signal]]
+[[https://github.com/RustForWeb/lucide][lucide]]
+[[https://github.com/RustForWeb/floating-ui][floating-ui]]
+[[https://github.com/demiurg-dev/leptos_async_signal][leptos_async_signal]]
