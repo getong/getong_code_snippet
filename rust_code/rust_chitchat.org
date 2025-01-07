@@ -500,3 +500,5 @@ impl UdpSocket {
 [[https://github.com/nuclia/nucliadb][nucliadb]]
 [[https://github.com/lnx-search/datacake][datacake]]
 [[https://github.com/quickwit-oss/quickwit][quickwit]]
+[[https://github.com/getong/stract][stract]]
+[[https://github.com/getong/neos][neos]]
