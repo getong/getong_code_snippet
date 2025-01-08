@@ -71,3 +71,14 @@ websocket.send("Hello World!");
 #+end_src
 
 copy from [[https://leptos-use.rs/network/use_websocket.html][use_websocket]]
+
+
+** use with spawn_local
+
+#+begin_quote
+I imagine the problem with your struct being !Send comes from the fact that spawn requires the Future to be Send. Have you considered using spawn_local?
+
+If that doesn't work, another common approach when dealing with !Send data is to manage it in just one thread and using channel to signal that thread to perform actions on it.
+#+end_quote
+
+copy from [[https://users.rust-lang.org/t/dealing-with-send-type/96054][Dealing with !Send type]]
