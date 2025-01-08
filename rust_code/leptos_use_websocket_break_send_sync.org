@@ -1,0 +1,73 @@
+* leptos use websocket break send sync
+
+** web_sys::websocket
+
+#+begin_src rust
+impl !Send for WebSocket
+
+impl !Sync for WebSocket
+#+end_src
+
+copy from https://rustwasm.github.io/wasm-bindgen/api/web_sys/struct.WebSocket.html#impl-Send-for-WebSocket
+
+** leptos use_websocket break send sync
+
+#+begin_quote
+The return value of use_websocket utilizes several type parameters which can make it cumbersome to use with
+provide_context + expect_context. The following example shows how to avoid type parameters with dynamic
+dispatch. This sacrifices a little bit of performance for the sake of ergonomics. However, compared to
+network transmission speeds this loss of performance is negligible.
+#+end_quote
+
+*** define the struct that is going to be passed around as context.
+
+#+begin_src rust
+use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct WebsocketContext {
+    pub message: Signal<Option<String>>,
+    send: Arc<dyn Fn(&String)>,  // use Arc to make it easily cloneable
+}
+
+impl WebsocketContext {
+    pub fn new(message: Signal<Option<String>>, send: Arc<dyn Fn(&String)>) -> Self {
+        Self {
+            message,
+            send,
+        }
+    }
+
+    // create a method to avoid having to use parantheses around the field
+    #[inline(always)]
+    pub fn send(&self, message: &str) {
+        (self.send)(&message.to_string())
+    }
+}
+#+end_src
+
+*** Now you can provide the context like the following
+
+#+begin_src rust
+
+let UseWebSocketReturn {
+    message,
+    send,
+    ..
+} = use_websocket::<String, String, FromToStringCodec>("ws:://some.websocket.io");
+
+provide_context(WebsocketContext::new(message, Arc::new(send.clone())));
+
+#+end_src
+
+*** Finally let's use the context
+
+#+begin_src rust
+
+let websocket = expect_context::<WebsocketContext>();
+
+websocket.send("Hello World!");
+
+#+end_src
+
+copy from [[use_websocket][https://leptos-use.rs/network/use_websocket.html]]
