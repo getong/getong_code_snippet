@@ -70,4 +70,4 @@ websocket.send("Hello World!");
 
 #+end_src
 
-copy from [[use_websocket][https://leptos-use.rs/network/use_websocket.html]]
+copy from [[https://leptos-use.rs/network/use_websocket.html][use_websocket]]
