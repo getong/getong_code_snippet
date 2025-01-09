@@ -101,3 +101,41 @@ https://github.com/rust-dd/blog
 [[https://github.com/RustForWeb/floating-ui][floating-ui]]
 [[https://github.com/demiurg-dev/leptos_async_signal][leptos_async_signal]]
 [[https://github.com/thaw-ui/thaw][thaw ui]]
+
+** leptos router
+
+#+begin_src rust
+use leptos_router::components::{Router, Route, Routes, ParentRoute};
+#+end_src
+
+*** little example
+
+#+begin_src rust
+use leptos::prelude::*;
+use leptos_router::components::{ParentRoute, Route, Router, Routes};
+
+#[component]
+pub fn App() -> impl IntoView {
+    view! {
+        <Router>
+            <nav></nav>
+            <main>
+                // all our routes will appear inside <main>
+                <Routes fallback=|| "Not found.">
+                    <Route path=path!("/") view=Home />
+                    <Route path=path!("/users") view=Users />
+                    <Route path=path!("/users/:id") view=UserProfile />
+                    <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> } />
+                    <ParentRoute path=path!("/users") view=Users>
+                        <Route path=path!(":id") view=UserProfile />
+                    </ParentRoute>
+                    <Route path="/b_users" view=Users>
+                        <Route path=":id" view=UserProfile />
+                        <Route path="" view=NoUser />
+                    </Route>
+                </Routes>
+            </main>
+        </Router>
+    }
+}
+#+end_src
