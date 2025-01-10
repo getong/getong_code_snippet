@@ -1,0 +1,17 @@
+* thaw
+
+** install cargo-generate
+
+#+begin_src shell
+cargo install cargo-generate
+# or
+cargo binstall cargo-generate
+#+end_src
+
+** To set up your project with this template, run
+
+#+begin_src shell
+cargo generate thaw-ui/thaw-template
+#+end_src
+
+copy from [[https://github.com/thaw-ui/thaw-template][Thaw template]]
