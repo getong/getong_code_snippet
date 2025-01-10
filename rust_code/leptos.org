@@ -97,6 +97,7 @@ https://github.com/rust-dd/blog
 
 [[https://leptos-use.rs/][leptos use]]
 [[https://github.com/thaw-ui/thaw][thaw ui]]
+[[https://github.com/gaucho-labs/tailwind-fuse][tailwind-fuse]]
 [[https://github.com/carloskiki/leptos-icons][leptos-icons]]
 [[https://github.com/RustForWeb/lucide][lucide]]
 [[https://github.com/RustForWeb/floating-ui][floating-ui]]
