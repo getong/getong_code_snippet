@@ -1,5 +1,19 @@
 * leptos tailwind.css
 
+** cargo-leptos use scss by default
+
+in the _Cargo.toml_
+
+#+begin_quote
+# The source style file. If it ends with _.sass_ or _.scss_ then it will be compiled by `dart-sass`
+# into CSS and processed by lightning css. When release is set, then it will also be minified.
+#
+# Optional. Env: LEPTOS_STYLE_FILE.
+style-file = "style/main.scss"
+#+end_quote
+
+also see [[https://sass-lang.com/dart-sass/][dart-sass]]
+
 ** cargo-leptos also has some built-in Tailwind support
 
 that you can use as an alternative to Tailwind’s CLI.
