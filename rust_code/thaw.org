@@ -15,3 +15,12 @@ cargo generate thaw-ui/thaw-template
 #+end_src
 
 copy from [[https://github.com/thaw-ui/thaw-template][Thaw template]]
+
+** thaw 0.4 project
+
+#+begin_quote
+https://github.com/opeolluwa/filesync
+https://github.com/KWARC/iMMT
+https://github.com/kandrelczyk/twili-recipes
+https://github.com/reiase/probing
+#+end_quote

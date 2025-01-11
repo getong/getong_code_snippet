@@ -92,6 +92,7 @@ https://github.com/Estate-DAO/estate-dao-platform-leptos-ssr
 https://github.com/rust-dd/blog
 https://github.com/JonasKruckenberg/tauri-sys
 https://github.com/rust-dd/blog
+https://github.com/bochaco/formicaio
 
 ** support leptos 0.7 crate
 
