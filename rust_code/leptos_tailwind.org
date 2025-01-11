@@ -1,0 +1,141 @@
+* leptos tailwind.css
+
+** cargo-leptos also has some built-in Tailwind support
+
+that you can use as an alternative to Tailwind’s CLI.
+
+
+https://github.com/leptos-rs/cargo-leptos#site-parameters
+
+https://www.rustadventure.dev/building-wasm-web-ui-with-rust-and-leptos
+
+
+** manual docs, which might be deprecated
+
+copy from [[https://8vi.cat/full-stack-with-rust-axum-leptos-tailwind-css/][Full stack with Rust: axum + leptos + tailwind.css]]
+
+
+** comand line
+
+*** Install Tailwind
+
+#+begin_src shell
+# I assume you have npm or similar
+npm install tailwindcss
+
+* use bun
+bun i tailwindcss
+#+end_src
+
+***  Create the file _style/tailwind.css_ and add the following content:
+
+#+begin_src css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+#+end_src
+
+*** Create a _tailwind.config.js_
+
+#+begin_src js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["*.html", "./src/**/*.rs",],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+#+end_src
+
+*** Update _Cargo.toml_
+
+#+begin_src shell
+...
+
+[package.metadata.leptos]
+# The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
+output-name = "your_crate_name"  # Note this value here!!
+ ...
+
+# IMPORTANT! Remove or comment-out
+# style-file = "style/main.scss"
+
+# Activates the tailwind build
+tailwind-input-file = "style/tailwind.css"
+tailwind-config-file = "tailwind.config.js"
+
+...
+#+end_src
+
+*** Make sure this matches the value you had in Cargo.toml
+
+#+begin_quote
+output-name = "your_crate_name"
+<Stylesheet id="leptos" href="/pkg/your_crate_name.css"/>
+#+end_quote
+It seems all CSS gets saved to this file.
+
+*** Update _src/app.rs_ to use tailwind.
+
+#+begin_src rust
+use crate::error_template::{AppError, ErrorTemplate};
+use leptos::*;
+use leptos_meta::*;
+use leptos_router::*;
+
+#[component]
+pub fn App() -> impl IntoView {
+    // Provides context that manages stylesheets, titles, meta tags, etc.
+    provide_meta_context();
+
+    view! {
+
+
+        // injects a stylesheet into the document <head>
+        // id=leptos means cargo-leptos will hot-reload this stylesheet
+        // Stylesheet name is the CRATE NAME by default!!!
+        <Stylesheet id="leptos" href="/pkg/your_crate_name.css"/>
+
+        // sets the document title
+        <Title text="Welcome to Leptos"/>
+
+        // content for this welcome page
+        <Router fallback=|| {
+            let mut outside_errors = Errors::default();
+            outside_errors.insert_with_default_key(AppError::NotFound);
+            view! {
+                <ErrorTemplate outside_errors/>
+            }
+            .into_view()
+        }>
+            <main>
+                <Routes>
+                    <Route path="" view=HomePage/>
+                </Routes>
+            </main>
+        </Router>
+    }
+}
+
+/// Renders the home page of your application.
+#[component]
+fn HomePage() -> impl IntoView {
+    // Creates a reactive value to update the button
+    let (count, set_count) = create_signal(0);
+    let on_click = move |_| set_count.update(|count| *count += 1);
+
+    view! {
+        <Title text="Leptos + Tailwindcss"/>
+        <main>
+            <div class="bg-gradient-to-tl from-blue-800 to-blue-500 text-white font-mono flex flex-col min-h-screen">
+                <div class="flex flex-row-reverse flex-wrap m-auto">
+                    <button on:click=on_click class="rounded px-3 py-2 m-1 border-b-4 border-l-2 shadow-lg bg-blue-700 border-blue-800 text-white">
+                        "Click number " {count}
+                    </button>
+                </div>
+            </div>
+        </main>
+    }
+}
+#+end_src
