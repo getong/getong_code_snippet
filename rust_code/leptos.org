@@ -98,11 +98,14 @@ https://github.com/bochaco/formicaio
 
 [[https://leptos-use.rs/][leptos use]]
 [[https://github.com/thaw-ui/thaw][thaw ui]]
-[[https://github.com/gaucho-labs/tailwind-fuse][tailwind-fuse]]
+
 [[https://github.com/carloskiki/leptos-icons][leptos-icons]]
-[[https://github.com/RustForWeb/lucide][lucide]]
+
 [[https://github.com/RustForWeb/floating-ui][floating-ui]]
 [[https://github.com/demiurg-dev/leptos_async_signal][leptos_async_signal]]
+
+[[https://github.com/RustForWeb/lucide][lucide]]
+[[https://github.com/gaucho-labs/tailwind-fuse][tailwind-fuse]]
 
 ** leptos router
 
