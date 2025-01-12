@@ -1,0 +1,46 @@
+* tuono
+
+** installation
+
+#+begin_src shell
+cargo install tuono
+#+end_src
+
+copy from [[https://tuono.dev/documentation/installation][Installation]]
+
+** init project
+
+#+begin_src shell
+tuono new tuono-tutorial
+cd tuono-tutorial
+#+end_src
+
+** tuono build
+
+*** install the typescript package
+
+#+begin_src shell
+bun i
+#+end_src
+
+*** start dev
+
+#+begin_src shell
+tuono dev
+#+end_src
+
+*** build the rust code part
+
+#+begin_src shell
+cargo build
+#+end_src
+
+*** run the rust code part
+
+#+begin_src shell
+cargo run --release
+#+end_src
+
+copy from [[https://tuono.dev/documentation/tutorial/development-setup][Start the dev environment]]
+
+Then open http://localhost:3000/ on the browser.
