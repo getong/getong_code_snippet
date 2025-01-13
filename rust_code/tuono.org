@@ -29,16 +29,35 @@ bun i
 tuono dev
 #+end_src
 
+*** build the typescript code part
+
+this _build_ command will genenrate a _out_ directory.
+
+#+begin_src shell
+tuono build
+#+end_src
+
+
 *** build the rust code part
 
 #+begin_src shell
 cargo build
 #+end_src
 
-*** run the rust code part
+*** build the rust code part
 
 #+begin_src shell
-cargo run --release
+cargo build --release
+#+end_src
+
+** deployment
+
+*** copy the tuono from the target directory
+
+#+begin_src shell
+cp target/release/tuono .
+# in the same directory, with the out directory
+./tuono
 #+end_src
 
 copy from [[https://tuono.dev/documentation/tutorial/development-setup][Start the dev environment]]
