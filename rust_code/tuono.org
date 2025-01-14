@@ -63,3 +63,21 @@ cp target/release/tuono .
 copy from [[https://tuono.dev/documentation/tutorial/development-setup][Start the dev environment]]
 
 Then open http://localhost:3000/ on the browser.
+
+
+** debug tuono
+
+#+begin_src shell
+$ cd tuono
+$ pnpm i & pnpm build
+$ cargo build
+$ cd  examples/tuono-app
+$ pnpm i
+$ ../../target/debug/tuono dev
+
+  ⚡ Tuono v0.17.0
+  Ready at: http://localhost:3000
+
+  GET / 200 in 43ms
+  GET / 200 in 40ms
+#+end_src
