@@ -122,15 +122,15 @@ see also [[https://flutterawesome.com/repl-interactive-shell-for-dart-supporting
 
 ** flutter download link
 #+begin_src sh
-wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/linux/flutter_linux_3.24.2-stable.tar.xz
-wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/macos/flutter_macos_3.24.2-stable.zip
+wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/linux/flutter_linux_3.27.2-stable.tar.xz
+wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/flutter_infra/releases/stable/macos/flutter_macos_3.27.2-stable.zip
 wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/dart-archive/channels/stable/release/3.24.2/sdk/dartsdk-linux-x64-release.zip
 
 ## or
 ## wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.24.2/sdk/dartsdk-macos-x64-release.zip
 
 
-wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_3.24.2-stable.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_3.27.2-stable.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.24.2/api-docs/dartdocs-gen-api.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.24.2/sdk/dartsdk-linux-x64-release.zip
 
