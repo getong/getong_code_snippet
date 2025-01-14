@@ -311,3 +311,18 @@ pnpm create vite my-vue-app --template vanilla-ts
 
 bun create vite my-vue-app --template vanilla-ts
 #+end_src
+
+** bun repl
+
+#+begin_src shell
+bun repl
+#+end_src
+
+** deno
+
+#+begin_src shell
+deno
+#+end_src
+
+ts-node does not fit in this day.
+copy from [[https://medium.com/@s.atmaramani/ts-node-vs-bun-vs-deno-vs-swc-vs-esbuild-1cb057586d3b][Ts-node Vs Bun Vs Deno Vs Swc Vs EsBuild]]
