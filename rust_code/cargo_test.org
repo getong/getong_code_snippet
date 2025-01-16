@@ -1,0 +1,16 @@
+* cargo test
+
+** cargo test with println
+
+*** in the rust source code
+#+begin_src rust
+println!("break point here");
+#+end_src
+
+*** run with output result
+
+#+begin_src shell
+cargo test -- --show-output
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/25106554/why-doesnt-println-work-in-rust-unit-tests][Why doesn't println! work in Rust unit tests?]]
