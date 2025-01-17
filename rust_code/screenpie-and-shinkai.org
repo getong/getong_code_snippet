@@ -1,0 +1,9 @@
+* scrrenpie and shinkai
+
+** scrrenpie
+
+[[https://github.com/mediar-ai/screenpipe][screenpipe]]
+
+** shinkai
+
+[[https://github.com/dcSpark/shinkai-apps][Shinkai apps]]
