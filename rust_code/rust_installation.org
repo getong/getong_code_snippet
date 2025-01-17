@@ -515,3 +515,18 @@ taplo fmt
 ** rust 2024 blog
 
 [[https://rust-dd.com/post/rust-2024-wrap-up-biggest-changes-and-future-outlook][Rust 2024 Wrap-Up: Biggest Changes and Future Outlook]]
+
+
+** cargo cache
+
+*** installation
+
+#+begin_src shell
+cargo install cargo-cache
+#+end_src
+
+*** clean cache
+
+#+begin_src shell
+cargo cache -a -r all
+#+end_src
