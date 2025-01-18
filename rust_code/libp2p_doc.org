@@ -1031,3 +1031,6 @@ match event {
 #+end_src
 
 code with chatgpt
+
+** libp2p discussion
+https://github.com/libp2p/rust-libp2p/discussions/2025
