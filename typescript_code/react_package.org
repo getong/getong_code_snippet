@@ -4,3 +4,8 @@
 [[https://www.npmjs.com/package/react-dom][react-dom]]
 [[https://www.npmjs.com/package/react-router-dom][react-router-dom]]
 [[https://www.npmjs.com/package/@mui/material][material-ui]]
+
+
+** React Developer Tools
+
+https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en-US&utm_source=ext_sidebar
