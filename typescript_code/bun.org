@@ -13,3 +13,44 @@ source ~/.zshrc
 #+begin_src shell
 grep -q '\[install\]' ~/.bunfig.toml || echo -e "[install]\nregistry = \"https://registry.npmmirror.com\"" >> ~/.bunfig.toml
 #+end_src
+
+
+** bun
+
+#+begin_src shell
+$ mkdir bun_min_react_sketch
+$ cd bun_min_react_sketch
+$ bun init
+src/index.tsx
+
+bun run src/index.tsx
+bun add react react-dom @types/react @types/react-dom @types/web
+#+end_src
+
+complicated doc is at [[https://qiita.com/avaice/items/7823b2b2824c9d3cf416][素のReact with Bun]]
+
+*** bun create react-app
+
+#+begin_src shell
+bun create react-app  bun_create_react_sketch --template typescript
+cd bun_create_react_sketch
+bun install  --save @testing-library/jest-dom \
+  @testing-library/react @testing-library/user-event web-vitals
+bunx --bun vite
+#+end_src
+
+which does work, it cannot compile.
+
+*** bun create with vite
+
+#+begin_src shell
+$ bun create vite bun_vite_sketch
+✔ Select a framework: › React
+✔ Select a variant: › TypeScript + SWC
+
+$ cd bun_vite_sketch
+
+$ bun i
+
+$ bun dev
+#+end_src
