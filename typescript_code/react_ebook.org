@@ -7,3 +7,12 @@ Beginning.React.A.Step-By-Step.Gentle.Guide.to.Learn.React.for.Beginners
 
 React The Comprehensive Guide
 https://www.sap-press.com/react_5705/?srsltid=AfmBOooE_64smD3643EoiZ56GXE2ZcTNDkXnYMzUtD-4kK-Q-7iVDAPh
+
+** epicweb-dev
+
+[[https://github.com/epicweb-dev/react-fundamentals][react-fundamentals]]
+[[https://github.com/epicweb-dev/react-hooks][react-hooks]]
+[[https://github.com/epicweb-dev/advanced-react-apis][advanced-react-apis]]
+[[https://github.com/epicweb-dev/react-suspense][react-suspense]]
+[[https://github.com/epicweb-dev/advanced-react-patterns][advanced-react-patterns]]
+[[https://github.com/epicweb-dev/react-performance][react-performance]]
