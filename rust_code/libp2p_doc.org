@@ -1034,3 +1034,22 @@ code with chatgpt
 
 ** libp2p discussion
 https://github.com/libp2p/rust-libp2p/discussions/2025
+
+
+** kad peer_id set
+
+#+begin_src rust
+pub fn known_peers(&mut self) -> HashSet<PeerId> {
+    let mut peers = HashSet::new();
+    if let Some(k) = self.kademlia.as_mut() {
+        for b in k.kbuckets() {
+            for e in b.iter() {
+                if !peers.contains(e.node.key.preimage()) {
+                    peers.insert(*e.node.key.preimage());
+                }
+            }
+        }
+    }
+    peers
+}
+#+end_src
