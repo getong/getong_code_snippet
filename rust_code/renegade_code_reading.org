@@ -863,3 +863,34 @@ Any error returned from this function will immediately abort the dial attempt.
 
 
 #+end_quote
+
+
+** handle raft request from request response
+
+#+begin_src rust
+#[instrument(name = "handle_raft_request", skip_all, err, fields(req_type))]
+pub(crate) async fn handle_raft_request(
+    &self,
+    req: RaftRequest,
+) -> Result<RaftResponse, ReplicationV2Error> {
+    backfill_trace_field("req_type", req.type_str());
+    match req {
+        RaftRequest::AppendEntries(req) => {
+            let res = self.raft().append_entries(req).await?;
+            Ok(RaftResponse::AppendEntries(res))
+        },
+        RaftRequest::Vote(req) => {
+            let res = self.raft().vote(req).await?;
+            Ok(RaftResponse::Vote(res))
+        },
+        RaftRequest::InstallSnapshot(req) => {
+            let res = self.raft().install_snapshot(req).await?;
+            Ok(RaftResponse::InstallSnapshot(Ok(res)))
+        },
+        RaftRequest::ForwardedProposal(req) => {
+            self.propose_transition(req).await?;
+            Ok(RaftResponse::Ack)
+        },
+    }
+}
+#+end_src
