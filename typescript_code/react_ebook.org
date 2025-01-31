@@ -16,3 +16,8 @@ https://www.sap-press.com/react_5705/?srsltid=AfmBOooE_64smD3643EoiZ56GXE2ZcTNDk
 [[https://github.com/epicweb-dev/react-suspense][react-suspense]]
 [[https://github.com/epicweb-dev/advanced-react-patterns][advanced-react-patterns]]
 [[https://github.com/epicweb-dev/react-performance][react-performance]]
+
+
+** the joy of react
+
+[[https://github.com/georgealan/the-joy-of-react-course][the joy of react code]]
