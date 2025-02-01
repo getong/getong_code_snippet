@@ -60,3 +60,6 @@ $ bun dev
 https://dev.to/andrewbaisden/building-modern-react-apps-in-2025-a-guide-to-cutting-edge-tools-and-tech-stacks-k8g
 https://github.com/nksaraf/vinxi
 https://zenn.dev/gemcook/articles/909eaf62eab51d
+
+
+** parcel replace webpack
