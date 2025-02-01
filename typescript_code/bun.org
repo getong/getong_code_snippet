@@ -63,3 +63,15 @@ https://zenn.dev/gemcook/articles/909eaf62eab51d
 
 
 ** parcel replace webpack
+But bun replace parcel
+
+** bun is very fast
+
+#+begin_quote
+Bun.Transpiler transpiles JSX files via JS API:
+- 7x faster than swc
+- 15x faster than esbuild
+- 44x faster than babel
+#+end_quote
+
+copy from https://x.com/jarredsumner/status/1485397686224257027
