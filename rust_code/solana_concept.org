@@ -147,3 +147,10 @@ async fn process_transaction(rpc_client: &RpcClient, signature: &str) -> Result<
 #+end_src
 
 copy from [[https://github.com/joaquinsoza/soltrac][soltrac]]
+
+** client libraries for encoding instructions will also help with decoding
+
+also see [[https://solana.stackexchange.com/questions/17467/how-to-recognize-and-parse-instructions-in-solana-transactions-for-raydium-and-j][How to Recognize and Parse Instructions in Solana Transactions for Raydium and Jupiter Swaps]]
+
+
+also see https://github.com/jup-ag/instruction-parser
