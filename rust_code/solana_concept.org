@@ -91,3 +91,59 @@ It's a bit confusing, but you can fetch a parsed transaction by specifying JsonP
 #+end_quote
 
 copy from [[https://solana.stackexchange.com/questions/9942/request-for-assistance-retrieving-parsed-transaction-data-in-rust-for-solana-te][Request for Assistance: Retrieving Parsed Transaction Data in Rust for Solana Test Validator]]
+
+
+** get_transaction_with_config example
+
+#+begin_src rust
+async fn process_transaction(rpc_client: &RpcClient, signature: &str) -> Result<()> {
+  println!("Processing transaction");
+
+  let raydium_program_id = Pubkey::from_str("routeUGWgWzqBWFcrCfv8tritsqukccJPu3q5GPP3xS")?;
+  let jupiter_program_id = Pubkey::from_str("JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4")?;
+
+  let transaction_with_meta = rpc_client.get_transaction_with_config(
+    &Signature::from_str(signature)?,
+    RpcTransactionConfig {
+      encoding: Some(UiTransactionEncoding::JsonParsed),
+      commitment: Some(CommitmentConfig::confirmed()),
+      max_supported_transaction_version: Some(0),
+    },
+  )?;
+
+  if let Some(meta) = &transaction_with_meta.transaction.meta {
+    if let EncodedTransaction::Json(parsed_tx) = &transaction_with_meta.transaction.transaction {
+      if let UiMessage::Parsed(message) = &parsed_tx.message {
+        let mut is_raydium_tx = false;
+        let mut is_jupiter_tx = false;
+
+        // Check if any instruction interacts with Raydium or Jupiter
+        for instruction in &message.instructions {
+          if let UiInstruction::Parsed(UiParsedInstruction::PartiallyDecoded(partially_decoded)) =
+            instruction
+          {
+            if partially_decoded.program_id == raydium_program_id.to_string() {
+              is_raydium_tx = true;
+            } else if partially_decoded.program_id == jupiter_program_id.to_string() {
+              is_jupiter_tx = true;
+            }
+          }
+        }
+
+        // Route transaction to appropriate handler
+        if is_raydium_tx {
+          parse_raydium_swap(message, meta, rpc_client).await?;
+        } else if is_jupiter_tx {
+          parse_jupiter_swap(message)?;
+        } else {
+          println!("No Raydium or Jupiter instructions found.");
+        }
+      }
+    }
+  }
+
+  Ok(())
+}
+#+end_src
+
+copy from [[https://github.com/joaquinsoza/soltrac][soltrac]]
