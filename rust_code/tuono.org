@@ -116,3 +116,8 @@ config.json config.mjs
 #+end_src
 
 if the _config.json_ is not found, or the _config_ directory not found in _.tuono_, it might be the some node library missing in the project.
+
+the config.json might be like this:
+#+begin_src json
+{"server":{"host":"localhost","port":3000}}
+#+end_src
