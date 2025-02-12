@@ -154,3 +154,15 @@ also see [[https://solana.stackexchange.com/questions/17467/how-to-recognize-and
 
 
 also see https://github.com/jup-ag/instruction-parser
+
+
+** anchor 0.30.1 only support solana 1.x
+
+#+begin_quote
+While this release supports anything above 1.17.3, the recommended Solana version is 1.18.17.
+#+end_quote
+
+
+copy from [[https://www.anchor-lang.com/docs/updates/release-notes/0-30-1][Anchor - Release Notes 0.30.1]]
+also see https://stackoverflow.com/questions/79286009/is-the-solana-sdk-v2-compatible-with-v1-and-therefore-compatible-with-anchor-0-3
+also see https://solana.stackexchange.com/questions/15882/which-anchor-version-to-use
