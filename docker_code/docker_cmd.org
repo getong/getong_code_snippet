@@ -347,3 +347,14 @@ copy from [[https://www.coderjia.cn/archives/dba3f94c-a021-468a-8ac6-e840f85867e
 #+begin_src shell
 docker run -it --entrypoint /bin/sh docker_image_name
 #+end_src
+
+** Docker build fails because unable to install `libc-bin`
+
+#+begin_src shell
+RUN rm /var/lib/dpkg/info/libc-bin.*
+RUN apt-get clean
+RUN apt-get update
+RUN apt-get install libc-bin
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/78105004/docker-build-fails-because-unable-to-install-libc-bin][Docker build fails because unable to install `libc-bin`]]
