@@ -139,3 +139,15 @@ It might also need to update tuono cli:
 #+begin_src shell
 cargo install --force tuono
 #+end_src
+
+** node default port is 3001, tuono default port is 3000
+
+#+begin_src shell
+$ lsof -i :3001
+COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    57445 user   57u  IPv4 0xb3d09473786addda      0t0  TCP localhost:redwood-broker (LISTEN)
+
+$ lsof -i :3000
+COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+tuono   57504 user    9u  IPv4 0xcd75cedf64ddec7b      0t0  TCP localhost:hbci (LISTEN)
+#+end_src
