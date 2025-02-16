@@ -151,3 +151,25 @@ $ lsof -i :3000
 COMMAND   PID   USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 tuono   57504 user    9u  IPv4 0xcd75cedf64ddec7b      0t0  TCP localhost:hbci (LISTEN)
 #+end_src
+
+
+** deploy tuono application
+
+*** config.json
+
+#+begin_src typescript
+{"server":{"host":"localhost","port":3000}}
+#+end_src
+
+*** tuono compile
+
+#+begin_src shell
+tuono build
+
+cargo build --release
+
+# in the directory which contains config.json file
+./target/release/tuono
+#+end_src
+
+This _tuono_ file is just compiled in the _Cargo.toml_ file.
