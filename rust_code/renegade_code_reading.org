@@ -894,3 +894,124 @@ pub(crate) async fn handle_raft_request(
     }
 }
 #+end_src
+
+** renegade openraft implementation
+
+*** P2PNetworkFactoryWrapper network definition
+
+#+begin_src rust
+pub struct P2PNetworkFactoryWrapper {
+    /// The inner factory implementation
+    inner: Arc<dyn P2PNetworkFactory>,
+}
+#+end_src
+
+*** impl RaftNetworkFactory<TypeConfig> for P2PNetworkFactoryWrapper
+
+#+begin_src rust
+impl RaftNetworkFactory<TypeConfig> for P2PNetworkFactoryWrapper {
+    type Network = P2PRaftNetworkWrapper;
+
+    async fn new_client(&mut self, target: NodeId, target_info: &Node) -> Self::Network {
+        self.inner.new_p2p_client(target, *target_info)
+    }
+}
+#+end_src
+
+*** P2PRaftNetworkWrapper definition
+
+#+begin_src rust
+pub struct P2PRaftNetworkWrapper {
+    /// The inner p2p network
+    inner: Box<dyn P2PRaftNetwork + Send + Sync>,
+}
+#+end_src
+
+*** impl P2PRaftNetworkWrapper
+
+#+begin_src rust
+impl P2PRaftNetworkWrapper {
+    /// Constructor
+    pub fn new<N: P2PRaftNetwork>(inner: N) -> Self {
+        Self { inner: Box::new(inner) }
+    }
+}
+
+#[async_trait]
+impl P2PRaftNetwork for P2PRaftNetworkWrapper {
+    fn target(&self) -> NodeId {
+        self.inner.target()
+    }
+
+    async fn send_request(
+        &self,
+        target: NodeId,
+        request: RaftRequest,
+    ) -> Result<RaftResponse, RPCError<NodeId, Node, RaftError<NodeId>>> {
+        self.inner.send_request(target, request).await
+    }
+}
+#+end_src
+
+*** impl RaftNetwork<TypeConfig> for P2PRaftNetworkWrapper
+
+#+begin_src rust
+impl RaftNetwork<TypeConfig> for P2PRaftNetworkWrapper {
+    async fn append_entries(
+        &mut self,
+        rpc: AppendEntriesRequest<TypeConfig>,
+        _option: RPCOption,
+    ) -> Result<AppendEntriesResponse<NodeId>, RPCError<NodeId, Node, RaftError<NodeId>>> {
+        let target = self.inner.target();
+        let req = RaftRequest::AppendEntries(rpc);
+        self.inner.send_request(target, req).await.map(|resp| resp.into_append_entries())
+    }
+
+    async fn install_snapshot(
+        &mut self,
+        rpc: InstallSnapshotRequest<TypeConfig>,
+        _option: RPCOption,
+    ) -> Result<
+        InstallSnapshotResponse<NodeId>,
+        RPCError<NodeId, Node, RaftError<NodeId, InstallSnapshotError>>,
+    > {
+        let target = self.inner.target();
+        let req = RaftRequest::InstallSnapshot(rpc);
+        let res =
+            self.inner.send_request(target, req).await.map(|resp| resp.into_install_snapshot());
+
+        // Map the error to have the correct remote error type
+        // We do this because the remote error type can only be reported by the remote
+        // peer. Other error types are determined locally by the RPC handler
+        if res.is_err() {
+            let mapped_err = match res.err().unwrap() {
+                RPCError::Network(e) => RPCError::Network(e),
+                RPCError::PayloadTooLarge(e) => RPCError::PayloadTooLarge(e),
+                RPCError::Timeout(e) => RPCError::Timeout(e),
+                RPCError::Unreachable(e) => RPCError::Unreachable(e),
+                _ => unreachable!("remote errors sent in response"),
+            };
+
+            return Err(mapped_err);
+        };
+
+        match res.unwrap() {
+            Ok(resp) => Ok(resp),
+            Err(e) => {
+                let err = RaftError::APIError(e);
+                Err(RPCError::RemoteError(RemoteError::new(target, err)))
+            },
+        }
+    }
+
+    async fn vote(
+        &mut self,
+        rpc: VoteRequest<NodeId>,
+        _option: RPCOption,
+    ) -> Result<VoteResponse<NodeId>, RPCError<NodeId, Node, RaftError<NodeId>>> {
+        let target = self.inner.target();
+        let req = RaftRequest::Vote(rpc);
+        self.inner.send_request(target, req).await.map(|resp| resp.into_vote())
+    }
+}
+#+end_src
