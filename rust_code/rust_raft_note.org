@@ -570,3 +570,126 @@ impl RaftStateMachine<TypeConfig> for Arc<StateMachineStore> {
 // Create a instance of where the state machine data will be stored.
 let state_machine_store = Arc::new(StateMachineStore::default());
 #+end_src
+
+** openraft network
+
+*** define network struct
+
+#+begin_src rust
+pub struct Network {}
+#+end_src
+
+*** impl RaftNetworkFactory<TypeConfig> for network
+
+#+begin_src rust
+impl RaftNetworkFactory<TypeConfig> for Network {
+  type Network = NetworkConnection;
+
+  #[tracing::instrument(level = "debug", skip_all)]
+  async fn new_client(&mut self, target: NodeId, node: &Node) -> Self::Network {
+    let mut transport = tarpc::serde_transport::tcp::connect(&node.rpc_addr, Json::default);
+    transport.config_mut().max_frame_length(usize::MAX);
+    let client = WorldClient::new(client::Config::default(), transport.await.unwrap()).spawn();
+    tracing::debug!("new_client: is_none: {:?}", client);
+
+    NetworkConnection {
+      addr: node.rpc_addr.clone(),
+      client: Some(client),
+      target,
+    }
+  }
+}
+#+end_src
+
+*** define the real network client
+
+#+begin_src rust
+pub struct NetworkConnection {
+  addr: String,
+  client: Option<WorldClient>,
+  target: NodeId,
+}
+#+end_src
+
+*** impl NetworkConnection
+
+#+begin_src rust
+impl NetworkConnection {
+  async fn c<E: std::error::Error + DeserializeOwned>(
+    &mut self,
+  ) -> Result<&WorldClient, RPCError<TypeConfig, E>> {
+    if self.client.is_none() {
+      let mut transport = tarpc::serde_transport::tcp::connect(&self.addr, Json::default);
+      transport.config_mut().max_frame_length(usize::MAX);
+      self.client =
+        Some(WorldClient::new(client::Config::default(), transport.await.unwrap()).spawn());
+    }
+    self
+      .client
+      .as_ref()
+      .ok_or_else(|| RPCError::Network(NetworkError::from(AnyError::default())))
+  }
+}
+#+end_src
+
+*** impl RaftNetwork<TypeConfig> for NetworkConnection
+
+#+begin_src rust
+#[allow(clippy::blocks_in_conditions)]
+impl RaftNetwork<TypeConfig> for NetworkConnection {
+  #[tracing::instrument(level = "debug", skip_all, err(Debug))]
+  async fn append_entries(
+    &mut self,
+    req: AppendEntriesRequest<TypeConfig>,
+    _option: RPCOption,
+  ) -> Result<AppendEntriesResponse<TypeConfig>, RPCError<TypeConfig, RaftError<TypeConfig>>> {
+    tracing::debug!(req = debug(&req), "append_entries");
+
+    let client = self.c().await?;
+    tracing::debug!("got connection");
+
+    client
+      .append(context::current(), req)
+      .await
+      .unwrap()
+      .map_err(|e| to_error(e, self.target))
+  }
+
+  #[tracing::instrument(level = "debug", skip_all, err(Debug))]
+  async fn install_snapshot(
+    &mut self,
+    req: InstallSnapshotRequest<TypeConfig>,
+    _option: RPCOption,
+  ) -> Result<
+    InstallSnapshotResponse<TypeConfig>,
+    RPCError<TypeConfig, RaftError<TypeConfig, InstallSnapshotError>>,
+  > {
+    tracing::debug!(req = debug(&req), "install_snapshot");
+    self
+      .c()
+      .await?
+      .snapshot(context::current(), req)
+      .await
+      .unwrap()
+      .map_err(|e| to_error(e, self.target))
+  }
+
+  #[tracing::instrument(level = "debug", skip_all, err(Debug))]
+  async fn vote(
+    &mut self,
+    req: VoteRequest<TypeConfig>,
+    _option: RPCOption,
+  ) -> Result<VoteResponse<TypeConfig>, RPCError<TypeConfig, RaftError<TypeConfig>>> {
+    tracing::debug!(req = debug(&req), "vote");
+    self
+      .c()
+      .await?
+      .vote(context::current(), req)
+      .await
+      .unwrap()
+      .map_err(|e| to_error(e, self.target))
+  }
+}
+#+end_src
+
+Five Steps to implement openraft network
