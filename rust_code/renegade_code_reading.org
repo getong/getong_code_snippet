@@ -1015,3 +1015,100 @@ impl RaftNetwork<TypeConfig> for P2PRaftNetworkWrapper {
     }
 }
 #+end_src
+
+
+** openraft libp2p data request and response data type
+
+#+begin_src rust
+/// The request type a raft node may send to another
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub enum RaftRequest {
+    /// A request to append entries
+    AppendEntries(AppendEntriesRequest<TypeConfig>),
+    /// A request to install a snapshot
+    InstallSnapshot(InstallSnapshotRequest<TypeConfig>),
+    /// A request to vote
+    Vote(VoteRequest<NodeId>),
+    /// A proposal forwarded to the leader
+    ForwardedProposal(Proposal),
+}
+
+impl RaftRequest {
+    /// Get a string representing the request type
+    pub fn type_str(&self) -> String {
+        match self {
+            RaftRequest::AppendEntries(req) => {
+                format!("append_entries (len = {})", req.entries.len())
+            },
+            RaftRequest::InstallSnapshot(_) => "install_snapshot".to_string(),
+            RaftRequest::Vote(_) => "vote".to_string(),
+            RaftRequest::ForwardedProposal(_) => "forwarded_proposal".to_string(),
+        }
+    }
+}
+
+/// The response type a raft node may send to another
+#[derive(Debug, Serialize, Deserialize)]
+pub enum RaftResponse {
+    /// A simple ack when no data must be returned
+    Ack,
+    /// A response to an append entries request
+    AppendEntries(AppendEntriesResponse<NodeId>),
+    /// A response to an install snapshot request
+    InstallSnapshot(Result<InstallSnapshotResponse<NodeId>, InstallSnapshotError>),
+    /// A response to a vote request
+    Vote(VoteResponse<NodeId>),
+}
+
+impl RaftResponse {
+    /// Serialize a raft response to bytes
+    #[instrument(name = "RaftResponse::to_bytes", skip_all, fields(size), err)]
+    pub fn to_bytes(&self) -> Result<Vec<u8>, StateError> {
+        let buf = ciborium_serialize(self).map_err(err_str!(StateError::Serde))?;
+        backfill_trace_field("size", buf.len());
+        Ok(buf)
+    }
+
+    /// Convert the response to an append entries request
+    pub fn into_append_entries(self) -> AppendEntriesResponse<NodeId> {
+        match self {
+            RaftResponse::AppendEntries(resp) => resp,
+            _ => panic!("Expected AppendEntries response, got {:?}", self),
+        }
+    }
+
+    /// Convert the response to an install snapshot request
+    pub fn into_install_snapshot(
+        self,
+    ) -> Result<InstallSnapshotResponse<NodeId>, InstallSnapshotError> {
+        match self {
+            RaftResponse::InstallSnapshot(resp) => resp,
+            _ => panic!("Expected InstallSnapshot response, got {:?}", self),
+        }
+    }
+
+    /// Convert the response to a vote request
+    pub fn into_vote(self) -> VoteResponse<NodeId> {
+        match self {
+            RaftResponse::Vote(resp) => resp,
+            _ => panic!("Expected Vote response, got {:?}", self),
+        }
+    }
+}
+#+end_src
+
+and it is used in openraft code, for example, append_entries function
+
+#+begin_src rust
+async fn append_entries(
+    &mut self,
+    rpc: AppendEntriesRequest<TypeConfig>,
+    _option: RPCOption,
+) -> Result<AppendEntriesResponse<NodeId>, RPCError<NodeId, Node, RaftError<NodeId>>> {
+    let target = self.inner.target();
+    let req = RaftRequest::AppendEntries(rpc);
+    self.inner.send_request(target, req).await.map(|resp| resp.into_append_entries())
+}
+#+end_src
+
+_req_ and the _map_ function, they are request and response.
