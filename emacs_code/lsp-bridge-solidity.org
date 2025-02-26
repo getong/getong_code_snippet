@@ -1,0 +1,22 @@
+* lsp-bridge solidity usage
+
+** clone ethereum contract repo
+
+for example, use https://github.com/subquery/network-contracts
+
+#+begin_src shell
+git clone https://github.com/subquery/network-contracts
+cd network-contracts
+yarn install
+yarn build
+#+end_src
+
+** emacs open StateChannel.sol
+
+#+begin_src shell
+emacs contracts/StateChannel.sol
+#+end_src
+
+** input a string, delete the string, and save the file
+
+After this operation, the lsp-bridge can use _lsp-bridge-find-def_ command to view the definition of the solidity function.
