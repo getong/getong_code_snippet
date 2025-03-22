@@ -211,3 +211,25 @@ The macro `contract!` adds dynamic function to current module.
 In this code, you can use the `root_proxy_admin` function in this module.
 
 copy from https://github.com/subquery/network-contracts
+
+** cargo expand
+
+#+begin_src shell
+cargo install cargo-expand
+#+end_src
+
+** types of macros
+
+- [ ] declarative macros
+- [ ] procedural macros
+  - [ ] derive macros
+  - [ ] attribute macros
+  - [ ] function-like macros
+
+** crates for procedural macros
+
+- [ ] syn - parsing Rust code into syntax tree
+- [ ] proc_macro - essential types and functions
+- [ ] quote - generating Rust code from syntax tree
+
+rust original code -> tokenstream to syntax tree (syn crate) -> procedural macro -> syntax tree to tokenstream(quote create) -> rust new code
