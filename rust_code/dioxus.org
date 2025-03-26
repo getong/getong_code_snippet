@@ -1,0 +1,14 @@
+* dioxus
+
+** dioxus basic installation
+
+
+#+begin_src shell
+brew install cargo-binstall
+
+cargo binstall dioxus-cli
+
+dx new <your_project_name_here>
+#+end_src
+
+copy from [[https://dioxuslabs.com/learn/0.6/getting_started/][dioxus Getting Started]]
