@@ -6,15 +6,12 @@ p* archlinux command
 :PROPERTIES:
 :CUSTOM_ID: intallation
 :END:
-see [[https://zhuanlan.zhihu.com/p/433920079][Archlinux
-安装教程超详细（2021.11.15）]]
+see [[https://zhuanlan.zhihu.com/p/433920079][Archlinux 安装教程超详细（2021.11.15）]]
 
 see
-[[https://www.securedyou.com/how-to-install-arch-linux-step-by-step-tutorial/][How
-to Install Arch Linux in 2022 {Easy Step-by-Step Guide}]]
+[[https://www.securedyou.com/how-to-install-arch-linux-step-by-step-tutorial/][How to Install Arch Linux in 2022 {Easy Step-by-Step Guide}]]
 
-see [[https://www.cnblogs.com/LzsCxb/p/15669736.html][Archlinux
-2022安装配置之Gnome40]]
+see [[https://www.cnblogs.com/LzsCxb/p/15669736.html][Archlinux 2022安装配置之Gnome40]]
 
 #+begin_src shell
 # reflector --country China --age 72 --sort rate --protocol https --save /etc/pacman.d/mirrorlist
@@ -67,7 +64,7 @@ EOF
 pacman -Syyu
 pacman -S --noconfirm archlinuxcn-keyring
 
-pacman -S --noconfirm virtualbox-ext-oracle gstreamer0.10-base-plugins netease-cloud-music authy vdhcoapp feishu-bin
+# pacman -S --noconfirm virtualbox-ext-oracle gstreamer0.10-base-plugins netease-cloud-music vdhcoapp feishu-bin
 
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
@@ -142,7 +139,7 @@ DNS=192.168.1.253
 vim /etc/systemd/network/static-enp1s0.link
 --------------------------------
 [Match]
-MACAddress=a8:4b:05:2b:e8:54
+MACAddress=50:2b:73:a9:01:b4
 
 [Link]
 NamePolicy=
@@ -167,6 +164,7 @@ systemctl enable systemd-resolved.service
 
 exit
 
+umount /mnt/boot
 umount /mnt
 
 reboot
@@ -751,10 +749,12 @@ process remains active after closing it]]
 :CUSTOM_ID: ugrren-ac1300-wireless-card
 :END:
 #+begin_src shell
-git clone https://github.com/morrownr/8812au-20210820
-cd 8812au-20210820
-sudo ./install-driver.sh
-sudo reboot
+# git clone https://github.com/morrownr/8812au-20210820
+# cd 8812au-20210820
+# sudo ./install-driver.sh
+# sudo reboot
+
+yay -S aur/rtw88-dkms-git
 #+end_src
 
 copy from
@@ -2045,7 +2045,7 @@ ExecStart=/usr/bin/wpa_supplicant -u -s -O /run/wpa_supplicant
 change to be:
 
 #+begin_src shell
-ExecStart=/usr/bin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlp0s20u9
+ExecStart=/usr/bin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlp0s20u2
 Restart=always
 #+end_src
 

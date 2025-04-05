@@ -43,19 +43,19 @@ pacman -S --noconfirm archlinuxcn-keyring
 
 pacstrap /mnt linux linux-firmware linux-headers base base-devel vim git \
     net-tools openssh gdm xorg xorg-server xorg-xinit xorg-xrandr \
-    gnome gnome-extra gnome-tweak-tool gnome-shell grub efibootmgr \
-    intel-ucode proxychains v2ray asp nemo emacs erlang \
-    gnome-software-packagekit-plugin gnome-tweaks pacman-contrib \
-    util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel mesa-libgl \
+    gnome gnome-shell grub efibootmgr \
+    intel-ucode proxychains v2ray nemo emacs erlang \
+    gnome-tweaks pacman-contrib \
+    util-linux vagrant w3m wget xf86-video-nouveau xf86-video-intel \
     wqy-zenhei cmake reflector bc nano zsh trash-cli vlc cpio xmlto python-sphinx_rtd_theme \
     virtualbox virtualbox-host-dkms virtualbox-guest-iso \
     adobe-source-han-serif-cn-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
     adobe-source-han-sans-cn-fonts ttf-sarasa-gothic texlive-core texlive-latexextra \
-    nfs-utils mpv wpa_supplicant samba pandoc texlive-fontsextra texlive-langchinese \
+    nfs-utils mpv wpa_supplicant samba texlive-fontsextra texlive-langchinese \
     gst-libav a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 \
     libtheora libvorbis libxv wavpack x264 xvidcore \
     fcitx-configtool fcitx fcitx-gtk3 sunpinyin fcitx-sunpinyin calibre gthumb \
-    moc firefox firefox-i18n-zh-cn
+    firefox firefox-i18n-zh-cn
 
 ## virtualbox-ext-oracle gstreamer0.10-base-plugins netease-cloud-music authy vdhcoapp feishu-bin
 
