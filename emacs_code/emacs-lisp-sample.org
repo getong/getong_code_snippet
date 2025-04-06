@@ -1,0 +1,48 @@
+* emacs lisp sample
+
+#+begin_src elisp
+(+ 2 2)
+'(this is an unquoted list)
+(concat "abc" "def")
+(substring "The quick brown fox jumped." 16 19)
+(setq fill-column 72)
+(concat "The " (number-to-string (+ 2 fill-column)) " red foxes.")
+(* 3 4 5)
+(+ 2 'hello)
+(message "This message app")
+(message "The name of this buffer is: %s." (buffer-name))
+
+(set 'flowers '(rose vilet daisy buttercup))
+
+(setq carnivores '(lion tiger leopard))
+
+(setq trees '(pine fir oak maple)
+      herbivores '(gazelle antelope zebra))
+
+(setq counter 0)
+(setq counter (+ counter 1))
+(message counter)
+
+(message "The name of this buffer is: %s." (buffer-file-name))
+
+(current-buffer)
+(switch-to-buffer (other-buffer))
+
+(buffer-size)
+
+(point)
+(point-min)
+(point-max)
+
+(defun multiply-by-seven (number)
+  "Multiply NUMBER by seven."
+  (* 7 number))
+
+(multiply-by-seven 7)
+
+(defun multiply-by-seven-i (number) ; Interactive version.
+  "Multiply NUMBER by seven."
+  (interactive "p")
+  (message "The result is %d" (* 7 number)))
+
+#+end_src
