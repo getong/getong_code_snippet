@@ -117,5 +117,15 @@ leave mark at previous position."
   (push-mark)
   (goto-char (point-min)))
 
+(let ((xbuff (generate-new-buffer "*my output*")))
+  (with-output-to-temp-buffer xbuff
+    ;; this is printed to xbuff
+    (print "abc")
+    ;;
+    ))
 
 #+end_src
+
+** doc
+https://www.jianshu.com/p/9d26f3d9cf14
+http://xahlee.info/emacs/emacs/elisp_editing_basics.html
