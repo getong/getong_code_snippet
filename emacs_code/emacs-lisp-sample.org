@@ -45,4 +45,77 @@
   (interactive "p")
   (message "The result is %d" (* 7 number)))
 
+;; c-u 3 M-x multiply-by-seven-i
+
+(let ((zebra 'stripes)
+      (tiger 'fierce))
+  (message "One kind of animal has %s and another is %s."
+           zebra tiger))
+
+(let ((birch 3)
+      pine
+      fir
+      (oak 'some))
+  (message
+   "Here are %d variables with %s, %s, and %s value."
+   birch pine fir oak))
+
+(if (> 5 4) ; if-part
+    (message "5 is greater than 4!"))
+
+(defun type-of-animal (characteristic)
+  "Print message in echo area depending on CHARACTERISTIC.
+If the CHARACTERISTIC is the symbol ‘fierce’,
+then warn of a tiger."
+  (if (equal characteristic 'fierce)
+      (message "It’s a tiger!")))
+
+(type-of-animal 'fierce)
+
+(type-of-animal 'zebra)
+
+(if (> 4 5) ; if-part
+    (message "5 is greater than 4!") ; then-part
+  (message "4 is not greater than 5!")) ; else-part
+
+(defun type-of-animal (characteristic) ; Second version.
+  "Print message in echo area depending on CHARACTERISTIC.
+If the CHARACTERISTIC is the symbol ‘fierce’,
+then warn of a tiger;
+else say it’s not fierce."
+  (if (equal characteristic 'fierce)
+      (message "It’s a tiger!")
+    (message "It’s not fierce!")))
+
+(type-of-animal 'fierce)
+(type-of-animal 'zebra)
+
+(if 4
+    'true
+  'false)
+(if nil
+    'true
+  'false)
+
+(> 5 4)
+
+(let ((foo (buffer-name))
+      (bar (buffer-size)))
+  (message
+   "This buffer is %s and has %d characters."
+   foo bar))
+
+(message "We are %d characters into this buffer."
+         (- (point)
+            (save-excursion
+              (goto-char (point-min)) (point))))
+
+(defun simplified-beginning-of-buffer ()
+  "Move point to the beginning of the buffer;
+leave mark at previous position."
+  (interactive)
+  (push-mark)
+  (goto-char (point-min)))
+
+
 #+end_src
