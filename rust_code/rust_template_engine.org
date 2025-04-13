@@ -1,0 +1,15 @@
+* rust template engine
+
+see [[https://crates.io/categories/template-engine][Template engine]]
+
+** tera
+** handlebars
+** askama
+** maud
+
+They are all ssr(server site rendering).
+tuono, in a way, is also template engine, but it compile to typescript/javascript.
+
+** leptos
+** dioxus
+* yew
