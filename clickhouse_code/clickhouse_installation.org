@@ -44,3 +44,19 @@ edit file =/etc/clickhouse-server/config.xml= uncomment
 #+begin_src shell
 sudo systemctl restart clickhouse-server
 #+end_src
+
+
+** clickhouse via docker
+
+#+begin_src shell
+docker pull dockerpull.cn/clickhouse:25.3.2.39
+docker tag dockerpull.cn/clickhouse:25.3.2.39 clickhouse:25.3.2.39
+
+docker run -d \
+  --name clickhouse-server \
+  -p 8123:8123 \
+  -p 9000:9000 \
+  -e CLICKHOUSE_PASSWORD=changeme \
+  --ulimit nofile=262144:262144 \
+  clickhouse:25.3.2.39
+#+end_src
