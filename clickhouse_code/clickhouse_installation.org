@@ -60,3 +60,9 @@ docker run -d \
   --ulimit nofile=262144:262144 \
   clickhouse:25.3.2.39
 #+end_src
+
+** DBeaver
+
+#+begin_src shell
+
+#+end_src
