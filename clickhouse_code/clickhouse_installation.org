@@ -64,5 +64,5 @@ docker run -d \
 ** DBeaver
 
 #+begin_src shell
-
+brew install --cask dbeaver-community
 #+end_src
