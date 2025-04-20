@@ -1,0 +1,55 @@
+* solana installation
+
+** installation script
+
+#+begin_src shell
+sh -c "$(curl -sSfL https://release.anza.xyz/v2.2.11/install)"
+
+solana --version
+#+end_src
+
+copy from [[https://docs.anza.xyz/cli/install][Install the Solana CLI]]
+
+** set path variable
+
+#+begin_src shell
+echo 'export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"' >> ~/.zshrc
+
+source ~/.zshrc
+
+#+end_src
+
+** update
+
+#+begin_src shell
+agave-install update
+#+end_src
+
+copy from [[https://solana.com/zh/docs/intro/installation#install-the-solana-cli][Install the Solana CLI]]
+
+** install Anchor CLI
+
+#+begin_src shell
+cargo install --git https://github.com/solana-foundation/anchor avm --force
+#+end_src
+
+** avm version
+
+#+begin_src shell
+avm --version
+#+end_src
+
+** install anchor latest
+
+#+begin_src shell
+avm install latest
+avm use latest
+#+end_src
+
+** anchor version
+
+#+begin_src shell
+anchor --version
+#+end_src
+
+copy from [[https://solana.com/zh/docs/intro/installation#install-the-solana-cli][Install Anchor CLI]]
