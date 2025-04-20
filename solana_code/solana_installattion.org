@@ -53,3 +53,56 @@ anchor --version
 #+end_src
 
 copy from [[https://solana.com/zh/docs/intro/installation#install-the-solana-cli][Install Anchor CLI]]
+
+** anchor init project
+
+#+begin_src shell
+anchor init solana_hello
+cd solana_hello
+
+# enable network proxy via proxychain or something your enable proxy script
+# after proxy setting
+anchor build
+#+end_src
+
+** show current solana key
+
+#+begin_src shell
+## get current account
+solana address --keypair ~/.config/solana/id.json
+# FynFiCCcJVhh9cy54D7FNftaKc74u3HsaEZavpNxqqrL
+
+## get current account balance
+solana balance --keypair ~/.config/solana/id.json
+
+## airdrop account
+solana airdrop 111 --keypair ~/.config/solana/id.json
+#+end_src
+
+_~/.config/solana/id.json_ is the default current used solana account.
+
+** with current accout airdrop, anchor deploy
+
+#+begin_src shell
+anchor deploy
+#+end_src
+
+** anchor test
+
+#+begin_src shell
+anchor test
+#+end_src
+
+copy from [[https://www.anchor-lang.com/docs/installation#anchor-cli-basics][Anchor CLI Basics]]
+
+** anchor zsh Shell Completions
+
+#+begin_src shell
+autoload -U compinit
+compinit -i
+anchor completions zsh | sudo tee /usr/local/share/zsh/site-functions/_anchor
+avm completions zsh | sudo tee /usr/local/share/zsh/site-functions/_avm
+exec zsh
+#+end_src
+
+copy from [[https://www.anchor-lang.com/docs/installation#shell-completions][Shell Completions]]
