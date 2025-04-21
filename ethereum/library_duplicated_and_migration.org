@@ -1,0 +1,17 @@
+* ethereum library duplicated and migration
+
+** Truffle and Ganache are duplicated
+
+use [[https://github.com/NomicFoundation/hardhat][hardhat]]
+use [[https://github.com/foundry-rs/foundry][foundry]]
+
+see [[https://consensys.io/blog/consensys-announces-the-sunset-of-truffle-and-ganache-and-new-hardhat][Consensys Announces the Sunset of Truffle and Ganache and New Hardhat Partnership]]
+
+** Web3.js is duplicated
+
+Web3.js libraries will be archived on March 4th, 2025.
+
+use [[https://github.com/ethers-io/ethers.js][ethers]]
+use [[https://github.com/wevm/viem][viem]]
+
+see [[https://blog.chainsafe.io/web3-js-sunset/][Web3.js to sunset]]
