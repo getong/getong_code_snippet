@@ -57,7 +57,7 @@ copy from [[https://solana.com/zh/docs/intro/installation#install-the-solana-cli
 ** anchor init project
 
 #+begin_src shell
-anchor init solana_hello
+anchor init solana_hello --package-manager pnpm
 cd solana_hello
 
 # enable network proxy via proxychain or something your enable proxy script
