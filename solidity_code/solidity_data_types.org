@@ -1,0 +1,20 @@
+* solidity data types
+
+** values types
+
+- bool: represents a boolean value
+- int and uint: Thesse represent signed and unsigned integers, respectively.
+  The solidity language allows for specifying bit sizes (e.g., uint8, uint256), with uint256 being the default.
+  Careful selection of size can optimize the contract's gas usage.
+- address: This 20-byte value type is used to store Ethereum addresses.
+  Addresses are crucial in solidity for sending and receiving Ether and interacting with other contracts.
+- bytes1 to bytes32: Offer fixed-size byte arrays. Each bytesN represents a sequence of N bytes.
+  There is also a dynamic size bytes type for arbitrary-length data.
+
+** complex data types
+
+- Arrays: Can be fixed or dynamically sized and store elements of the same type.
+  They are declared using square brackets, e.g., uint[].
+- Structs: Allow for creating cutsom types that group releated data together.
+- Mappings: Are data structures that sotre key-value pairs.
+  In mappings, all keys are unique and mapped to a Value.
