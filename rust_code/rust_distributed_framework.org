@@ -30,6 +30,7 @@
 [[https://github.com/automerge/automerge][automerge]]
 [[https://github.com/loro-dev/loro][loro]]
 [[https://github.com/kwai/blaze][blaze]]
+[[https://github.com/hydro-project/hydro][hydro]]
 
 ** use with kubernetes
 :PROPERTIES:
