@@ -1,0 +1,21 @@
+* debug deployed smart contract
+
+** Tenderly
+
+[[https://tenderly.co/][Tenderly]]
+
+** hardhat
+
+
+copy from [[https://ethereum.stackexchange.com/questions/144207/debug-a-deployed-smart-contract][Debug a deployed smart contract]]
+
+** EtherScan
+
+** Test Automation Frameworks
+
+[[https://smartbear.com/learn/automated-testing/test-automation-frameworks/][Test Automation Frameworks]]
+
+
+** diligence
+
+[[https://diligence.consensys.io/tools/][diligence]]
