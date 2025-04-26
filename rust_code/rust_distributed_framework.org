@@ -29,6 +29,7 @@
 [[https://github.com/n0-computer/iroh][iroh]]
 [[https://github.com/automerge/automerge][automerge]]
 [[https://github.com/loro-dev/loro][loro]]
+[[https://github.com/kwai/blaze][blaze]]
 
 ** use with kubernetes
 :PROPERTIES:
