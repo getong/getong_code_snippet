@@ -1,0 +1,17 @@
+* volta
+
+** brew install
+
+#+begin_src shell
+brew install volta
+#+end_src
+
+** volta install cli
+
+#+begin_src shell
+volta install node@20
+
+volta install yarn
+
+volta install bun
+#+end_src
