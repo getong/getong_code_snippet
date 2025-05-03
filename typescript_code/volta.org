@@ -14,4 +14,6 @@ volta install node@20
 volta install yarn
 
 volta install bun
+
+volta install @nestjs/cli
 #+end_src
