@@ -1,0 +1,5 @@
+* macos cannot verify cli
+
+#+begin_src shell
+xattr -d com.apple.quarantine /path/to/your/app
+#+end_src
