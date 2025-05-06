@@ -16,4 +16,8 @@ volta install yarn
 # volta install bun
 
 volta install @nestjs/cli
+
+volta install clinic
+
+volta install artillery
 #+end_src
