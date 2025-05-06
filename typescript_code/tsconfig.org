@@ -1,0 +1,23 @@
+* tsconfig setting
+
+** no NodeNext
+
+#+begin_quote
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "commonjs",
+  }
+}
+#+end_quote
+
+or change to use _bundler_
+
+#+begin_quote
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+  }
+}
+#+end_quote
