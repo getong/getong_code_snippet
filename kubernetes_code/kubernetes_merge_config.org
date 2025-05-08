@@ -1,0 +1,22 @@
+* kubernetes merge config
+
+** install yq
+
+#+begin_src shell
+brew install yq  # macOS with Homebrew
+#+end_src
+
+** merge two config files
+
+#+begin_src shell
+yq eval-all '. as $item ireduce ({}; . *+ $item)' local-config.yaml new-config.yaml > merged-config.yaml
+#+end_src
+
+*** for example, use .kube directory
+
+#+begin_src shell
+cd ~/.kube
+cp config "config.bak.$(date +%Y%m%d-%H%M%S)"
+
+yq eval-all '. as $item ireduce ({}; . *+ $item)' config new-config.yaml > config
+#+end_src
