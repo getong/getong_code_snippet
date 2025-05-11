@@ -1,0 +1,55 @@
+* react code snippets
+
+** JSX short
+
+without jsx:
+
+#+begin_src javascript
+const element = React.createElement('div', null,
+React.createElement('h1', null, 'Welcome to React'),
+React.createElement('p', null, 'Learning React is fun!'));
+#+end_src
+
+with jsx:
+#+begin_src javascript
+const element = (<div><h1>Welcome to React</h1><p>Learning React is fun!</p></div>);”
+#+end_src
+
+** jsx camelCase style
+
+#+begin_src javascript
+const button = <button onClick={handleClick}>Click me</button>;
+#+end_src
+
+In JSX, HTML attributes are often written in camelCase. For example, onclick becomes onClick, tabindex becomes tabIndex, and so on.
+This naming convention matches JavaScript’s style, maintaining consistency throughout your code.
+
+** basic react example
+
+#+begin_src javascript
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+const element = <h1>Hello, world!</h1>;
+const root = createRoot(document.getElementById('root'));
+root.render(element);
+#+end_src
+
+** two types of components
+
+There are two types of components:
+- Function Components (the modern standard)
+- Class Components (older, still supported but less recommended for new projects)
+
+** functional component code sample
+Here is a simple example of a functional component:
+
+#+begin_src typescript
+function Greeting(props) {
+    return <h1>Hello, {props.name}!</h1>;
+}
+// Or using the modern arrow function syntax:
+const Greeting = ({ name }) => {
+    return <h1>Hello, {name}!</h1>;
+};
+#+end_src
+This component takes a name prop and renders a greeting message.
