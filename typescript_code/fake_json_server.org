@@ -1,0 +1,69 @@
+* fake json server
+
+*** 1. Create a JSON file
+Create a file named ~data.json~ with the following content:
+
+#+BEGIN_SRC json
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Hello World",
+      "author": "John Doe"
+    },
+    {
+      "id": 2,
+      "title": "Emacs Org-Mode",
+      "author": "Jane Smith"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "postId": 1,
+      "body": "Great post!"
+    },
+    {
+      "id": 2,
+      "postId": 2,
+      "body": "Very informative!"
+    }
+  ],
+  "profile": {
+    "name": "Admin"
+  }
+}
+#+END_SRC
+
+*** 2. Install ~bunx json-server~
+If you haven't already installed ~bunx json-server~, you can do so by running:
+
+#+BEGIN_SRC shell
+bun add json-server
+#+END_SRC
+
+*** 3. Run the JSON server
+Use the following command to start the JSON server on port 3001 and watch the ~data.json~ file for changes:
+
+#+BEGIN_SRC shell
+bunx json-server -p 3001 -w data.json
+#+END_SRC
+
+*** 4. Access the server
+Once the server is running, you can access the following endpoints in your browser or via tools like ~curl~ or ~Postman~:
++ ~http://localhost:3001/posts~
++ ~http://localhost:3001/comments~
++ ~http://localhost:3001/profile~
+
+*** 5. Example: Fetch data using ~curl~
+You can fetch data from the ~posts~ endpoint using the following ~curl~ command:
+
+#+BEGIN_SRC shell
+curl http://localhost:3001/posts
+#+END_SRC
+
+This will return the list of posts in JSON format.
+
+*** Notes
++ The ~-w~ flag ensures that the server watches the ~data.json~ file for changes and reloads automatically.
++ You can modify the ~data.json~ file while the server is running, and the changes will be reflected immediately.
