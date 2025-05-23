@@ -2114,7 +2114,14 @@ yt-dlp --cookies-from-browser firefox  https://www.bilibili.com/video/BV1af421R7
 ** yl-dlp use cookie from chrome browser
 
 #+begin_src shell
-yt-dlp --cookies-from-browser chrome --proxy socks5://127.0.0.1:7890/ -R infinite -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'  --sub-lang zh-Hans --convert-subtitles srt $url
+yt-dlp --cookies-from-browser chrome \
+  --proxy socks5://127.0.0.1:7890/ \
+  -R infinite \
+  -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' \
+  --write-sub --sub-langs "en.* zh-*" \
+  --convert-subs srt \
+  --write-auto-subs \
+  $url
 #+end_src
 
 
