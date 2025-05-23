@@ -77,10 +77,10 @@ set search_path to schema1, schema2;
 ** backup and restore from two docker containers
 
 #+begin_src shell
-pg_dump -h remote_host -U postgres -p 15433 -d database_name -F c -f database_name-20241121.sqlc
+pg_dump -h 192.168.1.141 -U postgres -p 15433 -d  -F c -f database_name-20241121.sqlc
 
 createdb -U postgres database_name
 # sqlx database create
 
-pg_restore -h localhost -U postgres -d database_name -F c database_name-20241121.sqlc
+pg_restore -h localhost -U postgres -d chs-online4 -F c 'public (3).dmp'
 #+end_src
