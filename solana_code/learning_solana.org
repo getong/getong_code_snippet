@@ -323,3 +323,43 @@ Decimals:  9
 
 Signature: 2Dj5B8kcSkAMus9f9kV6HMA9ahZLiFZmMN3JK9Zu6Mx94qd6VMAuTRzbTsCYDU2KLt2hAQESxvtLtAd74SD8Zsrv
 #+end_src
+
+** spl-token create-account
+
+#+begin_src rust
+spl-token create-account EXh3MxWq7ZMNRFUXAUWVqD9AMezKVqV5BvqpEmXKpctr
+#+end_src
+
+** spl-token token accounts
+
+#+begin_src shell
+$ spl-token accounts
+
+Token                                         Balance
+-----------------------------------------------------
+5iKzsyCbfnyvGYpBxTtjDsK74B695CmiDKX7EW7ShDxe  0
+EXh3MxWq7ZMNRFUXAUWVqD9AMezKVqV5BvqpEmXKpctr  0
+GoCSyuoVDKZiiFK7D8BvWFxvw1ySudk9Kgeoo7qbNJXV  100
+#+end_src
+
+** spl-token mint
+
+#+begin_src shell
+$ spl-token mint 5iKzsyCbfnyvGYpBxTtjDsK74B695CmiDKX7EW7ShDxe 300 --url http://127.0.0.1:8899
+Minting 300 tokens
+Token: 5iKzsyCbfnyvGYpBxTtjDsK74B695CmiDKX7EW7ShDxe
+Recipient: 219DWMDDmCkiQXAGXtmVQLba5pv7fcaX9JmQonijimRB
+
+Signature: 3a1XYnm51hZR78BmDCZFYbpBPizS9mzM8prmzR5CUdtEQhanfjh4WhD1onPTxD6NfzRETxAeruUR11UbbZU7MJrm
+#+end_src
+
+** spl-token balance token
+
+#+begin_src shell
+$ spl-token accounts
+Token                                         Balance
+-----------------------------------------------------
+5iKzsyCbfnyvGYpBxTtjDsK74B695CmiDKX7EW7ShDxe  400
+EXh3MxWq7ZMNRFUXAUWVqD9AMezKVqV5BvqpEmXKpctr  0
+GoCSyuoVDKZiiFK7D8BvWFxvw1ySudk9Kgeoo7qbNJXV  100
+#+end_src
