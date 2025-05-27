@@ -301,3 +301,25 @@ copy from [[https://spl.solana.com/token][spl-token]]
 #+begin_src shell
 solana program deploy <PROGRAM_FILEPATH>
 #+end_src
+
+** solana rent
+
+#+begin_src shell
+$ solana rent 20
+Rent-exempt minimum: 0.00103008 SOL
+
+$ solana rent 200
+Rent-exempt minimum: 0.00228288 SOL
+#+end_src
+
+** spl-token create token
+
+#+begin_src shell
+$ spl-token create-token --url http://127.0.0.1:8899
+Creating token JbFvVh2xS8WRemU3T3ovudWxysy9EgzBmyFnCMvr1v7 under program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+
+Address:  JbFvVh2xS8WRemU3T3ovudWxysy9EgzBmyFnCMvr1v7
+Decimals:  9
+
+Signature: 2Dj5B8kcSkAMus9f9kV6HMA9ahZLiFZmMN3JK9Zu6Mx94qd6VMAuTRzbTsCYDU2KLt2hAQESxvtLtAd74SD8Zsrv
+#+end_src
