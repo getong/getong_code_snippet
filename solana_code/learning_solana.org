@@ -436,3 +436,10 @@ $ solana address
 
 5bpViBCg958Xg4d2VF4AyJWn2P5KMwaTmXEBFgZmdBXA
 #+end_src
+
+** solana balance
+
+#+begin_src shell
+$ solana balance
+0.78727204 SOL
+#+end_src
