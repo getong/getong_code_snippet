@@ -363,3 +363,76 @@ Token                                         Balance
 EXh3MxWq7ZMNRFUXAUWVqD9AMezKVqV5BvqpEmXKpctr  0
 GoCSyuoVDKZiiFK7D8BvWFxvw1ySudk9Kgeoo7qbNJXV  100
 #+end_src
+
+** spl-token account json info
+
+#+begin_src shell
+$ spl-token accounts --output json
+{
+  "accounts": [
+    {
+      "address": "219DWMDDmCkiQXAGXtmVQLba5pv7fcaX9JmQonijimRB",
+      "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+      "isAssociated": true,
+      "mint": "5iKzsyCbfnyvGYpBxTtjDsK74B695CmiDKX7EW7ShDxe",
+      "owner": "5bpViBCg958Xg4d2VF4AyJWn2P5KMwaTmXEBFgZmdBXA",
+      "tokenAmount": {
+        "uiAmount": 400.0,
+        "decimals": 9,
+        "amount": "400000000000",
+        "uiAmountString": "400"
+      },
+      "state": "initialized",
+      "isNative": false
+    },
+    {
+      "address": "7cmK5kuQWAguLwwsMf38pjujbeKGwh8QSByP93RWtzmJ",
+      "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+      "isAssociated": true,
+      "mint": "EXh3MxWq7ZMNRFUXAUWVqD9AMezKVqV5BvqpEmXKpctr",
+      "owner": "5bpViBCg958Xg4d2VF4AyJWn2P5KMwaTmXEBFgZmdBXA",
+      "tokenAmount": {
+        "uiAmount": 0.0,
+        "decimals": 9,
+        "amount": "0",
+        "uiAmountString": "0"
+      },
+      "state": "initialized",
+      "isNative": false
+    },
+    {
+      "address": "fyXns3iqStQ3wBaLoGv5gZGQYHq3BXFnKkF3FPabTJX",
+      "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+      "isAssociated": true,
+      "mint": "GoCSyuoVDKZiiFK7D8BvWFxvw1ySudk9Kgeoo7qbNJXV",
+      "owner": "5bpViBCg958Xg4d2VF4AyJWn2P5KMwaTmXEBFgZmdBXA",
+      "tokenAmount": {
+        "uiAmount": 0.0,
+        "decimals": 9,
+        "amount": "0",
+        "uiAmountString": "0"
+      },
+      "state": "initialized",
+      "isNative": false
+    }
+  ]
+}
+#+end_src
+
+** spl-token burn
+
+#+begin_src shell
+spl-token burn fyXns3iqStQ3wBaLoGv5gZGQYHq3BXFnKkF3FPabTJX 100
+Burn 100 tokens
+  Source: fyXns3iqStQ3wBaLoGv5gZGQYHq3BXFnKkF3FPabTJX
+
+Signature: 4Td8Pc2CBQe7cmzvvns8VdLFzBJPA9hpu3gpxUNSD3GjB9Fn1ak2g6GAb5MYMV1STQPjWNhPfcwgaM37xCMbDHcU
+#+end_src
+
+** solana address
+
+#+begin_src shell
+$ solana address
+
+5bpViBCg958Xg4d2VF4AyJWn2P5KMwaTmXEBFgZmdBXA
+#+end_src
