@@ -11,6 +11,17 @@ flutter run
 
 copy from [[https://cjycode.com/flutter_rust_bridge/quickstart][Quickstart]]
 
+*** flutter_rust_bridge_codegen generate
+
+change rust code, and run the `flutter_rust_bridge_codegen` cli,
+it will generate the same code in dart language.
+
+#+begin_src shell
+flutter_rust_bridge_codegen generate
+#+end_src
+
+copy from [[https://cjycode.com/flutter_rust_bridge/quickstart][quickstart]]
+
 ** basic commands 1.0 example
 #+begin_src shell
 cargo install flutter_rust_bridge_codegen
