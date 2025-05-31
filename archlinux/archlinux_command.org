@@ -2121,6 +2121,8 @@ yt-dlp --cookies-from-browser chrome \
   --write-sub --sub-langs "en.*" \
   --convert-subs srt \
   --write-auto-subs \
+  --extractor-args youtubetab:skip=authcheck \
+ --merge-output-format mp4 \
   $url
 #+end_src
 
@@ -2132,6 +2134,8 @@ yt-dlp --cookies-from-browser chrome \
   --write-sub --sub-langs "en.*" \
   --convert-subs srt \
   --write-auto-subs \
+  --extractor-args youtubetab:skip=authcheck \
+ --merge-output-format mp4 \
   -a down.txt
 #+end_src
 
