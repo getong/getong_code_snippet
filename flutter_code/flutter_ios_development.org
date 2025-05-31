@@ -1,3 +1,5 @@
 * flutter ios development
 
 - [[https://zhuanlan.zhihu.com/p/696780711][将Flutter程序打包为ios应用并进行安装使用]]
+- [[https://www.youtube.com/watch?v=iE2bpP56QKc][Release an iOS app with Flutter in 7 steps
+]]
