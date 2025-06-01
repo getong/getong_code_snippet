@@ -36,3 +36,8 @@ Widget build(BuildContext context) {
   return Text(name);
 }
 #+end_src
+
+** cubit vs bloc
+
+cubit changes as function call
+bloc changes as event handled
