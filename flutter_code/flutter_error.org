@@ -97,3 +97,30 @@ Row(
 )
 #+end_src
 copy from [[https://www.fluttercampus.com/guide/228/renderbox-was-not-laid-out-error/][RenderBox was not laid out Error in Flutter]]
+
+** macos error, update macos api to 11.5
+
+*** macos/Podfile
+
+#+begin_src
+platform :osx, '11.5'
+#+end_src
+
+#+begin_src shell
+cd macos
+pod install --repo-update
+
+cd ..
+flutter clean
+flutter pub get
+flutter run -d macos
+#+end_src
+
+
+#+begin_src
+macos/Runner.xcodeproj/project.pbxproj
+#+end_src
+
+#+begin_src shell
+platform :osx, '11.5'
+#+end_src
