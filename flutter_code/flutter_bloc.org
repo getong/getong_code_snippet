@@ -6,8 +6,13 @@
 BlocBuilder
 BlocProvider
 BlocListener
+BlocSelector
+MultiBlocProvider
+MultiBlocListener
 BlocConsumer
 BlocObserver
+RepositoryProvider
+MultiRepositoryProvider
 #+end_quote
 
 ** usage
