@@ -8,3 +8,4 @@ https://getstream.io/chat/docs/sdk/flutter/guides/token_generation_with_firebase
 https://medium.com/@flutternewshub/flutter-chat-integration-with-stream-chat-f48ca86f7ec9
 https://getstream.io/chat/docs/react/tokens_and_authentication/
 https://www.youtube.com/watch?v=_nNAWdmjQJ0&list=PL3PvZdDvJcMIhyNRvU-7iHm_GWSHlvH5W
+https://github.com/GetStream/javascript-beginner-guide
