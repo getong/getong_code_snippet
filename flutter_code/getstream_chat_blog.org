@@ -9,3 +9,17 @@ https://medium.com/@flutternewshub/flutter-chat-integration-with-stream-chat-f48
 https://getstream.io/chat/docs/react/tokens_and_authentication/
 https://www.youtube.com/watch?v=_nNAWdmjQJ0&list=PL3PvZdDvJcMIhyNRvU-7iHm_GWSHlvH5W
 https://github.com/GetStream/javascript-beginner-guide
+
+** with firebase
+
+https://getstream.io/chat/docs/sdk/flutter/guides/token_generation_with_firebase/
+
+** with supabase
+
+https://getstream.io/blog/passwordless-authentication-react/
+https://www.youtube.com/watch?v=XL760qT3nS4
+https://depshub.com/blog/using-supabase-auth-as-a-service-with-a-custom-backend/
+https://www.freecodecamp.org/news/set-up-authentication-in-apps-with-supabase/
+https://supabase.com/partners/integrations/getstream_io
+https://getstream.io/blog/whatsapp-chat-authentication/
+https://github.com/GetStream/fullstack-nextjs-whatsapp-clone

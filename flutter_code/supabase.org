@@ -60,3 +60,80 @@ flutter pub get
 #+end_src
 
 copy from [[https://supabase.com/docs/guides/getting-started/tutorials/with-flutter][Build a User Management App with Flutter]]
+
+** supabase installation via docker
+
+#+begin_quote
+Create a Supabase docker container ( I made with Coolify)
+
+Set up the Supabase domain Open the UI, go to Configuration, and at the bottom, you’ll see a list of services in green. At the top (under “Supabase kong”), click on Settings to specify the domain where your project will be accessible. I set it to my subdomain: supabase.mydomain.com.
+
+Set up GitHub OAuth
+
+Go to GitHub profile → Settings → Developer Settings → OAuth Apps → Create New App.
+
+For the name, enter anything you like.
+
+For the Homepage URL, enter the URL of your Next.js project where it’s running. For development, this would typically be http://localhost:3000.
+
+For the Authorization Callback URL, use the domain you set up in the previous step, followed by /auth/v1/callback. In my case: https://supabase.mydomain.com/auth/v1/callback.
+
+Add environment variables to the Supabase Auth container
+
+Open your Supabase container in Coolify, then click Edit Compose File.
+
+Scroll down to the supabase-auth section under environment: and add these variables for GitHub:
+
+GOTRUE_EXTERNAL_GITHUB_ENABLED=true
+
+GOTRUE_EXTERNAL_GITHUB_CLIENT_ID=<you get this in step 3>
+
+GOTRUE_EXTERNAL_GITHUB_SECRET=<you get this in step 3>
+
+GOTRUE_EXTERNAL_GITHUB_REDIRECT_URI=<use the same Authorization Callback URL as in GitHub>
+
+For example, in my case: https://supabase.mydomain.com/auth/v1/callback.
+
+Update the site URL Something I had figured out earlier (but was criticized for here) is that you need to update the site URL to match the domain where your Next.js app is running. In development, I set it to localhost:3000. If I not mistaken this variable refers to the URL where Supabase is hosted (in my case, supabase.mydomain.com), but it needs to be updated to the URL of your Next.js app. However, you’ll still be able to access Supabase using the domain you set up in step 2.
+
+GOTRUE_SITE_URL=${SERVICE_FQDN_SUPABASEKONG}
+
+I updated it to: GOTRUE_SITE_URL=http://localhost:3000
+#+end_quote
+
+copy from [[https://www.reddit.com/r/Supabase/comments/1h46b6d/set_up_selfhosted_supabase_auth_with_github_oauth/][Set Up Self-hosted Supabase Auth with GitHub OAuth]]
+
+
+*** self host docker
+
+#+begin_src shell
+# Get the code
+git clone --depth 1 https://github.com/supabase/supabase
+
+# Make your new supabase project directory
+mkdir supabase-project
+
+# Tree should look like this
+# .
+# ├── supabase
+# └── supabase-project
+
+# Copy the compose files over to your project
+cp -rf supabase/docker/* supabase-project
+
+# Copy the fake env vars
+cp supabase/docker/.env.example supabase-project/.env
+
+# Switch to your project directory
+cd supabase-project
+
+# Pull the latest images
+docker compose pull
+
+# Start the services (in detached mode)
+docker compose up -d
+#+end_src
+
+copy from [[https://supabase.com/docs/guides/self-hosting/docker][Self-Hosting with Docker]]
+
+also see https://www.goroutine.cn/article/1707b35a-24cd-8096-a109-f2808ea6f2fe

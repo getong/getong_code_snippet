@@ -1127,3 +1127,10 @@ find `find /tmp/a -maxdepth 1 -iname "*b*" -type d` -type d -exec rmdir -p {} \;
 #+end_src
 
 see [[https://unix.stackexchange.com/questions/18100/is-it-possible-to-nest-a-find-exec-within-another-find-exec][Is it possible to nest a 'find -exec' within another 'find -exec'?]]
+
+** convert all vtt files into srt file
+
+#+begin_src shell
+cd path/to/your/directory
+find . -type f -name "*.vtt" -exec sh -c 'ffmpeg -i "$1" "${1%.vtt}.srt"' _ {} \;
+#+end_src
