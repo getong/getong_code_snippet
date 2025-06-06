@@ -141,3 +141,5 @@ also see https://www.goroutine.cn/article/1707b35a-24cd-8096-a109-f2808ea6f2fe
 ** supabase user auth
 
 see https://www.goroutine.cn/article/c3a6cbe4-6b5f-4550-be09-5938d716ba00
+
+https://zenn.dev/manase/scraps/0c54109cbce5d3
