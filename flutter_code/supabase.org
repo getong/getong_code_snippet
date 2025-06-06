@@ -137,3 +137,7 @@ docker compose up -d
 copy from [[https://supabase.com/docs/guides/self-hosting/docker][Self-Hosting with Docker]]
 
 also see https://www.goroutine.cn/article/1707b35a-24cd-8096-a109-f2808ea6f2fe
+
+** supabase user auth
+
+see https://www.goroutine.cn/article/c3a6cbe4-6b5f-4550-be09-5938d716ba00
