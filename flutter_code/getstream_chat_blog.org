@@ -9,6 +9,7 @@ https://medium.com/@flutternewshub/flutter-chat-integration-with-stream-chat-f48
 https://getstream.io/chat/docs/react/tokens_and_authentication/
 https://www.youtube.com/watch?v=_nNAWdmjQJ0&list=PL3PvZdDvJcMIhyNRvU-7iHm_GWSHlvH5W
 https://github.com/GetStream/javascript-beginner-guide
+https://deepwiki.com/GetStream/stream-chat-flutter
 
 ** with firebase
 
