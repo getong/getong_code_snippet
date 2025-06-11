@@ -1,0 +1,19 @@
+* firebase
+
+** dart installation
+
+#+begin_src shell
+dart pub global activate flutterfire_cli
+#+end_src
+
+** register a firebase project
+
+use web browser, signin with your google account, goto https://console.firebase.google.com/
+
+create a new project, like flutter-social-chat-42d94
+
+** connect to firebase with local settings
+
+#+begin_src shell
+flutterfire configure
+#+end_src
