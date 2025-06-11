@@ -24,3 +24,35 @@ https://www.freecodecamp.org/news/set-up-authentication-in-apps-with-supabase/
 https://supabase.com/partners/integrations/getstream_io
 https://getstream.io/blog/whatsapp-chat-authentication/
 https://github.com/GetStream/fullstack-nextjs-whatsapp-clone
+
+** Flutter 2023 GetStream & Firebase
+
+see https://www.youtube.com/playlist?list=PL3PvZdDvJcMIixstKkuvLWQleqJ1VhLrf
+
+*** getstream_chat_service.dart
+- current user: streamChatClient.state.currentUserStream
+- LazySingleton
+- dashboard.getstream.io explorer user info
+- streamChatClient.queryChannels
+- bottom_navigation_builder.dart BottomNavigationBar widget
+- abstract IChatService class, other service implements IChatService, which imply multi authentication method
+- chat_setup_cubit.dart _chatService.chatAuthStateChanges.listen
+- connectTheCurrentUser
+- custom_profile_button.dart InkWell widget
+- [[https://getstream.io/blog/flutter-social-chat/][Flutter Social Chat: Building a Modern Chat Experience with Stream]]
+- [[https://getstream.io/blog/build-a-flutter-social-chat/][Build a Flutter Social Chat with Stream: Bloc and Domain Driven Design]]
+- channels_page.dart, serach icon, StreamChannelListView widget
+- searched_channel.dart, ChatManageMentCubit searchInsideExistingChannels()
+- chat_management_cubit.dart
+  - firebase, firestore database, users is documents, user info is also documentation, the whole user info can be fetched as json data
+- router.dart
+- create_new_chat_page.dart, RefreshIndicator widget
+- creating_group_chat_page_details.dart
+- profile_page.dart, authState.authUser.userName
+- camera_page.dart, i_camera_service.dart, i_microphone_service.dart
+- camera_service.dart, package: permission_handler
+- camera_state.dart, microphone_state.dart
+- camera_cubit.dart, camera_page.dart, camera_preview_widget.dart
+- capture_and_send_photo_page.dart
+- getstream_chat_service.dart, streamChatClient.sendMessage(message, "messaging");
+- connectivity_service.dart, LazySingleton
