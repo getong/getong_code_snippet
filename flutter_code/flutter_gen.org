@@ -3,31 +3,31 @@ Flutter's ~gen_l10n~ tool is used to generate localization code for your Flutter
 
 This document provides an overview of how to use the ~gen_l10n~ tool effectively.
 
-*** Overview of ~gen_l10n~
+** Overview of ~gen_l10n~
 The ~gen_l10n~ tool generates Dart localization code from your application's ARB (Application Resource Bundle) files. These files contain key-value pairs for localized strings.
 
 + The tool is part of the Flutter SDK.
 + It automates the process of creating localization delegates and message lookup functions.
 + It supports pluralization, gender-specific messages, and more.
 
-*** Setting Up Localization
+** Setting Up Localization
 To use ~gen_l10n~, follow these steps:
 
 1. Create a directory for your ARB files (e.g., ~lib/l10n/~).
 2. Add ARB files for each language you want to support (e.g., ~app_en.arb~, ~app_es.arb~).
 3. Configure the ~flutter_localizations~ package in your ~pubspec.yaml~.
 
-#+begin_quote
+#+begin_src yaml
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-#+end_quote
+#+end_src
 
 4. Enable the ~gen_l10n~ tool in your ~pubspec.yaml~.
 
-#+begin_quote
+#+begin_src yaml
 flutter:
   generate: true
   gen-l10n:
@@ -35,9 +35,9 @@ flutter:
     template-arb-file: app_en.arb
     output-localization-file: app_localizations.dart
     output-class: AppLocalizations
-#+end_quote
+#+end_src
 
-*** Creating ARB Files
+** Creating ARB Files
 ARB files are JSON-like files that define your localized strings. Here's an example of an ARB file:
 
 #+BEGIN_SRC json
@@ -60,7 +60,7 @@ ARB files are JSON-like files that define your localized strings. Here's an exam
 }
 #+END_SRC
 
-*** Generating Localization Code
+** Generating Localization Code
 Run the following command to generate the localization code:
 
 #+BEGIN_SRC bash
@@ -69,7 +69,7 @@ flutter gen-l10n
 
 This will create a Dart file (e.g., ~app_localizations.dart~) in the specified output directory.
 
-*** Using Localized Strings in Your App
+** Using Localized Strings in Your App
 To use the generated localization code, follow these steps:
 
 1. Add the ~AppLocalizations~ delegate to your app's ~MaterialApp~ widget.
@@ -105,10 +105,10 @@ Widget build(BuildContext context) {
 }
 #+END_SRC
 
-*** Advanced Features
+** Advanced Features
 + **Pluralization**: Use ICU message syntax for plural forms.
 + **Gender-specific Messages**: Use ICU message syntax for gender-specific messages.
 + **Customizing Output**: Modify the ~gen-l10n~ configuration in ~pubspec.yaml~ to customize the output.
 
-*** Conclusion
+** Conclusion
 The ~gen_l10n~ tool is a powerful way to manage localization in Flutter apps. By following the steps outlined above, you can easily support multiple languages and provide a better user experience for your audience.
