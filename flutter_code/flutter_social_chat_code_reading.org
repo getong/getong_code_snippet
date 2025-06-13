@@ -1,0 +1,2668 @@
+* flutter social chat code reading
+
+** code repo
+
+see [[https://github.com/FlutterWiz/flutter_social_chat][Real-time social chat app with Firebase & GetStream]]
+
+** dependency packages
+
+*** flutter
+- *Usage*: Core Flutter SDK framework
+- *Purpose*: Provides the foundation for building cross-platform mobile applications
+- *Category*: Framework
+
+*** cupertino_icons ^1.0.8
+- *Usage*: iOS-style icons for Flutter apps
+- *Purpose*: Provides Cupertino (iOS) design system icons
+- *Category*: UI/Icons
+
+*** State Management
+
+**** flutter_bloc ^8.1.6
+- *Usage*: Business Logic Component pattern implementation
+- *Purpose*: Manages application state using the BLoC architecture pattern
+- *Category*: State Management
+- *Key Features*:
+  - Separation of business logic from UI
+  - Reactive programming with streams
+  - Testable architecture
+
+**** bloc ^8.1.4
+- *Usage*: Core BLoC library (dependency of flutter_bloc)
+- *Purpose*: Provides the fundamental BLoC pattern implementation
+- *Category*: State Management
+
+**** equatable ^2.0.5
+- *Usage*: Simplifies equality comparisons for Dart objects
+- *Purpose*: Used with BLoC for efficient state comparisons and immutable objects
+- *Category*: Utilities
+
+*** Firebase Integration
+
+**** firebase_core ^3.6.0
+- *Usage*: Core Firebase SDK for Flutter
+- *Purpose*: Initializes Firebase services and provides common functionality
+- *Category*: Backend Services
+
+**** firebase_auth ^5.3.1
+- *Usage*: Firebase Authentication service
+- *Purpose*: Handles user authentication (login, registration, password reset)
+- *Category*: Authentication
+
+**** cloud_firestore ^5.4.3
+- *Usage*: Cloud Firestore database integration
+- *Purpose*: Real-time NoSQL database for storing chat messages, user data
+- *Category*: Database
+
+**** firebase_storage ^12.3.2
+- *Usage*: Firebase Cloud Storage service
+- *Purpose*: Stores and retrieves user-generated content (images, files)
+- *Category*: File Storage
+
+*** Media & File Handling
+
+**** image_picker ^1.1.2
+- *Usage*: Image and video picker from camera/gallery
+- *Purpose*: Allows users to select profile pictures, share images in chat
+- *Category*: Media
+
+**** cached_network_image ^3.4.1
+- *Usage*: Efficient network image loading with caching
+- *Purpose*: Optimizes image loading performance in chat and profiles
+- *Category*: Image Loading
+
+**** permission_handler ^11.3.1
+- *Usage*: Runtime permission management
+- *Purpose*: Handles camera, storage, and other sensitive permissions
+- *Category*: Permissions
+
+*** UI Components & Utilities
+
+**** flutter_svg ^2.0.10+1
+- *Usage*: SVG (Scalable Vector Graphics) rendering
+- *Purpose*: Displays vector icons and illustrations
+- *Category*: UI/Graphics
+
+**** shimmer ^3.0.0
+- *Usage*: Shimmer loading effect
+- *Purpose*: Provides skeleton loading animations while content loads
+- *Category*: UI/Loading
+
+**** loading_animation_widget ^1.2.1
+- *Usage*: Pre-built loading animations
+- *Purpose*: Shows loading indicators during async operations
+- *Category*: UI/Loading
+
+*** Development Dependencies
+
+**** flutter_test
+- *Usage*: Flutter testing framework
+- *Purpose*: Unit testing, widget testing, and integration testing
+- *Category*: Testing
+
+**** flutter_lints ^4.0.0
+- *Usage*: Dart and Flutter linting rules
+- *Purpose*: Enforces code quality and consistency standards
+- *Category*: Code Quality
+
+*** Architecture Overview
+
+**** State Management Flow
+#+BEGIN_EXAMPLE
+UI Layer (Widgets)
+    ↓ Events
+BLoC Layer (Business Logic)
+    ↓ States
+Repository Layer
+    ↓ Data
+Firebase Services (Auth, Firestore, Storage)
+#+END_EXAMPLE
+
+** Overview of get_it usage
+
+*** The Flutter Social Chat app uses GetIt as a service locator pattern for dependency injection. The global variable `getIt` is defined and used throughout the application to manage dependencies and their lifecycles.
+
+*** Global Variable Declaration
+
+**** Location
+- File: [`lib/core/di/dependency_injector.dart`](lib/core/di/dependency_injector.dart)
+- Line: 17
+
+**** Declaration
+#+BEGIN_SRC dart
+final getIt = GetIt.instance;
+#+END_SRC
+
+*** Dependency Registration
+
+**** Registration Function
+The `injectionSetup()` function registers all dependencies in a specific order to handle dependency relationships.
+
+**** Registration Categories
+
+***** Core Utilities
+#+BEGIN_SRC dart
+// Router for navigation
+getIt.registerSingleton<AppRouter>(AppRouter());
+
+// Network connectivity
+getIt.registerSingleton<Connectivity>(Connectivity());
+
+// Stream Chat client
+getIt.registerSingleton<StreamChatClient>(
+  StreamChatClient(
+    EnvConfig.instance.streamChatApiKey,
+    logLevel: Level.INFO,
+  ),
+);
+#+END_SRC
+
+***** Firebase Services
+#+BEGIN_SRC dart
+// Firebase Authentication
+getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+
+// Cloud Firestore database
+getIt.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+#+END_SRC
+
+***** Repository Layer
+#+BEGIN_SRC dart
+// Connectivity repository
+getIt.registerLazySingleton<IConnectivityRepository>(
+  () => ConnectivityRepository(getIt<Connectivity>())
+);
+
+// Authentication repository
+getIt.registerLazySingleton<IAuthRepository>(
+  () => AuthRepository(getIt<FirebaseAuth>(), getIt<FirebaseFirestore>())
+);
+
+// Chat repository
+getIt.registerLazySingleton<IChatRepository>(
+  () => ChatRepository(getIt<StreamChatClient>(), getIt<FirebaseFirestore>())
+);
+#+END_SRC
+
+***** BLoC/Cubit Layer
+#+BEGIN_SRC dart
+// Authentication session management
+getIt.registerLazySingleton<AuthSessionCubit>(
+  () => AuthSessionCubit(getIt<IAuthRepository>())
+);
+
+// Phone number sign-in
+getIt.registerLazySingleton<PhoneNumberSignInCubit>(
+  () => PhoneNumberSignInCubit(getIt<IAuthRepository>())
+);
+
+// Connectivity monitoring
+getIt.registerLazySingleton<ConnectivityCubit>(
+  () => ConnectivityCubit(getIt<IConnectivityRepository>())
+);
+
+// Profile management
+getIt.registerLazySingleton<ProfileManagerCubit>(
+  () => ProfileManagerCubit(
+    getIt<IChatRepository>(),
+    getIt<AuthSessionCubit>(),
+  )
+);
+
+// Chat management
+getIt.registerLazySingleton<ChatManagementCubit>(
+  () => ChatManagementCubit(
+    getIt<IChatRepository>(),
+    getIt<AuthSessionCubit>(),
+  )
+);
+
+// Chat session
+getIt.registerLazySingleton<ChatSessionCubit>(
+  () => ChatSessionCubit(getIt<IChatRepository>())
+);
+#+END_SRC
+
+**** Registration Patterns
+
+***** Singleton Registration
+- *Purpose*: Single instance throughout app lifecycle
+- *Usage*: For services that should maintain state
+- *Examples*: AppRouter, Connectivity, StreamChatClient
+
+#+BEGIN_SRC dart
+getIt.registerSingleton<ServiceType>(ServiceInstance());
+#+END_SRC
+
+***** Lazy Singleton Registration
+- *Purpose*: Single instance created only when first accessed
+- *Usage*: For expensive-to-create services
+- *Examples*: Firebase services, Repositories, BLoCs
+
+#+BEGIN_SRC dart
+getIt.registerLazySingleton<ServiceType>(() => ServiceInstance());
+#+END_SRC
+
+*** Usage Throughout the Application
+
+**** Direct Service Access
+Services are accessed directly using the global `getIt` instance:
+
+#+BEGIN_SRC dart
+// In app_widget.dart
+final router = getIt<AppRouter>();
+
+// Accessing repositories
+final authRepo = getIt<IAuthRepository>();
+final chatRepo = getIt<IChatRepository>();
+#+END_SRC
+
+**** BLoC Provider Integration
+Used with `flutter_bloc` for providing BLoCs to the widget tree:
+
+#+BEGIN_SRC dart
+// In app_widget.dart
+MultiBlocProvider(
+  providers: [
+    BlocProvider.value(value: getIt<AuthSessionCubit>()),
+    BlocProvider.value(value: getIt<ConnectivityCubit>()),
+    BlocProvider.value(value: getIt<ChatSessionCubit>()),
+    BlocProvider.value(value: getIt<ProfileManagerCubit>()),
+    BlocProvider.value(value: getIt<ChatManagementCubit>()),
+    BlocProvider.value(value: getIt<PhoneNumberSignInCubit>()),
+  ],
+  child: MaterialApp.router(/* ... */),
+)
+#+END_SRC
+
+**** Router Access
+The router is accessed globally for navigation:
+
+#+BEGIN_SRC dart
+// Navigation using the global router
+final router = getIt<AppRouter>();
+router.go(RouterEnum.dashboardView.routeName);
+#+END_SRC
+
+*** Dependency Graph
+
+**** High-Level Architecture
+#+BEGIN_EXAMPLE
+UI Layer (Widgets)
+    ↓ uses
+BLoC Layer (Cubits) ← getIt provides
+    ↓ depends on
+Repository Layer ← getIt provides
+    ↓ depends on
+Service Layer (Firebase, Stream) ← getIt provides
+#+END_EXAMPLE
+
+**** Dependency Relationships
+- *AuthSessionCubit* → IAuthRepository
+- *ChatSessionCubit* → IChatRepository
+- *ProfileManagerCubit* → IChatRepository + AuthSessionCubit
+- *ChatManagementCubit* → IChatRepository + AuthSessionCubit
+- *IAuthRepository* → FirebaseAuth + FirebaseFirestore
+- *IChatRepository* → StreamChatClient + FirebaseFirestore
+
+*** Initialization
+
+**** Setup Location
+The dependency injection is initialized in the main application setup:
+
+#+BEGIN_SRC dart
+// In main.dart (inferred from app structure)
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
+  // Setup dependency injection
+  injectionSetup();
+
+  runApp(AppWidget());
+}
+#+END_SRC
+
+**** Initialization Order
+1. Core utilities (Router, Connectivity)
+2. External services (StreamChatClient)
+3. Firebase services
+4. Repository layer
+5. BLoC layer (with proper dependency resolution)
+
+*** Benefits of This Pattern
+
+**** Advantages
+- *Decoupling*: Classes don't create their own dependencies
+- *Testability*: Easy to mock dependencies for testing
+- *Lifecycle Management*: Centralized control over object creation
+- *Performance*: Lazy initialization for expensive objects
+- *Global Access*: Services available throughout the app
+
+**** Trade-offs
+- *Global State*: Can make testing more complex if not managed properly
+- *Implicit Dependencies*: Dependencies not visible in constructor signatures
+- *Runtime Errors*: Missing registrations only discovered at runtime
+
+*** Best Practices in the Codebase
+
+**** Proper Layering
+- Services register their direct dependencies only
+- BLoCs depend on abstractions (interfaces) not concrete implementations
+- Clear separation between data, domain, and presentation layers
+
+**** Interface Usage
+#+BEGIN_SRC dart
+// Using interfaces for better testability
+getIt.registerLazySingleton<IAuthRepository>(
+  () => AuthRepository(/* dependencies */)
+);
+
+// BLoCs depend on interfaces
+AuthSessionCubit(getIt<IAuthRepository>())
+#+END_SRC
+
+**** Lazy Registration
+Most services use lazy registration to avoid unnecessary initialization:
+#+BEGIN_SRC dart
+getIt.registerLazySingleton<ExpensiveService>(() => ExpensiveService());
+#+END_SRC
+
+*** Testing Considerations
+
+**** Mock Registration
+For testing, dependencies can be overridden:
+#+BEGIN_SRC dart
+// In test setup
+getIt.registerSingleton<IAuthRepository>(MockAuthRepository());
+#+END_SRC
+
+**** Reset Between Tests
+#+BEGIN_SRC dart
+// Clean up between tests
+getIt.reset();
+injectionSetup(); // Re-register for next test
+#+END_SRC
+
+** Overview of go_router usage
+
+*** The Flutter Social Chat app uses GoRouter for declarative routing with a sophisticated authentication-aware navigation system. The app implements a shell-based architecture with route protection and state-based navigation.
+
+*** Router Configuration
+
+**** Core Setup
+Located in [`lib/core/init/router/app_router.dart`](lib/core/init/router/app_router.dart)
+
+#+BEGIN_SRC dart
+class AppRouter {
+  // Navigator keys for different navigation scopes
+  static final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+  static final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+
+  late final GoRouter router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
+    debugLogDiagnostics: kDebugMode,
+    observers: [botToastNavigatorObserver],
+    initialLocation: RouterEnum.initialLocation.routeName,
+    extraCodec: NavigationStateCodec(),
+    routes: [
+      _initialRoute,
+      _bottomTabShellRoute,
+      _chatRoute,
+      _signInRoute,
+      _smsVerificationRoute,
+      _createNewChatRoute,
+      _onboardingRoute,
+    ],
+  );
+}
+#+END_SRC
+
+**** Navigation Observers
+- *BotToastNavigatorObserver*: Handles toast notifications during navigation
+- *Debug Logging*: Enabled in debug mode for development
+
+*** Route Enum System
+
+**** Router Enum Definition
+Located in [`lib/core/constants/enums/router_enum.dart`](lib/core/constants/enums/router_enum.dart)
+
+#+BEGIN_SRC dart
+enum RouterEnum {
+  initialLocation('/'),
+  dashboardView('/dashboard_view'),
+  profileView('/profile_view'),
+  chatView('/chat_view'),
+  signInView('/sign_in_view'),
+  smsVerificationView('/sms_verification_view'),
+  createChatView('/create_chat_view'),
+  onboardingView('/onboarding_view');
+
+  final String routeName;
+  const RouterEnum(this.routeName);
+}
+#+END_SRC
+
+**** Benefits of Enum-Based Routing
+- *Type Safety*: Prevents typos in route names
+- *Centralized Management*: All routes defined in one place
+- *IDE Support*: Auto-completion and refactoring support
+- *Compile-Time Validation*: Missing routes caught at compile time
+
+**** Usage Pattern
+#+BEGIN_SRC dart
+// Type-safe navigation
+context.go(RouterEnum.signInView.routeName);
+context.push(RouterEnum.smsVerificationView.routeName);
+
+// Instead of error-prone string literals
+// context.go('/sign_in_view'); // Prone to typos
+#+END_SRC
+
+*** Route Architecture
+
+**** Route Hierarchy
+#+BEGIN_EXAMPLE
+Root Navigator
+├── Initial Route (/)
+│   └── LandingView
+├── Shell Route (Bottom Tab Navigation)
+│   ├── Dashboard (/dashboard_view)
+│   └── Profile (/profile_view)
+├── Chat Route (/chat_view)
+├── Sign In Route (/sign_in_view)
+├── SMS Verification (/sms_verification_view)
+├── Create Chat (/create_chat_view)
+└── Onboarding (/onboarding_view)
+#+END_EXAMPLE
+
+**** Shell Route Implementation
+The app uses a shell route for bottom tab navigation:
+
+#+BEGIN_SRC dart
+ShellRoute get _bottomTabShellRoute => ShellRoute(
+  navigatorKey: _shellNavigatorKey,
+  pageBuilder: (context, state, child) {
+    return customPageBuilderWidget(
+      context,
+      state,
+      BottomTabView(child: child),
+    );
+  },
+  routes: [
+    // Dashboard and Profile routes
+  ],
+);
+#+END_SRC
+
+*** Authentication Flow and Route Protection
+
+**** Authentication States
+The app manages three key authentication states:
+1. *Not Authenticated*: User not signed in
+2. *Authenticated but Not Onboarded*: User signed in but profile incomplete
+3. *Fully Authenticated*: User signed in and onboarded
+
+**** Route Access Control
+
+***** Landing View Navigation Logic
+Located in [`lib/presentation/views/landing/landing_view.dart`](lib/presentation/views/landing/landing_view.dart)
+
+#+BEGIN_SRC dart
+String _getRouteForUser(bool isUserLoggedIn, bool isOnboardingCompleted) {
+  if (isUserLoggedIn && !isOnboardingCompleted) {
+    return RouterEnum.onboardingView.routeName;
+  } else if (isUserLoggedIn && isOnboardingCompleted) {
+    return RouterEnum.dashboardView.routeName;
+  } else {
+    return RouterEnum.signInView.routeName;
+  }
+}
+#+END_SRC
+
+***** Authentication State Listeners
+Views implement `BlocListener<AuthSessionCubit, AuthSessionState>` to react to auth changes:
+
+#+BEGIN_SRC dart
+// In ProfileView
+BlocListener<AuthSessionCubit, AuthSessionState>(
+  listenWhen: (previous, current) =>
+    previous.isLoggedIn != current.isLoggedIn,
+  listener: _handleAuthStateChanges,
+  // ...
+)
+
+void _handleAuthStateChanges(BuildContext context, AuthSessionState state) {
+  if (!state.isLoggedIn) {
+    _safelyNavigateToSignIn(context);
+  }
+}
+#+END_SRC
+
+**** Sign-In Protection Mechanism
+
+***** Automatic Redirect to Sign-In
+The app does NOT prevent accessing sign-up (there's no separate sign-up route), but it implements automatic redirects:
+
+1. *Unauthenticated users* are redirected to sign-in from protected routes
+2. *Landing view* acts as a router that determines the appropriate destination
+3. *Profile and Dashboard views* redirect to sign-in when authentication is lost
+
+***** Safe Navigation Implementation
+All navigation calls use safe navigation patterns:
+
+#+BEGIN_SRC dart
+void _safelyNavigateToSignIn(BuildContext context) {
+  try {
+    context.go(RouterEnum.signInView.routeName);
+  } catch (e) {
+    // Ignore navigation errors
+  }
+}
+
+// Post-frame callback navigation
+WidgetsBinding.instance.addPostFrameCallback((_) {
+  if (mounted) {
+    try {
+      context.go(RouterEnum.dashboardView.routeName);
+    } catch (e) {
+      // Handle navigation error
+    }
+  }
+});
+#+END_SRC
+
+*** Custom Page Transitions
+
+**** Zero-Duration Transitions
+Located in [`lib/core/init/router/custom_page_builder_widget.dart`](lib/core/init/router/custom_page_builder_widget.dart)
+
+#+BEGIN_SRC dart
+CustomTransitionPage<void> customPageBuilderWidget(
+  BuildContext context,
+  GoRouterState state,
+  Widget child,
+) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
+    transitionDuration: Duration.zero, // Instant navigation
+  );
+}
+#+END_SRC
+
+**** Benefits
+- *Instant Navigation*: No animation delays
+- *Consistent UX*: Uniform navigation behavior
+- *Performance*: Reduced animation overhead
+
+*** State Management Integration
+
+**** Navigation State Codec
+For complex state passing between routes:
+
+#+BEGIN_SRC dart
+// Encoding state for navigation
+final encodedState = NavigationStateCodec.encodeMap(currentState.toJson());
+context.push(RouterEnum.smsVerificationView.routeName, extra: encodedState);
+
+// Decoding state in destination route
+final extras = encodedExtras != null
+  ? NavigationStateCodec.decodeString(encodedExtras)
+  : {};
+#+END_SRC
+
+**** BLoC Integration
+Routes integrate with BLoC for state-aware navigation:
+
+#+BEGIN_SRC dart
+// In SignInView
+void _handleSignInSuccess(BuildContext context, PhoneNumberSignInState state) {
+  // Update navigation flag to prevent duplicate navigation
+  context.read<PhoneNumberSignInCubit>().updateNavigationFlag(hasNavigated: true);
+
+  // Navigate with state
+  final encodedState = NavigationStateCodec.encodeMap(state.toJson());
+  context.push(RouterEnum.smsVerificationView.routeName, extra: encodedState);
+}
+#+END_SRC
+
+*** Route-Specific Implementations
+
+**** Dashboard/Profile Routes (Shell Routes)
+- Protected by authentication
+- Use `BottomTabView` as shell wrapper
+- Automatic sign-in redirect on auth loss
+
+**** Chat Route
+- Requires `Channel` parameter
+- Direct route (not in shell)
+- Parameter validation
+
+#+BEGIN_SRC dart
+GoRoute get _chatRoute => GoRoute(
+  path: RouterEnum.chatView.routeName,
+  builder: (context, state) {
+    final channel = extraParameters['channel'] as Channel?;
+    if (channel == null) {
+      throw Exception('Missing required channel parameter for ChatView');
+    }
+    return ChatView(channel: channel);
+  },
+);
+#+END_SRC
+
+**** SMS Verification Route
+- Receives encoded state from sign-in
+- Handles navigation to dashboard/onboarding after verification
+
+**** Onboarding Route
+- Shown after authentication but before profile completion
+- Navigates to dashboard after completion
+
+*** Error Handling and Resilience
+
+**** Navigation Error Handling
+Multiple layers of error handling:
+
+#+BEGIN_SRC dart
+void _handleNavigationError(bool isUserLoggedIn, bool isOnboardingCompleted) {
+  if (!mounted) return;
+
+  // Try once more on the next frame
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (!mounted) return;
+
+    try {
+      final route = _getRouteForUser(isUserLoggedIn, isOnboardingCompleted);
+      context.go(route);
+    } catch (e) {
+      // Last resort - go to sign in view directly
+      if (mounted) {
+        context.go(RouterEnum.signInView.routeName);
+      }
+    }
+  });
+}
+#+END_SRC
+
+**** Duplicate Navigation Prevention
+- Navigation flags in BLoC state
+- `hasNavigatedAway` boolean flags
+- Post-frame callbacks for timing
+
+*** Authentication Flow Summary
+
+**** Does it prevent accessing sign-up?
+The app implements a *phone-based authentication system* without a separate sign-up route:
+
+1. *Single Entry Point*: `SignInView` handles both sign-in and sign-up
+2. *Phone Verification*: Uses SMS verification for new and existing users
+3. *Onboarding*: New users complete profile setup after verification
+4. *No Separate Sign-up*: The sign-in flow creates accounts automatically
+
+**** Protection Mechanisms
+- *Route Guards*: Automatic redirects based on auth state
+- *State Listeners*: Real-time auth state monitoring
+- *Safe Navigation*: Error-resilient navigation with fallbacks
+- *Landing Router*: Central routing logic based on user state
+
+**** Navigation Flow
+#+BEGIN_EXAMPLE
+App Start
+    ↓
+LandingView (Router)
+    ↓
+┌─────────────────────────────┐
+│ Check Authentication State  │
+└─────────────────────────────┘
+    ↓
+┌── Not Authenticated ──→ SignInView
+│
+├── Authenticated + Not Onboarded ──→ OnboardingView
+│
+└── Authenticated + Onboarded ──→ DashboardView
+#+END_EXAMPLE
+
+*** Best Practices Implemented
+
+**** Type Safety
+- Enum-based route definitions
+- Compile-time route validation
+- Parameter type checking
+
+**** State Management
+- BLoC integration for auth-aware navigation
+- State encoding/decoding for complex navigation
+- Centralized auth state management
+
+**** Error Resilience
+- Multiple fallback navigation strategies
+- Safe navigation with error handling
+- Post-frame callback navigation
+
+**** Performance
+- Zero-duration transitions
+- Lazy route initialization
+- Efficient state passing
+
+** Overview of flutter_bloc usage
+
+*** The Flutter Social Chat app implements a comprehensive BLoC (Business Logic Component) architecture using flutter_bloc for state management. The app follows a layered architecture with clear separation between presentation, business logic, and data layers.
+
+*** BLoC Architecture Pattern
+
+**** Layered Architecture
+#+BEGIN_EXAMPLE
+┌─────────────────────────────────────┐
+│           Presentation Layer        │
+│        (Widgets, Views, UI)         │
+└─────────────────────────────────────┘
+                    ↕ Events/States
+┌─────────────────────────────────────┐
+│          Business Logic Layer       │
+│       (BLoCs, Cubits, Use Cases)    │
+└─────────────────────────────────────┘
+                    ↕ Repository Calls
+┌─────────────────────────────────────┐
+│           Data Layer               │
+│      (Repositories, Data Sources)   │
+└─────────────────────────────────────┘
+                    ↕ API/Database Calls
+┌─────────────────────────────────────┐
+│         External Services          │
+│    (Firebase, Stream Chat, etc.)   │
+└─────────────────────────────────────┘
+#+END_EXAMPLE
+
+*** Core Components
+- *BLoC/Cubit*: Manages business logic and state
+- *State*: Immutable data representing UI state
+- *Event*: User actions or system events (for BLoCs)
+- *Repository*: Abstraction layer for data access
+- *Entity*: Domain models representing business data
+
+*** BLoC/Cubit Implementations
+
+**** Authentication Management
+
+***** AuthSessionCubit
+*Location*: [`lib/presentation/cubits/auth_session/auth_session_cubit.dart`](lib/presentation/cubits/auth_session/auth_session_cubit.dart)
+
+*Purpose*: Manages global authentication state and user session
+
+*State Structure*:
+#+BEGIN_SRC dart
+class AuthSessionState extends Equatable {
+  final bool isLoggedIn;
+  final User? user;
+  final bool isOnboardingCompleted;
+  final AuthSessionStatus status;
+
+  // Computed properties
+  bool get canAccessApp => isLoggedIn && isOnboardingCompleted;
+}
+#+END_SRC
+
+*Key Methods*:
+- `signOut()`: Handles user logout
+- `updateUserData()`: Updates user information
+- `checkAuthStatus()`: Validates current auth state
+
+*Repository Dependency*: `IAuthRepository`
+
+***** PhoneNumberSignInCubit
+*Location*: [`lib/presentation/cubits/phone_number_sign_in/phone_number_sign_in_cubit.dart`](lib/presentation/cubits/phone_number_sign_in/phone_number_sign_in_cubit.dart)
+
+*Purpose*: Manages phone number authentication flow
+
+*State Structure*:
+#+BEGIN_SRC dart
+class PhoneNumberSignInState extends Equatable {
+  final PhoneNumberSignInStatus status;
+  final String phoneNumber;
+  final String verificationId;
+  final String errorMessage;
+  final bool hasNavigated;
+  final int? resendToken;
+}
+#+END_SRC
+
+*Key Methods*:
+- `signInWithPhoneNumber()`: Initiates phone verification
+- `verifyOTP()`: Verifies SMS code
+- `resendOTP()`: Resends verification code
+
+*Repository Dependency*: `IAuthRepository`
+
+**** Chat Management
+
+***** ChatSessionCubit
+*Location*: [`lib/presentation/cubits/chat_session/chat_session_cubit.dart`](lib/presentation/cubits/chat_session/chat_session_cubit.dart)
+
+*Purpose*: Manages individual chat session state
+
+*State Structure*:
+#+BEGIN_SRC dart
+class ChatSessionState extends Equatable {
+  final ChatSessionStatus status;
+  final Channel? channel;
+  final String errorMessage;
+  final List<Message> messages;
+  final bool isTyping;
+}
+#+END_SRC
+
+*Key Methods*:
+- `initializeChat()`: Sets up chat channel
+- `sendMessage()`: Sends chat message
+- `markAsRead()`: Marks messages as read
+
+*Repository Dependency*: `IChatRepository`
+
+***** ChatManagementCubit
+*Location*: [`lib/presentation/cubits/chat_management/chat_management_cubit.dart`](lib/presentation/cubits/chat_management/chat_management_cubit.dart)
+
+*Purpose*: Manages overall chat operations and channel management
+
+*State Structure*:
+#+BEGIN_SRC dart
+class ChatManagementState extends Equatable {
+  final ChatManagementStatus status;
+  final List<Channel> channels;
+  final String errorMessage;
+  final bool isLoadingMore;
+  final Channel? selectedChannel;
+}
+#+END_SRC
+
+*Key Methods*:
+- `loadUserChannels()`: Loads user's chat channels
+- `createChannel()`: Creates new chat channel
+- `deleteChannel()`: Deletes chat channel
+- `searchUsers()`: Searches for users to chat with
+
+*Repository Dependencies*: `IChatRepository`, `AuthSessionCubit`
+
+***** ProfileManagerCubit
+*Location*: [`lib/presentation/cubits/profile_manager/profile_manager_cubit.dart`](lib/presentation/cubits/profile_manager/profile_manager_cubit.dart)
+
+*Purpose*: Manages user profile operations
+
+*State Structure*:
+#+BEGIN_SRC dart
+class ProfileManagerState extends Equatable {
+  final ProfileManagerStatus status;
+  final User? user;
+  final String errorMessage;
+  final bool isUpdating;
+  final File? selectedImage;
+}
+#+END_SRC
+
+*Key Methods*:
+- `loadUserProfile()`: Loads current user profile
+- `updateProfile()`: Updates user profile information
+- `uploadProfileImage()`: Handles profile image upload
+- `completeOnboarding()`: Completes user onboarding
+
+*Repository Dependencies*: `IChatRepository`, `AuthSessionCubit`
+
+**** Connectivity Management
+
+***** ConnectivityCubit
+*Location*: [`lib/presentation/cubits/connectivity/connectivity_cubit.dart`](lib/presentation/cubits/connectivity/connectivity_cubit.dart)
+
+*Purpose*: Monitors network connectivity status
+
+*State Structure*:
+#+BEGIN_SRC dart
+class ConnectivityState extends Equatable {
+  final ConnectivityResult connectivityResult;
+  final bool isConnected;
+  final String connectionType;
+}
+#+END_SRC
+
+*Key Methods*:
+- `checkConnectivity()`: Checks current connectivity
+- `monitorConnectivity()`: Monitors connectivity changes
+
+*Repository Dependency*: `IConnectivityRepository`
+
+*** Repository Layer
+
+**** Repository Interfaces
+
+***** IAuthRepository
+*Location*: [`lib/domain/repositories/auth_repository.dart`](lib/domain/repositories/auth_repository.dart)
+
+*Purpose*: Abstracts authentication operations
+
+*Key Methods*:
+#+BEGIN_SRC dart
+abstract class IAuthRepository {
+  Future<User?> getCurrentUser();
+  Future<void> signInWithPhoneNumber(String phoneNumber);
+  Future<User?> verifyOTP(String verificationId, String smsCode);
+  Future<void> signOut();
+  Future<void> updateUserProfile(User user);
+  Stream<User?> authStateChanges();
+}
+#+END_SRC
+
+***** IChatRepository
+*Location*: [`lib/domain/repositories/chat_repository.dart`](lib/domain/repositories/chat_repository.dart)
+
+*Purpose*: Abstracts chat and user management operations
+
+*Key Methods*:
+#+BEGIN_SRC dart
+abstract class IChatRepository {
+  Future<void> connectUser(User user);
+  Future<List<Channel>> getUserChannels();
+  Future<Channel> createChannel(List<String> userIds, String channelName);
+  Future<void> sendMessage(Channel channel, String message);
+  Future<List<User>> searchUsers(String query);
+  Future<void> updateUserProfile(User user);
+  Stream<List<Channel>> watchUserChannels();
+}
+#+END_SRC
+
+***** IConnectivityRepository
+*Location*: [`lib/domain/repositories/connectivity_repository.dart`](lib/domain/repositories/connectivity_repository.dart)
+
+*Purpose*: Abstracts network connectivity monitoring
+
+*Key Methods*:
+#+BEGIN_SRC dart
+abstract class IConnectivityRepository {
+  Future<ConnectivityResult> checkConnectivity();
+  Stream<ConnectivityResult> onConnectivityChanged();
+}
+#+END_SRC
+
+**** Repository Implementations
+
+***** AuthRepository
+*Location*: [`lib/data/repositories/auth_repository.dart`](lib/data/repositories/auth_repository.dart)
+
+*Dependencies*: `FirebaseAuth`, `FirebaseFirestore`
+
+*Key Features*:
+- Firebase Authentication integration
+- User data persistence in Firestore
+- Phone number verification
+- Auth state streaming
+
+***** ChatRepository
+*Location*: [`lib/data/repositories/chat_repository.dart`](lib/data/repositories/chat_repository.dart)
+
+*Dependencies*: `StreamChatClient`, `FirebaseFirestore`
+
+*Key Features*:
+- Stream Chat integration
+- Real-time messaging
+- Channel management
+- User search and discovery
+
+***** ConnectivityRepository
+*Location*: [`lib/data/repositories/connectivity_repository.dart`](lib/data/repositories/connectivity_repository.dart)
+
+*Dependencies*: `Connectivity`
+
+*Key Features*:
+- Network status monitoring
+- Connection type detection
+- Real-time connectivity updates
+
+*** Entity Models
+
+**** User Entity
+*Location*: [`lib/domain/entities/user.dart`](lib/domain/entities/user.dart)
+
+*Purpose*: Represents user data in the domain layer
+
+#+BEGIN_SRC dart
+class User extends Equatable {
+  final String id;
+  final String phoneNumber;
+  final String? name;
+  final String? email;
+  final String? profileImageUrl;
+  final bool isOnboardingCompleted;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  // Business logic methods
+  bool get canAccessApp => isOnboardingCompleted;
+  bool get hasCompleteProfile => name != null && name!.isNotEmpty;
+}
+#+END_SRC
+
+**** Channel Entity
+*Purpose*: Represents chat channels from Stream Chat
+
+*Key Properties*:
+- Channel ID and type
+- Member list
+- Last message
+- Unread count
+- Channel configuration
+
+**** Message Entity
+*Purpose*: Represents individual chat messages
+
+*Key Properties*:
+- Message ID and text
+- Sender information
+- Timestamp
+- Message type and attachments
+- Read status
+
+*** State Management Patterns
+
+**** Cubit vs BLoC Usage
+
+***
+
+** Overview of data storing in disk and reloading from disk
+
+The Flutter Social Chat app implements a multi-layered data persistence architecture using:
+- *HydratedBloc* for BLoC state persistence
+- *Firebase Firestore* for cloud data storage
+- *Firebase Auth* for authentication state
+- *Stream Chat* for real-time chat data
+- *Local caching* for optimized performance
+
+**** Persistence Layers Architecture
+
+***** Persistence Stack
+#+BEGIN_EXAMPLE
+┌─────────────────────────────────────┐
+│           UI Layer                  │
+│       (Widgets, Views)              │
+└─────────────────────────────────────┘
+                    ↕
+┌─────────────────────────────────────┐
+│         BLoC State Layer            │
+│      (HydratedBloc Storage)         │  ← Local Disk Storage
+└─────────────────────────────────────┘
+                    ↕
+┌─────────────────────────────────────┐
+│       Repository Layer              │
+│    (Data Source Abstraction)       │
+└─────────────────────────────────────┘
+                    ↕
+┌─────────────────────────────────────┐
+│        External Services            │
+│  Firebase/Stream Chat (Cloud)      │  ← Cloud Storage
+└─────────────────────────────────────┘
+#+END_EXAMPLE
+
+**** HydratedBloc Implementation
+
+***** Initialization
+*Location*: [`lib/main.dart`](lib/main.dart)
+
+#+BEGIN_SRC dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Load environment variables
+  await EnvConfig.instance.initialize();
+
+  // Setup dependency injection
+  injectionSetup();
+
+  // Initialize hydrated storage for state persistence
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: HydratedStorageDirectory(
+      (await getApplicationDocumentsDirectory()).path
+    ),
+  );
+
+  runApp(const AppWidget());
+}
+#+END_SRC
+
+***** Storage Location
+- *iOS*: `/Documents/` directory within app sandbox
+- *Android*: App-specific internal storage directory
+- *File Format*: JSON-based key-value storage
+- *Encryption*: Not encrypted by default (uses device-level security)
+
+***** AuthSessionCubit Persistence
+*Location*: [`lib/presentation/blocs/auth_session/auth_session_cubit.dart`](lib/presentation/blocs/auth_session/auth_session_cubit.dart)
+
+****** State Serialization
+#+BEGIN_SRC dart
+@override
+Map<String, dynamic> toJson(AuthSessionState state) {
+  return {
+    'authUser': state.authUser.toJson(),
+    'isUserCheckedFromAuthService': state.isUserCheckedFromAuthService,
+  };
+}
+#+END_SRC
+
+****** State Deserialization
+#+BEGIN_SRC dart
+@override
+AuthSessionState? fromJson(Map<String, dynamic> json) {
+  try {
+    // Create a base state from the cached data
+    final cachedState = AuthSessionState.empty().copyWith(
+      authUser: AuthUserModel.fromJson(json['authUser'] as Map<String, dynamic>),
+      isUserCheckedFromAuthService: json['isUserCheckedFromAuthService'] as bool? ?? false,
+    );
+
+    // If the user is logged in according to cached data, verify with repository
+    if (cachedState.isLoggedIn) {
+      _verifyUserSession(cachedState);
+    }
+
+    return cachedState;
+  } catch (e) {
+    return AuthSessionState.empty();
+  }
+}
+#+END_SRC
+
+****** Session Verification
+#+BEGIN_SRC dart
+Future<void> _verifyUserSession(AuthSessionState cachedState) async {
+  try {
+    // Verify the cached auth state with the repository
+    final currentUser = await _authRepository.getSignedInUser();
+
+    currentUser.fold(
+      () {
+        // User is no longer authenticated, clear the session
+        emit(AuthSessionState.empty());
+      },
+      (user) {
+        // User is still authenticated, update state with fresh data
+        emit(cachedState.copyWith(authUser: user));
+      },
+    );
+  } catch (e) {
+    // On error, clear the session for security
+    emit(AuthSessionState.empty());
+  }
+}
+#+END_SRC
+
+***** Persisted Data Structure
+
+****** AuthSessionState JSON Structure
+#+BEGIN_SRC json
+{
+  "authUser": {
+    "id": "user_firebase_uid",
+    "userName": "John Doe",
+    "phoneNumber": "+1234567890",
+    "photoUrl": "https://example.com/photo.jpg",
+    "isOnboardingCompleted": true,
+    "createdAt": "2025-06-13T10:00:00Z",
+    "updatedAt": "2025-06-13T10:00:00Z"
+  },
+  "isUserCheckedFromAuthService": true
+}
+#+END_SRC
+
+**** Firebase Firestore Persistence
+
+***** User Data Structure
+*Location*: [`lib/data/repository/auth/auth_repository.dart`](lib/data/repository/auth/auth_repository.dart)
+
+****** User Document Schema
+#+BEGIN_SRC dart
+// Firestore document structure at /users/{userId}
+{
+  "userName": "John Doe",
+  "phoneNumber": "+1234567890",
+  "photoUrl": "https://example.com/photo.jpg",
+  "isOnboardingCompleted": true,
+  "createdAt": ServerTimestamp,
+  "updatedAt": ServerTimestamp
+}
+#+END_SRC
+
+****** Atomic Operations
+#+BEGIN_SRC dart
+Future<void> _updateUserDataInFirestore(Map<String, dynamic> data) async {
+  final user = _firebaseAuth.currentUser;
+  if (user == null) return;
+
+  final userDoc = _firestore.collection('users').doc(user.uid);
+
+  try {
+    // Use transaction to ensure atomic operations
+    await _firestore.runTransaction((transaction) async {
+      final docSnapshot = await transaction.get(userDoc);
+
+      if (docSnapshot.exists) {
+        transaction.update(userDoc, data);
+      } else {
+        // Include required fields if creating a new document
+        final completeData = {
+          'userName': user.displayName ?? 'User',
+          'phoneNumber': user.phoneNumber ?? '',
+          'isOnboardingCompleted': false,
+          'createdAt': FieldValue.serverTimestamp(),
+          ...data,
+        };
+        transaction.set(userDoc, completeData);
+      }
+    });
+  } catch (e) {
+    debugPrint('Failed to update user data in Firestore: $e');
+    rethrow;
+  }
+}
+#+END_SRC
+
+***** Data Synchronization Strategy
+
+****** Read Strategy
+1. *Check Local Cache*: HydratedBloc provides cached state
+2. *Verify Auth Status*: Validate with Firebase Auth
+3. *Fetch Latest Data*: Get updated user data from Firestore
+4. *Update Local State*: Merge cloud data with local state
+
+****** Write Strategy
+1. *Optimistic Update*: Update local state immediately
+2. *Background Sync*: Persist to Firebase asynchronously
+3. *Error Handling*: Rollback on failure
+4. *State Persistence*: HydratedBloc automatically saves updated state
+
+**** Stream Chat Data Persistence
+
+***** Chat Data Storage
+Stream Chat handles its own data persistence:
+- *Local Database*: SQLite for offline message storage
+- *Cloud Sync*: Automatic synchronization with Stream servers
+- *Real-time Updates*: WebSocket connections for live data
+
+***** Integration with App State
+#+BEGIN_SRC dart
+// In ChatSessionCubit - manages Stream Chat connection state
+class ChatSessionState extends Equatable {
+  final bool isUserCheckedFromChatService;
+  final bool isChatUserConnected;
+  final String chatUserId;
+  final String createdAt;
+  final bool isUserBanned;
+
+  // Stream Chat handles its own data persistence
+  // App only manages connection state
+}
+#+END_SRC
+
+**** Data Loading Flow
+
+***** App Startup Sequence
+#+BEGIN_EXAMPLE
+App Launch
+    ↓
+HydratedStorage Initialization
+    ↓
+┌─────────────────────────────────────┐
+│     Load Cached BLoC States         │
+│   (AuthSessionState, etc.)          │
+└─────────────────────────────────────┘
+    ↓
+Firebase Initialization
+    ↓
+┌─────────────────────────────────────┐
+│    Verify Cached Auth State         │
+│   with Firebase Auth Service        │
+└─────────────────────────────────────┘
+    ↓
+┌─────────────────────────────────────┐
+│     Fetch Latest User Data          │
+│    from Firestore (if needed)       │
+└─────────────────────────────────────┘
+    ↓
+Stream Chat Connection
+    ↓
+UI Render with Combined State
+#+END_EXAMPLE
+
+***** Landing View Data Loading
+*Location*: [`lib/presentation/views/landing/landing_view.dart`](lib/presentation/views/landing/landing_view.dart)
+
+#+BEGIN_SRC dart
+void _checkAuthAndInitialize() {
+  if (!mounted) return;
+
+  // Update initial message with localized string
+  final localizations = AppLocalizations.of(context)!;
+  _updateLoadingState(localizations.startingUp, 0);
+
+  final authState = context.read<AuthSessionCubit>().state;
+
+  // Start loading message animation
+  _startLoadingDotsAnimation();
+
+  // Handle the case where auth state is already checked (from cache)
+  if (authState.isUserCheckedFromAuthService) {
+    _isAuthStateReady = true;
+    _updateLoadingState(localizations.accountVerified, 2);
+    _checkAndNavigate(authState);
+  } else {
+    _updateLoadingState(localizations.verifyingAccount, 1);
+  }
+
+  // Ensure minimum display time for the splash screen
+  _ensureMinimumSplashDuration(authState);
+}
+#+END_SRC
+
+**** Database Extensions for Current User
+
+***** Firestore Extensions
+*Location*: [`lib/data/extensions/auth/database_extensions.dart`](lib/data/extensions/auth/database_extensions.dart)
+
+#+BEGIN_SRC dart
+extension DatabaseExtensions on FirebaseFirestore {
+  Future<DocumentReference> currentUserDocument() async {
+    final userOption = await getIt<IAuthRepository>().getSignedInUser();
+    final user = userOption.getOrElse(() => throw Exception('Not authenticated'));
+
+    return FirebaseFirestore.instance.collection('users').doc(user.id);
+  }
+
+  Future<DocumentReference> userDocument({required String userId}) async {
+    return FirebaseFirestore.instance.collection('users').doc(userId);
+  }
+}
+
+extension CollectionExtensions on DocumentReference {
+  CollectionReference get userCollection => collection('users');
+}
+#+END_SRC
+
+***** Benefits
+- *Type Safety*: Strongly typed document references
+- *Current User Context*: Automatic user ID resolution
+- *Error Handling*: Consistent authentication validation
+
+**** Data Consistency Strategies
+
+***** Cache Invalidation
+1. *Time-based*: Automatic cache expiration (handled by Firebase)
+2. *Event-based*: Clear cache on authentication changes
+3. *Manual*: Force refresh on user action
+
+***** Conflict Resolution
+1. *Last Write Wins*: Firestore's default strategy
+2. *Server Timestamp*: Use server timestamps for ordering
+3. *Optimistic Updates*: UI updates immediately, sync in background
+
+***** Error Recovery
+#+BEGIN_SRC dart
+// Example from AuthSessionCubit
+@override
+AuthSessionState? fromJson(Map<String, dynamic> json) {
+  try {
+    // Attempt to restore from cache
+    final cachedState = AuthSessionState.empty().copyWith(
+      authUser: AuthUserModel.fromJson(json['authUser'] as Map<String, dynamic>),
+      isUserCheckedFromAuthService: json['isUserCheckedFromAuthService'] as bool? ?? false,
+    );
+
+    // Verify cached data is still valid
+    if (cachedState.isLoggedIn) {
+      _verifyUserSession(cachedState);
+    }
+
+    return cachedState;
+  } catch (e) {
+    // On any error, return clean state
+    return AuthSessionState.empty();
+  }
+}
+#+END_SRC
+
+**** Performance Optimizations
+
+***** HydratedBloc Optimizations
+- *Selective Persistence*: Only critical state is persisted
+- *Compression*: JSON serialization for efficient storage
+- *Lazy Loading*: State restored only when BLoC is accessed
+
+***** Firebase Optimizations
+- *Offline Persistence*: Firestore caches data locally
+- *Real-time Listeners*: Efficient delta updates
+- *Batch Operations*: Atomic multi-document updates
+
+***** Stream Chat Optimizations
+- *Local SQLite*: Fast local message retrieval
+- *Pagination*: Load messages on demand
+- *Background Sync*: Automatic cloud synchronization
+
+**** Security Considerations
+
+***** Data Encryption
+- *At Rest*: Firebase handles server-side encryption
+- *In Transit*: TLS/SSL for all network communications
+- *Local Storage*: Relies on device-level security
+
+***** Authentication Verification
+#+BEGIN_SRC dart
+Future<void> _verifyUserSession(AuthSessionState cachedState) async {
+  try {
+    // Always verify cached auth state with server
+    final currentUser = await _authRepository.getSignedInUser();
+
+    currentUser.fold(
+      () {
+        // Security: Clear invalid session immediately
+        emit(AuthSessionState.empty());
+      },
+      (user) {
+        // Update with verified user data
+        emit(cachedState.copyWith(authUser: user));
+      },
+    );
+  } catch (e) {
+    // Security: On any error, clear session
+    emit(AuthSessionState.empty());
+  }
+}
+#+END_SRC
+
+***** Data Privacy
+- *Minimal Storage*: Only essential data persisted locally
+- *User Control*: Sign-out clears local cache
+- *Compliance*: Follows Firebase GDPR guidelines
+
+**** Debugging and Monitoring
+
+***** Storage Inspection
+- *HydratedBloc*: JSON files in app documents directory
+- *Firebase Console*: Real-time Firestore data viewing
+- *Stream Chat Dashboard*: Message and user analytics
+
+***** Debug Logging
+#+BEGIN_SRC dart
+// Throughout the codebase
+debugPrint('Failed to update user data in Firestore: $e');
+debugPrint('Error getting signed in user data: $e');
+debugPrint('Successfully reconnected to GetStream with updated profile');
+#+END_SRC
+
+***** State Monitoring
+- Auth state changes logged and tracked
+- Connection status monitoring for Stream Chat
+- Error tracking for failed persistence operations
+
+**** Data Migration Strategy
+
+***** Version Compatibility
+- *Backward Compatible*: fromJson handles missing fields gracefully
+- *Default Values*: Safe fallbacks for new properties
+- *Migration Logic*: Handle schema changes in fromJson
+
+***** Example Migration Handling
+#+BEGIN_SRC dart
+@override
+AuthSessionState? fromJson(Map<String, dynamic> json) {
+  try {
+    return AuthSessionState.empty().copyWith(
+      authUser: AuthUserModel.fromJson(json['authUser'] as Map<String, dynamic>),
+      // Handle missing fields with defaults
+      isUserCheckedFromAuthService: json['isUserCheckedFromAuthService'] as bool? ?? false,
+      // New fields with safe defaults
+      // someNewField: json['someNewField'] as String? ?? '',
+    );
+  } catch (e) {
+    // Return clean state on any migration error
+    return AuthSessionState.empty();
+  }
+}
+#+END_SRC
+
+This comprehensive data persistence architecture ensures reliable, secure, and performant data storage and retrieval across app sessions, providing a seamless user experience with proper offline capabilities and real-time synchronization.
+
+
+** Overview of future and stream usage
+
+The Flutter Social Chat app extensively uses Dart's asynchronous programming features (`async`, `await`, `async*`, `yield`) to handle:
+- Firebase operations (Authentication, Firestore)
+- Stream Chat API calls
+- State management with BLoC pattern
+- File operations and image processing
+- Network connectivity monitoring
+
+**** Async Function Usage
+
+***** Firebase Authentication Operations
+*Location*: [`lib/data/repository/auth/auth_repository.dart`](lib/data/repository/auth/auth_repository.dart)
+
+****** Phone Number Sign-In
+#+BEGIN_SRC dart
+@override
+Stream<Either<AuthFailureEnum, (String, int?)>> signInWithPhoneNumber({
+  required String phoneNumber,
+  required Duration timeout,
+  required int? resendToken,
+}) async* {
+  final streamController = StreamController<Either<AuthFailureEnum, (String, int?)>>();
+
+  try {
+    await _firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: timeout,
+      forceResendingToken: resendToken,
+
+      // Async callback for successful verification
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        try {
+          await _firebaseAuth.signInWithCredential(credential);
+          streamController.add(right(('', null)));
+        } catch (e) {
+          streamController.add(left(AuthFailureEnum.serverError));
+        }
+      },
+
+      // Callback for SMS code sent
+      codeSent: (String verificationId, int? resendToken) {
+        streamController.add(right((verificationId, resendToken)));
+      },
+
+      // Error handling callback
+      verificationFailed: (FirebaseAuthException e) {
+        // Handle different error types
+        late final Either<AuthFailureEnum, (String, int?)> result;
+        switch (e.code) {
+          case 'too-many-requests':
+            result = left(AuthFailureEnum.tooManyRequests);
+            break;
+          case 'invalid-phone-number':
+            result = left(AuthFailureEnum.serverError);
+            break;
+          default:
+            result = left(AuthFailureEnum.serverError);
+        }
+        streamController.add(result);
+      },
+    );
+  } catch (e) {
+    streamController.add(left(AuthFailureEnum.serverError));
+  }
+
+  yield* streamController.stream;
+}
+#+END_SRC
+
+****** SMS Code Verification
+#+BEGIN_SRC dart
+@override
+Future<Either<AuthFailureEnum, Unit>> verifySmsCode({
+  required String smsCode,
+  required String verificationId,
+}) async {
+  try {
+    final credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: smsCode,
+    );
+
+    await _firebaseAuth.signInWithCredential(credential);
+
+    // Create or update user document atomically
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      final userDoc = _firestore.collection('users').doc(user.uid);
+      final docSnapshot = await userDoc.get();
+
+      if (docSnapshot.exists) {
+        // Existing user - update login timestamp
+        await userDoc.update({
+          'lastLogin': FieldValue.serverTimestamp(),
+        });
+      } else {
+        // New user - create complete document
+        await userDoc.set({
+          'userName': user.displayName ?? 'User',
+          'phoneNumber': user.phoneNumber ?? '',
+          'isOnboardingCompleted': false,
+          'createdAt': FieldValue.serverTimestamp(),
+          'lastLogin': FieldValue.serverTimestamp(),
+        });
+      }
+    }
+
+    return right(unit);
+  } catch (e) {
+    return left(AuthFailureEnum.serverError);
+  }
+}
+#+END_SRC
+
+***** Firestore Transaction Operations
+*Location*: [`lib/data/repository/auth/auth_repository.dart`](lib/data/repository/auth/auth_repository.dart)
+
+****** Atomic User Data Updates
+#+BEGIN_SRC dart
+Future<void> _updateUserDataInFirestore(Map<String, dynamic> data) async {
+  final user = _firebaseAuth.currentUser;
+  if (user == null) return;
+
+  final userDoc = _firestore.collection('users').doc(user.uid);
+
+  try {
+    // Use transaction for atomic operations
+    await _firestore.runTransaction((transaction) async {
+      final docSnapshot = await transaction.get(userDoc);
+
+      if (docSnapshot.exists) {
+        // Update existing document
+        transaction.update(userDoc, data);
+      } else {
+        // Create new document with required fields
+        final completeData = {
+          'userName': user.displayName ?? 'User',
+          'phoneNumber': user.phoneNumber ?? '',
+          'isOnboardingCompleted': false,
+          'createdAt': FieldValue.serverTimestamp(),
+          ...data,
+        };
+        transaction.set(userDoc, completeData);
+      }
+    });
+  } catch (e) {
+    debugPrint('Failed to update user data in Firestore: $e');
+    rethrow;
+  }
+}
+#+END_SRC
+
+**** Async* Stream Usage
+
+***** Authentication State Streaming
+*Location*: [`lib/data/repository/auth/auth_repository.dart`](lib/data/repository/auth/auth_repository.dart)
+
+****** Firebase Auth State Changes
+#+BEGIN_SRC dart
+@override
+Stream<AuthUserModel> get authStateChanges {
+  return FirebaseAuth.instance.authStateChanges().asyncMap(
+    (User? firebaseUser) async {
+      if (firebaseUser == null) {
+        return AuthUserModel.empty();
+      }
+
+      try {
+        // Fetch additional user data from Firestore
+        final userDoc = await _firestore
+            .collection('users')
+            .doc(firebaseUser.uid)
+            .get();
+
+        if (userDoc.exists) {
+          final userData = userDoc.data()!;
+          return AuthUserModel(
+            id: firebaseUser.uid,
+            userName: userData['userName'] as String?,
+            phoneNumber: firebaseUser.phoneNumber ?? '',
+            photoUrl: userData['photoUrl'] as String?,
+            isOnboardingCompleted: userData['isOnboardingCompleted'] as bool? ?? false,
+          );
+        }
+
+        // Return basic user info if Firestore doc doesn't exist
+        return AuthUserModel(
+          id: firebaseUser.uid,
+          userName: firebaseUser.displayName,
+          phoneNumber: firebaseUser.phoneNumber ?? '',
+          photoUrl: firebaseUser.photoURL,
+          isOnboardingCompleted: false,
+        );
+      } catch (e) {
+        debugPrint('Error getting user data from Firestore: $e');
+        return AuthUserModel.empty();
+      }
+    },
+  );
+}
+#+END_SRC
+
+***** Chat Repository Streaming
+*Location*: [`lib/data/repository/chat/chat_repository.dart`](lib/data/repository/chat/chat_repository.dart)
+
+****** Chat User State Changes
+#+BEGIN_SRC dart
+@override
+Stream<ChatUserModel> get chatAuthStateChanges {
+  return _streamChatClient.state.currentUserStream.map(
+    (OwnUser? user) => user?.toDomain() ?? ChatUserModel.empty(),
+  );
+}
+#+END_SRC
+
+****** User Channels Stream
+#+BEGIN_SRC dart
+@override
+Stream<List<Channel>> get channelsThatTheUserIsIncluded {
+  try {
+    final currentUser = _streamChatClient.state.currentUser;
+    if (currentUser == null) {
+      return Stream.value([]);
+    }
+
+    return _streamChatClient
+        .queryChannels(
+          filter: Filter.in_('members', [currentUser.id]),
+        )
+        .map((channels) => channels);
+  } catch (e) {
+    debugPrint('Error fetching channels: $e');
+    return Stream.value([]);
+  }
+}
+#+END_SRC
+
+**** BLoC Async Operations
+
+***** AuthSessionCubit Async Methods
+*Location*: [`lib/presentation/blocs/auth_session/auth_session_cubit.dart`](lib/presentation/blocs/auth_session/auth_session_cubit.dart)
+
+****** Chat Connection Management
+#+BEGIN_SRC dart
+Future<void> connectToChat() async {
+  // Prevent multiple simultaneous connections
+  if (_isConnecting) return;
+  _isConnecting = true;
+
+  try {
+    // Check if already connected
+    if (await _isStreamChatAlreadyConnected()) {
+      emit(state.copyWith(isInProgress: false));
+      return;
+    }
+
+    emit(state.copyWith(isInProgress: true));
+
+    final result = await _chatRepository.connectTheCurrentUser();
+
+    result.fold(
+      (failure) {
+        // Handle connection failures
+        if (_isAlreadyConnectingError(failure)) {
+          emit(state.copyWith(isInProgress: false));
+        } else {
+          emit(state.copyWith(isInProgress: false, hasError: true));
+        }
+      },
+      (_) {
+        emit(state.copyWith(isInProgress: false));
+      },
+    );
+  } catch (e) {
+    emit(state.copyWith(isInProgress: false, hasError: true));
+  } finally {
+    _isConnecting = false;
+  }
+}
+#+END_SRC
+
+****** Profile Setup Completion
+#+BEGIN_SRC dart
+Future<void> completeProfileSetup(Future<String> getProfilePhotoUrl) async {
+  emit(state.copyWith(isInProgress: true));
+
+  try {
+    // Await the profile photo URL
+    final userProfilePhotoUrl = await getProfilePhotoUrl;
+
+    if (userProfilePhotoUrl.isEmpty) {
+      emit(state.copyWith(isInProgress: false));
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isInProgress: false,
+        authUser: state.authUser.copyWith(
+          photoUrl: userProfilePhotoUrl,
+          isOnboardingCompleted: true,
+        ),
+      ),
+    );
+  } catch (e) {
+    emit(state.copyWith(isInProgress: false, hasError: true));
+  }
+}
+#+END_SRC
+
+***** ProfileManagerCubit Async Operations
+*Location*: [`lib/presentation/blocs/profile_management/profile_manager_cubit.dart`](lib/presentation/blocs/profile_management/profile_manager_cubit.dart)
+
+****** Profile Creation with Multiple Async Operations
+#+BEGIN_SRC dart
+Future<void> createProfile({required String username}) async {
+  if (state.isInProgress) return;
+
+  emit(state.copyWith(isInProgress: true));
+
+  try {
+    final authUser = _authSessionCubit.state.authUser;
+    if (authUser.id.isEmpty) {
+      emit(state.copyWith(isInProgress: false, hasError: true));
+      return;
+    }
+
+    // Generate default profile image URL
+    final profileImageUrl = 'https://ui-avatars.com/api/?name=${Uri.encodeComponent(username)}&background=6366f1&color=fff&size=200';
+
+    // Execute multiple async operations in parallel
+    await Future.wait([
+      _persistUserProfileData(authUser.id, username, profileImageUrl),
+      _updateAuthSessionState(username, profileImageUrl),
+    ]);
+
+    // Reconnect to Stream Chat with updated profile
+    await _reconnectToGetStream();
+
+    emit(state.copyWith(isInProgress: false, hasError: false));
+  } catch (e) {
+    emit(state.copyWith(isInProgress: false, hasError: true));
+  }
+}
+#+END_SRC
+
+****** Stream Chat Reconnection
+#+BEGIN_SRC dart
+Future<void> _reconnectToGetStream() async {
+  try {
+    // Disconnect first to ensure clean reconnection
+    await _chatRepository.disconnectUser();
+
+    // Delay to ensure disconnection completes
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Reconnect with updated profile
+    final result = await _chatRepository.connectTheCurrentUser();
+
+    result.fold(
+      (failure) => debugPrint('Failed to reconnect to GetStream: $failure'),
+      (_) => debugPrint('Successfully reconnected to GetStream with updated profile'),
+    );
+  } catch (e) {
+    debugPrint('Error reconnecting to GetStream: $e');
+  }
+}
+#+END_SRC
+
+***** ChatManagementCubit Async Operations
+*Location*: [`lib/presentation/blocs/chat_management/chat_management_cubit.dart`](lib/presentation/blocs/chat_management/chat_management_cubit.dart)
+
+****** Photo Message Sending
+#+BEGIN_SRC dart
+Future<void> sendCapturedPhotoAsMessage({
+  required String pathOfTheTakenPhoto,
+  required int sizeOfTheTakenPhoto,
+}) async {
+  // Prevent multiple simultaneous operations
+  if (state.isInProgress) {
+    return;
+  }
+
+  emit(state.copyWith(isInProgress: true));
+
+  // Get channel ID for selected user
+  final channelId = state.currentUserChannels[state.userIndex].id;
+  if (channelId == null) {
+    emit(
+      state.copyWith(
+        isInProgress: false,
+        isCapturedPhotoSent: false,
+        error: ChatFailureEnum.channelCreateFailure
+      ),
+    );
+    return;
+  }
+
+  // Add delay for better UX
+  await Future.delayed(const Duration(seconds: 1));
+
+  // Send photo through chat service
+  final result = await _chatRepository.sendPhotoAsMessageToTheSelectedUser(
+    channelId: channelId,
+    pathOfTheTakenPhoto: pathOfTheTakenPhoto,
+    sizeOfTheTakenPhoto: sizeOfTheTakenPhoto,
+  );
+
+  // Update state based on result
+  result.fold(
+    (failure) => emit(
+      state.copyWith(
+        isInProgress: false,
+        isCapturedPhotoSent: false,
+        error: failure,
+      ),
+    ),
+    (_) => emit(
+      state.copyWith(
+        isInProgress: false,
+        isCapturedPhotoSent: true,
+        error: null,
+      ),
+    ),
+  );
+}
+#+END_SRC
+
+**** UI Layer Async Operations
+
+***** Dashboard View Connection Management
+*Location*: [`lib/presentation/views/dashboard/dashboard_view.dart`](lib/presentation/views/dashboard/dashboard_view.dart)
+
+****** Chat Connection Initialization
+#+BEGIN_SRC dart
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _ensureChatConnection();
+    // Set timeout to show content even if connection is delayed
+    _startConnectionTimeout();
+  });
+}
+
+void _startConnectionTimeout() {
+  _cancelConnectionTimeout();
+
+  _connectionTimeoutTimer = Timer(const Duration(milliseconds: 3000), () {
+    if (mounted && _channelListController == null) {
+      debugPrint('Connection timeout reached, showing content without channels');
+      setState(() {
+        _hasShownContentDespiteConnectionIssues = true;
+      });
+
+      // Continue trying to connect in background
+      _continueConnectionAttempts();
+    }
+  });
+}
+
+Future<void> _continueConnectionAttempts() async {
+  int attempts = 0;
+  const maxAttempts = 3;
+
+  while (attempts < maxAttempts && mounted && _channelListController == null) {
+    attempts++;
+    debugPrint('Background connection attempt $attempts');
+
+    await Future.delayed(Duration(seconds: attempts * 2));
+
+    if (mounted) {
+      _ensureChatConnection();
+    }
+  }
+}
+#+END_SRC
+
+***** Landing View Async Navigation
+*Location*: [`lib/presentation/views/landing/landing_view.dart`](lib/presentation/views/landing/landing_view.dart)
+
+****** Minimum Splash Duration Management
+#+BEGIN_SRC dart
+void _ensureMinimumSplashDuration(AuthSessionState authState) {
+  Future.delayed(_minimumSplashDuration, () {
+    if (!mounted) return;
+
+    setState(() {
+      _isReadyToNavigate = true;
+      _loadingMessage = AppLocalizations.of(context)!.loadingChats;
+      _loadingPhase = 3;
+    });
+
+    // Navigate if auth state is ready
+    if (_isAuthStateReady && !_hasCheckedInitialRoute) {
+      _prepareForNavigation();
+      _navigateToAppropriateRoute(
+        authState.isLoggedIn,
+        authState.authUser.isOnboardingCompleted
+      );
+    }
+  });
+}
+
+void _startLoadingDotsAnimation() {
+  _loadingDotsTimer?.cancel();
+  _loadingDotsTimer = Timer.periodic(_loadingDotsDuration, (_) {
+    if (!mounted || _hasCheckedInitialRoute) {
+      _loadingDotsTimer?.cancel();
+      return;
+    }
+
+    setState(() {
+      if (_loadingMessage.endsWith('...')) {
+        _loadingMessage = _loadingMessage.substring(0, _loadingMessage.length - 3);
+      } else {
+        _loadingMessage += '.';
+      }
+    });
+  });
+}
+#+END_SRC
+
+**** HydratedBloc Async Persistence
+
+***** ChatSessionCubit State Persistence
+*Location*: [`lib/presentation/blocs/chat_session/chat_session_cubit.dart`](lib/presentation/blocs/chat_session/chat_session_cubit.dart)
+
+****** Stream Subscription Management
+#+BEGIN_SRC dart
+Future<void> connectChatUserToService() async {
+  try {
+    // Subscribe to chat auth state changes
+    _chatAuthStateSubscription = _chatRepository.chatAuthStateChanges.listen(
+      _listenChatUserAuthStateChangesStream,
+      onError: (error) {
+        debugPrint('Error in chat auth state stream: $error');
+        emit(state.copyWith(
+          isUserCheckedFromChatService: true,
+          webSocketConnectionStatus: ConnectionStatus.disconnected,
+        ));
+      },
+    );
+
+    // Connect to chat service
+    final result = await _chatRepository.connectTheCurrentUser();
+
+    result.fold(
+      (failure) {
+        emit(state.copyWith(
+          isUserCheckedFromChatService: true,
+          webSocketConnectionStatus: ConnectionStatus.disconnected,
+        ));
+      },
+      (_) {
+        // Connection successful - state will be updated via stream
+      },
+    );
+  } catch (e) {
+    debugPrint('Error connecting to chat service: $e');
+    emit(state.copyWith(
+      isUserCheckedFromChatService: true,
+      webSocketConnectionStatus: ConnectionStatus.disconnected,
+    ));
+  }
+}
+
+Future<void> _listenChatUserAuthStateChangesStream(
+  ChatUserModel chatUser,
+) async {
+  emit(
+    state.copyWith(
+      chatUser: chatUser,
+      isUserCheckedFromChatService: true,
+      webSocketConnectionStatus: ConnectionStatus.connected,
+    ),
+  );
+}
+#+END_SRC
+
+**** Error Handling Patterns
+
+***** Async Error Handling with Try-Catch
+#+BEGIN_SRC dart
+// Pattern used throughout the codebase
+Future<void> _handleAsyncOperation() async {
+  try {
+    emit(state.copyWith(isInProgress: true));
+
+    // Async operation
+    final result = await someAsyncOperation();
+
+    // Handle success
+    emit(state.copyWith(
+      isInProgress: false,
+      data: result,
+    ));
+  } catch (e) {
+    // Handle error
+    debugPrint('Operation failed: $e');
+    emit(state.copyWith(
+      isInProgress: false,
+      hasError: true,
+      errorMessage: e.toString(),
+    ));
+  }
+}
+#+END_SRC
+
+***** Either Pattern for Async Error Handling
+#+BEGIN_SRC dart
+// Using fpdart Either for functional error handling
+Future<Either<ErrorType, SuccessType>> asyncOperation() async {
+  try {
+    final result = await dangerousOperation();
+    return right(result);
+  } catch (e) {
+    return left(ErrorType.fromException(e));
+  }
+}
+
+// Usage in BLoC
+Future<void> handleOperation() async {
+  final result = await asyncOperation();
+
+  result.fold(
+    (error) => emit(state.copyWith(error: error)),
+    (success) => emit(state.copyWith(data: success)),
+  );
+}
+#+END_SRC
+
+**** Performance Optimizations
+
+***** Concurrent Async Operations
+#+BEGIN_SRC dart
+// Running multiple async operations in parallel
+await Future.wait([
+  _updateFirebaseAuth(username, profileImageUrl),
+  _updateFirestore(userId, username, profileImageUrl),
+  _updateLocalState(username, profileImageUrl),
+]);
+#+END_SRC
+
+***** Debounced Async Operations
+#+BEGIN_SRC dart
+// Preventing rapid successive calls
+Future<void> debouncedOperation() async {
+  if (_isOperationInProgress) return;
+  _isOperationInProgress = true;
+
+  try {
+    await actualOperation();
+  } finally {
+    _isOperationInProgress = false;
+  }
+}
+#+END_SRC
+
+***** Stream Subscription Management
+#+BEGIN_SRC dart
+class SomeCubit extends Cubit<SomeState> {
+  StreamSubscription? _subscription;
+
+  void startListening() {
+    _subscription = someStream.listen(
+      (data) async {
+        // Handle async data processing
+        await processData(data);
+      },
+      onError: (error) {
+        // Handle stream errors
+        handleError(error);
+      },
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
+}
+#+END_SRC
+
+**** Key Async Patterns Summary
+
+***** Common Async Patterns Used
+1. *Future.wait()*: Parallel execution of multiple async operations
+2. *Stream.listen()*: Reactive programming with async callbacks
+3. *async*/yield**: Creating custom streams
+4. *Timer/Future.delayed()*: Async timing operations
+5. *StreamController*: Manual stream management
+6. *Transaction/Batch operations*: Atomic async database operations
+
+***** Error Handling Strategies
+1. *try-catch blocks*: Traditional error handling
+2. *Either pattern*: Functional error handling
+3. *Stream error handling*: onError callbacks
+4. *State emission*: Error state management in BLoC
+
+***** Performance Considerations
+1. *Debouncing*: Preventing rapid successive calls
+2. *Cancellation*: Proper cleanup of async operations
+3. *Parallel execution*: Using Future.wait() for independent operations
+4. *Stream subscription management*: Proper disposal in BLoC close()
+
+The app demonstrates sophisticated async programming patterns with proper error handling, state management, and performance optimizations throughout the Firebase authentication, Stream Chat integration, and UI layer interactions.
+
+
+**o Overview of other package usage
+
+After analyzing the Flutter Social Chat app codebase, several packages and features appear to be missing or could be improved. This document identifies gaps in functionality, missing dependencies, and potential enhancements.
+
+*** Missing Core Packages
+
+**** Image Processing and Caching
+
+***** image_cropper
+- *Current Issue*: Profile image upload lacks cropping functionality
+- *Location Affected*: [`lib/presentation/views/onboarding/`](lib/presentation/views/onboarding/)
+- *Usage*: Allow users to crop profile images before upload
+- *Integration*:
+#+BEGIN_SRC yaml
+image_cropper: ^5.0.1
+#+END_SRC
+
+***** photo_view
+- *Current Issue*: No image zoom/pan functionality in chat
+- *Location Affected*: [`lib/presentation/views/chat/widgets/`](lib/presentation/views/chat/widgets/)
+- *Usage*: Full-screen image viewing with zoom capabilities
+- *Integration*:
+#+BEGIN_SRC yaml
+photo_view: ^0.14.0
+#+END_SRC
+
+**** File Handling Extensions
+
+***** file_picker
+- *Current Issue*: Limited to image_picker only
+- *Location Affected*: Chat message attachments
+- *Usage*: Support for document, PDF, and other file types
+- *Missing Features*: File sharing in chat conversations
+
+***** path_provider (Already present but underutilized)
+- *Current Usage*: Only for HydratedBloc storage
+- *Potential Usage*: Cache management, temporary file storage
+- *Missing Implementation*: Custom cache directory management
+
+**** Network and Connectivity
+
+***** dio (Missing HTTP client)
+- *Current Issue*: Relying only on Firebase SDK HTTP calls
+- *Location Affected*: API calls, file uploads
+- *Usage*: Better HTTP error handling, interceptors, retry logic
+- *Benefits*: Upload progress tracking, request cancellation
+
+***** connectivity_plus (Upgrade from connectivity)
+- *Current Status*: Using older `connectivity` package
+- *Location*: [`lib/data/repository/connectivity/`](lib/data/repository/connectivity/)
+- *Upgrade Path*:
+#+BEGIN_SRC yaml
+# Replace
+connectivity: ^3.0.6
+# With
+connectivity_plus: ^5.0.1
+#+END_SRC
+
+*** Missing UI/UX Packages
+
+**** Animation and Visual Effects
+
+***** flutter_staggered_animations
+- *Missing Feature*: List item animations
+- *Location Affected*:
+  - [`lib/presentation/views/dashboard/widgets/dashboard_view_list_view.dart`](lib/presentation/views/dashboard/widgets/dashboard_view_list_view.dart)
+  - [`lib/presentation/views/create_chat/widgets/create_chat_view_user_list_view.dart`](lib/presentation/views/create_chat/widgets/create_chat_view_user_list_view.dart)
+- *Enhancement*: Staggered animations for chat list, user list
+
+***** flutter_animate
+- *Current State*: Basic AnimatedContainer usage
+- *Enhancement*: More sophisticated animations for state changes
+- *Location*: Throughout UI widgets
+
+**** Pull-to-Refresh
+
+***** pull_to_refresh or flutter native RefreshIndicator
+- *Missing Feature*: Pull-to-refresh for chat list
+- *Location Affected*: [`lib/presentation/views/dashboard/dashboard_view.dart`](lib/presentation/views/dashboard/dashboard_view.dart)
+- *Current Workaround*: Manual retry button only
+
+**** Toast and Snackbar Management
+
+***** Current Implementation*: Using bot_toast
+- *Issue*: No centralized toast/notification management
+- *Missing Features*:
+  - Success/error toast styling consistency
+  - Queue management for multiple toasts
+  - Custom toast positioning
+
+*** Missing Development Tools
+
+**** Code Generation
+
+***** json_serializable (Missing)
+- *Current Issue*: Manual JSON serialization in models
+- *Location Affected*:
+  - [`lib/domain/models/auth/`](lib/domain/models/auth/)
+  - [`lib/domain/models/chat/`](lib/domain/models/chat/)
+- *Benefits*: Type-safe JSON serialization, reduced boilerplate
+
+***** build_runner (Missing)
+- *Required For*: Code generation workflows
+- *Dependencies*: json_serializable, other generators
+
+**** Testing Infrastructure
+
+***** mockito (Missing)
+- *Current Issue*: Limited testing capabilities
+- *Usage*: Mock repository implementations for unit testing
+- *Integration*:
+#+BEGIN_SRC yaml
+dev_dependencies:
+  mockito: ^5.4.4
+  build_runner: ^2.4.7
+#+END_SRC
+
+***** bloc_test (Missing)
+- *Current Issue*: No BLoC-specific testing utilities
+- *Usage*: Testing BLoC state transitions
+- *Location*: Test files for all Cubits
+
+**** Static Analysis
+
+***** dart_code_metrics (Missing)
+- *Enhancement*: Advanced code quality metrics
+- *Benefits*: Cyclomatic complexity analysis, maintainability index
+
+*** Missing Security Features
+
+**** Secure Storage
+
+***** flutter_secure_storage (Missing)
+- *Current Issue*: Sensitive data stored in plain HydratedBloc storage
+- *Security Gap*: Auth tokens, user credentials
+- *Implementation Need*:
+#+BEGIN_SRC dart
+// Store sensitive auth data securely
+final storage = FlutterSecureStorage();
+await storage.write(key: 'auth_token', value: token);
+#+END_SRC
+
+**** Biometric Authentication
+
+***** local_auth (Missing)
+- *Feature Gap*: No biometric login option
+- *Enhancement*: Fingerprint/Face ID for app access
+- *User Experience*: Quick re-authentication
+
+*** Missing Configuration Management
+
+**** Environment Configuration
+
+***** flutter_dotenv (Missing but has custom EnvConfig)
+- *Current Implementation*: Custom [`lib/core/config/env_config.dart`](lib/core/config/env_config.dart)
+- *Issue*: Could be simplified with flutter_dotenv
+- *Enhancement*: Better environment variable management
+
+**** Feature Flags
+
+***** No feature flag system
+- *Missing*: Runtime feature toggles
+- *Use Cases*: A/B testing, gradual rollouts
+- *Suggested*: Custom feature flag service
+
+*** Missing Performance Optimizations
+
+**** Image Optimization
+
+***** flutter_image_compress (Missing)
+- *Current Issue*: No image compression before upload
+- *Location*: Profile image, chat image sharing
+- *Performance Impact*: Large file uploads, storage costs
+
+**** Memory Management
+
+***** No explicit memory management for images
+- *Issue*: Potential memory leaks with cached images
+- *Location*: [`lib/presentation/views/dashboard/widgets/dashboard_view_searched_chat.dart`](lib/presentation/views/dashboard/widgets/dashboard_view_searched_chat.dart)
+- *Enhancement*: Image memory management, cache size limits
+
+*** Missing Error Handling and Logging
+
+**** Crash Reporting
+
+***** firebase_crashlytics (Missing)
+- *Current State*: Only debug prints for errors
+- *Missing*: Production crash reporting
+- *Integration Need*:
+#+BEGIN_SRC dart
+FirebaseCrashlytics.instance.recordError(
+  error,
+  stackTrace,
+  fatal: false,
+);
+#+END_SRC
+
+**** Advanced Logging
+
+***** logger (Missing)
+- *Current State*: Using debugPrint throughout
+- *Enhancement*: Structured logging with levels
+- *Examples in Code*:
+#+BEGIN_SRC dart
+// Current
+debugPrint('Failed to update user data in Firestore: $e');
+
+// Enhanced
+logger.error('Failed to update user data', error: e, extra: {'userId': userId});
+#+END_SRC
+
+*** Missing Accessibility Features
+
+**** Accessibility Support
+
+***** No accessibility optimizations
+- *Missing*: Semantic labels for screen readers
+- *Location*: Throughout UI widgets
+- *Enhancement*:
+#+BEGIN_SRC dart
+Semantics(
+  label: 'Send message button',
+  child: IconButton(/*...*/),
+)
+#+END_SRC
+
+**** Text Scaling Support
+
+***** No explicit text scaling handling
+- *Issue*: UI may break with large text sizes
+- *Enhancement*: MediaQuery.textScaleFactorOf(context) usage
+
+*** Missing Internationalization Features
+
+**** RTL Language Support
+
+***** Current State*: LTR languages only
+- *Missing*: Arabic, Hebrew, Persian support
+- *Location*: [`lib/l10n/`](lib/l10n/) - only English
+- *Enhancement*: Directionality widgets, RTL layouts
+
+**** Date/Time Localization
+
+***** intl package present but underutilized
+- *Current Usage*: Basic date formatting in [`lib/presentation/views/dashboard/widgets/dashboard_view_searched_chat.dart`](lib/presentation/views/dashboard/widgets/dashboard_view_searched_chat.dart)
+- *Missing*: Localized relative time strings
+
+*** Missing Chat Features
+
+**** Message Status Indicators
+
+***** Read Receipts Enhancement
+- *Current*: Basic Stream Chat implementation
+- *Missing*: Custom read receipt UI
+- *Enhancement*: Delivered/Read status indicators
+
+**** Message Reactions
+
+***** No emoji reactions
+- *Feature Gap*: Message reactions (👍, ❤️, etc.)
+- *Stream Chat Capability*: Available but not implemented
+
+**** Voice Messages
+
+***** No audio recording/playback
+- *Missing Packages*:
+  - `record` for audio recording
+  - `audioplayers` for playback
+- *Feature Gap*: Voice note functionality
+
+**** Message Search
+
+***** Limited search functionality
+- *Current*: Basic text search in [`lib/presentation/views/dashboard/widgets/dashboard_view_search_field.dart`](lib/presentation/views/dashboard/widgets/dashboard_view_search_field.dart)
+- *Missing*: Full-text message search within conversations
+
+*** Missing State Management Enhancements
+
+**** State Persistence Improvements
+
+***** HydratedBloc limitations
+- *Current Issue*: Limited to JSON serialization
+- *Enhancement*: Custom serialization for complex objects
+- *Missing*: Selective state persistence (some states shouldn't persist)
+
+**** Background State Sync
+
+***** No background app state updates
+- *Missing*: App state updates when app is backgrounded
+
+- *Enhancement*: Background sync for critical state changes
+
+*** Platform-Specific Missing Features
+
+**** iOS Specific
+
+***** App Store Connect API
+- *Missing*: In-app review prompts
+- *Package*: `in_app_review`
+
+***** iOS 14+ Features
+- *Missing*: Widget support
+- *Missing*: App Clips integration
+
+**** Android Specific
+
+***** Material You Support
+- *Current*: Static theme colors
+- *Missing*: Dynamic color theming (Android 12+)
+- *Package*: `dynamic_color`
+
+***** Android Notifications
+***** Background Processing
+- *Missing*: Firebase Cloud Messaging integration
+- *Package*: `firebase_messaging`
+
+*** Suggested Package Additions
+
+**** High Priority
+#+BEGIN_SRC yaml
+dependencies:
+  # Security
+  flutter_secure_storage: ^9.0.0
+
+  # Image Processing
+  image_cropper: ^5.0.1
+  photo_view: ^0.14.0
+  flutter_image_compress: ^2.1.0
+
+  # Network
+  dio: ^5.4.0
+  connectivity_plus: ^5.0.1
+
+  # Error Handling
+  firebase_crashlytics: ^3.4.8
+  logger: ^2.0.2
+
+dev_dependencies:
+  # Testing
+  mockito: ^5.4.4
+  bloc_test: ^9.1.5
+  build_runner: ^2.4.7
+
+  # Code Generation
+  json_serializable: ^6.7.1
+#+END_SRC
+
+**** Medium Priority
+#+BEGIN_SRC yaml
+dependencies:
+  # UI/UX
+  flutter_staggered_animations: ^1.1.1
+  pull_to_refresh: ^2.0.0
+  in_app_review: ^2.0.8
+
+  # Audio
+  record: ^5.0.4
+  audioplayers: ^5.2.1
+
+  # Biometrics
+  local_auth: ^2.1.7
+#+END_SRC
+
+**** Low Priority
+#+BEGIN_SRC yaml
+dependencies:
+  # Advanced Features
+  dynamic_color: ^1.6.8
+  flutter_animate: ^4.5.0
+
+  # Firebase Extensions
+  firebase_messaging: ^14.7.9
+  firebase_remote_config: ^4.3.8
+#+END_SRC
+
+*** Implementation Priorities
+
+**** Phase 1: Core Functionality
+1. Image processing (cropper, compression)
+2. Secure storage implementation
+3. Enhanced error handling and logging
+4. Testing infrastructure setup
+
+**** Phase 2: User Experience
+1. Animation improvements
+2. Pull-to-refresh functionality
+3. Photo viewing capabilities
+4. Accessibility enhancements
+
+**** Phase 3: Advanced Features
+1. Voice messages
+2. Push notifications
+3. Background sync
+4. Platform-specific enhancements
+
+**** Phase 4: Optimization
+1. Performance monitoring
+2. Advanced analytics
+3. A/B testing framework
+4. Memory optimization
+
+*** Code Quality Improvements
+
+**** Missing Code Documentation
+- *Issue*: Inconsistent documentation throughout codebase
+- *Enhancement*: Comprehensive dartdoc comments
+- *Tool*: `dartdoc` for documentation generation
+
+**** Missing Design Patterns
+- *Observer Pattern*: For app-wide state changes
+- *Command Pattern*: For undo/redo functionality
+- *Factory Pattern*: For object creation consistency
+
+**** Missing Validation
+- *Input Validation*: More comprehensive form validation
+- *Data Validation*: Server response validation
+- *Type Safety*: Enhanced null safety usage
+
+This comprehensive analysis identifies key areas where the Flutter Social Chat app can be enhanced with additional packages and improved implementations for better functionality, security, and user experience.
