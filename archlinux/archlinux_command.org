@@ -2118,7 +2118,8 @@ yt-dlp --cookies-from-browser chrome \
   --proxy socks5://127.0.0.1:7890/ \
   -R infinite \
   -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' \
-  --write-sub --sub-langs "en.*" \
+  --write-sub \
+  --sub-langs "en.*" \
   --convert-subs srt \
   --write-auto-subs \
   --extractor-args youtubetab:skip=authcheck \
@@ -2131,7 +2132,8 @@ yt-dlp --cookies-from-browser chrome \
   --proxy socks5://127.0.0.1:7890/ \
   -R infinite \
   -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' \
-  --write-sub --sub-langs "en.*" \
+  --write-sub \
+  --sub-langs "en.*" \
   --convert-subs srt \
   --write-auto-subs \
   --extractor-args youtubetab:skip=authcheck \
