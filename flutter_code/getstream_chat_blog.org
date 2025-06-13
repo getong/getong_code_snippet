@@ -10,6 +10,7 @@ https://getstream.io/chat/docs/react/tokens_and_authentication/
 https://www.youtube.com/watch?v=_nNAWdmjQJ0&list=PL3PvZdDvJcMIhyNRvU-7iHm_GWSHlvH5W
 https://github.com/GetStream/javascript-beginner-guide
 https://deepwiki.com/GetStream/stream-chat-flutter
+https://getstream.io/video/sdk/flutter/tutorial/video-calling/
 
 ** with firebase
 
