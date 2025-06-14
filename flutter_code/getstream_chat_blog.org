@@ -62,3 +62,7 @@ see https://www.youtube.com/playlist?list=PL3PvZdDvJcMIixstKkuvLWQleqJ1VhLrf
 
 [[https://github.com/klilmhdi/zinsta][zinsta]]
 [[https://github.com/Aadi1245/chatApp][chatApp]]
+
+** getstream flutter offline message store
+
+https://pub.dev/packages/stream_chat_persistence
