@@ -1,0 +1,266 @@
+* Overview of zinsta
+
+This document describes how =get_it= (dependency injection), =flutter_bloc= (state management), and the =_initStreamVideo= function work together to provide video calling capabilities in the ZInsta application.
+
+[[https://github.com/klilmhdi/zinsta][zinsta]]
+
+
+* Architecture Components
+
+** Dependency Injection Layer (get_it)
+- Manages singleton instances of services
+- Provides service locator pattern implementation
+- Handles lifecycle management and cleanup
+- Ensures single source of truth for shared services
+
+** State Management Layer (flutter_bloc)
+- Manages UI state and business logic
+- Triggers service initialization during authentication
+- Provides reactive updates to UI components
+- Maintains clean separation of concerns
+
+** Video Service Layer (StreamVideo)
+- Handles video calling functionality
+- Manages user authentication and tokens
+- Provides push notification support
+- Maintains persistent connections
+
+* Integration Flow
+
+** 1. Application Initialization
+#+BEGIN_SRC dart
+// main.dart
+await AppInjector.init();  // Initialize dependency injection
+#+END_SRC
+
+The application starts by initializing the dependency injection container, registering core services like =TokenService= and =SharedPrefController=.
+
+** 2. User Authentication Flow
+#+BEGIN_SRC dot :file zinsta.png :exports results
+digraph G {
+    rankdir=TD;
+    A [label="User Signs Up/In"];
+    B [label="SignUpBloc/SignInBloc"];
+    C [label="UserAuthController.login()"];
+    D [label="AppInjector.registerStreamVideo()"];
+    E [label="_initStreamVideo()"];
+    F [label="StreamVideo Instance Created"];
+    G [label="Registered in get_it"];
+    H [label="Available App-wide"];
+    A -> B -> C -> D -> E -> F -> G -> H;
+}
+#+END_SRC
+
+** 3. Service Registration Process
+When a user authenticates, the following chain of events occurs:
+
+1. *BLoC Event Trigger*: User interaction triggers authentication event
+2. *Controller Access*: BLoC retrieves =UserAuthController= via get_it
+3. *StreamVideo Registration*: Controller calls =registerStreamVideo()=
+4. *Instance Creation*: =_initStreamVideo()= creates configured client
+5. *Singleton Registration*: Instance stored in get_it service locator
+6. *App-wide Access*: All components can access same instance
+
+* Code Integration Points
+
+** Dependency Registration
+#+BEGIN_SRC dart
+// di.dart - AppInjector class
+static StreamVideo registerStreamVideo(
+  TokenResponse tokenResponse,
+  User user,
+  EnvEnum environment,
+) {
+  return locator.registerSingleton(
+    dispose: (_) => StreamVideo.reset(),
+    _initStreamVideo(  // ← Core factory function
+      tokenResponse.apiKey,
+      user,
+      initialToken: tokenResponse.token,
+      tokenLoader: // ... token refresh logic
+    ),
+  );
+}
+#+END_SRC
+
+** StreamVideo Factory Function
+#+BEGIN_SRC dart
+// di.dart - _initStreamVideo function
+StreamVideo _initStreamVideo(
+  String apiKey,
+  User user, {
+  String? initialToken,
+  TokenLoader? tokenLoader,
+}) {
+  // Creates fully configured StreamVideo client
+  return StreamVideo(
+    apiKey,
+    user: user,
+    tokenLoader: tokenLoader,
+    options: const StreamVideoOptions(/* ... */),
+    pushNotificationManagerProvider: // ... push config
+  );
+}
+#+END_SRC
+
+** BLoC Authentication Integration
+#+BEGIN_SRC dart
+// sign_up_bloc.dart
+on<SignUpRequired>((event, emit) async {
+  // Register user with Firebase
+  MyUser userFirebase = await _userRepository.signUp(/*...*/);
+
+  // Initialize StreamVideo via dependency injection
+  await locator.get<UserAuthController>().login(
+    User(info: userGetStream),
+    environment,
+  );
+  // ↑ This triggers _initStreamVideo() call
+});
+#+END_SRC
+
+** Service Access Pattern
+#+BEGIN_SRC dart
+// Various services accessing StreamVideo
+class AppConsumers {
+  Future<bool> handleRemoteMessage(RemoteMessage message) async {
+    final streamVideo = locator.get<StreamVideo>();  // ← get_it access
+    return streamVideo.handleVoipPushNotification(message.data);
+  }
+}
+
+class UserAuthRepository {
+  final StreamVideo videoClient;  // ← Injected via constructor
+
+  Future<UserCredentialsModel> login() async {
+    return await videoClient.connect();  // ← Uses same instance
+  }
+}
+#+END_SRC
+
+* Benefits of This Architecture
+
+** Single Responsibility Principle
+- =_initStreamVideo=: Creates and configures StreamVideo instances
+- =get_it=: Manages dependency lifecycle and provides service location
+- =flutter_bloc=: Handles state management and business logic
+
+** Testability
+- Dependencies can be easily mocked for unit testing
+- Service locator pattern enables injection of test doubles
+- BLoCs can be tested independently of video services
+
+** Consistency
+- Single StreamVideo instance shared across entire application
+- Same configuration and authentication state everywhere
+- Centralized token management and refresh logic
+
+** Maintainability
+- Clear separation between configuration, dependency management, and business logic
+- Easy to modify StreamVideo configuration in one place
+- Straightforward to add new services following same pattern
+
+* Usage Patterns
+
+** Checking Service Availability
+#+BEGIN_SRC dart
+if (locator.isRegistered<StreamVideo>()) {
+  final streamVideo = locator.get<StreamVideo>();
+  // Use video services
+}
+#+END_SRC
+
+** Background Service Integration
+#+BEGIN_SRC dart
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await AppInjector.init();  // Re-initialize dependencies
+
+  // Access same StreamVideo configuration
+  final streamVideo = locator.get<StreamVideo>();
+  await streamVideo.handleVoipPushNotification(message.data);
+
+  await AppInjector.reset();  // Cleanup
+}
+#+END_SRC
+
+** BLoC Service Consumption
+#+BEGIN_SRC dart
+class VideoCallBloc extends Bloc<VideoCallEvent, VideoCallState> {
+  VideoCallBloc() {
+    on<StartCall>((event, emit) async {
+      final streamVideo = locator.get<StreamVideo>();
+      final call = await streamVideo.makeCall(/* ... */);
+      emit(CallStarted(call));
+    });
+  }
+}
+#+END_SRC
+
+* Lifecycle Management
+
+** Registration Phase (Authentication)
+1. User authenticates via BLoC
+2. =_initStreamVideo()= creates configured instance
+3. Instance registered as singleton in get_it
+4. Available for immediate use across app
+
+** Usage Phase (Runtime)
+1. Services access StreamVideo via =locator.get<StreamVideo>()=
+2. Same instance used for all video operations
+3. Shared state and configuration maintained
+4. Token refresh handled automatically
+
+** Cleanup Phase (Logout)
+1. User logs out via BLoC
+2. =StreamVideo.reset()= called via dispose callback
+3. Instance removed from get_it container
+4. Memory and connections properly cleaned up
+
+* Error Handling
+
+** Token Validation
+#+BEGIN_SRC dart
+if (initialToken == null || initialToken.isEmpty) {
+  debugPrint("Invalid token: Token is missing or expired.");
+  throw Exception("Invalid token");
+}
+#+END_SRC
+
+** Service Availability
+#+BEGIN_SRC dart
+if (!locator.isRegistered<StreamVideo>()) {
+  // Handle case where video services aren't available
+  return;
+}
+#+END_SRC
+
+** Connection Failures
+#+BEGIN_SRC dart
+try {
+  final response = await videoClient.connect();
+  // Handle successful connection
+} catch (e) {
+  // Handle connection errors
+  throw Exception('Failed to connect user');
+}
+#+END_SRC
+
+* Future Considerations
+
+** Scaling
+- Pattern can be extended to other real-time services
+- Multiple video service providers could be supported
+- Service discovery could be made more dynamic
+
+** Testing Strategy
+- Mock =_initStreamVideo= for unit tests
+- Use test doubles for StreamVideo in BLoC tests
+- Integration tests can use real StreamVideo instances
+
+** Performance
+- Lazy loading of video services when needed
+- Connection pooling for multiple video sessions
+- Background task optimization for push notifications
+
+This architecture provides a robust, testable, and maintainable foundation for integrating video calling capabilities with Flutter's reactive state management and dependency injection patterns.
