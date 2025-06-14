@@ -60,5 +60,5 @@ see https://www.youtube.com/playlist?list=PL3PvZdDvJcMIixstKkuvLWQleqJ1VhLrf
 
 ** getstream use StreamVideo example repo
 
-[[zinsta][https://github.com/klilmhdi/zinsta]]
-[[chatApp][https://github.com/Aadi1245/chatApp]]
+[[https://github.com/klilmhdi/zinsta][zinsta]]
+[[https://github.com/Aadi1245/chatApp][chatApp]]
