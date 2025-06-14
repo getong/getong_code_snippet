@@ -57,3 +57,8 @@ see https://www.youtube.com/playlist?list=PL3PvZdDvJcMIixstKkuvLWQleqJ1VhLrf
 - capture_and_send_photo_page.dart
 - getstream_chat_service.dart, streamChatClient.sendMessage(message, "messaging");
 - connectivity_service.dart, LazySingleton
+
+** getstream use StreamVideo example repo
+
+[[zinsta][https://github.com/klilmhdi/zinsta]]
+[[chatApp][https://github.com/Aadi1245/chatApp]]
