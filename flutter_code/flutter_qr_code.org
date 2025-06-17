@@ -1,0 +1,184 @@
+* QR Code Implementation in Stream Video Flutter Dogfooding App
+
+The Stream Video Flutter dogfooding app implements a complete QR code solution for video call management, combining both QR code generation for sharing calls and QR code scanning for joining calls. This dual approach eliminates manual call ID entry and provides a seamless user experience.
+
+** Key Components
+- *QR Code Generation*: Using =qr_flutter= package for creating shareable call QR codes
+- *QR Code Scanning*: Using =mobile_scanner= package for reading QR codes to join calls
+- *Integration Points*: Home screen, call screen, and share widgets
+
+* QR Code Generation (qr_flutter)
+
+** Package Information
+- *Package*: =qr_flutter: ^4.1.0=
+- *Purpose*: Generate QR codes containing video call URLs
+- *Primary Location*: =lib/widgets/share_call_card.dart=
+
+** Implementation Details
+
+*** Core QR Code Widget
+#+BEGIN_SRC dart
+QrImageView(
+  data: callUrl,                    // Call URL from environment
+  version: QrVersions.auto,         // Auto-detect optimal version
+  eyeStyle: const QrEyeStyle(
+    color: Colors.black,
+    eyeShape: QrEyeShape.square,
+  ),
+  dataModuleStyle: const QrDataModuleStyle(
+    color: Colors.black,
+    dataModuleShape: QrDataModuleShape.square,
+  ),
+  size: 200.0,                      // Fixed 200x200 pixels
+)
+#+END_SRC
+
+*** Data Source Configuration
+#+BEGIN_SRC dart
+// Call URL generation from environment preferences
+final callUrl = _appPreferences.environment.getJoinUrl(callId: callId);
+#+END_SRC
+
+** UI Integration
+
+*** Share Call Welcome Card
+- *Location*: =lib/widgets/share_call_card.dart=
+- *Trigger*: Displayed when user is alone in a call
+- *Features*:
+  - Expandable card interface
+  - "Your meeting is live!" message
+  - QR code with sharing options
+  - Responsive design with 150px max height
+
+*** Share Call Participants Card
+- *Purpose*: QR code access during active calls
+- *Integration*: Available in call participants list
+- *Layout*: White container with 16px padding and rounded corners
+
+** Technical Specifications
+
+*** Styling Configuration
+- *Color Scheme*: Black on white for high contrast
+- *Shape*: Square eyes and data modules for clean appearance
+- *Size*: Fixed 200x200 pixels with 1:1 aspect ratio
+- *Background*: White container matching scaffold theme
+
+*** Environment Awareness
+- *URL Generation*: Environment-specific call URLs (dev, beta, prod, livestream)
+- *Dependency Injection*: Uses =locator.get<AppPreferences>()=
+- *State Management*: Integrated with Flutter's state management
+
+* QR Code Scanning (mobile_scanner)
+
+** Package Information
+- *Package*: =mobile_scanner=
+- *Purpose*: Scan QR codes to join video calls
+- *Primary Location*: =lib/screens/qr_code_scanner.dart=
+
+** Implementation Architecture
+
+*** Controller Setup
+#+BEGIN_SRC dart
+controller = MobileScannerController(
+  formats: [BarcodeFormat.qrCode],  // QR codes only
+);
+#+END_SRC
+
+*Benefits*:
+- Optimized performance by filtering barcode formats
+- Reduces false positives from other barcode types
+
+*** Scanner Interface
+#+BEGIN_SRC dart
+MobileScanner(
+  controller: controller,
+  onDetect: _handleBarcode,         // Callback for detected codes
+)
+#+END_SRC
+
+*** Barcode Processing Logic
+#+BEGIN_SRC dart
+void _handleBarcode(BarcodeCapture barcodes) {
+  final barcode = barcodes.barcodes.firstOrNull?.displayValue;
+
+  // Prevent multiple scans and ensure widget is mounted
+  if (barcode != null && mounted && !_foundBarcode) {
+    _foundBarcode = true;
+    Navigator.pop(context, barcode);
+  }
+}
+#+END_SRC
+
+*Key Features*:
+- Single-scan prevention with =_foundBarcode= flag
+- Widget lifecycle awareness with =mounted= check
+- Automatic navigation back with scanned result
+
+** User Experience Flow
+
+*** Entry Point Integration
+#+BEGIN_SRC dart
+Widget _scanQRButton(BuildContext context) => IconButton(
+  icon: const Icon(Icons.qr_code),
+  onPressed: () async {
+    final result = await QrCodeScanner.scan(context);
+    if (context.mounted) {
+      _handleJoinUrl(context, result);
+    }
+  },
+);
+#+END_SRC
+
+*** Complete Scanning Process
+1. *Initiation*: User taps QR code icon in home screen
+2. *Camera Launch*: =QrCodeScanner.scan(context)= opens camera interface
+3. *Detection*: Scanner identifies and reads QR code content
+4. *Processing*: Extracted URL returned to calling screen
+5. *Joining*: =_handleJoinUrl= processes result and joins call
+
+* File Structure and Locations
+
+** Core Implementation Files
+- *QR Scanner*: =lib/screens/qr_code_scanner.dart=
+- *Share Cards*: =lib/widgets/share_call_card.dart=
+- *Home Integration*: =lib/screens/home_screen.dart=
+- *Call Screen*: =lib/screens/call_screen.dart=
+- *Dependencies*: =pubspec.yaml=
+
+** Integration Points
+- *Home Screen*: QR scan button for joining calls
+- *Call Screen*: QR generation for sharing active calls
+- *Share Widgets*: Expandable cards with QR display
+
+* Benefits and Advantages
+
+** User Experience Improvements
+- *Eliminates Manual Entry*: No need to type call IDs or URLs
+- *Reduces Errors*: Visual scanning prevents transcription mistakes
+- *Quick Sharing*: Instant QR code generation for call invitations
+- *Cross-Platform*: Works seamlessly across iOS and Android
+
+** Technical Benefits
+- *Environment Awareness*: Automatic URL generation based on current environment
+- *Performance Optimized*: Format filtering reduces scanning overhead
+- *State Management*: Proper lifecycle handling prevents memory leaks
+- *Error Handling*: Robust validation and error recovery
+
+** Architecture Advantages
+- *Modular Design*: Separate packages for generation and scanning
+- *Dependency Injection*: Clean separation of concerns
+- *Theme Integration*: Consistent with app design system
+- *Responsive Layout*: Adapts to different screen sizes
+
+* Usage Patterns
+
+** Typical User Scenarios
+1. *Host Sharing*: User starts call, generates QR code for others to join
+2. *Guest Joining*: User scans QR code from invitation to join call
+3. *Quick Access*: Users switch between scanning and sharing within same session
+
+** Development Considerations
+- *Testing*: QR functionality requires camera permissions and physical devices
+- *Environment Management*: URL generation must handle all deployment environments
+- *Performance*: Camera usage requires careful resource management
+- *Accessibility*: Alternative text-based sharing methods should remain available
