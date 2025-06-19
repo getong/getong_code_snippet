@@ -12,6 +12,8 @@ https://github.com/GetStream/javascript-beginner-guide
 https://deepwiki.com/GetStream/stream-chat-flutter
 https://getstream.io/video/sdk/flutter/tutorial/video-calling/
 https://getstream.io/video/docs/flutter/
+https://getstream.io/video/docs/flutter/incoming-call/
+https://getstream.io/video/docs/flutter/call-participants/
 
 ** with firebase
 
