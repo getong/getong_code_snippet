@@ -68,6 +68,8 @@ see https://www.youtube.com/playlist?list=PL3PvZdDvJcMIixstKkuvLWQleqJ1VhLrf
 [[https://github.com/GetStream/flutter-video-samples][flutter-video-samples]]
 [[https://github.com/SwargamVinayKumar/newStreamApp][newStreamApp]]
 [[https://github.com/MamikonP/video_audio_streaming][video_audio_streaming]]
+[[https://github.com/maniraj1234/zuggled][zuggled]]
+[[https://github.com/DuongVoAnhTai/Telegram_chat_app][Telegram_chat_app]]
 
 ** getstream flutter offline message store
 
