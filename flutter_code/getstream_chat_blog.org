@@ -70,6 +70,9 @@ see https://www.youtube.com/playlist?list=PL3PvZdDvJcMIixstKkuvLWQleqJ1VhLrf
 [[https://github.com/MamikonP/video_audio_streaming][video_audio_streaming]]
 [[https://github.com/maniraj1234/zuggled][zuggled]]
 [[https://github.com/DuongVoAnhTai/Telegram_chat_app][Telegram_chat_app]]
+a button to add stream video call
+[[https://github.com/GetStream/stream-video-flutter/tree/main/dogfooding][dogfooding]]
+
 
 ** getstream flutter offline message store
 
