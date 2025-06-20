@@ -236,3 +236,11 @@ class LeaveReviewController extends AutoDisposeAsyncNotifier<void> {
 #+end_src
 
 copy from [[https://codewithandrea.com/articles/flutter-navigate-without-context-gorouter-riverpod/][How to Navigate Without Context with GoRouter and Riverpod in Flutter]]
+
+** go_router_build does not work with router enum
+
+#+begin_example
+The issue is that the @TypedGoRoute annotation can't resolve
+the RouterEnum values at compile time.
+The annotation requires string literals, not enum values.
+#+end_example
