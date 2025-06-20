@@ -109,3 +109,1393 @@ void _observeCallKitEvents() {
   }
 }
 #+end_src
+
+** Network Data to UI Flow
+
+*** 1. Incoming Call Data Processing
+#+BEGIN_SRC dart
+// Push notification trigger
+FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  streamVideo.handleRingingFlowNotifications(message.data);
+});
+
+// StreamVideo state listening
+streamVideo.state.incomingCall.listen((Call? call) {
+  if (call != null) {
+    _showIncomingCallScreen(call);
+  }
+});
+#+END_SRC
+
+*** 2. CallKit Integration Flow
+#+BEGIN_SRC dart
+// iOS/Android system call interface
+streamVideo.observeCoreCallKitEvents(
+  onCallAccepted: (Call callToJoin) {
+    // Navigate to call UI after user accepts
+    context.pushNamed(
+      CallRoute.name,
+      pathParameters: {'id': callToJoin.id},
+    );
+  },
+  onCallRejected: (Call call) {
+    // Handle call rejection
+  },
+);
+#+END_SRC
+
+*** 3. Manual Call Initiation Flow
+#+BEGIN_SRC dart
+// 1. User initiates call in UI
+final call = streamVideo.makeCall(
+  callType: StreamCallType.defaultType(),
+  id: callId,
+);
+
+// 2. Network request to create call
+await call.getOrCreate();
+
+// 3. Launch call UI
+context.pushNamed(
+  CallRoute.name,
+  pathParameters: {'id': call.id},
+);
+#+END_SRC
+
+** Data Flow Architecture
+
+*** Data Flow Diagram
+#+BEGIN_EXAMPLE
+Push Server → Firebase/APN → Device
+    ↓
+StreamVideo SDK ← WebSocket ← Stream Server
+    ↓
+State Management (incomingCall.listen)
+    ↓
+UI Trigger (GoRouter navigation)
+    ↓
+Call Screen (CallScreen)
+#+END_EXAMPLE
+
+*** Key Network Connection Points
+
+**** Initialization Connection
+#+BEGIN_SRC dart
+// Initialize in AppInjector
+final streamVideo = StreamVideo(
+  apiKey: tokenResponse.apiKey,
+  user: user,
+  userToken: tokenResponse.token,
+);
+
+// Connect to Stream server
+await streamVideo.connect();
+#+END_SRC
+
+**** Real-time Data Listening
+#+BEGIN_SRC dart
+// Listen to call status changes
+call.state.status.listen((CallStatus status) {
+  switch (status) {
+    case CallStatus.incoming:
+      // Show incoming call UI
+      break;
+    case CallStatus.ringing:
+      // Show dialing UI
+      break;
+    case CallStatus.joined:
+      // Enter call UI
+      break;
+  }
+});
+#+END_SRC
+
+** UI Component Data Usage
+
+*** 1. Main Listening Location and UI Launch
+#+BEGIN_SRC dart
+// Core processing in app_content.dart
+void _observeCallKitEvents() {
+  final streamVideo = locator.get<StreamVideo>();
+
+  if (CurrentPlatform.isMobile) {
+    // Mobile uses CallKit events
+    _compositeSubscription.add(
+      streamVideo.observeCoreCallKitEvents(
+        onCallAccepted: (callToJoin) {
+          // Direct navigation to call screen
+          final extra = (call: callToJoin, connectOptions: null);
+          _router.push(CallRoute($extra: extra).location, extra: extra);
+        },
+      ),
+    );
+  } else {
+    // Desktop and Web use WebSocket listening
+    _compositeSubscription.add(
+      streamVideo.state.incomingCall.listen((call) {
+        if (call == null) return;
+
+        // Navigate to call screen
+        final extra = (call: call, connectOptions: null);
+        _router.push(CallRoute($extra: extra).location, extra: extra);
+      })
+    );
+  }
+}
+#+END_SRC
+
+*** 2. Data Flow to UI Components
+
+**** Complete Flow
+#+BEGIN_EXAMPLE
+StreamVideo.state.incomingCall (Stream<Call?>)
+    ↓
+GoRouter Navigation System
+    ↓
+CallScreen UI Component
+    ↓
+StreamCallContainer (Wrapper)
+    ↓
+Specific UI Components
+#+END_EXAMPLE
+
+**** CallScreen State Usage
+#+BEGIN_SRC dart
+class CallScreen extends StatefulWidget {
+  const CallScreen({
+    required this.call,  // Call object from incoming call
+    this.connectOptions,
+  });
+
+  final Call call;  // Data obtained from incomingCall stream
+}
+
+// Usage in StreamCallContainer
+StreamCallContainer(
+  call: widget.call,  // Pass incoming Call object
+  callConnectOptions: widget.connectOptions,
+  onCancelCallTap: () async {
+    await widget.call.reject(reason: CallRejectReason.cancel());
+  },
+  onCallDisconnected: (disconnectedProperties) {
+    Navigator.of(context).pop();
+  },
+)
+#+END_SRC
+
+*** 3. State Management and Data Binding
+
+**** StreamBuilder Listening to Call State Changes
+#+BEGIN_SRC dart
+// Listen to call state changes in CallScreen
+StreamBuilder<CallState>(
+  stream: call.state.asStream(),  // Listen to Call's state stream
+  builder: (context, snapshot) {
+    final callState = snapshot.data;
+    return StreamCallContent(
+      call: call,
+      callState: callState,
+      // Render UI using real-time state data
+    );
+  },
+)
+#+END_SRC
+
+**** Real-time Participant List Updates
+#+BEGIN_SRC dart
+StreamBuilder<CallState>(
+  stream: call.state.asStream(),
+  builder: (context, snapshot) {
+    final callState = snapshot.requireData;
+    final participants = callState.callParticipants;  // Real-time participant data
+
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        final participant = participants[index];
+        return ParticipantTile(participant: participant);
+      },
+      itemCount: participants.length,
+    );
+  },
+)
+#+END_SRC
+
+*** 4. Specific UI Component Data Usage
+
+**** Call Control Bar Using Call Data
+#+BEGIN_SRC dart
+// Call control buttons use Call object methods
+ToggleMicrophoneOption(
+  call: call,  // Use incoming Call object
+  localParticipant: localParticipant,
+  onPressed: () => call.setMicrophoneEnabled(!isMuted),
+),
+
+ToggleCameraOption(
+  call: call,
+  localParticipant: localParticipant,
+  onPressed: () => call.setCameraEnabled(!isCameraOff),
+),
+#+END_SRC
+
+**** Call Duration Display
+#+BEGIN_SRC dart
+StreamBuilder<Duration>(
+  stream: widget.call.callDurationStream,  // Use Call's duration stream
+  builder: (context, snapshot) {
+    final duration = snapshot.data ?? Duration.zero;
+    return Text('${duration.inMinutes}:${duration.inSeconds % 60}');
+  },
+)
+#+END_SRC
+
+*** 5. Chat Feature Integration
+
+**** Create Chat Channel Based on Call ID
+#+BEGIN_SRC dart
+Future<void> _connectChatChannel() async {
+  // Create chat channel using Call ID
+  _channel = await _userChatRepo.createChannel(widget.call.id);
+
+  if (mounted) setState(() {});  // Rebuild UI to enable chat button
+}
+
+// Chat button usage
+_ShowChatButton(channel: _channel),  // Pass chat channel
+#+END_SRC
+
+*** 6. Reactive State Updates
+
+**** Real-time Participant State Changes
+#+BEGIN_SRC dart
+// Listen to participant state changes
+call.state.participants.listen((participants) {
+  // UI automatically updates participant list
+  setState(() {
+    // Trigger UI rebuild
+  });
+});
+
+// Listen to call status changes
+call.state.status.listen((CallStatus status) {
+  switch (status) {
+    case CallStatus.incoming:
+      // Show incoming call acceptance interface
+      break;
+    case CallStatus.joined:
+      // Enter call interface
+      break;
+    case CallStatus.ended:
+      // Call ended, return to main interface
+      break;
+  }
+});
+#+END_SRC
+
+** Summary
+
+*** Reactive Data Flow
+The entire data flow is reactive:
+
+1. *Incoming Call Event* → ~streamVideo.state.incomingCall~ stream
+2. *Route Navigation* → ~GoRouter.push(CallRoute)~
+3. *UI Rendering* → ~CallScreen~ receives ~Call~ object
+4. *State Binding* → ~StreamBuilder~ listens to ~call.state~
+5. *Real-time Updates* → UI components respond to state changes and automatically rebuild
+
+This design ensures the entire process from incoming call to UI display is real-time responsive, allowing users to see real-time changes in call status, participants, duration, and other information.
+
+
+
+** Overview
+This document describes how the `streamVideo.state.incomingCall.listen()` stream data is consumed by UI components, state management (BLoC), and routing (GoRouter) in the Flutter Dogfooding app.
+
+*** Core Data Stream
+#+BEGIN_SRC dart
+streamVideo.state.incomingCall.listen((Call? incomingCall) {
+  if (incomingCall != null) {
+    _handleIncomingCall(incomingCall);
+  }
+});
+#+END_SRC
+
+*** 1. GoRouter Integration
+
+**** 1.1 Route Configuration
+#+BEGIN_SRC dart
+// filepath: lib/router/routes.dart
+@TypedGoRoute<CallRoute>(
+  path: '/call/:id',
+  name: 'call',
+)
+class CallRoute extends GoRouteData {
+  const CallRoute({
+    required this.id,
+    this.$extra,
+  });
+
+  final String id;
+  final ({Call call, CallConnectOptions? connectOptions})? $extra;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final call = $extra?.call;
+    final connectOptions = $extra?.connectOptions;
+
+    return CallScreen(
+      call: call,
+      connectOptions: connectOptions,
+    );
+  }
+}
+#+END_SRC
+
+**** 1.2 Navigation Trigger from Incoming Call
+#+BEGIN_SRC dart
+// filepath: lib/app/app_content.dart
+void _handleIncomingCall(Call incomingCall) {
+  // Navigate to call screen using GoRouter
+  final extra = (
+    call: incomingCall,
+    connectOptions: CallConnectOptions(
+      camera: true,
+      microphone: true,
+    )
+  );
+
+  context.pushNamed(
+    'call',
+    pathParameters: {'id': incomingCall.id},
+    extra: extra,
+  );
+}
+#+END_SRC
+
+**** 1.3 Deep Link Handling
+#+BEGIN_SRC dart
+// filepath: lib/app/app_content.dart
+void _handleDeepLink(Uri uri) {
+  if (uri.pathSegments.contains('join')) {
+    final callId = uri.pathSegments.last;
+
+    // Get call from StreamVideo state
+    final call = streamVideo.state.calls.firstWhere(
+      (c) => c.id == callId,
+      orElse: () => streamVideo.call(callId: callId),
+    );
+
+    // Navigate using GoRouter
+    context.pushNamed(
+      'call',
+      pathParameters: {'id': callId},
+      extra: (call: call, connectOptions: null),
+    );
+  }
+}
+#+END_SRC
+
+*** 2. State Management (BLoC Pattern)
+
+**** 2.1 Call State BLoC
+#+BEGIN_SRC dart
+// filepath: lib/blocs/call_state_bloc.dart
+class CallStateBloc extends Bloc<CallStateEvent, CallStateState> {
+  final StreamVideo _streamVideo;
+  late StreamSubscription<Call?> _incomingCallSubscription;
+
+  CallStateBloc(this._streamVideo) : super(CallStateInitial()) {
+    _incomingCallSubscription = _streamVideo.state.incomingCall.listen(
+      (incomingCall) {
+        if (incomingCall != null) {
+          add(IncomingCallReceived(incomingCall));
+        } else {
+          add(IncomingCallCleared());
+        }
+      },
+    );
+  }
+
+  @override
+  Stream<CallStateState> mapEventToState(CallStateEvent event) async* {
+    if (event is IncomingCallReceived) {
+      yield CallStateIncoming(event.call);
+    } else if (event is IncomingCallCleared) {
+      yield CallStateInitial();
+    }
+  }
+}
+#+END_SRC
+
+**** 2.2 Call State Events
+#+BEGIN_SRC dart
+abstract class CallStateEvent {}
+
+class IncomingCallReceived extends CallStateEvent {
+  final Call call;
+  IncomingCallReceived(this.call);
+}
+
+class IncomingCallCleared extends CallStateEvent {}
+
+class CallAccepted extends CallStateEvent {
+  final Call call;
+  CallAccepted(this.call);
+}
+
+class CallRejected extends CallStateEvent {
+  final Call call;
+  CallRejected(this.call);
+}
+#+END_SRC
+
+**** 2.3 Call State States
+#+BEGIN_SRC dart
+abstract class CallStateState {}
+
+class CallStateInitial extends CallStateState {}
+
+class CallStateIncoming extends CallStateState {
+  final Call call;
+  CallStateIncoming(this.call);
+}
+
+class CallStateActive extends CallStateState {
+  final Call call;
+  CallStateActive(this.call);
+}
+
+class CallStateEnded extends CallStateState {}
+#+END_SRC
+
+*** 3. UI Components Data Consumption
+
+**** 3.1 App-level Incoming Call Handler
+#+BEGIN_SRC dart
+// filepath: lib/app/app_content.dart
+class AppContent extends StatefulWidget {
+  @override
+  _AppContentState createState() => _AppContentState();
+}
+
+class _AppContentState extends State<AppContent> {
+  StreamSubscription<Call?>? _incomingCallSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupIncomingCallListener();
+  }
+
+  void _setupIncomingCallListener() {
+    final streamVideo = GetIt.instance<StreamVideo>();
+
+    _incomingCallSubscription = streamVideo.state.incomingCall.listen(
+      (incomingCall) {
+        if (incomingCall != null) {
+          _showIncomingCallDialog(incomingCall);
+        }
+      },
+    );
+  }
+
+  void _showIncomingCallDialog(Call call) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => IncomingCallDialog(call: call),
+    );
+  }
+}
+#+END_SRC
+
+**** 3.2 Incoming Call Dialog Component
+#+BEGIN_SRC dart
+// filepath: lib/widgets/incoming_call_dialog.dart
+class IncomingCallDialog extends StatelessWidget {
+  final Call call;
+
+  const IncomingCallDialog({required this.call});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Incoming Call'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Call from: ${call.state.createdBy?.name ?? 'Unknown'}'),
+          Text('Call ID: ${call.id}'),
+          StreamBuilder<CallState>(
+            stream: call.state.asStream(),
+            builder: (context, snapshot) {
+              final callState = snapshot.data;
+              return Text('Status: ${callState?.status ?? 'Unknown'}');
+            },
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => _rejectCall(context),
+          child: Text('Reject'),
+        ),
+        ElevatedButton(
+          onPressed: () => _acceptCall(context),
+          child: Text('Accept'),
+        ),
+      ],
+    );
+  }
+
+  void _acceptCall(BuildContext context) {
+    Navigator.of(context).pop();
+
+    // Navigate to call screen
+    context.pushNamed(
+      'call',
+      pathParameters: {'id': call.id},
+      extra: (call: call, connectOptions: null),
+    );
+  }
+
+  void _rejectCall(BuildContext context) {
+    call.reject();
+    Navigator.of(context).pop();
+  }
+}
+#+END_SRC
+
+**** 3.3 Call Screen Component
+#+BEGIN_SRC dart
+// filepath: lib/screens/call_screen.dart
+class CallScreen extends StatefulWidget {
+  final Call? call;
+  final CallConnectOptions? connectOptions;
+
+  const CallScreen({
+    this.call,
+    this.connectOptions,
+  });
+
+  @override
+  _CallScreenState createState() => _CallScreenState();
+}
+
+class _CallScreenState extends State<CallScreen> {
+  late Call _call;
+
+  @override
+  void initState() {
+    super.initState();
+    _call = widget.call ?? _getCallFromRouter();
+    _setupCallStateListener();
+  }
+
+  void _setupCallStateListener() {
+    _call.state.status.listen((status) {
+      switch (status) {
+        case CallStatus.incoming:
+          // Show incoming call UI
+          break;
+        case CallStatus.ringing:
+          // Show ringing UI
+          break;
+        case CallStatus.joined:
+          // Show active call UI
+          break;
+        case CallStatus.ended:
+          // Navigate back
+          context.pop();
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamCallContainer(
+        call: _call,
+        child: Column(
+          children: [
+            _buildVideoRenderer(),
+            _buildCallControls(),
+            _buildParticipantsList(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildParticipantsList() {
+    return StreamBuilder<List<CallParticipant>>(
+      stream: _call.state.participants.asStream(),
+      builder: (context, snapshot) {
+        final participants = snapshot.data ?? [];
+        return ListView.builder(
+          itemCount: participants.length,
+          itemBuilder: (context, index) {
+            final participant = participants[index];
+            return ParticipantTile(participant: participant);
+          },
+        );
+      },
+    );
+  }
+}
+#+END_SRC
+
+*** 4. Service Layer Integration
+
+**** 4.1 Notification Service
+#+BEGIN_SRC dart
+// filepath: lib/services/notification_service.dart
+class NotificationService {
+  final StreamVideo _streamVideo;
+
+  NotificationService(this._streamVideo) {
+    _setupIncomingCallNotifications();
+  }
+
+  void _setupIncomingCallNotifications() {
+    _streamVideo.state.incomingCall.listen((call) {
+      if (call != null) {
+        _showLocalNotification(call);
+      }
+    });
+  }
+
+  void _showLocalNotification(Call call) {
+    final notification = LocalNotification(
+      title: 'Incoming Call',
+      body: 'Call from ${call.state.createdBy?.name ?? 'Unknown'}',
+      payload: call.id,
+    );
+
+    NotificationManager.show(notification);
+  }
+}
+#+END_SRC
+
+**** 4.2 Analytics Service
+#+BEGIN_SRC dart
+// filepath: lib/services/analytics_service.dart
+class AnalyticsService {
+  final StreamVideo _streamVideo;
+
+  AnalyticsService(this._streamVideo) {
+    _trackIncomingCalls();
+  }
+
+  void _trackIncomingCalls() {
+    _streamVideo.state.incomingCall.listen((call) {
+      if (call != null) {
+        _trackEvent('incoming_call_received', {
+          'call_id': call.id,
+          'caller_id': call.state.createdBy?.id,
+          'timestamp': DateTime.now().toIso8601String(),
+        });
+      }
+    });
+  }
+
+  void _trackEvent(String eventName, Map<String, dynamic> parameters) {
+    // Send to analytics service
+    FirebaseAnalytics.instance.logEvent(
+      name: eventName,
+      parameters: parameters,
+    );
+  }
+}
+#+END_SRC
+
+*** 5. Dependency Injection Setup
+
+**** 5.1 Service Registration
+#+BEGIN_SRC dart
+// filepath: lib/di/injector.dart
+class AppInjector {
+  static void init() {
+    // Register StreamVideo
+    GetIt.instance.registerSingleton<StreamVideo>(
+      StreamVideo(/*...*/),
+    );
+
+    // Register BLoC
+    GetIt.instance.registerFactory<CallStateBloc>(
+      () => CallStateBloc(GetIt.instance<StreamVideo>()),
+    );
+
+    // Register Services
+    GetIt.instance.registerSingleton<NotificationService>(
+      NotificationService(GetIt.instance<StreamVideo>()),
+    );
+
+    GetIt.instance.registerSingleton<AnalyticsService>(
+      AnalyticsService(GetIt.instance<StreamVideo>()),
+    );
+  }
+}
+#+END_SRC
+
+*** 6. Complete Data Flow Architecture
+
+**** 6.1 Data Flow Diagram
+#+BEGIN_EXAMPLE
+StreamVideo.state.incomingCall (Stream<Call?>)
+            |
+            ├── GoRouter Navigation
+            |   └── CallRoute.build() → CallScreen
+            |
+            ├── BLoC State Management
+            |   ├── CallStateBloc.listen()
+            |   └── CallStateEvent → CallStateState
+            |
+            ├── UI Components
+            |   ├── IncomingCallDialog
+            |   ├── CallScreen
+            |   └── ParticipantsList
+            |
+            └── Services
+                ├── NotificationService
+                └── AnalyticsService
+#+END_EXAMPLE
+
+**** 6.2 Event Sequence
+#+BEGIN_EXAMPLE
+1. Incoming Call Received
+   ↓
+2. streamVideo.state.incomingCall emits Call object
+   ↓
+3. Multiple Listeners React:
+   ├── App-level listener → Show dialog
+   ├── BLoC listener → Update state
+   ├── Router listener → Navigate
+   └── Service listeners → Notify/Track
+   ↓
+4. UI Components Update:
+   ├── IncomingCallDialog renders
+   ├── CallScreen prepares
+   └── State-dependent widgets rebuild
+   ↓
+5. User Interaction:
+   ├── Accept → Navigate to CallScreen
+   └── Reject → Dismiss and cleanup
+#+END_EXAMPLE
+
+*** 7. Best Practices and Patterns
+
+**** 7.1 Stream Subscription Management
+#+BEGIN_SRC dart
+class ComponentWithSubscription extends StatefulWidget {
+  @override
+  _ComponentState createState() => _ComponentState();
+}
+
+class _ComponentState extends State<ComponentWithSubscription> {
+  StreamSubscription<Call?>? _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = streamVideo.state.incomingCall.listen(_handleCall);
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel(); // Prevent memory leaks
+    super.dispose();
+  }
+
+  void _handleCall(Call? call) {
+    if (mounted && call != null) {
+      // Handle call safely
+    }
+  }
+}
+#+END_SRC
+
+**** 7.2 Error Handling
+#+BEGIN_SRC dart
+_subscription = streamVideo.state.incomingCall.listen(
+  (call) => _handleCall(call),
+  onError: (error) {
+    // Log error and show user-friendly message
+    print('Incoming call error: $error');
+    _showErrorDialog('Failed to receive incoming call');
+  },
+);
+#+END_SRC
+
+**** 7.3 Testing Considerations
+#+BEGIN_SRC dart
+// Mock for testing
+class MockStreamVideo extends Mock implements StreamVideo {
+  final StreamController<Call?> _incomingCallController =
+      StreamController<Call?>.broadcast();
+
+  @override
+  Stream<Call?> get incomingCall => _incomingCallController.stream;
+
+  void simulateIncomingCall(Call call) {
+    _incomingCallController.add(call);
+  }
+}
+#+END_SRC
+
+*** Summary
+
+The `streamVideo.state.incomingCall.listen()` stream serves as the central data source for incoming call handling, with multiple components consuming this data:
+
+- *GoRouter*: Handles navigation to call screens
+- *BLoC*: Manages application state and business logic
+- *UI Components*: Render incoming call interfaces and update displays
+- *Services*: Handle notifications, analytics, and other side effects
+
+This architecture ensures a reactive, scalable approach to incoming call management while maintaining separation of concerns and testability.
+
+This document describes how the `streamVideo.state.incomingCall.listen()` stream data is consumed by UI components, state management (BLoC), and routing (GoRouter) in the Flutter Dogfooding app.
+
+*** Core Data Stream
+#+BEGIN_SRC dart
+streamVideo.state.incomingCall.listen((Call? incomingCall) {
+  if (incomingCall != null) {
+    _handleIncomingCall(incomingCall);
+  }
+});
+#+END_SRC
+
+*** 1. GoRouter Integration
+
+**** 1.1 Route Configuration
+#+BEGIN_SRC dart
+// filepath: lib/router/routes.dart
+@TypedGoRoute<CallRoute>(
+  path: '/call/:id',
+  name: 'call',
+)
+class CallRoute extends GoRouteData {
+  const CallRoute({
+    required this.id,
+    this.$extra,
+  });
+
+  final String id;
+  final ({Call call, CallConnectOptions? connectOptions})? $extra;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    final call = $extra?.call;
+    final connectOptions = $extra?.connectOptions;
+
+    return CallScreen(
+      call: call,
+      connectOptions: connectOptions,
+    );
+  }
+}
+#+END_SRC
+
+**** 1.2 Navigation Trigger from Incoming Call
+#+BEGIN_SRC dart
+// filepath: lib/app/app_content.dart
+void _handleIncomingCall(Call incomingCall) {
+  // Navigate to call screen using GoRouter
+  final extra = (
+    call: incomingCall,
+    connectOptions: CallConnectOptions(
+      camera: true,
+      microphone: true,
+    )
+  );
+
+  context.pushNamed(
+    'call',
+    pathParameters: {'id': incomingCall.id},
+    extra: extra,
+  );
+}
+#+END_SRC
+
+**** 1.3 Deep Link Handling
+#+BEGIN_SRC dart
+// filepath: lib/app/app_content.dart
+void _handleDeepLink(Uri uri) {
+  if (uri.pathSegments.contains('join')) {
+    final callId = uri.pathSegments.last;
+
+    // Get call from StreamVideo state
+    final call = streamVideo.state.calls.firstWhere(
+      (c) => c.id == callId,
+      orElse: () => streamVideo.call(callId: callId),
+    );
+
+    // Navigate using GoRouter
+    context.pushNamed(
+      'call',
+      pathParameters: {'id': callId},
+      extra: (call: call, connectOptions: null),
+    );
+  }
+}
+#+END_SRC
+
+*** 2. State Management (BLoC Pattern)
+
+**** 2.1 Call State BLoC
+#+BEGIN_SRC dart
+// filepath: lib/blocs/call_state_bloc.dart
+class CallStateBloc extends Bloc<CallStateEvent, CallStateState> {
+  final StreamVideo _streamVideo;
+  late StreamSubscription<Call?> _incomingCallSubscription;
+
+  CallStateBloc(this._streamVideo) : super(CallStateInitial()) {
+    _incomingCallSubscription = _streamVideo.state.incomingCall.listen(
+      (incomingCall) {
+        if (incomingCall != null) {
+          add(IncomingCallReceived(incomingCall));
+        } else {
+          add(IncomingCallCleared());
+        }
+      },
+    );
+  }
+
+  @override
+  Stream<CallStateState> mapEventToState(CallStateEvent event) async* {
+    if (event is IncomingCallReceived) {
+      yield CallStateIncoming(event.call);
+    } else if (event is IncomingCallCleared) {
+      yield CallStateInitial();
+    }
+  }
+}
+#+END_SRC
+
+**** 2.2 Call State Events
+#+BEGIN_SRC dart
+abstract class CallStateEvent {}
+
+class IncomingCallReceived extends CallStateEvent {
+  final Call call;
+  IncomingCallReceived(this.call);
+}
+
+class IncomingCallCleared extends CallStateEvent {}
+
+class CallAccepted extends CallStateEvent {
+  final Call call;
+  CallAccepted(this.call);
+}
+
+class CallRejected extends CallStateEvent {
+  final Call call;
+  CallRejected(this.call);
+}
+#+END_SRC
+
+**** 2.3 Call State States
+#+BEGIN_SRC dart
+abstract class CallStateState {}
+
+class CallStateInitial extends CallStateState {}
+
+class CallStateIncoming extends CallStateState {
+  final Call call;
+  CallStateIncoming(this.call);
+}
+
+class CallStateActive extends CallStateState {
+  final Call call;
+  CallStateActive(this.call);
+}
+
+class CallStateEnded extends CallStateState {}
+#+END_SRC
+
+*** 3. UI Components Data Consumption
+
+**** 3.1 App-level Incoming Call Handler
+#+BEGIN_SRC dart
+// filepath: lib/app/app_content.dart
+class AppContent extends StatefulWidget {
+  @override
+  _AppContentState createState() => _AppContentState();
+}
+
+class _AppContentState extends State<AppContent> {
+  StreamSubscription<Call?>? _incomingCallSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupIncomingCallListener();
+  }
+
+  void _setupIncomingCallListener() {
+    final streamVideo = GetIt.instance<StreamVideo>();
+
+    _incomingCallSubscription = streamVideo.state.incomingCall.listen(
+      (incomingCall) {
+        if (incomingCall != null) {
+          _showIncomingCallDialog(incomingCall);
+        }
+      },
+    );
+  }
+
+  void _showIncomingCallDialog(Call call) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => IncomingCallDialog(call: call),
+    );
+  }
+}
+#+END_SRC
+
+**** 3.2 Incoming Call Dialog Component
+#+BEGIN_SRC dart
+// filepath: lib/widgets/incoming_call_dialog.dart
+class IncomingCallDialog extends StatelessWidget {
+  final Call call;
+
+  const IncomingCallDialog({required this.call});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Incoming Call'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Call from: ${call.state.createdBy?.name ?? 'Unknown'}'),
+          Text('Call ID: ${call.id}'),
+          StreamBuilder<CallState>(
+            stream: call.state.asStream(),
+            builder: (context, snapshot) {
+              final callState = snapshot.data;
+              return Text('Status: ${callState?.status ?? 'Unknown'}');
+            },
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => _rejectCall(context),
+          child: Text('Reject'),
+        ),
+        ElevatedButton(
+          onPressed: () => _acceptCall(context),
+          child: Text('Accept'),
+        ),
+      ],
+    );
+  }
+
+  void _acceptCall(BuildContext context) {
+    Navigator.of(context).pop();
+
+    // Navigate to call screen
+    context.pushNamed(
+      'call',
+      pathParameters: {'id': call.id},
+      extra: (call: call, connectOptions: null),
+    );
+  }
+
+  void _rejectCall(BuildContext context) {
+    call.reject();
+    Navigator.of(context).pop();
+  }
+}
+#+END_SRC
+
+**** 3.3 Call Screen Component
+#+BEGIN_SRC dart
+// filepath: lib/screens/call_screen.dart
+class CallScreen extends StatefulWidget {
+  final Call? call;
+  final CallConnectOptions? connectOptions;
+
+  const CallScreen({
+    this.call,
+    this.connectOptions,
+  });
+
+  @override
+  _CallScreenState createState() => _CallScreenState();
+}
+
+class _CallScreenState extends State<CallScreen> {
+  late Call _call;
+
+  @override
+  void initState() {
+    super.initState();
+    _call = widget.call ?? _getCallFromRouter();
+    _setupCallStateListener();
+  }
+
+  void _setupCallStateListener() {
+    _call.state.status.listen((status) {
+      switch (status) {
+        case CallStatus.incoming:
+          // Show incoming call UI
+          break;
+        case CallStatus.ringing:
+          // Show ringing UI
+          break;
+        case CallStatus.joined:
+          // Show active call UI
+          break;
+        case CallStatus.ended:
+          // Navigate back
+          context.pop();
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamCallContainer(
+        call: _call,
+        child: Column(
+          children: [
+            _buildVideoRenderer(),
+            _buildCallControls(),
+            _buildParticipantsList(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildParticipantsList() {
+    return StreamBuilder<List<CallParticipant>>(
+      stream: _call.state.participants.asStream(),
+      builder: (context, snapshot) {
+        final participants = snapshot.data ?? [];
+        return ListView.builder(
+          itemCount: participants.length,
+          itemBuilder: (context, index) {
+            final participant = participants[index];
+            return ParticipantTile(participant: participant);
+          },
+        );
+      },
+    );
+  }
+}
+#+END_SRC
+
+*** 4. Service Layer Integration
+
+**** 4.1 Notification Service
+#+BEGIN_SRC dart
+// filepath: lib/services/notification_service.dart
+class NotificationService {
+  final StreamVideo _streamVideo;
+
+  NotificationService(this._streamVideo) {
+    _setupIncomingCallNotifications();
+  }
+
+  void _setupIncomingCallNotifications() {
+    _streamVideo.state.incomingCall.listen((call) {
+      if (call != null) {
+        _showLocalNotification(call);
+      }
+    });
+  }
+
+  void _showLocalNotification(Call call) {
+    final notification = LocalNotification(
+      title: 'Incoming Call',
+      body: 'Call from ${call.state.createdBy?.name ?? 'Unknown'}',
+      payload: call.id,
+    );
+
+    NotificationManager.show(notification);
+  }
+}
+#+END_SRC
+
+**** 4.2 Analytics Service
+#+BEGIN_SRC dart
+// filepath: lib/services/analytics_service.dart
+class AnalyticsService {
+  final StreamVideo _streamVideo;
+
+  AnalyticsService(this._streamVideo) {
+    _trackIncomingCalls();
+  }
+
+  void _trackIncomingCalls() {
+    _streamVideo.state.incomingCall.listen((call) {
+      if (call != null) {
+        _trackEvent('incoming_call_received', {
+          'call_id': call.id,
+          'caller_id': call.state.createdBy?.id,
+          'timestamp': DateTime.now().toIso8601String(),
+        });
+      }
+    });
+  }
+
+  void _trackEvent(String eventName, Map<String, dynamic> parameters) {
+    // Send to analytics service
+    FirebaseAnalytics.instance.logEvent(
+      name: eventName,
+      parameters: parameters,
+    );
+  }
+}
+#+END_SRC
+
+*** 5. Dependency Injection Setup
+
+**** 5.1 Service Registration
+#+BEGIN_SRC dart
+// filepath: lib/di/injector.dart
+class AppInjector {
+  static void init() {
+    // Register StreamVideo
+    GetIt.instance.registerSingleton<StreamVideo>(
+      StreamVideo(/*...*/),
+    );
+
+    // Register BLoC
+    GetIt.instance.registerFactory<CallStateBloc>(
+      () => CallStateBloc(GetIt.instance<StreamVideo>()),
+    );
+
+    // Register Services
+    GetIt.instance.registerSingleton<NotificationService>(
+      NotificationService(GetIt.instance<StreamVideo>()),
+    );
+
+    GetIt.instance.registerSingleton<AnalyticsService>(
+      AnalyticsService(GetIt.instance<StreamVideo>()),
+    );
+  }
+}
+#+END_SRC
+
+*** 6. Complete Data Flow Architecture
+
+**** 6.1 Data Flow Diagram
+#+BEGIN_EXAMPLE
+StreamVideo.state.incomingCall (Stream<Call?>)
+            |
+            ├── GoRouter Navigation
+            |   └── CallRoute.build() → CallScreen
+            |
+            ├── BLoC State Management
+            |   ├── CallStateBloc.listen()
+            |   └── CallStateEvent → CallStateState
+            |
+            ├── UI Components
+            |   ├── IncomingCallDialog
+            |   ├── CallScreen
+            |   └── ParticipantsList
+            |
+            └── Services
+                ├── NotificationService
+                └── AnalyticsService
+#+END_EXAMPLE
+
+**** 6.2 Event Sequence
+#+BEGIN_EXAMPLE
+1. Incoming Call Received
+   ↓
+2. streamVideo.state.incomingCall emits Call object
+   ↓
+3. Multiple Listeners React:
+   ├── App-level listener → Show dialog
+   ├── BLoC listener → Update state
+   ├── Router listener → Navigate
+   └── Service listeners → Notify/Track
+   ↓
+4. UI Components Update:
+   ├── IncomingCallDialog renders
+   ├── CallScreen prepares
+   └── State-dependent widgets rebuild
+   ↓
+5. User Interaction:
+   ├── Accept → Navigate to CallScreen
+   └── Reject → Dismiss and cleanup
+#+END_EXAMPLE
+
+*** 7. Best Practices and Patterns
+
+**** 7.1 Stream Subscription Management
+#+BEGIN_SRC dart
+class ComponentWithSubscription extends StatefulWidget {
+  @override
+  _ComponentState createState() => _ComponentState();
+}
+
+class _ComponentState extends State<ComponentWithSubscription> {
+  StreamSubscription<Call?>? _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription = streamVideo.state.incomingCall.listen(_handleCall);
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel(); // Prevent memory leaks
+    super.dispose();
+  }
+
+  void _handleCall(Call? call) {
+    if (mounted && call != null) {
+      // Handle call safely
+    }
+  }
+}
+#+END_SRC
+
+**** 7.2 Error Handling
+#+BEGIN_SRC dart
+_subscription = streamVideo.state.incomingCall.listen(
+  (call) => _handleCall(call),
+  onError: (error) {
+    // Log error and show user-friendly message
+    print('Incoming call error: $error');
+    _showErrorDialog('Failed to receive incoming call');
+  },
+);
+#+END_SRC
+
+**** 7.3 Testing Considerations
+#+BEGIN_SRC dart
+// Mock for testing
+class MockStreamVideo extends Mock implements StreamVideo {
+  final StreamController<Call?> _incomingCallController =
+      StreamController<Call?>.broadcast();
+
+  @override
+  Stream<Call?> get incomingCall => _incomingCallController.stream;
+
+  void simulateIncomingCall(Call call) {
+    _incomingCallController.add(call);
+  }
+}
+#+END_SRC
+
+*** Summary
+
+The `streamVideo.state.incomingCall.listen()` stream serves as the central data source for incoming call handling, with multiple components consuming this data:
+
+- *GoRouter*: Handles navigation to call screens
+- *BLoC*: Manages application state and business logic
+- *UI Components*: Render incoming call interfaces and update displays
+- *Services*: Handle notifications, analytics, and other side effects
+
+This architecture ensures a reactive, scalable approach to incoming call management while maintaining separation of concerns and testability.
