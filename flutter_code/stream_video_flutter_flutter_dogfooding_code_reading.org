@@ -1,0 +1,111 @@
+* stream_video_flutter flutter_dogfooding code reading
+
+** code repo
+
+https://github.com/GetStream/stream-video-flutter/tree/main/dogfooding
+
+** stream video data flow
+
+App → GoRouter → CallScreen
+                      ↓
+                 StreamCallContainer
+                      ↓
+                 StreamVideoRenderer
+                      ↓
+                 CallControlsBar
+
+** handle incoming call
+
+#+begin_src dart
+streamVideo.state.incomingCall.listen((Call? incomingCall) {
+    if (incomingCall != null) {
+      _handleIncomingCall(incomingCall);
+    }
+});
+#+end_src
+
+** call screen
+
+#+begin_src dart
+class CallScreen extends StatefulWidget {
+  final String callId;
+  final Call? call;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: StreamCallContainer(
+        call: call,
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamVideoRenderer(
+                call: call,
+              ),
+            ),
+            CallControlsBar(
+              call: call,
+              onEndCall: () => context.pop(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+#+end_src
+
+
+** consumeAndAcceptActiveCall
+
+#+begin_src dart
+streamVideo.consumeAndAcceptActiveCall(
+  onCallAccepted: (call) {
+    final extra = (
+      call: call,
+      connectOptions: null,
+    );
+
+    _router.push(CallRoute($extra: extra).location, extra: extra);
+  },
+);
+#+end_src
+
+** observeCallKitEvents
+
+#+begin_src dart
+void _observeCallKitEvents() {
+  final streamVideo = locator.get<StreamVideo>();
+
+  // On mobile we depend on call kit notifications.
+  // On desktop and web they are (currently) not available, so we depend on a
+  // websocket which can receive a call when the app is open.
+  if (CurrentPlatform.isMobile) {
+    _compositeSubscription.add(
+      streamVideo.observeCoreCallKitEvents(
+        onCallAccepted: (callToJoin) {
+          // Navigate to the call screen.
+          final extra = (
+            call: callToJoin,
+            connectOptions: null,
+          );
+
+          _router.push(CallRoute($extra: extra).location, extra: extra);
+        },
+      ),
+    );
+  } else {
+    _compositeSubscription.add(streamVideo.state.incomingCall.listen((call) {
+          if (call == null) return;
+
+          // Navigate to the call screen.
+          final extra = (
+            call: call,
+            connectOptions: null,
+          );
+
+          _router.push(CallRoute($extra: extra).location, extra: extra);
+    }));
+  }
+}
+#+end_src
