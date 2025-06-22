@@ -1,0 +1,15 @@
+* flutter debug tool
+
+** inspector
+
+#+begin_src shell
+cd path/to/flutter/app
+flutter run
+
+
+> http://127.0.0.1:9100?uri=http://127.0.0.1:51830/u37pq71Re0k=/
+#+end_src
+
+Then open web browser, go to http://127.0.0.1:9100?uri=http://127.0.0.1:51830/u37pq71Re0k=/
+
+copy from [[https://docs.flutter.dev/tools/devtools/cli][Run DevTools from the command line]]
