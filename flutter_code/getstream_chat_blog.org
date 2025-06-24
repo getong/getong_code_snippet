@@ -79,3 +79,7 @@ a button to add stream video call
 
 https://pub.dev/packages/stream_chat_persistence
 https://github.com/GetStream/stream-tutorial-projects
+
+** stream_chat_persistence
+
+https://getstream.io/chat/docs/sdk/flutter/guides/adding_local_data_persistence/
