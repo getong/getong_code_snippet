@@ -1,0 +1,581 @@
+* Group Chat Role and Membership Management in Flutter Social Chat
+
+
+* Overview
+
+The Flutter Social Chat app manages group chat roles and membership through a combination of:
+- *Stream Chat SDK* for real-time chat functionality
+- *Firebase Firestore* for user metadata storage
+- *Custom BLoC state management* for UI state coordination
+- *Role-based access control* through Stream Chat's built-in system
+
+* Group Chat Creation Flow
+
+** 1. User Selection Process
+*Location*: [`lib/presentation/blocs/chat_management/chat_management_cubit.dart`](lib/presentation/blocs/chat_management/chat_management_cubit.dart)
+
+*** Multi-User Selection Logic
+#+BEGIN_SRC dart
+/// Selects or deselects a user when creating a chat
+void selectUserWhenCreatingAGroup({
+  required User user,
+  required bool isCreateNewChatPageForCreatingGroup,
+}) {
+  final listOfSelectedUserIDs = {...state.listOfSelectedUserIDs};
+  final listOfSelectedUsers = {...state.listOfSelectedUsers};
+
+  // Check if the user is already selected
+  final isUserAlreadySelected = listOfSelectedUserIDs.contains(user.id);
+
+  if (isUserAlreadySelected) {
+    // Remove user (toggle off)
+    listOfSelectedUserIDs.remove(user.id);
+    listOfSelectedUsers.removeWhere((u) => u.id == user.id);
+  } else {
+    // Add user based on chat type
+    if (!isCreateNewChatPageForCreatingGroup) {
+      // Private chat: Only one user allowed
+      listOfSelectedUserIDs.clear();
+      listOfSelectedUsers.clear();
+      listOfSelectedUserIDs.add(user.id);
+      listOfSelectedUsers.add(user);
+    } else {
+      // Group chat: Multiple users allowed
+      listOfSelectedUserIDs.add(user.id);
+      listOfSelectedUsers.add(user);
+    }
+  }
+
+  emit(state.copyWith(
+    listOfSelectedUserIDs: listOfSelectedUserIDs,
+    listOfSelectedUsers: listOfSelectedUsers,
+  ));
+}
+#+END_SRC
+
+*** Minimum Member Validation
+*Location*: [`lib/presentation/views/create_chat/widgets/create_chat_view_creating_group_chat_page_details.dart`](lib/presentation/views/create_chat/widgets/create_chat_view_creating_group_chat_page_details.dart)
+
+#+BEGIN_SRC dart
+// Minimum members indicator
+Container(
+  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+  decoration: BoxDecoration(
+    color: state.listOfSelectedUserIDs.length >= 2
+        ? successColor.withValues(alpha: 0.1)
+        : customOrangeColor.withValues(alpha: 0.1),
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: CustomText(
+    text: state.listOfSelectedUserIDs.length >= 2
+        ? appLocalizations?.enough ?? ''
+        : appLocalizations?.min2Required ?? '',
+    fontSize: 12,
+    color: state.listOfSelectedUserIDs.length >= 2
+        ? successColor
+        : customOrangeColor,
+  ),
+)
+#+END_SRC
+
+** 2. Channel Creation with Membership
+*Location*: [`lib/presentation/blocs/chat_management/chat_management_cubit.dart`](lib/presentation/blocs/chat_management/chat_management_cubit.dart)
+
+*** Group Channel Creation Process
+#+BEGIN_SRC dart
+Future<void> createNewChannel({
+  required bool isCreateNewChatPageForCreatingGroup,
+}) async {
+  // Prevent multiple simultaneous operations
+  if (state.isInProgress) return;
+
+  // Validate user selection
+  if (state.listOfSelectedUserIDs.isEmpty) {
+    emit(state.copyWith(error: ChatFailureEnum.channelCreateFailure));
+    return;
+  }
+
+  // Initialize member list
+  final listOfMemberIDs = {...state.listOfSelectedUserIDs};
+
+  // Always include current user as channel creator/admin
+  final currentUserId = _authCubit.state.authUser.id;
+  if (!listOfMemberIDs.contains(currentUserId)) {
+    listOfMemberIDs.add(currentUserId);
+  }
+
+  // Validate minimum members for group chat
+  final bool hasEnoughMembers = listOfMemberIDs.length >= 2;
+  final bool isValidName = isCreateNewChatPageForCreatingGroup
+      ? state.isChannelNameValid
+      : true;
+
+  if (!hasEnoughMembers || !isValidName) {
+    emit(state.copyWith(error: ChatFailureEnum.channelCreateFailure));
+    return;
+  }
+
+  // Create channel through repository
+  final result = await _chatRepository.createNewChannel(
+    listOfMemberIDs: listOfMemberIDs.toList(),
+    channelName: channelName,
+    channelImageUrl: channelImageUrl,
+  );
+
+  // Handle creation result
+  result.fold(
+    (failure) => emit(state.copyWith(
+      isInProgress: false,
+      isChannelCreated: false,
+      error: failure
+    )),
+    (_) => emit(state.copyWith(
+      isInProgress: false,
+      isChannelCreated: true,
+      // Reset selections after successful creation
+      listOfSelectedUsers: {},
+      listOfSelectedUserIDs: {},
+      channelName: '',
+      isChannelNameValid: false,
+    )),
+  );
+}
+#+END_SRC
+
+* Stream Chat Integration
+
+** Channel Creation with Roles
+*Location*: [`lib/data/repository/chat/chat_repository.dart`](lib/data/repository/chat/chat_repository.dart)
+
+*** Stream Chat Channel Setup
+#+BEGIN_SRC dart
+@override
+Future<Either<ChatFailureEnum, Unit>> createNewChannel({
+  required List<String> listOfMemberIDs,
+  required String channelName,
+  required String channelImageUrl,
+}) async {
+  try {
+    if (listOfMemberIDs.isEmpty) {
+      return left(ChatFailureEnum.channelCreateFailure);
+    }
+
+    final randomId = const Uuid().v1();
+
+    // Create channel with Stream Chat
+    await _streamChatClient.createChannel(
+      'messaging',                    // Channel type
+      channelId: randomId,           // Unique channel identifier
+      channelData: {
+        'members': listOfMemberIDs,  // All channel members
+        'name': channelName,         // Channel display name
+        'image': channelImageUrl,    // Channel avatar
+        'created_at': DateTime.now().toIso8601String(),
+
+        // Implicit role assignment:
+        // - Channel creator becomes admin/owner
+        // - Other members become regular members
+      },
+    );
+
+    return right(unit);
+  } catch (e) {
+    debugPrint('Error creating channel: $e');
+    return left(ChatFailureEnum.channelCreateFailure);
+  }
+}
+#+END_SRC
+
+** User Connection with Profile Data
+#+BEGIN_SRC dart
+@override
+Future<Either<ChatFailureEnum, Unit>> connectTheCurrentUser() async {
+  try {
+    final signedInUserOption = await _authRepository.getSignedInUser();
+    final signedInUser = signedInUserOption.fold(
+      () => throw Exception('User not authenticated'),
+      (user) => user,
+    );
+
+    // Generate JWT token for this user
+    final userToken = _generateToken(signedInUser.id);
+
+    // Connect user to Stream Chat with profile data
+    await _streamChatClient.connectUser(
+      User(
+        id: signedInUser.id,           // Unique user identifier
+        name: signedInUser.userName,   // Display name
+        image: signedInUser.photoUrl,  // Profile image
+        // Additional user metadata can be added here
+      ),
+      userToken,                       // Authentication token
+    );
+
+    return right(unit);
+  } catch (e) {
+    debugPrint('Error connecting user: $e');
+    return left(ChatFailureEnum.connectionFailure);
+  }
+}
+#+END_SRC
+
+* Role Management System
+
+** Implicit Role Assignment
+The app uses Stream Chat's built-in role system:
+
+*** Default Role Hierarchy
+1. *Channel Owner/Admin*: User who created the channel
+   - Can add/remove members
+   - Can update channel settings
+   - Can delete the channel
+
+2. *Channel Members*: Users added to the channel
+   - Can send messages
+   - Can read all messages
+   - Can leave the channel
+
+*** Role Detection in UI
+*Location*: [`lib/presentation/views/chat/chat_view.dart`](lib/presentation/views/chat/chat_view.dart)
+
+#+BEGIN_SRC dart
+PreferredSizeWidget _buildAppBar(BuildContext context) {
+  final currentUserId = context.read<AuthSessionCubit>().state.authUser.id;
+  final channelMembers = widget.channel.state?.members ?? [];
+  final isOneToOneChat = channelMembers.length == 2;
+
+  // Determine if current user is channel owner
+  final currentUserMember = channelMembers
+      .where((member) => member.userId == currentUserId)
+      .firstOrNull;
+
+  final isChannelOwner = currentUserMember?.role == 'owner' ||
+                        currentUserMember?.role == 'admin';
+
+  // Build UI based on user role
+  return AppBar(
+    title: Row(children: [
+      _buildAvatar(imageUrl, isOneToOneChat),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(text: displayName ?? ''),
+            // Show member count for group chats
+            if (!isOneToOneChat)
+              CustomText(
+                text: '${channelMembers.length} members',
+                fontSize: 12,
+                color: customGreyColor600,
+              ),
+          ],
+        ),
+      ),
+    ]),
+    // Add admin actions if user has permissions
+    actions: isChannelOwner ? _buildAdminActions(context) : null,
+  );
+}
+#+END_SRC
+
+* Member Management Features
+
+** Member Search and Selection
+*Location*: [`lib/presentation/views/create_chat/widgets/create_chat_view_user_list_view.dart`](lib/presentation/views/create_chat/widgets/create_chat_view_user_list_view.dart)
+
+*** User List with Selection State
+#+BEGIN_SRC dart
+Widget _buildUserListItem({
+  required BuildContext context,
+  required User user,
+  required bool isSelected,
+  required bool isGroup,
+}) {
+  return Material(
+    color: transparent,
+    child: Tooltip(
+      message: isSelected
+          ? appLocalizations?.deselectUser ?? ''
+          : appLocalizations?.selectUserToChat ?? '',
+      child: InkWell(
+        onTap: () {
+          context.read<ChatManagementCubit>().selectUserWhenCreatingAGroup(
+            user: user,
+            isCreateNewChatPageForCreatingGroup: isGroup,
+          );
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? customIndigoColor.withValues(alpha: 0.05)
+                : transparent,
+            border: const Border(
+              bottom: BorderSide(color: customGreyColor200, width: 0.5)
+            ),
+          ),
+          child: Row(
+            children: [
+              // User avatar
+              CircleAvatar(
+                backgroundImage: user.image != null
+                    ? CachedNetworkImageProvider(user.image!)
+                    : null,
+                child: user.image == null
+                    ? Text(user.name.substring(0, 1).toUpperCase())
+                    : null,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(user.name ?? 'Unknown User'),
+                    if (user.online)
+                      Text(
+                        'Online',
+                        style: TextStyle(
+                          color: successColor,
+                          fontSize: 12
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              // Selection indicator
+              if (isSelected)
+                Icon(Icons.check_circle, color: customIndigoColor),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+#+END_SRC
+
+** Channel Member Display
+*Location*: [`lib/presentation/views/dashboard/widgets/dashboard_view_searched_chat.dart`](lib/presentation/views/dashboard/widgets/dashboard_view_searched_chat.dart)
+
+*** Group Chat Member Information
+#+BEGIN_SRC dart
+Widget _buildChannelListItem(BuildContext context, Channel channel, int index) {
+  final currentUserId = context.read<AuthSessionCubit>().state.authUser.id;
+  final channelMembers = channel.state?.members ?? [];
+  final lengthOfTheChannelMembers = channelMembers.length;
+  final isOneToOneChat = lengthOfTheChannelMembers == 2;
+
+  // Find other members (excluding current user)
+  Member? otherMember;
+  try {
+    otherMember = channelMembers
+        .firstWhere((member) => member.userId != currentUserId);
+  } catch (e) {
+    // Fallback to first member if no other member found
+    otherMember = channelMembers.isNotEmpty ? channelMembers.first : null;
+  }
+
+  final oneToOneChatMember = otherMember?.user;
+
+  // Determine display information based on chat type
+  final String displayName = isOneToOneChat
+      ? oneToOneChatMember?.name ?? ''
+      : channel.name ?? appLocalizations?.unnamedGroup ?? '';
+
+  final String? imageUrl = isOneToOneChat
+      ? oneToOneChatMember?.image
+      : channel.image;
+
+  // Show member count for group chats
+  final String memberInfo = isOneToOneChat
+      ? (otherMember?.user?.online ?? false)
+          ? 'Online'
+          : 'Last seen recently'
+      : '$lengthOfTheChannelMembers members';
+
+  return ListTile(
+    leading: CircleAvatar(
+      backgroundImage: imageUrl != null
+          ? CachedNetworkImageProvider(imageUrl)
+          : null,
+      child: imageUrl == null
+          ? Icon(isOneToOneChat ? Icons.person : Icons.group)
+          : null,
+    ),
+    title: Text(displayName),
+    subtitle: Text(memberInfo),
+    trailing: _buildUnreadIndicator(channel),
+    onTap: () => _navigateToChannel(channel),
+  );
+}
+#+END_SRC
+
+* State Management for Membership
+
+** Chat Management State
+*Location*: [`lib/presentation/blocs/chat_management/chat_management_state.dart`](lib/presentation/blocs/chat_management/chat_management_state.dart)
+
+#+BEGIN_SRC dart
+class ChatManagementState extends Equatable {
+  const ChatManagementState({
+    this.isInProgress = false,
+    this.isChannelNameValid = false,
+    this.isChannelCreated = false,
+    this.isCapturedPhotoSent = false,
+    this.channelName = '',
+    this.userIndex = 0,
+    this.listOfSelectedUserIDs = const {},      // Selected user IDs
+    this.listOfSelectedUsers = const {},        // Selected user objects
+    this.currentUserChannels = const [],        // User's channels
+    this.error,
+  });
+
+  // Member selection state
+  final Set<String> listOfSelectedUserIDs;
+  final Set<User> listOfSelectedUsers;
+
+  // Channel state
+  final List<Channel> currentUserChannels;
+  final String channelName;
+  final bool isChannelNameValid;
+  final bool isChannelCreated;
+
+  // Operation state
+  final bool isInProgress;
+  final ChatFailureEnum? error;
+
+  @override
+  List<Object?> get props => [
+    isInProgress,
+    isChannelNameValid,
+    isChannelCreated,
+    channelName,
+    listOfSelectedUserIDs,
+    listOfSelectedUsers,
+    currentUserChannels,
+    error,
+  ];
+}
+#+END_SRC
+
+* Channel Subscription and Updates
+
+** Real-time Channel Updates
+*Location*: [`lib/presentation/blocs/chat_management/chat_management_cubit.dart`](lib/presentation/blocs/chat_management/chat_management_cubit.dart)
+
+#+BEGIN_SRC dart
+/// Subscribes to channel changes from the chat service
+void _subscribeToChannels() {
+  _currentUserChannelsSubscription = _chatRepository
+      .channelsThatTheUserIsIncluded
+      .listen(_listenCurrentUserChannelsChangeStream);
+}
+
+/// Updates state when channel list changes
+Future<void> _listenCurrentUserChannelsChangeStream(
+  List<Channel> currentUserChannels
+) async {
+  emit(state.copyWith(currentUserChannels: currentUserChannels));
+}
+#+END_SRC
+
+** Channel Query in Repository
+*Location*: [`lib/data/repository/chat/chat_repository.dart`](lib/data/repository/chat/chat_repository.dart)
+
+#+BEGIN_SRC dart
+@override
+Stream<List<Channel>> get channelsThatTheUserIsIncluded {
+  try {
+    final currentUser = _streamChatClient.state.currentUser;
+    if (currentUser == null) {
+      return Stream.value([]);
+    }
+
+    // Query channels where current user is a member
+    return _streamChatClient
+        .queryChannels(
+          filter: Filter.in_('members', [currentUser.id]),
+        )
+        .map((channels) => channels);
+  } catch (e) {
+    debugPrint('Error fetching channels: $e');
+    return Stream.value([]);
+  }
+}
+#+END_SRC
+
+* Search and Filtering
+
+** Member-based Channel Search
+*Location*: [`lib/presentation/blocs/chat_management/chat_management_cubit.dart`](lib/presentation/blocs/chat_management/chat_management_cubit.dart)
+
+#+BEGIN_SRC dart
+/// Searches for a channel based on member names or channel name
+bool searchInsideExistingChannels({
+  required List<Channel> listOfChannels,
+  required String searchedText,
+  required int index,
+  required int lengthOfTheChannelMembers,
+  required User oneToOneChatMember,
+}) {
+  if (searchedText.isEmpty) return true;
+
+  final editedSearchedText = searchedText.toLowerCase().trim();
+
+  // Safety check for index bounds
+  if (index < 0 || index >= listOfChannels.length) {
+    return false;
+  }
+
+  final channel = listOfChannels[index];
+
+  if (lengthOfTheChannelMembers == 2) {
+    // One-to-one chat: search by member name
+    return oneToOneChatMember.name
+        .toLowerCase()
+        .trim()
+        .contains(editedSearchedText);
+  } else {
+    // Group chat: search by channel name
+    final channelName = channel.name ?? '';
+    return channelName
+        .toLowerCase()
+        .trim()
+        .contains(editedSearchedText);
+  }
+}
+#+END_SRC
+
+* Key Features Summary
+
+** Group Chat Membership Management
+1. *Multi-user Selection*: Users can select multiple members for group chats
+2. *Minimum Member Validation*: Enforces minimum 2 members for group chats
+3. *Role-based Access*: Channel creator gets admin privileges automatically
+4. *Real-time Updates*: Channel membership changes reflected in real-time
+5. *Search Functionality*: Find channels by member names or channel names
+
+** Role System Integration
+1. *Stream Chat Roles*: Leverages built-in owner/admin/member roles
+2. *Implicit Assignment*: Channel creator automatically becomes owner
+3. *Permission Control*: UI adapts based on user's role in each channel
+4. *Member Management*: Admins can add/remove members (through Stream Chat)
+
+** State Management Flow
+#+BEGIN_EXAMPLE
+User Selection
+    ↓
+ChatManagementCubit (State Update)
+    ↓
+Channel Creation Request
+    ↓
+ChatRepository (Stream Chat API)
+    ↓
+Channel Created with Members
+    ↓
+Real-time Updates
+    ↓
+UI Reflects New Channel
+#+END_EXAMPLE
+
+The app effectively manages group chat roles and membership through Stream Chat's robust channel system, with custom UI logic for user selection and validation, ensuring a smooth group chat creation and management experience.
