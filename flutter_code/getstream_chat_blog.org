@@ -85,3 +85,19 @@ https://github.com/GetStream/stream-tutorial-projects
 ** stream_chat_persistence
 
 https://getstream.io/chat/docs/sdk/flutter/guides/adding_local_data_persistence/
+
+** permission
+
+role permission
+https://getstream.io/chat/docs/flutter-dart/user_permissions/
+
+channel level permission
+https://getstream.io/chat/docs/flutter-dart/channel-level_settings/
+https://getstream.io/chat/docs/flutter-dart/channel_update/
+https://getstream.io/chat/docs/flutter-dart/channel_members/
+https://getstream.io/moderation/docs/quick-start/chat/
+
+#+begin_src typescript
+await channel.addModerators(["thierry", "josh"]);
+await channel.demoteModerators(["tommaso"]);
+#+end_src
