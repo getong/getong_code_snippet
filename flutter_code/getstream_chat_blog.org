@@ -90,14 +90,36 @@ https://getstream.io/chat/docs/sdk/flutter/guides/adding_local_data_persistence/
 
 role permission
 https://getstream.io/chat/docs/flutter-dart/user_permissions/
+https://getstream.io/chat/docs/flutter-dart/permissions_reference/
 
 channel level permission
 https://getstream.io/chat/docs/flutter-dart/channel-level_settings/
 https://getstream.io/chat/docs/flutter-dart/channel_update/
 https://getstream.io/chat/docs/flutter-dart/channel_members/
 https://getstream.io/moderation/docs/quick-start/chat/
+https://getstream.io/chat/docs/flutter-dart/channel_invites/
 
 #+begin_src typescript
 await channel.addModerators(["thierry", "josh"]);
 await channel.demoteModerators(["tommaso"]);
 #+end_src
+
+** typescript code repo
+
+https://github.com/akashmahlax/MindHeal
+
+** channel member add member to join channel
+
+https://stackoverflow.com/questions/77138572/how-to-make-a-user-able-to-join-a-channel-using-the-channels-id-with-getstream
+
+#+begin_example
+How to fix this?
+
+go to the dashboard and select your project
+go to Roles and Permissions
+hit the Edit button at the top
+for Role select User and for Scope select Messaging
+in the search field enter update channel members
+activate the checkbox of the permission called Update Channel Members
+hit Save
+#+end_example
