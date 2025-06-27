@@ -17,6 +17,7 @@ https://getstream.io/video/docs/flutter/incoming-call/
 https://getstream.io/video/docs/flutter/call-participants/
 https://getstream.io/video/docs/flutter/quickstart/
 https://getstream.io/chat/flutter/tutorial/
+https://github.com/GetStream/flutter-samples
 
 ** with firebase
 
