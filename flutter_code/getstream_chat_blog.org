@@ -19,8 +19,17 @@ https://getstream.io/video/docs/flutter/quickstart/
 https://getstream.io/chat/flutter/tutorial/
 https://github.com/GetStream/flutter-samples
 
+** video-calling
+https://getstream.io/video/sdk/flutter/tutorial/video-calling/
+
 ** ringing
 https://getstream.io/video/sdk/flutter/tutorial/ringing/
+
+** livestreaming
+https://getstream.io/video/sdk/flutter/tutorial/livestreaming/
+
+** audio-room
+https://getstream.io/video/sdk/flutter/tutorial/audio-room/
 
 ** with firebase
 
