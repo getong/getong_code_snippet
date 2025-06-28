@@ -21,6 +21,7 @@ https://github.com/GetStream/flutter-samples
 
 ** video-calling
 https://getstream.io/video/sdk/flutter/tutorial/video-calling/
+https://getstream.io/chat/docs/sdk/flutter/guides/initialize_stream_chat_widget_tree/
 
 ** ringing
 https://getstream.io/video/sdk/flutter/tutorial/ringing/
