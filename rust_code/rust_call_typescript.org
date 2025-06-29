@@ -1,0 +1,18 @@
+* rust call typescript
+
+** rust call typescript via v8 crate
+
+[[https://github.com/denoland/rusty_v8][v8]]
+
+** doc example and code example
+
+doc example
+[[https://zenn.dev/gw31415/articles/rusty-v8-static-compiled-js][V8内蔵でRustからMathJaxを呼び出す & コンパイル済環境を使い回す]]
+
+code example
+[[https://github.com/gw31415/mathjax_svg][mathjax_svg]]
+
+
+** some other projects
+
+[[https://github.com/rscarson/rustyscript][rustyscript]]
