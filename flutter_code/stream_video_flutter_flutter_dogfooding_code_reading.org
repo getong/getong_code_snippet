@@ -1513,6 +1513,30 @@ void joinCallPressed() {
 }
 #+end_src
 
+** participant view
+
+#+begin_src dart
+callParticipantsBuilder: (context, call, callState) {
+  return StreamCallParticipants(
+    call: call,
+    participants: callState.callParticipants,
+    layoutMode: _currentLayoutMode,
+  );
+},
+#+end_src
+
+** localParticipant and call state
+
+#+begin_src dart
+localParticipant.isAudioEnabled
+
+localParticipant.isVideoEnabled
+
+call.setMicrophoneEnabled(enabled: !localParticipant.isAudioEnabled)
+
+call.setCameraEnabled(enabled: !localParticipant.isVideoEnabled)
+#+end_src
+
 *** Summary
 
 The `streamVideo.state.incomingCall.listen()` stream serves as the central data source for incoming call handling, with multiple components consuming this data:
