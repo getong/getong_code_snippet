@@ -1534,7 +1534,81 @@ localParticipant.isVideoEnabled
 
 call.setMicrophoneEnabled(enabled: !localParticipant.isAudioEnabled)
 
-call.setCameraEnabled(enabled: !localParticipant.isVideoEnabled)
+callControlsBuilder: (
+  BuildContext context,
+  Call call,
+  CallState callState,
+) {
+  final localParticipant = callState.localParticipant!;
+  return Container(
+    child: SafeArea(
+      child: Row(children: [
+
+        ToggleMicrophoneOption(
+          call: call,
+          localParticipant: localParticipant,
+          disabledMicrophoneBackgroundColor: AppColorPalette.appRed,
+        ),
+
+        ToggleCameraOption(
+          call: call,
+          localParticipant: localParticipant,
+          disabledCameraBackgroundColor: AppColorPalette.appRed,
+        ),
+        // ...
+      ]),
+    ),
+  );
+},
+
+#+end_src
+
+** _handleMobileAudioInterruptions function
+
+#+begin_src dart
+void _handleMobileAudioInterruptions() {
+  if (!CurrentPlatform.isMobile) return;
+
+  RtcMediaDeviceNotifier.instance.handleCallInterruptionCallbacks(
+    onInterruptionStart: () {
+      final call = StreamVideo.instance.activeCall;
+      _microphoneEnabledBeforeInterruption =
+      call?.state.value.localParticipant?.isAudioEnabled;
+
+      call?.setMicrophoneEnabled(enabled: false);
+    },
+    onInterruptionEnd: () {
+      if (_microphoneEnabledBeforeInterruption == true) {
+        StreamVideo.instance.activeCall?.setMicrophoneEnabled(enabled: true);
+      }
+      _microphoneEnabledBeforeInterruption = null;
+    },
+  );
+}
+
+void _tryConsumingIncomingCallFromTerminatedState() {
+  if (!CurrentPlatform.isAndroid) return;
+
+  if (_router.routerDelegate.navigatorKey.currentContext == null) {
+    // App is not running yet. Postpone consuming after app is in the foreground
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        final streamVideo = locator.get<StreamVideo>();
+        streamVideo.consumeAndAcceptActiveCall(
+          onCallAccepted: (call) {
+            final extra = (
+              call: call,
+              connectOptions: null,
+            );
+
+            _router.push(CallRoute($extra: extra).location, extra: extra);
+          },
+        );
+    });
+  } else {
+    // no-op. If the app is already running we'll handle it via events
+  }
+}
+
 #+end_src
 
 *** Summary
