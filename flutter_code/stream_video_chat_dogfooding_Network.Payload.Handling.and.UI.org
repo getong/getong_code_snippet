@@ -1,0 +1,229 @@
+* Network Payload Handling and UI Navigation in Stream Video Flutter Dogfooding App
+
+* Overview
+The Stream Video Flutter Dogfooding app handles incoming network payloads through multiple channels:
+- Firebase Cloud Messaging (FCM) for push notifications
+- Deep links via app links
+- Stream Video WebSocket events
+- CallKit events (iOS/Android)
+
+* Network Payload Reception Points
+
+** Firebase Cloud Messaging Handler
+*** Location: [[stream-video-flutter/dogfooding/lib/app/app_content.dart][app_content.dart:27]]
+*** Function: =_firebaseMessagingBackgroundHandler=
+
+#+BEGIN_SRC dart
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Only handle Firebase messaging on supported platforms
+  if (defaultTargetPlatform == TargetPlatform.macOS) return;
+
+  // Initialise Firebase and app
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await AppInjector.init();
+
+  // Handle the message
+  await _handleRemoteMessage(message);
+}
+#+END_SRC
+
+*** Foreground Message Handling: [[stream-video-flutter/dogfooding/lib/app/app_content.dart][app_content.dart:201]]
+#+BEGIN_SRC dart
+FirebaseMessaging.onMessage.listen(_handleRemoteMessage)
+#+END_SRC
+
+** Deep Link Handler
+*** Location: [[stream-video-flutter/dogfooding/lib/app/app_content.dart][app_content.dart:215]]
+*** Function: =_observeDeepLinks=
+
+#+BEGIN_SRC dart
+// Background deep links
+AppLinks().uriLinkStream.listen((uri) {
+  if (mounted) _handleDeepLink(uri);
+});
+
+// Terminated state deep links
+final initialUri = await AppLinks().getInitialLink();
+if (initialUri != null) _handleDeepLink(initialUri);
+#+END_SRC
+
+** Stream Video Events
+*** CallKit Events (Mobile): [[stream-video-flutter/dogfooding/lib/app/app_content.dart][app_content.dart:166]]
+#+BEGIN_SRC dart
+streamVideo.observeCoreCallKitEvents(
+  onCallAccepted: (callToJoin) {
+    final extra = (call: callToJoin, connectOptions: null);
+    _router.push(CallRoute($extra: extra).location, extra: extra);
+  },
+)
+#+END_SRC
+
+*** WebSocket Events (Desktop/Web): [[stream-video-flutter/dogfooding/lib/app/app_content.dart][app_content.dart:181]]
+#+BEGIN_SRC dart
+streamVideo.state.incomingCall.listen((call) {
+  if (call == null) return;
+  final extra = (call: call, connectOptions: null);
+  _router.push(CallRoute($extra: extra).location, extra: extra);
+});
+#+END_SRC
+
+* Payload Type Determination and UI Navigation
+
+** Route Definitions
+*** Location: [[stream-video-flutter/dogfooding/lib/router/routes.dart][routes.dart]]
+
+** Call Flow Navigation
+
+*** 1. Lobby Screen (Pre-call Setup)
+**** Route: =/lobby=
+**** Widget: [[stream-video-flutter/dogfooding/lib/screens/lobby_screen.dart][LobbyScreen]]
+**** Purpose: Configure audio/video settings before joining
+
+#+BEGIN_SRC dart
+@TypedGoRoute<LobbyRoute>(path: '/lobby', name: 'lobby')
+class LobbyRoute extends GoRouteData {
+  final Call $extra;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return LobbyScreen(
+      call: $extra,
+      onJoinCallPressed: (connectOptions) {
+        CallRoute($extra: (call: $extra, connectOptions: connectOptions))
+          .replace(context);
+      },
+    );
+  }
+}
+#+END_SRC
+
+*** 2. Call Screen (Main Call UI)
+**** Route: =/call=
+**** Widget: [[stream-video-flutter/dogfooding/lib/screens/call_screen.dart][CallScreen]]
+**** Supports: Audio calls, Video calls, Screen sharing
+
+#+BEGIN_SRC dart
+@TypedGoRoute<CallRoute>(path: '/call', name: 'call')
+class CallRoute extends GoRouteData {
+  final ({Call call, CallConnectOptions? connectOptions}) $extra;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return CallScreen(
+      call: $extra.call,
+      connectOptions: $extra.connectOptions,
+    );
+  }
+}
+#+END_SRC
+
+*** 3. Livestream Screen
+**** Route: =/livestream=
+**** Widget: [[stream-video-flutter/dogfooding/lib/screens/livestream_demo_screen.dart][LivestreamDemoScreen]]
+**** Purpose: View-only livestream participation
+
+#+BEGIN_SRC dart
+@TypedGoRoute<LivestreamRoute>(path: '/livestream', name: 'livestream')
+class LivestreamRoute extends GoRouteData {
+  final String $extra; // callId
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return LivestreamDemoScreen(callId: $extra);
+  }
+}
+#+END_SRC
+
+** Navigation Decision Logic
+
+*** Deep Link Processing: [[stream-video-flutter/dogfooding/lib/app/app_content.dart][app_content.dart:238]]
+#+BEGIN_SRC dart
+Future<void> _handleDeepLink(Uri uri) async {
+  // Extract call ID from URL
+  String? callId;
+  for (final segment in uri.pathSegments.indexed) {
+    if (segment.$2 == 'join') {
+      callId = uri.pathSegments[segment.$1 + 1];
+      break;
+    }
+  }
+  callId ??= uri.queryParameters['id'];
+
+  // Create call and navigate to lobby
+  final call = streamVideo.makeCall(callType: kCallType, id: callId);
+  await call.getOrCreate();
+  _router.push(LobbyRoute($extra: call).location, extra: call);
+}
+#+END_SRC
+
+*** Call Type Determination
+**** Standard Calls: Use =kCallType= (defined in constants)
+**** Livestream: Use =StreamCallType.liveStream()=
+
+** Call UI Features by Type
+
+*** Audio/Video Calls ([[stream-video-flutter/dogfooding/lib/screens/call_screen.dart][CallScreen]])
+**** Controls Available:
+- Microphone toggle
+- Camera toggle
+- Screen sharing
+- Layout switching (grid/focus)
+- Participant list
+- Call statistics
+- Settings menu
+- Chat integration
+
+**** Chat Integration: [[stream-video-flutter/dogfooding/lib/screens/call_screen.dart][call_screen.dart:311]]
+#+BEGIN_SRC dart
+class _ShowChatButton extends StatefulWidget {
+  final Channel? channel;
+
+  void showChat(BuildContext context) {
+    showModalBottomSheet(
+      // Chat bottom sheet with StreamMessageListView and StreamMessageInput
+      child: ChatBottomSheet(channel: widget.channel!),
+    );
+  }
+}
+#+END_SRC
+
+*** Livestream Calls ([[stream-video-flutter/dogfooding/lib/screens/livestream_demo_screen.dart][LivestreamDemoScreen]])
+**** View-only interface
+**** Uses =LivestreamPlayer= widget
+**** Simpler UI without call controls
+
+** Supporting Navigation Routes
+
+*** Participants List: =/call/participants=
+**** Widget: [[stream-video-flutter/dogfooding/lib/screens/call_participants_list.dart][CallParticipantsList]]
+**** Shows participant details and roles
+
+*** Call Statistics: =/call/stats=
+**** Widget: [[stream-video-flutter/dogfooding/lib/screens/call_stats_screen.dart][CallStatsScreen]]
+**** Displays network stats and quality metrics
+
+* Platform-Specific Behavior
+
+** Mobile (iOS/Android)
+- Uses CallKit for native call interface
+- Push notifications via FCM
+- Background service support
+- Full-screen intent permissions
+
+** Desktop/Web
+- WebSocket-based call events
+- Custom screen share selector
+- No CallKit integration
+
+* Error Handling and Fallbacks
+
+** Connection Issues
+- Automatic retry mechanisms
+- Graceful degradation
+- User feedback via snackbars
+
+** Authentication Flow
+- Automatic redirect to login if user not authenticated
+- Token refresh handling
+- Environment-specific API endpoints
