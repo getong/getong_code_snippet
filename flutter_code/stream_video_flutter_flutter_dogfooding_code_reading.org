@@ -1489,6 +1489,30 @@ class MockStreamVideo extends Mock implements StreamVideo {
 }
 #+END_SRC
 
+** callconnectionOption
+
+#+begin_src dart
+void joinCallPressed() {
+  var options = const CallConnectOptions();
+
+  final cameraTrack = _cameraTrack;
+  if (cameraTrack != null) {
+    options = options.copyWith(
+      camera: TrackOption.enabled(),
+    );
+  }
+
+  final microphoneTrack = _microphoneTrack;
+  if (microphoneTrack != null) {
+    options = options.copyWith(
+      microphone: TrackOption.enabled(),
+    );
+  }
+
+  widget.onJoinCallPressed(options);
+}
+#+end_src
+
 *** Summary
 
 The `streamVideo.state.incomingCall.listen()` stream serves as the central data source for incoming call handling, with multiple components consuming this data:
