@@ -23,6 +23,7 @@ https://getstream.io/video/docs/flutter/advanced/incoming-calls/ringing/
 ** video-calling
 https://getstream.io/video/sdk/flutter/tutorial/video-calling/
 https://getstream.io/chat/docs/sdk/flutter/guides/initialize_stream_chat_widget_tree/
+https://getstream.io/video/docs/flutter/call-container/
 
 ** ringing
 https://getstream.io/video/sdk/flutter/tutorial/ringing/
