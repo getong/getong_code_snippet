@@ -1621,3 +1621,12 @@ The `streamVideo.state.incomingCall.listen()` stream serves as the central data 
 - *Services*: Handle notifications, analytics, and other side effects
 
 This architecture ensures a reactive, scalable approach to incoming call management while maintaining separation of concerns and testability.
+
+** code architecture
+
+#+begin_example
+
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/di/injector.dart add streamvideo as get_it
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/app/app_content.dart get_it streamvideo _observeCallKitEvents https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/router/routes.dart define routes
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_screen.dart use StreamCallContent to show ui
+#+end_example
