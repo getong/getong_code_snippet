@@ -25,6 +25,15 @@ https://getstream.io/video/sdk/flutter/tutorial/video-calling/
 https://getstream.io/chat/docs/sdk/flutter/guides/initialize_stream_chat_widget_tree/
 https://getstream.io/video/docs/flutter/call-container/
 https://getstream.io/video/docs/flutter/advanced/background-modes/
+https://getstream.io/video/docs/flutter/incoming-call/
+#+begin_src dart
+StreamCallContainer(
+    call: call,
+    incomingCallBuilder: (context, call, callState) {
+      return MyOwnIncomingCallScreen(call: call);
+    },
+)
+#+end_src
 
 ** ringing
 https://getstream.io/video/sdk/flutter/tutorial/ringing/
