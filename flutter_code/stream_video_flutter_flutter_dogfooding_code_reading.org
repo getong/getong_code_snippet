@@ -1628,5 +1628,8 @@ This architecture ensures a reactive, scalable approach to incoming call managem
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/di/injector.dart add streamvideo as get_it;
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/app/app_content.dart get_it streamvideo _observeCallKitEvents;
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/router/routes.dart define routes;
-https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_screen.dart use StreamCallContent to show ui.
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_screen.dart use StreamCallContent to show ui;
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/router/routes.dart routes definition;
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_participants_list.dart participants list screen;
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_stats_screen.dart call stats screen;
 #+end_example
