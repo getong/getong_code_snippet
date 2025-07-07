@@ -1,0 +1,206 @@
+* flutter_social_chat use go_router
+:PROPERTIES:
+:CUSTOM_ID: flutter_social_chat-use-go_router
+:END:
+
+** RouterEnum definition
+
+#+begin_src dart
+enum RouterEnum {
+  initialLocation('/'),
+  dashboardView('/dashboard_view'),
+  profileView('/profile_view'),
+  chatView('/chat_view'),
+  signInView('/sign_in_view'),
+  smsVerificationView('/sms_verification_view'),
+  createChatView('/create_chat_view'),
+  onboardingView('/onboarding_view');
+
+  final String routeName;
+
+  const RouterEnum(this.routeName);
+}
+#+end_src
+
+** 1. *Dynamic Route Navigation Based on Auth State*
+:PROPERTIES:
+:CUSTOM_ID: dynamic-route-navigation-based-on-auth-state
+:END:
+The app dynamically navigates users based on their authentication and
+onboarding status:
+
+#+begin_src dart
+// In landing_view.dart
+String _getRouteForUser(bool isUserLoggedIn, bool isOnboardingCompleted) {
+  if (isUserLoggedIn && !isOnboardingCompleted) {
+    return RouterEnum.onboardingView.routeName;
+  } else if (isUserLoggedIn && isOnboardingCompleted) {
+    return RouterEnum.dashboardView.routeName;
+  } else {
+    return RouterEnum.signInView.routeName;
+  }
+}
+#+end_src
+
+** 2. *Shell Route with Tab Navigation*
+:PROPERTIES:
+:CUSTOM_ID: shell-route-with-tab-navigation
+:END:
+The app uses a =ShellRoute= for persistent bottom navigation:
+
+#+begin_src dart
+// In app_router.dart
+ShellRoute get _bottomTabShellRoute => ShellRoute(
+  navigatorKey: _shellNavigatorKey,
+  pageBuilder: (context, state, child) {
+    return customPageBuilderWidget(
+      context,
+      state,
+      BottomTabView(child: child),
+    );
+  },
+  routes: [
+    GoRoute(path: RouterEnum.dashboardView.routeName, ...),
+    GoRoute(path: RouterEnum.profileView.routeName, ...),
+  ],
+);
+#+end_src
+
+** 3. *Dynamic Parameter Passing*
+:PROPERTIES:
+:CUSTOM_ID: dynamic-parameter-passing
+:END:
+The router supports complex parameter passing using a custom codec:
+
+#+begin_src dart
+// Custom codec for encoding/decoding navigation state
+class NavigationStateCodec extends Codec<Object?, Object?> {
+  static String encodeMap(Map<String, dynamic> data) {
+    try {
+      return jsonEncode(data);
+    } catch (e) {
+      return '{}';
+    }
+  }
+}
+#+end_src
+
+*Example usage for SMS verification:*
+
+#+begin_src dart
+GoRoute get _smsVerificationRoute => GoRoute(
+  path: RouterEnum.smsVerificationView.routeName,
+  builder: (context, state) {
+    final String? encodedExtras = state.extra as String?;
+    final extras = encodedExtras != null ? NavigationStateCodec.decodeString(encodedExtras) : {};
+
+    final phoneNumberSignInState = PhoneNumberSignInState(
+      phoneNumber: extras['phoneNumber'] ?? '',
+      smsCode: extras['smsCode'] ?? '',
+      verificationIdOption: Option.of(extras['verificationId'] as String? ?? ''),
+      // ... more parameters
+    );
+
+    return SmsVerificationView(state: phoneNumberSignInState);
+  },
+);
+#+end_src
+
+** 4. *Dynamic Route Guards & State-Based Navigation*
+:PROPERTIES:
+:CUSTOM_ID: dynamic-route-guards-state-based-navigation
+:END:
+The app listens to BLoC states and navigates accordingly:
+
+#+begin_src dart
+// In landing_view.dart
+@override
+Widget build(BuildContext context) {
+  return BlocListener<AuthSessionCubit, AuthSessionState>(
+    listenWhen: (previous, current) =>
+        previous.isUserCheckedFromAuthService != current.isUserCheckedFromAuthService &&
+        current.isUserCheckedFromAuthService,
+    listener: _handleAuthStateChanged,
+    child: // ... UI
+  );
+}
+
+void _checkAndNavigate(AuthSessionState authState) {
+  if (!_isReadyToNavigate || !_isAuthStateReady || _hasCheckedInitialRoute) return;
+
+  _prepareForNavigation();
+  _navigateToAppropriateRoute(authState.isLoggedIn, authState.authUser.isOnboardingCompleted);
+}
+#+end_src
+
+** 5. *Dynamic Chat Route with Channel Data*
+:PROPERTIES:
+:CUSTOM_ID: dynamic-chat-route-with-channel-data
+:END:
+Chat routes dynamically receive channel objects:
+
+#+begin_src dart
+GoRoute get _chatRoute => GoRoute(
+  path: RouterEnum.chatView.routeName,
+  builder: (context, state) {
+    final extraParameters = state.extra is Map<String, dynamic>
+        ? state.extra as Map<String, dynamic>
+        : {'channel': state.extra as Channel?};
+
+    final channel = extraParameters['channel'] as Channel?;
+    if (channel == null) {
+      throw Exception('Missing required channel parameter for ChatView');
+    }
+
+    return ChatView(channel: channel);
+  },
+);
+#+end_src
+
+** 6. *Dynamic Bottom Navigation*
+:PROPERTIES:
+:CUSTOM_ID: dynamic-bottom-navigation
+:END:
+The bottom navigation dynamically updates based on current route:
+
+#+begin_src dart
+// In bottom_navigation_builder.dart
+int _calculateSelectedIndex(BuildContext context) {
+  final String location = GoRouterState.of(context).uri.toString();
+
+  if (location == RouterEnum.dashboardView.routeName) {
+    return 0;
+  }
+  if (location == RouterEnum.profileView.routeName) {
+    return 1;
+  }
+  return 0;
+}
+
+void _onItemTapped(int index, BuildContext context) {
+  switch (index) {
+    case 0:
+      GoRouter.of(context).go(RouterEnum.dashboardView.routeName);
+      break;
+    case 1:
+      GoRouter.of(context).go(RouterEnum.profileView.routeName);
+      break;
+  }
+}
+#+end_src
+
+** Key Dynamic Routing Features:
+:PROPERTIES:
+:CUSTOM_ID: key-dynamic-routing-features
+:END:
+1. *State-driven navigation* - Routes change based on auth/onboarding
+   state
+2. *Complex parameter passing* - Using custom codecs for serialization
+3. *Shell routes* - Persistent UI elements (bottom nav) across routes
+4. *Dynamic route calculations* - Based on current location and state
+5. *Error handling* - Fallback navigation when routes fail
+6. *Custom page transitions* - Zero-duration transitions for instant
+   navigation
+
+The app uses =RouterEnum= to centralize route definitions and
+=NavigationStateCodec= to handle complex state passing between routes.
