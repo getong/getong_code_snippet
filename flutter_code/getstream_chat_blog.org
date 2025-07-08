@@ -215,3 +215,33 @@ https://github.com/GetStream/nextjs-ai-chat-app
 https://github.com/GetStream/npx-nextjs-chat-setup-script
 https://github.com/GetStream/discord-clone-nextjs
 https://github.com/GetStream/fullstack-nextjs-whatsapp-clone
+
+** flutter offline
+
+see https://getstream.io/chat/docs/flutter-dart/flutter_offline/
+
+pubspec.yaml
+#+begin_src yaml
+dependencies:
+ stream_chat_persistence: ^latest_version
+#+end_src
+
+usage
+#+begin_src dart
+final chatPersistentClient = StreamChatPersistenceClient(
+ logLevel: Level.INFO,
+ connectionMode: ConnectionMode.background,
+);
+
+final client = StreamChatClient(
+  apiKey ?? kDefaultStreamApiKey,
+  logLevel: Level.INFO,
+ )..chatPersistenceClient = chatPersistentClient;
+
+ // leave user
+client.disconnect(flushOfflineStorage: true)
+#+end_src
+
+** permission reference
+
+see https://getstream.io/chat/docs/flutter-dart/permissions_reference/
