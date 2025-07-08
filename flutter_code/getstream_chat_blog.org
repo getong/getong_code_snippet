@@ -151,3 +151,67 @@ in the search field enter update channel members
 activate the checkbox of the permission called Update Channel Members
 hit Save
 #+end_example
+
+** getstream chat queryChannels
+
+see https://getstream.io/chat/docs/flutter-dart/
+
+#+begin_src dart
+final filter = {
+ "type": "messaging",
+ "members": {
+  "\$in": ["john"]
+ }
+};
+
+final sort = [SortOption("last_message_at", direction: SortOption.DESC)];
+
+final channels = await client.queryChannels(
+ filter: filter,
+ sort: sort,
+);
+#+end_src
+
+** getstream chat queryusers
+
+see https://getstream.io/chat/docs/flutter-dart/query_users/
+
+#+begin_src dart
+final _result = client.queryUsers(
+ filter: Filter.and(
+  Filter.equal('id', 'jessie'),
+  Filter.equal('banned', true),
+ ),
+ sort: [SortOption('last_active')],
+ pagination: PaginationParams(
+  offset: 0,
+  limit: 20,
+ ),
+);
+#+end_src
+
+**  Chat Client, Server, & Stream API communicate with each other
+
+see https://getstream.io/chat/docs/flutter-dart/stream_api_and_client_integration/
+
+see [[https://getstream.imgix.net/docs/96ce224c-c476-4d60-af19-bc43c3864d4c.png][GetStream API and client integration]]
+
+#+ATTR_ORG: :height 100
+[[https://getstream.imgix.net/docs/96ce224c-c476-4d60-af19-bc43c3864d4c.png]]
+
+** getstream app setting
+
+see https://getstream.io/chat/docs/flutter-dart/app_setting_overview/
+
+huawei, xiaomi are listed in the url, which seems to support them.
+
+** getstream nextjs samples
+
+search via https://github.com/GetStream?q=next&type=all&language=&sort=
+
+https://github.com/GetStream/nextjs-elevenlabs-chat-summaries
+https://github.com/GetStream/chat-app-in-5-frameworks
+https://github.com/GetStream/nextjs-ai-chat-app
+https://github.com/GetStream/npx-nextjs-chat-setup-script
+https://github.com/GetStream/discord-clone-nextjs
+https://github.com/GetStream/fullstack-nextjs-whatsapp-clone
