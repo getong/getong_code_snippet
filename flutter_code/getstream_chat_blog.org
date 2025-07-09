@@ -26,6 +26,8 @@ https://getstream.io/chat/docs/sdk/flutter/guides/initialize_stream_chat_widget_
 https://getstream.io/video/docs/flutter/call-container/
 https://getstream.io/video/docs/flutter/advanced/background-modes/
 https://getstream.io/video/docs/flutter/incoming-call/
+https://getstream.io/video/docs/flutter/advanced/incoming-calls/providers-configuration/
+
 #+begin_src dart
 StreamCallContainer(
     call: call,
