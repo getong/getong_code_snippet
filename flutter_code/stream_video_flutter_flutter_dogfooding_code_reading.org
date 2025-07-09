@@ -1626,10 +1626,58 @@ This architecture ensures a reactive, scalable approach to incoming call managem
 
 #+begin_example
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/di/injector.dart add streamvideo as get_it;
-https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/app/app_content.dart get_it streamvideo _observeCallKitEvents;
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/app/app_content.dart get_it streamvideo _observeCallKitEvents, use called
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/router/routes.dart define routes;
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_screen.dart use StreamCallContent to show ui;
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/router/routes.dart routes definition;
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_participants_list.dart participants list screen;
 https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/call_stats_screen.dart call stats screen;
+https://github.com/GetStream/stream-video-flutter/blob/main/dogfooding/lib/screens/home_screen.dart generateAlphanumericString() generate callid, _getOrCreateCall() makecall
+
 #+end_example
+
+
+结合你提供的 app_content.dart 代码和全局上下文，针对 streamvideo invitation 消息的处理机制，逐条解答如下：
+
+1. 如何处理 streamvideo invitation 消息
+处理 invitation 消息的入口主要有两个：
+FCM 消息监听：_observeFcmMessages() 方法中，FirebaseMessaging.onMessage.listen(_handleRemoteMessage)，而 _handleRemoteMessage 最终会调用 streamVideo.handleRingingFlowNotifications(message.data)，由 SDK 解析和处理 invitation。
+CallKit 事件监听：_observeCallKitEvents() 方法中，streamVideo.observeCoreCallKitEvents(onCallAccepted: ...)，当有来电时会回调 onCallAccepted，并跳转到通话页面。
+2. 如何已读该消息
+invitation 消息的已读（消费）逻辑通常由 SDK 内部管理。对于 Android 终端，_tryConsumingIncomingCallFromTerminatedState() 里有 streamVideo.consumeAndAcceptActiveCall(...)，这会消费（已读）掉未处理的 invitation。
+另外，streamVideo.handleRingingFlowNotifications 也会在处理后自动标记消息为已读，防止重复弹窗。
+3. 如何不重复处理该消息
+依赖 SDK 的“消费”机制：如 consumeAndAcceptActiveCall 只会消费一次未处理的 invitation，处理后即被标记，后续不会再触发。
+FCM/CallKit 事件监听和处理后，SDK 内部会维护状态，防止同一 invitation 被多次处理。
+代码层面没有手动去重逻辑，完全依赖 SDK 的幂等和状态管理。
+4. 如何判断这个消息不是自己发出来的从而不弹出邀请
+一般 invitation 消息体会包含发起者 userId 或 senderId。
+
+你可以在 _handleRemoteMessage 或 onCallAccepted 回调中，判断 invitation 的发起者 id 是否等于当前用户 id，如果是自己发的，则直接 return，不弹窗。
+
+伪代码示例（需结合实际 invitation 数据结构）：
+void _handleInvitation(Map<String, dynamic> data) {
+  final currentUserId = _userAuthController.currentUser?.id;
+  final senderId = data['sender_id']; // 具体字段名需查实际消息体
+  if (senderId == currentUserId) {
+    // 是自己发的邀请，忽略
+    return;
+  }
+  // 不是自己发的，弹出邀请
+  // ...处理逻辑...
+}
+你可以在 _handleRemoteMessage 里加上类似判断，或者在 onCallAccepted 回调前做判断。
+
+总结：
+
+处理 invitation 依赖 FCM/CallKit 事件和 SDK 的 handle/consume 方法。
+已读和去重由 SDK 内部机制保障。
+判断是否自己发的 invitation 需在消息体中比对 senderId 和当前用户 id，手动过滤。
+如需具体代码实现，可补充 invitation 消息体结构。
+
+FCM消息是指 Firebase Cloud Messaging（Firebase 云消息推送）发送到客户端应用的消息。在你的代码中，FCM消息主要用于推送音视频通话相关的通知（如来电邀请、通话状态变更等）。
+
+在本项目里，FirebaseMessaging.onMessage.listen(_handleRemoteMessage) 监听的就是 FCM 消息。收到消息后，_handleRemoteMessage 会把消息内容交给 streamVideo.handleRingingFlowNotifications(message.data) 处理，通常这些消息内容包括通话邀请、通话状态、通话ID、发起人ID等信息。
+
+总结：
+FCM消息就是服务端通过 Firebase 推送到你 app 的通知消息，内容一般为音视频通话的事件数据。
