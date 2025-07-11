@@ -3,7 +3,7 @@
 ** installation script
 
 #+begin_src shell
-sh -c "$(curl -sSfL https://release.anza.xyz/v2.2.11/install)"
+sh -c "$(curl -sSfL https://release.anza.xyz/v2.3.3/install)"
 
 solana --version
 #+end_src

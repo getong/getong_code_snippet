@@ -160,15 +160,22 @@ pub fn process_instruction(
 cargo-build-bpf
 
 mkdir -p ~/solana-release/bin/sdk/sbf/dependencies
-wget -c https://github.com/Snaipe/Criterion/releases/download/v2.3.3/criterion-v2.3.3-linux-x86_64.tar.bz2 -O ~/solana-release/bin/sdk/sbf/dependencies
+wget -c https://github.com/Snaipe/Criterion/releases/download/v2.3.3/criterion-v2.4.2-linux-x86_64.tar.bz2 -O ~/solana-release/bin/sdk/sbf/dependencies
 cd ~/solana-release/bin/sdk/sbf/dependencies
 mkdir -p criterion
 tar --strip-components 1 -xjf criterion-v2.3.3-linux-x86_64.tar.bz2 -C criterion
 
-wget -c https://github.com/anza-xyz/platform-tools/releases/download/v1.41/platform-tools-linux-x86_64.tar.bz2 -O ~/solana-release/bin/sdk/sbf/dependencies
+# linux
+wget -c https://github.com/anza-xyz/platform-tools/releases/download/v1.50/platform-tools-linux-x86_64.tar.bz2 -O ~/solana-release/bin/sdk/sbf/dependencies
+# macos aarch64
+wget -c https://github.com/anza-xyz/platform-tools/releases/download/v1.50/platform-tools-osx-aarch64.tar.bz2
 cd ~/solana-release/bin/sdk/sbf/dependencies
 mkdir -p platform-tools
 tar xjf platform-tools-linux-x86_64.tar.bz2 -C platform-tools
+
+cd /Users/a/.local/share/solana/install/releases/2.3.3/solana-release/bin/platform-tools-sdk/sbf/dependencies/platform-tools
+wget -c https://github.com/anza-xyz/platform-tools/releases/download/v1.50/platform-tools-osx-aarch64.tar.bz2
+tar xjf platform-tools-osx-aarch64.tar.bz2
 #+end_src
 
 #+RESULTS:
