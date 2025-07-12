@@ -1,0 +1,23 @@
+* sui move
+
+** create move project
+
+#+begin_src shell
+sui move new smart_contract_test
+#+end_src
+
+copy from [[https://docs.sui.io/references/cli/move][Sui Move CLI]]
+
+** build
+
+#+begin_src shell
+sui move build
+#+end_src
+
+** test
+
+#+begin_src shell
+sui move test
+#+end_src
+
+copy from [[https://docs.sui.io/guides/developer/first-app/build-test][Build and Test Packages]]
