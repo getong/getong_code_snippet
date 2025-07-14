@@ -502,3 +502,63 @@ impl UdpSocket {
 [[https://github.com/quickwit-oss/quickwit][quickwit]]
 [[https://github.com/getong/stract][stract]]
 [[https://github.com/getong/neos][neos]]
+
+
+** chitchat as a service discovery
+
+see [[https://github.com/StractOrg/stract/blob/main/crates/core/src/distributed/cluster.rs][cluster.rs]]
+see [[https://github.com/StractOrg/stract/blob/main/crates/core/src/distributed/member.rs][member.rs]]
+
+#+begin_src rust
+#[derive(
+    serde::Serialize,
+    serde::Deserialize,
+    bincode::Encode,
+    bincode::Decode,
+    PartialEq,
+    Eq,
+    Hash,
+    Clone,
+    Debug,
+)]
+pub enum Service {
+    Searcher {
+        host: SocketAddr,
+        shard: crate::inverted_index::ShardId,
+    },
+    EntitySearcher {
+        host: SocketAddr,
+    },
+    LiveIndex {
+        host: SocketAddr,
+        search_host: SocketAddr,
+        shard: crate::inverted_index::ShardId,
+        state: LiveIndexState,
+    },
+    Api {
+        host: SocketAddr,
+    },
+    Webgraph {
+        host: SocketAddr,
+        shard: ShardId,
+    },
+    Dht {
+        host: SocketAddr,
+        shard: ShardId,
+    },
+    HarmonicWorker {
+        host: SocketAddr,
+        shard: ShardId,
+    },
+    ApproxHarmonicWorker {
+        host: SocketAddr,
+        shard: ShardId,
+    },
+    ShortestPathWorker {
+        host: SocketAddr,
+        shard: ShardId,
+    },
+}
+#+end_src
+
+_Service_ is used to store various different service in the cluster.
