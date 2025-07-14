@@ -1,0 +1,334 @@
+#+TITLE: Stract project, How OpenRaft Uses cluster.rs to Store Various Kinds of Data
+#+AUTHOR: GitHub Copilot
+#+DATE: July 14, 2025
+#+STARTUP: overview
+#+OPTIONS: toc:2 num:t
+
+* Overview
+
+This document explains how the Stract project implements a dual-layer distributed architecture where OpenRaft provides consensus-based storage while =cluster.rs= provides service discovery and cluster membership management.
+
+* Architecture Overview
+
+The Stract project uses a **hybrid approach** combining two complementary distributed systems:
+
+1. *cluster.rs* - Uses **chitchat gossip protocol** for cluster membership and service discovery
+2. *OpenRaft DHT* - Uses **Raft consensus** for strongly consistent distributed key-value storage
+
+#+BEGIN_EXAMPLE
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Node A        │    │   Node B        │    │   Node C        │
+│                 │    │                 │    │                 │
+│ ┌─────────────┐ │    │ ┌─────────────┐ │    │ ┌─────────────┐ │
+│ │ Gossip      │◄┼────┼►│ Gossip      │◄┼────┼►│ Gossip      │ │
+│ │ (cluster.rs)│ │    │ │ (cluster.rs)│ │    │ │ (cluster.rs)│ │
+│ └─────────────┘ │    │ └─────────────┘ │    │ └─────────────┘ │
+│                 │    │                 │    │                 │
+│ ┌─────────────┐ │    │ ┌─────────────┐ │    │ ┌─────────────┐ │
+│ │ Raft Shard 1│◄┼────┼►│ Raft Shard 1│◄┼────┼►│ Raft Shard 1│ │
+│ │ (OpenRaft)  │ │    │ │ (OpenRaft)  │ │    │ │ (OpenRaft)  │ │
+│ └─────────────┘ │    │ └─────────────┘ │    │ └─────────────┘ │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+#+END_EXAMPLE
+
+* Data Storage Layers
+
+** Cluster Membership Data (via cluster.rs)
+
+The =cluster.rs= file implements a **gossip-based cluster membership system** using the chitchat library.
+
+*** Key Features
+- *Service Registration*: Each node advertises its service type (DHT, Searcher, etc.) via gossip
+- *Node Discovery*: Maintains a view of all available services in the cluster
+- *Ephemeral State*: This data is not persisted - it's rebuilt through gossip on restart
+
+*** Code Example
+#+BEGIN_SRC rust
+// From cluster.rs - stores service information via gossip
+pub async fn set_service(&self, service: Service) -> Result<()> {
+    self.chitchat
+        .lock()
+        .await
+        .self_node_state()
+        .set(SERVICE_KEY, serde_json::to_string(&service)?);
+    Ok(())
+}
+#+END_SRC
+
+*** Data Stored
+- Service type information (DHT, Searcher, etc.)
+- Node addresses and ports
+- Health status
+- Shard assignments
+
+** Consensus-Based Data Storage (via OpenRaft)
+
+The OpenRaft implementation provides **strongly consistent distributed storage** with two main components:
+
+*** A. Raft Log Storage (log_store.rs)
+
+Stores the fundamental Raft consensus data:
+
+**** Components
+- *Raft Entries*: Stores the append-only log of all operations
+- *Voting Records*: Tracks leader election votes
+- *Commit State*: Tracks which entries have been committed
+- *Metadata*: Last purged log ID, committed log ID
+
+**** Implementation
+#+BEGIN_SRC rust
+// From log_store.rs - stores Raft consensus data
+pub struct LogStoreInner<C: RaftTypeConfig> {
+    /// The last purged log id
+    last_purged_log_id: Option<LogId<C::NodeId>>,
+
+    /// The Raft log (index -> entry)
+    log: BTreeMap<u64, C::Entry>,
+
+    /// The commit log id
+    committed: Option<LogId<C::NodeId>>,
+
+    /// The current granted vote
+    vote: Option<Vote<C::NodeId>>,
+}
+#+END_SRC
+
+**** Operations Supported
+- Append new log entries
+- Truncate log from specific index
+- Purge old entries
+- Read log ranges
+- Save/read voting state
+- Track commit progress
+
+*** B. State Machine Storage (store.rs)
+
+Stores the actual application data and state:
+
+**** Components
+- *Application Data*: The actual key-value data organized in tables
+- *Applied State*: Tracks which log entries have been applied to the state machine
+- *Membership Changes*: Cluster membership for the Raft group
+- *Snapshots*: Compressed state for fast recovery
+
+**** Implementation
+#+BEGIN_SRC rust
+// From store.rs - stores application data
+pub struct StateMachineData {
+    /// Last applied log entry
+    pub last_applied_log: Option<LogId<NodeId>>,
+
+    /// Current cluster membership
+    pub last_membership: StoredMembership<NodeId, BasicNode>,
+
+    /// The actual application data (multi-table key-value store)
+    pub db: Db,
+}
+
+pub struct Db {
+    /// Tables -> Keys -> Values
+    data: BTreeMap<Table, BTreeMap<Key, Value>>,
+}
+#+END_SRC
+
+**** Operations Supported
+- Set/get key-value pairs
+- Batch operations
+- Upsert with custom merge functions
+- Table management (create, drop, clone)
+- Range queries
+- Snapshot creation and restoration
+
+* Types of Data Stored
+
+** 1. DHT Data (via OpenRaft)
+*** Multi-table key-value store
+- Tables can be created, dropped, and cloned
+- Each table contains key-value pairs
+- Keys and values are arbitrary bytes
+
+*** Upsert operations with custom merge functions
+- Support for atomic read-modify-write operations
+- Custom merge logic for conflict resolution
+- Batch upsert operations for efficiency
+
+*** Range queries and batch operations
+- Efficient range scans within tables
+- Batch get/set operations
+- Atomic multi-key operations
+
+*** Strong consistency via Raft consensus
+- All operations go through Raft log
+- Guaranteed consistency across replicas
+- Leader election for availability
+
+** 2. Cluster Membership (via gossip)
+*** Service discovery information
+- Node addresses and service types
+- Shard assignments
+- Capability advertisements
+
+*** Node health status
+- Failure detection via gossip
+- Automatic removal of failed nodes
+- Health metrics propagation
+
+*** Dynamic cluster topology changes
+- New nodes can join automatically
+- Graceful node departure
+- Service migration coordination
+
+*** Eventually consistent
+- Gossip protocol provides eventual consistency
+- Fast convergence under normal conditions
+- Partition tolerance
+
+** 3. Raft Consensus Data
+*** Operation logs for durability
+- All state changes logged before application
+- Write-ahead logging semantics
+- Configurable log retention policies
+
+*** Leader election state
+- Voting records for each term
+- Leader leases and heartbeats
+- Election timeout management
+
+*** Cluster membership for each shard
+- Raft group membership separate from gossip
+- Learner and voter management
+- Configuration changes via Raft
+
+*** Snapshots for efficient recovery
+- Periodic state snapshots
+- Log compaction
+- Fast node recovery from snapshots
+
+* System Integration
+
+** File Structure
+#+BEGIN_EXAMPLE
+crates/core/src/
+├── distributed/
+│   ├── cluster.rs              # Gossip-based service discovery
+│   └── member.rs              # Service and shard definitions
+├── ampc/dht/
+│   ├── mod.rs                 # OpenRaft type definitions
+│   ├── log_store.rs           # Raft log storage implementation
+│   ├── store.rs               # State machine storage
+│   ├── network/               # Raft network layer
+│   └── client.rs              # DHT client implementation
+└── entrypoint/ampc/
+    └── dht.rs                 # DHT service entrypoint
+#+END_EXAMPLE
+
+** Initialization Process
+
+*** 1. Start Raft Node
+#+BEGIN_SRC rust
+// Create Raft instance with log and state machine stores
+let raft = openraft::Raft::new(
+    config.node_id,
+    raft_config,
+    network,
+    log_store,
+    state_machine_store.clone(),
+).await?;
+#+END_SRC
+
+*** 2. Join or Initialize Cluster
+#+BEGIN_SRC rust
+// Either join existing cluster or initialize new one
+match config.seed_node {
+    Some(seed) => {
+        client.join(config.node_id, config.host).await?;
+    }
+    None => {
+        raft.initialize(members).await?;
+    }
+}
+#+END_SRC
+
+*** 3. Register with Gossip Layer
+#+BEGIN_SRC rust
+// Join gossip cluster for service discovery
+let _cluster_handle = Cluster::join(
+    Member::new(Service::Dht {
+        host: config.host,
+        shard: config.shard,
+    }),
+    gossip.addr,
+    gossip.seed_nodes.unwrap_or_default(),
+).await?;
+#+END_SRC
+
+** Request Flow
+
+*** Client Request Routing
+1. Client queries gossip layer for available DHT shards
+2. Determines target shard based on key hash
+3. Sends request to current Raft leader for that shard
+4. Raft replicates operation to followers
+5. State machine applies operation and returns result
+
+*** Data Consistency
+- *Strong Consistency*: DHT operations via Raft consensus
+- *Eventual Consistency*: Service discovery via gossip
+- *Partition Tolerance*: Both systems handle network splits gracefully
+
+* Benefits of Dual-System Approach
+
+** Strong Consistency for Application Data
+- Raft provides linearizable consistency for DHT operations
+- No split-brain scenarios for data operations
+- Guaranteed durability and replication
+
+** High Availability for Service Discovery
+- Gossip protocol continues working during Raft leader elections
+- No single point of failure for service discovery
+- Fast convergence of membership information
+
+** Fault Tolerance
+- Services can be discovered even during Raft leader elections
+- Multiple Raft shards provide horizontal scalability
+- Gossip layer provides automatic failure detection
+
+** Scalability
+- Multiple Raft shards for data partitioning
+- Gossip-based coordination scales to large clusters
+- Independent scaling of storage and discovery layers
+
+* Configuration
+
+** Raft Configuration
+#+BEGIN_SRC rust
+let raft_config = openraft::Config {
+    heartbeat_interval: 500,
+    election_timeout_min: 1500,
+    election_timeout_max: 3000,
+    ..Default::default()
+};
+#+END_SRC
+
+** Gossip Configuration
+#+BEGIN_SRC rust
+let config = ChitchatConfig {
+    node_id,
+    cluster_id: CLUSTER_ID.to_string(),
+    gossip_interval: Duration::from_secs(1),
+    listen_addr: gossip_addr,
+    seed_nodes,
+    failure_detector_config,
+    is_ready_predicate: None,
+};
+#+END_SRC
+
+* Summary
+
+The Stract project's storage architecture demonstrates an elegant separation of concerns:
+
+- **cluster.rs** acts as a **service mesh** that helps clients find the right Raft shard for their data
+- **OpenRaft** provides the **strongly consistent storage layer** for the actual application data
+- The combination provides both strong consistency where needed and high availability for service discovery
+
+This hybrid approach allows Stract to scale horizontally while maintaining data consistency and providing robust service discovery in a distributed environment.
