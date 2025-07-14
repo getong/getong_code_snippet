@@ -1,4 +1,4 @@
-#+TITLE: Stract project, How OpenRaft Uses cluster.rs to Store Various Kinds of Data
+#+TITLE: tract project, How OpenRaft Uses cluster.rs to Store Various Kinds of Data
 #+AUTHOR: GitHub Copilot
 #+DATE: July 14, 2025
 #+STARTUP: overview
@@ -322,6 +322,14 @@ let config = ChitchatConfig {
     is_ready_predicate: None,
 };
 #+END_SRC
+
+** entrypoint
+
+There is a entrypoint directory, which start the appliation.
+
+for example, dht.rs file start dht application.
+
+see [[https://github.com/StractOrg/stract/blob/main/crates/core/src/entrypoint/ampc/dht.rs][dht.rs]]
 
 * Summary
 
