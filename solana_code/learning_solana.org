@@ -450,3 +450,11 @@ $ solana address
 $ solana balance
 0.78727204 SOL
 #+end_src
+
+** solana playground
+
+see https://beta.solpg.io/
+
+** solana action and blinks
+
+see [[https://www.markreadfintech.com/p/solana-actions-blinks][區塊鏈新時代的利器：Solana Actions 和 Blinks]]
