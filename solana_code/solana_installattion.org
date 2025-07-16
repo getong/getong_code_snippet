@@ -106,3 +106,10 @@ exec zsh
 #+end_src
 
 copy from [[https://www.anchor-lang.com/docs/installation#shell-completions][Shell Completions]]
+
+
+** install stable version
+
+#+begin_src shell
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+#+end_src
