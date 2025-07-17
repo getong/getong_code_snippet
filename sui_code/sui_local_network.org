@@ -1,0 +1,33 @@
+* sui local network
+
+** Start the local network
+
+#+begin_src shell
+$ RUST_LOG="off,sui_node=info" sui start --with-faucet --force-regenesis
+#+end_src
+
+
+** Access your local Full node
+
+#+begin_src shell
+curl --location --request POST 'http://127.0.0.1:9000' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "sui_getTotalTransactionBlocks",
+  "params": []
+}'
+#+end_src
+
+*** output result
+
+#+begin_src json
+{
+	"jsonrpc": "2.0",
+	"result": 168,
+	"id": 1
+}
+#+end_src
+
+copy from [[https://docs.sui.io/guides/developer/getting-started/local-network][Connect to a Local Network]]
