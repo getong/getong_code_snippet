@@ -1,0 +1,27 @@
+* arbitrum stylus
+
+** Installing cargo stylus
+
+#+begin_src shell
+cargo install --force cargo-stylus
+#+end_src
+
+** Creating a project
+
+#+begin_src shell
+cargo stylus new <YOUR_PROJECT_NAME>
+#+end_src
+
+** Checking if your Stylus project is valid
+
+#+begin_src shell
+cargo stylus check
+#+end_src
+
+** Exporting the Solidity ABI interface
+
+#+begin_src shell
+cargo stylus export-abi
+#+end_src
+
+copy from [[https://docs.arbitrum.io/stylus/quickstart][stylus quickstart]]
