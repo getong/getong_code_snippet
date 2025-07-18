@@ -1,0 +1,260 @@
+* Solana Resource Limitations
+
+** Introduction
+Solana is a high-performance blockchain with strict resource management mechanisms. Programs running on Solana are subject to several types of resource limitations designed to maintain network efficiency and stability while providing developers with clear boundaries for development.
+
+** Types of Resource Limitations
+
+*** CU (Compute Unit) Limitations
+In the Solana blockchain, a CU is the smallest unit used to measure the computational resources consumed during transaction execution. Each transaction on the chain consumes a certain number of CUs depending on the operations it performs.
+
+**** CU Limits:
+- Maximum CU limit per transaction: 1.4 million
+- Default CU limit per instruction: 200,000
+- CU limit per block: 48 million
+- CU limit per user in a block: 12 million
+
+**** Setting CU Limits:
+The limit can be adjusted using the =SetComputeUnitLimit= instruction, but it cannot exceed the maximum transaction limit of 1.4 million CUs.
+
+*** Storage Limitations
+Each account's data structure is called AccountInfo, which includes:
+- The account's state
+- Program code (if it's a program account)
+- Balance (in lamports, where 1 SOL = 1 billion lamports)
+- The associated owner program (program ID)
+
+**** Storage Limits:
+- Maximum storage size for each account: 10MB
+
+*** Transaction Size Limitations
+Solana follows a maximum transmission unit (MTU) limit of 1,280 bytes, in line with the IPv6 MTU standard. After accounting for headers, 1,232 bytes remain for data.
+
+**** Transaction Size Limits:
+- Maximum size of each transaction: 1,232 bytes
+- Each signature occupies 64 bytes
+- Message contains instructions, accounts, and metadata (32 bytes each)
+
+*** Call Depth Limitations
+To ensure efficient program execution, Solana imposes limits on each program's call stack depth.
+
+**** Call Depth Limits:
+- Maximum call stack depth per program: 64 layers
+- Maximum depth for cross-program calls: 4 layers
+
+*** Stack Size Limitations
+Each stack frame has a size limit, using fixed stack frames instead of variable stack pointers.
+
+**** Stack Size Limits:
+- Each stack frame size limit: 4KB
+- Program heap size: 32KB
+
+*** Program Derived Addresses (PDA) Account Limitations
+PDAs offer developers a deterministic method for generating account addresses using predefined seeds and the program ID.
+
+**** PDA Limits:
+- Length of each PDA seed cannot exceed: 32 bytes
+- Total number of seeds cannot exceed: 16 seeds
+
+** Displaying CU Consumption
+
+*** Basic CU Logging
+#+begin_src rust
+use solana_program::log::sol_log_compute_units;
+
+sol_log_compute_units();
+// other code
+sol_log_compute_units();
+#+end_src
+
+*** CU Logging Macro
+#+begin_src rust
+// build a macro to log compute units
+#[macro_export]
+macro_rules! compute_fn {
+    ($msg:expr=> $($tt:tt)*) => {{
+        msg!(concat!($msg, " {"));
+        sol_log_compute_units();
+        let res = { $($tt)* };
+        sol_log_compute_units();
+        msg!(concat!(" } // ", $msg));
+        res
+    }};
+}
+
+// use the macro to log compute units
+compute_fn!("create account" => {
+    // create account code
+});
+#+end_src
+
+** CU Consumption Analysis
+
+*** Common Operations CU Consumption
+| Operation                 | CU Consumption |
+|---------------------------+----------------|
+| Transfer SOL              | 150            |
+| Create Account            | 3,000          |
+| Create Simple data struct | 7,000          |
+| Counter (Init)            | 5,000          |
+| Counter (Add count)       | 900            |
+| Token Create              | 3,000          |
+| Token Mint                | 4,500          |
+| Token Burn                | 4,000          |
+| Token Transfer            | 4,500          |
+
+*** Program Constructs CU Consumption
+| Construct                | CU Consumption |
+|--------------------------+----------------|
+| For Loop (Init)          |            301 |
+| For Loop (Per Iteration) |            181 |
+| If Statement             |            100 |
+| Vec<u8> (10 items)       |            462 |
+| Vec<u32> (10 items)      |            628 |
+| Vec<u64> (10 items)      |            682 |
+| Hash Function            |            200 |
+| Function Call (empty)    |            100 |
+
+*** Loop Examples
+#+begin_src rust
+// simple msg print, cost 226 CU
+msg!("i: {}", 1);
+
+// simple print for loop 1 time, cost 527 CU
+for i in 0..1 {
+    msg!("i: {}", i);
+}
+
+// simple print for loop 2 times, cost 934 CU
+for i in 0..2 {
+    msg!("i: {}", i);
+}
+#+end_src
+
+*** If Statement Examples
+#+begin_src rust
+// a base function consumed 221 CU
+pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
+    Ok(())
+}
+
+// after add if statement, the CU consumed is 339 CU
+pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
+    if true {
+        Ok(())
+    } else {
+        Ok(())
+    }
+}
+#+end_src
+
+*** Different Data Structure Sizes
+#+begin_src rust
+// use a default vector and push 10 items, it will consume 628 CU
+let mut a: Vec<u32> = Vec::new();
+for _ in 0..10 {
+    a.push(1);
+}
+
+// use a 64-bit vector and do the same things, it will consume 682 CU
+let mut a: Vec<u64> = Vec::new();
+for _ in 0..10 {
+    a.push(1);
+}
+
+// use an 8-bit vector and do the same things, it will consume 462 CU
+let mut a: Vec<u8> = Vec::new();
+for _ in 0..10 {
+    a.push(1);
+}
+#+end_src
+
+*** Hash Function Example
+#+begin_src rust
+use solana_program::hash::hash;
+
+pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
+    let data = b"some data";
+    let _hash = hash(data);
+    Ok(())
+}
+#+end_src
+
+** Native vs Anchor Programs CU Consumption
+
+*** Native Program Token Transfer CU Breakdown
+| Operation                           | CU Consumption |
+|-------------------------------------+----------------|
+| Base consumption (empty method)     |            939 |
+| Transfer initialization             |          2,641 |
+| Checking if account is frozen       |            105 |
+| Checking sufficient balance         |            107 |
+| Verifying Token type match          |            123 |
+| Checking Token address and decimals |            107 |
+| Handling self-transfers             |            107 |
+| Updating account balances           |            107 |
+| Handling SOL transfers              |            103 |
+| Saving account states               |            323 |
+| *Total*                               |         ~4,555 |
+
+*** Anchor Program Token Transfer CU Breakdown
+| Operation                       | CU Consumption |
+|---------------------------------+----------------|
+| Anchor framework initialization | 10,526         |
+| Account initialization          | 20,544         |
+| Token transfer instruction      | 50,387         |
+| *Total*                           | 81,457         |
+
+*** Anchor Transfer Instruction Breakdown
+| Operation                                          | CU Consumption |
+|----------------------------------------------------+----------------|
+| Function initialization                            | 6,213          |
+| Print statement #1 (Base58 conversion)             | 11,770         |
+| Print statement #2                                 | 11,645         |
+| Print statement #3                                 | 11,811         |
+| Transfer instruction (anchor_spl::token::transfer) | 7,216          |
+| Other miscellaneous costs                          | 1,732          |
+| *Total*                                              | 50,387         |
+
+** Data Structure Example
+#+begin_src rust
+use anchor_lang::prelude::*;
+
+#[account]
+#[derive(InitSpace)] // automatically calculate the space required for the struct
+pub struct AddressInfo {
+    #[max_len(50)] // set a max length for the string
+    pub name: String, // 4 bytes + 50 bytes
+    pub house_number: u8, // 1 byte
+    #[max_len(50)]
+    pub street: String, // 4 bytes + 50 bytes
+    #[max_len(50)]
+    pub city: String, // 4 bytes + 50 bytes
+}
+#+end_src
+
+** Optimization Tips
+
+*** Measure compute usage
+Display CU consumption in logs to assess the compute cost of code snippets and identify high-cost areas.
+
+*** Reduce logging
+Logging operations (especially =msg!= macro) significantly increase CU consumption, particularly with Base58 encoding and string concatenation. Use =.key().log()= for more efficient logging.
+
+*** Choose appropriate data types
+Larger data types (like =u64=) consume more CUs than smaller ones (like =u8=). Use smaller data types when possible.
+
+*** Optimize serialization operations
+Serialization and deserialization operations increase CU consumption. Use zero-copy techniques to interact directly with account data.
+
+*** Optimize PDA lookup
+The =find_program_address= function's computational complexity depends on attempts needed to find a valid address. Store the bump value during initialization and reuse it in subsequent operations.
+
+** References
+- [[https://solana.com/docs/core/fees#compute-unit-limit][Solana Docs: Core Fees]]
+- [[https://solana.com/docs/core/accounts][Solana Docs: Core Accounts]]
+- [[https://solana.com/docs/core/transactions][Solana Docs: Core Transactions]]
+- [[https://solana.com/docs/programs/limitations][Solana Docs: Program Limitations]]
+- [[https://github.com/solana-developers/program-examples][Solana Developers: Program Examples]]
+- [[https://www.anchor-lang.com/][Anchor Lang]]
+- [[https://57blocks.io/blog/deep-dive-into-resource-limitations-in-solana-development-cu-edition][Original Article: Deep Dive into Resource Limitations in Solana Development]]
