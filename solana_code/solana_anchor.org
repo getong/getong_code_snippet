@@ -1,0 +1,71 @@
+* solana anchor
+
+** generate program id keypair
+
+#+begin_src shell
+solana-keygen new --outfile ~/solana-wallets/program2.json
+#+end_src
+
+The output:
+
+#+begin_example
+Generating a new keypair
+
+For added security, enter a BIP39 passphrase
+
+NOTE! This passphrase improves security of the recovery seed phrase NOT the
+keypair file itself, which is stored as insecure plain text
+
+BIP39 Passphrase (empty for none):
+
+Wrote new keypair to /Users/gerald/solana-wallets/program2.json
+=====================================================================
+pubkey: FR5qMvZDfUihKgmqVUeESy8AtMXb1YW6wWQ57TpoKtnn
+#+end_example
+
+the pubkey is : _FR5qMvZDfUihKgmqVUeESy8AtMXb1YW6wWQ57TpoKtnn_
+
+** update anchor code
+
+*** update Anchor.toml
+
+#+begin_example
+[programs.localnet]
+counter = "FR5qMvZDfUihKgmqVUeESy8AtMXb1YW6wWQ57TpoKtnn"
+#+end_example
+
+*** update program lib.rs
+
+for example, programs/counter/src/lib.rs
+
+#+begin_src rust
+declare_id!("FR5qMvZDfUihKgmqVUeESy8AtMXb1YW6wWQ57TpoKtnn");
+#+end_src
+
+*** sync keys
+
+#+begin_src shell
+anchor keys sync
+#+end_src
+
+and the idl.json is located in directory _target/idl/counter.json_
+
+** copy idl file and compile
+
+*** copy the idl file
+
+#+begin_src shell
+cp target/idl/counter.json ../rust_code/counter_idl_example/idls
+#+end_src
+
+*** compile
+
+#+begin_src shell
+cargo build
+#+end_src
+
+*** run the code
+
+#+begin_src shell
+cargo run
+#+end_src
