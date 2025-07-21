@@ -69,3 +69,13 @@ cargo build
 #+begin_src shell
 cargo run
 #+end_src
+
+** regenerate program id
+
+#+begin_src shell
+solana-keygen new --force --outfile target/deploy/pda_limitation-keypair.json
+anchor keys sync
+
+anchor build
+anchor deploy
+#+end_src
