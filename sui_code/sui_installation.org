@@ -1,0 +1,7 @@
+* sui installation
+
+** install on macos
+
+#+begin_src shell
+brew install sui
+#+end_src
