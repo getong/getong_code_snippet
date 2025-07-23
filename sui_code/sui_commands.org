@@ -24,4 +24,6 @@ $ sui client balance
 
 $ sui client faucet
 
+$ sui client new-address ed25519
+
 #+end_src
