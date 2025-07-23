@@ -1,0 +1,27 @@
+* sui commands
+
+** sui client subcommands
+
+#+begin_src shell
+$ sui client
+
+$ sui client addressses
+[warning] Client/Server api version mismatch, client api version : 1.52.1, server api version : 1.52.2
+╭────────────────┬────────────────────────────────────────────────────────────────────┬────────────────╮
+│ alias          │ address                                                            │ active address │
+├────────────────┼────────────────────────────────────────────────────────────────────┼────────────────┤
+│ sleepy-axinite │ 0x07666ec73e3a36d9484281040bb6488bbf7b12542c2b7bbbda337cb88b04803d │ *              │
+╰────────────────┴────────────────────────────────────────────────────────────────────┴────────────────╯
+
+
+$ sui client active-address
+
+$ sui client switch-address sleepy-axinite
+
+$ sui client active-env
+
+$ sui client balance
+
+$ sui client faucet
+
+#+end_src
