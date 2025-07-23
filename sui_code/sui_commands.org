@@ -5,6 +5,13 @@
 #+begin_src shell
 $ sui client
 
+$ sui client new-env --alias local --rpc http://127.0.0.1:9000
+
+$ sui client switch --env local
+
+$ sui client active-env
+
+
 $ sui client addresses
 ╭────────────────┬────────────────────────────────────────────────────────────────────┬────────────────╮
 │ alias          │ address                                                            │ active address │
