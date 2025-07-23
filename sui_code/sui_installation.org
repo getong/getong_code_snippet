@@ -1,7 +1,18 @@
 * sui installation
 
-** install on macos
+** +install on macos+
 
 #+begin_src shell
-brew install sui
+# brew install sui
+#+end_src
+
+
+** download from github
+
+#+begin_src shell
+ wget -c https://github.com/MystenLabs/sui/releases/download/testnet-v1.52.2/sui-testnet-v1.52.2-macos-x86_64.tgz
+ mkdir ~/sui-1.52.2
+ cd ~/sui-1.52.2
+ tar xzf ~/sui-testnet-v1.52.2-macos-x86_64.tgz
+ export PATH=~/sui-1.52.2:$PATH
 #+end_src

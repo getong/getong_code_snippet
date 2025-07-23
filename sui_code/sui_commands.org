@@ -6,7 +6,6 @@
 $ sui client
 
 $ sui client addressses
-[warning] Client/Server api version mismatch, client api version : 1.52.1, server api version : 1.52.2
 ╭────────────────┬────────────────────────────────────────────────────────────────────┬────────────────╮
 │ alias          │ address                                                            │ active address │
 ├────────────────┼────────────────────────────────────────────────────────────────────┼────────────────┤
