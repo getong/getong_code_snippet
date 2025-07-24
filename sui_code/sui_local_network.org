@@ -31,3 +31,11 @@ curl --location --request POST 'http://127.0.0.1:9000' \
 #+end_src
 
 copy from [[https://docs.sui.io/guides/developer/getting-started/local-network][Connect to a Local Network]]
+
+
+** sui website
+
+#+begin_example
+https://suivision.xyz
+https://suiscan.xyz
+#+end_example
