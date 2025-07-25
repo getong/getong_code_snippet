@@ -7,7 +7,11 @@ $ sui client
 
 $ sui client new-env --alias local --rpc http://127.0.0.1:9000
 
+$ sui client new-env --alias testnet --rpc https://fullnode.testnet.sui.io:443
+
 $ sui client switch --env local
+
+$ sui client switch --env testnet
 
 $ sui client active-env
 
@@ -33,6 +37,8 @@ $ sui client faucet
 $ sui client new-address ed25519
 
 $ sui client publish --gas-budget 100000000
+
+$ sui client object <package_id>
 
 sui client call \
   --package 0x639c74726babc9346b19053102ed7c5fdb626aed7403c5da435ff1f02a4b372d \
