@@ -1,5 +1,7 @@
 * deno_runtime
 
+** deno blog
+
 [[https://deno.com/blog/roll-your-own-javascript-runtime][Roll your own JavaScript runtime]]
 [[https://deno.com/blog/roll-your-own-javascript-runtime-pt2][Roll your own JavaScript runtime, pt. 2]]
 [[https://deno.com/blog/roll-your-own-javascript-runtime-pt3][Roll your own JavaScript runtime, pt. 3]]
@@ -7,3 +9,11 @@
 [[https://stackoverflow.com/questions/79486773/how-to-reuse-full-featured-deno-in-my-rust-project][How to reuse full-featured Deno in my Rust project]]
 [[https://crates.io/crates/oxc_resolver][ESM / CJS module resolution]]
 [[https://github.com/alshdavid/napi_ext][Extends napi-rs with local-thread futures]]
+[[https://cheatcod3.hashnode.dev/embedding-typescript-in-your-rust-project][Embedding TypeScript in your Rust Project]]
+[[https://zenn.dev/skanehira/articles/2022-11-20-rust-deno-node][Denoを使ってRustでNodeモジュールを使う]]
+
+
+** rust + deno + typescript projects
+
+[[https://github.com/data2evidence/trex][trex]]
+[[https://github.com/supabase/edge-runtime][A server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services]]
