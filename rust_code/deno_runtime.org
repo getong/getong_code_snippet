@@ -1,0 +1,9 @@
+* deno_runtime
+
+[[https://deno.com/blog/roll-your-own-javascript-runtime][Roll your own JavaScript runtime]]
+[[https://deno.com/blog/roll-your-own-javascript-runtime-pt2][Roll your own JavaScript runtime, pt. 2]]
+[[https://deno.com/blog/roll-your-own-javascript-runtime-pt3][Roll your own JavaScript runtime, pt. 3]]
+[[https://secutils.dev/docs/blog/rust-application-with-js-extensions][Supercharge your app with user extensions using Deno runtime]]
+[[https://stackoverflow.com/questions/79486773/how-to-reuse-full-featured-deno-in-my-rust-project][How to reuse full-featured Deno in my Rust project]]
+[[https://crates.io/crates/oxc_resolver][ESM / CJS module resolution]]
+[[https://github.com/alshdavid/napi_ext][Extends napi-rs with local-thread futures]]
