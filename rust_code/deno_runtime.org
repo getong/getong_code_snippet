@@ -11,7 +11,7 @@
 [[https://github.com/alshdavid/napi_ext][Extends napi-rs with local-thread futures]]
 [[https://cheatcod3.hashnode.dev/embedding-typescript-in-your-rust-project][Embedding TypeScript in your Rust Project]]
 [[https://zenn.dev/skanehira/articles/2022-11-20-rust-deno-node][Denoを使ってRustでNodeモジュールを使う]]
-
+[[https://scrapbox.io/uki00a/deno_core][deno projects]]
 
 ** rust + deno + typescript projects
 
