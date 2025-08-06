@@ -16,3 +16,10 @@ code example
 ** some other projects
 
 [[https://github.com/rscarson/rustyscript][rustyscript]]
+
+[[https://github.com/supabase/edge-runtime][A server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services]]
+[[https://github.com/exograph/exograph][Build production-ready backends in minutes]]
+[[https://github.com/windmill-labs/windmill][windmill]]
+[[https://github.com/coasys/ad4m][Agent-centric social network and interoperability dApp framework]]
+[[https://github.com/not-elm/desktop_homunculus][Desktop mascot built with bevy]]
+[[https://github.com/SteveBeeblebrox/SJS][A simple JavaScript runtime]]
