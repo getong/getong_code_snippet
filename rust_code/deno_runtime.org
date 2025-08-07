@@ -24,3 +24,126 @@
 https://github.com/andreubotella/deno-simple-module-loader
 https://github.com/search?q=deno_core+impl+ModuleLoader+for++npm&type=code
 https://github.com/invertase/globe_runtime
+
+** module loader sample
+
+copy from https://github.com/hanakla/illustrator-webgpu-plugin
+
+#+begin_src rust
+impl ModuleLoader for AiDenoModuleLoader {
+    fn resolve(
+        &self,
+        raw_specifier: &str,
+        raw_referrer: &str,
+        kind: ResolutionKind,
+    ) -> Result<ModuleSpecifier, ModuleLoaderError> {
+        deno_println!(
+            "resolving: {}, referrer: {}, kind: {:?}",
+            raw_specifier,
+            raw_referrer,
+            kind
+        );
+
+        let referrer = self.resolve_referrer(raw_referrer)?;
+
+        if raw_specifier.starts_with("npm:") {
+            let package_name = raw_specifier.strip_prefix("npm:").unwrap_or(raw_specifier);
+            let npm_url = format!("npm:{}", package_name);
+            return Url::parse(&npm_url).map_err(|err| {
+                ModuleLoaderError::from(JsErrorBox::generic(format!(
+                    "Failed to parse npm URL: {} - {}",
+                    npm_url, err
+                )))
+            });
+        } else if raw_specifier.starts_with("jsr:") {
+            deno_println!("JSR module: {}", raw_specifier);
+            return Ok(ModuleSpecifier::from_str(raw_specifier).unwrap());
+        } else if raw_specifier.starts_with("node:") {
+            return self.resolve_node_builtin(raw_specifier, &referrer);
+        } else if (self
+            .allowed_module_schemas
+            .iter()
+            .any(|s| raw_specifier.starts_with(s)))
+        {
+            return Ok(ModuleSpecifier::from_str(raw_specifier).unwrap());
+        }
+
+        let result = match deno_core::resolve_import(raw_specifier, raw_referrer) {
+            Ok(url) => Ok(url),
+            Err(err) => match self.resolve_npm_module(raw_specifier, &referrer) {
+                Ok(url) => return Ok(url),
+                Err(err2) => {
+                    deno_println!(
+                        "Failed to fallback resoling npm module: {}, {}",
+                        raw_specifier,
+                        err2.to_string()
+                    );
+                    return Err(ModuleLoaderError::from(JsErrorBox::from_err(err)));
+                }
+            },
+        };
+
+        deno_println!("resolve request: {:?} -> {:?}", raw_specifier, result);
+
+        result
+    }
+
+    fn load(
+        &self,
+        module_specifier: &ModuleSpecifier,
+        maybe_referrer: Option<&ModuleSpecifier>,
+        is_dyn_import: bool,
+        requested_module_type: RequestedModuleType,
+    ) -> ModuleLoadResponse {
+        deno_println!(
+            "loading: {}, referrer: {:?}, is_dyn_import: {}",
+            module_specifier,
+            maybe_referrer,
+            is_dyn_import
+        );
+
+        let module_specifier = module_specifier.clone();
+        let maybe_referrer = maybe_referrer.cloned();
+        let loader = self.clone();
+
+        ModuleLoadResponse::Async(Box::pin(async move {
+            let actual_specifier = if module_specifier.scheme() == "npm" {
+                let referrer = maybe_referrer.unwrap_or_else(|| {
+                    let current_dir = std::env::current_dir().unwrap();
+                    deno_core::resolve_path(".", &current_dir).unwrap()
+                });
+
+                loader
+                    .resolve_and_ensure_npm_module(module_specifier.as_str(), &referrer)
+                    .await?
+            } else if module_specifier.scheme() == "jsr" {
+                loader.ensure_jsr_module(&module_specifier).await?
+            } else {
+                module_specifier.clone()
+            };
+
+            let (content, final_url) = loader.fetch_module_content(&actual_specifier).await?;
+            let module_type = loader.determine_module_type(&final_url, &content);
+
+            if module_type == ModuleType::Json && requested_module_type != RequestedModuleType::Json
+            {
+                return Err(ModuleLoaderError::from(JsErrorBox::generic(
+                    "Invalid module type requested",
+                )));
+            }
+
+            deno_println!("Loaded module: {}", final_url);
+
+            let module_source = ModuleSource::new_with_redirect(
+                module_type,
+                ModuleSourceCode::String(content.into()),
+                &module_specifier,
+                &final_url,
+                None,
+            );
+
+            Ok(module_source)
+        }))
+    }
+}
+#+end_src
