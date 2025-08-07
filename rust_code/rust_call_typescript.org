@@ -23,3 +23,7 @@ code example
 [[https://github.com/coasys/ad4m][Agent-centric social network and interoperability dApp framework]]
 [[https://github.com/not-elm/desktop_homunculus][Desktop mascot built with bevy]]
 [[https://github.com/SteveBeeblebrox/SJS][A simple JavaScript runtime]]
+[[https://github.com/marcomq/tauri-plugin-deno][Tauri plugin to run deno javascript code in the backend instead of rust]]
+[[https://github.com/LIT-Protocol/Node][This is a release snapshot repo of the Lit Node]]
+[[https://github.com/umijs/mako][An extremely fast, production-grade web bundler based on Rust]]
+[[https://github.com/hanakla/illustrator-webgpu-plugin][Dinostrator - A WebGPU LiveEffects for Adobe Illustrator]]
