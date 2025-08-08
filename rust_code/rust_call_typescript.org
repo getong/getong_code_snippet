@@ -28,3 +28,12 @@ code example
 [[https://github.com/umijs/mako][An extremely fast, production-grade web bundler based on Rust]]
 [[https://github.com/hanakla/illustrator-webgpu-plugin][Dinostrator - A WebGPU LiveEffects for Adobe Illustrator]]
 [[https://github.com/alshdavid-labs/deno-experiments][deno-experiments]]
+
+
+** deno_core/deno_runtime call typescript difficulty
+
+- [X] setup deno_core/deno_runtime
+- [X] support javascript/typescript
+- [X] support npm: scheme url
+- [X] support download all dependencies of package.json
+- [ ] support node:http, node:https built-in library, take a look at edge-runtime
