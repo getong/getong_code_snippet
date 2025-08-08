@@ -19,7 +19,7 @@
 [[https://github.com/supabase/edge-runtime][A server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services]]
 
 [[https://github.com/denoland/deno/issues/29174][Using deno_runtime to run a JS script fails with SyntaxError]]
-
+[[https://zenn.dev/skanehira/articles/2022-11-20-rust-deno-node][Denoを使ってRustでNodeモジュールを使う]]
 
 https://github.com/andreubotella/deno-simple-module-loader
 https://github.com/search?q=deno_core+impl+ModuleLoader+for++npm&type=code
