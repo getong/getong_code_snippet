@@ -37,3 +37,15 @@ code example
 - [X] support npm: scheme url
 - [X] support download all dependencies of package.json
 - [ ] support node:http, node:https built-in library, take a look at edge-runtime
+  it can resolve by deno_node crate.
+#+begin_src typescript
+import * as http from "node:http"
+#+end_src
+
+** use deno_node project
+
+https://github.com/tyrchen/deno-utils
+https://github.com/graphteon/luwak
+https://github.com/Cassielxd/DenoCool
+https://github.com/denoland/deno
+https://github.com/supabase/edge-runtime
