@@ -1,0 +1,239 @@
+#+TITLE: Deno Architecture: Node.js HTTP/HTTPS Module Loading and Execution
+#+AUTHOR: Analysis of Deno Runtime
+#+DATE: 2025-08-10
+
+* Overview
+
+This document describes how Deno handles TypeScript/JavaScript scripts that import ~node:http~ and ~node:https~ modules, tracing the complete flow from module import to execution through the Rust runtime.
+
+* Architecture Components
+
+** Module Resolution System
+
+*** Built-in Module Registry
+- Location: ~libs/node_resolver/builtin_modules.rs~
+- Contains static list of supported Node.js built-in modules
+- Includes "http", "https", and other Node.js core modules
+
+*** NodeResolver
+- Location: ~libs/node_resolver/resolution.rs~
+- Handles "node:" URL scheme recognition
+- Maps module names to built-in status
+- Key method: ~resolve()~ - determines if specifier is built-in Node module
+
+** Module Loading Pipeline
+
+*** CliModuleLoader
+- Location: ~cli/module_loader.rs~
+- Implements ~ModuleLoader~ trait from deno_core
+- Handles module resolution, loading, and caching
+- Supports TypeScript transpilation
+
+*** Extension System
+- Location: ~ext/node/lib.rs~
+- Maps "node:" specifiers to TypeScript polyfills:
+  #+BEGIN_SRC rust
+  deno_core::extension!(deno_node,
+    esm = [
+      "node:http" = "http.ts",
+      "node:https" = "https.ts",
+      // ... other mappings
+    ],
+  );
+  #+END_SRC
+
+** Runtime Integration
+
+*** JsRuntime
+- Core bridge between Rust and V8 JavaScript engine
+- Location: ~runtime/worker.rs~
+- Manages module execution and event loop
+- Key components:
+  - MainWorker: Contains JsRuntime instance
+  - Extensions: Collection of Rust extensions providing JS APIs
+  - ModuleLoader: Handles module resolution and loading
+
+*** Op System
+- Rust functions exposed to JavaScript via ~#[op2]~ attribute
+- Provides system-level functionality to JavaScript
+- Examples in http.ts:
+  - ~op_node_http_request_with_conn~
+  - ~op_node_http_await_response~
+  - ~op_node_http_fetch_response_upgrade~
+
+* Execution Flow: Import to Runtime
+
+** Phase 1: CLI Entry and Runtime Setup
+
+1. *CLI Entry Point* (~cli/main.rs~)
+   - Parse command line arguments
+   - Configure runtime options
+   - Create MainWorker instance
+
+2. *Worker Creation* (~runtime/worker.rs~)
+   #+BEGIN_SRC rust
+   MainWorker::bootstrap_from_options(options)
+   #+END_SRC
+   - Initialize JsRuntime with extensions
+   - Register deno_node extension containing polyfills
+
+** Phase 2: Module Resolution
+
+3. *Import Statement Processing*
+   #+BEGIN_SRC typescript
+   import { createServer } from "node:http";
+   #+END_SRC
+
+4. *Resolution Process*
+   - CliModuleLoader receives "node:http" specifier
+   - NodeResolver identifies it as built-in module
+   - Maps to ~ext/node/polyfills/http.ts~
+
+** Phase 3: Module Loading
+
+5. *TypeScript Loading*
+   - Load http.ts polyfill from filesystem
+   - Transpile TypeScript to JavaScript if needed
+   - Create ModuleSource for V8
+
+6. *V8 Module Creation*
+   #+BEGIN_SRC rust
+   let id = worker.preload_main_module(&module_specifier).await?;
+   worker.evaluate_module(id).await
+   #+END_SRC
+
+** Phase 4: JavaScript Execution
+
+7. *Bootstrap Process* (~runtime/js/99_main.js~)
+   - Initialize global objects and APIs
+   - Set up Node.js compatibility layer
+   - Configure event handlers
+
+8. *Module Instantiation*
+   - V8 instantiates ES module
+   - Import/export linkage established
+   - Module evaluation begins
+
+** Phase 5: Runtime Integration
+
+9. *Polyfill Execution*
+   - http.ts executes, importing Deno internals
+   - Integrates with Deno's native HTTP capabilities
+   - Exposes Node.js-compatible API
+
+10. *Op System Bridge*
+    - JavaScript calls Rust ops for system functionality
+    - Async operations integrate with V8 promises
+    - Event loop coordinates V8 and Tokio
+
+* Node.js HTTP/HTTPS Implementation
+
+** HTTP Module (~ext/node/polyfills/http.ts~)
+
+*** Key Imports
+#+BEGIN_SRC typescript
+import {
+  op_node_http_await_information,
+  op_node_http_await_response,
+  op_node_http_fetch_response_upgrade,
+  op_node_http_request_with_conn,
+} from "ext:core/ops";
+#+END_SRC
+
+*** Implementation Details
+- Implements Node.js-compatible HTTP server and client
+- Uses Deno's native HTTP server (~ext:deno_http/00_serve.ts~)
+- Wraps Deno functionality with Node.js API
+
+** HTTPS Module (~ext/node/polyfills/https.ts~)
+
+*** Key Features
+#+BEGIN_SRC typescript
+import { type ServerHandler, ServerImpl as HttpServer } from "node:http";
+import { createHttpClient } from "ext:deno_fetch/22_http_client.js";
+#+END_SRC
+
+*** Implementation
+- Extends HTTP module with TLS support
+- Server class wraps HttpServer with certificate handling
+- Client uses Deno's fetch HTTP client with TLS
+
+* Key Rust Components
+
+** Module Execution Functions
+
+*** execute_main_module
+#+BEGIN_SRC rust
+pub async fn execute_main_module(
+  &mut self, 
+  module_specifier: &ModuleSpecifier
+) -> Result<(), CoreError> {
+  let id = self.preload_main_module(module_specifier).await?;
+  self.evaluate_module(id).await
+}
+#+END_SRC
+
+*** evaluate_module
+- Waits for inspector session
+- Runs module evaluation in V8
+- Coordinates with event loop
+
+** Event Loop Integration
+#+BEGIN_SRC rust
+pub async fn run_event_loop(
+  &mut self, 
+  wait_for_inspector: bool
+) -> Result<(), CoreError> {
+  self.js_runtime.run_event_loop(PollEventLoopOptions {
+    wait_for_inspector,
+    ..Default::default()
+  }).await
+}
+#+END_SRC
+
+* Test Infrastructure
+
+** Node Unit Tests (~tests/integration/node_unit_tests.rs~)
+
+*** Test Runner
+#+BEGIN_SRC rust
+fn node_unit_test(test: String) {
+  let mut deno = util::deno_cmd()
+    .arg("test")
+    .arg(util::tests_path()
+      .join("unit_node")
+      .join(format!("{test}.ts")))
+    .spawn()
+    .expect("failed to spawn script");
+}
+#+END_SRC
+
+*** Special Handling
+- HTTP tests require TLS certificates
+- Uses ~--cert=./tests/testdata/tls/RootCA.pem~ flag
+
+* Performance Optimizations
+
+** Snapshots
+- Pre-compiled JavaScript code for faster startup
+- Includes polyfills and bootstrap code
+
+** Code Caching
+- V8 bytecode caching
+- Module graph optimization
+
+** Lazy Loading
+- Extensions loaded on-demand
+- Reduces initial memory footprint
+
+* Summary
+
+The Deno architecture for handling Node.js HTTP/HTTPS modules demonstrates:
+
+1. *Modular Design*: Clear separation between resolution, loading, and execution
+2. *Compatibility Layer*: TypeScript polyfills provide Node.js API surface
+3. *Performance*: Optimized through snapshots and caching
+4. *Integration*: Seamless bridge between Rust system code and JavaScript runtime
+5. *Extensibility*: Op system allows adding new functionality from Rust
+
+The flow from ~import "node:http"~ to execution involves multiple layers of abstraction, each serving a specific purpose in providing Node.js compatibility while maintaining Deno's security and performance characteristics.
