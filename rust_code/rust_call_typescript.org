@@ -28,7 +28,22 @@ code example
 [[https://github.com/umijs/mako][An extremely fast, production-grade web bundler based on Rust]]
 [[https://github.com/hanakla/illustrator-webgpu-plugin][Dinostrator - A WebGPU LiveEffects for Adobe Illustrator]]
 [[https://github.com/alshdavid-labs/deno-experiments][deno-experiments]]
-
+[[https://github.com/oramasearch/orama-js-pool][The OramaCore serverless JavaScript runtime - powered by Deno Resources]]
+[[https://github.com/Ciencia-Cafe/cafe_runtime][cafe runtime]]
+https://github.com/metatypedev/metatype
+https://github.com/umijs/mako
+https://github.com/garronej/denoify
+https://github.com/nurv/aish
+https://github.com/kevinJ045/rew
+https://github.com/fensak-io/senc
+https://github.com/BioforestChain/plaoc
+https://github.com/denoland/deno/blob/main/ext/node/polyfills/01_require.js
+https://github.com/fleek-network/lightning
+https://github.com/phylum-dev/cli
+https://github.com/invertase/globe_runtime
+https://github.com/project-gauntlet/gauntlet
+https://github.com/Schachte/kaffe-rs
+https://github.com/denoland/deno-js-loader
 
 ** deno_core/deno_runtime call typescript difficulty
 
@@ -49,3 +64,5 @@ https://github.com/graphteon/luwak
 https://github.com/Cassielxd/DenoCool
 https://github.com/denoland/deno
 https://github.com/supabase/edge-runtime
+
+https://choubey.gitbook.io/internals-of-deno/import-and-ops/5.6-registration-of-ops
