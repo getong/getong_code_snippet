@@ -1,0 +1,21 @@
+* deno lsp setting
+
+** deno enable feature
+
+#+begin_example
+{
+  "deno.enable": true, // enables extension
+  "deno.lint": true, // inline deno lint diagnostics, requires `deno.unstable`
+  "deno.unstable": true // also provides unstable type declarations in VS Code
+}
+#+end_example
+
+** deno runtime types
+
+#+begin_src shell
+cd <your-project>
+deno types --unstable > deno.runtime.d.ts
+touch tsconfig.json # (1); jsconfig.json for JS projects also possible
+#+end_src
+
+copy from [[https://stackoverflow.com/questions/54794933/how-to-pull-typings-in-deno/62101596#62101596][How to pull typings in Deno]]
