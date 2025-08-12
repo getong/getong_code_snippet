@@ -44,6 +44,7 @@ https://github.com/invertase/globe_runtime
 https://github.com/project-gauntlet/gauntlet
 https://github.com/Schachte/kaffe-rs
 https://github.com/denoland/deno-js-loader
+https://github.com/txpipe/oura
 
 ** deno_core/deno_runtime call typescript difficulty
 
