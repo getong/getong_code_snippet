@@ -1,0 +1,23 @@
+* cargo-stylus
+
+** installation
+
+#+begin_src shell
+# Install cargo-stylus
+cargo install cargo-stylus
+rustup target add wasm32-unknown-unknown
+
+# Create a new project
+cargo stylus new my-contract
+
+# Check if contract can be deployed
+cargo stylus check
+
+# Deploy to testnet (Arbitrum Sepolia)
+cargo stylus deploy --private-key-path=/path/to/key.txt --endpoint="https://sepolia-rollup.arbitrum.io/rpc"
+
+# Export contract ABI
+cargo stylus export-abi --output=./abi.json --json
+#+end_src
+
+copy from [[https://github.com/OffchainLabs/cargo-stylus][Cargo Stylus]]
