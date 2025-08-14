@@ -1,0 +1,55 @@
+* cario installation
+
+** install scarb
+
+#+begin_src shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.starkup.dev | sh
+#+end_src
+
+copy from [[https://docs.swmansion.com/scarb/][The build toolchain and package manager for Cairo and Starknet ecosystems]]
+
+** scarb usage
+
+*** version
+
+#+begin_src shell
+scarb --version
+#+end_src
+
+*** new project
+
+#+begin_src shell
+scarb new hello_erc20
+#+end_src
+
+*** build
+
+#+begin_src shell
+scarb build
+#+end_src
+
+*** execute
+
+#+begin_src shell
+scarb execute
+#+end_src
+
+*** fmt
+
+#+begin_src shell
+scarb fmt
+#+end_src
+
+*** cario-run
+
+#+begin_src shell
+scarb cairo-run
+#+end_src
+
+*** test
+
+#+begin_src shell
+scarb test
+#+end_src
+
+copy from [[https://blog.wssh.trade/posts/cairo1-with-erc20/][Cairo 实战入门:编写测试部署ERC-20代币智能合约]]
