@@ -1,0 +1,54 @@
+
+* TypeScript Module Systems
+TypeScript supports both CommonJS (CJS) and ECMAScript Modules (ESM), which are two prominent module systems in JavaScript.
+
+** CommonJS (CJS)
+- Traditional module system used primarily in Node.js environments.
+- Syntax:
+  - Import: ~require()~
+  - Export: ~module.exports~ or ~exports~
+- Configuration:
+  - In ~tsconfig.json~, set:
+    #+BEGIN_SRC json
+    {
+      "compilerOptions": {
+        "module": "commonjs"
+      }
+    }
+    #+END_SRC
+
+** ECMAScript Modules (ESM)
+- Official, standardized module system for JavaScript.
+- Supported in modern browsers and Node.js (since v12).
+- Syntax:
+  - Import: ~import~
+  - Export: ~export~
+- Configuration:
+  - In ~tsconfig.json~, set:
+    #+BEGIN_SRC json
+    {
+      "compilerOptions": {
+        "module": "esnext",
+        "moduleResolution": "node16"
+      }
+    }
+    #+END_SRC
+  - In ~package.json~, add:
+    #+BEGIN_SRC json
+    {
+      "type": "module"
+    }
+    #+END_SRC
+
+** Building for Both CJS and ESM
+When creating npm packages or libraries that need compatibility with both CJS and ESM:
+- Common practice: build separate output bundles for each system.
+- Approach:
+  1. Create multiple ~tsconfig.json~ files
+     - One targeting CJS output
+     - Another targeting ESM output
+  2. Configure build process to generate both sets of files
+- Tools:
+  - ~tsup~
+  - ~tshy~
+  - Help automate dual-target compilation
