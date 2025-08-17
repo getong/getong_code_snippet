@@ -52,3 +52,59 @@ When creating npm packages or libraries that need compatibility with both CJS an
   - ~tsup~
   - ~tshy~
   - Help automate dual-target compilation
+
+
+* Deno Module Systems
+
+Deno uses ECMAScript Modules (ESM) as its default module system, unlike Node.js which defaults to CommonJS (CJS).
+While Deno also supports CommonJS, it encourages the use of ESM for new code and future-proofing.
+
+** ESM is the Standard
+- ECMAScript Modules (ESM) are the officially standardized module system for JavaScript.
+- Supported by:
+  - Deno
+  - Modern browsers
+  - Edge runtimes
+
+** Deno's Default
+- Deno assumes ESM format by default when importing modules.
+- No need for additional configuration unless using CJS.
+
+** CommonJS (CJS) Support
+- Deno also supports the older CommonJS system from Node.js.
+- Purpose:
+  - Ensure compatibility with existing Node.js modules and libraries.
+- Recommendation:
+  - Use ESM for new projects (future-proofing).
+
+** Why ESM is the Default
+- Advantages of ESM over CJS:
+  - Better support for modern JavaScript features
+  - Enables static analysis (tree-shaking)
+  - Improved runtime performance
+
+** Using CommonJS in Deno
+- Approaches:
+  1. Use the ~.cjs~ file extension
+  2. Or, define in ~package.json~:
+     #+BEGIN_SRC json
+     {
+       "type": "commonjs"
+     }
+     #+END_SRC
+- Notes:
+  - Deno will handle module loading accordingly.
+  - May require permissions (e.g., ~--allow-read~) to access ~package.json~ and ~node_modules~ when resolving dependencies.
+
+** Comparison: CJS vs ESM in Deno
+| Feature                | CommonJS (CJS)              | ECMAScript Modules (ESM)             |
+|------------------------+-----------------------------+--------------------------------------|
+| Default in Deno        | ❌ No (optional support)    | ✅ Yes (default system)              |
+| Syntax (import)        | ~const x = require("x")~      | ~import x from "x"~                    |
+| Syntax (export)        | ~module.exports = ...~        | ~export default ...~ / ~export {...}~  |
+| File extension         | ~.cjs~                        | ~.js~, ~.ts~, ~.mjs~                       |
+| Config in package.json | ~"type": "commonjs"~          | ~"type": "module"~ (optional)          |
+| Compatibility          | Legacy Node.js libraries    | Modern JS, browsers, edge, Deno      |
+| Static analysis        | ❌ Limited                  | ✅ Full (tree-shaking enabled)       |
+| Performance            | ⚠️ Slower (dynamic require) | ✅ Better (optimized, async capable) |
+| Future-proofing        | ❌ Legacy                   | ✅ Recommended                       |
