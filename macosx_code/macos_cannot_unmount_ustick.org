@@ -1,0 +1,28 @@
+* macos cannot unmount ustick solution
+
+** check mds_stores process
+
+#+begin_src shell
+ps aux | grep -i mds_stores
+
+root             59937   0.2  0.4 43716880 150064   ??  Ss    7:35下午   0:37.44 /System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Versions/A/Support/mds_stores
+#+end_src
+
+*** kill the pid
+
+#+begin_src shell
+sudo kill -9 59937
+#+end_src
+
+*** kill the mds_store with killall cli
+
+#+begin_src shell
+sudo killall -STOP mds_stores
+#+end_src
+
+
+** disable indexing
+
+#+begin_src shell
+sudo touch /Volumes/HIKSEMI/.metadata_never_index
+#+end_src
