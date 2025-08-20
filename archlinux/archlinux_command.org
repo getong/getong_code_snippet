@@ -1,4 +1,4 @@
-p* archlinux command
+* archlinux command
 :PROPERTIES:
 :CUSTOM_ID: archlinux-command
 :END:
@@ -500,7 +500,6 @@ build() {
  $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
  # and run as USER:
- yay -S nvidia-390xx-dkms
  yay -S nvidia-340xx-dkms
 
  sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
@@ -610,7 +609,6 @@ sudo pacman -Sy dkms
 sudo pacman -Sy yay
 
 # and run as USER:
-yay -S nvidia-390xx-dkms
 yay -S nvidia-340xx-dkms
 
 sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
