@@ -500,9 +500,10 @@ build() {
  $ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
  # and run as USER:
- yay -S nvidia-340xx-dkms
+ #yay -S nvidia-340xx-dkms
 
- sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+ #sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+ yay -S nouveau-fw
 
  // uninstall custom linux kernel
  $ sudo pacman -R linux-custom-headers
@@ -609,9 +610,9 @@ sudo pacman -Sy dkms
 sudo pacman -Sy yay
 
 # and run as USER:
-yay -S nvidia-340xx-dkms
-
-sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+# yay -S nvidia-340xx-dkms
+# sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+yay -S nouveau-fw
 #+end_src
 
 copy from [[https://www.reddit.com/r/archlinux/comments/g4e6qq/unable_to_find_nvidia390xx_anymore/][Unable to find =nvidia-390xx= anymore]]

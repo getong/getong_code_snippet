@@ -53,8 +53,9 @@ lspci -k | grep -A 2 -E "(VGA|3D)"
 
 sudo pacman -S bumblebee
 
-yay -S nvidia-340xx-dkms
-sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+# yay -S nvidia-340xx-dkms
+# sudo cp /usr/share/nvidia-340xx/20-nvidia.conf /etc/X11/xorg.conf.d/
+yay -S nouveau-fw
 sudo reboot
 #+end_src
 
