@@ -16,3 +16,14 @@
  tar xzf ~/sui-testnet-v1.52.2-macos-x86_64.tgz
  export PATH=~/sui-1.52.2:$PATH
 #+end_src
+
+** compile sui on macos intel error
+
+#+begin_src shell
+cd https://github.com/MystenLabs/sui
+cd sui
+cargo update blst
+cargo build
+#+end_src
+
+see [[https://github.com/MystenLabs/sui/pull/20921][Update "blst" from "0.3.11" to "0.3.13" to fix build on x86 Mac]]
