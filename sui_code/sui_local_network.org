@@ -1,6 +1,43 @@
 * sui local network
 
-** Start the local network
+** new a genesis block info
+
+Bootstrap and initialize a new Sui network
+
+#+begin_src shell
+sui genesis
+#+end_src
+
+*** if it runs with error
+
+#+begin_src shell
+$ sui genesis
+Cannot run genesis with non-empty Sui config directory /Users/user/.sui/sui_config, please use the --force/-f option to remove the existing configuration
+#+end_src
+
+delete the old genesis files:
+
+#+begin_src shell
+rm -rf ~/.sui/
+
+# rerun the genesis cli
+sui genesis
+#+end_src
+
+** genesis with working directory
+
+#+begin_src shell
+mkdir mylocalnet
+sui genesis  --working-dir mylocalnet
+#+end_src
+
+** start the local network with local genesis
+
+#+begin_src shell
+RUST_LOG="off,sui_node=info" sui start --with-faucet --network.config mylocalnet
+#+end_src
+
+** Start the local network with genesis regenerate
 
 #+begin_src shell
 $ RUST_LOG="off,sui_node=info" sui start --with-faucet --force-regenesis
@@ -31,6 +68,25 @@ curl --location --request POST 'http://127.0.0.1:9000' \
 #+end_src
 
 copy from [[https://docs.sui.io/guides/developer/getting-started/local-network][Connect to a Local Network]]
+
+
+** request 30M sui on localnet
+
+#+begin_src shell
+ADDR=$(sui client active-address)
+for i in $(seq 1 300); do
+  curl -s -X POST http://127.0.0.1:9123/gas \
+    -H 'Content-Type: application/json' \
+    -d "{\"FixedAmountRequest\":{\"recipient\":\"$ADDR\"}}" >/dev/null
+  echo "faucet request #$i"
+done
+#+end_src
+
+** check localnet balance
+
+#+begin_src shell
+sui client balance
+#+end_src
 
 
 ** sui website
