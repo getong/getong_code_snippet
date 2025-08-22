@@ -89,6 +89,15 @@ sui client balance
 #+end_src
 
 
+** sui keytool
+
+#+begin_src shell
+mkdir validator-keytool
+cd validator-keytool
+sui keytool generate --json ed25519 2>&1 | tee -a keytool-generator.txt
+#+end_src
+
+
 ** sui website
 
 #+begin_example
