@@ -1,0 +1,20 @@
+* sui validator node
+
+** sui-node
+
+#+begin_src shell
+curl https://releases.sui.io/$SUI_SHA/sui-node -o sui-node
+
+./sui-node --config-path /opt/sui/config/validator.yaml
+#+end_src
+
+copy from [[https://docs.sui.io/guides/operator/validator/validator-config][Validator Deployment & Configuration]]
+
+
+** validator.yaml
+
+There is a template in https://github.com/MystenLabs/sui/blob/main/nre/config/validator.yaml
+
+** validator node management
+
+see [[https://docs.sui.io/guides/operator/validator/validator-tasks][Validator Node Management]]
