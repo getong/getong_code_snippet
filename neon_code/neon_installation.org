@@ -1,0 +1,15 @@
+* neon installation
+
+* docker run
+
+#+begin_src shell
+docker run \
+  --name db \
+  -p 5432:5432 \
+  -e NEON_API_KEY=<neon_api_key> \
+  -e NEON_PROJECT_ID=<neon_project_id> \
+  -e DRIVER=serverless \
+  neondatabase/neon_local:latest
+#+end_src
+
+copy from [[https://neon.com/blog/make-yourself-at-home-with-neon-local][Make Yourself at Home with Neon Local]]
