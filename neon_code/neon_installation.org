@@ -1,5 +1,16 @@
 * neon installation
 
+** What is Neon Local?
+Neon Local is a proxy service that provides a local interface to your Neon cloud database. It automatically creates a new database branch when your container starts and deletes it when it stops, making it ideal for ephemeral environments.
+
+** Key Benefits
+- CI-friendly branching: Automatically creates and removes a database branch for each test run.
+- Local development support: Use branching locally without manual management.
+- Consistent connectivity: Connect to a local Postgres endpoint while Neon Local routes and authenticates to the correct project and branch.
+
+** Is Neon Local a local Postgres instance?
+No. Neon Local avoids environment drift and slow restores common with local Postgres. Instead, it uses Neon’s instant branching for fast, isolated, cloud-based environments via Docker.
+
 * docker run
 
 #+begin_src shell
@@ -12,4 +23,93 @@ docker run \
   neondatabase/neon_local:latest
 #+end_src
 
+** Alternative: Generate credentials with openssl and uuidgen
+You can also use `openssl` and `uuidgen` to generate random strings for `NEON_API_KEY` and `NEON_PROJECT_ID`:
+
+#+begin_src shell
+docker run \
+  --name db \
+  -p 5432:5432 \
+  -e NEON_API_KEY=$(openssl rand -base64 20) \
+  -e NEON_PROJECT_ID=$(uuidgen) \
+  -e DRIVER=serverless \
+  neondatabase/neon_local:latest
+#+end_src
+** Generate dynamic credentials for docker run
+You can use `pwgen` to generate random strings for `NEON_API_KEY` and `NEON_PROJECT_ID` when running Neon Local:
+
+#+begin_src shell
+docker run \
+  --name db \
+  -p 5432:5432 \
+  -e NEON_API_KEY=$(pwgen 20 1) \
+  -e NEON_PROJECT_ID=$(pwgen 12 1) \
+  -e DRIVER=serverless \
+  neondatabase/neon_local:latest
+#+end_src
+** Docker Compose Example
+You can use Neon Local with Docker Compose. Example service configuration:
+
+#+begin_src yaml
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+    depends_on:
+      - db
+  db:
+    image: neondatabase/neon_local:latest
+    ports:
+      - "5432:5432"
+    environment:
+      NEON_API_KEY: ${NEON_API_KEY}
+      NEON_PROJECT_ID: ${NEON_PROJECT_ID}
+      DRIVER: serverless
+#+end_src
+
+** Using Neon Serverless Driver (JavaScript)
+Configure the Neon serverless driver to connect to Neon Local in development:
+
+#+begin_src typescript
+import { neon, neonConfig } from '@neondatabase/serverless';
+if (process.env.NODE_ENV !== 'production') {
+  neonConfig.fetchEndpoint = 'http://db:5432/sql';
+}
+const connectionString = process.env.NODE_ENV === 'production'
+  ? process.env.DATABASE_URL
+  : 'postgres://neon:npg@db:5432/neondb';
+export const sql = neon(connectionString);
+#+end_src
+
+If using `docker run` (not compose), use `localhost` instead of `db`:
+
+#+begin_src typescript
+import { neon, neonConfig } from '@neondatabase/serverless';
+if (process.env.NODE_ENV !== 'production') {
+  neonConfig.fetchEndpoint = 'http://localhost:5432/sql';
+}
+const connectionString = process.env.NODE_ENV === 'production'
+  ? process.env.DATABASE_URL
+  : 'postgres://neon:npg@localhost:5432/neondb';
+export const sql = neon(connectionString);
+#+end_src
+
+** Environment Variables and Configuration
+- `PARENT_BRANCH_ID`: Set to branch from a specific base branch (e.g., development, staging).
+- `DELETE_BRANCH`: Set to `false` to persist branches between container runs.
+
+** Future Features
+- Custom branch names for longer-lived environments (upcoming).
+- Offline mode for local dump/restore (planned).
+
+** References
+- [[https://neon.tech/docs/local/neon-local][Neon Local Documentation]]
+- [[https://neon.tech/guides/neon-local-docker-compose-javascript][Neon Local Docker Compose Guide]]
 copy from [[https://neon.com/blog/make-yourself-at-home-with-neon-local][Make Yourself at Home with Neon Local]]
