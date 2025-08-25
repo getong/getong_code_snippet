@@ -113,3 +113,8 @@ export const sql = neon(connectionString);
 - [[https://neon.tech/docs/local/neon-local][Neon Local Documentation]]
 - [[https://neon.tech/guides/neon-local-docker-compose-javascript][Neon Local Docker Compose Guide]]
 copy from [[https://neon.com/blog/make-yourself-at-home-with-neon-local][Make Yourself at Home with Neon Local]]
+
+
+** for k8s and neon
+
+see [[https://github.com/molnett/neon-operator/][neon-operator]]
