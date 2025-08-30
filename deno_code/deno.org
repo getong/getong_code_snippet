@@ -44,3 +44,13 @@ copy from
 [[https://www.infoq.cn/article/IAHih5jdk8vslmaK10s4][手把手教你从 Node
 快速迁移到 Deno]] [[https://aralroca.com/blog/from-node-to-deno][From
 Node to Deno]]
+
+** deno internal
+
+#+begin_src shell
+deno test -A --config tests/config/deno.json tests/unit/webcrypto_test.ts --filter "rsa keygen"
+
+cargo install cargo-plonk
+#+end_src
+
+see [[https://littledivy.com/deno-2][Deno 2 internals]]
