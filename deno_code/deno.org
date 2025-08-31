@@ -54,3 +54,7 @@ cargo install cargo-plonk
 #+end_src
 
 see [[https://littledivy.com/deno-2][Deno 2 internals]]
+
+** deno architecture
+
+see [[https://choubey.gitbook.io/internals-of-deno/architecture/core][Deno components]]
