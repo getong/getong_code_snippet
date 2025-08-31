@@ -533,3 +533,9 @@ ssh-add ~/.ssh/id_ed25519
 #+end_src
 
 copy from [[https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent][Generating a new SSH key and adding it to the ssh-agent]]
+
+** force using github username
+
+#+begin_src shell
+git remote set-url origin https://username@github.com/username/project_name
+#+end_src
