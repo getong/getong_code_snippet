@@ -45,6 +45,8 @@ https://github.com/project-gauntlet/gauntlet
 https://github.com/Schachte/kaffe-rs
 https://github.com/denoland/deno-js-loader
 https://github.com/txpipe/oura
+https://github.com/aglundahl/deno_rider
+https://github.com/jstz-dev/jstz
 
 ** deno_core/deno_runtime call typescript difficulty
 
@@ -67,3 +69,110 @@ https://github.com/denoland/deno
 https://github.com/supabase/edge-runtime
 
 https://choubey.gitbook.io/internals-of-deno/import-and-ops/5.6-registration-of-ops
+https://www.zaynetro.com/post/2023-how-deno-works
+
+
+** deno_lib
+
+
+https://github.com/denoland/deno/blob/228574b04210ad54baf04126810e2c113a462bcc/cli/tools/run/mod.rs
+
+#+begin_src rust
+pub async fn maybe_npm_install(factory: &CliFactory) -> Result<(), AnyError> {
+  let cli_options = factory.cli_options()?;
+  // ensure an "npm install" is done if the user has explicitly
+  // opted into using a managed node_modules directory
+  if cli_options.specified_node_modules_dir()? == Some(NodeModulesDirMode::Auto)
+    && let Some(npm_installer) = factory.npm_installer_if_managed().await?
+  {
+    let _clear_guard = factory
+      .text_only_progress_bar()
+      .deferred_keep_initialize_alive();
+    let already_done = npm_installer
+      .ensure_top_level_package_json_install()
+      .await?;
+    if !already_done
+      && matches!(
+        cli_options.default_npm_caching_strategy(),
+        NpmCachingStrategy::Eager
+      )
+    {
+      npm_installer.cache_packages(PackageCaching::All).await?;
+    }
+  }
+  Ok(())
+}
+#+end_src
+
+
+
+https://github.com/denoland/deno/issues/27881
+https://github.com/denoland/deno/issues/29174
+https://github.com/denoland/deno/blob/main/cli/npm.rs
+
+https://github.com/denoland/deno/blob/a8cde960ce626c77416edd4b58a8e502bcb0bacc/cli/lib/loader.rs
+
+#+begin_src rust
+
+#+end_src
+
+https://github.com/denoland/deno/blob/a8cde960ce626c77416edd4b58a8e502bcb0bacc/cli/rt/node.rs
+
+#+begin_src rust
+pub type DenoRtCjsTracker =
+  deno_resolver::cjs::CjsTracker<DenoInNpmPackageChecker, DenoRtSys>;
+pub type DenoRtNpmResolver = deno_resolver::npm::NpmResolver<DenoRtSys>;
+pub type DenoRtNpmModuleLoader = NpmModuleLoader<
+  CjsCodeAnalyzer,
+  DenoInNpmPackageChecker,
+  DenoIsBuiltInNodeModuleChecker,
+  DenoRtNpmResolver,
+  DenoRtSys,
+>;
+pub type DenoRtNodeCodeTranslator = NodeCodeTranslator<
+  CjsCodeAnalyzer,
+  DenoInNpmPackageChecker,
+  DenoIsBuiltInNodeModuleChecker,
+  DenoRtNpmResolver,
+  DenoRtSys,
+>;
+pub type DenoRtNodeResolver = deno_runtime::deno_node::NodeResolver<
+  DenoInNpmPackageChecker,
+  DenoRtNpmResolver,
+  DenoRtSys,
+>;
+pub type DenoRtNpmReqResolver = NpmReqResolver<
+  DenoInNpmPackageChecker,
+  DenoIsBuiltInNodeModuleChecker,
+  DenoRtNpmResolver,
+  DenoRtSys,
+>;
+
+pub struct CjsCodeAnalyzer {
+  cjs_tracker: Arc<DenoRtCjsTracker>,
+  modules: Arc<StandaloneModules>,
+  sys: DenoRtSys,
+}
+#+end_src
+
+
+** deno_runtime::UnconfiguredRuntime
+
+#+begin_src rust
+let unconfigured = deno_runtime::UnconfiguredRuntime::new::<
+      deno_resolver::npm::DenoInNpmPackageChecker,
+      crate::npm::CliNpmResolver,
+      crate::sys::CliSys,
+    >(deno_runtime::UnconfiguredRuntimeOptions {
+      startup_snapshot,
+      create_params: deno_lib::worker::create_isolate_create_params(
+        &crate::sys::CliSys::default(),
+      ),
+      shared_array_buffer_store: Some(roots.shared_array_buffer_store.clone()),
+      compiled_wasm_module_store: Some(
+        roots.compiled_wasm_module_store.clone(),
+      ),
+      additional_extensions: vec![],
+      enable_raw_imports: false,
+    });
+#+end_src
