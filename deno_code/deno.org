@@ -58,3 +58,9 @@ see [[https://littledivy.com/deno-2][Deno 2 internals]]
 ** deno architecture
 
 see [[https://choubey.gitbook.io/internals-of-deno/architecture/core][Deno components]]
+
+** deno fetch
+
+Fetch API implementation for Deno
+
+see [[https://github.com/denoland/deno/blob/main/ext/fetch/Cargo.toml][fetch]]
