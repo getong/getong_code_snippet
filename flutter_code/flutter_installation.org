@@ -130,12 +130,12 @@ wget -c https://mirrors.tuna.tsinghua.edu.cn/flutter/dart-archive/channels/stabl
 ## wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.24.2/sdk/dartsdk-macos-x64-release.zip
 
 
-wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_arm64_3.32.6-stable.zip
-wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_3.32.6-stable.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_arm64_3.35.3-stable.zip
+wget -c https://storage.flutter-io.cn/flutter_infra/releases/stable/macos/flutter_macos_3.35.3-stable.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.29.1/api-docs/dartdocs-gen-api.zip
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.29.1/sdk/dartsdk-linux-x64-release.zip
 
-wget -c https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.29.1-stable.zip
+wget -c https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.35.3-stable.zip
 wget -c https://storage.googleapis.com/dart-archive/channels/stable/release/3.29.1/api-docs/dartdocs-gen-api.zip
 #+end_src
 
