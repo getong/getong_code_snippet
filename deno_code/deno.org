@@ -64,3 +64,7 @@ see [[https://choubey.gitbook.io/internals-of-deno/architecture/core][Deno compo
 Fetch API implementation for Deno
 
 see [[https://github.com/denoland/deno/blob/main/ext/fetch/Cargo.toml][fetch]]
+
+** deno_lib
+
+deno_lib::worker module
