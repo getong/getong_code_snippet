@@ -1,0 +1,15 @@
+# sui architecture
+
+
+https://immunefi.com/blog/bug-fix-reviews/sui-network-shutdown/
+https://medium.com/@sweetybunny1998/how-does-sui-work-6056bbced577
+https://www.youtube.com/watch?v=AJUr5K02esc&pp=ygUQc3VpIGFyY2hpdGVjdHVyZQ%3D%3D
+https://www.youtube.com/watch?v=7wWj0hD__ak&pp=ygUQc3VpIGFyY2hpdGVjdHVyZQ%3D%3D
+https://www.youtube.com/watch?v=LbAzTzlj3ac&t=50s&pp=ygUQc3VpIGFyY2hpdGVjdHVyZQ%3D%3D
+https://docs.sui.io/guides/operator/validator/validator-config
+https://github.com/MystenLabs/sui/blob/main/nre/config/validator.yaml
+https://medium.com/@alexgeorge_18841/how-we-setup-sui-nodes-on-gke-eks-and-digitalocean-0b7bcf9de81a
+https://medium.com/scale3-labs/setup-and-run-a-sui-full-node-a4f3224e71c3
+https://www.cherryservers.com/blog/sui-node
+https://forums.sui.io/t/how-to-start-a-local-sui-network-with-multiple-nodes-and-validators-on-one-machine/45303
+https://docs.sui.io/guides/developer/getting-started/local-network
