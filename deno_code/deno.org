@@ -68,3 +68,7 @@ see [[https://github.com/denoland/deno/blob/main/ext/fetch/Cargo.toml][fetch]]
 ** deno_lib
 
 deno_lib::worker module
+
+** vitrine
+
+see [[https://github.com/charlyisidore/vitrine][vitrine]]
