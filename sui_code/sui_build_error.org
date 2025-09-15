@@ -1,0 +1,22 @@
+* sui build error
+
+** sui buidl error on macos intel cpu
+
+error log:
+
+#+begin_example
+sui move build
+Failed to build Move modules: Failed to resolve dependencies for package 'hash_game'
+
+Caused by:
+    0: Parsing manifest for 'Bridge'
+    1: No such file or directory (os error 2).
+#+end_example
+
+*** solution 1:
+
+downgrade sui to sui-mainnet-v1.53.2-macos-x86_64
+
+*** solution 2:
+
+self compile sui source
