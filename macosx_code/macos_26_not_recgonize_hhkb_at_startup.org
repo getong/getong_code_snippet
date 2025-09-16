@@ -1,0 +1,13 @@
+* macos 26 not recgnonize hhkb at startup
+
+** disable FileVault
+
+#+begin_example
+go to Apple menu > System Settings,
+then select Privacy & Security in the sidebar,
+and click on FileVault.
+Click the lock icon to make changes, enter your administrator password,
+and select Turn Off Encryption.
+#+end_example
+
+copy from [[https://www.reddit.com/r/MacOS/comments/rfckz5/mac_bluetooth_keyboard_doesnt_auto_connect_at/][Mac - Bluetooth keyboard doesn't auto connect at login screen]]
