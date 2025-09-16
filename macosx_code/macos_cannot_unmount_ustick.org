@@ -26,3 +26,9 @@ sudo killall -STOP mds_stores
 #+begin_src shell
 sudo touch /Volumes/HIKSEMI/.metadata_never_index
 #+end_src
+
+** disable spotlight indexing
+
+#+begin_src shell
+sudo mdutil -a -i off
+#+end_src
