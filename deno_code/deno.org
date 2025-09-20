@@ -73,6 +73,8 @@ deno_lib::worker module
 
 see [[https://github.com/charlyisidore/vitrine][vitrine]]
 
+vitrine copy the deno cli directory as vitrine_deno crate, and use [[https://github.com/rolldown/rolldown][rolldown]].
+
 ** denort
 
 see [[https://github.com/denoland/deno/tree/main/cli/rt][denort]]
