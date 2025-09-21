@@ -1,0 +1,18 @@
+* deno command
+
+** command list
+
+#+begin_src shell
+deno init
+
+deno run main.ts
+
+deno task dev
+
+deno test
+
+deno add jsr:@cliffy/command@^1.0.0-rc.7
+
+deno add npm:zod
+
+#+end_src
