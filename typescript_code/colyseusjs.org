@@ -1,0 +1,19 @@
+* colyseusjs
+
+** installation
+
+#+begin_src shell
+npm install --save colyseus.js
+#+end_src
+
+** init template
+
+#+begin_src shell
+mkdir server
+npm init colyseus-app ./server
+
+cd server
+npm install
+
+npm run start
+#+end_src
