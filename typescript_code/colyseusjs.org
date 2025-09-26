@@ -17,3 +17,11 @@ npm install
 
 npm run start
 #+end_src
+
+** test
+
+#+begin_src shell
+npx colyseus-loadtest script.ts --room battle --numClients 50 --endpoint ws://localhost:2567
+#+end_src
+
+copy from [[https://www.cnblogs.com/hacker-linner/p/14758629.html][ColyseusJS 轻量级多人游戏服务器开发框架]]
