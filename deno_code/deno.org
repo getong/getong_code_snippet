@@ -83,3 +83,7 @@ see [[https://github.com/denoland/deno/tree/main/cli/rt][denort]]
 ** deno copy source project
 
 see [[https://github.com/Cassielxd/moduforge-rs][moduforge-rs]]
+
+** orama-js-pool
+
+[[https://github.com/oramasearch/orama-js-pool][orama-js-pool]]
