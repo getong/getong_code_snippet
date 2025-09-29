@@ -1,0 +1,391 @@
+#+TITLE: Deno TypeScript Compilation & Dependency Resolution Architecture
+#+AUTHOR: Code Reading Analysis
+#+DATE: 2025
+#+OPTIONS: toc:3 num:t
+
+* Overview
+Deno's TypeScript compilation and dependency resolution system is built on a multi-layered architecture that integrates Rust and JavaScript components. The system provides zero-config TypeScript support with automatic dependency downloading and caching.
+
+* Architecture Components
+
+** Core Module Loading Pipeline
+The module loading process follows this sequence:
+1. File fetching (with caching)
+2. Module graph construction
+3. Type checking
+4. Module instantiation
+
+Key entry point: ~cli/module_loader.rs:173-260~ - =ModuleLoadPreparer::prepare_module_load()=
+
+** TypeScript Compilation Bridge
+
+*** Rust Side
+- Entry: ~cli/tsc/mod.rs~ - Orchestrates TypeScript compilation
+- Interface: Calls JavaScript runtime via ops system
+
+*** JavaScript Side
+- Main compiler: ~cli/tsc/99_main_compiler.js:95-181~
+  - =exec()= function at line 98 - Main entry for type checking
+  - Creates incremental TypeScript program
+  - Handles configuration normalization
+
+- TypeScript Host: ~cli/tsc/97_ts_host.js:394-794~
+  - =hostImpl= object bridges TypeScript and Deno
+  - =getSourceFile()= (line 441) - Loads and caches sources
+  - =resolveModuleNameLiterals()= (line 593) - Resolves imports
+  - =resolveTypeReferenceDirectiveReferences()= (line 528) - Type refs
+
+* Module Resolution System
+
+** Module Loader (~cli/module_loader.rs~)
+
+*** Core Components
+- =CliModuleLoader= (line 963) - Main loader implementation
+- =ModuleLoadPreparer= (line 131) - Pre-load preparation with type checking
+- =SharedCliModuleLoaderState= (line 319) - Shared state management
+
+*** Loading Process
+#+BEGIN_SRC rust
+// cli/module_loader.rs:1005-1034
+fn load(&self, specifier: &ModuleSpecifier, ...) -> ModuleLoadResponse {
+  ModuleLoadResponse::Async(
+    async move {
+      inner.load_inner(&specifier, maybe_referrer, &requested_module_type).await
+    }.boxed_local(),
+  )
+}
+#+END_SRC
+
+** Resolver Architecture (~cli/resolver.rs~)
+
+*** Type Definitions (lines 19-25)
+#+BEGIN_SRC rust
+pub type CliResolver = deno_resolver::graph::DenoResolver<
+  DenoInNpmPackageChecker,
+  DenoIsBuiltInNodeModuleChecker,
+  CliNpmResolver,
+  CliSys,
+>;
+#+END_SRC
+
+*** Supported URL Schemes
+- =file:= - Local file system
+- =http:/https:= - Remote modules
+- =npm:= - NPM packages
+- =jsr:= - JavaScript Registry
+- =node:= - Node built-in modules
+
+* Dependency Downloading
+
+** File Fetcher (~cli/file_fetcher.rs~)
+
+*** HTTP Client Adapter (lines 124-242)
+Handles remote module fetching with:
+- Automatic retry logic
+- Progress tracking
+- Connection pooling
+- Header management
+
+#+BEGIN_SRC rust
+async fn send_no_follow(&self, url: &Url, headers: HeaderMap)
+  -> Result<SendResponse, SendError> {
+  let mut retried = false;
+  loop {
+    let response = self.http_client_provider
+      .get_or_create()
+      .send(url, headers.clone())
+      .await;
+    // Retry logic and response processing
+  }
+}
+#+END_SRC
+
+*** Text Decoding (lines 28-62)
+- Character encoding detection
+- Automatic conversion to UTF-8
+- Support for various file types
+
+** NPM Package Resolution (~cli/npm.rs~)
+
+*** NPM Fetch Resolver (lines 157-226)
+#+BEGIN_SRC rust
+impl NpmFetchResolver {
+  pub async fn req_to_nv(&self, req: &PackageReq) -> Option<PackageNv> {
+    let package_info = self.package_info(&req.name).await?;
+    let version = version_from_package_info(&package_info, &req.version_req)?;
+    Some(PackageNv { name: req.name.clone(), version })
+  }
+}
+#+END_SRC
+
+*** Lifecycle Scripts (lines 277-575)
+- Secure execution environment
+- Pre/post install scripts
+- Permission sandboxing
+
+** JSR Support (~cli/jsr.rs~)
+
+*** JSR Fetch Resolver (lines 20-162)
+#+BEGIN_SRC rust
+impl JsrFetchResolver {
+  pub async fn req_to_nv(&self, req: &PackageReq) -> Option<PackageNv> {
+    let package_info = self.package_info(&req.name).await?;
+    let version = select_version(&package_info.versions, req)?;
+    Some(PackageNv { name: req.name.clone(), version })
+  }
+}
+#+END_SRC
+
+* Module Graph Construction
+
+** Graph Builder (~cli/graph_util.rs~)
+
+*** ModuleGraphBuilder (lines 651-1027)
+Key methods:
+- =build_graph_with_npm_resolution()= (line 719) - NPM integration
+- =build_fast_check_graph()= (line 920) - Performance optimization
+- =graph_valid()= (line 990) - Validation
+
+*** Building Process (lines 793-917)
+#+BEGIN_SRC rust
+async fn build_graph_with_npm_resolution_and_build_options<'a>(
+  &self,
+  graph: &mut ModuleGraph,
+  request: BuildGraphRequest,
+  loader: &'a mut dyn deno_graph::source::Loader,
+  options: deno_graph::BuildOptions<'a>,
+  npm_caching: NpmCachingStrategy,
+) -> Result<(), BuildGraphWithNpmResolutionError> {
+  match request {
+    BuildGraphRequest::Roots(roots) => {
+      graph.build(roots, imports, loader, options).await;
+    }
+    BuildGraphRequest::Reload(urls) => {
+      graph.reload(urls, loader, options).await;
+    }
+  }
+}
+#+END_SRC
+
+** Graph Container (~cli/graph_container.rs~)
+- =MainModuleGraphContainer= (line 41) - Main worker graph
+- =ModuleGraphUpdatePermit= (line 29) - Thread-safe updates
+
+* Type Checking
+
+** TypeChecker (~cli/type_checker.rs~)
+
+*** Main Check Function (lines 142-169)
+#+BEGIN_SRC rust
+pub fn check(&self, graph: ModuleGraph, options: CheckOptions)
+  -> Result<Arc<ModuleGraph>, CheckError> {
+  let mut diagnostics = self.check_diagnostics(graph, options)?;
+  let mut failed = false;
+
+  for result in diagnostics.by_ref() {
+    let mut diagnostics = result?;
+    diagnostics.emit_warnings();
+    if diagnostics.has_diagnostic() {
+      failed = true;
+      log::error!("{}\n", diagnostics);
+    }
+  }
+
+  if failed {
+    Err(FailedTypeCheckingError { can_skip: true }.into())
+  } else {
+    Ok(diagnostics.into_graph())
+  }
+}
+#+END_SRC
+
+*** Graph Walker (lines 613-945)
+- Traverses module graph
+- Collects files for type checking
+- Handles different module types
+- Manages circular dependencies
+
+* Caching System
+
+** Cache Architecture (~cli/cache/mod.rs~)
+
+*** Cache Types
+#+BEGIN_SRC rust
+pub type GlobalHttpCache = deno_cache_dir::GlobalHttpCache<CliSys>;
+pub type DenoDir = deno_resolver::cache::DenoDir<CliSys>;
+pub use cache_db::CacheDBHash;
+pub use code_cache::CodeCache;
+pub use fast_check::FastCheckCache;
+#+END_SRC
+
+*** Cache Layers
+1. *HTTP Cache* - Remote modules
+   - Location: =~/.cache/deno/deps=
+   - Persistent across runs
+   - Content-addressed storage
+
+2. *Code Cache* - V8 bytecode
+   - Speeds up JavaScript execution
+   - Avoids re-parsing
+
+3. *Type Check Cache* - TypeScript compilation
+   - Stores =.tsbuildinfo= files
+   - Enables incremental compilation
+
+4. *Fast Check Cache* - Quick type validation
+   - Optimized for performance
+   - Skip unnecessary checks
+
+** Cache Database (~cli/cache/cache_db.rs~)
+- SQLite-based metadata storage
+- Tracks headers, timestamps
+- Manages cache invalidation
+
+* Compilation Flow
+
+** Step 1: Module Request
+1. Parse module specifier
+2. Check local cache
+3. Fetch if not cached
+
+** Step 2: Graph Building
+1. Start from entry module
+2. Parse imports/exports
+3. Recursively resolve dependencies
+4. Build directed acyclic graph
+
+** Step 3: Type Checking
+1. Collect all TypeScript files
+2. Create TypeScript program
+3. Run type checker
+4. Emit diagnostics
+
+** Step 4: Transpilation
+1. Convert TypeScript to JavaScript
+2. Apply source maps
+3. Cache compiled output
+
+** Step 5: Module Loading
+1. Instantiate V8 modules
+2. Link dependencies
+3. Execute initialization
+
+* Performance Optimizations
+
+** Incremental Compilation
+- Uses TypeScript's incremental API
+- Stores =.tsbuildinfo= files
+- Only recompiles changed modules
+
+** Fast Check Mode
+- Lightweight type validation
+- Skips full TypeScript compilation
+- Used for development mode
+
+** Parallel Processing
+- Concurrent module fetching
+- Parallel graph traversal
+- Multi-threaded type checking
+
+** V8 Code Cache
+- Stores parsed JavaScript
+- Avoids re-parsing on reload
+- Significant startup improvement
+
+* Security Features
+
+** Permission System Integration
+- Network access for remote modules
+- File system access for local modules
+- Read/write permissions enforced
+
+** Integrity Checking
+- Lock files for dependency verification
+- Checksum validation
+- Prevents supply chain attacks
+
+** Sandboxed Execution
+- NPM lifecycle scripts sandboxed
+- Limited system access
+- Controlled environment variables
+
+* Import Maps Support
+
+** Configuration
+#+BEGIN_SRC json
+{
+  "imports": {
+    "lodash": "https://cdn.skypack.dev/lodash",
+    "@/": "./src/"
+  }
+}
+#+END_SRC
+
+** Resolution Process
+1. Check import map first
+2. Apply mapping rules
+3. Continue normal resolution
+
+* Node.js Compatibility
+
+** NPM Package Support
+- Full npm: specifier support
+- Node resolution algorithm
+- CommonJS interop
+
+** Built-in Modules
+- Node API polyfills
+- Compatible module loading
+- Seamless migration path
+
+* Key Integration Points
+
+** Module Loading Pipeline
+File fetching → Graph building → Type checking → Module loading
+Entry: ~cli/module_loader.rs:173-260~ =ModuleLoadPreparer.prepare_module_load()=
+
+** TypeScript Bridge
+- Rust calls JavaScript via =tsc::exec()=
+- JavaScript host interfaces with Deno file system
+- Bidirectional communication via ops
+
+** Unified Resolver
+- Single resolver for all URL schemes
+- Import map support
+- Node.js compatibility layer
+
+* Configuration
+
+** TypeScript Configuration
+- Default configuration in ~cli/tsc/99_main_compiler.js~
+- User overrides via =deno.json=
+- Compiler options normalization
+
+** Cache Configuration
+- Cache directory: =DENO_DIR= environment variable
+- Default: =~/.cache/deno=
+- Configurable per-project
+
+* Debugging & Diagnostics
+
+** Debug Output
+- =DENO_LOG= environment variable
+- TypeScript diagnostics
+- Module resolution tracing
+
+** Performance Metrics
+- Compilation timing
+- Cache hit rates
+- Module load statistics
+
+* Summary
+
+Deno's TypeScript compilation system provides:
+- Zero-config TypeScript support
+- Automatic dependency management
+- Multi-layered caching
+- Security-first design
+- High performance through optimization
+- Standards-compliant module resolution
+
+The architecture seamlessly integrates Rust's performance with TypeScript's type system, creating a robust development experience that eliminates traditional JavaScript toolchain complexity.
