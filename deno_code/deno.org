@@ -93,3 +93,7 @@ see [[https://github.com/Cassielxd/moduforge-rs][moduforge-rs]]
 deno_fetch is one of the deno extension
 
 ** deno download and compile typescript
+
+** deno_embed
+
+[[https://github.com/alshdavid-scratch/deno_embed][deno_embed]]
