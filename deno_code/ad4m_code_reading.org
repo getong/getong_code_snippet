@@ -1,0 +1,70 @@
+* ad4m code reading
+
+** load_module
+
+#+begin_src rust
+#[derive(Clone)]
+pub struct JsCore {
+    worker: Arc<TokioMutex<MainWorker>>,
+    loaded_modules: Arc<TokioMutex<HashSet<String>>>,
+}
+
+impl JsCore {
+    pub fn new() -> Self {
+        deno_core::v8::V8::set_flags_from_string("--no-opt");
+        let fs = Arc::new(RealFs);
+        let permission_desc_parser = Arc::new(RuntimePermissionDescriptorParser::new(
+            sys_traits::impls::RealSys,
+        ));
+
+        let worker = MainWorker::bootstrap_from_options(
+            &main_module_url(),
+            WorkerServiceOptions::<
+                DenoInNpmPackageChecker,
+                NpmResolver<sys_traits::impls::RealSys>,
+                sys_traits::impls::RealSys,
+            > {
+                deno_rt_native_addon_loader: None,
+                module_loader: module_loader(),
+                permissions: PermissionsContainer::allow_all(permission_desc_parser),
+                blob_store: Default::default(),
+                broadcast_channel: Default::default(),
+                feature_checker: Default::default(),
+                node_services: Default::default(),
+                npm_process_state_provider: Default::default(),
+                root_cert_store_provider: Default::default(),
+                fetch_dns_resolver: Default::default(),
+                shared_array_buffer_store: Default::default(),
+                compiled_wasm_module_store: Default::default(),
+                v8_code_cache: Default::default(),
+                fs,
+            },
+            main_worker_options(),
+        );
+
+        JsCore {
+            #[allow(clippy::arc_with_non_send_sync)]
+            worker: Arc::new(TokioMutex::new(worker)),
+            loaded_modules: Arc::new(TokioMutex::new(HashSet::new())),
+        }
+    }
+
+    async fn load_module(&self, file_path: String) -> Result<(), AnyError> {
+        let mut worker = self.worker.lock().await;
+        let mut loaded_modules = self.loaded_modules.lock().await;
+        let url = resolve_url_or_path(&file_path, current_dir()?.as_path())?;
+        if loaded_modules.contains(url.clone().as_str()) {
+            return Ok(());
+        }
+
+        let module_id = worker.js_runtime.load_side_es_module(&url).await?;
+        loaded_modules.insert(url.clone().to_string());
+        let evaluate_fut = worker.js_runtime.mod_evaluate(module_id);
+        worker
+            .js_runtime
+            .with_event_loop_future(evaluate_fut, PollEventLoopOptions::default())
+            .await?;
+        Ok(())
+    }
+}
+#+end_src
