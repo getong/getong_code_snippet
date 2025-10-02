@@ -97,3 +97,7 @@ deno_fetch is one of the deno extension
 ** deno_embed
 
 [[https://github.com/alshdavid-scratch/deno_embed][deno_embed]]
+
+** edge_runtime
+
+[[https://github.com/supabase/edge-runtime][edge-runtime]]
