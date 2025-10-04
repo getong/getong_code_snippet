@@ -101,3 +101,7 @@ deno_fetch is one of the deno extension
 ** edge_runtime
 
 [[https://github.com/supabase/edge-runtime][edge-runtime]]
+
+There are a lot of typescript example in edge-runtime/examples directory.
+
+The edge-runtime call deno crate in cli directory, the cli directory contains the edge-runtime entry.
