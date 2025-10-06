@@ -15,4 +15,11 @@ deno add jsr:@cliffy/command@^1.0.0-rc.7
 
 deno add npm:zod
 
+deno fmt
+
+deno lint
+
+deno check
+
+deno repl
 #+end_src
