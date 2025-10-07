@@ -105,3 +105,9 @@ deno_fetch is one of the deno extension
 There are a lot of typescript example in edge-runtime/examples directory.
 
 The edge-runtime call deno crate in cli directory, the cli directory contains the edge-runtime entry.
+
+** metatype
+
+metatype suppport wasm, include python and typescript
+
+[[https://github.com/metatypedev/metatype][metatype]]
