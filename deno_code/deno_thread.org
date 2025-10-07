@@ -1,0 +1,26 @@
+* deno_thread
+
+** deno use std::thread
+
+#+begin_src rust
+pub fn new_thread_builder() -> std::thread::Builder {
+    let builder = std::thread::Builder::new();
+    let builder = if cfg!(debug_assertions) {
+        // this is only relevant for WebWorkers
+        // FIXME: find a better location for this as tihs won't work
+        // if a second thread has already launched by this point
+        if std::env::var("RUST_MIN_STACK").is_err() {
+            unsafe {
+                std::env::set_var("RUST_MIN_STACK", "8388608");
+            }
+        }
+        // deno & swc need 8 MiB with dev profile (release is ok)
+        // https://github.com/swc-project/swc/blob/main/CONTRIBUTING.md
+        builder.stack_size(8 * 1024 * 1024)
+    } else {
+        // leave default: https://doc.rust-lang.org/std/thread/#stack-size
+        builder
+    };
+    builder
+}
+#+end_src
