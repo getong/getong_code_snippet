@@ -7,3 +7,17 @@ curl -fsSL https://metatype.dev/installer.sh | bash
 #+end_src
 
 copy from [[https://metatype.dev/docs/tutorials/quick-start][metatype cli]]
+
+** usage example
+
+#+begin_src shell
+
+mkdir first-project && cd first-project
+
+meta new --template node
+
+npm install
+
+meta dev
+
+#+end_src
