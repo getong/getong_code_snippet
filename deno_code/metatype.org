@@ -1,0 +1,9 @@
+* metatype
+
+** install cli
+
+#+begin_src shell
+curl -fsSL https://metatype.dev/installer.sh | bash
+#+end_src
+
+copy from [[https://metatype.dev/docs/tutorials/quick-start][metatype cli]]
