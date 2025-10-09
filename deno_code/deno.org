@@ -111,3 +111,11 @@ The edge-runtime call deno crate in cli directory, the cli directory contains th
 metatype suppport wasm, include python and typescript
 
 [[https://github.com/metatypedev/metatype][metatype]]
+
+** reexport deno_core
+
+#+begin_src rust
+
+#[rustfmt::skip]
+use deno_runtime::deno_core as deno_core; // necessary for re-exported macros to work
+#+end_src
