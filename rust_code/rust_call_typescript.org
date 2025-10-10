@@ -110,17 +110,11 @@ pub async fn maybe_npm_install(factory: &CliFactory) -> Result<(), AnyError> {
 }
 #+end_src
 
-
-
 https://github.com/denoland/deno/issues/27881
 https://github.com/denoland/deno/issues/29174
 https://github.com/denoland/deno/blob/main/cli/npm.rs
 
 https://github.com/denoland/deno/blob/a8cde960ce626c77416edd4b58a8e502bcb0bacc/cli/lib/loader.rs
-
-#+begin_src rust
-
-#+end_src
 
 https://github.com/denoland/deno/blob/a8cde960ce626c77416edd4b58a8e502bcb0bacc/cli/rt/node.rs
 
