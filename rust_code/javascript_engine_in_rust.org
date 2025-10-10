@@ -1,5 +1,0 @@
-* javascript engine in rust
-
-[[https://github.com/boa-dev/boa][boa]]
-[[https://github.com/DelSkayn/rquickjs][rquickjs]]
-[[https://github.com/denoland/deno][deno]]
