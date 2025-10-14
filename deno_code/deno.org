@@ -119,3 +119,12 @@ metatype suppport wasm, include python and typescript
 #[rustfmt::skip]
 use deno_runtime::deno_core as deno_core; // necessary for re-exported macros to work
 #+end_src
+
+
+** rari
+
+[[https://github.com/rari-build/rari][rari]]
+
+** cloudstate
+
+[[https://github.com/freestyle-sh/cloudstate][cloudstate]]
