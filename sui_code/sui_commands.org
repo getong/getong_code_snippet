@@ -37,6 +37,9 @@ $ sui client faucet
 $ sui client new-address ed25519
 
 $ sui client publish --gas-budget 100000000
+$ sui client publish --gas-budget 100000000 \
+  --skip-fetch-latest-git-deps \
+  --skip-dependency-verification
 
 $ sui client object <package_id>
 
