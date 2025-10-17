@@ -1,0 +1,207 @@
+* sui multisig
+
+** Create addresses with different schemes
+
+#+begin_src shell
+sui client new-address ed25519
+
+sui client new-address secp256k1
+
+sui client new-address secp256r1
+#+end_src
+
+*** output result
+
+#+begin_example
+╭──────────────────────────────────────────────────╮
+│ Created new key pair and saved it to keystore.    │
+├────────────────┬─────────────────────────────────┤
+│ alias          │ <ALIAS>                         │
+│ address        │ <SUI-ADDRESS>                   │
+│ keyScheme      │ <KEY-SCHEME>                    │
+│ recoveryPhrase │ <RECOVERY-PHRASE>               │
+╰────────────────┴─────────────────────────────────╯
+#+end_example
+
+*** add script
+
+#+begin_src shell
+ADDRESS1=<SUI-ADDRESS-ED25519>
+
+ADDRESS2=<SUI-ADDRESS-SECP256K1>
+
+ADDRESS3=<SUI-ADDRESS-SECP256R1>
+
+ACTIVE=<ACTIVE-ADDRESS>
+#+end_src
+
+** Verify addresses
+
+#+begin_src shell
+sui keytool list
+#+end_src
+
+*** output example
+
+#+begin_example
+╭────────────────────────────────────────────────────────────────────╮
+│ ╭─────────────────┬──────────────────────────────────────────────╮ │
+| | alias           |  <ALIAS-NAME>                                | |
+│ │ suiAddress      │  <SUI-ADDRESS>                               │ │
+│ │ publicBase64Key │  <PUBLIC-KEY>                                │ │
+│ │ keyScheme       │  ed25519                                     │ │
+│ │ flag            │  0                                           │ │
+│ │ peerId          │  <PEER-ID>                                   │ │
+│ ╰─────────────────┴──────────────────────────────────────────────╯ │
+│ ╭─────────────────┬──────────────────────────────────────────────╮ │
+| | alias           |  <ALIAS-NAME>                                | |
+│ │ suiAddress      │  <SUI-ADDRESS>                               │ │
+│ │ publicBase64Key │  <PUBLIC-KEY>                                │ │
+│ │ keyScheme       │  secp256k1                                   │ │
+│ │ flag            │  0                                           │ │
+│ │ peerId          │  <PEER-ID>                                   │ │
+│ ╰─────────────────┴──────────────────────────────────────────────╯ │
+│ ╭─────────────────┬──────────────────────────────────────────────╮ │
+| | alias           |  <ALIAS-NAME>                                | |
+│ │ suiAddress      │  <SUI-ADDRESS>                               │ │
+│ │ publicBase64Key │  <PUBLIC-KEY>                                │ │
+│ │ keyScheme       │  secp256r1                                   │ │
+│ │ flag            │  0                                           │ │
+│ │ peerId          │  <PEER-ID>                                   │ │
+│ ╰─────────────────┴──────────────────────────────────────────────╯ │
+╰────────────────────────────────────────────────────────────────────╯
+#+end_example
+
+*** PUBLIC-KEY list
+
+#+begin_src shell
+PKEY_1=<PUBLIC-KEY-ED25519>
+
+PKEY_2=<PUBLIC-KEY-SECP256K1>
+
+PKEY_3=<PUBLIC-KEY-SECP256R1>
+#+end_src
+
+
+** Create a multisig address
+
+#+begin_src shell
+sui keytool multi-sig-address --pks $PKEY_1 $PKEY_2 $PKEY_3 --weights 1 2 3 --threshold 3
+#+end_src
+
+*** output result
+
+#+begin_example
+╭─────────────────┬─────────────────────────────────────────────────────────╮
+│ multisigAddress │  <MULTISIG-ADDRESS>                                     │
+│ multisig        │ ╭─────────────────────────────────────────────────────╮ │
+│                 │ │ ╭─────────────────┬───────────────────────────────╮ │ │
+│                 │ │ │ address         │  <SUI-ADDRESS>                │ │ │
+│                 │ │ │ publicBase64Key │  <PUBLIC-KEY>                 │ │ │
+│                 │ │ │ weight          │  1                            │ │ │
+│                 │ │ ╰─────────────────┴───────────────────────────────╯ │ │
+│                 │ │ ╭─────────────────┬───────────────────────────────╮ │ │
+│                 │ │ │ address         │  <SUI-ADDRESS>                │ │ │
+│                 │ │ │ publicBase64Key │  <PUBLIC-KEY>                 │ │ │
+│                 │ │ │ weight          │  2                            │ │ │
+│                 │ │ ╰─────────────────┴───────────────────────────────╯ │ │
+│                 │ │ ╭─────────────────┬───────────────────────────────╮ │ │
+│                 │ │ │ address         │  <SUI-ADDRESS>                │ │ │
+│                 │ │ │ publicBase64Key │  <PUBLIC-KEY>                 │ │ │
+│                 │ │ │ weight          │  3                            │ │ │
+│                 │ │ ╰─────────────────┴───────────────────────────────╯ │ │
+│                 │ ╰─────────────────────────────────────────────────────╯ │
+╰─────────────────┴─────────────────────────────────────────────────────────╯
+#+end_example
+
+** Add SUI to the multisig address
+
+#+begin_src shell
+MULTISIG=<MULTISIG-ADDRESS>
+#+end_src
+
+** test and send coin to multisig address
+
+#+begin_src shell
+sui client faucet --address $MULTISIG
+sui client gas $MULTISIG
+#+end_src
+
+*** Transfer SUI to your active address
+
+#+begin_src shell
+COIN=<COIN-OBJECT-ID>
+#+end_src
+
+#+begin_src shell
+sui client transfer --to $ACTIVE --object-id $COIN --gas-budget <GAS-AMOUNT> --serialize-unsigned-transaction
+#+end_src
+
+** TXBYTES
+The console displays the result (<TX-BYTES-RESULT>), which you can assign to another shell variable.
+#+begin_src shell
+TXBYTES=<TX-BYTES-RESULT>
+#+end_src
+
+** Sign the transaction with two public keys
+
+
+#+begin_src shell
+sui keytool sign --address $ADDRESS1 --data $TXBYTES
+
+sui keytool sign --address $ADDRESS2 --data $TXBYTES
+#+end_src
+
+*** output result
+
+#+begin_example
+╭──────────────┬─────────────────────────────╮
+│ suiAddress   │ <ADDRESS>                   │
+│ rawTxData    │ <TRANSACTION-HASH>          │
+│ intent       │ ╭─────────┬─────╮           │
+│              │ │ scope   │  0  │           |
+│              │ │ version │  0  │           |
+│              │ │ app_id  │  0  │           |
+|              | ╰─────────┴─────╯           │
+│ rawIntentMsg │ <INTENT-MSG-HASH>           │
+│ digest       │ <DIGEST-HASH>               │
+│ suiSignature │ <SIGNATURE-HASH>            │
+╰──────────────┴─────────────────────────────╯
+#+end_example
+
+
+** signatures list
+
+#+begin_src shell
+SIG_1=<SIGNATURE-HASH-ED25519>
+
+SIG_2=<SIGNATURE-HASH-SECP256K1>
+#+end_src
+
+** Combine individual signatures into a multisig
+
+#+begin_src shell
+sui keytool multi-sig-combine-partial-sig --pks $PKEY_1 $PKEY_2 $PKEY_3 --weights 1 2 3 --threshold 3 --sigs $SIG_1 $SIG_2
+#+end_src
+
+*** output result
+
+#+begin_example
+╭────────────────────┬──────────────────────────────╮
+│ multisigAddress    │  <MULTISIG-ADDRESS>          │
+│ multisigParsed     │  <MULTISIG-PARSED-HASH>      │
+│ multisigSerialized │  <MULTISIG-SERIALIZED-HASH>  │
+╰────────────────────┴──────────────────────────────╯
+#+end_example
+
+** Execute the transaction
+Use sui client execute-signed-tx to execute the multisig transaction.
+Set a shell variable equal to the multisigSerialized value you receive from the previous response,
+then use it to build the execute-signed-tx command.
+#+begin_src shell
+MULTISIG_SERIALIZED=<MULTISIG-SERIALIZED-HASH>
+
+sui client execute-signed-tx --tx-bytes $TXBYTES --signatures $MULTISIG_SERIALIZED
+#+end_src
+
+copy from [[https://docs.sui.io/guides/developer/cryptography/multisig#verify-addresses][Multisig Authentication]]
