@@ -128,3 +128,8 @@ use deno_runtime::deno_core as deno_core; // necessary for re-exported macros to
 ** cloudstate
 
 [[https://github.com/freestyle-sh/cloudstate][cloudstate]]
+
+
+** deno projects
+
+see [[https://deno.com/blog/open-source][Deno's Other Open Source Projects]]
