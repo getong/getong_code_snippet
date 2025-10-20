@@ -128,3 +128,8 @@ use deno_runtime::deno_core as deno_core; // necessary for re-exported macros to
 ** deno projects
 
 see [[https://deno.com/blog/open-source][Deno's Other Open Source Projects]]
+
+
+** chiselstrike
+
+[[https://github.com/chiselstrike/chiselstrike][chiselstrike]]
