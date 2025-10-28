@@ -14,6 +14,8 @@ bun tauri build
 bun tauri dev
 #+end_src
 
+copy from [[https://v2.tauri.app/reference/cli/][Command Line Interface]]
+
 copy from [[https://tauri.app/][tauri]]
 
 ** tauri project
