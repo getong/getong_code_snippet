@@ -6,6 +6,14 @@ cargo install create-tauri-app --locked
 cargo create-tauri-app
 #+end_src
 
+** tauri usage
+
+#+begin_src shell
+bun tauri build
+
+bun tauri dev
+#+end_src
+
 copy from [[https://tauri.app/][tauri]]
 
 ** tauri project
