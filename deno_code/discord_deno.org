@@ -1,0 +1,11 @@
+* discord deno
+
+** discord and deno development
+
+see [[https://pinta.land/posts/deno-discord-bot/][Building a Discord Bot with Deno and Harmony. A Step-by-Step Guide]]
+
+** typescript library
+
+[[https://discordeno.js.org/][discordeno]]
+
+[[https://github.com/discordeno/discordeno][discordeno]]
