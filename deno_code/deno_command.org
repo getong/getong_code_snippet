@@ -23,3 +23,7 @@ deno check
 
 deno repl
 #+end_src
+
+** deno and libsui
+
+deno use libsui as an embemed cli tool
