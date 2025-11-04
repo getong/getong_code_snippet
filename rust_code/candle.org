@@ -1,0 +1,6 @@
+* candle
+
+** candle learning
+
+[[https://pranitha.dev/posts/neural-networks-with-candle/][Neural Networks with Candle
+]]
