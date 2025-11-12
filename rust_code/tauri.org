@@ -38,3 +38,9 @@ also see [[https://blog.aiherrera.com/easy-guide-to-create-a-desktop-app-with-ne
 ** tauri libp2p project
 https://github.com/kewbish/kintsugi
 https://github.com/MiauDona/MiauChat
+
+** install craete dmg
+
+#+begin_src shell
+brew install create-dmg
+#+end_src
