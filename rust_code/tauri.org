@@ -44,3 +44,8 @@ https://github.com/MiauDona/MiauChat
 #+begin_src shell
 brew install create-dmg
 #+end_src
+
+
+** macos intel cpu issue
+
+[[https://github.com/tauri-apps/tauri/issues/14453][Running the iOS simulator on an Intel-based Mac failed with an error message]]
