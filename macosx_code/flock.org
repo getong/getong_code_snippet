@@ -1,0 +1,101 @@
+* flock CLI Usage Guide
+
+This document provides a concise reference for using `flock` on Linux to manage file-based locks in shell scripts.
+
+**Table of Contents**
+
+** installation
+
+#+begin_src shell
+brew install flock
+#+end_src
+
+** Usage Patterns
+
+  * Exclusive lock
+  * Shared lock
+  * Running commands under lock
+  * Non-blocking mode
+  * Timeout
+  * Using file descriptors
+  * Locking directories
+** Troubleshooting
+
+- Overview
+  `flock` provides advisory file locking for shell scripts. It prevents multiple processes from accessing the same resource simultaneously.
+
+- Basic Syntax
+  #+begin_src bash
+  flock [options] <file|FD> <command> [args]
+  flock [options] <file|FD> -c "command"
+  #+end_src
+
+- Common Options
+
+*** `-x` or `--exclusive`: Acquire an exclusive lock (write lock).
+*** `-s` or `--shared`: Acquire a shared lock (read lock).
+*** `-n` or `--nonblock`: Fail immediately if lock is not available.
+*** `-w <sec>` or `--timeout <sec>`: Wait up to N seconds to acquire the lock.
+*** `-u` or `--unlock`: Explicitly unlock.
+*** `-c`: Run a command string.
+
+- Usage Patterns
+
+** Exclusive Lock **
+#+begin_src bash
+flock -x /tmp/my.lock -c "echo doing work; sleep 5"
+#+end_src
+
+** Shared Lock **
+#+begin_src bash
+flock -s /tmp/my.lock -c "cat shared_resource.txt"
+#+end_src
+
+** Non-blocking **
+#+begin_src bash
+if ! flock -n /tmp/job.lock -c "run_job"; then
+echo "Another process is running."
+fi
+#+end_src
+
+** Timeout **
+#+begin_src bash
+flock -w 10 /tmp/longtask.lock -c "long_operation"
+#+end_src
+
+** Using File Descriptors **
+#+begin_src bash
+exec 9>/tmp/my.lock
+flock -x 9
+
+# critical section
+
+echo "Protected work"
+flock -u 9
+exec 9>&-
+#+end_src
+
+** Locking Directories **
+#+begin_src bash
+flock -x /var/lock/mydir.lock -c "update_stuff_in_dir"
+#+end_src
+
+
+** Prevent simultaneous script runs **
+#+begin_src bash
+#!/bin/bash
+LOCK=/tmp/myscript.lock
+flock -n $LOCK -c "echo running; sleep 3" || exit 1
+#+end_src
+
+** Queue jobs sequentially **
+#+begin_src bash
+flock /tmp/queue.lock -c "process_item"
+#+end_src
+
+** Troubleshooting
+
+
+- Ensure the lock file exists or can be created.
+- Advisory locks require cooperating processes — other tools must also use `flock`.
+- Use `lsof` to inspect active locks.
