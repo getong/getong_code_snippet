@@ -49,3 +49,21 @@ brew install create-dmg
 ** macos intel cpu issue
 
 [[https://github.com/tauri-apps/tauri/issues/14453][Running the iOS simulator on an Intel-based Mac failed with an error message]]
+https://github.com/tauri-apps/tauri/issues/10074
+https://github.com/tauri-apps/tauri/issues/14233
+
+** tauri android configure
+
+https://a3colorr.hatenablog.com/entry/2025/10/12/080047
+https://a3colorr.hatenablog.com/entry/2025/09/20/221428
+
+** tauri android development
+
+https://v2.tauri.app/develop/
+
+#+begin_src shell
+bun tauri info
+bun tauri ios dev --host
+bun tauri ios dev 'iPhone 17'
+bun tauri ios dev --open
+#+end_src
