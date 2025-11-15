@@ -1,0 +1,30 @@
+* language manager
+
+** rust
+
+rust-toolchain.toml
+
+#+begin_example
+[toolchain]
+channel = "1.82.0"
+components = ["rustfmt", "clippy"]
+#+end_example
+
+** java -- SDKMAN
+
+#+begin_src shell
+
+curl -s "https://get.sdkman.io" | bash
+
+source "~/.sdkman/bin/sdkman-init.sh"
+
+sdk version
+#+end_src
+
+** typescript -- volta
+
+** python -- virtualenv
+
+** go
+
+https://github.com/voidint/g
