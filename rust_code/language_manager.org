@@ -38,3 +38,5 @@ sdk current java
 ** go
 
 https://github.com/voidint/g
+
+** c++ -- vcpkg
