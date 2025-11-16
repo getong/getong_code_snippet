@@ -20,6 +20,14 @@ uv venv
 source .venv/bin/activate
 #+end_src
 
+** setup python version
+
+setup python version with .python-version config file
+
+#+begin_src shell
+echo 3.14.0 > .python-version
+#+end_src
+
 ** add pip library
 
 #+begin_src shell
@@ -35,7 +43,9 @@ uv pip compile ./requirements.in --universal --output-file ./requirements.txt
 #+begin_src shell
 cd ~/.emacs.d
 
-uv venv
+echo 3.14.0 > .python-version
+
+uv venv --clear
 
 uv pip install epc \
   orjson \
