@@ -1,0 +1,56 @@
+# uv
+
+** installation
+
+#+begin_src shell
+# On macOS and Linux.
+curl -LsSf https://astral.sh/uv/install.sh | sh
+#+end_src
+
+
+** create project
+
+#+begin_src shell
+mkdir uv-demo
+
+cd uv-demo
+
+uv venv
+
+source .venv/bin/activate
+#+end_src
+
+** add pip library
+
+#+begin_src shell
+uv pip install requests
+uv pip list
+uv pip list --outdated
+
+uv pip compile ./requirements.in --universal --output-file ./requirements.txt
+#+end_src
+
+** install lsp-bridge requirement
+
+#+begin_src shell
+cd ~/.emacs.d
+
+uv venv
+
+uv pip install epc \
+  orjson \
+  setuptools \
+  packaging \
+  paramiko \
+  rapidfuzz \
+  setuptools \
+  sexpdata \
+  six \
+  watchdog
+#+end_src
+
+*** lsp-bridge-python
+
+#+begin_src elisp
+(setq lsp-bridge-python-command ~/.emacs.d/.venv/python3)
+#+end_src
