@@ -27,3 +27,14 @@ cargo build
 #+end_src
 
 see [[https://github.com/MystenLabs/sui/pull/20921][Update "blst" from "0.3.11" to "0.3.13" to fix build on x86 Mac]]
+
+
+** compile sui source code
+
+#+begin_src shell
+git clone https://github.com/MystenLabs/sui
+cd sui
+git checkout mainnet-v1.60.1
+cargo update blst
+cargo build
+#+end_src
