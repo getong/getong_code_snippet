@@ -60,6 +60,7 @@ https://a3colorr.hatenablog.com/entry/2025/09/20/221428
 ** tauri android development
 
 https://v2.tauri.app/develop/
+https://v2.tauri.app/start/prerequisites/
 
 #+begin_src shell
 bun tauri info
