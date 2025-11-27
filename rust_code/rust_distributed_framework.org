@@ -32,6 +32,7 @@
 [[https://github.com/kwai/blaze][blaze]]
 [[https://github.com/hydro-project/hydro][hydro]]
 [[https://github.com/nubskr/walrus][walrus]]
+[[https://github.com/octopii-rs/octopii][octopii]]
 
 ** use with kubernetes
 :PROPERTIES:
