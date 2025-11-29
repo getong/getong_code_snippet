@@ -1,0 +1,8 @@
+* learn kubernetes
+
+** doc
+
+https://github.com/kelseyhightower/kubernetes-the-hard-way
+https://github.com/k8spatterns/examples
+https://github.com/alijahnas/CKA-practice-exercises
+https://github.com/tuxerrante/kubernetes-utils
