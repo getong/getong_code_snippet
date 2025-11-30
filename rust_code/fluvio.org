@@ -1,0 +1,10 @@
+* fluvio
+
+** installation
+
+#+begin_src shell
+curl -fsS https://hub.infinyon.cloud/install/install.sh | bash
+
+echo 'export PATH="${HOME}/.fvm/bin:${HOME}/.fluvio/bin:${PATH}"' >> ~/.zshrc
+source ~/.sort
+#+end_src
