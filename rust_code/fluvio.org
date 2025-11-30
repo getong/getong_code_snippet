@@ -8,3 +8,31 @@ curl -fsS https://hub.infinyon.cloud/install/install.sh | bash
 echo 'export PATH="${HOME}/.fvm/bin:${HOME}/.fluvio/bin:${PATH}"' >> ~/.zshrc
 source ~/.sort
 #+end_src
+
+** start local cluster
+
+#+begin_src shell
+fluvio cluster start
+#+end_src
+
+** create a topic
+
+#+begin_src shell
+fluvio topic create "echo-test"
+#+end_src
+
+** Produce Records
+
+#+begin_src shell
+fluvio produce echo-test
+> hello world!
+Ok!
+>
+#+end_src
+
+** Consume Records
+
+#+begin_src shell
+$ fluvio consume echo-test -B -d
+hello world!
+#+end_src
