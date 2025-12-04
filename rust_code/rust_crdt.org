@@ -6,6 +6,7 @@ see [[https://kerkour.com/rust-crdt][How CRDTs and Rust are revolutionizing dist
 
 ** rust implementation
 
+[[https://github.com/loro-dev/loro][loro]]
 [[https://github.com/y-crdt/y-crdt][y-crdt]]
 [[https://github.com/automerge/automerge][automerge]]
 [[https://github.com/josephg/diamond-types][diamond-types]]
