@@ -1,0 +1,11 @@
+* rust CRDT
+
+** introduction
+
+see [[https://kerkour.com/rust-crdt][How CRDTs and Rust are revolutionizing distributed systems and local-first applications]]
+
+** rust implementation
+
+[[https://github.com/y-crdt/y-crdt][y-crdt]]
+[[https://github.com/automerge/automerge][automerge]]
+[[https://github.com/josephg/diamond-types][diamond-types]]
