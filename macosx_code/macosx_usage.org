@@ -363,3 +363,9 @@ codesign --force --deep --sign -  /Applications/Emacs.app
 #+end_src
 
 copy from [[https://forums.macrumors.com/threads/finder-does-not-have-permission-to-open-null.2441374/][Finder does not have permission to open (null)]]
+
+** set timezone
+
+#+begin_src shell
+sudo systemsetup -settimezone Asia/Shanghai
+#+end_src
