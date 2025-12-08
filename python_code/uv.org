@@ -7,6 +7,11 @@
 curl -LsSf https://astral.sh/uv/install.sh | sh
 #+end_src
 
+*** via brew
+
+#+begin_src shell
+brew install uv
+#+end_src
 
 ** create project
 
