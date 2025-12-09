@@ -1,0 +1,26 @@
+* sui transfer
+
+** sui clients
+
+find out all the objects
+
+#+begin_src shell
+sui client objects
+#+end_src
+
+** sui client object
+
+get the object info
+
+#+begin_src shell
+sui client object 0x00000_object_id
+#+end_src
+
+** sui transfer
+
+#+begin_src shell
+sui client transfer \
+  --to 0xabcd1234... \
+  --object-id 0x123456789abcdef \
+  --gas-budget 100000000
+#+end_src
