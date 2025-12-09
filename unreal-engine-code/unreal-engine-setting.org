@@ -7,7 +7,7 @@
 ** GenerateProjectFiles.sh
 
 #+begin_src sh
-cd /Users/Shared/Epic\ Games/UE_5.4/Engine/Build/BatchFiles/Mac
+cd /Users/Shared/Epic\ Games/UE_5.7/Engine/Build/BatchFiles/Mac
 
 ./GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a1/a1.uproject" -game -vscode
 
@@ -22,7 +22,7 @@ copy from [[https://medium.com/techiepedia/setting-up-unreal-engine-m1-macbook-f
 ## pip install ue4cli
 pip3 install --break-system-packages ue4cli
 ## macos
-ue4 setroot /Users/Shared/Epic\ Games/UE_5.4
+ue4 setroot /Users/Shared/Epic\ Games/UE_5.7
 ## linux
 ## ue4 setroot /opt/unreal-engine
 
@@ -90,7 +90,7 @@ ue4 gen
 
 gen compile_commands.json
 #+begin_src sh
-# /Users/Shared/Epic\ Games/UE_5.4/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a4/a4.uproject" -game -vscode
+# /Users/Shared/Epic\ Games/UE_5.7/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a4/a4.uproject" -game -vscode
 
 /usr/local/bin/ue4 gen -vscode
 
