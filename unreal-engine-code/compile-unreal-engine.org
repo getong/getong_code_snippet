@@ -162,3 +162,12 @@ see [[https://aur.archlinux.org/packages/unreal-engine][Package Details: unreal-
 [[https://forums.unrealengine.com/t/error-ue5-for-linux-trying-to-create-my-first-project/679914/2][Error UE5 for Linux trying to create my first project]]
 [[https://wiki.archlinux.org/title/Unreal_Engine_5][Unreal Engine 5]]
 [[https://aur.archlinux.org/packages/unreal-engine-bin][unreal-engine-bin]]
+
+
+** make unreal engine compile in arm cpu macos, Fix Unreal Engine Xcode Metal Compiler Error
+
+#+begin_src shell
+xcodebuild -downloadComponent MetalToolChain
+#+end_src
+
+copy from [[https://www.youtube.com/watch?v=ek6yYxzVERY][How To Fix Unreal Engine Xcode Metal Compiler Error]]
