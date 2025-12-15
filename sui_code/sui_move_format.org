@@ -1,0 +1,22 @@
+* sui move format
+
+** install prettier
+
+#+begin_src shell
+brew install prettier
+#+end_src
+
+** install @mysten/prettier-plugin-move
+
+#+begin_src shell
+npm i -g @mysten/prettier-plugin-move
+#+end_src
+
+** usage
+
+#+begin_src shell
+prettier-move -c sources/example.move # to check
+prettier-move -w sources/example.move # to write
+#+end_src
+
+copy from [[https://www.npmjs.com/package/@mysten/prettier-plugin-move][@mysten/prettier-plugin-move]]
