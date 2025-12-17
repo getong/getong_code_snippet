@@ -1,0 +1,21 @@
+# quickwit installation
+
+** quickwith install with docker
+
+#+begin_src shell
+docker pull quickwit/quickwit:edge-slim-bookworm
+
+mkdir qwdata
+
+docker run \
+  --rm \
+  -v $(pwd)/qwdata:/quickwit/qwdata \
+  -p 127.0.0.1:7280:7280 \
+  quickwit/quickwit:edge-slim-bookworm run
+#+end_src
+
+*** view the version with curl
+
+#+begin_src shell
+curl http://localhost:7280/api/v1/version
+#+end_src
