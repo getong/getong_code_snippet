@@ -80,3 +80,13 @@ also see
 Kubelet in a live cluster]] copy from
 [[https://www.ibm.com/docs/en/cloud-private/3.2.0?topic=upgrade-kubelet-container-fails-start][Kubelet
 fails to start]]
+
+** use docker-desktop context
+
+``` shell
+$ kubectl config get-contexts
+$ kubectl config use-context docker-desktop
+```
+I was switching between docker-desktop and minikube. The solution was switching the context.
+
+copy from [[https://stackoverflow.com/questions/76841889/kubectl-error-memcache-go265-couldn-t-get-current-server-api-group-list-get][Kubectl error: memcache.go:265] couldn’t get current server API group list: Get [closed]]
