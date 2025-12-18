@@ -228,3 +228,73 @@ see
 Ingress 原理 和 Ingress-nginx 案例]] see
 [[https://www.emqx.com/zh/blog/access-emqx-in-kubernetes-cluster-through-nginx-ingress-controller][通过
 NGINX Ingress Controller 访问 Kubernetes 集群中的 EMQ X]]
+
+
+** kubernetes pod yaml examples
+
+#+begin_src yaml
+# 2022 version
+apiVersion: v1
+kind: Pod
+metadata:
+  name: first-pod
+  labels:
+    project: project-name
+spec:
+  containers:
+    - name: web-ctr
+      image: image-name
+      ports:
+        - containerPort: 8080
+#+end_src
+
+*** deploy pod
+
+#+begin_src shell
+kubectl apply -f pod.yml
+#+end_src
+
+*** describe pod
+
+#+begin_src shell
+kubectl describe pod first-pod
+#+end_src
+
+** kubernetes service yaml examples
+
+#+begin_src yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: svc-lb
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5555
+    targetPort: 8080
+  selector:
+    project: project-name
+#+end_src
+
+*** the service selector project must be the same with pod project name
+
+Currently, the `project-name` should be changed within the pod and service yaml config file.
+
+*** deploy service
+
+#+begin_src shell
+kubectl apply -f svc.yml
+#+end_src
+
+*** describe service
+
+#+begin_src shell
+kubectl get svc
+#+end_src
+
+
+** delete pod
+
+#+begin_src shell
+kubectl delete pod first-pod
+#+end_src

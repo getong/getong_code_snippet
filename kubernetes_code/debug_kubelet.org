@@ -90,3 +90,17 @@ $ kubectl config use-context docker-desktop
 I was switching between docker-desktop and minikube. The solution was switching the context.
 
 copy from [[https://stackoverflow.com/questions/76841889/kubectl-error-memcache-go265-couldn-t-get-current-server-api-group-list-get][Kubectl error: memcache.go:265] couldn’t get current server API group list: Get [closed]]
+
+** kubectl get contexts
+
+#+begin_src shell
+kubectl config get-contexts
+#+end_src
+
+** kubectl use context
+
+qsk is a kubernetes context
+
+#+begin_src shell
+kubectl config use-context qsk
+#+end_src
