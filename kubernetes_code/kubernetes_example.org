@@ -298,3 +298,58 @@ kubectl get svc
 #+begin_src shell
 kubectl delete pod first-pod
 #+end_src
+
+
+** deployment examples
+
+*** deployment yaml config file
+
+#+begin_src yaml
+# 2025 version
+# Start with 5 replicas on app version 1.0 and no update settings
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-deploy
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      project: project-name
+  template:
+    metadata:
+      labels:
+        project: project-name
+    spec:
+      containers:
+      - name: project-pod
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        image: image-name
+#+end_src
+
+*** deploy a deployment
+
+#+begin_src shell
+kubectl apply -f deploy.yml
+#+end_src
+
+*** describe deployments
+
+#+begin_src shell
+kubectl get deployments
+#+end_src
+
+*** describe a deployment
+
+#+begin_src shell
+kubectl get deployment project-deploy
+#+end_src
+
+
+*** delete a pod from deployment
+
+#+begin_src shell
+kubectl delete pod project-deploy-85dffd5d64-4rbdr
+#+end_src
