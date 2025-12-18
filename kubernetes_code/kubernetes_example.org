@@ -292,6 +292,11 @@ kubectl apply -f svc.yml
 kubectl get svc
 #+end_src
 
+*** delete a service
+
+#+begin_src shell
+kubectl delete svc svc-name
+#+end_src
 
 ** delete pod
 
@@ -347,9 +352,68 @@ kubectl get deployments
 kubectl get deployment project-deploy
 #+end_src
 
+*** delete a deployment:
+
+#+begin_src shell
+kubectl delete deployment project-deploy
+#+end_src
+
 
 *** delete a pod from deployment
 
 #+begin_src shell
 kubectl delete pod project-deploy-85dffd5d64-4rbdr
+#+end_src
+
+
+*** scale deployment
+
+#+begin_src shell
+kubectl scale --replicas 5 deployment/project-deploy
+#+end_src
+
+** Deploy the rollout
+
+*** config file
+
+#+begin_src yaml
+# 2022 version
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-deploy
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      project: project-name
+  minReadySeconds: 20
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        project: project-name
+    spec:
+      containers:
+        - name: project-pod
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8080
+          image: image-name
+#+end_src
+
+*** deoply rolling-update
+
+#+begin_src shell
+kubectl apply -f rolling-update.yml
+#+end_src
+
+*** get rollout info
+
+#+begin_src shell
+kubectl rollout status deployment project-deploy
 #+end_src
