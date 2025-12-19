@@ -1,6 +1,6 @@
 * sui build error
 
-** sui buidl error on macos intel cpu
+** sui build compile error on macos intel cpu
 
 error log:
 
@@ -20,3 +20,35 @@ downgrade sui to sui-mainnet-v1.53.2-macos-x86_64
 *** solution 2:
 
 self compile sui source
+
+** update sui move compiler-version in sui move project
+
+*** sui move version
+
+#+begin_src shell
+$ sui move --version
+sui-move 1.62.0-74e8414a4986
+#+end_src
+
+*** update Move.lock file
+
+**** before
+
+#+begin_example
+[move.toolchain-version]
+compiler-version = "1.41.1"
+#+end_example
+
+
+**** after
+
+#+begin_example
+[move.toolchain-version]
+compiler-version = "1.62.0"
+#+end_example
+
+*** compile
+
+#+begin_src shell
+sui move build
+#+end_src
