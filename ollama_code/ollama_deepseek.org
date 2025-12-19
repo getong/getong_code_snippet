@@ -1,0 +1,14 @@
+* ollama
+
+** install ollama on macos
+
+#+begin_src shell
+brew install Ollama
+
+ollama serve
+
+ollama run deepseek-r1:14b
+
+#+end_src
+
+see [[https://zenn.dev/iot101/articles/57187997c42d43][ローカル環境(MacBook Pro)でDeepSeekを動かしたメモ]]
