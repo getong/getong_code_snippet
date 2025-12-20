@@ -7,8 +7,25 @@ brew install Ollama
 
 ollama serve
 
+# on other terminal
 ollama run deepseek-r1:14b
 
 #+end_src
 
 see [[https://zenn.dev/iot101/articles/57187997c42d43][ローカル環境(MacBook Pro)でDeepSeekを動かしたメモ]]
+
+** china mirror
+
+#+begin_src shell
+mkdir -p ~/.ollama
+
+cat << EOF > ~/.ollama/config.json
+{
+    "registry": {
+        "mirrors": {
+            "registry.ollama.ai": "https://registry.ollama.ai"  # 可替换为其他国内镜像源地址
+        }
+    }
+}
+EOF
+#+end_src
