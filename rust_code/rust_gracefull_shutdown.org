@@ -164,3 +164,8 @@ fn main() {
 :END:
 [[https://github.com/Dav1dde/elegant-departure][elegant-departure]]
 [[https://github.com/Finomnis/tokio-graceful-shutdown][tokio-graceful-shutdown]]
+
+
+** ctrlc vs signal hook vs tokio signal
+
+The tokio signal seems to be the best.
