@@ -7,9 +7,15 @@ docker pull qdrant/qdrant
 
 mkdir -p qdrant-data
 
-docker run -p 6333:6333 \
-    -v $(pwd)/qdrant-data:/qdrant/storage \
-    qdrant/qdrant
+docker run -d --name qdrant \
+  -p 6333:6333 \
+  -p 6334:6334 \
+  -v "$PWD/qdrant-data:/qdrant/storage" \
+  --restart unless-stopped \
+  qdrant/qdrant
 #+end_src
 
 copy from [[https://qdrant.tech/documentation/guides/installation/][qdrant installation]]
+
+
+6333 is REST port, 6334 is GRPC port.
