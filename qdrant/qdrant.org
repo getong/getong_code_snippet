@@ -5,8 +5,10 @@
 #+begin_src shell
 docker pull qdrant/qdrant
 
+mkdir -p qdrant-data
+
 docker run -p 6333:6333 \
-    -v $(pwd)/path/to/data:/qdrant/storage \
+    -v $(pwd)/qdrant-data:/qdrant/storage \
     qdrant/qdrant
 #+end_src
 
