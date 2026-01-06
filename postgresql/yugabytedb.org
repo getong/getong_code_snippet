@@ -15,10 +15,11 @@ docker pull yugabytedb/yugabyte:2025.2.0.0-b131
 mkdir ~/yb_data
 
 docker run -d --name yugabyte01 --hostname yugabyte01 \
-  -p 7000:7000 -p 9000:9000 -p 15433:15433 -p 5433:5433 -p 9042:9042 \
+  -p 7001:7000 -p 9000:9000 -p 15433:15433 -p 5433:5433 -p 9042:9042 \
   yugabytedb/yugabyte:2025.2.0.0-b131 bin/yugabyted start \
   --base_dir=~/yb_data \
-  --background=false
+  --background=false \
+  --tserver_flags="ysql_pg_conf_csv=password_encryption=scram-sha-256,ysql_hba_conf_csv={host all all 0.0.0.0/0 md5,host all all ::0/0 md5,host all all 0.0.0.0/0 scram-sha-256,host all all ::0/0 scram-sha-256}"
 #+end_src
 
 copy from [[https://docs.yugabyte.com/stable/quick-start/docker/][Use a local YugabyteDB cluster]]
