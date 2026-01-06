@@ -1,0 +1,24 @@
+* YugabyteDB
+
+** YugabyteDB work with docker
+
+*** docker pull
+
+#+begin_src shell
+docker pull yugabytedb/yugabyte:2025.2.0.0-b131
+#+end_src
+
+*** run YugabyteDB
+
+#+begin_src shell
+
+mkdir ~/yb_data
+
+docker run -d --name yugabyte01 --hostname yugabyte01 \
+  -p 7000:7000 -p 9000:9000 -p 15433:15433 -p 5433:5433 -p 9042:9042 \
+  yugabytedb/yugabyte:2025.2.0.0-b131 bin/yugabyted start \
+  --base_dir=~/yb_data \
+  --background=false
+#+end_src
+
+copy from [[https://docs.yugabyte.com/stable/quick-start/docker/][Use a local YugabyteDB cluster]]
