@@ -369,3 +369,12 @@ copy from [[https://forums.macrumors.com/threads/finder-does-not-have-permission
 #+begin_src shell
 sudo systemsetup -settimezone Asia/Shanghai
 #+end_src
+
+** power on time
+
+#+begin_src shell
+pmset -g sched
+sudo pmset repeat wakeorpoweron M-F 09:10:00
+
+sudo pmset repeat cancel
+#+end_src
