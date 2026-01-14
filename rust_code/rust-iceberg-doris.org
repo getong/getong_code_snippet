@@ -1,0 +1,14 @@
+* rust + Iceberg + Doris
+
+see [[https://dev.to/mayu2008/building-high-performance-analytics-with-rust-apache-iceberg-and-apache-doris-a-modern-data-stack-agm][Building High-Performance Analytics with Rust, Apache Iceberg, and Apache Doris: A Modern Data Stack]]
+
+#+begin_example
+Key Libraries:
+
+tokio: Async runtime for high-concurrency I/O
+arrow-rs: Apache Arrow implementation
+parquet: Native Parquet reader/writer
+datafusion: In-process query engine for ETL
+rdkafka: High-performance Kafka client
+iceberg-rust: Apache Iceberg table format support
+#+end_example
