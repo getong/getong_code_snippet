@@ -33,6 +33,7 @@
 [[https://github.com/hydro-project/hydro][hydro]]
 [[https://github.com/nubskr/walrus][walrus]]
 [[https://github.com/octopii-rs/octopii][octopii]]
+[[ https://github.com/apache/datafusion-ballista][datafusion-ballista]]
 
 ** use with kubernetes
 :PROPERTIES:
