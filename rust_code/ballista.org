@@ -1,0 +1,42 @@
+* ballista
+
+** installation
+
+#+begin_src shell
+cargo install --locked ballista-scheduler
+cargo install --locked ballista-executor
+#+end_src
+
+** setup
+
+#+begin_src shell
+# The scheduler will bind to port 50050 by default
+RUST_LOG=info ballista-scheduler
+
+RUST_LOG=info ballista-executor
+
+RUST_LOG=info ballista-executor --bind-port 50052
+#+end_src
+
+copy from [[https://datafusion.apache.org/ballista/user-guide/deployment/cargo-install.html][Deploying a standalone Ballista cluster using cargo install]]
+
+
+** setup grpc port
+
+#+begin_src shell
+RUST_LOG=info ballista-executor -c 2 -p 50051 --bind-grpc-port 50052
+#+end_src
+
+copy from [[https://datafusion.apache.org/ballista/user-guide/deployment/quick-start.html][Ballista Quickstart]]
+
+** use rust client
+
+#+begin_src shell
+cd examples
+cargo run --release --example remote-sql
+
+cd examples
+cargo run --release --example remote-dataframe
+#+end_src
+
+copy from [[https://datafusion.apache.org/ballista/user-guide/deployment/quick-start.html][Ballista Quickstart]]
