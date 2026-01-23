@@ -1,0 +1,25 @@
+* neon
+
+** neon operator
+
+#+begin_src shell
+grep -rn "neondatabase/" .
+./config/crd/bases/neon.oltp.molnett.org_clusters.yaml:62:                default: neondatabase/neon:8463
+./specs/compute/deployment.go:60:
+                                Image: fmt.Sprintf("n
+eondatabase/compute-node-v%d", branch.Spec.PGVersion),
+./internal/controller/safekeeper_controller_test.go:64:
+                        NeonImage:        "neondatabase
+/neon:8463",
+./internal/controller/pageserver_controller_test.go:98:
+                        NeonImage:        "neondatabase
+/neon:8463",
+./internal/controller/cluster_controller_test.go:92:
+                                NeonImage:        "ne
+ondatabase/neon:8463",
+./api/v1alpha1/cluster_types.go:36:     // +kubebuilder:default:="neondatabas
+e/neon:8463"
+./yaml/crd.yaml:39:                default: neondatabase/neon:6351-bookworm
+#+end_src
+
+see [[https://github.com/molnett/neon-operator][neon-operator]]
