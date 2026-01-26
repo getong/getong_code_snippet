@@ -42,3 +42,75 @@ smartparens 很多命令，都是 sp-* 开头的。比较常用的：
 | sp-unwrap-sexp                 | (x) -> x           |
 | sp-forward-slurp-sexp          | [a b] c -> [a b c] |
 | sp-forward-barf-sexp           | [a b] c -> [a] b c |
+
+** movement
+M-a     句首
+M-e     句尾
+
+M-{     上一个段落
+M-}     下一个段落
+C-M-v   另一个窗口下卷一个屏幕
+C-M-V   另一个窗口上卷一个屏幕
+
+** delete
+C-S-Backspace  删除当前行
+
+
+C-x C-x 互换插入点和文本标记的位置
+
+M-h     标记整个段落
+C-x C-p 标记整个页面
+C-x h   标记整个缓冲区
+
+rust-mode
+C-M-a      移动到当前函数的开始
+C-M-e      移动到当前函数的结尾
+
+C-x r SPACE + register名（一个字符，比如a吧）
+然后我们就可以到处瞎逛，若要回到保存的register a位置，我们可以输入：
+
+C-x r j a
+挺好用的吧:)
+
+如果你记性和我一样不好，恐怕会常常想看看自己保存了哪些register，我们可以输入：
+
+M-x view-register    查看某一个register
+M-x list-registers   查看所有的register
+其实我常用的就是以上功能，为了使笔记稍微完整一点，下面开始Copy 《GNU Emacs Manual》的相关章节：
+
+在下面，我们使用r来命名所有的register：
+
+Save Positions in Registers
+C-x r SPC r
+    Save position of point in register r (point-to-register).
+C-x r j r
+    Jump to the position saved in register r (jump-to-register).
+Saving Text in Registers
+C-x r s r
+    Copy region into register r (copy-to-register).
+C-x r i r
+    Insert text from register r (insert-register).
+M-x append-to-register RET r
+    Append region to text in register r.
+M-x prepend-to-register RET r
+    Prepend region to text in register r.
+Saving Rectangles in Registers
+C-x r r r
+    Copy the region-rectangle into register r (copy-rectangle-to-register).
+    With numeric argument, delete it as well.
+C-x r i r
+    Insert the rectangle stored in register r (if it contains a rectangle) (insert-register).
+Saving Window Configurations in Registers
+C-x r w r
+    Save the state of the selected frame's windows in register r (window-configuration-to-register).
+C-x r f r
+    Save the state of all frames, including all their windows,
+    in register r (frame-configuration-to-register).
+Keeping Numbers in Registers
+C-u number C-x r n r
+    Store number into register r (number-to-register).
+C-u number C-x r + r
+    Increment the number in register r by number (increment-register).
+C-x r g r
+    Insert the number from register r into the buffer.
+copy from [[https://comdyn.hy.tsinghua.edu.cn/from-web/software-usage/366-emacs][Emacs 的基本操作]]
