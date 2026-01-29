@@ -114,3 +114,5 @@ C-u number C-x r + r
 C-x r g r
     Insert the number from register r into the buffer.
 copy from [[https://comdyn.hy.tsinghua.edu.cn/from-web/software-usage/366-emacs][Emacs 的基本操作]]
+
+pop-global-mark (C-x C-SPC) to jump back to the previous location.

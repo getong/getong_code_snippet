@@ -41,6 +41,8 @@ uv pip list
 uv pip list --outdated
 
 uv pip compile ./requirements.in --universal --output-file ./requirements.txt
+
+uv pip freeze > requirements.txt
 #+end_src
 
 ** install lsp-bridge requirement
