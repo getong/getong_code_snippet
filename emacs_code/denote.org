@@ -1,0 +1,5 @@
+* denote
+
+[[https://wowow005.github.io/posts/2024/07/20240417t220159--denote-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95__emacs/][denote 使用方法]]
+[[https://dasein.site/Denote_in_Emacs/][在Emacs中使用中Denote做笔记]]
+[[https://emacs-china.org/t/denote-dblock/28277][一篇介绍使用 Denote 以及 dblock 功能进行项目管理的好文]]
