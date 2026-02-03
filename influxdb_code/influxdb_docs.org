@@ -24,3 +24,34 @@ $ influx -port 8087
 :END:
 [[https://github.com/palkan/influx_udp][influx_udp]]
 [[https://github.com/travelping/exometer_influxdb][exometer_influxdb]]
+
+** influxdb3 core usage
+
+#+begin_src shell
+$ docker volume create influxdb3-data
+
+$ docker run -d --name influxdb3-core \
+  -p 8181:8181 \
+  -v influxdb3-data:/var/lib/influxdb3 \
+  influxdb:3-core \
+  influxdb3 serve \
+  --node-id=node0 \
+  --object-store=file \
+  --data-dir=/var/lib/influxdb3
+
+$ docker exec -it influxdb3-core influxdb3 create token --admin
+New token created successfully!
+
+Token: apiv3_fVk554m9Nlx7uJ18t_n0n8xxgtbCP7Ud0RwaTmm5dPxWNf62HRuyvRo9cnL1uwrTDLeG22zxK7QdmZLFP-klPw
+HTTP Requests Header: Authorization: Bearer apiv3_fVk554m9Nlx7uJ18t_n0n8xxgtbCP7Ud0RwaTmm5dPxWNf62HRuyvRo9cnL1uwrTDLeG22zxK7QdmZLFP-klPw
+
+IMPORTANT: Store this token securely, as it will not be shown again.
+
+$ export INFLUXDB_TOKEN=Apiv3_Fvk554m9nlx7uj18t_N0n8xxgtbcp7ud0rwatmm5dpxwnf62hruyvro9cnl1uwrtdleg22zxk7qdmzlfp-Klpw
+$ docker exec influxdb3-core influxdb3 create database weather --token $INFLUXDB_TOKEN
+
+
+$ docker exec influxdb3-core influxdb3 write --database weather --token $INFLUXDB_TOKEN "France temperature=22.5,hygrometry=65"
+
+$ docker exec influxdb3-core influxdb3 write --database weather --token $INFLUXDB_TOKEN "France temperature=18.3,hygrometry=72"
+#+end_src
