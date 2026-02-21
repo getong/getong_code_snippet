@@ -1,0 +1,5 @@
+* solana fork program
+
+
+[[https://www.quicknode.com/guides/solana-development/accounts-and-data/fork-programs-to-localnet][How to Fork and Deploy Solana Accounts & Programs from Mainnet to Localhost]]
+[[https://www.quicknode.com/guides/solana-development/accounts-and-data/how-to-deserialize-account-data-on-solana][How to Deserialize Account Data on Solana]]
