@@ -6,3 +6,5 @@
 [[https://solana.com/docs/programs/deploying][Deploying Programs]]
 
 https://github.com/Ackee-Blockchain/trident
+
+https://github.com/helius-labs/solana-awesome
