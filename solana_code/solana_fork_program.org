@@ -8,3 +8,5 @@
 https://github.com/Ackee-Blockchain/trident
 
 https://github.com/helius-labs/solana-awesome
+
+https://github.com/LulzFi/solana-trading-sdk
