@@ -19,3 +19,4 @@
 - Structs: Allow for creating cutsom types that group releated data together.
 - Mappings: Are data structures that sotre key-value pairs.
   In mappings, all keys are unique and mapped to a Value.
+- enum
