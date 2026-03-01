@@ -23,3 +23,21 @@ forge remappings
 #+begin_src shell
 forge build
 #+end_src
+
+** create contract
+
+#+begin_src shell
+forge create
+#+end_src
+
+** debug contract
+
+#+begin_src shell
+forge debug
+#+end_src
+
+** install library
+
+#+begin_src shell
+forge install username/contract-name
+#+end_src
