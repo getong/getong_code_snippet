@@ -79,3 +79,9 @@ anchor keys sync
 anchor build
 anchor deploy
 #+end_src
+
+** anchor upgrade
+
+#+begin_src shell
+anchor upgrade target/deploy/<PROGRAM_NAME>.so --provider.cluster <CLUSTER> --program-id <PROGRAM_ID>
+#+end_src
