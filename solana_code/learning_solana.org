@@ -458,3 +458,5 @@ see https://beta.solpg.io/
 ** solana action and blinks
 
 see [[https://www.markreadfintech.com/p/solana-actions-blinks][區塊鏈新時代的利器：Solana Actions 和 Blinks]]
+
+[[https://www.helius.dev/blog/pinocchio][How to Build Solana Programs with Pinocchio]]
