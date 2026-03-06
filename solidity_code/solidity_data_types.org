@@ -2,6 +2,7 @@
 
 ** values types
 
+- bytes
 - bool: represents a boolean value
 - int and uint: Thesse represent signed and unsigned integers, respectively.
   The solidity language allows for specifying bit sizes (e.g., uint8, uint256), with uint256 being the default.
