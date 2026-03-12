@@ -41,3 +41,9 @@ forge debug
 #+begin_src shell
 forge install username/contract-name
 #+end_src
+
+** forge inspect abi json file
+
+#+begin_src shell
+forge inspect --json your_solidity_filename.sol:ContractName abi
+#+end_src
