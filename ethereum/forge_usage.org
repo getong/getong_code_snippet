@@ -47,3 +47,12 @@ forge install username/contract-name
 #+begin_src shell
 forge inspect --json your_solidity_filename.sol:ContractName abi
 #+end_src
+
+** forge script example
+
+#+begin_src shell
+forge script script/your_script.s.sol \
+  --broadcast \
+  --private-key your_private_key \
+  --rpc-url endpoint_url
+#+end_src
