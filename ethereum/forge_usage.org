@@ -27,7 +27,11 @@ forge build
 ** create contract
 
 #+begin_src shell
-forge create
+forge create \
+  --broadcast \
+  --rpc-url <YOUR_RPC_URL> \
+  --private-key <YOUR_PRIVATE_KEY> \
+  src/Counter.sol:Counter
 #+end_src
 
 ** debug contract
@@ -56,3 +60,23 @@ forge script script/your_script.s.sol \
   --private-key your_private_key \
   --rpc-url endpoint_url
 #+end_src
+
+** cast call cli exmaple
+
+#+begin_src shell
+cast send 0xContractAddress "set(uint256)" 42 --private-key YOUR_PRIVAТE_KEY
+cast call 0xContractAddress "get()"
+cast balance <ACCOUNT ADDRESS>
+#+end_src
+
+** mythx
+
+#+begin_src shell
+pip3 install mythx-cli
+
+mythx analyze
+
+mythx analyze --contract path/to/contract.so
+#+end_src
+
+https://learnblockchain.cn/docs/foundry/i18n/zh/reference/cast/cast-publish.html
