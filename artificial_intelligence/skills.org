@@ -1,0 +1,13 @@
+* skills
+
+** installation
+
+#+begin_src shell
+npx skills add flutter/skills
+
+npx skills add actionbook/rust-skills
+
+npx skills add \
+  https://github.com/abdelhakrazi/flutter-bloc-clean-architecture-skill \
+  --skill flutter-bloc-development
+#+end_src
