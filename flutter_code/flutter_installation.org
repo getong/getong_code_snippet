@@ -28,6 +28,32 @@ cd project
 fvm flutter run
 #+end_src
 
+** melos
+
+#+begin_src shell
+fvm dart pub global activate melos
+
+fvm dart pub add melos --dev
+
+melos bootstrap
+
+melos clean
+
+melos format
+
+melos exec
+# e.g. melos exec -- pub global run tuneup check
+
+melos list
+
+melos publish
+
+melos run <name>
+
+melos version
+
+#+end_src
+
 ** macos set java sdk
 If already have android studio installed simply run:
 #+begin_src sh
