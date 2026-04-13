@@ -13,6 +13,12 @@ Key Focus: Row Level Security (RLS) and Key Management.
 This is the most critical security measure. By default, Supabase tables are open if RLS is not enabled. Once active, no one can read or write data unless you explicitly create "Policies."
 Action: In the Supabase Dashboard Table Editor, click "Enable RLS" for every table.
 SQL Policy Example: Allow users to view only their own data.
+
+Postgresql setting
+#+begin_src shell
+ALTER TABLE your_table_name ENABLE ROW LEVEL SECURITY;
+#+end_src
+
 #+BEGIN_SRC sql
 -- Only authenticated users can view their own rows
 create policy "Individuals can view their own data"
