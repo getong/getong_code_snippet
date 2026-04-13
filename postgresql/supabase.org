@@ -1,0 +1,44 @@
+* supabase
+
+** Self-Hosting with Docker
+
+#+begin_src shell
+# Get the code
+git clone --depth 1 https://github.com/supabase/supabase
+
+# Make your new supabase project directory
+mkdir supabase-project
+
+# Tree should look like this
+# .
+# ├── supabase
+# └── supabase-project
+
+# Copy the compose files over to your project
+cp -rf supabase/docker/* supabase-project
+
+# Copy the fake env vars
+cp supabase/docker/.env.example supabase-project/.env
+
+# Switch to your project directory
+cd supabase-project
+
+# Pull the latest images
+docker compose pull
+
+#+end_src
+
+*** Configuring and securing Supabase
+
+#+begin_src shell
+sh ./utils/generate-keys.sh
+#+end_src
+
+*** Starting and stopping
+
+#+begin_src shell
+# Start the services (in detached mode)
+docker compose up -d
+#+end_src
+
+copy from [[https://supabase.com/docs/guides/self-hosting/docker][Self-Hosting with Docker]]
