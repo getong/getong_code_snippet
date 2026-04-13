@@ -1,0 +1,344 @@
+* Patroni
+
+** Links
+
+copy from [[https://cloud.tencent.com/developer/article/2607316][CentOS 9 / PostgreSQL 17 / Patroni + etcd + HAProxy + Keepalived]]
+
+official docs:
+- [[https://patroni.readthedocs.io/en/master/index.html][Patroni documentation]]
+- [[https://patroni.readthedocs.io/en/master/yaml_configuration.html][Patroni YAML configuration]]
+- [[https://patroni.readthedocs.io/en/master/rest_api.html][Patroni REST API]]
+- [[https://patroni.readthedocs.io/en/master/patronictl.html][patronictl]]
+- [[https://patroni.readthedocs.io/en/master/watchdog.html][Watchdog support]]
+
+** Topology
+
+The article uses a common HA layout:
+- 3 PostgreSQL nodes, each node runs =patroni=
+- 3 etcd members as the DCS
+- =HAProxy= exposes write and read endpoints
+- =Keepalived= floats one VIP in front of HAProxy
+
+Typical traffic split:
+- write: VIP:=5000= -> current primary
+- read: VIP:=5001= -> replicas
+
+** Key Steps
+
+*** 1. Build the etcd cluster first
+
+Each node needs a stable name, peer URL, client URL, and the full initial cluster list.
+
+#+begin_src yaml
+# /etc/etcd/etcd.conf.yml
+name: pg-node1
+data-dir: /var/lib/etcd
+listen-peer-urls: http://192.168.1.11:2380
+listen-client-urls: http://192.168.1.11:2379,http://127.0.0.1:2379
+initial-advertise-peer-urls: http://192.168.1.11:2380
+advertise-client-urls: http://192.168.1.11:2379
+initial-cluster-token: patroni-etcd
+initial-cluster-state: new
+initial-cluster: pg-node1=http://192.168.1.11:2380,pg-node2=http://192.168.1.12:2380,pg-node3=http://192.168.1.13:2380
+#+end_src
+
+#+begin_src shell
+sudo systemctl enable --now etcd
+sudo systemctl status etcd
+
+etcdctl --endpoints=http://192.168.1.11:2379,http://192.168.1.12:2379,http://192.168.1.13:2379 endpoint status -w table
+etcdctl --endpoints=http://192.168.1.11:2379,http://192.168.1.12:2379,http://192.168.1.13:2379 member list -w table
+#+end_src
+
+Notes:
+- etcd should use an odd number of members
+- verify quorum before starting Patroni
+- keep client endpoints reachable from every Patroni node
+
+*** 2. Enable watchdog before allowing automatic failover
+
+The article enables the Linux software watchdog so Patroni can fence a broken leader more safely.
+
+#+begin_src shell
+sudo dnf install -y watchdog
+echo softdog | sudo tee /etc/modules-load.d/softdog.conf
+sudo modprobe softdog
+
+cat <<'EOF' | sudo tee /etc/watchdog.conf
+watchdog-device = /dev/watchdog
+EOF
+#+end_src
+
+If =/dev/watchdog= permissions are a problem, create a udev rule:
+
+#+begin_src shell
+cat <<'EOF' | sudo tee /etc/udev/rules.d/99-watchdog.rules
+KERNEL=="watchdog", MODE="0660", GROUP="postgres"
+EOF
+
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+#+end_src
+
+Per Patroni docs, =watchdog.mode: required= is the safer choice: the node will not become leader if watchdog is unavailable.
+
+*** 3. Install Patroni and prepare PostgreSQL
+
+The article installs =patroni= with the =etcd= backend and lets Patroni manage PostgreSQL startup.
+
+#+begin_src shell
+sudo dnf install -y python3 python3-pip postgresql17 postgresql17-server
+sudo pip3 install patroni[etcd]
+
+sudo mkdir -p /data/patroni
+sudo chown -R postgres:postgres /data/patroni
+#+end_src
+
+Main points for =/etc/patroni.yml=:
+- every node has a unique =name=
+- =scope= is the cluster name shared by all nodes
+- =restapi.connect_address= must be reachable by other nodes and HAProxy
+- =postgresql.connect_address= must point to the node's PostgreSQL address
+- DCS hosts should list all etcd members
+
+#+begin_src yaml
+scope: mycluster
+namespace: /db/
+name: pg-node1
+
+restapi:
+  listen: 0.0.0.0:8008
+  connect_address: 192.168.1.11:8008
+
+etcd3:
+  hosts:
+    - 192.168.1.11:2379
+    - 192.168.1.12:2379
+    - 192.168.1.13:2379
+
+bootstrap:
+  dcs:
+    ttl: 30
+    loop_wait: 10
+    retry_timeout: 10
+    maximum_lag_on_failover: 1048576
+    postgresql:
+      use_pg_rewind: true
+      use_slots: true
+      parameters:
+        wal_level: replica
+        hot_standby: "on"
+        wal_log_hints: "on"
+        max_wal_senders: 10
+        max_replication_slots: 10
+  initdb:
+    - encoding: UTF8
+    - data-checksums
+  pg_hba:
+    - host replication replicator 192.168.1.0/24 md5
+    - host all all 192.168.1.0/24 md5
+
+postgresql:
+  listen: 0.0.0.0:5432
+  connect_address: 192.168.1.11:5432
+  data_dir: /data/patroni
+  bin_dir: /usr/pgsql-17/bin
+  authentication:
+    superuser:
+      username: postgres
+      password: postgres
+    replication:
+      username: replicator
+      password: replicator
+
+watchdog:
+  mode: required
+  device: /dev/watchdog
+
+tags:
+  nofailover: false
+  noloadbalance: false
+  clonefrom: false
+  nosync: false
+#+end_src
+
+Important Patroni note:
+- keep =ttl=, =loop_wait=, and =retry_timeout= consistent with the docs; Patroni requires =loop_wait + 2 * retry_timeout <= ttl=
+
+Systemd service:
+
+#+begin_src ini
+# /etc/systemd/system/patroni.service
+[Unit]
+Description=Runners to orchestrate a high-availability PostgreSQL
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=postgres
+Group=postgres
+ExecStart=/usr/local/bin/patroni /etc/patroni.yml
+KillMode=process
+TimeoutSec=30
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
+#+end_src
+
+#+begin_src shell
+sudo systemctl daemon-reload
+sudo systemctl enable --now patroni
+patronictl -c /etc/patroni.yml list
+#+end_src
+
+*** 4. Put HAProxy in front of Patroni
+
+The article routes writer and reader traffic with Patroni REST API health checks.
+
+Patroni REST API behavior that matters here:
+- =/primary= returns success only on the leader
+- =/replica= returns success only on replicas suitable for read traffic
+
+#+begin_src haproxy
+global
+    log 127.0.0.1 local2
+    maxconn 2000
+    daemon
+
+defaults
+    mode tcp
+    log global
+    option tcplog
+    timeout connect 10s
+    timeout client 1m
+    timeout server 1m
+
+listen stats
+    bind *:7000
+    mode http
+    stats enable
+    stats uri /
+
+listen postgres-master
+    bind *:5000
+    option httpchk OPTIONS /primary
+    http-check expect status 200
+    default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
+    server pg-node1 192.168.1.11:5432 check port 8008
+    server pg-node2 192.168.1.12:5432 check port 8008
+    server pg-node3 192.168.1.13:5432 check port 8008
+
+listen postgres-replica
+    bind *:5001
+    option httpchk OPTIONS /replica
+    http-check expect status 200
+    default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
+    server pg-node1 192.168.1.11:5432 check port 8008
+    server pg-node2 192.168.1.12:5432 check port 8008
+    server pg-node3 192.168.1.13:5432 check port 8008
+#+end_src
+
+#+begin_src shell
+sudo systemctl enable --now haproxy
+curl http://127.0.0.1:7000/
+#+end_src
+
+*** 5. Add Keepalived for a floating VIP
+
+Keepalived should track HAProxy and move the VIP if the front node dies.
+
+Health check script:
+
+#+begin_src shell
+# /etc/keepalived/check_haproxy.sh
+#!/usr/bin/env bash
+systemctl is-active --quiet haproxy
+#+end_src
+
+#+begin_src shell
+sudo chmod +x /etc/keepalived/check_haproxy.sh
+#+end_src
+
+Example Keepalived config:
+
+#+begin_src conf
+vrrp_script chk_haproxy {
+    script "/etc/keepalived/check_haproxy.sh"
+    interval 2
+    weight 10
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 101
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        192.168.1.100/24
+    }
+    track_script {
+        chk_haproxy
+    }
+}
+#+end_src
+
+Backup nodes use the same block with lower =priority= and =state BACKUP=.
+
+#+begin_src shell
+sudo systemctl enable --now keepalived
+ip addr
+#+end_src
+
+*** 6. Verify switchover and failover
+
+Basic checks:
+
+#+begin_src shell
+patronictl -c /etc/patroni.yml list
+curl http://192.168.1.11:8008/primary
+curl http://192.168.1.12:8008/replica
+psql -h 192.168.1.100 -p 5000 -U postgres -d postgres -c "select pg_is_in_recovery();"
+psql -h 192.168.1.100 -p 5001 -U postgres -d postgres -c "select pg_is_in_recovery();"
+#+end_src
+
+Manual switchover:
+
+#+begin_src shell
+patronictl -c /etc/patroni.yml switchover --cluster mycluster
+#+end_src
+
+Failure drill:
+
+#+begin_src shell
+sudo systemctl stop patroni
+#+end_src
+
+Then verify:
+- a replica is promoted by Patroni
+- HAProxy =5000= now points at the new primary
+- Keepalived still serves the VIP from a healthy HAProxy node
+
+*** 7. Cleanup when bootstrap state is wrong
+
+If a failed initialization leaves stale cluster state in etcd, remove the cluster namespace only after confirming no live cluster depends on it.
+
+#+begin_src shell
+etcdctl --endpoints=http://192.168.1.11:2379,http://192.168.1.12:2379,http://192.168.1.13:2379 get /db/mycluster --prefix
+etcdctl --endpoints=http://192.168.1.11:2379,http://192.168.1.12:2379,http://192.168.1.13:2379 del /db/mycluster --prefix
+#+end_src
+
+This is destructive. Make sure =scope= and =namespace= match the Patroni configuration before deleting anything.
+
+** Practical Notes
+
+- The article is a full environment walkthrough; this file keeps only the steps that matter for a repeatable build
+- Use the article for CentOS 9 package names and service examples
+- Use official Patroni docs for behavior, field semantics, and API endpoint meaning
+- Replace the sample IPs, interface name, passwords, and PostgreSQL paths before using this in production
