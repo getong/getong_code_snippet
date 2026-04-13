@@ -1,0 +1,651 @@
+#+title: CloudNativePG Usage
+#+date: 2026-04-14
+#+startup: overview
+
+* CloudNativePG in one page
+
+CloudNativePG is a Kubernetes operator for running PostgreSQL clusters as native Kubernetes resources.
+The main object is the =Cluster= CRD. You describe the desired state in YAML, and the operator reconciles pods, PVCs, services, failover, backups, and configuration.
+
+For day-to-day use, the most important ideas are:
+
+- one =Cluster= resource describes one PostgreSQL HA cluster
+- =spec.instances= controls the number of PostgreSQL instances
+- applications should connect through Kubernetes services, not directly to pods
+- backups and recovery are declarative and operator-driven
+- the =kubectl cnpg= plugin is the easiest way to inspect and operate clusters
+
+
+* Version note
+
+This note is based on the official CloudNativePG documentation checked on 2026-04-14.
+
+- Supported releases page shows =1.29.x= and =1.28.x= as supported as of 2026-04-14
+- examples below target the =1.29= API and docs layout
+- the operator manifest for 1.29 uses:
+  =https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.29/releases/cnpg-1.29.0.yaml=
+- backup guidance reflects the post-1.26 direction: CNPG-I plugins are the preferred path, while native =barmanObjectStore= support is deprecated
+
+
+* Core concepts
+
+** Cluster and instances
+
+A minimal CloudNativePG cluster is just a =Cluster= object with:
+
+- a name
+- =spec.instances=
+- storage
+- an optional bootstrap section
+
+With =instances: 3=, CloudNativePG runs one primary and two standbys under normal conditions.
+
+** Services
+
+CloudNativePG creates standard Kubernetes services for application access:
+
+- =<cluster>-rw=: points to the primary, for read/write traffic
+- =<cluster>-ro=: points to replicas, for read-only traffic
+- =<cluster>-r=: points to any instance, usually for read traffic
+
+Do not connect applications directly to a specific pod. Pod identity can change during failover, switchover, restart, and rescheduling.
+
+** Secrets
+
+CloudNativePG generates up to two important secrets:
+
+- =<cluster>-app=: application credentials, unless you supplied your own application secret during bootstrap
+- =<cluster>-superuser=: superuser credentials, only if superuser network access is enabled or a superuser secret is explicitly configured
+
+The generated app secret includes useful fields such as:
+
+- =username=
+- =password=
+- =host=
+- =port=
+- =dbname=
+- =.pgpass=
+- =uri=
+- =jdbc-uri=
+- =fqdn-uri=
+- =fqdn-jdbc-uri=
+
+By default, network superuser access is disabled.
+
+
+* Install the operator
+
+** Install CloudNativePG 1.29
+
+#+begin_src shell
+kubectl apply --server-side -f \
+  https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.29/releases/cnpg-1.29.0.yaml
+
+kubectl rollout status deployment \
+  -n cnpg-system cnpg-controller-manager
+#+end_src
+
+** Install the =kubectl cnpg= plugin
+
+Choose one method:
+
+#+begin_src shell
+# Homebrew
+brew install kubectl-cnpg
+
+# or Krew
+kubectl krew install cnpg
+
+# or the project install script
+curl -sSfL \
+  https://github.com/cloudnative-pg/cloudnative-pg/raw/main/hack/install-cnpg-plugin.sh | \
+  sudo sh -s -- -b /usr/local/bin
+#+end_src
+
+The plugin is useful for:
+
+- cluster status
+- launching =psql=
+- requesting backups
+- restart, reload, promote, hibernate, certificate issuance, pgbench, and more
+
+** Optional: generate install YAML with the plugin
+
+If you want to customize operator installation settings such as watch namespaces:
+
+#+begin_src shell
+kubectl cnpg install generate \
+  --watch-namespace "specific-namespace" \
+  > cnpg_for_specific_namespace.yaml
+#+end_src
+
+
+* Bootstrap a new PostgreSQL cluster
+
+** Recommended pattern
+
+For a normal application cluster:
+
+1. create an application secret
+2. create a =Cluster= resource
+3. let CloudNativePG bootstrap the database using =initdb=
+
+** Example secret
+
+The secret must use the Kubernetes =basic-auth= type, and the =username= must match the application owner.
+
+#+begin_src yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: kubernetes.io/basic-auth
+stringData:
+  username: app
+  password: replace-me
+#+end_src
+
+** Example cluster
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: appdb
+spec:
+  instances: 3
+
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      secret:
+        name: app-secret
+
+  storage:
+    size: 20Gi
+#+end_src
+
+This bootstrap mode will:
+
+- initialize =PGDATA= with =initdb=
+- create the =app= role
+- set its password from =app-secret=
+- create the =app= database owned by =app=
+
+If you omit =database= and =owner=, CloudNativePG defaults to =app= for both.
+
+** Apply and inspect
+
+#+begin_src shell
+kubectl apply -f app-secret.yaml
+kubectl apply -f cluster.yaml
+
+kubectl get cluster
+kubectl get pods -l cnpg.io/cluster=appdb
+kubectl get svc
+kubectl cnpg status appdb
+#+end_src
+
+** Image pinning
+
+For production, pin the PostgreSQL image explicitly through =spec.imageName= and avoid floating tags such as =latest=.
+If you need strict reproducibility, pin by digest.
+
+Example:
+
+#+begin_src yaml
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:<exact-version>@sha256:<digest>
+#+end_src
+
+
+* How applications should connect
+
+Use Kubernetes DNS and the generated app secret.
+
+** Service names
+
+For a cluster named =appdb=:
+
+- =appdb-rw= for writes
+- =appdb-ro= for read-only traffic
+- =appdb-r= for generic reads
+
+If the application is in another namespace, use the fully qualified service name, for example:
+
+#+begin_example
+appdb-rw.database-namespace
+#+end_example
+
+** Read the connection URI
+
+If you supplied your own application secret during bootstrap, read from that secret:
+
+#+begin_src shell
+kubectl get secret app-secret \
+  -o jsonpath='{.data.uri}' | base64 -d; echo
+#+end_src
+
+If you let CloudNativePG generate the application secret automatically, use:
+
+#+begin_src shell
+kubectl get secret appdb-app \
+  -o jsonpath='{.data.uri}' | base64 -d; echo
+#+end_src
+
+** Get a psql shell
+
+#+begin_src shell
+kubectl cnpg psql appdb
+#+end_src
+
+To connect to a replica instead:
+
+#+begin_src shell
+kubectl cnpg psql --replica appdb
+#+end_src
+
+Note that this connects as =postgres=. Treat it as an admin operation, not an application pattern.
+
+
+* Common day-1 and day-2 operations
+
+** Inspect cluster state
+
+#+begin_src shell
+kubectl cnpg status appdb
+kubectl describe cluster appdb
+kubectl get backups
+kubectl get events --sort-by=.lastTimestamp
+#+end_src
+
+With extra verbosity:
+
+#+begin_src shell
+kubectl cnpg status appdb -v -v
+#+end_src
+
+That can show PostgreSQL configuration, HBA settings, and certificates.
+
+** Scale instances
+
+Change =spec.instances= and re-apply:
+
+#+begin_src yaml
+spec:
+  instances: 5
+#+end_src
+
+** Restart or reload
+
+#+begin_src shell
+# reload cluster-dependent config
+kubectl cnpg reload appdb
+
+# rollout restart the whole cluster
+kubectl cnpg restart appdb
+
+# restart one instance
+kubectl cnpg restart appdb appdb-2
+#+end_src
+
+** Promote a standby
+
+#+begin_src shell
+kubectl cnpg promote appdb appdb-2
+#+end_src
+
+This is mainly for controlled maintenance or testing switchovers.
+
+** Hibernate a cluster
+
+#+begin_src shell
+kubectl cnpg hibernate on appdb
+kubectl cnpg status appdb
+kubectl cnpg hibernate off appdb
+#+end_src
+
+
+* PostgreSQL configuration
+
+CloudNativePG manages =postgresql.conf=, =pg_hba.conf=, and =pg_ident.conf= declaratively through the =postgresql= section of the cluster spec.
+
+Do not rely on =ALTER SYSTEM= for operator-managed settings.
+
+** Example
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: appdb
+spec:
+  instances: 3
+  storage:
+    size: 20Gi
+  postgresql:
+    parameters:
+      shared_buffers: "1GB"
+      wal_level: "replica"
+    pg_hba:
+      - hostssl app app 10.0.0.0/8 scram-sha-256
+#+end_src
+
+Important behavior to remember:
+
+- CloudNativePG sets =wal_level= to =logical= by default
+- if you do not need logical replication, setting =wal_level: replica= can reduce WAL volume
+- fixed parameters required by the operator cannot be overridden
+
+** Bootstrap-time =initdb= tuning
+
+Useful bootstrap options include:
+
+- =dataChecksums: true=
+- =encoding=
+- =locale=
+- =localeProvider=
+- =icuLocale=
+- =builtinLocale=
+
+Example:
+
+#+begin_src yaml
+spec:
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      secret:
+        name: app-secret
+      dataChecksums: true
+      encoding: UTF8
+#+end_src
+
+
+* Declarative database and role management
+
+CloudNativePG can go beyond just bootstrapping one database and one application role.
+
+** Managed roles
+
+Additional roles can be managed declaratively under =.spec.managed.roles=.
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: appdb
+spec:
+  managed:
+    roles:
+      - name: readonly
+        ensure: present
+        login: true
+        inRoles:
+          - pg_read_all_data
+#+end_src
+
+** Database CRD
+
+Additional databases can be managed through the =Database= CRD.
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: appdb-reporting
+spec:
+  cluster:
+    name: appdb
+  name: reporting
+  owner: app
+#+end_src
+
+The =Database= CRD can also manage:
+
+- extensions
+- schemas
+- foreign data wrappers
+- foreign servers
+
+CloudNativePG manages global objects, not application tables and data migrations. Schema migrations should still be handled by your app or migration tooling.
+
+
+* Backup strategy
+
+** Current backup methods
+
+CloudNativePG supports three physical backup methods for scheduled and on-demand backups:
+
+- =plugin=: recommended, via CNPG-I plugins
+- =volumeSnapshot=: native Kubernetes snapshots
+- =barmanObjectStore=: deprecated from 1.26 onward, retained for backward compatibility
+
+The official direction is to use CNPG-I plugins, especially the Barman Cloud Plugin, for object-store-based backup and WAL archiving.
+
+** Production recommendation
+
+For production:
+
+- enable WAL archiving
+- take regular base backups
+- test recovery, not just backup creation
+- keep Kubernetes secret backup in your broader cluster backup plan
+
+CloudNativePG explicitly notes that on-demand backups do not include the Kubernetes secrets for superuser and application users.
+
+** Scheduled backup example
+
+Scheduled backups are implemented with the =ScheduledBackup= CRD.
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: appdb-daily
+spec:
+  schedule: "0 0 2 * * *"
+  cluster:
+    name: appdb
+  method: plugin
+  backupOwnerReference: self
+#+end_src
+
+Important: the cron expression has *six* fields because it includes seconds.
+
+** Immediate and suspended scheduled backups
+
+#+begin_src yaml
+spec:
+  immediate: true
+  suspend: true
+#+end_src
+
+** On-demand backup
+
+Using the plugin:
+
+#+begin_src shell
+kubectl cnpg backup appdb
+#+end_src
+
+Using volume snapshots:
+
+#+begin_src shell
+kubectl cnpg backup appdb -m volumeSnapshot
+#+end_src
+
+You can also create a =Backup= CR directly if you prefer GitOps-style reconciliation.
+
+
+* Recovery and PITR
+
+Recovery in CloudNativePG is not in-place. You create a *new* cluster and bootstrap it from a backup.
+
+** Restore from an existing =Backup= object
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: appdb-restore
+spec:
+  instances: 3
+  bootstrap:
+    recovery:
+      backup:
+        name: backup-example
+  storage:
+    size: 20Gi
+#+end_src
+
+** PITR from object storage
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: appdb-pitr
+spec:
+  instances: 3
+  bootstrap:
+    recovery:
+      source: origin
+      recoveryTarget:
+        targetTime: "2026-04-14T08:00:00Z"
+  externalClusters:
+    - name: origin
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: appdb-backup
+          serverName: appdb
+  storage:
+    size: 20Gi
+#+end_src
+
+Key rules:
+
+- PITR requires a valid WAL archive
+- if =targetTime= or =targetLSN= is set, CloudNativePG selects the closest eligible base backup automatically
+- for targets such as =targetName=, =targetXID=, or =targetImmediate=, you must specify =backupID=
+
+** Recovery from volume snapshots
+
+If you use =volumeSnapshot= backups, recovery can bootstrap from =recovery.volumeSnapshots=.
+If the original cluster used separate WAL storage, you must restore the WAL snapshot as well.
+
+
+* Monitoring
+
+** What CloudNativePG exposes
+
+- each PostgreSQL instance exposes Prometheus metrics on port =9187=
+- the operator exposes metrics on port =8080=
+- the operator ships a default monitoring query set in the =cnpg-default-monitoring= ConfigMap
+
+Monitoring queries run:
+
+- atomically
+- as user =postgres=
+- with role =pg_monitor=
+- with =application_name= set to =cnpg_metrics_exporter=
+
+** Recommended pattern
+
+Create your own =PodMonitor= and do not rely on automatic =PodMonitor= creation.
+The =.spec.monitoring.enablePodMonitor= field is deprecated.
+
+** Manual =PodMonitor= example
+
+#+begin_src yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: appdb
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: appdb
+  podMetricsEndpoints:
+    - port: metrics
+#+end_src
+
+If you enable TLS on the metrics port with =.spec.monitoring.tls.enabled: true=, your =PodMonitor= must use =scheme: https= and a proper TLS config.
+
+** Custom queries
+
+You can attach custom metric queries through:
+
+- =.spec.monitoring.customQueriesConfigMap=
+- =.spec.monitoring.customQueriesSecret=
+
+If you want changes to related ConfigMaps or Secrets to be reloaded automatically, label them with =cnpg.io/reload=. Otherwise, use:
+
+#+begin_src shell
+kubectl cnpg reload appdb
+#+end_src
+
+
+* Connection pooling
+
+CloudNativePG has native PgBouncer integration through the =Pooler= CRD.
+
+Example:
+
+#+begin_src yaml
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: appdb-rw-pooler
+spec:
+  cluster:
+    name: appdb
+  instances: 3
+  type: rw
+  pgbouncer:
+    poolMode: session
+    parameters:
+      max_client_conn: "1000"
+      default_pool_size: "10"
+#+end_src
+
+Use this when:
+
+- your application opens many short-lived connections
+- you want to protect PostgreSQL from connection storms
+- you want a separate database access layer in front of the =rw= or =ro= service
+
+PgBouncer 1.19+ is required because CloudNativePG depends on =auth_dbname= support.
+
+
+* Practical production checklist
+
+- pin PostgreSQL operand images to exact versions
+- use at least =instances: 3= for HA
+- spread pods across nodes and zones through Kubernetes scheduling policies
+- enable WAL archiving in production
+- run scheduled backups and test restore regularly
+- treat the generated Kubernetes secrets as part of your backup and disaster recovery scope
+- prefer =plugin= over deprecated native =barmanObjectStore= backup configuration
+- use service DNS names, not pod IPs
+- use app credentials for applications, not =postgres=
+- manage config declaratively via YAML, not =ALTER SYSTEM=
+- create your own =PodMonitor= resources
+
+
+* Reference links
+
+- [[https://cloudnative-pg.io/docs/1.29/installation_upgrade/][Installation and upgrades]]
+- [[https://cloudnative-pg.io/docs/1.29/quickstart/][Quickstart]]
+- [[https://cloudnative-pg.io/docs/1.29/bootstrap/][Bootstrap]]
+- [[https://cloudnative-pg.io/docs/1.29/postgresql_conf/][PostgreSQL Configuration]]
+- [[https://cloudnative-pg.io/docs/1.29/backup/][Backup]]
+- [[https://cloudnative-pg.io/docs/1.29/recovery/][Recovery]]
+- [[https://cloudnative-pg.io/docs/1.29/monitoring/][Monitoring]]
+- [[https://cloudnative-pg.io/docs/1.29/kubectl-plugin/][Kubectl Plugin]]
+- [[https://cloudnative-pg.io/docs/1.29/connection_pooling/][Connection Pooling]]
+- [[https://cloudnative-pg.io/docs/1.29/declarative_database_management/][PostgreSQL Database management]]
+- [[https://cloudnative-pg.io/docs/1.29/supported_releases/][Supported releases]]
