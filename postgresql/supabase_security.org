@@ -1,0 +1,47 @@
+Improving Security for Supabase + Flutter Connections
+In Flutter, Supabase security relies heavily on PostgreSQL's underlying mechanisms and correct configuration of client-side policies. Since Supabase encourages direct interaction between the client and the database, your "shield" must be set at the database layer.
+Timeframe: Current best practices as of April 2026.
+Key Focus: Row Level Security (RLS) and Key Management.
+[[#1. Core Defense: Enable Row Level Security (RLS)]]
+[[#2. Key Management: Never Leak the service_role Key]]
+[[#3. Hardening Authentication (Auth)]]
+[[#4. Principle of Least Privilege: Using RPC]]
+[[#5. Storage Security]]
+[[#6. Flutter Client-Side Hardening]]
+[[#Summary Checklist]]
+** 1. Core Defense: Enable Row Level Security (RLS)
+This is the most critical security measure. By default, Supabase tables are open if RLS is not enabled. Once active, no one can read or write data unless you explicitly create "Policies."
+Action: In the Supabase Dashboard Table Editor, click "Enable RLS" for every table.
+SQL Policy Example: Allow users to view only their own data.
+#+BEGIN_SRC sql
+-- Only authenticated users can view their own rows
+create policy "Individuals can view their own data"
+on profiles for select
+using (auth.uid() = id);
+#+END_SRC
+** 2. Key Management: Never Leak the service_role Key
+Supabase provides two types of API keys with completely different purposes:
+anon key (Public): Safe to embed in your Flutter code. It is restricted by RLS and has minimal privileges.
+service_role key (Private): NEVER include this in your Flutter app. It bypasses all RLS policies and has full administrative access. Leaking this is equivalent to giving away your database password.
+** 3. Hardening Authentication (Auth)
+Enable Email Confirmation: Prevents registration with fake accounts.
+Multi-Factor Authentication (MFA): Supabase supports MFA. Integrate the MFA flow in Flutter for sensitive apps to require TOTP (Time-based One-Time Password).
+Restrict Auth Domains: In Auth Settings, configure allowed Redirect URLs to prevent phishing attacks.
+** 4. Principle of Least Privilege: Using RPC
+If business logic is too complex for simple RLS or involves sensitive multi-table operations, use Database Functions and invoke them via supabase.rpc().
+This keeps logic on the server side.
+The client only sends parameters, reducing the risk of data exposure.
+** 5. Storage Security
+If your app handles file uploads (e.g., avatars, documents):
+Enable RLS for Storage Buckets.
+Do not set Buckets to Public unless the assets are intended for the general web.
+Use "Protected" paths and write policies that validate auth.uid().
+** 6. Flutter Client-Side Hardening
+Code Obfuscation: Use the --obfuscate flag when building your Flutter app to make it harder for attackers to reverse-engineer your anon key or API URL.
+Secure Session Storage: Ensure the Supabase Flutter SDK is configured to use flutter_secure_storage to store JWTs securely.
+** Summary Checklist
+Are all tables RLS-enabled?
+Is only the anon key used in the Flutter code?
+Is sensitive logic encapsulated in RPC (Database Functions)?
+Are unnecessary external connections closed in production?
+How are your RLS policies currently structured? If you have a specific business scenario (e.g., social "friends only" visibility or admin roles), I can help you draft the corresponding SQL policies.
