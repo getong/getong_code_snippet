@@ -203,3 +203,10 @@ systemctl restart docker
 :END:
 see [[https://segmentfault.com/a/1190000040053517][用 kubeadm 在 Debian
 或 Ubuntu 中创建 k8s 集群]]
+
+** install kind and helm
+
+#+begin_src shell
+brew install kind
+brew install helm
+#+end_src
