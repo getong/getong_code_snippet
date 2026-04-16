@@ -2,3 +2,9 @@
 
 ** socket.io written in rust
 https://github.com/totodore/socketioxide
+
+** rust websocket work with axum
+
+axum-server crate
+
+** supabase realtime use websocket
