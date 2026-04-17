@@ -1,0 +1,46 @@
+* puro
+
+** installation
+
+#+begin_src shell
+# macOS
+curl -o- https://puro.dev/install.sh | PURO_VERSION="1.5.0" bash
+
+# Linux
+curl -o- https://puro.dev/install.sh | PURO_VERSION="1.5.0" bash
+
+# Windows (PowerShell，不要使用管理员权限)
+Invoke-WebRequest -Uri "https://puro.dev/builds/1.5.0/windows-x64/puro.exe" -OutFile "$env:temp\puro.exe"; &"$env:temp\puro.exe" install-puro --promote
+#+end_src
+
+** usage
+
+#+begin_src shell
+# 创建新环境
+puro create foo stable          # 使用最新稳定版创建环境 "foo"
+puro create bar 3.13.6          # 使用 Flutter 3.13.6 创建环境 "bar"
+
+# 升级环境
+puro upgrade bar 3.10.6         # 将 "bar" 切换到 Flutter 3.10.6
+
+# 列出环境和版本
+puro ls                         # 列出可用环境
+puro releases                   # 列出可用 Flutter 版本
+
+# 切换版本
+puro use foo                    # 当前项目切换到环境 "foo"
+puro use -g bar                 # 全局默认切换到环境 "bar"
+
+# 清理
+puro clean                      # 移除当前项目的 Puro 配置
+puro rm foo                     # 删除环境 "foo"
+puro gc                         # 手动清理未使用的缓存
+
+# 在指定环境中运行命令
+puro -e foo flutter run
+puro -e foo dart ...
+puro -e foo pub ...
+#+end_src
+
+
+copy from [[https://mp.weixin.qq.com/s/yopO7npU3YNDYM_Ur4oKqQ][Flutter 版本管理工具对比：FVM vs Puro]]
