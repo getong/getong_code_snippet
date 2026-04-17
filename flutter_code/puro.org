@@ -16,7 +16,13 @@ Invoke-WebRequest -Uri "https://puro.dev/builds/1.5.0/windows-x64/puro.exe" -Out
 ** usage
 
 #+begin_src shell
+puro create gitee_env --fork https://gitee.com/mirrors/Flutter.git
+puro create gitee_env stable
+puro use gitee_env
+puro gc
+
 # 创建新环境
+puro rm foo
 puro create foo stable          # 使用最新稳定版创建环境 "foo"
 puro create bar 3.13.6          # 使用 Flutter 3.13.6 创建环境 "bar"
 

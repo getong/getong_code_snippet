@@ -18,7 +18,7 @@ brew install fvm
 
 # Set Flutter version for a project
 cd my_project
-fvm use 3.41.6
+fvm use 3.41.7
 
 # Run Flutter commands
 fvm flutter doctor
@@ -190,6 +190,7 @@ wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.29.
 wget -c https://storage.flutter-io.cn/dart-archive/channels/stable/release/3.29.1/sdk/dartsdk-linux-x64-release.zip
 
 wget -c https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.35.3-stable.zip
+wget -c https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_3.41.7.stable.zip
 wget -c https://storage.googleapis.com/dart-archive/channels/stable/release/3.29.1/api-docs/dartdocs-gen-api.zip
 #+end_src
 
