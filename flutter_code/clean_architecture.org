@@ -1,0 +1,78 @@
+* clean architecture
+
+** 实体层（Entities）
+
+#+begin_src dart
+// 实体类
+class User {
+  final String id;
+  final String name;
+
+  User({required this.id, required this.name});
+}
+#+end_src
+
+** 数据层（Data Layer）：
+
+#+begin_src dart
+// 数据接口
+abstract class UserRepository {
+  Future<User> getUserById(String userId);
+}
+
+// 数据实现
+class UserRepositoryImpl implements UserRepository {
+  @override
+  Future<User> getUserById(String userId) {
+    // 实现获取用户逻辑
+  }
+}
+#+end_src
+
+** 领域层（Domain Layer）：
+
+#+begin_src dart
+// 用例类
+class GetUserByIdUseCase {
+  final UserRepository userRepository;
+
+  GetUserByIdUseCase(this.userRepository);
+
+  Future<User> execute(String userId) {
+    return userRepository.getUserById(userId);
+  }
+}
+#+end_src
+
+** 表示层（Presentation Layer）：
+
+#+begin_src dart
+// Flutter 页面
+class UserPage extends StatelessWidget {
+  final GetUserByIdUseCase getUserByIdUseCase;
+
+  UserPage(this.getUserByIdUseCase);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('User Page'),
+      ),
+      body: Center(
+        child: FutureBuilder<User>(
+          future: getUserByIdUseCase.execute('1'),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Text('User: ${snapshot.data!.name}');
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            return CircularProgressIndicator();
+          },
+        ),
+      ),
+    );
+  }
+}
+#+end_src
