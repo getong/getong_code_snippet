@@ -204,3 +204,65 @@ It is an essential widget, which is mainly used for overlapping a widget, such a
 #+end_src
 
 copy from [[https://www.javatpoint.com/flutter-widgets][Flutter Widgets]]
+
+
+On the Material Design side, Flutter implements the following button widgets:
+
+FloatingActionButton: A floating action button is, by default, a rounded-corner rectangle, shows an icon, and hovers over the page, generally in the lower-right corner, although its position can be configured. It is used to enact a primary action for the page it is shown on. For example, on a page showing email messages, the action button could have a plus icon on it, denoting the ability to create a new email when it is pressed.
+TextButton: A text button is a string of text printed on a Material widget that will react to touch by showing the standard Material splash or ripple.
+ElevatedButton: The ElevatedButton widget is a button that is very similar to TextButton but appears to hover slightly above the page.
+OutlinedButton: This is a button that is very similar to TextButton but has an outlined border around the text, denoting the edge of the button.
+IconButton: An icon button is a picture printed on a Material widget that, like the TextButton widget, will react to touch by showing a splash or ripple effect.
+DropDownButton: The DropDownButton widget is very similar to the drop-down buttons that you view on web pages. It shows a currently selected item alongside an arrow. Pressing this button will drop down a menu that allows the user to select another item.
+PopUpMenuButton: The PopUpMenuButton widget will pop up a menu of options to the user, allowing the user to take action on the app.
+FilledButton: Fill a button with a color
+SegmentedButton: Checkable sections
+ExtendedFloatingActionButton that allows you to have text along with the icon.
+
+Text
+Image
+Icon
+
+
+
+Selection widgets
+Selection widgets allow a user to select one or more answers to a question.
+The available control widgets for selection in Material Design are as follows:
+
+Checkbox allows you to select multiple options in a list
+Radio allows a single selection in a list of options
+Switch allows you to toggle (on/off) a single option
+Slider allows you to select a value in a range by moving the slider thumb
+Chips are a newer widget and there are several different types
+DatePicker allows you to create a popup window for selecting a date. A sample popup is as follows
+TimePicker allows the user to choose a specific time
+
+
+
+Layouts
+BottomSheets
+Card
+Column
+Container
+Dialogs
+Expanded
+GridView
+IndexedStack
+LayoutBuilder
+ListView
+Row
+Scaﬀold
+SizedBox
+Slivers
+Stack
+Table
+FutureBuilder
+StreamBuilder
+Advanced widgets (gestures, animations, and transformations)
+
+
+The Scaffold widget
+AppBar
+BottomNavigationBar
+Drawer
+Snackbar
