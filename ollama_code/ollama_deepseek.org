@@ -29,3 +29,10 @@ cat << EOF > ~/.ollama/config.json
 }
 EOF
 #+end_src
+
+** docker image
+
+#+begin_src shell
+docker model pull ai/deepseek-v3.2-vllm:685B
+docker model run deepseek-v3.2-vllm
+#+end_src
