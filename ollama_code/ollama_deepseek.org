@@ -33,6 +33,8 @@ EOF
 ** docker image
 
 #+begin_src shell
+docker desktop enable model-runner
+
 docker model pull ai/deepseek-v3.2-vllm:685B
 docker model run deepseek-v3.2-vllm
 #+end_src
