@@ -15,11 +15,11 @@ export FLUTTER_GIT_URL=https://gitee.com/mirrors/Flutter.git
 # Install FVM
 brew tap leoafarias/fvm
 brew install fvm
-fvm install 3.41.9
+fvm install 3.44.0
 
 # Set Flutter version for a project
 cd my_project
-fvm use 3.41.9
+fvm use 3.44.0
 
 # Run Flutter commands
 fvm flutter doctor

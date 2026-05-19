@@ -240,8 +240,10 @@ TimePicker allows the user to choose a specific time
 
 
 Layouts
+AspectRatio: Constrains the child’s aspect ratio.
+CircleAvatar is often used to display a profile image or user’s avatar in a circular shape.
 BottomSheets
-Card
+Card: A material design container that holds content and actions about a single subject.
 Column
 Container
 Dialogs
@@ -249,7 +251,9 @@ Expanded
 GridView
 IndexedStack
 LayoutBuilder
+ListTile: A widget that contains title and subtitle text.
 ListView
+Padding: Adds a uniform padding of 16.0 pixels around the content inside it to provide some spacing.
 Row
 Scaﬀold
 SizedBox
@@ -266,3 +270,14 @@ AppBar
 BottomNavigationBar
 Drawer
 Snackbar
+
+Types of Slivers
+SliverList and SliverGrid are the sliver equivalents of ListView and GridView, respectively. They allow you to lay out items linearly or in a grid pattern.
+
+SliverAppBar is a highly flexible app bar that can expand, collapse, float, and snap as you scroll.
+
+SliverToBoxAdapter allows you to place a single non-sliver widget within a CustomScrollView.
+SliverToBoxAdapter is a handy widget that adapts a standard, non-sliver widget for use within a sliver list.
+
+SliverFillRemaining and SliverFillViewport let you size children based on the remaining space in the viewport, creating dynamic effects as you scroll.
+SliverFillRemaining sizes its children to occupy the available remaining space in the viewport, perfect for expanding content areas.
