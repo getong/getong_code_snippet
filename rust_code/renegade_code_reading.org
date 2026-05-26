@@ -1112,3 +1112,34 @@ async fn append_entries(
 #+end_src
 
 _req_ and the _map_ function, they are request and response.
+
+** monitor task
+
+#+begin_src rust
+/// Spawn a watcher thread for each join handle in the worker being watched
+///
+/// A worker may have more than one join handle in the case that it spawns
+/// multiple sub-worker threads. Each will be individually watched
+pub fn watch_worker<W: Worker>(worker: &mut W, failure_channel: &WorkerFailureSender) {
+    let watcher_name = format!("{}-watcher", worker.name());
+    for join_handle in worker.join() {
+        let worker_name = worker.name();
+        let channel_clone = failure_channel.clone();
+
+        Builder::new()
+            .name(watcher_name.clone())
+            .spawn(move || {
+                match join_handle.join() {
+                    Err(panic) => {
+                        error!("worker {worker_name} panicked with error: {panic:?}");
+                    },
+                    Ok(err) => {
+                        error!("worker {worker_name} exited with error: {err:?}");
+                    },
+                }
+                channel_clone.blocking_send(()).unwrap();
+            })
+            .unwrap();
+    }
+}
+#+end_src
