@@ -109,3 +109,8 @@ mv compile_commands.json ../..
 #+end_src
 
 copy from [[https://github.com/microsoft/vcpkg][vcpkg]]
+
+** other package manager
+
+conan
+xmake
