@@ -1,0 +1,152 @@
+#+title: Dart 与 Python 点号操作符对比
+#+author:
+#+date:
+#+options: toc:2 num:t
+
+* 问题
+
+Dart 的 =.= 符号用法和 Python 的 =.= 符号用法是不是差不多？
+
+简短回答：日常使用中很接近。两者的点号核心作用都是访问对象、类、模块或库上的成员，例如属性、方法和函数。不过 Dart 是静态类型语言，并且有空安全、级联调用、命名构造函数等语法，因此它围绕点号扩展出了一些 Python 没有的用法。
+
+* 共同点
+
+在最常见的成员访问场景中，Dart 和 Python 基本是一一对应的。
+
+| 场景             | Python 示例             | Dart 示例                |
+|------------------+-------------------------+--------------------------|
+| 调用对象方法     | ~my_car.drive()~        | ~my_car.drive();~        |
+| 访问或修改属性   | ~my_car.color = "red"~  | ~my_car.color = "red";~  |
+| 调用模块/库函数  | ~math.sqrt(16)~         | ~math.sqrt(16);~         |
+
+核心模型可以理解为：
+
+#+begin_example
+对象.成员
+类.成员
+模块或库.成员
+#+end_example
+
+* Dart 特有或更常见的点号相关语法
+
+** 空安全访问：=?.=
+
+Dart 中，如果对象可能为 =null=，直接调用普通成员访问可能产生错误。可以使用 =?.= 做条件访问：
+
+#+begin_src dart
+myCar?.drive();
+#+end_src
+
+含义是：如果 =myCar= 不是 =null=，就调用 =drive()=；如果是 =null=，整个表达式返回 =null=，不会继续调用方法。
+
+Python 没有等价的 =?.= 操作符，通常需要显式判断：
+
+#+begin_src python
+if my_car is not None:
+    my_car.drive()
+#+end_src
+
+** 级联操作符：=..= 和 =?..=
+
+Dart 的级联操作符允许在同一个对象上连续执行多个操作，而不要求每个方法都返回对象本身。
+
+#+begin_src dart
+var car = Car()
+  ..color = 'red'
+  ..speed = 100
+  ..drive();
+#+end_src
+
+上面的代码等价于：
+
+#+begin_src dart
+var car = Car();
+car.color = 'red';
+car.speed = 100;
+car.drive();
+#+end_src
+
+如果对象可能为 =null=，Dart 还可以使用 null-aware cascade：
+
+#+begin_src dart
+car
+  ?..color = 'red'
+  ..drive();
+#+end_src
+
+Python 不支持这种语法，通常需要重复变量名，或依赖方法本身返回 =self= 来实现链式调用。
+
+** 命名构造函数：=Class.name=
+
+Dart 使用点号调用命名构造函数，这在解析 JSON、创建不同语义的对象时很常见：
+
+#+begin_src dart
+var myCar = Car.fromJson(data);
+#+end_src
+
+Python 通常用 =@classmethod= 实现类似工厂方法：
+
+#+begin_src python
+class Car:
+    @classmethod
+    def from_json(cls, data):
+        return cls(...)
+
+my_car = Car.from_json(data)
+#+end_src
+
+两者写法相似，但语义不同：Dart 的 =Car.fromJson= 可以是真正的命名构造函数；Python 的 =Car.from_json= 通常只是一个类方法。
+
+* 细节差异
+
+** 导入路径
+
+Python 会用点号表达包或模块层级：
+
+#+begin_src python
+import os.path
+from package.module import name
+#+end_src
+
+Dart 的 =import= 使用 URI 字符串：
+
+#+begin_src dart
+import 'package:flutter/material.dart';
+import 'src/my_file.dart';
+#+end_src
+
+这里的 =.= 只是文件名后缀的一部分，例如 =material.dart=，不是包路径分隔符。
+
+** 私有成员
+
+Python 常见约定是单下划线表示“内部使用”，双下划线触发名称改写：
+
+#+begin_src python
+class Person:
+    def __init__(self):
+        self._age = 18
+        self.__token = 'secret'
+#+end_src
+
+Dart 使用前导下划线表示库级私有：
+
+#+begin_src dart
+class Person {
+  int _age = 18;
+}
+#+end_src
+
+也就是说，=_age= 只能在同一个 Dart library 内访问；跨 library 不能通过点号访问。它不是 Python 那种命名约定，而是语言层面的可见性规则。
+
+* 总结
+
+| 对比项       | Python                          | Dart                                     |
+|--------------+---------------------------------+------------------------------------------|
+| 普通成员访问 | ~obj.member~                    | ~obj.member~                             |
+| 空安全访问   | 需要显式判断                    | 支持 ~obj?.member~                       |
+| 级联操作     | 不支持专门语法                  | 支持 =..= 和 =?..=                       |
+| 命名构造     | 通常用 ~@classmethod~ 工厂方法  | 支持 ~Class.namedConstructor()~          |
+| 导入路径     | 点号表示模块层级                | 使用 URI 字符串                          |
+| 私有成员     | 主要是约定和名称改写            | 前导下划线表示库级私有                   |
+
+结论：如果只看 =对象.属性=、=对象.方法()= 这类基础用法，Dart 和 Python 很像；但 Dart 的点号相关语法承担了更多语言级功能，尤其是空安全、级联操作和命名构造函数。
