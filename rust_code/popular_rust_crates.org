@@ -1,0 +1,14 @@
+* popular rust crates
+
+- apalis
+- burn
+- grpc, former tonic
+- kameo
+- libp2p
+- openraft
+- rocksdb
+- rustfs
+- sail, replace spark
+- tarpc
+- turmoil
+- wasmtime
