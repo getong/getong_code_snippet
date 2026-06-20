@@ -13,6 +13,38 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 brew install uv
 #+end_src
 
+** init project
+
+#+begin_src shell
+uv init --lib my-project
+#+end_src
+
+** add dependencies
+
+#+begin_src shell
+uv add requests
+uv add --dev pytest
+#+end_src
+
+** sync dependencies
+
+#+begin_src shell
+uv sync
+#+end_src
+
+** activate .venv
+
+#+begin_src shell
+uv sync
+source .venv/bin/activate
+#+end_src
+
+** deactivate
+
+#+begin_src shell
+deactivate
+#+end_src
+
 ** create project
 
 #+begin_src shell
