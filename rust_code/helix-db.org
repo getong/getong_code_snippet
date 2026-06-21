@@ -1,0 +1,25 @@
+* helix-db
+
+** installation
+
+#+begin_src shell
+curl -sSL "https://install.helix-db.com" | bash
+#+end_src
+
+** init local
+
+#+begin_src shell
+helix init local
+#+end_src
+
+** start dev
+
+#+begin_src shell
+helix start dev
+#+end_src
+
+** query dev
+
+#+begin_src shell
+helix query dev --file examples/request.json
+#+end_src
