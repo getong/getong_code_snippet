@@ -1,0 +1,9 @@
+* zig build
+
+** Compile Cargo project with zig as linker
+
+** installation
+
+#+begin_src shell
+cargo install --locked cargo-zigbuild
+#+end_src
