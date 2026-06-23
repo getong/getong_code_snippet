@@ -24,10 +24,10 @@ puro gc
 # 创建新环境
 puro rm foo
 puro create foo stable          # 使用最新稳定版创建环境 "foo"
-puro create bar 3.44.2          # 使用 Flutter 3.44.2 创建环境 "bar"
+puro create bar 3.44.3          # 使用 Flutter 3.44.3 创建环境 "bar"
 
 # 升级环境
-puro upgrade bar 3.44.2         # 将 "bar" 切换到 Flutter 3.44.2
+puro upgrade bar 3.44.3         # 将 "bar" 切换到 Flutter 3.44.3
 
 # 列出环境和版本
 puro ls                         # 列出可用环境
