@@ -5,5 +5,9 @@
 ** installation
 
 #+begin_src shell
+# macos
+brew isntall cargo-zigbuild
+
+# linux
 cargo install --locked cargo-zigbuild
 #+end_src

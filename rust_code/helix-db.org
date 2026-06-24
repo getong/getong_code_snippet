@@ -9,6 +9,8 @@ curl -sSL "https://install.helix-db.com" | bash
 ** init local
 
 #+begin_src shell
+mkdir helix-db
+cd helix-db
 helix init local
 #+end_src
 

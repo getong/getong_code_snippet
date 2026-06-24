@@ -37,4 +37,9 @@ docker desktop enable model-runner
 
 docker model pull ai/deepseek-v3.2-vllm:685B
 docker model run deepseek-v3.2-vllm
+
+docker pull coolesocke/ollama-deepseek-r1-7b:latest
+
+
+docker pull ghcr.nju.edu.cn/lmxxf/vllm-deepseek-v4-dgx-spark
 #+end_src
