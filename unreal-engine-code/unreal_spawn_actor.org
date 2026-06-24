@@ -1,0 +1,109 @@
+* unreal spawn actor
+
+** in cpp
+
+#+begin_example
+FVector Location(0.0f, 0.0f, 0.0f);
+FRotator Rotation(0.0f, 0.0f, 0.0f);
+FActorSpawnParameters SpawnInfo;
+
+AMyActor* NewActor = GetWorld()->SpawnActor<AMyActor>(AMyActor::StaticClass(), Location, Rotation, SpawnInfo);
+
+#+end_example
+
+** 动态挂载材质
+
+#+begin_example
+// 1. 获取或创建动态材质实例（假设 Element 0 是你的网格体材质插槽）
+UMaterialInstanceDynamic* DynMaterial = MeshComponent->CreateDynamicMaterialInstance(0);
+
+// 2. 加载你的纹理图片（路径格式为 /Game/路径/图片名）
+UTexture2D* NewTexture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("/Game/Textures/MyPhoto")));
+
+// 3. 将纹理传递给材质中对应的参数（材质中的 Texture Parameter 变量名需为 "MyParamName"）
+if (DynMaterial && NewTexture)
+{
+    DynMaterial->SetTextureParameterValue(FName("MyParamName"), NewTexture);
+}
+
+#+end_example
+
+** 汇总
+
+*** 头文件
+#+begin_example
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "MyActor.generated.h"
+
+UCLASS()
+class MYPROJECT_API AMyActor : public AActor
+{
+    GENERATED_BODY()
+
+public:
+    AMyActor();
+
+protected:
+    // 声明静态网格体组件，用来承载外观
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UStaticMeshComponent* MeshComp;
+};
+
+#+end_example
+
+*** 实现
+
+#+begin_example
+#include "MyActor.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInterface.h"
+
+AMyActor::AMyActor()
+{
+    PrimaryActorTick.bCanEverTick = false;
+
+    // 1. 创建并设置根组件
+    MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+    RootComponent = MeshComp;
+
+    // 2. 自动加载一个默认网格体（例如引擎自带的立方体，防止材质没有形状可以显示）
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Engine/BasicShapes/Cube.Cube"));
+    if (MeshAsset.Succeeded())
+    {
+        MeshComp->SetStaticMesh(MeshAsset.Object);
+    }
+
+    // 3. 自动加载并穿上材质
+    // 注意：把下面的路径替换为你自己材质在项目中的真实引用路径
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialAsset(TEXT("/Game/Materials/M_MyMaterial.M_MyMaterial"));
+    if (MaterialAsset.Succeeded())
+    {
+        // 0 代表材质插槽索引（Element 0）
+        MeshComp->SetMaterial(0, MaterialAsset.Object);
+    }
+}
+
+#+end_example
+
+*** beginplay
+
+#+begin_example
+void AMyActor::BeginPlay()
+{
+    Super::BeginPlay();
+
+    // 运行时动态加载材质资源
+    FString MaterialPath = TEXT("/Game/Materials/M_MyMaterial.M_MyMaterial");
+    UMaterialInterface* NewMaterial = Cast<UMaterialInterface>(StaticLoadObject(UMaterialInterface::StaticClass(), nullptr, *MaterialPath));
+
+    if (MeshComp && NewMaterial)
+    {
+        MeshComp->SetMaterial(0, NewMaterial);
+    }
+}
+
+#+end_example

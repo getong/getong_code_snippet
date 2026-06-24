@@ -1,0 +1,763 @@
+#+title: PuerTS 与 Unreal Engine 协作笔记
+#+author: getong
+#+startup: overview
+#+options: toc:2
+#+tags: unreal ue cpp typescript puerts
+
+* 目标
+
+本文整理 PuerTS、Unreal Engine C++、TypeScript 之间的协作方式，并补充 Actor 生成、材质挂载、UE 服务端语言选择等上下文。
+
+重点关注：
+
+- UE 中 Actor 如何实例化并自动设置材质。
+- UE 服务端哪些部分适合 C++，哪些部分适合 Rust。
+- PuerTS 如何把 TypeScript 和 C++ 连接起来。
+- PuerTS 的实际部署流程。
+- 商业项目中常见的“C++ 静态外壳 + TS 动态逻辑”模式。
+
+* Unreal Engine Actor 与材质
+
+** Actor 如何实例化
+
+实例化 Actor 意味着把某个 Actor 类生成到当前 ~World~ 中。
+
+*** Blueprint 方式
+
+使用 ~Spawn Actor from Class~ 节点：
+
+- 选择需要生成的 Actor 类。
+- 输入 ~Transform~，包括位置、旋转、缩放。
+- 根据需要传入 Spawn 参数。
+
+*** C++ 方式
+
+使用 ~GetWorld()->SpawnActor<T>()~ 。
+
+#+begin_src cpp
+FVector Location(0.0f, 0.0f, 0.0f);
+FRotator Rotation(0.0f, 0.0f, 0.0f);
+FActorSpawnParameters SpawnInfo;
+
+AMyActor* NewActor = GetWorld()->SpawnActor<AMyActor>(
+    AMyActor::StaticClass(),
+    Location,
+    Rotation,
+    SpawnInfo
+);
+#+end_src
+
+** 图片如何挂载到 Actor
+
+UE 中通常不能直接把 ~.jpg~ 或 ~.png~ 挂到 Actor 上。常见流程是：
+
+1. 把图片导入 UE，得到 ~Texture2D~ 。
+2. 创建 ~Material~，把纹理接到 ~Base Color~ 或材质参数上。
+3. 把材质赋给 Actor 的 ~Mesh Component~ 。
+
+常用承载组件：
+
+- ~UStaticMeshComponent~ ：3D 物体表面。
+- ~UPaperSpriteComponent~ ：2D Sprite 场景。
+
+*** Blueprint 静态配置
+
+1. 导入图片，生成 ~Texture2D~ 。
+2. 右键纹理，创建材质。
+3. 在材质里把纹理接到 ~Base Color~ 。
+4. 在 Actor 蓝图中选择 Mesh 组件。
+5. 在 Details 面板的 ~Materials~ 插槽选择该材质。
+
+*** C++ 动态替换纹理
+
+如果需要运行时替换图片，可以使用动态材质实例。
+
+#+begin_src cpp
+// 1. 获取或创建动态材质实例。0 是 Mesh 的材质插槽索引。
+UMaterialInstanceDynamic* DynMaterial =
+    MeshComponent->CreateDynamicMaterialInstance(0);
+
+// 2. 加载项目中的 Texture2D。路径格式为 /Game/路径/资源名。
+UTexture2D* NewTexture = Cast<UTexture2D>(
+    StaticLoadObject(
+        UTexture2D::StaticClass(),
+        nullptr,
+        TEXT("/Game/Textures/MyPhoto")
+    )
+);
+
+// 3. 设置材质中的 Texture Parameter。
+if (DynMaterial && NewTexture)
+{
+    DynMaterial->SetTextureParameterValue(FName("MyParamName"), NewTexture);
+}
+#+end_src
+
+** Actor 出生后自动设置材质
+
+推荐根据资源是否固定来选择加载方式：
+
+| 场景                         | 建议方式                                | 说明                       |
+|------------------------------+----------------------------------------+----------------------------|
+| Actor 类型固定使用某个网格/材质 | 构造函数 + ~ConstructorHelpers~           | 编辑器和运行时都能看到默认效果 |
+| 运行时按条件切换材质           | ~BeginPlay~ 或普通函数 + ~StaticLoadObject~ | 适合动态选择资源             |
+
+*** 构造函数中绑定材质
+
+这种方式适合固定资源。Actor 实例创建时就会带上材质。
+
+#+begin_src cpp
+// MyActor.h
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "MyActor.generated.h"
+
+UCLASS()
+class MYPROJECT_API AMyActor : public AActor
+{
+    GENERATED_BODY()
+
+public:
+    AMyActor();
+
+protected:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UStaticMeshComponent* MeshComp;
+};
+#+end_src
+
+#+begin_src cpp
+// MyActor.cpp
+#include "MyActor.h"
+#include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInterface.h"
+#include "UObject/ConstructorHelpers.h"
+
+AMyActor::AMyActor()
+{
+    PrimaryActorTick.bCanEverTick = false;
+
+    MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+    RootComponent = MeshComp;
+
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(
+        TEXT("/Engine/BasicShapes/Cube.Cube")
+    );
+    if (MeshAsset.Succeeded())
+    {
+        MeshComp->SetStaticMesh(MeshAsset.Object);
+    }
+
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialAsset(
+        TEXT("/Game/Materials/M_MyMaterial.M_MyMaterial")
+    );
+    if (MaterialAsset.Succeeded())
+    {
+        MeshComp->SetMaterial(0, MaterialAsset.Object);
+    }
+}
+#+end_src
+
+*** BeginPlay 中动态加载材质
+
+#+begin_src cpp
+void AMyActor::BeginPlay()
+{
+    Super::BeginPlay();
+
+    const FString MaterialPath = TEXT("/Game/Materials/M_MyMaterial.M_MyMaterial");
+    UMaterialInterface* NewMaterial = Cast<UMaterialInterface>(
+        StaticLoadObject(
+            UMaterialInterface::StaticClass(),
+            nullptr,
+            *MaterialPath
+        )
+    );
+
+    if (MeshComp && NewMaterial)
+    {
+        MeshComp->SetMaterial(0, NewMaterial);
+    }
+}
+#+end_src
+
+*** 材质路径注意事项
+
+在 UE 编辑器中右键材质资源，选择 ~Copy Reference~ 。复制出来通常类似：
+
+#+begin_example
+Material'/Game/Materials/M_MyMaterial.M_MyMaterial'
+#+end_example
+
+
+代码里一般只写资源路径：
+
+#+begin_example
+/Game/Materials/M_MyMaterial.M_MyMaterial
+#+end_example
+
+注意：
+
+- ~ConstructorHelpers::FObjectFinder~ 只能在构造函数中使用。
+- 不要把 ~ConstructorHelpers~ 放进 ~BeginPlay~ 或普通函数。
+- 运行时加载资源可以使用 ~StaticLoadObject~ 或异步加载。
+
+* Unreal Engine 服务端是否可以用 Rust
+
+UE 服务端需要先区分两种含义：
+
+- Dedicated Server：运行 UE 引擎的专属游戏服务器。
+- Master / Backend Server：不运行 UE 引擎的大厅、账号、匹配、排行榜、商城、存档等后端服务。
+
+** Dedicated Server 不建议用 Rust 替代 C++
+
+Dedicated Server 负责物理、碰撞、角色移动、弹道、Replication 等实时玩法逻辑，本质上还是 UE 引擎进程。
+
+不建议直接用 Rust 替代这一层，原因包括：
+
+- UE 的核心对象模型是 C++、 ~UObject~ 、 ~UClass~ 、反射和 GC。
+- Replication、组件系统、物理系统都深度绑定 UE C++。
+- Rust 与 UE 对象生命周期和反射系统的桥接成本很高。
+- 社区有 FFI 方向探索，但商业项目通常风险过高。
+
+结论：UE 专属服务器的玩法同步层优先使用 C++ 和 Blueprint。
+
+** Backend Server 很适合 Rust
+
+如果服务端不运行 UE 引擎，而是处理外部业务，则 Rust 很适合：
+
+- 登录与账号。
+- 匹配系统。
+- 排行榜。
+- 背包与物品。
+- 商城与支付。
+- 数据存档。
+- 公会、聊天、运营活动。
+- 网关、WebSocket、gRPC、自定义协议。
+
+UE 客户端或 UE Dedicated Server 可以通过 HTTP、gRPC、WebSocket、MessagePack-RPC 等方式访问 Rust 后端。
+
+示例：
+
+1. 玩家在 UE Dedicated Server 中击杀怪物。
+2. UE C++ 服务器计算掉落结果。
+3. UE 服务器向 Rust 后端发送 gRPC 请求。
+4. Rust 后端写入数据库，更新玩家背包。
+
+** 混合方案：C++ 调用 Rust 算法库
+
+如果只是某些独立算法希望用 Rust 编写，可以通过 FFI 做混合：
+
+- Rust 编译成静态库或动态库。
+- UE C++ 通过 C ABI 或 ~cxx~ 等桥接调用。
+- 适合与 UE 对象系统解耦的模块。
+
+适合放入 Rust 的模块：
+
+- 复杂寻路或图计算。
+- 全服经济模拟。
+- 数据加解密。
+- 战争迷雾计算。
+- 独立规则引擎。
+
+** 选择建议
+
+| 服务端类型        | 推荐语言        | Rust 适合度 | 备注                              |
+|------------------+----------------+------------+-----------------------------------|
+| Dedicated Server | C++            | 低         | 利用 UE 原生 Replication 和引擎系统 |
+| 独立算法模块       | C++ / Rust     | 中         | 通过 FFI 接入，要求边界清晰          |
+| Backend Server   | Rust / Go / C# | 高         | 与 UE 引擎解耦，使用网络协议通信      |
+
+* PuerTS 概览
+
+PuerTS 是腾讯开源的 TypeScript / JavaScript 与游戏引擎互操作方案。UE 版本的核心目标是：在 Unreal Engine 进程中嵌入 V8，让 TypeScript 可以调用 UE C++ 对象，也可以承接部分游戏逻辑。
+
+仓库：
+
+- https://github.com/Tencent/puerts
+
+** 核心原理
+
+PuerTS 的大致工作方式：
+
+1. UE C++ 侧启动 PuerTS 的 JS 环境，内部运行 V8。
+2. PuerTS 基于 UE 反射系统或静态生成的绑定代码，把 C++ 类型暴露给 JS/TS。
+3. TypeScript 调用 UE 对象时，PuerTS 把调用转换为 C++ 的函数调用。
+4. C++ 对象与 V8 对象之间由 PuerTS 维护生命周期关系。
+
+可以把它理解成：
+
+- V8：负责执行 TS 编译后的 JS。
+- UE Reflection / Glue Code：负责把 ~UObject~ 、 ~UFunction~ 、属性和参数转成 JS 可访问对象。
+- 生命周期映射：负责协调 UE GC 和 V8 GC，避免对象提前释放。
+
+** TypeScript 调用 C++ 示例
+
+*** C++ 暴露类
+
+带有 ~UCLASS~ 、 ~UPROPERTY~ 、 ~UFUNCTION~  的 C++ 类型，可以被 PuerTS 识别并生成声明。
+
+#+begin_src cpp
+// MyGameCharacter.h
+#pragma once
+
+#include "GameFramework/Character.h"
+#include "MyGameCharacter.generated.h"
+
+UCLASS()
+class AMyGameCharacter : public ACharacter
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float Health = 100.0f;
+
+    UFUNCTION(BlueprintCallable)
+    void TakeDamage(float Amount)
+    {
+        Health -= Amount;
+        UE_LOG(LogTemp, Warning, TEXT("C++: Health left %f"), Health);
+    }
+};
+#+end_src
+
+PuerTS 内部会把 UE 相关类型注册到 JS 环境中。伪代码如下：
+
+#+begin_src cpp
+v8Context->Global()->Set("UE", UE_Namespace_Object);
+#+end_src
+
+*** TS 调用 C++ 属性和方法
+
+#+begin_src typescript
+// MyScript.ts
+import * as UE from 'ue';
+
+function onPlayerTrigger(player: UE.MyGameCharacter) {
+    console.log(`TS: player health is ${player.Health}`);
+
+    if (player.Health > 50) {
+        player.TakeDamage(20);
+    }
+}
+#+end_src
+
+当执行 ~player.TakeDamage(20)~ 时，调用链大致是：
+
+1. V8 捕捉 JS 方法调用。
+2. PuerTS 找到对应的 UE 对象和 ~UFunction~。
+3. 参数从 JS 值转换为 C++ 参数。
+4. 通过 ~ProcessEvent~ 或绑定胶水代码执行 C++ 函数。
+
+** TS 继承 UE 类示例
+
+PuerTS 可以让 TS 继承 UE 类并重写生命周期函数，用于逻辑热更新。
+
+#+begin_src typescript
+// TS_Monster.ts
+import * as UE from 'ue';
+
+class TS_Monster extends UE.Actor {
+    private moveSpeed: number = 200;
+
+    ReceiveBeginPlay(): void {
+        console.log('TS: Monster spawned and BeginPlay triggered.');
+
+        UE.UKismetSystemLibrary.PrintString(
+            this,
+            'Hello from TS Monster!',
+            true,
+            true,
+            new UE.LinearColor(1, 0, 0, 1),
+            2
+        );
+    }
+
+    MonsterAttack(): void {
+        console.log('TS: Monster is attacking.');
+    }
+}
+
+export default TS_Monster;
+#+end_src
+
+* PuerTS 实际部署与调用流程
+
+PuerTS 真正运行起来通常需要完成：
+
+1. 安装并启用 PuerTS 插件。
+2. 在 C++ 中创建并持有 ~FJsEnv~ 。
+3. 启动入口脚本。
+4. 编写 TS 逻辑并编译到 UE 可加载目录。
+5. 在 C++ 或 Blueprint 中实例化相关类或触发绑定。
+
+** GameInstance 中启动 JS 环境
+
+PuerTS 的生命周期通常适合挂在 ~UGameInstance~ 上，因为它与游戏进程生命周期接近。
+
+#+begin_src cpp
+// MyGameInstance.h
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/GameInstance.h"
+#include "MyGameInstance.generated.h"
+
+namespace puerts
+{
+class FJsEnv;
+}
+
+UCLASS()
+class MYPROJECT_API UMyGameInstance : public UGameInstance
+{
+    GENERATED_BODY()
+
+public:
+    virtual void Init() override;
+    virtual void Shutdown() override;
+
+private:
+    TSharedPtr<puerts::FJsEnv> JsEnv;
+};
+#+end_src
+
+#+begin_src cpp
+// MyGameInstance.cpp
+#include "MyGameInstance.h"
+#include "JsEnv.h"
+
+void UMyGameInstance::Init()
+{
+    Super::Init();
+
+    JsEnv = MakeShared<puerts::FJsEnv>();
+
+    // 默认可从项目脚本目录加载入口脚本。实际路径按项目配置调整。
+    JsEnv->Start("QuickStart");
+}
+
+void UMyGameInstance::Shutdown()
+{
+    JsEnv.Reset();
+
+    Super::Shutdown();
+}
+#+end_src
+
+** TS 入口脚本
+
+#+begin_src typescript
+// Content/JavaScript/QuickStart.ts
+import * as UE from 'ue';
+
+console.log('PuerTS VM started.');
+#+end_src
+
+** TS 生成可被 UE 使用的类
+
+可以用 ~makeUClass~ 把 TS 类包装成 UE 可识别的动态类。
+
+#+begin_src typescript
+// Content/JavaScript/TS_PlayerController.ts
+import * as UE from 'ue';
+import { makeUClass } from 'puerts';
+
+const TS_PlayerController = makeUClass({
+    SuperClass: UE.PlayerController,
+
+    ReceiveBeginPlay: function () {
+        const controller = this as UE.PlayerController;
+
+        console.log('TS PlayerController BeginPlay.');
+
+        UE.UKismetSystemLibrary.PrintString(
+            controller,
+            'TS Controller Init Complete!',
+            true,
+            true,
+            new UE.LinearColor(0, 1, 0, 1),
+            5
+        );
+    },
+});
+
+export default TS_PlayerController;
+#+end_src
+
+** C++ 中加载并实例化 TS 动态类
+
+#+begin_src cpp
+UClass* TSClass = StaticLoadClass(
+    UObject::StaticClass(),
+    nullptr,
+    TEXT("/Game/JavaScript/TS_PlayerController.TS_PlayerController_C")
+);
+
+if (TSClass)
+{
+    FActorSpawnParameters SpawnParams;
+    GetWorld()->SpawnActor<APlayerController>(
+        TSClass,
+        FVector::ZeroVector,
+        FRotator::ZeroRotator,
+        SpawnParams
+    );
+}
+#+end_src
+
+实际项目中动态类路径需要以项目生成结果为准。
+
+** Blueprint 中使用 TS 类
+
+如果 TS 类已经被 PuerTS 注册到 UE 类型系统中，可以在 Blueprint 里像普通类一样选择：
+
+- GameMode 的 ~Player Controller Class~ 。
+- Spawn Actor 节点的 Class。
+- 其他可配置 UClass 的字段。
+
+** TypeScript 开发工作流
+
+常见项目配置：
+
+1. 配置 ~tsconfig.json~ ，把编译输出目录设为 UE 脚本加载目录。
+2. 运行  ~tsc -w~ ，保存 TS 后自动编译 JS。
+3. 使用 PuerTS 工具生成  ~.d.ts~ ，获得 TS 类型提示。
+4. UE 启动时由 ~GameInstance~ 创建 ~FJsEnv~ 并加载入口脚本。
+
+* PuerTS 两种协作模式
+
+PuerTS 常见协作方式可以分为两类：
+
+| 模式                     | 说明                                                                   | 适合场景                             |
+|--------------------------+------------------------------------------------------------------------+-------------------------------------|
+| TS 动态生成类             | TS 通过 ~makeUClass~ 创建 UE 可识别的动态类，C++ / Blueprint 像普通类一样使用 | 策划配置、关卡摆放、低频生命周期逻辑    |
+| C++ 静态外壳 + TS 动态逻辑 | UE 中先有稳定 C++ 类或组件，运行时把某个 TS 脚本绑定到对象上                 | 商业项目常见热更逻辑、高频实体、统一外壳 |
+
+** 模式一：TS 动态生成类，C++ / Blueprint 调用
+
+流程：
+
+1. TS 中定义类。
+2. 使用 ~makeUClass~ 声明继承的 UE 父类。
+3. PuerTS 在运行时生成动态 ~UClass~ 。
+4. C++ 或 Blueprint 通过该类生成 Actor / Controller。
+5. UE 触发生命周期事件时，PuerTS 把调用转交给 TS。
+
+优点：
+
+- UE 编辑器能看到或配置这个类。
+- 对策划和关卡编辑较友好。
+- 可以像 Blueprint 类一样被 Spawn。
+
+限制：
+
+- 事件触发通常要经过 UE 反射和 V8 桥接。
+- 高频 Tick 或大量实体可能需要谨慎评估。
+
+** 模式二：C++ 静态外壳 + TS 动态逻辑
+
+流程：
+
+1. C++ / Blueprint 中创建稳定的 Actor 或 Component。
+2. 外壳类提供 Mesh、碰撞、移动、Replication 等底层能力。
+3. 外壳上配置一个 TS 脚本路径。
+4. BeginPlay 时 C++ 把自身指针交给 PuerTS。
+5. TS 创建逻辑对象，持有 UE Actor 引用并接管业务行为。
+
+优点：
+
+- C++ 外壳稳定，适合承载 UE 原生系统。
+- TS 只负责可热更的业务逻辑。
+- 适合大量同类实体，如怪物、技能、任务、交互物。
+- 更容易控制性能边界。
+
+* 模式二代码 Demo：C++ 外壳组件 + TS 逻辑
+
+下面示例演示一个通用 ~UTSComponent~ ：任何 Actor 挂载该组件后，只要配置  ~ScriptPath~ ，运行时就会把 Actor 绑定到对应 TS 脚本。
+
+** C++ 组件头文件
+
+#+begin_src cpp
+// TSComponent.h
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
+#include "TSComponent.generated.h"
+
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+class MYPROJECT_API UTSComponent : public UActorComponent
+{
+    GENERATED_BODY()
+
+public:
+    UTSComponent();
+
+    // 例如：Monsters/FireDragon
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TypeScript")
+    FString ScriptPath;
+
+protected:
+    virtual void BeginPlay() override;
+    virtual void TickComponent(
+        float DeltaTime,
+        ELevelTick TickType,
+        FActorComponentTickFunction* ThisTickFunction
+    ) override;
+};
+#+end_src
+
+** C++ 组件实现
+
+#+begin_src cpp
+// TSComponent.cpp
+#include "TSComponent.h"
+#include "JsEnv.h"
+
+// 示例：项目中应由 GameInstance、Subsystem 或其他全局管理器提供 JsEnv。
+extern TSharedPtr<puerts::FJsEnv> GetGlobalJsEnv();
+
+UTSComponent::UTSComponent()
+{
+    PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTSComponent::BeginPlay()
+{
+    Super::BeginPlay();
+
+    TSharedPtr<puerts::FJsEnv> JsEnv = GetGlobalJsEnv();
+    if (JsEnv.IsValid() && !ScriptPath.IsEmpty())
+    {
+        // 把当前 Actor 指针交给 TS 脚本。
+        // 实际 API 和参数以项目接入的 PuerTS 版本为准。
+        JsEnv->InitInstance(GetOwner(), *ScriptPath, nullptr);
+    }
+}
+
+void UTSComponent::TickComponent(
+    float DeltaTime,
+    ELevelTick TickType,
+    FActorComponentTickFunction* ThisTickFunction
+)
+{
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+    // 商业项目中通常会统一管理 TS Tick，避免每个组件都频繁跨语言调用。
+}
+#+end_src
+
+** TypeScript 逻辑脚本
+
+#+begin_src typescript
+// Content/JavaScript/Monsters/FireDragon.ts
+import * as UE from 'ue';
+
+export default class FireDragon {
+    private actor: UE.Actor;
+    private maxHealth: number = 500;
+    private currentHealth: number = 500;
+
+    constructor(actor: UE.Actor) {
+        this.actor = actor;
+        this.onBeginPlay();
+    }
+
+    private onBeginPlay(): void {
+        console.log(`[TS] bind actor: ${this.actor.GetName()}`);
+
+        this.actor.SetActorScale3D(new UE.Vector(2, 2, 2));
+
+        UE.UKismetSystemLibrary.PrintString(
+            this.actor,
+            'FireDragon script loaded.',
+            true,
+            true,
+            new UE.LinearColor(0, 1, 0, 1),
+            5
+        );
+    }
+
+    public takeDamage(amount: number): void {
+        this.currentHealth -= amount;
+
+        console.log(
+            `[TS] FireDragon damage=${amount}, hp=${this.currentHealth}/${this.maxHealth}`
+        );
+
+        if (this.currentHealth <= 0) {
+            this.actor.K2_DestroyActor();
+        }
+    }
+}
+#+end_src
+
+** 编辑器配置流程
+
+1. 创建普通 C++ Actor 或 Blueprint，例如 ~BP_Monster_Base~ 。
+2. 在 Actor 上挂载 ~UTSComponent~ 。
+3. 在组件 Details 面板中设置 ~ScriptPath~ ：
+
+#+begin_example
+Monsters/FireDragon
+#+end_example
+
+
+4. 把 ~BP_Monster_Base~ 放入关卡或由 C++ Spawn。
+5. 运行时进入  ~UTSComponent::BeginPlay~ 。
+6. C++ 通过 PuerTS 加载 ~FireDragon.js~ 。
+7. TS 构造函数拿到 Actor 引用并开始控制逻辑。
+
+** 事件传递扩展
+
+在实际项目中，C++ 外壳通常会把 UE 事件转发给 TS：
+
+- ~BeginPlay~ 。
+- ~EndPlay~ 。
+- ~Tick~ 。
+- ~OnComponentBeginOverlap~ 。
+- ~OnHit~ 。
+- 动画通知。
+- 技能命中事件。
+- 网络同步后的状态变化。
+
+建议：
+
+- 高频事件尽量批量或集中转发。
+- 低频事件可以直接跨语言调用。
+- 关键战斗判定和 Replication 仍保留在 C++ / UE 原生系统中。
+- TS 负责规则、状态机、配置驱动逻辑和表现编排。
+
+* 对比总结
+
+** Actor / 材质
+
+- Actor 通过 ~SpawnActor~ 或 Blueprint Spawn 节点生成。
+- 图片通常需要先变成 Texture，再通过 Material 赋给 Mesh。
+- 固定材质放构造函数，动态材质放运行时逻辑。
+
+** UE 服务端
+
+- UE Dedicated Server 优先 C++。
+- Rust 适合做外部 Backend Server。
+- 独立算法可以用 Rust 库通过 FFI 接入 UE C++。
+
+** PuerTS
+
+- PuerTS 把 V8 嵌入 UE，并通过反射或胶水代码打通 C++ 与 TS。
+- TS 可以直接调用 UE C++ 暴露的类、属性和函数。
+- TS 可以动态生成 UE 类，也可以作为逻辑脚本绑定到 C++ 外壳。
+- 商业项目中常见做法是 C++ 负责稳定底层能力，TS 负责热更业务逻辑。
+
+* 待继续补充
+
+- PuerTS 项目目录推荐结构。
+- ~tsconfig.json~ 示例。
+- ~.d.ts~ 生成流程。
+- C++ 到 TS 的事件分发器设计。
+- TS 热更新与实例重载策略。
+- Dedicated Server 环境下是否启用 PuerTS 的边界。
