@@ -1,0 +1,1246 @@
+#+TITLE: Rust libp2p + Raft 管理分布式任务
+#+LANGUAGE: zh-CN
+#+OPTIONS: toc:2 num:t
+
+* 背景
+
+在 Rust 生态中， =libp2p= 负责点对点网络连接、节点发现和消息传输； =Raft=  负责复制日志、Leader 选举和状态机一致性。
+
+将二者组合起来，可以构建一个去中心化组网、但任务状态强一致的分布式任务系统。核心原则是：
+
+- =libp2p= 只做传输层，不负责共识。
+- =Raft= 只复制确定性的状态变更，不直接执行耗时任务。
+- 任务的创建、分配、完成、失败、重试、交还等状态变化，都必须作为 Raft 日志提交。
+- 真实任务执行必须在日志提交之后触发，并且要设计为幂等，避免节点重启或重复通知导致副作用重复。
+- =apalis= 可以作为节点本地的任务执行引擎，但不能替代 Raft 的全局状态账本。
+
+适合场景：
+
+- 分布式渲染、批处理、爬虫调度、数据分析等耗时任务。
+- 任务状态必须一致，不能丢任务或重复分配。
+- 集群规模中小，写入吞吐不是百万级每秒。
+- 普通 Worker 节点很多，但真正参与 Raft 投票的管理节点较少。
+
+不适合场景：
+
+- 极高频、低延迟的短任务流。
+- 大量临时节点频繁加入退出的开放网络。
+- 无法接受少数派网络分区停止写入的业务。
+- 每个本地执行细节都要写入 Raft 的场景。
+
+* 技术选型
+
+** libp2p 网络层
+
+| 组件                     | 用途                | 备注                                         |
+|--------------------------+---------------------+----------------------------------------------|
+| =libp2p::swarm=            | 驱动网络事件循环      | 统一处理连接、协议和行为事件                     |
+| =libp2p::request_response= | Raft RPC 与控制消息  | 适合 =AppendEntries= 、 =Vote= 、任务分配、状态上报 |
+| =libp2p::mdns=             | 局域网节点发现        | 适合开发环境或同网段集群                        |
+| =libp2p::kad=              | Kademlia DHT        | 适合公网、大规模或跨网段节点发现                 |
+| =libp2p::gossipsub=        | 广播任务摘要          | 适合 Worker 抢占任务或任务来源分散的场景         |
+| =libp2p::identify=         | 交换节点地址和协议能力 | 便于维护 =PeerId -> Multiaddr= 映射             |
+| =libp2p::ping=             | 连接活性探测          | 只能作为网络信号，不能单独决定任务重分配          |
+
+** Raft 共识层
+
+| 库         | 建议                  | 说明                                        |
+|------------+-----------------------+---------------------------------------------|
+| =openraft=   | 优先评估               | 支持 tokio，文档较完整；1.0 前 API 仍可能不兼容 |
+| =async-raft= | 谨慎用于新项目          | 历史上常用，但最新 docs.rs 版本停留在 2021 年   |
+| =raft-rs=    | 适合底层控制要求高的项目 | 工程成熟，但网络和存储集成工作量更大            |
+
+工程上建议优先从 =openraft= 开始验证。实际落地前，需要固定 crate 版本，并基于当前版本的 =RaftNetwork= 、 =RaftNetworkFactory= 、存储和状态机接口实现适配层。
+
+** apalis 本地执行层
+
+| 角色             | 适合放在         | 职责                           | 不应负责               |
+|------------------+-----------------+--------------------------------+-----------------------|
+| 本地任务消费者     | 普通 Worker 节点 | 并发控制、重试、超时、panic 捕获  | 全局任务分配            |
+| Leader 定时触发器 | Raft 管理节点    | Leader 本地触发定时提案          | 直接执行分布式任务      |
+| 异步解耦队列       | Raft 管理节点    | 把已提交状态机事件转成网络发送任务 | 阻塞 Raft 状态机 apply |
+
+当前 =apalis= 0.7.x 文档显示，它是基于 tower 的后台任务库，支持 =WorkerBuilder= 、 =backend= 、 =data= 、 =concurrency= 、 =retry= 、 =timeout= 、 =catch_panic= 等能力。具体 API 以锁定版本为准。
+
+* 总体架构
+
+#+begin_example
+             client / api
+                  |
+                  v
+        +-------------------+
+        | 任意 libp2p 节点  |
+        +-------------------+
+                  |
+          如果不是 Leader，则转发
+                  |
+                  v
+        +-------------------+
+        |    Raft Leader    |
+        +-------------------+
+          | append log / replicate
+          v
+  +-------------------------------+
+  |  Follower / Learner 节点集合  |
+  +-------------------------------+
+          |
+          | 日志被多数派提交后
+          v
+  +-------------------------------+
+  |  每个节点应用同一状态机变更   |
+  +-------------------------------+
+          |
+          | 仅被分配的 Worker 执行真实任务
+          v
+  +-------------------------------+
+  |     apalis 本地执行器         |
+  +-------------------------------+
+#+end_example
+
+关键边界：
+
+- 网络层负责把 Raft RPC、任务分配和状态上报发给目标 =PeerId= 。
+- Raft 层负责决定日志是否提交。
+- 状态机只维护任务元数据、Worker 视图、租约、锁和最终状态。
+- =apalis= 只管理本地执行生命周期，不保存全局真相。
+- 执行器只根据已提交状态启动、停止、重试或交还任务。
+
+* 节点身份设计
+
+Raft 需要稳定的 =NodeId= ，libp2p 使用 =PeerId= 。不要在每次启动时生成新的 Raft 身份，否则节点会被视为新成员。
+
+推荐做法：
+
+1. 节点首次启动时生成并持久化 libp2p keypair。
+2. 由 keypair 派生稳定 =PeerId= 。
+3. 使用稳定映射生成 Raft =NodeId= ：
+   - 小集群可以维护一张被 Raft 复制的 =NodeId -> PeerId -> Multiaddr= 表。
+   - 如果库要求整数 =NodeId= ，可以用稳定哈希或集中分配，但必须处理冲突。
+4. =PeerId= 、可拨号地址、节点角色和能力标签应作为集群成员元数据保存。
+
+需要避免：
+
+- 直接把临时发现的 =PeerId= 自动加入 voting member。
+- 因为 mDNS 发现事件就立即变更成员。
+- 节点地址变化时改变 Raft =NodeId= 。
+- 把普通 Worker 当作 Raft voting member。
+
+* 状态机模型
+
+Raft 日志里保存的是确定性的命令，而不是本地执行过程。
+
+#+begin_src rust
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub enum TaskCommand {
+    CreateTask {
+        task_id: TaskId,
+        task_type: TaskType,
+        spec_ref: TaskSpecRef,
+    },
+    RegisterWorker {
+        worker: WorkerInfo,
+    },
+    RenewWorkerLease {
+        worker: NodeId,
+        lease_epoch: u64,
+    },
+    AssignTask {
+        task_id: TaskId,
+        worker: NodeId,
+        lease_epoch: u64,
+        deadline_ms: u64,
+    },
+    StartTask {
+        task_id: TaskId,
+        worker: NodeId,
+        lease_epoch: u64,
+    },
+    FinishTask {
+        task_id: TaskId,
+        worker: NodeId,
+        output_ref: OutputRef,
+    },
+    FailTask {
+        task_id: TaskId,
+        worker: NodeId,
+        reason: String,
+        retryable: bool,
+    },
+    YieldTask {
+        task_id: TaskId,
+        worker: NodeId,
+        reason: String,
+    },
+    ReassignTask {
+        task_id: TaskId,
+        from: NodeId,
+        to: NodeId,
+        lease_epoch: u64,
+    },
+}
+#+end_src
+
+状态机可以维护：
+
+#+begin_src rust
+pub struct TaskStateMachine {
+    pub active_tasks: HashMap<TaskId, TaskRecord>,
+    pub workers: HashMap<NodeId, WorkerRecord>,
+    pub assignments: HashMap<TaskId, Assignment>,
+    pub last_applied_log: Option<LogId>,
+}
+#+end_src
+
+状态迁移示例：
+
+| 当前状态  | 命令         | 下一状态           | 说明                        |
+|----------+--------------+-------------------+-----------------------------|
+| 无       | =CreateTask=   | =Pending=           | 新任务进入队列                |
+| =Pending=  | =AssignTask=   | =Assigned=          | 任务绑定到某个 Worker         |
+| =Assigned= | =StartTask=    | =Running=           | Worker 确认开始执行          |
+| =Running=  | =FinishTask=   | =Finished=          | 记录结果引用，并可从热状态移除  |
+| =Running=  | =FailTask=     | =Failed= 或 =Pending= | 根据 =retryable= 判断是否重试   |
+| =Running=  | =YieldTask=  | =Pending=           | Worker 主动交还任务          |
+| =Running=  | =ReassignTask= | =Assigned=          | 原 Worker 超时或失联后重新分配 |
+
+注意：
+
+- 状态机不能读取本地时间、随机数或本地负载，否则不同节点应用同一日志可能得到不同结果。
+- 如果需要使用时间，Leader 应把时间戳、超时阈值或 =lease_epoch= 写入日志。
+- 大结果、大文件和任务输出不要直接放进 Raft 日志，日志里只保存引用。
+- 已完成历史任务建议进入冷存储，不要长期堆在 Raft 热状态机中。
+
+* 协同工作流
+
+** 1. 节点启动与发现
+
+1. 节点加载持久化 keypair，启动 =libp2p::Swarm= 。
+2. 通过 bootstrap 节点、mDNS 或 Kademlia 发现其他 =PeerId= 。
+3. 使用 =identify= 收集对端监听地址和协议能力。
+4. 建立 =PeerId -> Multiaddr= 路由表。
+5. 如果当前节点是 Leader，并且新节点通过准入检查，则先调用 =add_learner= 。
+6. Learner 追上日志后，再通过 membership change 把它提升为 voting member。
+
+发现节点不等于加入 Raft 集群。成员变更必须由 Leader 发起，并作为 Raft 配置变更提交。
+
+** 2. 创建任务
+
+1. 客户端把 =CreateTask= 请求发给任意节点。
+2. 如果该节点不是 Leader，它返回 Leader 信息或转发请求。
+3. Leader 把 =CreateTask= 写入 Raft 日志。
+4. Leader 通过 libp2p request-response 向 Follower 发送 =AppendEntries= 。
+5. 多数派写入成功后，日志提交。
+6. 所有节点应用该日志，任务变为 =Pending= 。
+
+** 3. 分配任务
+
+有三种常见策略：
+
+| 策略       | 做法                              | 优点                | 缺点              |
+|------------+-----------------------------------+---------------------+-------------------|
+| Leader 分配 | Leader 根据负载生成 =AssignTask= 日志 | 易接入真实负载和优先级 | Leader 逻辑更复杂  |
+| 确定性自调度 | 所有节点基于同一状态运行同一算法      | 少一次分配 RPC       | 算法必须完全确定    |
+| 抢锁调度    | Worker 收到任务后向 Raft 抢锁       | 任务来源灵活          | 高频抢锁会压垮 Raft |
+
+重型任务优先使用 Leader 分配。短任务或海量 Worker 场景，需要批处理、任务分片或减少 Raft 写入频率。
+
+** 4. 执行任务
+
+1. 每个节点应用 =AssignTask= 日志。
+2. 只有被分配的 Worker 把任务放入本地 =apalis= 队列。
+3. Worker 启动后提交 =StartTask= 。
+4. 本地成功后提交 =FinishTask= 。
+5. 本地失败、panic 或重试耗尽后提交 =FailTask= 。
+6. 优雅停机时提交 =YieldTask= ，让 Leader 尽快重分配。
+
+执行器需要满足：
+
+- 按 =task_id + lease_epoch= 做幂等保护。
+- 本地崩溃恢复后，先读取已提交状态，再决定继续、回滚或重新上报。
+- 外部副作用要么可重入，要么有业务级去重键。
+- 本地重试次数和临时错误不一定要写入 Raft；最终状态必须写入 Raft。
+
+** 5. 容错与重分配
+
+Worker 离线：
+
+- libp2p 的 =ConnectionClosed= 只是网络断开信号，不能直接证明节点死亡。
+- 推荐使用 Raft 日志中的 Worker heartbeat、租约或任务执行超时。
+- Leader 观察到租约过期后，提交 =ReassignTask= 或 =FailTask= 。
+
+Leader 离线：
+
+- Follower 在选举超时后发起新一轮选举。
+- 新 Leader 从已提交日志恢复任务状态。
+- 未提交的客户端请求必须由客户端重试，服务端用 =task_id= 去重。
+
+网络分区：
+
+- 多数派分区可以继续提交任务。
+- 少数派分区不能写入新任务或状态变化。
+- 少数派里的 Worker 即使完成了任务，也需要等恢复连接后再提交 =FinishTask= 。
+
+* libp2p 与 openraft 适配伪代码
+
+以下代码只展示适配思路，不是可直接编译的完整实现。具体 trait 签名应以当前锁定的 =openraft= 版本为准。
+
+#+begin_src rust
+use libp2p::PeerId;
+use openraft::network::{RaftNetwork, RaftNetworkFactory};
+use openraft::raft::{AppendEntriesRequest, AppendEntriesResponse, VoteRequest, VoteResponse};
+use openraft::{RaftError, RaftTypeConfig};
+use tokio::sync::{mpsc, oneshot};
+
+pub enum RaftRpc<C: RaftTypeConfig> {
+    AppendEntries(AppendEntriesRequest<C>),
+    Vote(VoteRequest<C::NodeId>),
+}
+
+pub enum RaftRpcResponse<C: RaftTypeConfig> {
+    AppendEntries(AppendEntriesResponse<C::NodeId>),
+    Vote(VoteResponse<C::NodeId>),
+}
+
+pub enum NetworkCommand<C: RaftTypeConfig> {
+    SendRpc {
+        target: C::NodeId,
+        peer: PeerId,
+        rpc: RaftRpc<C>,
+        respond_tx: oneshot::Sender<Result<RaftRpcResponse<C>, RaftError<C::NodeId>>>,
+    },
+}
+
+pub struct Libp2pRaftNetworkFactory<C: RaftTypeConfig> {
+    pub command_tx: mpsc::UnboundedSender<NetworkCommand<C>>,
+    pub peer_book: PeerBook<C::NodeId>,
+}
+
+impl<C> RaftNetworkFactory<C> for Libp2pRaftNetworkFactory<C>
+where
+    C: RaftTypeConfig,
+{
+    type Network = Libp2pRaftNetwork<C>;
+
+    async fn new_client(&mut self, target: C::NodeId, _node: &C::Node) -> Self::Network {
+        let peer = self.peer_book.peer_id(&target).expect("known raft peer");
+
+        Libp2pRaftNetwork {
+            target,
+            peer,
+            command_tx: self.command_tx.clone(),
+        }
+    }
+}
+
+pub struct Libp2pRaftNetwork<C: RaftTypeConfig> {
+    target: C::NodeId,
+    peer: PeerId,
+    command_tx: mpsc::UnboundedSender<NetworkCommand<C>>,
+}
+
+impl<C> RaftNetwork<C> for Libp2pRaftNetwork<C>
+where
+    C: RaftTypeConfig,
+{
+    async fn append_entries(
+        &mut self,
+        rpc: AppendEntriesRequest<C>,
+        _option: openraft::network::RPCOption,
+    ) -> Result<AppendEntriesResponse<C::NodeId>, RpcError<C>> {
+        let (respond_tx, respond_rx) = oneshot::channel();
+
+        self.command_tx
+            .send(NetworkCommand::SendRpc {
+                target: self.target.clone(),
+                peer: self.peer,
+                rpc: RaftRpc::AppendEntries(rpc),
+                respond_tx,
+            })
+            .map_err(|_| unreachable_rpc_error(self.target.clone()))?;
+
+        match respond_rx.await.map_err(|_| unreachable_rpc_error(self.target.clone()))?? {
+            RaftRpcResponse::AppendEntries(response) => Ok(response),
+            _ => Err(protocol_error(self.target.clone())),
+        }
+    }
+
+    async fn vote(
+        &mut self,
+        rpc: VoteRequest<C::NodeId>,
+        _option: openraft::network::RPCOption,
+    ) -> Result<VoteResponse<C::NodeId>, RpcError<C>> {
+        let (respond_tx, respond_rx) = oneshot::channel();
+
+        self.command_tx
+            .send(NetworkCommand::SendRpc {
+                target: self.target.clone(),
+                peer: self.peer,
+                rpc: RaftRpc::Vote(rpc),
+                respond_tx,
+            })
+            .map_err(|_| unreachable_rpc_error(self.target.clone()))?;
+
+        match respond_rx.await.map_err(|_| unreachable_rpc_error(self.target.clone()))?? {
+            RaftRpcResponse::Vote(response) => Ok(response),
+            _ => Err(protocol_error(self.target.clone())),
+        }
+    }
+}
+#+end_src
+
+libp2p 主循环负责真正发送请求和回填 =oneshot= ：
+
+#+begin_src rust
+async fn run_swarm<C>(
+    mut swarm: libp2p::Swarm<MyBehaviour<C>>,
+    mut cmd_rx: mpsc::UnboundedReceiver<NetworkCommand<C>>,
+    raft: AppRaftHandle<C>,
+) where
+    C: RaftTypeConfig,
+{
+    let mut pending = PendingRpcMap::default();
+
+    loop {
+        tokio::select! {
+            Some(cmd) = cmd_rx.recv() => {
+                match cmd {
+                    NetworkCommand::SendRpc { peer, rpc, respond_tx, .. } => {
+                        let request_id = swarm
+                            .behaviour_mut()
+                            .raft_rpc
+                            .send_request(&peer, rpc);
+
+                        pending.insert(request_id, respond_tx);
+                    }
+                }
+            }
+
+            event = swarm.select_next_some() => {
+                match event {
+                    libp2p::swarm::SwarmEvent::Behaviour(MyBehaviourEvent::RaftRpc(event)) => {
+                        handle_raft_rpc_event(&mut swarm, &mut pending, &raft, event).await;
+                    }
+                    libp2p::swarm::SwarmEvent::ConnectionClosed { peer_id, .. } => {
+                        raft.note_peer_disconnected(peer_id).await;
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+}
+#+end_src
+
+适配层要点：
+
+- =RaftNetworkFactory::new_client= 创建的是面向单个目标节点的客户端。
+- =RaftNetwork= 方法内部不要直接阻塞 Swarm，而是通过 channel 把发送请求交给 Swarm 任务。
+- =request_response= 的请求 ID 必须和 =oneshot::Sender= 建立映射。
+- 收到远端 Raft RPC 后，应调用本地 Raft handle，再把响应通过 =send_response= 回给对端。
+- snapshot 可能很大，需要单独设计分片、限流和超时。
+
+* 少数 Raft 节点与大量 libp2p Worker
+
+实际系统里，libp2p 节点数量可能远多于 Raft 节点。不要让所有 libp2p 节点都加入 Raft voting member 集合；Raft 成员越多，心跳、日志复制和选举成本越高，写入延迟也会快速上升。
+
+推荐采用“控制面 / 数据面分离”：
+
+- 控制面：少数稳定节点组成 Raft 集群，负责任务元数据、Worker 视图、锁、租约和最终状态。
+- 数据面：大量普通 libp2p Worker 负责发现、注册、拉取任务、执行任务和上报结果。
+- 普通 Worker 可以使用 libp2p 连接 Raft 节点，但不参与 Raft 投票。
+
+#+begin_example
+            +-----------------------------+
+            |        Raft 控制面          |
+            |  Leader + Follower 集群     |
+            +-----------------------------+
+               ^          ^          ^
+               | RPC      | RPC      | RPC
+               v          v          v
+        +----------+ +----------+ +----------+
+        | Worker 1 | | Worker 2 | | Worker N |
+        +----------+ +----------+ +----------+
+             \            |            /
+              \           |           /
+               +---------------------+
+               |   libp2p 数据面     |
+               | Kademlia/Gossipsub  |
+               +---------------------+
+#+end_example
+
+** 方案一：Master-Worker 集中调度
+
+Raft 集群充当高可用 Master，普通 libp2p 节点充当 Worker。
+
+工作流：
+
+1. Worker 启动后，通过 =libp2p::kad= 、bootstrap 地址或配置文件找到 Raft 节点。
+2. Worker 使用 =request_response= 向当前 Leader 注册，提交 =RegisterWorker(PeerId, Capacity, Labels)= 。
+3. Leader 把 Worker 注册、能力标签、可用资源和租约写入 Raft 日志。
+4. Worker 定期续租或上报负载；Leader 根据租约过期判断 Worker 是否失效。
+5. 新任务提交后，Leader 根据状态机里的 Worker 视图选择目标 Worker。
+6. Leader 通过 =request_response= 推送任务引用，或只提交 =AssignTask= 后由 Worker 主动拉取。
+7. Worker 完成后提交 =FinishTask= ；失败时提交 =FailTask= 或等待租约超时重分配。
+
+优点：
+
+- 实现简单，控制路径清晰。
+- 调度策略灵活，可以使用负载、标签、地域、GPU/CPU 资源和任务优先级。
+- 适合任务执行时间较长、任务数量中等的系统。
+
+缺点：
+
+- Leader 承担较多调度和网络压力。
+- 如果任务数据很大，不应由 Leader 转发完整任务数据，只应转发任务引用。
+- Worker 很多时，需要为注册、心跳和结果上报做限流与批处理。
+
+** 方案二：DHT 账本 + 确定性哈希分配
+
+该方案把 Raft 压力降到最低。Raft 只维护强一致的 =ActiveWorkers= 视图；任务内容和数据流转交给 libp2p Kademlia 或外部存储。
+
+工作流：
+
+1. Raft 状态机维护 =ActiveWorkers: Vec<WorkerInfo>= 。
+2. 任务创建后，任务内容写入 DHT、对象存储或其他数据面存储。
+3. Raft 只记录任务索引、任务哈希、状态和必要的防重信息。
+4. 所有节点使用同一套确定性分配算法计算目标 Worker。
+5. 被选中的 Worker 根据任务引用拉取数据并执行。
+6. Worker 完成后向 Raft 提交 =FinishTask= ，失败或超时后重新进入待分配状态。
+
+确定性分配可以使用 Rendezvous Hashing：
+
+#+begin_example
+TargetWorker = arg max hash(TaskId || WorkerPeerId)
+#+end_example
+
+优点：
+
+- Raft 不转发任务数据，控制面压力低。
+- 任务分配可以在本地计算，不需要 Leader 为每个任务主动推送。
+- 适合 Worker 数量多、任务量大、任务数据可外部存储的系统。
+
+缺点：
+
+- =ActiveWorkers= 视图必须由 Raft 强一致维护。
+- Worker 上下线频繁时，会导致较多任务重新映射。
+- DHT 本身不是强一致数据库，任务最终状态仍应由 Raft 仲裁。
+- 如果任务很短，完成上报仍可能成为 Raft 写入瓶颈。
+
+** 方案三：Gossipsub 广播 + Raft 抢锁
+
+该方案使用 =libp2p::gossipsub= 广播任务，Worker 通过 Raft 抢占执行权。Raft 不负责广播任务内容，只负责防止重复执行。
+
+工作流：
+
+1. 任意节点向 =task-pool= topic 广播任务摘要或任务引用。
+2. 空闲 Worker 收到任务后，向 Raft Leader 提交 =LockTask(TaskId, WorkerId, LeaseEpoch)= 。
+3. Leader 检查任务是否未被锁定；如果可抢占，则提交锁日志。
+4. 锁日志提交后，Worker 才能开始执行任务。
+5. 其他 Worker 再次抢锁会被拒绝，或者看到状态机中任务已被锁定后放弃。
+6. Worker 完成后提交 =FinishTask= ，失败或租约过期后释放或重分配。
+
+优点：
+
+- 任务广播吞吐高，Leader 不承担任务扇出。
+- Raft 只仲裁锁和最终状态，避免任务重复执行。
+- 适合任务来源分散、Worker 自主抢占的队列模型。
+
+缺点：
+
+- 抢锁是 Raft 写入，高并发短任务会压垮控制面。
+- 需要租约，否则抢到锁后崩溃的 Worker 会永久占用任务。
+- 广播消息可能重复或乱序，Worker 必须基于 Raft 状态做最终判断。
+
+** 三种方案对比
+
+| 方案             | Raft 负责                     | libp2p 负责               | 适合场景             | 主要风险             |
+|------------------+------------------------------+--------------------------+---------------------+---------------------|
+| Master-Worker    | Worker 注册、任务分配、最终状态 | 节点连接、任务推送、结果上报 | 重型任务、中小吞吐    | Leader 网络和调度压力 |
+| DHT + 确定性哈希  | Worker 视图、任务索引、最终状态 | 任务存储、任务拉取、数据分发 | 大量 Worker、较高吞吐 | DHT 非强一致、重映射  |
+| Gossipsub + 抢锁 | 锁、租约、最终状态             | 任务广播、Worker 抢占      | 分散任务源、广播队列  | 抢锁写入压力          |
+
+选型建议：
+
+- 单个任务执行超过数分钟：优先选择 Master-Worker，简单且容易排障。
+- 任务数据较大但状态写入不高：选择 Master-Worker + 外部对象存储，Leader 只分发任务引用。
+- Worker 很多、任务量大、任务可按哈希稳定分配：选择 DHT + 确定性哈希。
+- 任务来源分散且需要广播给大量 Worker 自主抢占：选择 Gossipsub + Raft 抢锁。
+- 如果是每秒成千上万个短任务，不要让每个短任务都写 Raft；应做批处理、分片队列或把 Raft 只用于队列元数据。
+
+* apalis 本地执行层
+
+=openraft=  和 =libp2p= 解决“任务在哪、该给谁、怎么传”； =apalis= 解决“任务进入节点后如何本地执行、限流、重试、超时和捕获错误”。
+
+** Worker 节点：本地任务消费者
+
+当任务通过 libp2p 被指派给某个 Worker 时，不建议直接 =tokio::spawn= 后丢给后台运行。更稳妥的做法是把任务接入本地 apalis 后端，让 apalis 管理本地并发、重试、超时和 panic 捕获。
+
+#+begin_example
+[libp2p 网络层]
+      | 收到 AssignTask / TaskPayload
+      v
+[本地 apalis backend]
+      | 并发限制 / 重试 / 超时 / panic 捕获
+      v
+[业务 Job Handler]
+      | 成功 / 失败 / 重试耗尽
+      v
+[libp2p 状态上报] -> [Raft Leader]
+#+end_example
+
+职责：
+
+- 接收 libp2p 分配过来的任务引用或任务载荷。
+- 将任务写入本地 apalis 后端。
+- 用 =concurrency(N)= 限制本地并行任务数。
+- 用 =retry= 、 =timeout= 、 =catch_panic= 控制本地失败行为。
+- 本地最终成功或失败后，通过 libp2p 向 Raft Leader 上报。
+
+** Raft 管理节点：Leader 定时触发器
+
+如果系统需要 Cron 定时任务，可以在每个 Raft 管理节点都启动本地 cron，但只有当前 Leader 允许提交定时任务提案。
+
+关键规则：
+
+- Cron 到点后不直接执行重型任务。
+- Cron handler 只生成 =CreateTask= 提案。
+- 提案必须经过 Raft commit，才能进入全局任务队列。
+- 节点失去 Leader 身份时，必须停止或暂停本地 cron。
+
+** 状态机事件异步解耦
+
+Raft 状态机 apply 必须轻量、确定、非阻塞。不要在 =apply_to_state_machine= 中直接做 libp2p 网络发送。
+
+推荐做法：
+
+1. Raft commit =AssignTask= 。
+2. 状态机只更新内存状态。
+3. 状态机或外层监听器产生 =DispatchNetworkTask= 本地事件。
+4. 本地 apalis 后台 worker 处理该事件，调用 libp2p 给目标 Worker 发任务。
+
+这样可以把共识安全性与网络 IO 耗时解耦。
+
+** Worker 接入 apalis 伪代码
+
+以下代码是结构示意。 =LocalTaskBackend=  可以是 apalis 支持的内存、Redis、SQL 或自定义 backend；如果全局状态已经由 Raft 负责，本地 Worker 通常优先选择轻量的本地 backend。
+
+#+begin_src rust
+use apalis::prelude::*;
+use serde::{Deserialize, Serialize};
+use tokio::sync::mpsc;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DistributedTask {
+    pub task_id: String,
+    pub lease_epoch: u64,
+    pub payload_ref: String,
+}
+
+pub enum NetworkCommand {
+    ReportFinished { task_id: String, lease_epoch: u64 },
+    ReportFailed { task_id: String, lease_epoch: u64, reason: String },
+}
+
+#[derive(Clone)]
+pub struct NetworkReporter {
+    pub tx: mpsc::UnboundedSender<NetworkCommand>,
+}
+
+async fn handle_task(job: DistributedTask, reporter: Data<NetworkReporter>) -> Result<(), Error> {
+    let task_id = job.task_id.clone();
+    let lease_epoch = job.lease_epoch;
+
+    let result = run_business_logic(job).await;
+
+    match result {
+        Ok(()) => {
+            let _ = reporter.tx.send(NetworkCommand::ReportFinished { task_id, lease_epoch });
+            Ok(())
+        }
+        Err(err) => {
+            let _ = reporter.tx.send(NetworkCommand::ReportFailed {
+                task_id,
+                lease_epoch,
+                reason: err.to_string(),
+            });
+            Err(err)
+        }
+    }
+}
+
+pub async fn run_worker_node(
+    mut swarm: MySwarm,
+    local_backend: LocalTaskBackend<DistributedTask>,
+    reporter: NetworkReporter,
+) -> anyhow::Result<()> {
+    let worker_backend = local_backend.clone();
+
+    tokio::spawn(async move {
+        WorkerBuilder::new("distributed-worker")
+            .data(reporter)
+            .concurrency(4)
+            .timeout(std::time::Duration::from_secs(300))
+            .catch_panic()
+            .backend(worker_backend)
+            .build_fn(handle_task)
+            .run()
+            .await
+    });
+
+    loop {
+        match swarm.next_event().await {
+            Some(SwarmEvent::TaskAssigned { task }) => {
+                local_backend.enqueue(task).await?;
+            }
+            Some(SwarmEvent::ConnectionClosed { peer_id }) => {
+                note_disconnect(peer_id).await;
+            }
+            None => break,
+        }
+    }
+
+    Ok(())
+}
+#+end_src
+
+** Leader Cron 伪代码
+
+下面示例展示 Leader 身份变化如何控制本地 cron。实际项目中，openraft metrics 的字段名与 apalis-cron API 以锁定版本为准。
+
+#+begin_src rust
+use apalis::prelude::*;
+use apalis_cron::{CronStream, Schedule};
+use std::str::FromStr;
+use tokio::sync::{mpsc, oneshot};
+
+#[derive(Default, Debug, Clone)]
+pub struct CronTick;
+
+#[derive(Clone)]
+pub struct RaftProposer {
+    pub tx: mpsc::UnboundedSender<TaskCommand>,
+}
+
+async fn handle_tick(_: CronTick, proposer: Data<RaftProposer>) -> Result<(), Error> {
+    proposer.tx.send(TaskCommand::CreateTask {
+        task_id: TaskId::new(),
+        task_type: TaskType::ScheduledMaintenance,
+        spec_ref: TaskSpecRef::from("scheduled://maintenance"),
+    })?;
+
+    Ok(())
+}
+
+pub struct CronController {
+    stop_tx: Option<oneshot::Sender<()>>,
+}
+
+impl CronController {
+    pub fn start(&mut self, proposer: RaftProposer) {
+        if self.stop_tx.is_some() {
+            return;
+        }
+
+        let (stop_tx, stop_rx) = oneshot::channel();
+        self.stop_tx = Some(stop_tx);
+
+        tokio::spawn(async move {
+            let schedule = Schedule::from_str("*/5 * * * * *").expect("valid cron");
+            let worker = WorkerBuilder::new("leader-cron")
+                .data(proposer)
+                .backend(CronStream::new(schedule))
+                .build_fn(handle_tick);
+
+            tokio::select! {
+                _ = worker.run() => {}
+                _ = stop_rx => {}
+            }
+        });
+    }
+
+    pub fn stop(&mut self) {
+        if let Some(stop_tx) = self.stop_tx.take() {
+            let _ = stop_tx.send(());
+        }
+    }
+}
+
+pub async fn run_role_monitor(mut metrics_rx: mpsc::Receiver<RaftRole>, proposer: RaftProposer) {
+    let mut cron = CronController { stop_tx: None };
+
+    while let Some(role) = metrics_rx.recv().await {
+        match role {
+            RaftRole::Leader => cron.start(proposer.clone()),
+            RaftRole::Follower | RaftRole::Learner => cron.stop(),
+        }
+    }
+}
+#+end_src
+
+* 失败回补与多任务路由
+
+** Panic 与失败回补
+
+Worker 本地任务失败不会自动同步到 Raft 控制面。必须建立明确的回补路径：
+
+1. apalis handler 捕获业务错误或 panic。
+2. handler 不直接阻塞等待网络发送，而是把结果发给本地 libp2p 网络任务。
+3. libp2p 发送 =ReportFinished= 或 =ReportFailed= 给 Leader。
+4. Leader 把结果转换为 =FinishTask= 或 =FailTask= Raft 提案。
+5. Raft commit 后，任务状态才算全局生效。
+
+可以使用 apalis 的 =catch_panic= feature，把 panic 转成错误；也可以在危险业务逻辑外层使用 =AssertUnwindSafe(...).catch_unwind()= 。无论采用哪种方式，最终都要通过 Raft 日志更新全局状态。
+
+#+begin_src rust
+use futures::FutureExt;
+use std::panic::AssertUnwindSafe;
+
+async fn safe_task_executor(
+    job: DistributedTask,
+    reporter: Data<NetworkReporter>,
+) -> Result<(), Error> {
+    let task_id = job.task_id.clone();
+    let lease_epoch = job.lease_epoch;
+
+    let result = AssertUnwindSafe(async move {
+        run_business_logic(job).await
+    })
+    .catch_unwind()
+    .await;
+
+    match result {
+        Ok(Ok(())) => {
+            let _ = reporter.tx.send(NetworkCommand::ReportFinished { task_id, lease_epoch });
+            Ok(())
+        }
+        Ok(Err(err)) => {
+            let _ = reporter.tx.send(NetworkCommand::ReportFailed {
+                task_id,
+                lease_epoch,
+                reason: err.to_string(),
+            });
+            Err(err)
+        }
+        Err(_) => {
+            let _ = reporter.tx.send(NetworkCommand::ReportFailed {
+                task_id,
+                lease_epoch,
+                reason: "worker panic".to_string(),
+            });
+            Err(Error::msg("job panicked"))
+        }
+    }
+}
+#+end_src
+
+** 多任务类型路由
+
+随着业务发展，系统通常不只有一种任务。推荐用强类型枚举描述任务类型，用统一日志命令描述状态变化。
+
+#+begin_src rust
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum TaskType {
+    DataCrunching { dataset_id: u64 },
+    EmailNotification { to: String, template: String },
+    DatabaseBackup { tables: Vec<String> },
+    ScheduledMaintenance,
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
+pub enum GlobalTaskStatus {
+    Pending,
+    Assigned { worker: NodeId, lease_epoch: u64, deadline_ms: u64 },
+    Running { worker: NodeId, lease_epoch: u64 },
+    Completed { output_ref: OutputRef },
+    Failed { reason: String, retry_count: u32 },
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct RegistryTask {
+    pub task_id: TaskId,
+    pub task_type: TaskType,
+    pub status: GlobalTaskStatus,
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum RaftLogCommand {
+    CreateTask(RegistryTask),
+    AssignTask { task_id: TaskId, worker: NodeId, lease_epoch: u64 },
+    UpdateStatus { task_id: TaskId, new_status: GlobalTaskStatus },
+}
+
+impl ClusterStateMachine {
+    pub fn apply(&mut self, command: RaftLogCommand) -> ApplyResult {
+        match command {
+            RaftLogCommand::CreateTask(task) => {
+                self.active_tasks.insert(task.task_id.clone(), task);
+                ApplyResult::Applied
+            }
+            RaftLogCommand::AssignTask { task_id, worker, lease_epoch } => {
+                let Some(task) = self.active_tasks.get_mut(&task_id) else {
+                    return ApplyResult::Rejected("task not found");
+                };
+
+                task.status = GlobalTaskStatus::Assigned {
+                    worker,
+                    lease_epoch,
+                    deadline_ms: self.config.default_deadline_ms,
+                };
+
+                ApplyResult::Applied
+            }
+            RaftLogCommand::UpdateStatus { task_id, new_status } => {
+                self.update_status(task_id, new_status)
+            }
+        }
+    }
+}
+#+end_src
+
+路由原则：
+
+- 状态机只做确定性路由、状态迁移和合法性检查。
+- 不同任务类型可以使用不同能力标签选择 Worker，例如 GPU、region、backup 权限。
+- 业务执行逻辑留在 Worker 的 apalis handler 中。
+- 任务完成后可从 =active_tasks= 移除，并写入冷存储。
+
+* 快照、超时与自愈
+
+** 状态机快照
+
+长时间运行后，任务日志和历史任务会持续增长。快照设计的目标不是保存所有历史，而是让 Raft 能快速恢复“仍然影响调度的热状态”。
+
+推荐策略：
+
+- 热数据： =Pending= 、 =Assigned= 、 =Running= 、Worker 视图、租约、membership 元数据。
+- 冷数据： =Completed= 、永久  =Failed= 、任务输出、审计日志。
+- 状态机应用 =FinishTask= 后，将任务从热状态移除，并把结果引用写入冷存储。
+- =build_snapshot= 只序列化热状态。
+- 快照成功后，Raft 可以安全清理旧日志。
+
+#+begin_src rust
+#[derive(Debug, Default, Clone, serde::Serialize, serde::Deserialize)]
+pub struct SerializableStateMachine {
+    pub active_tasks: HashMap<TaskId, RegistryTask>,
+    pub workers: HashMap<NodeId, WorkerRecord>,
+    pub last_applied_log: Option<LogId>,
+}
+
+impl MyStorage {
+    pub async fn build_snapshot_impl(&self) -> anyhow::Result<Vec<u8>> {
+        let sm = self.state_machine.read().await;
+        let bytes = bincode::serialize(&*sm)?;
+        Ok(bytes)
+    }
+
+    pub async fn install_snapshot_impl(&self, bytes: &[u8]) -> anyhow::Result<()> {
+        let new_sm: SerializableStateMachine = bincode::deserialize(bytes)?;
+        let mut sm = self.state_machine.write().await;
+        *sm = new_sm;
+        Ok(())
+    }
+}
+#+end_src
+
+** =request_response= 回补超时
+
+如果 Worker panic 后刚好网络断开，失败回补可能丢失。需要两层兜底：
+
+- 数据面：Worker 状态上报使用 request-response ACK、超时和指数退避重试。
+- 控制面：Leader 定期审计超时任务，即使 Worker 没有上报，也能重新分配。
+
+#+begin_src rust
+pub async fn send_report_with_retry(
+    swarm: &mut MySwarm,
+    leader: PeerId,
+    report: TaskReport,
+) -> anyhow::Result<()> {
+    let mut retry_delay = std::time::Duration::from_secs(1);
+
+    loop {
+        let request_id = swarm
+            .behaviour_mut()
+            .task_rpc
+            .send_request(&leader, report.clone());
+
+        let ack = tokio::time::timeout(
+            std::time::Duration::from_secs(5),
+            swarm.next_response_for(request_id),
+        )
+        .await;
+
+        if matches!(ack, Ok(Ok(TaskAck::Accepted))) {
+            return Ok(());
+        }
+
+        tokio::time::sleep(retry_delay).await;
+        retry_delay = std::cmp::min(retry_delay * 2, std::time::Duration::from_secs(60));
+    }
+}
+
+pub async fn start_leader_audit_loop(raft: AppRaftHandle, tick: std::time::Duration) {
+    let mut interval = tokio::time::interval(tick);
+
+    loop {
+        interval.tick().await;
+
+        if !raft.is_current_leader().await {
+            continue;
+        }
+
+        let now_ms = unix_millis();
+        let active_tasks = raft.read_active_tasks().await;
+
+        for task in active_tasks {
+            if task.is_assignment_expired(now_ms) {
+                let _ = raft.propose(TaskCommand::YieldTask {
+                    task_id: task.task_id,
+                    worker: task.assigned_worker,
+                    reason: "assignment expired".to_string(),
+                }).await;
+            }
+        }
+    }
+}
+#+end_src
+
+自愈闭环：
+
+1. Worker 本地失败后尝试上报。
+2. 上报成功则由 Raft 日志更新状态。
+3. 上报失败则 Worker 持续退避重试。
+4. Worker 彻底失联时，Leader 审计任务租约并主动收回。
+5. 收回日志提交后，任务回到 =Pending= 或被重新分配。
+
+* 运维治理
+
+** Worker 优雅停机
+
+Worker 发布、缩容或维护时，不要直接硬杀。推荐流程：
+
+1. 捕获 =SIGTERM= 或 =Ctrl+C= 。
+2. 通知 Leader 该 Worker 进入 =Draining= 状态，拒收新任务。
+3. 停止从本地 apalis backend 拉取新任务。
+4. 给正在执行的任务一个宽限期。
+5. 宽限期内完成的任务正常上报 =FinishTask= 。
+6. 宽限期后仍未完成的任务主动提交 =YieldTask= 。
+7. 注销 Worker，关闭 Swarm。
+
+#+begin_src rust
+pub async fn graceful_shutdown_worker(
+    swarm: &mut MySwarm,
+    local_runtime: &LocalRuntime,
+    grace: std::time::Duration,
+) -> anyhow::Result<()> {
+    swarm.send_control(ControlMessage::DrainWorker).await?;
+    local_runtime.stop_accepting_new_jobs().await;
+
+    let drained = tokio::time::timeout(grace, local_runtime.wait_inflight_done()).await;
+
+    if drained.is_err() {
+        for task_id in local_runtime.inflight_task_ids().await {
+            swarm
+                .send_control(ControlMessage::YieldTask {
+                    task_id,
+                    reason: "worker shutdown".to_string(),
+                })
+                .await?;
+        }
+    }
+
+    swarm.send_control(ControlMessage::UnregisterWorker).await?;
+    swarm.close().await;
+    Ok(())
+}
+#+end_src
+
+** Raft 管理节点扩缩容
+
+Raft 管理节点扩缩容必须走 membership change。不要直接把新节点加入 voter 集合。
+
+安全扩容流程：
+
+1. 新节点启动 libp2p，完成握手和地址发现。
+2. Leader 调用 =add_learner= ，让新节点先同步日志或快照。
+3. 通过 metrics 确认 learner 追上 Leader。
+4. 调用 =change_membership= 把新节点提升为 voter。
+5. 观察新配置稳定后再更新外部部署系统。
+
+安全缩容流程：
+
+1. 选择目标 voter。
+2. 调用 =change_membership= 从 voter 集合移除。
+3. 等配置日志提交并应用。
+4. 如果目标节点仍作为 learner 存在，再移除 learner 元数据。
+5. 关闭目标节点的 libp2p 连接和进程。
+
+#+begin_src rust
+impl RaftClusterManager {
+    pub async fn safe_add_node(&self, peer: PeerId, addr: Multiaddr) -> anyhow::Result<()> {
+        let node_id = peer_id_to_node_id(&peer);
+        let node = NodeInfo { peer, addr };
+
+        self.raft.add_learner(node_id, node, true).await?;
+        self.wait_until_caught_up(node_id).await?;
+
+        let mut voters = self.current_voters().await?;
+        voters.insert(node_id);
+
+        self.raft.change_membership(voters, false).await?;
+        Ok(())
+    }
+
+    pub async fn safe_remove_node(&self, peer: PeerId) -> anyhow::Result<()> {
+        let node_id = peer_id_to_node_id(&peer);
+        let mut voters = self.current_voters().await?;
+        voters.remove(&node_id);
+
+        self.raft.change_membership(voters, false).await?;
+        self.remove_learner_if_present(node_id).await?;
+        Ok(())
+    }
+}
+#+end_src
+
+* Leader 运行与任务指挥
+
+在由 =libp2p= 和 =openraft= 构建的集群中，不需要额外再实现一套选主协议。 =openraft= 通过 Raft 投票保证在任意合法任期内最多只有一个 Leader；业务代码只需要监听 Raft 状态变化，并且只允许当前 Leader 发起任务调度提案。
+
+核心边界：
+
+- =openraft= 负责强一致选主、任期推进和日志提交。
+- 每个节点订阅 =openraft= metrics，感知自己是否处于 Leader 状态。
+- Leader 调度器只生成 =CreateTask= 、 =AssignTask= 、 =YieldTask= 等 Raft 提案。
+- =libp2p= 只负责把已提交的调度结果或任务引用发送给目标 Worker。
+- Worker 在执行前必须确认任务分配已经提交，不能只凭网络消息直接执行。
+
+** 监听 Leader 状态
+
+每个 Raft 管理节点都可以启动一个角色监控任务。节点变为 Leader 时启动本地调度器；节点降级为 Follower 或 Learner 时，必须停止调度器，避免旧 Leader 继续下发命令。
+
+#+begin_src rust
+use openraft::State;
+
+let mut metrics_rx = raft.metrics();
+
+tokio::spawn(async move {
+    while metrics_rx.changed().await.is_ok() {
+        let current_metrics = metrics_rx.borrow().clone();
+
+        if current_metrics.state == State::Leader {
+            start_leader_scheduler().await;
+        } else {
+            stop_leader_scheduler().await;
+        }
+    }
+});
+#+end_src
+
+实际工程中， =start_leader_scheduler= 应该是幂等的；重复收到 Leader metrics 时不能重复启动多个调度循环。 =stop_leader_scheduler= 也要能安全处理“调度器尚未启动”的情况。
+
+** Leader 驱动调度
+
+Leader 调度器可以由定时器、客户端请求或状态机事件触发，但调度结果必须先写入 Raft：
+
+1. Leader 读取已提交状态中的 Worker 列表、能力标签和任务队列。
+2. Leader 选择目标 Worker，生成 =AssignTask= 提案。
+3. =AssignTask= 被多数派提交后，所有节点应用同一状态变更。
+4. Leader 或本地网络任务通过 =libp2p= 把任务引用发送给目标 Worker。
+5. Worker 收到任务后，再根据已提交的 =task_id + lease_epoch= 执行本地任务。
+
+不建议让 Follower 自己直接抢任务。若业务确实需要 Worker 抢占模型，也应该先向 Raft 提交抢锁提案，锁日志提交后才能执行。
+
+** 使用 libp2p 下发指令
+
+常见下发方式：
+
+| 方式                         | 适合场景       | 要点                                      |
+|------------------------------+----------------+-------------------------------------------|
+| =libp2p::request_response=   | 精准指派任务   | Leader 向指定 =PeerId= 发送任务引用并等待 ACK |
+| =libp2p::gossipsub=          | 广播任务摘要   | 消息体必须包含目标 =PeerId= 或抢锁所需字段     |
+| Worker 主动拉取              | Worker 数量较多 | Worker 根据 Raft 提交状态拉取自己的任务       |
+
+如果使用 =gossipsub= 广播，消息重复、乱序和延迟都应被视为正常现象。Worker 必须以 Raft 状态机里的任务归属为最终判断依据。
+
+** 防脑裂与线性化屏障
+
+网络分区时，旧 Leader 可能暂时还认为自己是 Leader。为了避免旧 Leader 在失去多数派后继续指挥任务，关键路径可以增加 Raft 屏障：
+
+- Leader 下发外部可见命令前，先执行一次线性化读或提交一个轻量 noop。
+- Follower 或 Worker 执行敏感任务前，确认任务分配日志已经提交到当前可见的 Raft 状态。
+- 如果 =ensure_linearizable= 或等价接口失败，说明当前节点不能证明自己仍拥有多数派，应立即停止调度。
+
+整体流程：
+
+#+begin_example
+[Leader 节点]
+    |
+    | 1. openraft 选主成功，metrics 变为 Leader
+    | 2. 调度器根据已提交状态生成任务分配
+    | 3. AssignTask 写入 Raft 并被多数派提交
+    v
+[libp2p request_response]
+    |
+    +--> [Worker 1] 收到自己的任务引用，执行并上报结果
+    |
+    +--> [Worker 2] 收到自己的任务引用，执行并上报结果
+#+end_example
+
+* 优缺点
+
+| 维度  | 优势                                 | 代价                             |
+|-------+--------------------------------------+----------------------------------|
+| 一致性 | 任务分配和最终状态全网一致              | 所有全局写入必须经过 Leader 和多数派 |
+| 容错  | Leader 故障后可重新选举                | 少数派分区不能继续写入              |
+| 网络  | libp2p 支持 NAT、DHT、mDNS、Gossipsub | 地址、身份和协议版本需要自己维护     |
+| 扩展  | Raft 管控制面，Worker 横向扩展         | membership 不能频繁抖动           |
+| 执行  | apalis 管理本地并发、重试和超时         | 本地执行状态不能替代全局状态         |
+| 运维  | 快照、租约、审计、优雅停机形成闭环       | 实现复杂度明显高于单机队列          |
+
+* 实现清单
+
+- [ ] 持久化 libp2p keypair 和 Raft storage。
+- [ ] 定义稳定的 =NodeId= 与 =PeerId= 映射。
+- [ ] 明确 Raft 管理节点与普通 Worker 节点的角色边界。
+- [ ] 实现 =request_response= 协议编解码。
+- [ ] 实现 =RaftNetworkFactory= 和 =RaftNetwork= 适配层。
+- [ ] 实现 Raft log store、state machine 和 snapshot。
+- [ ] 定义 =TaskCommand= 、 =TaskType= 与任务状态迁移。
+- [ ] 实现 Worker 注册、续租、退租、能力标签和 Draining 状态。
+- [ ] 根据任务粒度选择集中调度、确定性哈希或抢锁模式。
+- [ ] 将 Worker 本地执行接入 apalis backend。
+- [ ] 为 apalis 配置本地并发、重试、超时和 panic 捕获。
+- [ ] 实现 libp2p 状态回补、ACK、超时和指数退避。
+- [ ] 实现 Leader 审计循环，处理超时任务和失联 Worker。
+- [ ] 实现 Worker 优雅停机和 =YieldTask= 。
+- [ ] 实现 Raft learner 预热与 membership change。
+- [ ] 添加 metrics、tracing、限流、批处理和压测。
+- [ ] 编写网络分区、Leader 切换、Worker 崩溃、回补丢失、快照恢复测试。
+
+* 常见陷阱
+
+- 把 libp2p 发现到的节点直接加入 voting member。
+- 在状态机里使用本地时间、随机数或本地负载。
+- 任务还没被 Raft 提交就开始执行。
+- 在 Raft 状态机 apply 里直接做 libp2p 网络 IO。
+- 把大文件或完整任务结果写进 Raft 日志。
+- 只依赖 =ConnectionClosed= 判断 Worker 死亡。
+- 没有客户端请求幂等键，导致 Leader 切换后重复创建任务。
+- 节点重启后生成新的 keypair，导致身份漂移。
+- 把 apalis 本地重试当成全局任务状态。
+- Worker panic 后没有向 Raft 控制面回补状态。
+- 回补消息没有 ACK 和重试，导致任务长期卡在 =Assigned= 。
+- 没有快照和冷热分离，导致状态机内存持续增长。
+- Worker 缩容时直接杀进程，触发大量超时重分配。
+- Raft 管理节点扩缩容不走 learner 和 membership change。
+
+* 参考资料
+
+- [[https://docs.rs/libp2p/latest/libp2p/][libp2p docs.rs]]：Rust libp2p 是模块化 P2P 网络框架，包含 =swarm= 、 =kad= 、 =mdns= 、 =request_response= 等模块。
+- [[https://docs.rs/openraft/latest/openraft/][openraft docs.rs]]：当前 docs.rs 版本为 =0.9.24= ，官方说明 1.0 前 API 可能发生不兼容变更。
+- [[https://docs.rs/openraft/latest/openraft/network/trait.RaftNetwork.html][openraft RaftNetwork]]：网络层需要实现 =append_entries= 、 =vote= 、 =full_snapshot=  等 RPC。
+- [[https://docs.rs/openraft/latest/openraft/network/trait.RaftNetworkFactory.html][openraft RaftNetworkFactory]]：用于为目标节点创建 Raft 网络客户端。
+- [[https://docs.rs/async-raft/latest/async_raft/][async-raft docs.rs]]：最新 docs.rs 页面显示版本为 =0.6.1= ，发布时间为 2021-05-19。
+- [[https://docs.rs/apalis/latest/apalis/][apalis docs.rs]]：当前 docs.rs 版本为 =0.7.4= ，定位为 Rust 后台任务处理库，支持 tower middleware、并发和 worker 配置。
+- [[https://docs.rs/apalis/latest/apalis/prelude/struct.WorkerBuilder.html][apalis WorkerBuilder]]：包含 =backend= 、 =data= 、 =layer= 、 =concurrency= 、 =retry= 、 =timeout= 、 =catch_panic= 等构建能力。
+- [[https://docs.rs/apalis-cron/latest/apalis_cron/][apalis-cron docs.rs]]：当前 docs.rs 版本为 =0.7.4= ，提供 =CronStream= 和 cron 调度能力。
