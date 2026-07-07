@@ -1,0 +1,23 @@
+* bevy concept
+
+** bevy concept list
+
+Rust 的 Bevy 模块化游戏引擎基于 ECS（Entity-Component-System，实体-组件-系统）架构。理解 Bevy 时，可以先把核心概念分为 ECS 数据模型、运行调度机制和功能模块。
+
+| 分类        | Bevy 概念    | 游戏 / 服务端类比                             | 概念说明                                                    | 示例                                                           |
+|-------------+-------------+---------------------------------------------+------------------------------------------------------------+----------------------------------------------------------------|
+| ECS 数据模型 | App         | 游戏服务端进程 / 节点 (Server Process / Host) | Bevy 程序的载体，负责配置游戏、加载插件并启动运行。              | 分配内存、初始化网络监听（Lightyear）、启动底层线程池。              |
+| ECS 数据模型 | World       | 宇宙 / 内存数据库 (Memory State)              | 存放当前进程中所有 Entity、Component 和 Resource 的数据大仓库。 | 玩家、NPC、子弹、房间信息，底层都存放在 World 里。                  |
+| ECS 数据模型 | Entity      | 游戏对象 (GameObject / Actor / Room)         | 游戏世界中的唯一 ID，本身不保存业务数据，业务含义由组件组合决定。  | 一个玩家是一个 Entity；一个房间也可以是一个 Entity。                |
+| ECS 数据模型 | Component   | 对象属性 / 状态 (Data / Properties)          | 挂载到 Entity 上的纯 Rust 数据结构，用来描述身份、状态或能力。   | Player 表示玩家；Room { id: u32, max_players: u8 } 表示房间。     |
+| ECS 数据模型 | Resource    | 全局单例 / 全局状态 (Global State)            | 全局唯一的数据，适合存储不属于某个具体 Entity 的状态。           | 时间、分数、全局配置、网络连接池。                                 |
+| 运行调度机制  | System      | 游戏玩法逻辑 / 驱动器 (Systems / Game Loops)  | 包含游戏逻辑的普通 Rust 函数，通过 Query 并行处理 Component。   | move_player_system 更新玩家位置；matchmaking_system 处理房间分发。 |
+| 运行调度机制  | Schedule    | 调度器 / 主循环阶段 (Scheduler)               | 管理 System 的执行时机和顺序。                                | 控制 Startup、Update、FixedUpdate 等阶段中的系统运行。             |
+| 运行调度机制  | System Set  | 系统分组 (System Group)                      | 把多个 System 归为逻辑组，便于批量排序、控制或设置运行条件。     | 把移动、碰撞、同步系统分别放入不同 Set。                           |
+| 运行调度机制  | State       | 游戏状态机 (Game State)                      | 用于切换不同游戏流程或场景。                                   | 菜单、游戏中、暂停、结算。                                        |
+| 运行调度机制  | Event       | 系统间消息 (Event / Message)                 | 系统间异步通信机制，发送方写入事件，接收方在当帧或后续帧读取。     | 伤害事件、玩家加入房间事件、网络消息事件。                          |
+| 功能模块     | Plugin      | 模块 / 插件 (Module / Plugin)                | 模块化组织代码的工具，可把相关 System、Resource 和配置打包复用。 | PhysicsPlugin、NetworkPlugin、UiPlugin。                        |
+| 功能模块     | AssetServer | 资源加载器 (Asset Loader)                    | 异步加载外部资源的管理器。                                    | 加载图片、3D 模型、音效、字体。                                   |
+| 功能模块     | Handle      | 资源引用 (Asset Handle)                      | 指向加载中或已加载资源的轻量级引用，用于复用资源并避免重复加载。   | Handle<Image>、Handle<Scene>、Handle<AudioSource>。             |
+| 功能模块     | Query       | 数据查询器 (Data Query)                      | System 参数，用于过滤并获取满足特定组件组合的 Entity。          | Query<(&Transform, &Velocity), With<Player>>。                 |
+| 功能模块     | Commands    | 延迟命令缓冲区 (Command Buffer)               | 在 System 中安全地延迟创建、销毁 Entity 或修改组件。           | spawn 新玩家、despawn 子弹、insert 组件。                         |
