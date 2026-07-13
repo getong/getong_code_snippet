@@ -1,0 +1,30 @@
+* spin_sdk
+
+** install spin
+
+#+begin_src shell
+brew tap spinframework/tap
+brew install spinframework/tap/spin
+#+end_src
+
+copy from [[installing-spin][https://spinframework.dev/v3/install#installing-spin]]
+
+** spin example
+
+*** clone source
+#+begin_src shell
+git clone https://github.com/spinframework/spin-rust-sdk
+cd spin-rust-sdk/examples/hello-world
+#+end_src
+
+*** spin build
+
+#+begin_src shell
+spin build --up
+#+end_src
+
+** visit the web to view the result
+
+#+begin_src shell
+curl -i http://localhost:3000/hello
+#+end_src
