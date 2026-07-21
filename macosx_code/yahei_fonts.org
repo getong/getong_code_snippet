@@ -1,0 +1,17 @@
+* yahei fonts on macos
+
+** installation
+
+#+begin_src shell
+git clone https://github.com/BronyaCat/Win-Fonts-For-Mac
+cd Win-Fonts-For-Mac
+mkdir -p "$HOME/Library/Fonts"
+cp -n \
+  Fonts/用于Office的微软雅黑ttf文件/msyh.ttf \
+  Fonts/用于Office的微软雅黑ttf文件/msyhbd.ttf \
+  Fonts/用于Office的微软雅黑ttf文件/msyhl.ttf \
+  "$HOME/Library/Fonts/"
+
+#+end_src
+
+这个能解决macos 英文语言下，vlc播放中文乱码的bug。
