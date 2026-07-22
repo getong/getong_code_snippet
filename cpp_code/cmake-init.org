@@ -1,0 +1,170 @@
+* cmake-init
+
+cmake-init is a CMake project initializer, see https://github.com/friendlyanon/cmake-init
+It generates a modern CMake (>= 3.14) project with presets, dev/consumer target separation,
+CI config, clang-tidy/cppcheck integration, etc.
+
+** installation
+
+cmake-init is a Python tool, it is not in homebrew. Install via pipx (or pip/uv):
+
+#+begin_src shell
+brew install cmake python
+pipx install cmake-init
+## or
+# pip install cmake-init
+# uv tool install cmake-init
+#+end_src
+
+** create a project
+
+#+begin_src shell
+cmake-init <project_name>
+#+end_src
+
+It will interactively ask for project type (executable / library / header-only),
+C++ standard, package manager (none / vcpkg / conan), etc.
+Non-interactive shortcuts:
+
+#+begin_src shell
+cmake-init -e <project_name>            # executable
+cmake-init -s <project_name>            # shared/static library
+cmake-init -h <project_name>            # header-only library
+cmake-init --c <project_name>           # C project instead of C++
+cmake-init -e -p vcpkg <project_name>   # use vcpkg as package manager
+cmake-init --help                       # all flags
+#+end_src
+
+Generated layout (executable):
+
+#+begin_example
+<project_name>/
+├── CMakeLists.txt
+├── CMakePresets.json        # shared/CI presets, committed to git
+├── CMakeUserPresets.json    # local `dev` preset, gitignored
+├── HACKING.md               # developer workflow doc, read it
+├── vcpkg.json               # only when vcpkg was chosen
+├── source/
+└── test/
+#+end_example
+
+** vcpkg setup (once per machine)
+
+The vcpkg preset reads the =VCPKG_ROOT= environment variable to locate the toolchain file:
+
+#+begin_src shell
+git clone https://github.com/microsoft/vcpkg ~/vcpkg
+~/vcpkg/bootstrap-vcpkg.sh
+export VCPKG_ROOT="$HOME/vcpkg"   # put it in ~/.zshrc
+#+end_src
+
+** vcpkg add package
+
+Add the dependency to the =vcpkg.json= manifest:
+
+#+begin_src shell
+cd <project_name>
+vcpkg add port <package_name>   # e.g. vcpkg add port fmt
+#+end_src
+
+This only edits =vcpkg.json=. You still need to use it in =CMakeLists.txt=:
+
+#+begin_src cmake
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(<target_name> PRIVATE fmt::fmt)
+#+end_src
+
+Packages are downloaded and built automatically at configure time (manifest mode).
+
+** cmake configure
+
+The generated =CMakeUserPresets.json= provides a =dev= preset
+(build dir =build/dev=, developer mode on, compile_commands.json exported):
+
+#+begin_src shell
+cmake --preset=dev
+#+end_src
+
+** cmake build
+
+#+begin_src shell
+cmake --build --preset=dev
+#+end_src
+
+** run tests
+
+#+begin_src shell
+ctest --preset=dev
+#+end_src
+
+** run the executable
+
+#+begin_src shell
+./build/dev/<project_name>
+# with a multi-config generator the binary is under a config subdir:
+# ./build/dev/Debug/<project_name>
+#+end_src
+
+** release / production build
+
+The =dev= preset is Debug + developer mode (tests, extra warnings), do not ship it.
+Developer mode is OFF by default, so a plain configure without the dev preset
+is already a consumer/production build — just set =CMAKE_BUILD_TYPE=Release=:
+
+Without a package manager:
+
+#+begin_src shell
+cmake -S . -B build/release -D CMAKE_BUILD_TYPE=Release
+cmake --build build/release
+./build/release/<project_name>
+#+end_src
+
+When the project uses vcpkg, pass the toolchain file instead —
+run only ONE of the two configure commands, not both:
+
+#+begin_src shell
+cmake -S . -B build/release -D CMAKE_BUILD_TYPE=Release \
+      -D CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake --build build/release
+./build/release/<project_name>
+#+end_src
+
+CAUTION: =CMAKE_TOOLCHAIN_FILE= is only honored the FIRST time a build dir is
+configured. If the dir was already configured without it, CMake keeps using
+system libraries (e.g. homebrew fmt, whose API may not match the version
+pinned in =vcpkg.json=, giving errors like "no member named 'format' in
+namespace 'fmt'"). Fix by starting over with a clean build dir:
+
+#+begin_src shell
+rm -rf build/release
+cmake -S . -B build/release -D CMAKE_BUILD_TYPE=Release \
+      -D CMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+cmake --build build/release
+#+end_src
+
+Optionally install it:
+
+#+begin_src shell
+cmake --install build/release --prefix "$HOME/.local"   # or /usr/local etc.
+#+end_src
+
+Alternative: keep using presets by adding a =rel= preset to =CMakeUserPresets.json=
+(inherit =vcpkg= only when the project uses vcpkg):
+
+#+begin_src js
+// add into "configurePresets":
+{
+  "name": "rel",
+  "binaryDir": "${sourceDir}/build/rel",
+  "inherits": ["vcpkg"],
+  "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+}
+// add into "buildPresets":
+{ "name": "rel", "configurePreset": "rel" }
+#+end_src
+
+#+begin_src shell
+cmake --preset=rel
+cmake --build --preset=rel
+./build/rel/<project_name>
+#+end_src
