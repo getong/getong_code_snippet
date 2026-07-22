@@ -1,0 +1,10 @@
+* rocketmq-rust
+
+** compilation
+
+#+begin_src shell
+git clone https://github.com/mxsm/rocketmq-rust
+cd rocketmq-rust
+export LIBCLANG_PATH=$(brew --prefix llvm)/lib
+cargo build
+#+end_src
