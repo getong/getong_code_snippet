@@ -1,0 +1,18 @@
+* clang-format
+
+** installation
+
+#+begin_src shell
+brew install clang-format
+#+end_src
+
+** usage
+
+
+#+begin_src shell
+# 格式化单个文件 (覆盖原文件)
+clang-format -i my_code.cpp
+
+# 格式化当前目录下所有的 cpp, c 和 h 文件
+find . -name "*.cpp" -o -name "*.c" -o -name "*.h" | xargs clang-format -i
+#+end_src
