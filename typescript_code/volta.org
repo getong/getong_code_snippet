@@ -22,6 +22,8 @@ volta install clinic
 volta install artillery
 
 volta install dotenv-cli
+
+volta install @bytecodealliance/jco
 #+end_src
 
 ** createdb with .env file
