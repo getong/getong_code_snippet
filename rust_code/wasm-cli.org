@@ -1,0 +1,29 @@
+* wash-cli
+
+** installation
+
+#+begin_src shell
+git clone https://github.com/wasmCloud/wasmCloud
+cd wasmCloud/crates/wash
+cargo install --path . --force
+#+end_src
+
+
+** new project
+
+#+begin_src shell
+wash new https://github.com/wasmCloud/wasmCloud.git \
+    --name <project_name> \
+    --subfolder templates/http-hello-world
+#+end_src
+
+
+** fix cargo build in macos arm cpu
+
+
+edit .cargo/config file
+
+#+begin_src shell
+[build]
+target = "wasm32-wasip2"
+#+end_src
