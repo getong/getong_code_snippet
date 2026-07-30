@@ -27,6 +27,7 @@ $ rustup target add wasm32-wasi wasm32-unknown-emscripten wasm32-unknown-unknown
 $ cargo install cargo-make
 $ cargo update -p wasm-bindgen
 $ cargo binstall wasm-pack dioxus-cli
+$ rustup component add rustc-codegen-cranelift-preview --toolchain nightly-aarch64-apple-darwin
 
 // copy from https://github.com/rust-lang/rustfmt/issues/4454
 ## ensure rustfmt
