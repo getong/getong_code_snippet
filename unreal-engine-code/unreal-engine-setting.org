@@ -7,7 +7,7 @@
 ** GenerateProjectFiles.sh
 
 #+begin_src sh
-cd /Users/Shared/Epic\ Games/UE_5.7/Engine/Build/BatchFiles/Mac
+cd /Users/Shared/Epic\ Games/UE_5.8/Engine/Build/BatchFiles/Mac
 
 ./GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/a1/a1.uproject" -game -vscode
 
