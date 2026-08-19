@@ -291,3 +291,33 @@ sudo apt-add-repository ppa:ubuntu-elisp/ppa
 sudo apt update
 sudo apt install emacs-snapshot
 #+end_src
+
+rectangle-mark-mode（Emacs 内置）：特点：Emacs 25+ 原生自带的矩形选区模式，通过 C-x SPC 激活。优势：它不依赖 cua-mode 的全局绑定，不会污染你常规的复制粘贴习惯，配合 C-x r 系列命令（如 C-x r t 替换列内容、C-x r c 清空等）非常纯净高效。
+
+
+** force replace installation
+
+#+begin_example
+#!/bin/bash
+
+# 1. 自动判断 CPU 架构并设置对应的 Emacs 路径
+if [ "$(uname -m)" = "arm64" ]; then
+    # Apple Silicon (M1/M2/M3/M4...)
+    SOURCE_PATH="/opt/homebrew/opt/emacs-plus@31/Emacs.app"
+else
+    # Intel CPU
+    SOURCE_PATH="/usr/local/opt/emacs-plus@31/Emacs.app"
+fi
+
+# 2. 使用 Shell 强制删除已有的替身或应用（避免 Finder 废纸篓延迟）
+if [ -e "/Applications/Emacs.app" ] || [ -L "/Applications/Emacs.app" ]; then
+    rm -rf "/Applications/Emacs.app"
+fi
+
+# 3. 执行 AppleScript 创建新的替身
+osascript -e "
+tell application \"Finder\"
+    make alias file to posix file \"$SOURCE_PATH\" at posix file \"/Applications\" with properties {name:\"Emacs.app\"}
+end tell
+"
+#+end_example
