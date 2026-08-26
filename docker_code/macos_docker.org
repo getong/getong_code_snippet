@@ -21,3 +21,9 @@ copy from [[https://www.robinwieruch.de/docker-macos/][How to install Docker on 
 [[https://stackoverflow.com/questions/70281938/docker-machine-unable-to-create-a-machine-on-macos-vboxmanage-returning-e-acces][docker-machine unable to create a machine on macOS, VBoxManage returning E_ACCESSDENIED error]]
 [[https://jongsma.wordpress.com/2021/11/29/docker-and-the-virtualbox-host-only-networks/][Docker and the VirtualBox host-only networks]]
 [[https://pilsniak.com/how-to-install-docker-on-mac-os-using-brew][How to install Docker on Mac OS using brew?]]
+
+** docker pull linux platform image
+
+#+begin_src shell
+docker pull --platform linux/amd64 ghcr.io/epicgames/unreal-engine:dev-slim-5.8.2
+#+end_src

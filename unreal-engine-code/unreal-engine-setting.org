@@ -56,15 +56,43 @@ ue() {
     fi
     # Run project files generation, create a symlink for the compile database and fix-up the compile database
   elif [[ "$1" == "gen" ]]; then
-    $ue4cli gen
-    project=${PWD##*/}
-    cat ".vscode/compileCommands_${project}.json" | python3 -c 'import json,sys
-j = json.load(sys.stdin)
-for o in j:
-  file = o["file"]
-  arg = o["arguments"][1]
-  o["arguments"] = ["clang++ -std=c++20 -ferror-limit=0 -Wall -Wextra -Wpedantic -Wshadow-all -Wno-unused-parameter \"" + file + "\" \"" + arg + "\""]
-print(json.dumps(j, indent=2))' > compile_commands.json
+    local uprojects=( *.uproject(N) )
+    if (( ${#uprojects} != 1 )); then
+      print -u2 "ue gen: expected exactly one .uproject in $PWD, found ${#uprojects}"
+      return 1
+    fi
+
+    "$ue4cli" gen -vscode || return
+    local project="${uprojects[1]:r}"
+    local compile_db=".vscode/compileCommands_${project}.json"
+    if [[ ! -f "$compile_db" ]]; then
+      print -u2 "ue gen: compile database was not generated: $compile_db"
+      return 1
+    fi
+    python3 -c 'import json, sys
+src = sys.argv[1]
+dst = sys.argv[2]
+with open(src) as f:
+  entries = json.load(f)
+if not isinstance(entries, list):
+  raise SystemExit(f"{src} is not a compile_commands.json array")
+bad = []
+for entry in entries:
+  if not isinstance(entry, dict):
+    bad.append("<non-object entry>")
+    continue
+  if not entry.get("file") or not (entry.get("arguments") or entry.get("command")):
+    bad.append(entry.get("file", "<unknown>"))
+if bad:
+  raise SystemExit("invalid compile_commands.json entries: " + ", ".join(bad[:5]))
+for entry in entries:
+  args = entry.get("arguments")
+  if args and "-std=c++20" not in args:
+    entry["arguments"] = [args[0], "-std=c++20", *args[1:]]
+with open(dst, "w") as f:
+  json.dump(entries, f, indent=2)
+  f.write("\n")
+print(f"wrote {dst}: {len(entries)} entries copied from {src}")' "$compile_db" compile_commands.json || return
     # Pass through all other commands to ue4
   else
     $ue4cli "$@"
@@ -92,7 +120,8 @@ gen compile_commands.json
 #+begin_src sh
 # /Users/Shared/Epic\ Games/UE_5.8/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/Users/gerald/Documents/Unreal Projects/MyProject/MyProject.uproject" -game -vscode
 
-/usr/local/bin/ue4 gen -vscode
+#/usr/local/bin/ue4 gen -vscode
+~/.local/pipx/venvs/ue4cli/bin/ue4 gen -vscode
 
 ue gen
 #+end_src
