@@ -539,3 +539,9 @@ copy from [[https://docs.github.com/en/authentication/connecting-to-github-with-
 #+begin_src shell
 git remote set-url origin https://username@github.com/username/project_name
 #+end_src
+
+** disable hook
+
+#+begin_src shell
+ git config --global core.hooksPath /dev/null
+#+end_src
