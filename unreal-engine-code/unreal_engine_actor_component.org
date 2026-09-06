@@ -22,3 +22,5 @@ TArray<UActorComponent*> InstanceComponents;
 see [[https://zhuanlan.zhihu.com/p/74908124][UE4 Actor与ActorComponent之间的关联]]
 
 ** Subsystem 挂在 GameInstance 上，*生命周期比任何 Actor、任何关卡都长*
+ 真正的区别是生命周期：GameInstance 是进程里唯一跨地图存活的对象；World / GameMode / GameState 每张图重建。
+ 所以"跨地图要活下来的东西（配置）"放 GameInstance，"每张图要重做一遍的事（生成怪）"放 GameMode。
