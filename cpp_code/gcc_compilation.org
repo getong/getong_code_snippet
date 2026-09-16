@@ -1,0 +1,34 @@
+* gcc compilation error
+
+** gcc 13 compilation error
+
+#+begin_example
+153 | #include <linux/scc.h>
+|          ^~~~~~~~~~~~~
+compilation terminated.
+make[4]: *** [Makefile:614：sanitizer_platform_limits_posix.lo] 错误 1
+make[4]: 离开目录“/home/getong/.cache/paru/clone/gcc13/src/gcc-build/x86_64-pc-linux-gnu/libsanitizer/sanitizer_common”
+make[3]: *** [Makefile:532：all-recursive] 错误 1
+make[3]: 离开目录“/home/getong/.cache/paru/clone/gcc13/src/gcc-build/x86_64-pc-linux-gnu/libsanitizer”
+make[2]: *** [Makefile:419：all] 错误 2
+make[2]: 离开目录“/home/getong/.cache/paru/clone/gcc13/src/gcc-build/x86_64-pc-linux-gnu/libsanitizer”
+make[1]: *** [Makefile:18203：all-target-libsanitizer] 错误 2
+make[1]: 离开目录“/home/getong/.cache/paru/clone/gcc13/src/gcc-build”
+make: *** [Makefile:25606：bootstrap] 错误 2
+==> 错误： 在 build() 中发生一个错误。
+正在放弃...
+错误： 未能构建 'gcc13-13.4.1+r80+gd6ebfe4-1 (gcc13-libs gcc13)':
+错误： 未能构建的软件包：gcc13-13.4.1+r80+gd6ebfe4-1 (gcc13-libs gcc13)
+
+#+end_example
+
+*** change and compile
+
+#+begin_src shell
+cd /home/getong/.cache/paru/clone/gcc13/
+
+# 使用 find 找到该文件并用 sed 将 #include <linux/scc.h> 替换为注释
+find src/ -name "sanitizer_platform_limits_posix.cpp" -exec sed -i 's/#include <linux\/scc\.h>/\/\/ #include <linux\/scc\.h>/g' {} +
+
+makepkg -si --nocheck
+#+end_src
