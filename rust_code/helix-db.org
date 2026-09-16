@@ -6,6 +6,12 @@
 curl -sSL "https://install.helix-db.com" | bash
 #+end_src
 
+** update
+
+#+begin_src shell
+helix update
+#+end_src
+
 ** init local
 
 #+begin_src shell
