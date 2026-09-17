@@ -369,3 +369,13 @@ see [[https://www.http5.cn/index.php/archives/26/#:~:text=%E7%AC%AC%E4%B8%89%E6%
 #+begin_src shell
 docker exec my_container env
 #+end_src
+
+** docker login
+
+ghcr.io must login first, and then pull docker image
+#+begin_src shell
+docker login ghcr.io -u <YOUR_GITHUB_USERNAME>
+
+docker pull ghcr.io/helixdb/helixdb:v0.0.5
+docker pull --platform linux/amd64 ghcr.io/epicgames/unreal-engine:dev-slim-5.8.2
+#+end_src
