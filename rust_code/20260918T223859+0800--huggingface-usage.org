@@ -1,0 +1,19 @@
+#+title:      huggingface_usage
+#+date:       [2026-09-18 Fri 22:38 +0800]
+#+filetags:   
+#+identifier: 20260918T223859+0800
+
+* install hfrs
+
+#+begin_src shell
+cargo install --git https://github.com/huggingface/hf-hub.git hfrs
+#+end_src
+
+
+* clone huggingface repo
+
+for example, clone repo, https://huggingface.co/datasets/Jatpeng/ue58-rag-embeddings 
+
+#+begin_src shell
+hfrs download Jatpeng/ue58-rag-embeddings --repo-type dataset
+#+end_src
