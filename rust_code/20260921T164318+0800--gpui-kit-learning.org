@@ -1,0 +1,25 @@
+#+title:      gpui-kit learning
+#+date:       [2026-09-21 Mon 16:43 +0800]
+#+filetags:
+#+identifier: 20260921T164318+0800
+
+
+* gpui repo
+
+#+begin_src shell
+git clone https://github.com/zed-industries/zed
+#+end_src
+
+* gpui example
+
+#+begin_src shell
+cd zed/crates/gpui
+
+cargo run -p gpui --example animation
+#+end_src
+
+* gpui-kit
+https://github.com/longbridge/gpui-kit
+
+* gpui-mobile
+https://github.com/longbridge/gpui-mobile
