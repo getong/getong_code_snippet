@@ -1,0 +1,14 @@
+* sccache
+
+** installation
+
+#+begin_src shell
+brew install sccache
+#+end_src
+
+** usage
+
+#+begin_src shell
+export RUSTC_WRAPPER=sccache
+cargo build
+#+end_src
