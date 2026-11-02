@@ -1,0 +1,34 @@
+#+title:      unreal c++ task graph
+#+date:       [2026-11-02 Mon 23:50 +0800]
+#+filetags:
+#+identifier: 20261102T235012+0800
+
+* unreal c++ task graph
+
+#+begin_example
+#include "Async/TaskGraphInterfaces.h"
+
+// Example 1: Offloading a heavy calculation to a background worker thread
+FFunctionGraphTask::CreateAndDispatchWhenReady(
+    []()
+    {
+        // Your heavy, non-UObject calculation goes here
+        // e.g., Complex pathfinding math, data parsing, prime verification
+    },
+    TStatId(),
+    nullptr,
+    ENamedThreads::AnyBackgroundThreadNormalTask // Target Thread
+);
+
+// Example 2: Sending a lambda back to the GameThread from a background thread
+FFunctionGraphTask::CreateAndDispatchWhenReady(
+    []()
+    {
+        // Safely interact with UObjects, actors, or UI elements here
+        UE_LOG(LogTemp, Log, TEXT("Back on the Game Thread safely!"));
+    },
+    TStatId(),
+    nullptr,
+    ENamedThreads::GameThread // Target Thread
+);
+#+end_example
